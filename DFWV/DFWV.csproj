@@ -1,0 +1,299 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DC1D3621-153E-4385-8DE1-3252995EBCCD}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DFWV</RootNamespace>
+    <AssemblyName>DFWV</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>518638CB967F1841D6B11C1A8EF5B3A2483AED75</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>DFWV_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite, Version=1.0.81.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\World Viewer Releases\Version 1.0\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controls\FlickerFreeListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\LinkLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Database.cs" />
+    <Compile Include="DFXMLParser.cs" />
+    <Compile Include="Dynamic.cs" />
+    <Compile Include="FilterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FilterForm.Designer.cs">
+      <DependentUpon>FilterForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MapForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MapForm.Designer.cs">
+      <DependentUpon>MapForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StatsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StatsForm.Designer.cs">
+      <DependentUpon>StatsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Timeline.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Timeline.Designer.cs">
+      <DependentUpon>Timeline.cs</DependentUpon>
+    </Compile>
+    <Compile Include="World Classes\Coordinate.cs" />
+    <Compile Include="FilterSettings.cs" />
+    <Compile Include="World Classes\Dynasty.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_AddHFEntityLink.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_AddHFHFLink.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_AddHFSiteLink.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_AgreementMade.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_AgreementRejected.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_ArtifactCreated.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_ArtifactLost.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_ArtifactPossessed.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_ArtifactStored.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_AssumeIdentity.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_AttackedSite.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_BodyAbused.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_ChangedCreatureType.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_ChangeHFBodyState.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_ChangeHFJob.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_ChangeHFState.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_CreatedSite.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_CreatedStructure.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_CreatedWorldConstruction.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_CreateEntityPosition.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_CreatureDevoured.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_DestroyedSite.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_DiplomatLost.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_EntityCreated.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_EntityLaw.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_EntityPrimaryCriminals.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_EntityRelocate.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_FieldBattle.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_FirstContact.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_FirstContactFailed.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_HFAbducted.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_HFConfronted.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_HFDied.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_HFDoesInteraction.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_HFGainsSecretGoal.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_HFLearnsSecret.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_HFNewPet.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_HFProfanedStructure.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_HFReunion.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_HFRevived.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_HFSimpleBattleEvent.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_HFTravel.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_HFWounded.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_ItemStolen.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_MasterpieceArchConstructed.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_MasterpieceArchDesign.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_MasterpieceDye.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_MasterpieceEngraving.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_MasterpieceFood.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_MasterpieceItem.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_MasterpieceItemImprovement.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_MasterpieceLost.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_Merchant.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_NewSiteLeader.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_PeaceAccepted.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_PeaceRejected.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_PlunderedSite.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_RazedStructure.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_ReclaimSite.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_RemoveHFEntityLink.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_RemoveHFSiteLink.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_SiteAbandoned.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_SiteTakenOver.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HE_UnassessedEvent.cs" />
+    <Compile Include="World Classes\Historical Event Collection Classes\EC_Abduction.cs" />
+    <Compile Include="World Classes\Historical Event Collection Classes\EC_Battle.cs" />
+    <Compile Include="World Classes\Historical Event Collection Classes\EC_BeastAttack.cs" />
+    <Compile Include="World Classes\Historical Event Collection Classes\EC_Duel.cs" />
+    <Compile Include="World Classes\Historical Event Collection Classes\EC_Journey.cs" />
+    <Compile Include="World Classes\Historical Event Collection Classes\EC_SiteConquered.cs" />
+    <Compile Include="World Classes\Historical Event Collection Classes\EC_Theft.cs" />
+    <Compile Include="World Classes\Historical Event Collection Classes\EC_UnassessedEventCollection.cs" />
+    <Compile Include="World Classes\Historical Event Collection Classes\EC_War.cs" />
+    <Compile Include="World Classes\Historical Figure Classes\EntityReputation.cs" />
+    <Compile Include="World Classes\Historical Figure Classes\EntityFormerPositionLink.cs" />
+    <Compile Include="World Classes\Historical Figure Classes\EntityPositionLink.cs" />
+    <Compile Include="World Classes\Historical Figure Classes\SiteLink.cs" />
+    <Compile Include="World Classes\Historical Figure Classes\HFSkill.cs" />
+    <Compile Include="World Classes\Historical Figure Classes\HFLink.cs" />
+    <Compile Include="World Classes\Historical Figure Classes\EntityLink.cs" />
+    <Compile Include="World Classes\Stats.cs" />
+    <Compile Include="World Classes\Structure.cs" />
+    <Compile Include="World Classes\Artifact.cs" />
+    <Compile Include="World Classes\Child.cs" />
+    <Compile Include="World Classes\Civilization.cs" />
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="World Classes\Entity.cs" />
+    <Compile Include="World Classes\EntityPopulation.cs" />
+    <Compile Include="World Classes\God.cs" />
+    <Compile Include="World Classes\Historical Figure Classes\HistoricalFigure.cs" />
+    <Compile Include="World Classes\HistoricalEra.cs" />
+    <Compile Include="World Classes\Historical Event Classes\HistoricalEvent.cs" />
+    <Compile Include="World Classes\Historical Event Collection Classes\HistoricalEventCollection.cs" />
+    <Compile Include="World Classes\Leader.cs" />
+    <Compile Include="World Classes\Parameter.cs" />
+    <Compile Include="World Classes\Person.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="World Classes\Race.cs" />
+    <Compile Include="World Classes\Region.cs" />
+    <Compile Include="World Classes\Site.cs" />
+    <Compile Include="World Classes\UndergroundRegion.cs" />
+    <Compile Include="World Classes\VisualizationCollection.cs" />
+    <Compile Include="World Classes\World.cs" />
+    <Compile Include="World Classes\WorldConstruction.cs" />
+    <Compile Include="World Classes\WorldObject.cs" />
+    <Compile Include="World Classes\WorldTime.cs" />
+    <Compile Include="World Classes\XMLObject.cs" />
+    <EmbeddedResource Include="FilterForm.resx">
+      <DependentUpon>FilterForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MapForm.resx">
+      <DependentUpon>MapForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="StatsForm.resx">
+      <DependentUpon>StatsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Timeline.resx">
+      <DependentUpon>Timeline.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="DFWV_Template.sqlite3.backup">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.4.5">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 4.5</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
