@@ -35,13 +35,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             table = GetType().Name;
 
-
-            var vals = new List<object> { ID, Types[Type] };
+            var vals = new List<object>
+            {
+                ID, 
+                Type.DBExport(Types)
+            };
 
             Database.ExportWorldItem(table , vals);
-
         }
-
     }
 }
 

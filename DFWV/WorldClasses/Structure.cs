@@ -111,7 +111,14 @@ namespace DFWV.WorldClasses
 
         internal override void Export(string table)
         {
-            var vals = new List<object> { ID, Site.ID, SiteID  };
+            var vals = new List<object>
+            {
+                ID, 
+                Site.ID, 
+                SiteID,
+                Type.DBExport(Types),
+                Name.DBExport()
+            };
 
             Database.ExportWorldItem(table, vals);
         }

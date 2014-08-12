@@ -14,7 +14,18 @@ using SevenZip;
 
 //TODO: Group by multiple items
 
+//TODO: -----Export-------
+//TODO: Add Entity/Entity Links
+//TODO: Add Entity/Site Links
+//TODO: Add Entity/Children Links
+//TODO: Add EntityPopulation Race Counts
+//TODO: Add Region Coords
+//TODO: Add UGRegion Coords
+//TODO: Add World Construction Coords
+//TODO: Add Dynasty/Leader/God 
+
 //TODO: Properly Export Insurrection started/ended and event collections
+//TODO: Add != filter option
 
 //TODO: Add notes on event types currently On Change HF Body State
 //TODO: Handle "Died Event" at site level

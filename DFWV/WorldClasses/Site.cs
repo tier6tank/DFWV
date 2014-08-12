@@ -220,13 +220,13 @@ namespace DFWV.WorldClasses
 
 
         public static List<string> Types = new List<string>();
-        public int Type { get; private set; }
+        public int? Type { get; private set; }
         public Point Coords { get; private set; }
         private string StructureList { get; set; }
         public List<Structure> Structures { get; set; }
 
         [UsedImplicitly]
-        public string SiteType { get { return Types[Type]; } }
+        public string SiteType { get { return Type.HasValue ? Types[Type.Value] : String.Empty; } }
 
         public Site(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -288,7 +288,7 @@ namespace DFWV.WorldClasses
 
             frm.lblSiteName.Text = ToString();
             frm.lblSiteAltName.Text = AltName;
-            frm.lblSiteType.Text = Types[Type];
+            frm.lblSiteType.Text = SiteType;
             frm.lblSiteCoord.Data = new Coordinate(Coords);
             frm.lblSiteOwner.Data = Owner;
             frm.lblSiteParentCiv.Data = Parent;
@@ -538,7 +538,7 @@ namespace DFWV.WorldClasses
                         }
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + SiteType, element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -547,15 +547,13 @@ namespace DFWV.WorldClasses
         internal override void Export(string table)
         {
 
-            var vals = new List<object> {ID};
-
-            if (Name == null)
-                vals.Add(DBNull.Value);
-            else
-                vals.Add(Name.Replace("'", "''"));
-
-            vals.Add(AltName);
-            vals.Add(Types[Type]);
+            var vals = new List<object>
+            {
+                ID,
+                Name.DBExport(),
+                AltName.DBExport(),
+                SiteType
+            };
 
             Database.ExportWorldItem(table, vals);
         }

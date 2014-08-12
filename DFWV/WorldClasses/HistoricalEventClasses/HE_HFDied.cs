@@ -158,9 +158,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         ArtifactID = valI;
                         break;
                     case "item_type":
-                        if (!Items.Contains(val))
-                            Items.Add(val);
-                        ItemType = Items.IndexOf(val);
+                        if (!ItemTypes.Contains(val))
+                            ItemTypes.Add(val);
+                        ItemType = ItemTypes.IndexOf(val);
                         break;
                     case "item_subtype":
                         if (!ItemSubTypes.Contains(val))
@@ -185,9 +185,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         BowArtifactID = valI;
                         break;
                     case "bow_item_type":
-                        if (!Items.Contains(val))
-                            Items.Add(val);
-                        BowItemType = Items.IndexOf(val);
+                        if (!ItemTypes.Contains(val))
+                            ItemTypes.Add(val);
+                        BowItemType = ItemTypes.IndexOf(val);
                         break;
                     case "bow_item_subtype":
                         if (!ItemSubTypes.Contains(val))
@@ -299,12 +299,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                             timestring, HF.Race, HF,
                             SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
                             SlayerItem, locationText);
-                    if (ItemType != null && Items[ItemType.Value] == "corpsepiece")
+                    if (ItemType != null && ItemTypes[ItemType.Value] == "corpsepiece")
                         return string.Format("{0} the {1} {2} was struck down by \nthe {3} {4} {5} in {6}.",
                             timestring, HF.Race, HF,
                             SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
                             "with a body part", locationText);
-                    if (ItemType != null && Items[ItemType.Value] == "corpse")
+                    if (ItemType != null && ItemTypes[ItemType.Value] == "corpse")
                         return string.Format("{0} the {1} {2} was struck down by \nthe {3} {4} {5} in {6}.",
                             timestring, HF.Race, HF,
                             SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
@@ -313,7 +313,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         return string.Format("{0} the {1} {2} was struck down by \nthe {3} {4} {5} in {6}.",
                             timestring, HF.Race, HF,
                             SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                            "with a " + Materials[Mat.Value] + " " + Items[ItemType.Value] , locationText);
+                            "with a " + Materials[Mat.Value] + " " + ItemTypes[ItemType.Value] , locationText);
                     if (Mat != null && ItemType != null && ItemSubType != null)
                         return string.Format("{0} the {1} {2} was struck down by \nthe {3} {4} {5} in {6}.",
                             timestring, HF.Race, HF,
@@ -346,7 +346,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         return string.Format("{0} the {1} {2} was shot and killed by \nthe {3} {4} {5} in {6}.",
                             timestring, HF.Race, HF,
                             SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                            "with a " + Materials[Mat.Value] + " " + Items[ItemType.Value], locationText);
+                            "with a " + Materials[Mat.Value] + " " + ItemTypes[ItemType.Value], locationText);
                     if (BowMat != null && BowItemType != null && BowItemSubType != null && Mat != null && ItemType != null && ItemSubType != null)
                         return string.Format("{0} the {1} {2} was shot and killed by \nthe {3} {4} {5} in {6}.",
                             timestring, HF.Race, HF,
@@ -510,12 +510,34 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         internal override void Export(string table)
         {
-            //TODO: Incorporate new data
             base.Export(table);
 
             table = GetType().Name;
 
-            var vals = new List<object> { ID, HFID, SlayerHFID, SlayerRace == null ? (object)DBNull.Value : SlayerRace.ToString(), HistoricalFigure.Castes[SlayerCaste], SlayerItemID, SlayerShooterItemID, Causes[Cause], SiteID, SubregionID, FeatureLayerID   };
+            var vals = new List<object>
+            {
+                ID, 
+                HFID.DBExport(), 
+                SlayerHFID.DBExport(), 
+                SlayerRace.DBExport(),
+                SlayerCaste.DBExport(HistoricalFigure.Castes),
+                SlayerItemID.DBExport(), 
+                SlayerShooterItemID.DBExport(), 
+                Cause.DBExport(Causes), 
+                SiteID.DBExport(), 
+                SubregionID.DBExport(), 
+                FeatureLayerID.DBExport(),
+                Item.DBExport(),
+                ArtifactID.DBExport(),
+                ItemType.DBExport(ItemTypes),
+                ItemSubType.DBExport(ItemSubTypes),
+                Mat.DBExport(Materials),
+                BowItem.DBExport(),
+                BowArtifactID.DBExport(),
+                BowItemType.DBExport(ItemTypes),
+                BowItemSubType.DBExport(ItemSubTypes),
+                BowMat.DBExport(Materials),
+            };
 
             Database.ExportWorldItem(table, vals);
 

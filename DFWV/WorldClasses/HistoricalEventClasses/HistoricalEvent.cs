@@ -31,7 +31,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         override public Point Location { get { return Point.Empty; } }
 
-        public static List<string> Items = new List<string>();
+        public static List<string> ItemTypes = new List<string>();
         public static List<string> ItemSubTypes = new List<string>();
         public static List<string> Materials = new List<string>();
         public static List<string> MeetingTopics = new List<string>();
@@ -438,12 +438,15 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         
         internal override void Export(string table)
         {
-
-            var vals = new List<object> { ID, Types[Type], Year, Seconds };
-
+            var vals = new List<object>
+            {
+                ID, 
+                Type.DBExport(Types), 
+                Year, 
+                Seconds
+            };
 
             Database.ExportWorldItem(table, vals);
-
         }
     }
 }

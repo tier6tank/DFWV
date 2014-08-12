@@ -13,9 +13,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public Site Site { get; set; }
         public int? Method { get; set; }
 
-
-
-
         public HE_MasterpieceLost(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -115,19 +112,20 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         internal override void Export(string table)
         {
-            //TODO: Incorporate new data
             base.Export(table);
 
             table = GetType().Name;
 
-
-            var vals = new List<object> { ID };
-
+            var vals = new List<object>
+            {
+                ID,
+                HFID.DBExport(),
+                SiteID.DBExport(),
+                Method.DBExport()
+            };
 
             Database.ExportWorldItem(table, vals);
-
         }
-
     }
 }
 

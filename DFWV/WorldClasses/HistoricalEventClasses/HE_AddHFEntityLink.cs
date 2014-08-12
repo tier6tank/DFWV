@@ -178,12 +178,18 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         internal override void Export(string table)
         {
-            //TODO: Incorporate new data
             base.Export(table);
 
 
             table = GetType().Name;
-            var vals = new List<object> { ID, HF, CivID, LinkType};
+            var vals = new List<object>
+            {
+                ID, 
+                HFID.DBExport(), 
+                CivID.DBExport(), 
+                LinkType.DBExport(HFEntityLink.LinkTypes),
+                Position.DBExport(HFEntityLink.Positions)
+            };
 
 
             Database.ExportWorldItem(table, vals);

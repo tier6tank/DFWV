@@ -153,11 +153,17 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             table = GetType().Name;
 
 
-            var vals = new List<object> { ID, HFID, BodyState, BuildingID, SiteID,  SubregionID, FeatureLayerID};
-            if (Coords.IsEmpty)
-                vals.Add(DBNull.Value);
-            else
-                vals.Add(Coords.X + "," + Coords.Y);
+            var vals = new List<object>
+            {
+                ID, 
+                HFID.DBExport(), 
+                BodyState.DBExport(), 
+                BuildingID.DBExport(), 
+                SiteID.DBExport(),  
+                SubregionID.DBExport(), 
+                FeatureLayerID.DBExport(),
+                Coords.DBExport()
+            };
 
             Database.ExportWorldItem(table, vals);
 

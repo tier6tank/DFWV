@@ -154,7 +154,7 @@ namespace DFWV
         {
             foreach (var site in World.Sites.Values)
             {
-                if (!selectedSiteTypes.Contains(WorldClasses.Site.Types[site.Type])) 
+                if (!selectedSiteTypes.Contains(site.SiteType)) 
                     continue;
                 if (site.Parent != null || !chkNeutralSites.Checked)
                     continue;
@@ -172,7 +172,7 @@ namespace DFWV
             }
             foreach (var site in World.Sites.Values)
             {
-                if (!selectedSiteTypes.Contains(WorldClasses.Site.Types[site.Type]))
+                if (!selectedSiteTypes.Contains(site.SiteType))
                     continue;
                 if (site.Parent == null || !chkOwnedSites.Checked)
                     continue;
@@ -696,7 +696,7 @@ namespace DFWV
                 altNameText = selectedSite.AltName;
                 ownerText = selectedSite.Owner != null ? selectedSite.Owner.ToString() : "";
                 parentText = selectedSite.Parent != null ? selectedSite.Parent.ToString() : "";
-                typeText = WorldClasses.Site.Types[selectedSite.Type];
+                typeText = selectedSite.SiteType;
                 objectTypeText = "Site";
             }
             if (selectedObject is WorldConstruction)
@@ -798,7 +798,7 @@ namespace DFWV
         private Site GetSiteAt(Point coord)
         {
             return World.Sites.Values.FirstOrDefault(
-                site => selectedSiteTypes.Contains(WorldClasses.Site.Types[site.Type]) 
+                site => selectedSiteTypes.Contains(site.SiteType) 
                     && site.Coords == coord 
                     && ((site.Parent == null && chkNeutralSites.Checked) 
                        || (site.Parent != null && chkOwnedSites.Checked)) 

@@ -48,7 +48,11 @@ namespace DFWV.WorldClasses
         internal override void Export(string table)
         {
 
-            var vals = new List<object> {Name, Value};
+            var vals = new List<object>
+            {
+                Name, 
+                Value
+            };
 
 
             Database.ExportWorldItem(table, vals);

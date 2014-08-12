@@ -175,7 +175,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         timestring, HF, Civ, positionText);
 
             }
-            //(time), (HF) of (Entity) created the position of (position), pushed y a wave of popular support.
         }
 
         internal override string ToTimelineString()
@@ -186,19 +185,21 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         internal override void Export(string table)
         {
-            //TODO: Incorporate new data
             base.Export(table);
 
-
             table = GetType().Name;
-
-
             
-            var vals = new List<object> { ID };
-
+            var vals = new List<object>
+            {
+                ID,
+                HFID.DBExport(),
+                CivID.DBExport(),
+                GroupID.DBExport(),
+                Position.DBExport(),
+                Reason.DBExport()
+            };
 
             Database.ExportWorldItem(table, vals);
-
         }
 
     }

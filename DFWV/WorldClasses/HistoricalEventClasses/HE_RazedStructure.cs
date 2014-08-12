@@ -114,17 +114,17 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             base.Export(table);
 
-
             table = GetType().Name;
 
-
-            
-            var vals = new List<object> { ID, CivID, SiteID, StructureID };
-
+            var vals = new List<object>
+            {
+                ID, 
+                CivID.DBExport(), 
+                SiteID.DBExport(), 
+                StructureID.DBExport()
+            };
 
             Database.ExportWorldItem(table, vals);
-
         }
-
     }
 }

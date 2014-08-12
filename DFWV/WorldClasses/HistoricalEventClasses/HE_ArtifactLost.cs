@@ -100,7 +100,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             table = GetType().Name;
 
 
-            var vals = new List<object> { ID, ArtifactID, SiteID};
+            var vals = new List<object>
+            {
+                ID, 
+                ArtifactID.DBExport(), 
+                SiteID.DBExport()
+            };
 
 
             Database.ExportWorldItem(table, vals);

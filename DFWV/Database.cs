@@ -5,6 +5,8 @@ using System.Data.SQLite;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
+using DFWV.WorldClasses;
 
 namespace DFWV
 {
@@ -100,6 +102,13 @@ namespace DFWV
             _command.ExecuteNonQuery();
         }
 
+
+        /// <summary>
+        /// These functions take a given field of an object to be exported and properly parse it for export, including replacing nulls with DBNulls.
+        /// </summary>
+        /// <param name="field"></param>
+        /// <returns></returns>
+        #region DBExport
         internal static object DBExport(this string field)
         {
             if (field != null)
@@ -123,5 +132,73 @@ namespace DFWV
             else
                 return DBNull.Value;
         }
+
+        internal static object DBExport(this int field, List<string> LookupTable)
+        {
+            if (LookupTable != null && LookupTable.Count > field)
+                return LookupTable[field];
+            else
+                return DBNull.Value;
+        }
+
+        internal static object DBExport(this Race race)
+        {
+            if (race != null)
+                return race.ToString();
+            else
+                return DBNull.Value;
+        }
+
+        internal static object DBExport(this XMLObject xmlobject)
+        {
+            if (xmlobject != null)
+                return xmlobject.ID;
+            else
+                return DBNull.Value;
+        }
+
+        internal static object DBExport(this WorldTime time, bool year)
+        {
+            if (time != null)
+            {
+                if (year)
+                    return time.Year;
+                else
+                    return time.TotalSeconds;
+            }
+            else
+                return DBNull.Value;
+        }
+
+        internal static object DBExport(this List<int> field, List<string> LookupTable)
+        {
+            if (field != null)
+            {
+                var exportText = field.Aggregate("", (current, curItem) => current + (LookupTable[curItem] + ","));
+                exportText = exportText.TrimEnd(',');
+                return exportText;
+            }
+            else
+                return DBNull.Value;
+        }
+
+        internal static object DBExport(this List<int> field)
+        {
+            if (field != null)
+            {
+                return String.Join(",",field);
+            }
+            else
+                return DBNull.Value;
+        }
+
+        internal static object DBExport(this Point pt)
+        {
+            if (pt.IsEmpty)
+                return pt.X + "," + pt.Y;
+            else
+                return DBNull.Value;
+        }
+        #endregion
     }
 }

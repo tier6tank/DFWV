@@ -37,7 +37,7 @@ namespace DFWV.WorldClasses
                 return (ItemSubType.HasValue
                     ? HistoricalEvent.ItemSubTypes[ItemSubType.Value]
                     : (ItemType.HasValue
-                        ? HistoricalEvent.Items[ItemType.Value]
+                        ? HistoricalEvent.ItemTypes[ItemType.Value]
                         : ""));
             }
         }
@@ -89,7 +89,7 @@ namespace DFWV.WorldClasses
                                               (ItemSubType.HasValue
                                                   ? HistoricalEvent.ItemSubTypes[ItemSubType.Value]
                                                   : (ItemType.HasValue
-                                                      ? HistoricalEvent.Items[ItemType.Value]
+                                                      ? HistoricalEvent.ItemTypes[ItemType.Value]
                                                       : ""));
 
             frm.lblArtifactValue.Text = ItemValue.HasValue ? ItemValue.Value.ToString() : "";
@@ -164,9 +164,9 @@ namespace DFWV.WorldClasses
                     case "type":
                         break;
                     case "item_type":
-                        if (!HistoricalEvent.Items.Contains(val))
-                            HistoricalEvent.Items.Add(val);
-                        ItemType = HistoricalEvent.Items.IndexOf(val);
+                        if (!HistoricalEvent.ItemTypes.Contains(val))
+                            HistoricalEvent.ItemTypes.Add(val);
+                        ItemType = HistoricalEvent.ItemTypes.IndexOf(val);
                         break;
                     case "item_subtype":
                         if (valI != -1)
@@ -208,9 +208,9 @@ namespace DFWV.WorldClasses
                 Name.DBExport(),
                 Item.DBExport(),
                 Mat.DBExport(HistoricalEvent.Materials),
-                ItemType.DBExport(HistoricalEvent.Items),
+                ItemType.DBExport(HistoricalEvent.ItemTypes),
                 ItemSubType.DBExport(HistoricalEvent.ItemSubTypes),
-                Value
+                ItemValue.DBExport()
             };
 
 

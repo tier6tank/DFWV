@@ -160,21 +160,21 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             base.Export(table);
 
-
             table = GetType().Name;
-
-
             
-            var vals = new List<object> { ID, GroupHFID, Escape, Return, SiteID, SubregionID, FeatureLayerID };
-
-
-            if (Coords.IsEmpty)
-                vals.Add(DBNull.Value);
-            else
-                vals.Add(Coords.X + "," + Coords.Y);
+            var vals = new List<object>
+            {
+                ID, 
+                GroupHFID.DBExport(), 
+                Escape, 
+                Return, 
+                SiteID.DBExport(), 
+                SubregionID.DBExport(), 
+                FeatureLayerID.DBExport(),
+                Coords.DBExport()
+            };
 
             Database.ExportWorldItem(table, vals);
-
         }
 
     }

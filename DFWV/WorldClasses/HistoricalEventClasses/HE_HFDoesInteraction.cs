@@ -86,11 +86,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "target":
                     case "interaction":
                         break;
-                    case "site_id":
+                    case "site":
                         if (valI != -1)
                             SiteID = valI;
                         break;
-                    case "subregion_id":
+                    case "region":
                         if (valI != -1)
                             SubregionID = valI;
                         break;
@@ -186,16 +186,19 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         internal override void Export(string table)
         {
-            //TODO: Incorporate new data
             base.Export(table);
 
-
             table = GetType().Name;
-
-
             
-            var vals = new List<object> { ID, TargetHFID, DoerHFID, HistoricalFigure.Interactions[Interaction] };
-
+            var vals = new List<object>
+            {
+                ID, 
+                TargetHFID.DBExport(), 
+                DoerHFID.DBExport(),
+                Interaction.DBExport(HistoricalFigure.Interactions),
+                SiteID.DBExport(),
+                Subregion.DBExport()
+            };
 
             Database.ExportWorldItem(table, vals);
 

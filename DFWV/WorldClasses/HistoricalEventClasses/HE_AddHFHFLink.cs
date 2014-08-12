@@ -17,7 +17,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         override public Point Location { get { return Point.Empty; } }
 
-        public int LinkType { get; set; }
+        public int? LinkType { get; set; }
 
         public HFLink HFLink { get; set; }
         public HFLink HFLink2 { get; set; }
@@ -143,10 +143,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             EventLabel(frm, parent, ref location, "HF:", HF);
             EventLabel(frm, parent, ref location, "Target:", HFTarget);
-            EventLabel(frm, parent, ref location, "Type:", 
-                HFLink != null ?  
-                HFLink.LinkTypes[HFLink.LinkType] :
-                HFLink.LinkTypes[LinkType]);
+            if (HFLink != null)
+                EventLabel(frm, parent, ref location, "Type:", HFLink.LinkTypes[HFLink.LinkType]);
+            else if (LinkType.HasValue)
+                EventLabel(frm, parent, ref location, "Type:", HFLink.LinkTypes[LinkType.Value]);
         }
 
         protected override string LegendsDescription() //Matched
@@ -155,7 +155,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             switch (HFLink != null ? 
                 HFLink.LinkTypes[HFLink.LinkType] :
-                HFLink.LinkTypes[LinkType])
+                (LinkType.HasValue ? HFLink.LinkTypes[LinkType.Value] : String.Empty))
             {
                 case "spouse":
                     return string.Format("{0} {1} {2} {3}.",
@@ -171,7 +171,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         timestring, HF, "began worshipping", HFTarget == null ? "an unknown creature" : HFTarget.ToString());
                 default:
                     return string.Format("{0} {1} {2} {3}.",
-                                            timestring, HF, HFLink != null ? HFLink.LinkTypes[LinkType] : "UNKNOWN", HFTarget);
+                                            timestring, HF, "UNKNOWN", HFTarget);
 
             }
         }
@@ -191,8 +191,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             table = GetType().Name;
 
-            var vals = new List<object> { ID, HFID, HFIDTarget };
-
+            var vals = new List<object>
+            {
+                ID, 
+                HFID, 
+                HFIDTarget,
+                LinkType.DBExport(HFLink.LinkTypes)
+            };
 
             Database.ExportWorldItem(table, vals);
 

@@ -184,40 +184,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             base.Export(table);
 
-
-            base.Export(table);
-
-
             table = GetType().Name;
 
-
-
-            var vals = new List<object> { ID };
-
-
-            if (GroupHFID != null && GroupHFID.Count == 2)
+            var vals = new List<object>
             {
-                vals.Add(GroupHFID[0]);
-                vals.Add(GroupHFID[1]);
-            }
-            else if (GroupHFID != null && GroupHFID.Count == 1)
-            {
-                vals.Add(GroupHFID[0]);
-                vals.Add(DBNull.Value);
-            }
-            else
-            {
-                vals.Add(DBNull.Value);
-                vals.Add(DBNull.Value);
-            }
-
-
-            vals.AddRange(new List<object> { SubregionID, FeatureLayerID});
-
-            if (Coords.IsEmpty)
-                vals.Add(DBNull.Value);
-            else
-                vals.Add(Coords.X + "," + Coords.Y);
+                ID,
+                GroupHFID.DBExport(),
+                SubregionID.DBExport(),
+                FeatureLayerID.DBExport(),
+                Coords.DBExport()
+            };
 
             Database.ExportWorldItem(table, vals);
         }

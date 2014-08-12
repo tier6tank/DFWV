@@ -213,24 +213,24 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         internal override void Export(string table)
         {
-            //TODO: Incorporate new data
             base.Export(table);
-
 
             table = GetType().Name;
 
-
-            
-            var vals = new List<object> { ID, SiteID, SubregionID, FeatureLayerID };
-
-            if (Devourer == null)
-                vals.Add(DBNull.Value);
-            else
-                vals.Add(Devourer.ID);
-
+            var vals = new List<object>
+            {
+                ID, 
+                SiteID.DBExport(),
+                SubregionID.DBExport(), 
+                FeatureLayerID.DBExport(),
+                DevourerID.DBExport(),
+                VictimID.DBExport(),
+                VictimRace.DBExport(),
+                VictimCaste.DBExport(HistoricalFigure.Castes),
+                EntityID.DBExport()
+            };
 
             Database.ExportWorldItem(table, vals);
-
         }
 
     }

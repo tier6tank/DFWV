@@ -65,14 +65,14 @@ namespace DFWV.WorldClasses
         internal override void Export(string table)
         {
 
-            var vals = new List<object> {Members[0].ID};
+            //var vals = new List<object> {Members[0].ID};
 
-            if (Members[0].Name == null)
-                vals.Add(DBNull.Value);
-            else
-                vals.Add(Members[0].Name.Replace("'", "''"));
+            //if (Members[0].Name == null)
+            //    vals.Add(DBNull.Value);
+            //else
+            //    vals.Add(Members[0].Name.Replace("'", "''"));
 
-            Database.ExportWorldItem(table, vals);
+            //Database.ExportWorldItem(table, vals);
         }
     }
 }

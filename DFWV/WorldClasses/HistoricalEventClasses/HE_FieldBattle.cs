@@ -157,16 +157,19 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             base.Export(table);
 
-
             table = GetType().Name;
 
-            var vals = new List<object> { ID, SubregionID, FeatureLayerID, AttackerCivID, AttackerGeneralHFID, DefenderCivID, DefenderGeneralHFID };
-
-            if (Coords.IsEmpty)
-                vals.Add(DBNull.Value);
-            else
-                vals.Add(Coords.X + "," + Coords.Y);
-            
+            var vals = new List<object>
+            {
+                ID, 
+                SubregionID.DBExport(), 
+                FeatureLayerID.DBExport(), 
+                AttackerCivID.DBExport(), 
+                AttackerGeneralHFID.DBExport(), 
+                DefenderCivID.DBExport(), 
+                DefenderGeneralHFID.DBExport(),
+                Coords.DBExport()
+            };
 
             Database.ExportWorldItem(table, vals);
 

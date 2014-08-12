@@ -13,7 +13,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public Site Site { get; private set; }
         private int? SubregionID { get; set; }
         public Region Subregion { get; private set; }
-        private int State { get; set; }
+        private int? State { get; set; }
         public static List<string> States = new List<string>();
         private int? HFID { get; set; }
         public HistoricalFigure HF { get; set; }
@@ -87,7 +87,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (HF.Events == null)
                 HF.Events = new List<HistoricalEvent>();
             HF.Events.Add(this);
-            if (HF.isLeader && States[State] == "settled" && Site != null)
+            if (HF.isLeader && State.HasValue && States[State.Value] == "settled" && Site != null)
             {
                 HF.Leader.Site = Site;
             }
@@ -96,7 +96,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
             EventLabel(frm, parent, ref location, "HF:", HF);
-            EventLabel(frm, parent, ref location, "State:", States[State]);
+            if (State.HasValue)
+            EventLabel(frm, parent, ref location, "State:", States[State.Value]);
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Region:", Subregion);
             if (!Coords.IsEmpty)
@@ -107,18 +108,19 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         protected override string LegendsDescription()
         {
             var timestring = base.LegendsDescription();
-
-            switch (States[State])
+            if (!State.HasValue)
+                return "";
+            switch (States[State.Value])
             {
                 case "settled":
                     if (Subregion != null)
                         return string.Format("{0} {1} {2} {3} in {4}.",
                             timestring, HF.Race, HF,
-                            States[State], Subregion);
+                            States[State.Value], Subregion);
                     if (Site != null)
                         return string.Format("{0} {1} {2} {3} in {4}.",
                             timestring, HF.Race, HF,
-                            States[State], Site.AltName);
+                            States[State.Value], Site.AltName);
                     break;
                 case "wandering":
                     return string.Format(FeatureLayerID == -1 ? "{0} {1} began wandering the wilds." : "{0} {1} began wandering the depths of the world.", timestring, HF);
@@ -156,22 +158,26 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timelinestring = base.ToTimelineString();
 
-            if (HF == null )
-                return string.Format("{0} HF Changed state - {1} in {2}.",
-                            timelinestring, HFID,
-                            States[State]);
+            if (!State.HasValue)
+                return string.Format("{0} HF Changed state - {1}.",
+                            timelinestring, HFID);
 
-            switch (States[State])
+            if (HF == null )
+                return string.Format("{0} HF Changed state - {1} - {2}.",
+                            timelinestring, HFID,
+                            States[State.Value]);
+
+            switch (States[State.Value])
             {
                 case "settled":
                     if (Subregion != null)
                         return string.Format("{0} {1} {2} in {3}.",
                             timelinestring, HF,
-                            States[State], Subregion);
+                            States[State.Value], Subregion);
                     if (Site != null)
                         return string.Format("{0} {1} {2} in {3}.",
                             timelinestring, HF,
-                            States[State], Site.AltName);
+                            States[State.Value], Site.AltName);
                     break;
                 case "wandering":
                     return string.Format(FeatureLayerID == -1 ? "{0} {1} began wandering the wilds." : "{0} {1} began wandering the depths of the world.", timelinestring, HF);
@@ -212,13 +218,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             table = GetType().Name;
 
-            var vals = new List<object> { ID, HFID, States[State], SiteID, Subregion, FeatureLayerID};
-
-            if (Coords.IsEmpty)
-                vals.Add(DBNull.Value);
-            else
-                vals.Add(Coords.X + "," + Coords.Y);
-
+            var vals = new List<object>
+            {
+                ID, 
+                HFID.DBExport(), 
+                State.DBExport(States), 
+                SiteID.DBExport(), 
+                SubregionID.DBExport(), 
+                FeatureLayerID.DBExport(),
+                Coords.DBExport()
+            };
 
             Database.ExportWorldItem(table, vals);
 

@@ -90,9 +90,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         Item = valI;
                         break;
                     case "item_type":
-                        if (!Items.Contains(val))
-                            Items.Add(val);
-                        ItemType = Items.IndexOf(val);
+                        if (!ItemTypes.Contains(val))
+                            ItemTypes.Add(val);
+                        ItemType = ItemTypes.IndexOf(val);
                         break;
                     case "item_subtype":
                         if (val != "-1")
@@ -167,7 +167,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         Site.AltName);
 
                 return string.Format("{0} {1} created a masterful {2} {3} for {4} at {5}.",
-                    timestring, HF, Materials[Mat.Value], Items[ItemType.Value], Entity,
+                    timestring, HF, Materials[Mat.Value], ItemTypes[ItemType.Value], Entity,
                     Site.AltName);
             }
 
@@ -188,20 +188,24 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         internal override void Export(string table)
         {
-            //TODO: Incorporate new data
             base.Export(table);
-
 
             table = GetType().Name;
 
-
-
-            var vals = new List<object> { ID, HFID, EntityID, SiteID, SkillAtTime };
-
+            var vals = new List<object>
+            {
+                ID, 
+                HFID.DBExport(), 
+                EntityID.DBExport(), 
+                SiteID.DBExport(), 
+                SkillAtTime,
+                Item.DBExport(),
+                ItemType.DBExport(ItemTypes),
+                ItemSubType.DBExport(ItemSubTypes),
+                Mat.DBExport(Materials)
+            };
 
             Database.ExportWorldItem(table, vals);
-
         }
-
     }
 }

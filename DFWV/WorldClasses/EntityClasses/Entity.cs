@@ -428,14 +428,14 @@ namespace DFWV.WorldClasses.EntityClasses
         internal override void Export(string table)
         {
             //TODO Update export to include entity/site links
-            var vals = new List<object> {ID};
-
-            if (Name == null)
-                vals.Add(DBNull.Value);
-            else
-                vals.Add(Name.Replace("'", "''"));
-
-            vals.Add(Type);
+            var vals = new List<object>
+            {
+                ID,
+                Name.DBExport(),
+                Type,
+                Race.DBExport(),
+                WorshipHFID.DBExport(),
+            };
 
             Database.ExportWorldItem(table, vals);
         }

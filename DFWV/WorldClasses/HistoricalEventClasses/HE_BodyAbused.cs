@@ -123,9 +123,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "site":
                         break;
                     case "props_item_type":
-                        if (!Items.Contains(val))
-                            Items.Add(val);
-                        ItemType = Items.IndexOf(val);
+                        if (!ItemTypes.Contains(val))
+                            ItemTypes.Add(val);
+                        ItemType = ItemTypes.IndexOf(val);
                         break;
                     case "props_item_subtype":
                         if (!ItemSubTypes.Contains(val))
@@ -239,10 +239,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                                     locationtext);
                 }
                 return string.Format("{0} {1} impaled on a {2} by {3} in {4}.",
-                                timestring, abusedHFtext, Materials[ItemMat.Value] + " " + Items[ItemType.Value], AbuserEn,
+                                timestring, abusedHFtext, Materials[ItemMat.Value] + " " + ItemTypes[ItemType.Value], AbuserEn,
                                 locationtext);
             }
-            if (AbuserEn != null && PileType == -1 && ItemMat == null && ItemType != null && Items[ItemType.Value] == "none")
+            if (AbuserEn != null && PileType == -1 && ItemMat == null && ItemType != null && ItemTypes[ItemType.Value] == "none")
                 return string.Format("{0} {1} horribly mutilated by {2} in {3}.",
                                 timestring, abusedHFtext, AbuserEn,
                                 locationtext);
@@ -289,15 +289,22 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             table = GetType().Name;
 
 
-            var vals = new List<object> { ID, SiteID, SubregionID, FeatureLayerID};
-            if (Coords.IsEmpty)
-                vals.Add(DBNull.Value);
-            else
-                vals.Add(Coords.X + "," + Coords.Y);
-            if (AbuserEn == null)
-                vals.Add(DBNull.Value);
-            else
-                vals.Add(AbuserEn.ID);
+            var vals = new List<object>
+            {
+                ID, 
+                SiteID.DBExport(), 
+                SubregionID.DBExport(), 
+                FeatureLayerID.DBExport(),
+                Coords.DBExport(),
+                AbuserEnID.DBExport(),
+                BodyHFIDs.DBExport(),
+                ItemType.DBExport(ItemTypes),
+                ItemSubType.DBExport(ItemSubTypes),
+                ItemMat.DBExport(Materials),
+                HFID.DBExport(),
+                AbuseType.DBExport()
+            };
+
 
 
             Database.ExportWorldItem(table, vals);

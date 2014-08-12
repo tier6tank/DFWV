@@ -91,13 +91,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             base.Export(table);
 
-
             table = GetType().Name;
 
-
-            
-            var vals = new List<object> { ID, HFID, HistoricalFigure.Goals[SecretGoal] };
-
+            var vals = new List<object>
+            {
+                ID, 
+                HFID.DBExport(),
+                SecretGoal.DBExport(HistoricalFigure.Goals)
+            };
 
             Database.ExportWorldItem(table, vals);
 

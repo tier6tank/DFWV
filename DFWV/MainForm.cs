@@ -1168,7 +1168,7 @@ namespace DFWV
                     LineAlignment = StringAlignment.Near
                 };
 
-                e.Graphics.DrawString(WorldClasses.Site.Types[thisSite.Type].ToTitleCase(),
+                e.Graphics.DrawString(thisSite.SiteType.ToTitleCase(),
                         e.Font, Brushes.Black, e.Bounds, lineAlignFormat);
 
                 lineAlignFormat.Alignment = StringAlignment.Far;

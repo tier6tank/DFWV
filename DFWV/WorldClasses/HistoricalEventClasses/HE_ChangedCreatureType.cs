@@ -15,10 +15,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private HistoricalFigure ChangerHF { get; set; }
         private string OldRace_ { get; set; }
         private Race OldRace { get; set; }
-        private int OldCaste { get; set; }
+        private int? OldCaste { get; set; }
         private string NewRace_ { get; set; }
         private Race NewRace { get; set; }
-        private int NewCaste { get; set; }
+        private int? NewCaste { get; set; }
 
         override public Point Location { get { return Point.Empty ; } }
 
@@ -104,9 +104,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             EventLabel(frm, parent, ref location, "Changer:", ChangerHF);
             EventLabel(frm, parent, ref location, "Changee:", ChangeeHF);
             EventLabel(frm, parent, ref location, "Old Race:", OldRace);
-            EventLabel(frm, parent, ref location, "Old Caste:", HistoricalFigure.Castes[OldCaste]);
+            if (OldCaste.HasValue)
+                EventLabel(frm, parent, ref location, "Old Caste:", HistoricalFigure.Castes[OldCaste.Value]);
             EventLabel(frm, parent, ref location, "New Race:", NewRace);
-            EventLabel(frm, parent, ref location, "New Caste:", HistoricalFigure.Castes[NewCaste]);
+            if (NewCaste.HasValue)
+            EventLabel(frm, parent, ref location, "New Caste:", HistoricalFigure.Castes[NewCaste.Value]);
 
         }
 
@@ -136,8 +138,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             table = GetType().Name;
 
-            var vals = new List<object> { ID, ChangeeHFID, ChangerHFID, OldRace.ToString(), HistoricalFigure.Castes[OldCaste], NewRace.ToString(), HistoricalFigure.Castes[NewCaste] };
-
+            var vals = new List<object>
+            {
+                ID, 
+                ChangeeHFID.DBExport(), 
+                ChangerHFID.DBExport(), 
+                OldRace.DBExport(), 
+                OldCaste.DBExport(HistoricalFigure.Castes),
+                NewRace.DBExport(),
+                NewCaste.DBExport(HistoricalFigure.Castes)
+            };
 
             Database.ExportWorldItem(table, vals);
 

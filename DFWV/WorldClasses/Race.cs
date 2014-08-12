@@ -83,7 +83,8 @@ namespace DFWV.WorldClasses
 
             var vals = new List<object>
             {
-                Name.Replace("'", "''"),
+                Name.DBExport(),
+                PluralName.DBExport(),
                 isCivilized,
                 Population == Int64.MaxValue ? -1 : Population
             };

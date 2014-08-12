@@ -18,9 +18,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? FeatureLayerID { get; set; }
         private Point Coords { get; set; }
         private static readonly List<string> Situations = new List<string>();
-        private int Situation { get; set; }
+        private int? Situation { get; set; }
         private static readonly List<string> Reasons = new List<string>();
-        private int Reason { get; set; }
+        private int? Reason { get; set; }
 
         override public Point Location { get { return Site.Location; } }
 
@@ -99,8 +99,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
             EventLabel(frm, parent, ref location, "HF:", HF);
-            EventLabel(frm, parent, ref location, "Situation:", Situations[Situation]);
-            EventLabel(frm, parent, ref location, "Reason:", Reasons[Reason]);
+            if (Situation.HasValue)
+                EventLabel(frm, parent, ref location, "Situation:", Situations[Situation.Value]);
+            if (Reason.HasValue)
+                EventLabel(frm, parent, ref location, "Reason:", Reasons[Reason.Value]);
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Region:", Subregion);
             if (FeatureLayerID != null && FeatureLayerID > -1)
@@ -112,11 +114,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            if (Reasons[Reason] == "murder" && Situations[Situation] == "general suspicion")
+            if (!Reason.HasValue || !Situation.HasValue)
+                return timestring;
+            if (Reasons[Reason.Value] == "murder" && Situations[Situation.Value] == "general suspicion")
                 return string.Format("{0} {1} aroused general suspicion in {2} after a murder.",
                     timestring, HF,
                     Site.AltName);
-            if (Reasons[Reason] == "ageless" && Situations[Situation] == "general suspicion")
+            if (Reasons[Reason.Value] == "ageless" && Situations[Situation.Value] == "general suspicion")
                 return string.Format("{0} {1} aroused general suspicion in {2} after appearing not to age.",
                     timestring, HF,
                     Site.AltName);
@@ -127,11 +131,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timelinestring = base.ToTimelineString();
 
-            if (Reasons[Reason] == "murder" && Situations[Situation] == "general suspicion")
+            if (!Reason.HasValue || !Situation.HasValue)
+                return timelinestring;
+            if (Reasons[Reason.Value] == "murder" && Situations[Situation.Value] == "general suspicion")
                 return string.Format("{0} {1} aroused general suspicion in {2} after a murder.",
                     timelinestring, HF,
                     Site.AltName);
-            if (Reasons[Reason] == "ageless" && Situations[Situation] == "general suspicion")
+            if (Reasons[Reason.Value] == "ageless" && Situations[Situation.Value] == "general suspicion")
                 return string.Format("{0} {1} aroused general suspicion in {2} after appearing not to age.",
                     timelinestring, HF,
                     Site.AltName);
@@ -142,18 +148,21 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             base.Export(table);
 
-
             table = GetType().Name;
 
-            var vals = new List<object> { ID, HFID, Situations[Situation], Reasons[Reason], SiteID, SubregionID, FeatureLayerID };
-
-            if (Coords.IsEmpty)
-                vals.Add(DBNull.Value);
-            else
-                vals.Add(Coords.X + "," + Coords.Y);
+            var vals = new List<object>
+            {
+                ID, 
+                HFID.DBExport(), 
+                Situation.DBExport(Situations),
+                Reason.DBExport(Reasons), 
+                SiteID.DBExport(), 
+                SubregionID.DBExport(), 
+                FeatureLayerID.DBExport(),
+                Coords.DBExport()
+            };
 
             Database.ExportWorldItem(table, vals);
-
         }
 
     }

@@ -1295,134 +1295,77 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         internal override void Export(string table)
         {
 
-            var vals = new List<object> {ID};
-
-            if (Name == null)
-                vals.Add(DBNull.Value);
-            else
-                vals.Add(Name.Replace("'", "''"));
-
-            if (Race == null)
-                vals.Add(DBNull.Value);
-            else
-                vals.Add(Race.Name.Replace("'", "''"));
-
-            if (!Caste.HasValue)
-                vals.Add(DBNull.Value);
-            else
-                vals.Add(Castes[Caste.Value].Replace("'", "''"));
-            if (Appeared == null)
-                vals.Add(DBNull.Value);
-            else
-                vals.Add(Appeared.Year);
-            vals.Add(Birth.Year);
-            vals.Add(Birth.TotalSeconds);
-            if (Death == WorldTime.Present)
+            var vals = new List<object>
             {
-                vals.Add(DBNull.Value);
-                vals.Add(DBNull.Value);
-            }
-            else
-            { 
-                vals.Add(Death.Year);
-                vals.Add(Death.TotalSeconds);
-            }
-
-            if (!AssociatedType.HasValue)
-                vals.Add(DBNull.Value);
-            else
-                vals.Add(AssociatedTypes[AssociatedType.Value].Replace("'", "''"));
-
-            vals.Add(Deity);
-            vals.Add(Force);
-            vals.Add(Animated);
-            vals.Add(Ghost );
-            vals.Add(Adventurer);
-
-            if (EntPop == null)
-                vals.Add(DBNull.Value);
-            else
-                vals.Add(EntPop.ID);
-
-            if (!Goal.HasValue)
-                vals.Add(DBNull.Value);
-            else
-                vals.Add(Goals[Goal.Value]);
-
-            if (Sphere == null)
-                vals.Add(DBNull.Value);
-            else
-            {
-                var exportText = Sphere.Aggregate("", (current, curSphere) => current + (Spheres[curSphere] + ","));
-                exportText = exportText.TrimEnd(',');
-                vals.Add(exportText);
-            }
-
-            if (InteractionKnowledge == null)
-                vals.Add(DBNull.Value);
-            else
-            {
-                var exportText = InteractionKnowledge.Aggregate("", (current, curInteractionKnowledge) => current + (Interactions[curInteractionKnowledge] + ","));
-                exportText = exportText.TrimEnd(',');
-                vals.Add(exportText);
-            }
-
-            if (JourneyPet == null)
-                vals.Add(DBNull.Value);
-            else
-            {
-                var exportText = JourneyPet.Aggregate("", (current, curJourneyPet) => current + (JourneyPets[curJourneyPet] + ","));
-                exportText = exportText.TrimEnd(',');
-                vals.Add(exportText);
-            }
+                ID,
+                Name.DBExport(),
+                Race == null ? (object) DBNull.Value : Race.ToString().DBExport(),
+                Caste.DBExport(Castes),
+                Appeared.DBExport(true),
+                Birth.DBExport(true),
+                Birth.DBExport(false),
+                Death.DBExport(true),
+                Death.DBExport(false),
+                AssociatedType.DBExport(AssociatedTypes),
+                Deity,
+                Force,
+                Animated,
+                Ghost,
+                Adventurer,
+                EntPop.DBExport(),
+                Goal.DBExport(Goals),
+                Sphere.DBExport(Spheres),
+                InteractionKnowledge.DBExport(Interactions),
+                JourneyPet.DBExport(JourneyPets),
+            };
 
                 
             Database.ExportWorldItem(table, vals);
 
             if (EntityFormerPositionLinks != null)
             {
-                foreach (var EntityFormerPositionLink in EntityFormerPositionLinks)
-                    EntityFormerPositionLink.Export(ID);
+                foreach (var entityFormerPositionLink in EntityFormerPositionLinks)
+                    entityFormerPositionLink.Export(ID);
             }
 
             if (EntityPositionLinks != null)
             {
-                foreach (var EntityPositionLink in EntityPositionLinks)
-                    EntityPositionLink.Export(ID);
+                foreach (var entityPositionLink in EntityPositionLinks)
+                    entityPositionLink.Export(ID);
             }
 
             if (EntityReputations != null)
             {
-            foreach (var EntityReputation in EntityReputations)
-                EntityReputation.Export(ID);
+            foreach (var entityReputation in EntityReputations)
+                entityReputation.Export(ID);
             }
 
             if (HFSkills != null)
             {
-            foreach (var HFSkill in HFSkills)
-                HFSkill.Export(ID);
+            foreach (var hfSkill in HFSkills)
+                hfSkill.Export(ID);
             }
 
             if (EntityLinks != null)
             {
-            foreach (var EntityLink in EntityLinks.Values.SelectMany(EntityLinkList => EntityLinkList))
+            foreach (var entityLink in EntityLinks.Values.SelectMany(entityLinkList => entityLinkList))
             {
-                EntityLink.Export(ID);
+                entityLink.Export(ID);
             }
             }
 
             if (HFLinks != null)
             {
-                foreach (var HFLink in HFLinks.Values.SelectMany(HFLinkList => HFLinkList))
+                foreach (var hfLink in HFLinks.Values.SelectMany(hfLinkList => hfLinkList))
                 {
-                    HFLink.Export(ID);
+                    hfLink.Export(ID);
                 }
             }
 
             if (SiteLinks == null) return;
-            foreach (var SiteLink in SiteLinks.Values.SelectMany(SiteLinkList => SiteLinkList))
+            foreach (var siteLink in SiteLinks.Values.SelectMany(siteLinkList => siteLinkList))
             {
-                SiteLink.Export(ID);
+                siteLink.Export(ID);
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 using System.Drawing;
 using System.Windows.Forms;
@@ -179,17 +180,28 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         internal override void Export(string table)
         {
-            //TODO: Incorporate new data (multiple GroupHFs)
             base.Export(table);
 
             table = GetType().Name;
             
-            var vals = new List<object> { ID, GroupHFIDs[0], SiteID, SubregionID, FeatureLayerID };
+            var vals = new List<object>
+            {
+                ID, 
+                GroupHFIDs.DBExport(), 
+                SiteID.DBExport(), 
+                SubregionID.DBExport(), 
+                FeatureLayerID.DBExport(),
+                Coords.DBExport()
+            };
 
-            if (Coords.IsEmpty)
-                vals.Add(DBNull.Value);
+            if (Pets != null)
+            {
+                var petExport = Pets.Aggregate("", (current, petRace) => current + (petRace.ToString() + ","));
+                petExport = petExport.TrimEnd(',');
+                vals.Add(petExport);
+            }
             else
-                vals.Add(Coords.X + "," + Coords.Y);
+                vals.Add(DBNull.Value);
 
             Database.ExportWorldItem(table, vals);
 

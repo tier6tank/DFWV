@@ -109,13 +109,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             table = GetType().Name;
 
-            var vals = new List<object> { ID, AgreementID, 
-                HF != null ? HF.ID : -1, 
-                Site != null ? Site.ID : -1, 
-                Artifact != null ? Artifact.ID : -1,
-                ConcluderHFID.HasValue ? ConcluderHFID.Value : -1,
-                AgreementSubjectID.HasValue ? AgreementSubjectID.Value : -1,
-                Reason            
+            var vals = new List<object> 
+            { 
+                ID, 
+                AgreementID, 
+                HF.DBExport(),
+                Site.DBExport(),
+                Artifact.DBExport(),
+                ConcluderHFID.DBExport(),
+                AgreementSubjectID.DBExport(),
+                Reason.DBExport()  
             };
 
             Database.ExportWorldItem(table, vals);
