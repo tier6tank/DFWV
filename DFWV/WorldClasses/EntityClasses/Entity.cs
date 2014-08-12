@@ -438,6 +438,25 @@ namespace DFWV.WorldClasses.EntityClasses
             };
 
             Database.ExportWorldItem(table, vals);
+
+            if (EntityLinks != null)
+            {
+                foreach (var entityLink in EntityLinks.Values.SelectMany(entityLinkList => entityLinkList))
+                    entityLink.Export(ID);
+            }
+
+            if (SiteLinks != null)
+            {
+                foreach (var siteLink in SiteLinks.Values.SelectMany(siteLinkList => siteLinkList))
+                    siteLink.Export(ID);
+            }
+
+            if (Children != null)
+            {
+                foreach (var child in ChildrenIDs)
+                    Database.ExportWorldItem("Entity_EntityChild", new List<object>{ID, child});
+            }
+
         }
     }
 }

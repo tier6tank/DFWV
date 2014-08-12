@@ -152,6 +152,12 @@ namespace DFWV.WorldClasses
             };
 
             Database.ExportWorldItem(table, vals);
+
+            if (RaceCounts != null)
+            {
+                foreach (var raceCount in RaceCounts)
+                    Database.ExportWorldItem("EntityPop_RaceCounts", new List<object> { ID, raceCount.Key.ToString(), raceCount.Value });
+            }
         }
 
     }

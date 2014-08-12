@@ -144,6 +144,16 @@ namespace DFWV.WorldClasses
             };
 
             Database.ExportWorldItem(table, vals);
+
+            if (Coords != null)
+            {
+                int coordID = 0;
+                foreach (var coord in Coords)
+                {
+                    Database.ExportWorldItem("WorldConstruction_Coords", new List<object> { ID, coordID, coord.X, coord.Y });
+                    coordID++;
+                }
+            }
         }
     }
 }

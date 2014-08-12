@@ -15,13 +15,6 @@ using SevenZip;
 //TODO: Group by multiple items
 
 //TODO: -----Export-------
-//TODO: Add Entity/Entity Links
-//TODO: Add Entity/Site Links
-//TODO: Add Entity/Children Links
-//TODO: Add EntityPopulation Race Counts
-//TODO: Add Region Coords
-//TODO: Add UGRegion Coords
-//TODO: Add World Construction Coords
 //TODO: Add Dynasty/Leader/God 
 
 //TODO: Properly Export Insurrection started/ended and event collections

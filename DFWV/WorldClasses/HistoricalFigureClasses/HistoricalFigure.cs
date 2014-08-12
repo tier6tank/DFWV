@@ -1336,22 +1336,22 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
 
             if (EntityReputations != null)
             {
-            foreach (var entityReputation in EntityReputations)
-                entityReputation.Export(ID);
+                foreach (var entityReputation in EntityReputations)
+                    entityReputation.Export(ID);
             }
 
             if (HFSkills != null)
             {
-            foreach (var hfSkill in HFSkills)
-                hfSkill.Export(ID);
+                foreach (var hfSkill in HFSkills)
+                    hfSkill.Export(ID);
             }
 
             if (EntityLinks != null)
             {
-            foreach (var entityLink in EntityLinks.Values.SelectMany(entityLinkList => entityLinkList))
-            {
-                entityLink.Export(ID);
-            }
+                foreach (var entityLink in EntityLinks.Values.SelectMany(entityLinkList => entityLinkList))
+                {
+                    entityLink.Export(ID);
+                }
             }
 
             if (HFLinks != null)
