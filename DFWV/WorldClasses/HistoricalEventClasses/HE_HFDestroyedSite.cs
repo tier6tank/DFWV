@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
@@ -112,7 +111,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
 
             return string.Format("{0} {1} routed {2} of {3} and destroyed {4}.",
-                                    timestring, AttackerHF.FirstName.ToTitleCase(), SiteCiv, DefenderCiv, 
+                                    timestring, System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(AttackerHF.FirstName), SiteCiv, DefenderCiv, 
                                     Site.AltName);
         }
 

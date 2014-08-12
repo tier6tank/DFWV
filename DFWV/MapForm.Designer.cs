@@ -29,14 +29,20 @@
         private void InitializeComponent()
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sitesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.civilizationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.battlesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.regionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.HFtoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.constructionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.picMap = new System.Windows.Forms.PictureBox();
             this.mapTableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.pnlMap = new System.Windows.Forms.Panel();
             this.picMiniMap = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.lblMapParent = new System.Windows.Forms.Label();
+            this.lblMapParentCiv = new System.Windows.Forms.Label();
             this.lblMapOwner = new System.Windows.Forms.Label();
             this.lblMapCoords = new System.Windows.Forms.Label();
             this.lblMapOwnerCaption = new System.Windows.Forms.Label();
@@ -44,40 +50,25 @@
             this.lblMapTypeCaption = new System.Windows.Forms.Label();
             this.lblMapParentCaption = new System.Windows.Forms.Label();
             this.lblMapAltName = new System.Windows.Forms.Label();
-            this.lblMapAltNameCaption = new System.Windows.Forms.Label();
+            this.lblMapNickNameCaption = new System.Windows.Forms.Label();
             this.lblMapName = new System.Windows.Forms.Label();
             this.lblMapNameCaption = new System.Windows.Forms.Label();
-            this.grpSettings = new System.Windows.Forms.GroupBox();
-            this.ugRegionDepthPicker = new System.Windows.Forms.NumericUpDown();
-            this.btnOK = new System.Windows.Forms.Button();
-            this.chkSites = new System.Windows.Forms.CheckBox();
-            this.grpSites = new System.Windows.Forms.GroupBox();
-            this.lstSiteTypes = new System.Windows.Forms.ListView();
-            this.chkOwnedSites = new System.Windows.Forms.CheckBox();
-            this.chkNeutralSites = new System.Windows.Forms.CheckBox();
-            this.chkConstructions = new System.Windows.Forms.CheckBox();
-            this.chkHistoricalFigures = new System.Windows.Forms.CheckBox();
-            this.chkUGRegions = new System.Windows.Forms.CheckBox();
-            this.chkRegions = new System.Windows.Forms.CheckBox();
-            this.chkBattles = new System.Windows.Forms.CheckBox();
-            this.chkCivilizations = new System.Windows.Forms.CheckBox();
-            this.lblMapObject = new System.Windows.Forms.Label();
+            this.sitetypesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ownedsitesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.neutralsitesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picMap)).BeginInit();
             this.mapTableLayout.SuspendLayout();
             this.pnlMap.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picMiniMap)).BeginInit();
             this.panel1.SuspendLayout();
-            this.grpSettings.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ugRegionDepthPicker)).BeginInit();
-            this.grpSites.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mapsToolStripMenuItem,
-            this.settingsToolStripMenuItem});
+            this.viewToolStripMenuItem,
+            this.mapsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(4, 2, 0, 2);
@@ -85,18 +76,76 @@
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
+            // viewToolStripMenuItem
+            // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sitesToolStripMenuItem,
+            this.civilizationsToolStripMenuItem,
+            this.battlesToolStripMenuItem,
+            this.regionsToolStripMenuItem,
+            this.HFtoolStripMenuItem,
+            this.constructionsToolStripMenuItem});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Text = "&View";
+            // 
+            // sitesToolStripMenuItem
+            // 
+            this.sitesToolStripMenuItem.CheckOnClick = true;
+            this.sitesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sitetypesToolStripMenuItem,
+            this.ownedsitesToolStripMenuItem,
+            this.neutralsitesToolStripMenuItem});
+            this.sitesToolStripMenuItem.Name = "sitesToolStripMenuItem";
+            this.sitesToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.sitesToolStripMenuItem.Text = "&Sites";
+            this.sitesToolStripMenuItem.CheckedChanged += new System.EventHandler(this.ViewOptionChanged);
+            // 
+            // civilizationsToolStripMenuItem
+            // 
+            this.civilizationsToolStripMenuItem.CheckOnClick = true;
+            this.civilizationsToolStripMenuItem.Name = "civilizationsToolStripMenuItem";
+            this.civilizationsToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.civilizationsToolStripMenuItem.Text = "&Civilizations";
+            this.civilizationsToolStripMenuItem.CheckedChanged += new System.EventHandler(this.ViewOptionChanged);
+            // 
+            // battlesToolStripMenuItem
+            // 
+            this.battlesToolStripMenuItem.CheckOnClick = true;
+            this.battlesToolStripMenuItem.Name = "battlesToolStripMenuItem";
+            this.battlesToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.battlesToolStripMenuItem.Text = "&Battles (testing)";
+            this.battlesToolStripMenuItem.CheckedChanged += new System.EventHandler(this.ViewOptionChanged);
+            // 
+            // regionsToolStripMenuItem
+            // 
+            this.regionsToolStripMenuItem.CheckOnClick = true;
+            this.regionsToolStripMenuItem.Name = "regionsToolStripMenuItem";
+            this.regionsToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.regionsToolStripMenuItem.Text = "Regions (testing)";
+            this.regionsToolStripMenuItem.CheckedChanged += new System.EventHandler(this.ViewOptionChanged);
+            // 
+            // HFtoolStripMenuItem
+            // 
+            this.HFtoolStripMenuItem.CheckOnClick = true;
+            this.HFtoolStripMenuItem.Name = "HFtoolStripMenuItem";
+            this.HFtoolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.HFtoolStripMenuItem.Text = "Historical Figures (testing)";
+            this.HFtoolStripMenuItem.CheckedChanged += new System.EventHandler(this.ViewOptionChanged);
+            // 
+            // constructionsToolStripMenuItem
+            // 
+            this.constructionsToolStripMenuItem.CheckOnClick = true;
+            this.constructionsToolStripMenuItem.Name = "constructionsToolStripMenuItem";
+            this.constructionsToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.constructionsToolStripMenuItem.Text = "Constructions (testing)";
+            this.constructionsToolStripMenuItem.CheckedChanged += new System.EventHandler(this.ViewOptionChanged);
+            // 
             // mapsToolStripMenuItem
             // 
             this.mapsToolStripMenuItem.Name = "mapsToolStripMenuItem";
             this.mapsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.mapsToolStripMenuItem.Text = "&Maps";
-            // 
-            // settingsToolStripMenuItem
-            // 
-            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
-            this.settingsToolStripMenuItem.Text = "Settings";
-            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // picMap
             // 
@@ -158,8 +207,7 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.lblMapObject);
-            this.panel1.Controls.Add(this.lblMapParent);
+            this.panel1.Controls.Add(this.lblMapParentCiv);
             this.panel1.Controls.Add(this.lblMapOwner);
             this.panel1.Controls.Add(this.lblMapCoords);
             this.panel1.Controls.Add(this.lblMapOwnerCaption);
@@ -167,7 +215,7 @@
             this.panel1.Controls.Add(this.lblMapTypeCaption);
             this.panel1.Controls.Add(this.lblMapParentCaption);
             this.panel1.Controls.Add(this.lblMapAltName);
-            this.panel1.Controls.Add(this.lblMapAltNameCaption);
+            this.panel1.Controls.Add(this.lblMapNickNameCaption);
             this.panel1.Controls.Add(this.lblMapName);
             this.panel1.Controls.Add(this.lblMapNameCaption);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -177,19 +225,19 @@
             this.panel1.Size = new System.Drawing.Size(184, 403);
             this.panel1.TabIndex = 4;
             // 
-            // lblMapParent
+            // lblMapParentCiv
             // 
-            this.lblMapParent.AutoSize = true;
-            this.lblMapParent.Location = new System.Drawing.Point(58, 117);
-            this.lblMapParent.Name = "lblMapParent";
-            this.lblMapParent.Size = new System.Drawing.Size(25, 13);
-            this.lblMapParent.TabIndex = 75;
-            this.lblMapParent.Text = "      ";
+            this.lblMapParentCiv.AutoSize = true;
+            this.lblMapParentCiv.Location = new System.Drawing.Point(58, 85);
+            this.lblMapParentCiv.Name = "lblMapParentCiv";
+            this.lblMapParentCiv.Size = new System.Drawing.Size(25, 13);
+            this.lblMapParentCiv.TabIndex = 75;
+            this.lblMapParentCiv.Text = "      ";
             // 
             // lblMapOwner
             // 
             this.lblMapOwner.AutoSize = true;
-            this.lblMapOwner.Location = new System.Drawing.Point(58, 96);
+            this.lblMapOwner.Location = new System.Drawing.Point(58, 64);
             this.lblMapOwner.Name = "lblMapOwner";
             this.lblMapOwner.Size = new System.Drawing.Size(25, 13);
             this.lblMapOwner.TabIndex = 74;
@@ -208,7 +256,7 @@
             // lblMapOwnerCaption
             // 
             this.lblMapOwnerCaption.AutoSize = true;
-            this.lblMapOwnerCaption.Location = new System.Drawing.Point(3, 96);
+            this.lblMapOwnerCaption.Location = new System.Drawing.Point(3, 64);
             this.lblMapOwnerCaption.Name = "lblMapOwnerCaption";
             this.lblMapOwnerCaption.Size = new System.Drawing.Size(41, 13);
             this.lblMapOwnerCaption.TabIndex = 72;
@@ -217,7 +265,7 @@
             // lblMapType
             // 
             this.lblMapType.AutoSize = true;
-            this.lblMapType.Location = new System.Drawing.Point(58, 75);
+            this.lblMapType.Location = new System.Drawing.Point(58, 43);
             this.lblMapType.Name = "lblMapType";
             this.lblMapType.Size = new System.Drawing.Size(25, 13);
             this.lblMapType.TabIndex = 67;
@@ -226,7 +274,7 @@
             // lblMapTypeCaption
             // 
             this.lblMapTypeCaption.AutoSize = true;
-            this.lblMapTypeCaption.Location = new System.Drawing.Point(3, 75);
+            this.lblMapTypeCaption.Location = new System.Drawing.Point(3, 43);
             this.lblMapTypeCaption.Name = "lblMapTypeCaption";
             this.lblMapTypeCaption.Size = new System.Drawing.Size(34, 13);
             this.lblMapTypeCaption.TabIndex = 66;
@@ -235,7 +283,7 @@
             // lblMapParentCaption
             // 
             this.lblMapParentCaption.AutoSize = true;
-            this.lblMapParentCaption.Location = new System.Drawing.Point(3, 117);
+            this.lblMapParentCaption.Location = new System.Drawing.Point(3, 85);
             this.lblMapParentCaption.Name = "lblMapParentCaption";
             this.lblMapParentCaption.Size = new System.Drawing.Size(59, 13);
             this.lblMapParentCaption.TabIndex = 65;
@@ -244,25 +292,25 @@
             // lblMapAltName
             // 
             this.lblMapAltName.AutoSize = true;
-            this.lblMapAltName.Location = new System.Drawing.Point(58, 54);
+            this.lblMapAltName.Location = new System.Drawing.Point(58, 22);
             this.lblMapAltName.Name = "lblMapAltName";
             this.lblMapAltName.Size = new System.Drawing.Size(25, 13);
             this.lblMapAltName.TabIndex = 64;
             this.lblMapAltName.Text = "      ";
             // 
-            // lblMapAltNameCaption
+            // lblMapNickNameCaption
             // 
-            this.lblMapAltNameCaption.AutoSize = true;
-            this.lblMapAltNameCaption.Location = new System.Drawing.Point(3, 54);
-            this.lblMapAltNameCaption.Name = "lblMapAltNameCaption";
-            this.lblMapAltNameCaption.Size = new System.Drawing.Size(58, 13);
-            this.lblMapAltNameCaption.TabIndex = 63;
-            this.lblMapAltNameCaption.Text = "Nickname:";
+            this.lblMapNickNameCaption.AutoSize = true;
+            this.lblMapNickNameCaption.Location = new System.Drawing.Point(3, 22);
+            this.lblMapNickNameCaption.Name = "lblMapNickNameCaption";
+            this.lblMapNickNameCaption.Size = new System.Drawing.Size(58, 13);
+            this.lblMapNickNameCaption.TabIndex = 63;
+            this.lblMapNickNameCaption.Text = "Nickname:";
             // 
             // lblMapName
             // 
             this.lblMapName.AutoSize = true;
-            this.lblMapName.Location = new System.Drawing.Point(58, 32);
+            this.lblMapName.Location = new System.Drawing.Point(58, 0);
             this.lblMapName.Name = "lblMapName";
             this.lblMapName.Size = new System.Drawing.Size(25, 13);
             this.lblMapName.TabIndex = 62;
@@ -271,202 +319,42 @@
             // lblMapNameCaption
             // 
             this.lblMapNameCaption.AutoSize = true;
-            this.lblMapNameCaption.Location = new System.Drawing.Point(3, 32);
+            this.lblMapNameCaption.Location = new System.Drawing.Point(3, 0);
             this.lblMapNameCaption.Name = "lblMapNameCaption";
             this.lblMapNameCaption.Size = new System.Drawing.Size(41, 13);
             this.lblMapNameCaption.TabIndex = 61;
             this.lblMapNameCaption.Text = "Name: ";
             // 
-            // grpSettings
+            // sitetypesToolStripMenuItem
             // 
-            this.grpSettings.Controls.Add(this.ugRegionDepthPicker);
-            this.grpSettings.Controls.Add(this.btnOK);
-            this.grpSettings.Controls.Add(this.chkSites);
-            this.grpSettings.Controls.Add(this.grpSites);
-            this.grpSettings.Controls.Add(this.chkConstructions);
-            this.grpSettings.Controls.Add(this.chkHistoricalFigures);
-            this.grpSettings.Controls.Add(this.chkUGRegions);
-            this.grpSettings.Controls.Add(this.chkRegions);
-            this.grpSettings.Controls.Add(this.chkBattles);
-            this.grpSettings.Controls.Add(this.chkCivilizations);
-            this.grpSettings.Location = new System.Drawing.Point(64, 80);
-            this.grpSettings.Name = "grpSettings";
-            this.grpSettings.Size = new System.Drawing.Size(361, 226);
-            this.grpSettings.TabIndex = 5;
-            this.grpSettings.TabStop = false;
-            this.grpSettings.Text = "Settings";
-            this.grpSettings.Visible = false;
+            this.sitetypesToolStripMenuItem.Enabled = false;
+            this.sitetypesToolStripMenuItem.Name = "sitetypesToolStripMenuItem";
+            this.sitetypesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.sitetypesToolStripMenuItem.Text = "Types";
             // 
-            // ugRegionDepthPicker
+            // ownedsitesToolStripMenuItem
             // 
-            this.ugRegionDepthPicker.Location = new System.Drawing.Point(142, 86);
-            this.ugRegionDepthPicker.Maximum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.ugRegionDepthPicker.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.ugRegionDepthPicker.Name = "ugRegionDepthPicker";
-            this.ugRegionDepthPicker.Size = new System.Drawing.Size(31, 20);
-            this.ugRegionDepthPicker.TabIndex = 9;
-            this.ugRegionDepthPicker.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.ugRegionDepthPicker.ValueChanged += new System.EventHandler(this.ViewOptionChanged);
+            this.ownedsitesToolStripMenuItem.CheckOnClick = true;
+            this.ownedsitesToolStripMenuItem.Enabled = false;
+            this.ownedsitesToolStripMenuItem.Name = "ownedsitesToolStripMenuItem";
+            this.ownedsitesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.ownedsitesToolStripMenuItem.Text = "Owned";
+            this.ownedsitesToolStripMenuItem.CheckedChanged += new System.EventHandler(this.ViewOptionChanged);
             // 
-            // btnOK
+            // neutralsitesToolStripMenuItem
             // 
-            this.btnOK.Location = new System.Drawing.Point(7, 192);
-            this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(75, 23);
-            this.btnOK.TabIndex = 8;
-            this.btnOK.Text = "OK";
-            this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
-            // 
-            // chkSites
-            // 
-            this.chkSites.AutoSize = true;
-            this.chkSites.Location = new System.Drawing.Point(195, 19);
-            this.chkSites.Name = "chkSites";
-            this.chkSites.Size = new System.Drawing.Size(49, 17);
-            this.chkSites.TabIndex = 0;
-            this.chkSites.Text = "Sites";
-            this.chkSites.UseVisualStyleBackColor = true;
-            this.chkSites.Click += new System.EventHandler(this.ViewOptionChanged);
-            // 
-            // grpSites
-            // 
-            this.grpSites.Controls.Add(this.lstSiteTypes);
-            this.grpSites.Controls.Add(this.chkOwnedSites);
-            this.grpSites.Controls.Add(this.chkNeutralSites);
-            this.grpSites.Location = new System.Drawing.Point(186, 19);
-            this.grpSites.Name = "grpSites";
-            this.grpSites.Size = new System.Drawing.Size(163, 197);
-            this.grpSites.TabIndex = 7;
-            this.grpSites.TabStop = false;
-            this.grpSites.Visible = false;
-            // 
-            // lstSiteTypes
-            // 
-            this.lstSiteTypes.CheckBoxes = true;
-            this.lstSiteTypes.Location = new System.Drawing.Point(6, 70);
-            this.lstSiteTypes.Name = "lstSiteTypes";
-            this.lstSiteTypes.Size = new System.Drawing.Size(151, 120);
-            this.lstSiteTypes.TabIndex = 3;
-            this.lstSiteTypes.UseCompatibleStateImageBehavior = false;
-            this.lstSiteTypes.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.lstSiteTypes_ItemChecked);
-            // 
-            // chkOwnedSites
-            // 
-            this.chkOwnedSites.AutoSize = true;
-            this.chkOwnedSites.Location = new System.Drawing.Point(19, 43);
-            this.chkOwnedSites.Name = "chkOwnedSites";
-            this.chkOwnedSites.Size = new System.Drawing.Size(86, 17);
-            this.chkOwnedSites.TabIndex = 3;
-            this.chkOwnedSites.Text = "Owned Sites";
-            this.chkOwnedSites.UseVisualStyleBackColor = true;
-            this.chkOwnedSites.Click += new System.EventHandler(this.ViewOptionChanged);
-            // 
-            // chkNeutralSites
-            // 
-            this.chkNeutralSites.AutoSize = true;
-            this.chkNeutralSites.Location = new System.Drawing.Point(19, 19);
-            this.chkNeutralSites.Name = "chkNeutralSites";
-            this.chkNeutralSites.Size = new System.Drawing.Size(86, 17);
-            this.chkNeutralSites.TabIndex = 2;
-            this.chkNeutralSites.Text = "Neutral Sites";
-            this.chkNeutralSites.UseVisualStyleBackColor = true;
-            this.chkNeutralSites.Click += new System.EventHandler(this.ViewOptionChanged);
-            // 
-            // chkConstructions
-            // 
-            this.chkConstructions.AutoSize = true;
-            this.chkConstructions.Location = new System.Drawing.Point(6, 135);
-            this.chkConstructions.Name = "chkConstructions";
-            this.chkConstructions.Size = new System.Drawing.Size(90, 17);
-            this.chkConstructions.TabIndex = 6;
-            this.chkConstructions.Text = "Constructions";
-            this.chkConstructions.UseVisualStyleBackColor = true;
-            this.chkConstructions.Click += new System.EventHandler(this.ViewOptionChanged);
-            // 
-            // chkHistoricalFigures
-            // 
-            this.chkHistoricalFigures.AutoSize = true;
-            this.chkHistoricalFigures.Location = new System.Drawing.Point(6, 112);
-            this.chkHistoricalFigures.Name = "chkHistoricalFigures";
-            this.chkHistoricalFigures.Size = new System.Drawing.Size(106, 17);
-            this.chkHistoricalFigures.TabIndex = 5;
-            this.chkHistoricalFigures.Text = "Historical Figures";
-            this.chkHistoricalFigures.UseVisualStyleBackColor = true;
-            this.chkHistoricalFigures.Click += new System.EventHandler(this.ViewOptionChanged);
-            // 
-            // chkUGRegions
-            // 
-            this.chkUGRegions.AutoSize = true;
-            this.chkUGRegions.Location = new System.Drawing.Point(6, 89);
-            this.chkUGRegions.Name = "chkUGRegions";
-            this.chkUGRegions.Size = new System.Drawing.Size(130, 17);
-            this.chkUGRegions.TabIndex = 4;
-            this.chkUGRegions.Text = "Underground Regions";
-            this.chkUGRegions.UseVisualStyleBackColor = true;
-            this.chkUGRegions.Click += new System.EventHandler(this.ViewOptionChanged);
-            // 
-            // chkRegions
-            // 
-            this.chkRegions.AutoSize = true;
-            this.chkRegions.Location = new System.Drawing.Point(6, 66);
-            this.chkRegions.Name = "chkRegions";
-            this.chkRegions.Size = new System.Drawing.Size(65, 17);
-            this.chkRegions.TabIndex = 3;
-            this.chkRegions.Text = "Regions";
-            this.chkRegions.UseVisualStyleBackColor = true;
-            this.chkRegions.Click += new System.EventHandler(this.ViewOptionChanged);
-            // 
-            // chkBattles
-            // 
-            this.chkBattles.AutoSize = true;
-            this.chkBattles.Location = new System.Drawing.Point(6, 43);
-            this.chkBattles.Name = "chkBattles";
-            this.chkBattles.Size = new System.Drawing.Size(58, 17);
-            this.chkBattles.TabIndex = 2;
-            this.chkBattles.Text = "Battles";
-            this.chkBattles.UseVisualStyleBackColor = true;
-            this.chkBattles.Click += new System.EventHandler(this.ViewOptionChanged);
-            // 
-            // chkCivilizations
-            // 
-            this.chkCivilizations.AutoSize = true;
-            this.chkCivilizations.Location = new System.Drawing.Point(6, 20);
-            this.chkCivilizations.Name = "chkCivilizations";
-            this.chkCivilizations.Size = new System.Drawing.Size(80, 17);
-            this.chkCivilizations.TabIndex = 1;
-            this.chkCivilizations.Text = "Civilizations";
-            this.chkCivilizations.UseVisualStyleBackColor = true;
-            this.chkCivilizations.Click += new System.EventHandler(this.ViewOptionChanged);
-            // 
-            // lblMapObject
-            // 
-            this.lblMapObject.AutoSize = true;
-            this.lblMapObject.Location = new System.Drawing.Point(70, 8);
-            this.lblMapObject.Name = "lblMapObject";
-            this.lblMapObject.Size = new System.Drawing.Size(38, 13);
-            this.lblMapObject.TabIndex = 76;
-            this.lblMapObject.Text = "Object";
-            this.lblMapObject.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.neutralsitesToolStripMenuItem.CheckOnClick = true;
+            this.neutralsitesToolStripMenuItem.Enabled = false;
+            this.neutralsitesToolStripMenuItem.Name = "neutralsitesToolStripMenuItem";
+            this.neutralsitesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.neutralsitesToolStripMenuItem.Text = "Neutral";
+            this.neutralsitesToolStripMenuItem.CheckedChanged += new System.EventHandler(this.ViewOptionChanged);
             // 
             // MapForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(901, 553);
-            this.Controls.Add(this.grpSettings);
             this.Controls.Add(this.mapTableLayout);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -475,7 +363,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Map";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MapForm_FormClosing);
-            this.Load += new System.EventHandler(this.MapForm_Load);
             this.Move += new System.EventHandler(this.MapForm_Move);
             this.Resize += new System.EventHandler(this.MapForm_Resize);
             this.menuStrip1.ResumeLayout(false);
@@ -487,11 +374,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.picMiniMap)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            this.grpSettings.ResumeLayout(false);
-            this.grpSettings.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ugRegionDepthPicker)).EndInit();
-            this.grpSites.ResumeLayout(false);
-            this.grpSites.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -504,34 +386,28 @@
         private System.Windows.Forms.TableLayoutPanel mapTableLayout;
         private System.Windows.Forms.Panel pnlMap;
         private System.Windows.Forms.PictureBox picMiniMap;
+        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sitesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mapsToolStripMenuItem;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label lblMapOwnerCaption;
         private System.Windows.Forms.Label lblMapTypeCaption;
         private System.Windows.Forms.Label lblMapParentCaption;
         public System.Windows.Forms.Label lblMapAltName;
-        private System.Windows.Forms.Label lblMapAltNameCaption;
+        private System.Windows.Forms.Label lblMapNickNameCaption;
         public System.Windows.Forms.Label lblMapName;
         private System.Windows.Forms.Label lblMapNameCaption;
         public System.Windows.Forms.Label lblMapCoords;
-        public System.Windows.Forms.Label lblMapParent;
+        public System.Windows.Forms.Label lblMapParentCiv;
         public System.Windows.Forms.Label lblMapOwner;
         public System.Windows.Forms.Label lblMapType;
-        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
-        private System.Windows.Forms.GroupBox grpSettings;
-        private System.Windows.Forms.Button btnOK;
-        private System.Windows.Forms.CheckBox chkSites;
-        private System.Windows.Forms.GroupBox grpSites;
-        private System.Windows.Forms.ListView lstSiteTypes;
-        private System.Windows.Forms.CheckBox chkOwnedSites;
-        private System.Windows.Forms.CheckBox chkNeutralSites;
-        private System.Windows.Forms.CheckBox chkConstructions;
-        private System.Windows.Forms.CheckBox chkHistoricalFigures;
-        private System.Windows.Forms.CheckBox chkUGRegions;
-        private System.Windows.Forms.CheckBox chkRegions;
-        private System.Windows.Forms.CheckBox chkBattles;
-        private System.Windows.Forms.CheckBox chkCivilizations;
-        private System.Windows.Forms.NumericUpDown ugRegionDepthPicker;
-        private System.Windows.Forms.Label lblMapObject;
+        private System.Windows.Forms.ToolStripMenuItem civilizationsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem battlesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem regionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem HFtoolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem constructionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sitetypesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ownedsitesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem neutralsitesToolStripMenuItem;
     }
 }

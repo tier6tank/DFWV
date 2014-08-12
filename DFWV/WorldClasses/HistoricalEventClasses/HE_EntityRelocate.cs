@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
@@ -55,21 +54,18 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             base.Link();
             if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-            {
                 Site = World.Sites[SiteID.Value];
-                if (StructureID.HasValue)
-                {
-                    Structure = Site.GetStructure(StructureID.Value);
-
-                    if (Structure == null)
-                    {
-                        Structure = new Structure(Site, StructureID.Value, World);
-                        Site.AddStructure(Structure);
-                    }
-                }
-            }
             if (EntityID.HasValue && World.Entities.ContainsKey(EntityID.Value))
                 Entity = World.Entities[EntityID.Value];
+            if (!StructureID.HasValue || StructureID.Value == -1 || Site == null) return;
+
+            if (World.Structures.ContainsKey(StructureID.Value))
+                Structure = World.Structures[StructureID.Value];
+            else
+            {
+                Structure = new Structure(Site, StructureID.Value, World);
+                Site.AddStructure(Structure);
+            }
         }
 
         internal override void Process()
@@ -96,12 +92,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             EventLabel(frm, parent, ref location, "Structure:", Structure);
         }
 
-        protected override string LegendsDescription() //Not Matched - Verify structure names are right
+        protected override string LegendsDescription()
         {
             var timestring = base.LegendsDescription();
 
             return string.Format("{0} {1} moved to {2} in {3}.",
-                timestring, Entity, Structure == null ? "UNKNOWN" : Structure.Name,
+                            timestring, Entity, "UNKNOWN",
                             Site.AltName);
         }
 

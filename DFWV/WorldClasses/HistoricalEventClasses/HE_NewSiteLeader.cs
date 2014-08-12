@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
@@ -134,11 +133,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             EventLabel(frm, parent, ref location, "New Leader:", NewLeaderHF);
         }
 
-        protected override string LegendsDescription() //Matched
+        protected override string LegendsDescription()
         {
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} {1} defeated {2} and placed the {3} {4} in charge of {5}. \nThe new government was called {6}.",
+            return string.Format("{0} {1} defeated {2} and placed the {3} {4} in charge of {5}. The new government was called {6}.",
                                     timestring, AttackerCiv, SiteCiv, NewLeaderHF.Race, NewLeaderHF,
                                     Site.AltName, NewSiteCiv);
         }

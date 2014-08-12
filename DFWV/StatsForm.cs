@@ -37,9 +37,6 @@ namespace DFWV
             };
             var xAxis = new Axis(SiteCountChart.ChartAreas[0], AxisName.X) {Title = "Year"};
 
-            SiteCountChart.ChartAreas[0].AxisX = xAxis;
-            SiteCountChart.ChartAreas[0].AxisY = yAxis;
-
             // Bind the data to the chart
             SiteCountChart.Series["Default"].Points.DataBindXY(xValues, yValues);
             SiteCountChart.ChartAreas[0].AxisX.Interval = Math.Round((xValues[xValues.Length - 1] - xValues[0]) / 100.0, 0) * 10.0;
@@ -59,9 +56,6 @@ namespace DFWV
                 Name = "Population"
             };
             var xAxis = new Axis(HFPopulationChart.ChartAreas[0], AxisName.X) {Title = "Year"};
-
-            HFPopulationChart.ChartAreas[0].AxisX = xAxis;
-            HFPopulationChart.ChartAreas[0].AxisY = yAxis;
 
             // Bind the data to the chart
             HFPopulationChart.Series["Default"].Points.DataBindXY(xValues, yValues);

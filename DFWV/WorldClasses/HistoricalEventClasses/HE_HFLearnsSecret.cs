@@ -92,7 +92,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             EventLabel(frm, parent, ref location, "Interaction:", HistoricalFigure.Interactions[Interaction]);
         }
 
-        protected override string LegendsDescription() //Not Matched
+        protected override string LegendsDescription()
         {
             var timestring = base.LegendsDescription();
 

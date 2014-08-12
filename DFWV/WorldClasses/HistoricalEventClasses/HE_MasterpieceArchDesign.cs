@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
@@ -65,26 +64,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Site = World.Sites[SiteID.Value];
             if (EntityID.HasValue && World.Entities.ContainsKey(EntityID.Value))
                 Entity = World.Entities[EntityID.Value];
-        }
-
-        internal override void Plus(XDocument xdoc)
-        {
-            foreach (var element in xdoc.Root.Elements())
-            {
-                var val = element.Value;
-                int valI;
-                Int32.TryParse(val, out valI);
-
-                switch (element.Name.LocalName)
-                {
-                    case "id":
-                    case "type":
-                        break;
-                    default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
-                        break;
-                }
-            }
         }
 
         internal override void Process()

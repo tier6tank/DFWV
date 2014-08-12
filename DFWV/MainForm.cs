@@ -5,16 +5,15 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using DFWV.WorldClasses;
-using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalEventClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
+using Drawing = System.Drawing;
 using System.Drawing;
-using Region = DFWV.WorldClasses.Region;
 
 namespace DFWV
 {
-    public sealed partial class MainForm : Form
+    public partial class MainForm : Form
     {
         /// <summary>
         /// The Root object which describes everything about the DF world.
@@ -37,7 +36,6 @@ namespace DFWV
         {
             InitializeComponent();
 
-            Text = string.Format("World Viewer v{0}", Application.ProductVersion);
             LinkEvents();
             ClearTabs();
         }
@@ -68,17 +66,15 @@ namespace DFWV
                     selectedFile = openFileDiag.FileName;
             }
 
-            if (!string.IsNullOrEmpty(selectedFile))
+            if (selectedFile != "")
             {
                 if (Path.GetExtension(selectedFile) == ".7z" || Path.GetExtension(selectedFile) == ".zip")
                 {
-                    if (Program.ExtractArchive(selectedFile))
-                    {
-                        var newDirectory = Path.Combine(Path.GetDirectoryName(selectedFile), Path.GetFileNameWithoutExtension(selectedFile));
+                    Program.ExtractArchive(selectedFile);
 
-                        selectedFile = Directory.GetFiles(newDirectory, "*.bmp").FirstOrDefault();
-                        
-                    }
+                    var newDirectory = Path.Combine(Path.GetDirectoryName(selectedFile), Path.GetFileNameWithoutExtension(selectedFile));
+
+                    selectedFile = Directory.GetFiles(newDirectory, "*.bmp").FirstOrDefault();
                 }
                 if (selectedFile != null)
                     LoadFromFiles(selectedFile);
@@ -178,7 +174,6 @@ namespace DFWV
             var paramPath = Path.Combine(path, name + "-world_gen_param.txt");
             var historyPath = Path.Combine(path, name + "-world_history.txt");
             var sitesPath = Path.Combine(path, name + "-world_sites_and_pops.txt");
-            var xmlPlusPath = Path.Combine(path, name + "-legends_plus.xml");
 
             if (File.Exists(xmlPath) && File.Exists(paramPath) && File.Exists(historyPath) && File.Exists(sitesPath))
             {
@@ -195,7 +190,7 @@ namespace DFWV
 
                 Application.DoEvents();
 
-                World = new World(historyPath, sitesPath, paramPath, xmlPath, xmlPlusPath, mapPath, Year);
+                World = new World(historyPath, sitesPath, paramPath, xmlPath, mapPath, Year);
 
                 loadWorldToolStripMenuItem.Visible = false;
 
@@ -280,11 +275,8 @@ namespace DFWV
 
             foreach (var treeview in Program.GetControlsOfType<TreeView>(this))
             {
-                if (treeview != WorldSummaryTree)
-                {
-                    treeview.DoubleClick += TreeviewDoubleClicked;
-                    treeview.MouseClick += TreeviewMouseClicked;
-                }
+                treeview.DoubleClick += TreeviewDoubleClicked;
+                treeview.MouseClick += TreeviewMouseClicked;
             }
         }
 
@@ -430,9 +422,12 @@ namespace DFWV
         private void ListBoxSelectedIndexChanged(object sender, EventArgs e)
         {
             var listBox = (ListBox)sender;
-            var selectedItem = listBox.SelectedItem as WorldObject;
-            if (selectedItem != null)
-                selectedItem.Select(this);
+            if (listBox.SelectedItem is WorldObject)
+            {
+                var selectedItem = (WorldObject)listBox.SelectedItem;
+                if (selectedItem != null)
+                    selectedItem.Select(this);
+            }
         }
 
         private void ListBoxDrawItem(object sender, DrawItemEventArgs e)
@@ -441,17 +436,16 @@ namespace DFWV
 
             if (e.Index != -1)
             {
-                var lstBox = sender as ListBox;
+                ListBox lstBox = sender as ListBox;
                 if (lstBox.Items[e.Index] is WorldObject)
                 {
                     e.Graphics.DrawString(lstBox.Items[e.Index].ToString(),
-                            e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
+                            e.Font, Drawing.Brushes.Black, e.Bounds, Drawing.StringFormat.GenericDefault);
                 }
                 else
                 {
                     e.Graphics.DrawString(lstBox.Items[e.Index].ToString(),
-
-                            new Font(FontFamily.GenericMonospace, e.Font.Size, FontStyle.Bold), Brushes.Red, e.Bounds, StringFormat.GenericDefault);
+                            e.Font, Drawing.Brushes.Red, e.Bounds, Drawing.StringFormat.GenericDefault);
                 }
 
             }
@@ -507,13 +501,13 @@ namespace DFWV
         /// <param name="listBox">The listbox to fill</param>
         /// <param name="list">The list of objects to fill from</param>
         /// <param name="tabPage">The page this listbox is on</param>
-        public void FillList<T>(ListBox listBox, List<T> list, TabPage tabPage) where T : class
+        private void FillList<T>(ListBox listBox, List<T> list, TabPage tabPage) where T : class
         {
             listBox.InvokeEx(f =>
             {
                 f.BeginUpdate();
                 f.Items.Clear();
-                f.Items.AddRange(World.Filters[typeof(T)].Get(list).ToArray());
+                f.Items.AddRange(World.Filters[typeof(T)].Get(list).ToArray<object>());
                 f.EndUpdate();
 
             });
@@ -531,14 +525,14 @@ namespace DFWV
         /// <param name="listBox">The listbox to fill</param>
         /// <param name="dict">The dictionary of objects to fill from</param>
         /// <param name="tabPage">The page this listbox is on</param>
-        public void FillList<T, K>(ListBox listBox, Dictionary<K, T> dict, TabPage tabPage) where T : WorldObject
+        private void FillList<T, K>(ListBox listBox, Dictionary<K, T> dict, TabPage tabPage) where T : WorldObject
         {
 
             listBox.InvokeEx(f =>
             {
                 f.BeginUpdate();
                 f.Items.Clear();
-                f.Items.AddRange(World.Filters[typeof(T)].Get(dict.Values.ToList()).ToArray());
+                f.Items.AddRange(World.Filters[typeof(T)].Get(dict.Values.ToList()).ToArray<object>());
                 f.EndUpdate();
             });
 
@@ -572,8 +566,6 @@ namespace DFWV
             Program.Log(LogType.Status, " Done");
             if (DFXMLParser.MemoryFailureQuitParsing)
                 return;
-            if (World.hasPlusXML && !World.isPlusParsing) //Don't Provide Summary info or Fill Lists when there is still PlusXML to handle
-                return;
             switch (section)
             {
                 case "regions":
@@ -583,45 +575,32 @@ namespace DFWV
                     AddSummaryItem(@"Last Year: " + World.LastYear );
                     AddSummaryItem(@"Maps Found: " + World.Maps.Count  );
                     AddSummaryItem(@"History File" );
-                    AddSummaryItem(@"Civilizations: " + World.Civilizations.Count, "History File",
-                        new NavigationFilter(typeof(Civilization), new Filter("Name", "IsFull = true", "Race.Name", -1)));
-                    AddSummaryItem(@"Gods: " + World.Gods.Count, "History File",
-                        new NavigationFilter(typeof (God), new Filter("Name", null, null, -1)));
-                    AddSummaryItem(@"Leaders: " + World.Leaders.Count, "History File",
-                        new NavigationFilter(typeof (Leader), new Filter("Name", null, null, -1)));
+                    AddSummaryItem(@"Civilizations: " + World.Civilizations.Count , "History File");
+                    AddSummaryItem(@"Gods: " + World.Gods.Count , "History File");
+                    AddSummaryItem(@"Leaders: " + World.Leaders.Count  , "History File");
                     AddSummaryItem(@"Site File" );
-                    AddSummaryItem(@"Sites: " + World.SitesFile.Count, "Site File",
-                        new NavigationFilter(typeof (Site), new Filter("Name", null, null, -1)));
-                    AddSummaryItem(@"Entities: " + World.EntitiesFile.Count, "Site File",
-                        new NavigationFilter(typeof (Entity), new Filter(new List<string> {"Name", "Type"}, null, null, -1)));
-                    AddSummaryItem(@"Races: " + World.Races.Count, "Site File",
-                        new NavigationFilter(typeof (Race), new Filter(new List<string> {"Name", "!isCivilized"}, null, null, -1)));
+                    AddSummaryItem(@"Sites: " + World.SitesFile.Count , "Site File");
+                    AddSummaryItem(@"Entities: " + World.EntitiesFile.Count , "Site File");
+                    AddSummaryItem(@"Races: " + World.Races.Count  , "Site File");
                     AddSummaryItem(@"XML" );
-                    AddSummaryItem(@"Regions: " + World.Regions.Count, "XML",
-                        new NavigationFilter(typeof (Region), new Filter("Name", null, null, -1)));
+                    AddSummaryItem(@"Regions: " + World.Regions.Count , "XML");
                     
                     break;
                 case "underground_regions":
                     FillList(lstUndergroundRegion, World.UndergroundRegions, tabUndergroundRegion);
-                    AddSummaryItem(@"Underground Regions: " + World.UndergroundRegions.Count, "XML",
-                        new NavigationFilter(typeof (UndergroundRegion),
-                            new Filter(new List<string> {"Depth", "Name"}, null, null, -1)));
+                    AddSummaryItem(@"Underground Regions: " + World.UndergroundRegions.Count , "XML");
                     break;
                 case "entities":
                     FillList(lstEntity, World.Entities, tabEntity);
-                    AddSummaryItem(@"Entities: " + World.Entities.Count, "XML",
-                        new NavigationFilter(typeof (Entity), new Filter(new List<string> {"Name", "Type"}, null, null, -1)));
+                    AddSummaryItem(@"Entities: " + World.Entities.Count , "XML");
                     break;
                 case "entity_populations":
                     FillList(lstEntityPopulation, World.EntityPopulations, tabEntityPopulation);
-                    AddSummaryItem(@"Entity Populations: " + World.EntityPopulations.Count, "XML",
-                        new NavigationFilter(typeof (EntityPopulation),
-                            new Filter(new List<string> {"ID", "Race = null"}, null, null, -1)));
+                    AddSummaryItem(@"Entity Populations: " + World.EntityPopulations.Count , "XML");
                     break;
                 case "sites":
                     FillList(lstSite, World.Sites, tabSite);
-                    AddSummaryItem(@"Sites: " + World.Sites.Count, "XML",
-                        new NavigationFilter(typeof (Site), new Filter("Name", null, null, -1)));
+                    AddSummaryItem(@"Sites: " + World.Sites.Count , "XML");
                     break;
                 case "world_constructions":
                     FillList(lstWorldConstruction, World.WorldConstructions, tabWorldConstruction);
@@ -629,20 +608,17 @@ namespace DFWV
                     break;
                 case "artifacts":
                     FillList(lstArtifact, World.Artifacts, tabArtifact);
-                    AddSummaryItem(@"Artifacts: " + World.Artifacts.Count, "XML",
-                        new NavigationFilter(typeof (Artifact), new Filter("Name", null, null, -1)));
+                    AddSummaryItem(@"Artifacts: " + World.Artifacts.Count , "XML");
                     break;
                 case "historical_figures":
                     FillList(lstHistoricalFigure, World.HistoricalFigures, tabHistoricalFigure);
-                    var hfLabel = @"Historical Figures: " + World.HistoricalFigures.Count ;
-                    AddSummaryItem(hfLabel, "XML",
-                        new NavigationFilter(typeof (HistoricalFigure), new Filter("Name", null, null, 50000)));
+                    string hfLabel = @"Historical Figures: " + World.HistoricalFigures.Count ;
+                    AddSummaryItem(hfLabel, "XML");
 
                     AddSummaryItem(@"Castes" , hfLabel);
                     foreach (var hfCaste in HistoricalFigure.Castes)
                     {
-                        AddSummaryItem(string.Format(@"{0}: {1}", hfCaste, World.HistoricalFigures.Values.Count(x => x.Caste.HasValue && HistoricalFigure.Castes[x.Caste.Value] == hfCaste)), "Castes",
-                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "HFCaste == \"" + hfCaste + "\"" }, null, -1)));
+                        AddSummaryItem(string.Format(@"{0}: {1}", hfCaste, World.HistoricalFigures.Values.Count(x => x.Caste.HasValue && HistoricalFigure.Castes[x.Caste.Value] == hfCaste)), "Castes");
                     }
                     
                     AddSummaryItem(string.Format(@"{0}: {1}", "*NONE*", World.HistoricalFigures.Values.Count(x => !x.Caste.HasValue)), "Castes");
@@ -650,27 +626,19 @@ namespace DFWV
                     AddSummaryItem(@"      Associated Types" , hfLabel);
                     foreach (var hfAssociatedType in HistoricalFigure.AssociatedTypes)
                     {
-                        AddSummaryItem(string.Format(@"{0}: {1}", hfAssociatedType, World.HistoricalFigures.Values.Count(x => x.AssociatedType.HasValue && HistoricalFigure.AssociatedTypes[x.AssociatedType.Value] == hfAssociatedType)), "Associated Types",
-                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "Job == \"" + hfAssociatedType + "\"" }, null, -1)));
+                        AddSummaryItem(string.Format(@"{0}: {1}", hfAssociatedType, World.HistoricalFigures.Values.Count(x => x.AssociatedType.HasValue && HistoricalFigure.AssociatedTypes[x.AssociatedType.Value] == hfAssociatedType)), "Associated Types");
                     }
 
                     AddSummaryItem(string.Format(@"{0}: {1}", "*NONE*", World.HistoricalFigures.Values.Count(x => !x.AssociatedType.HasValue)), "Associated Types");
-
-
-                    AddSummaryItem(@"Adventurers: " + World.HistoricalFigures.Values.Count(x => x.Adventurer), hfLabel,
-                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "Adventurer == true" }, null, -1)));
-                    AddSummaryItem(@"Animated: " + World.HistoricalFigures.Values.Count(x => x.Animated), hfLabel,
-                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "Animated == true" }, null, -1)));
-                    AddSummaryItem(@"Ghost: " + World.HistoricalFigures.Values.Count(x => x.Ghost), hfLabel,
-                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "Ghost == true" }, null, -1)));
-                    AddSummaryItem(@"Deity: " + World.HistoricalFigures.Values.Count(x => x.Deity), hfLabel,
-                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "Deity == true" }, null, -1)));
-                    AddSummaryItem(@"Force: " + World.HistoricalFigures.Values.Count(x => x.Force), hfLabel,
-                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "Force == true" }, null, -1)));
+                    AddSummaryItem(@"Adventurers: " + World.HistoricalFigures.Values.Count(x => x.Adventurer), hfLabel);
+                    AddSummaryItem(@"Animated: " + World.HistoricalFigures.Values.Count(x => x.Animated), hfLabel);
+                    AddSummaryItem(@"Ghost: " + World.HistoricalFigures.Values.Count(x => x.Ghost), hfLabel);
+                    AddSummaryItem(@"Deity: " + World.HistoricalFigures.Values.Count(x => x.Deity), hfLabel);
+                    AddSummaryItem(@"Force: " + World.HistoricalFigures.Values.Count(x => x.Force), hfLabel);
 
 
                     AddSummaryItem(@"Sphere Alignment", hfLabel);
-                    for (var i = 0; i < HistoricalFigure.Spheres.Count; i++)
+                    for (int i = 0; i < HistoricalFigure.Spheres.Count; i++)
                     {
                         AddSummaryItem(HistoricalFigure.Spheres[i] + ": " +  World.HistoricalFigures.Values.Count(x => x.Sphere != null && x.Sphere.Contains(i)), @"Sphere Alignment");
                     }
@@ -680,30 +648,25 @@ namespace DFWV
                     break;
                 case "historical_events":
                     FillList(lstHistoricalEvent, World.HistoricalEvents, tabHistoricalEvent);
-                    var evtLabel = @"    Historical Events: " + World.HistoricalEvents.Count ;
-                    AddSummaryItem(evtLabel, "XML",
-                            new NavigationFilter(typeof(HistoricalEvent), new Filter("Year", null, null, 50000)));
+                    string evtLabel = @"    Historical Events: " + World.HistoricalEvents.Count ;
+                    AddSummaryItem(evtLabel, "XML");
                     foreach (var evtType in HistoricalEvent.Types)
                     {
-                        AddSummaryItem(string.Format(@"      {0}: {1}", evtType, World.HistoricalEvents.Values.Count(x => x.EventType == evtType)), evtLabel,
-                            new NavigationFilter(typeof(HistoricalEvent), new Filter(new List<string> { "Year" }, new List<string> { "EventType == \"" + evtType + "\"" }, null, 50000)));
+                        AddSummaryItem(string.Format(@"      {0}: {1}", evtType, World.HistoricalEvents.Values.Count(x => x.EventType == evtType)), evtLabel);
                     }
                     break;
                 case "historical_event_collections":
                     FillList(lstHistoricalEventCollection, World.HistoricalEventCollections, tabHistoricalEventCollection);
-                    var evtColLabel = @"    Historical Event Collections: " + World.HistoricalEventCollections.Count ;
-                    AddSummaryItem(evtColLabel, "XML",
-                            new NavigationFilter(typeof(HistoricalEventCollection), new Filter(new List<string> {"StartYear"}, null, null, 50000)));
+                    string evtColLabel = @"    Historical Event Collections: " + World.HistoricalEventCollections.Count ;
+                    AddSummaryItem(evtColLabel, "XML");
                     foreach (var evtColType in HistoricalEventCollection.Types)
                     {
-                        AddSummaryItem(string.Format(@"      {0}: {1}", evtColType, World.HistoricalEventCollections.Values.Count(x => x.EventCollectionType == evtColType)), evtColLabel,
-                            new NavigationFilter(typeof(HistoricalEventCollection), new Filter(new List<string> { "StartYear" }, new List<string> { "EventCollectionType == \"" + evtColType + "\"" }, null, 50000)));
+                        AddSummaryItem(string.Format(@"      {0}: {1}", evtColType, World.HistoricalEventCollections.Values.Count(x => x.EventCollectionType == evtColType)), evtColLabel);
                     }
                     break;
                 case "historical_eras":
                     FillList(lstHistoricalEra, World.HistoricalEras, tabHistoricalEra);
-                    AddSummaryItem(@"    Historical Eras: " + World.HistoricalEras.Count, "XML",
-                        new NavigationFilter(typeof(HistoricalEra), new Filter("StartYear", null, null, -1)));
+                    AddSummaryItem(@"    Historical Eras: " + World.HistoricalEras.Count , "XML");
                     break;
             }
         }
@@ -711,7 +674,7 @@ namespace DFWV
         /// <summary>
         /// Adds an additional item to the World Summary Tree, optionally under a specific parent
         /// </summary>
-        private void AddSummaryItem(string item, string parent = null, NavigationFilter navigationFilter = null)
+        private void AddSummaryItem(string item, string parent = null)
         {
             //this.InvokeEx(f => f.WorldSummary.Text += item);
             this.InvokeEx(f =>
@@ -720,16 +683,7 @@ namespace DFWV
                     f.WorldSummaryTree.TreeViewNodeSorter = new WorldSummaryNodeSorter();
             });
             if (parent == null)
-                this.InvokeEx(f =>
-                {
-                    var itemNode = new TreeNode(item.Trim());
-                    if (navigationFilter != null)
-                    {
-                        itemNode.Tag = navigationFilter;
-                        itemNode.ForeColor = Color.Blue;
-                    }
-                    f.WorldSummaryTree.Nodes.Add(itemNode);
-                });
+                this.InvokeEx(f => f.WorldSummaryTree.Nodes.Add(item.Trim()));
 
                 
 
@@ -741,40 +695,15 @@ namespace DFWV
                     if (parentNode != null)
                     {
                         var itemNode = new TreeNode(item.Trim());
-                        if (navigationFilter != null)
-                        {
-                            itemNode.Tag = navigationFilter;
-                            itemNode.ForeColor = Color.Blue;
-                        }
                         parentNode.Nodes.Add(itemNode);
+//#if DEBUG
+//                        itemNode.EnsureVisible();
+//                        f.WorldSummaryTree.Refresh();
+//#endif
                     }
                 });
             }
 
-        }
-
-        private void WorldSummaryTree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
-        {
-            if (e.Node.Tag is NavigationFilter)
-            {
-                var filter = e.Node.Tag as NavigationFilter;
-                filter.Select(this);
-            }
-        }
-
-        private void WorldSummaryTree_MouseLeave(object sender, EventArgs e)
-        {
-            Cursor.Current = Cursors.Default;
-        }
-
-        private void WorldSummaryTree_MouseMove(object sender, MouseEventArgs e)
-        {
-            var node = WorldSummaryTree.GetNodeAt(e.Location);
-
-            if (node != null && node.Tag != null && node.Tag is NavigationFilter)
-                Cursor.Current = Cursors.Hand;
-            else
-                Cursor.Current = Cursors.Default;
         }
 
         /// <summary>
@@ -782,10 +711,9 @@ namespace DFWV
         /// Since the XML is all loaded we allow world exporting at this point, since nothing else after this point is data that's exported.
         /// Events are subscribed to for the "Linking" step, which turns associations to XML objects by IDs, to actual references to the corresponding object.
         /// </summary>
-        /// /TODO: Accont for plus parsing here
         private void XMLFinished()
         {
-            Program.Log(LogType.Status, "XML Loading Done"); 
+            Program.Log(LogType.Status, "XML Loading Done");
 
             World.MergeSites();
             World.MergeEntities();
@@ -861,27 +789,21 @@ namespace DFWV
         /// </summary>
         private void AddSummaryItemsLearnedFromLinking()
         {
-            AddSummaryItem(@"World Constructions: " + World.WorldConstructions.Count, null,
-                        new NavigationFilter(typeof(WorldConstruction), new Filter()));
+            AddSummaryItem(@"World Constructions: " + World.WorldConstructions.Count);
 
-            var hfLabel = @"    Historical Figures: " + World.HistoricalFigures.Count;
-            AddSummaryItem(@"Races", hfLabel,
-                        new NavigationFilter(typeof(Race), new Filter(new List<string> {"Name", "!isCivilized"}, null, null, -1)));
+            string hfLabel = @"    Historical Figures: " + World.HistoricalFigures.Count;
+            AddSummaryItem(@"Races", hfLabel);
             foreach (var race in World.Races.Values)
             {
-                var count = World.HistoricalFigures.Values.Count(x => x.Race == race);
+                int count = World.HistoricalFigures.Values.Count(x => x.Race == race);
                 if (count == 0)
                     continue;
-                AddSummaryItem(string.Format(@"{0}: {1}", race.Name, count), "Races",
-                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "RaceName == \"" + race.Name + "\"" }, null, -1)));
+                AddSummaryItem(string.Format(@"{0}: {1}", race.Name, count), "Races");
             }
 
-            AddSummaryItem(@"Alive: " + World.HistoricalFigures.Values.Count(x => !x.Dead), hfLabel,
-                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "Dead == false" }, null, -1)));
-            AddSummaryItem(@" Dead: " + World.HistoricalFigures.Values.Count(x => x.Dead), hfLabel,
-                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "Dead == true" }, null, -1)));
-            AddSummaryItem(@"Is Leader: " + World.HistoricalFigures.Values.Count(x => x.Leader != null), hfLabel,
-                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "isLeader == true" }, null, -1)));
+            AddSummaryItem(@"Alive: " + World.HistoricalFigures.Values.Count(x => !x.Dead), hfLabel);
+            AddSummaryItem(@" Dead: " + World.HistoricalFigures.Values.Count(x => x.Dead), hfLabel);
+            AddSummaryItem(@"Is Leader: " + World.HistoricalFigures.Values.Count(x => x.Leader != null), hfLabel);
 
         }
 
@@ -890,18 +812,14 @@ namespace DFWV
         /// </summary>
         private void AddSummaryItemsLearnedFromProcessing()
         {
-            var hfLabel = @"    Historical Figures: " + World.HistoricalFigures.Count;
+            string hfLabel = @"    Historical Figures: " + World.HistoricalFigures.Count;
 
             AddSummaryItem(@"Prisoners: " + World.HistoricalFigures.Values.Count(x => x.PrisonerOf != null), hfLabel);
             AddSummaryItem(@"Slaves: " +  World.HistoricalFigures.Values.Count(x => x.SlaveOf != null), hfLabel);
             AddSummaryItem(@"Heroes: " + World.HistoricalFigures.Values.Count(x => x.HeroOf != null), hfLabel);
-            AddSummaryItem(@"Had Children: " + World.HistoricalFigures.Values.Count(x => x.Children != null), hfLabel,
-                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "ID", "Race = null" }, new List<string> { "ChildrenCount > 0" }, null, -1)));
-            AddSummaryItem(@"Childless: " + World.HistoricalFigures.Values.Count(x => x.Children == null), hfLabel,
-                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "ID", "Race = null" }, new List<string> { "ChildrenCount == 0" }, null, -1)));
+            AddSummaryItem(@"Had Children: " + World.HistoricalFigures.Values.Count(x => x.Children != null), hfLabel);
+            AddSummaryItem(@"Childless: " +  World.HistoricalFigures.Values.Count(x => x.Children == null), hfLabel);
             AddSummaryItem(@"Married: " + World.HistoricalFigures.Values.Count(x => x.Spouses != null), hfLabel);
-            AddSummaryItem(@"Killers: " + World.HistoricalFigures.Values.Count(x => x.Kills > 0), hfLabel,
-                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "ID", "Race = null" }, new List<string> { "Kills > 0" }, null, -1)));
 
         }
 
@@ -988,7 +906,7 @@ namespace DFWV
         /// </summary>
         private void World_HistoricalFiguresPositioned()
         {
-            var HFsPositioned = World.HistoricalFigures.Values.Count(x => x.Site != null || x.Region != null || x.Coords != Point.Empty && !x.Dead);
+            var HFsPositioned = World.HistoricalFigures.Values.Count(x => x.Site != null || x.Region != null || x.Coords != Drawing.Point.Empty && !x.Dead);
             var HFsAlive = World.HistoricalFigures.Values.Count(x => x.Dead);
 
             Program.Log(LogType.Status, String.Format("Historical Figures Positioned (" + Math.Round(100.0f * HFsPositioned / HFsAlive, 0) + "% located)"));
@@ -1002,7 +920,7 @@ namespace DFWV
             this.InvokeEx(f => f.statsToolStripMenuItem.Visible = true);
         }
 
-        private void World_VisualizationsCreated() //Not used
+        private void World_VisualizationsCreated()
         {
             Program.Log(LogType.Status, "Visualizations Created");
 
@@ -1020,38 +938,20 @@ namespace DFWV
         {
             var evtcol = (EC_Battle)lstEntityPopulationBattles.SelectedItem;
             var entpop = (EntityPopulation)lstEntityPopulation.SelectedItem;
-
-            var number = 0;
-            var deaths = 0;
-            var squads = 0;
-            if (evtcol.AttackingSquad != null)
+            var thisSquad = evtcol.AttackingSquad.FirstOrDefault(squad => squad.EntityPopulation == entpop);
+            if (thisSquad == null)
             {
-                foreach (var squad in evtcol.AttackingSquad)
+                foreach (var squad in evtcol.DefendingSquad.Where(squad => squad.EntityPopulation == entpop))
                 {
-                    if (squad.EntityPopulation == entpop)
-                    {
-                        squads++;
-                        number += squad.Number;
-                        deaths += squad.Deaths;
-                    }
+                    thisSquad = squad;
+                    break;
                 }
             }
-            if (evtcol.DefendingSquad != null)
-            {
-                foreach (var squad in evtcol.DefendingSquad)
-                {
-                    if (squad.EntityPopulation == entpop)
-                    {
-                        squads++;
-                        number += squad.Number;
-                        deaths += squad.Deaths;
-                    }
-                }
-            }
-            if (squads == 0)
+            if (thisSquad == null)
             {
                 lblEntityPopulationBattleDeaths.Text = "";
                 lblEntityPopulationBattleNumber.Text = "";
+                lblEntityPopulationBattleSite.Data = null;
                 lblEntityPopulationBattleTime.Data = null;
                 lblEntityPopulationBattleTime.Text = "";
                 lblEntityPopulationBattleWar.Data = null;
@@ -1059,8 +959,9 @@ namespace DFWV
             }
             else
             {
-                lblEntityPopulationBattleDeaths.Text = deaths.ToString();
-                lblEntityPopulationBattleNumber.Text = number.ToString();
+                lblEntityPopulationBattleDeaths.Text = thisSquad.Deaths.ToString();
+                lblEntityPopulationBattleNumber.Text = thisSquad.Number.ToString();
+                lblEntityPopulationBattleSite.Data = thisSquad.Site;
                 lblEntityPopulationBattleTime.Data = evtcol;
                 lblEntityPopulationBattleTime.Text = evtcol.StartTime.ToString();
                 lblEntityPopulationBattleWar.Data = evtcol.WarEventCol;
@@ -1081,21 +982,10 @@ namespace DFWV
             if (e.Index != -1)
             {
                 var thisSite = (Site)lstSite.SelectedItem;
-                if (thisSite == null)
-                {
-                    grpSite.Visible = false;
-                    return;
-                }
-                string drawString;
-                if (thisSite.Population[(Race)lstSitePopulation.Items[e.Index]] == 1)
-                    drawString = thisSite.Population[(Race)lstSitePopulation.Items[e.Index]] +
-                        " " + lstSitePopulation.Items[e.Index];
-                else
-                    drawString = thisSite.Population[(Race)lstSitePopulation.Items[e.Index]] +
-                        " " + lstSitePopulation.Items[e.Index].ToString().Pluralize();
-
-                e.Graphics.DrawString(drawString,
-                    e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
+                var drawstring = thisSite.Population[(Race)lstSitePopulation.Items[e.Index]] +
+                    " " + lstSitePopulation.Items[e.Index];
+                e.Graphics.DrawString(drawstring,
+                    e.Font, Drawing.Brushes.Black, e.Bounds, Drawing.StringFormat.GenericDefault);
             }
             e.DrawFocusRectangle();
         }
@@ -1108,15 +998,10 @@ namespace DFWV
             if (e.Index != -1)
             {
                 var thisSite = (Site)lstSite.SelectedItem;
-                if (thisSite == null)
-                {
-                    grpSite.Visible = false;
-                    return;
-                }
                 var drawstring = thisSite.Prisoners[(Race)lstSitePrisoners.Items[e.Index]] +
                     " " + lstSitePrisoners.Items[e.Index];
                 e.Graphics.DrawString(drawstring,
-                    e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
+                    e.Font, Drawing.Brushes.Black, e.Bounds, Drawing.StringFormat.GenericDefault);
             }
             e.DrawFocusRectangle();
         }
@@ -1130,15 +1015,10 @@ namespace DFWV
             if (e.Index != -1)
             {
                 var thisSite = (Site)lstSite.SelectedItem;
-                if (thisSite == null)
-                {
-                    grpSite.Visible = false;
-                    return;
-                }
                 var drawstring = thisSite.Outcasts[(Race)lstSiteOutcasts.Items[e.Index]] +
                     " " + lstSiteOutcasts.Items[e.Index];
                 e.Graphics.DrawString(drawstring,
-                    e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
+                    e.Font, Drawing.Brushes.Black, e.Bounds, Drawing.StringFormat.GenericDefault);
             }
             e.DrawFocusRectangle();
 
@@ -1160,48 +1040,28 @@ namespace DFWV
 
 
                 e.Graphics.DrawString(thisSite.Name,
-                        e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
+                        e.Font, Drawing.Brushes.Black, e.Bounds, Drawing.StringFormat.GenericDefault);
 
-                var lineAlignFormat = new StringFormat
-                {
-                    Alignment = StringAlignment.Center,
-                    LineAlignment = StringAlignment.Near
-                };
+                StringFormat lineAlignFormat = new StringFormat();
+                lineAlignFormat.Alignment = StringAlignment.Center;
+                lineAlignFormat.LineAlignment = StringAlignment.Near;
 
-                e.Graphics.DrawString(WorldClasses.Site.Types[thisSite.Type].ToTitleCase(),
-                        e.Font, Brushes.Black, e.Bounds, lineAlignFormat);
+                e.Graphics.DrawString(WorldClasses.Site.Types[thisSite.Type],
+                        e.Font, Drawing.Brushes.Black, e.Bounds, lineAlignFormat);
 
                 lineAlignFormat.Alignment = StringAlignment.Far;
 
                 if (thisSite.Parent == null)
-                    if (thisSite.Population.First().Value == 1)
-                        e.Graphics.DrawString(thisSite.Population.First().Value + " " + thisSite.Population.First().Key,
-                            e.Font, Brushes.Black, e.Bounds, lineAlignFormat);
-                    else
-                        e.Graphics.DrawString(thisSite.Population.First().Value + " " + thisSite.Population.First().Key.ToString().Pluralize(),
-                            e.Font, Brushes.Black, e.Bounds, lineAlignFormat);
-
+                    e.Graphics.DrawString(thisSite.Population.First().Value.ToString() + " " + thisSite.Population.First().Key.ToString(),
+                        e.Font, Drawing.Brushes.Black, e.Bounds, lineAlignFormat);
                 else
                 {
                     if (thisSite.Population.ContainsKey(thisSite.Parent.Race))
-                    {
-                        if (thisSite.Population[thisSite.Parent.Race] == 1)
-                            e.Graphics.DrawString(thisSite.Population[thisSite.Parent.Race] + " " + thisSite.Parent.Race,
-                                e.Font, Brushes.Black, e.Bounds, lineAlignFormat);
-                        else
-                            e.Graphics.DrawString(thisSite.Population[thisSite.Parent.Race] + " " + thisSite.Parent.Race.ToString().Pluralize(),
-                                e.Font, Brushes.Black, e.Bounds, lineAlignFormat);
-
-                    }
+                        e.Graphics.DrawString(thisSite.Population[thisSite.Parent.Race] + " " + thisSite.Parent.Race.ToString(),
+                            e.Font, Drawing.Brushes.Black, e.Bounds, lineAlignFormat);
                     else if (thisSite.Population.Count > 0)
-                    {
-                        if (thisSite.Population.First().Value == 1)
-                            e.Graphics.DrawString(thisSite.Population.First().Value + " " + thisSite.Population.First().Key,
-                                e.Font, Brushes.Black, e.Bounds, lineAlignFormat);
-                        else
-                            e.Graphics.DrawString(thisSite.Population.First().Value + " " + thisSite.Population.First().Key.ToString().Pluralize(),
-                                e.Font, Brushes.Black, e.Bounds, lineAlignFormat);
-                    }
+                        e.Graphics.DrawString(thisSite.Population.First().Value.ToString() + " " + thisSite.Population.First().Key.ToString(),
+                            e.Font, Drawing.Brushes.Black, e.Bounds, lineAlignFormat);
                 }
 
             }
@@ -1215,43 +1075,26 @@ namespace DFWV
             {
                 var thisLeader = (Leader)lstCivilizationLeaders.Items[e.Index];
 
-                e.Graphics.DrawString(
-                    thisLeader.Name.Split(new[] {" the ", " The "}, StringSplitOptions.RemoveEmptyEntries)[0],
-                    thisLeader.isCurrent
-                        ? new Font(e.Font.FontFamily.ToString(), e.Font.Size, FontStyle.Underline)
-                        : e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
-
-                var typeString = thisLeader.HF != null && thisLeader.HF.Caste.HasValue
-                    ? HistoricalFigure.Castes[thisLeader.HF.Caste.Value].ToLower().ToTitleCase() + " "
-                    : "";
-                    
-                    
-                typeString += Leader.LeaderTypes[thisLeader.LeaderType].ToTitleCase();
-
-
-                if (thisLeader.Site != null) //Leaders only in site file
+                if (thisLeader.isCurrent)
                 {
-                    typeString += " at " + thisLeader.Site.Name;
+                    e.Graphics.DrawString(thisLeader.Name.Split(new string[2] {" the ", " The "},StringSplitOptions.RemoveEmptyEntries)[0],
+                        new Drawing.Font(e.Font.FontFamily.ToString(), e.Font.Size, Drawing.FontStyle.Underline), Drawing.Brushes.Black, e.Bounds, Drawing.StringFormat.GenericDefault);
                 }
-                
-                if (thisLeader.ReignBegan != null)
-                {
-                    typeString += (thisLeader.ReignBegan.Year > -1
-                           ? " from " + thisLeader.ReignBegan.Year
-                           : "");
-                }
+                else
+                    e.Graphics.DrawString(thisLeader.Name.Split(new string[2] { " the ", " The " }, StringSplitOptions.RemoveEmptyEntries)[0],
+                        e.Font, Drawing.Brushes.Black, e.Bounds, Drawing.StringFormat.GenericDefault);
 
-                e.Graphics.DrawString(typeString,
-                            e.Font, Brushes.Black, new PointF(e.Bounds.Width / 5 * 2, e.Bounds.Top), StringFormat.GenericDefault);
 
-                var lineAlignFormat = new StringFormat
-                {
-                    Alignment = StringAlignment.Far,
-                    LineAlignment = StringAlignment.Near
-                };
+                    
+                e.Graphics.DrawString(Leader.LeaderTypes[thisLeader.LeaderType] + (thisLeader.ReignBegan.Year > -1 ? " from " + thisLeader.ReignBegan.Year : ""),
+                        e.Font, Drawing.Brushes.Black, new PointF(e.Bounds.Width / 5 * 2, e.Bounds.Top), Drawing.StringFormat.GenericDefault);
 
-                e.Graphics.DrawString(thisLeader.Race != null ? thisLeader.Race.ToString() : (thisLeader.HF != null && thisLeader.HF.Race != null ? thisLeader.HF.Race.ToString() : ""),
-                    e.Font, Brushes.Black, e.Bounds, lineAlignFormat);
+                StringFormat lineAlignFormat = new StringFormat();
+                lineAlignFormat.Alignment = StringAlignment.Far;
+                lineAlignFormat.LineAlignment = StringAlignment.Near;
+
+                e.Graphics.DrawString(thisLeader.Race != null ? thisLeader.Race.ToString() : (thisLeader.HF != null && thisLeader.HF.Race != null? thisLeader.HF.Race.ToString() : ""),
+                    e.Font, Drawing.Brushes.Black, e.Bounds, lineAlignFormat);
 
 
             }
@@ -1266,22 +1109,20 @@ namespace DFWV
             {
                 var thisGod = (God)lstCivilizationGods.Items[e.Index];
 
-                e.Graphics.DrawString(thisGod.Name.Split(new[] { " the ", " The " }, StringSplitOptions.RemoveEmptyEntries)[0],
-                        e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
+                e.Graphics.DrawString(thisGod.Name.Split(new string[2] { " the ", " The " }, StringSplitOptions.RemoveEmptyEntries)[0],
+                        e.Font, Drawing.Brushes.Black, e.Bounds, Drawing.StringFormat.GenericDefault);
 
-                var lineAlignFormat = new StringFormat
-                {
-                    Alignment = StringAlignment.Center,
-                    LineAlignment = StringAlignment.Near
-                };
+                StringFormat lineAlignFormat = new StringFormat();
+                lineAlignFormat.Alignment = StringAlignment.Center;
+                lineAlignFormat.LineAlignment = StringAlignment.Near;
 
                 e.Graphics.DrawString(God.Types[thisGod.Type],
-                        e.Font, Brushes.Black, e.Bounds, lineAlignFormat);
+                        e.Font, Drawing.Brushes.Black, e.Bounds, lineAlignFormat);
 
                 lineAlignFormat.Alignment = StringAlignment.Far;
-
-                e.Graphics.DrawString(thisGod.HF != null && thisGod.HF.Race != null ? thisGod.HF.Race.ToString() : "",
-                    e.Font, Brushes.Black, e.Bounds, lineAlignFormat);
+ 
+                e.Graphics.DrawString(thisGod.RaceName,
+                    e.Font, Drawing.Brushes.Black, e.Bounds, lineAlignFormat);
 
             }
             e.DrawFocusRectangle();
@@ -1294,34 +1135,32 @@ namespace DFWV
             if (e.Index != -1)
             {
                 var thisWar = (EC_War)lstCivilizationWars.Items[e.Index];
-                if (!(lstCivilization.SelectedItem is WorldObject))
+                if (lstCivilization.SelectedItem == null || !(lstCivilization.SelectedItem is WorldObject))
                     return;
                 var thisCiv = (Civilization)lstCivilization.SelectedItem;
                 e.Graphics.DrawString(thisWar.ToString(),
-                        e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
+                        e.Font, Drawing.Brushes.Black, e.Bounds, Drawing.StringFormat.GenericDefault);
 
                 // Create a StringFormat object with the each line of text, and the block 
                 // of text centered on the page.
-                var rightAlignFormat = new StringFormat
-                {
-                    Alignment = StringAlignment.Far,
-                    LineAlignment = StringAlignment.Near
-                };
+                StringFormat rightAlignFormat = new StringFormat();
+                rightAlignFormat.Alignment = StringAlignment.Far;
+                rightAlignFormat.LineAlignment = StringAlignment.Near;
 
-                var timeString = String.Format("({0} - {1})", thisWar.StartTime,
+                string timeString = String.Format("({0} - {1})", thisWar.StartTime.ToString(),
                     thisWar.EndTime != WorldTime.Present ? thisWar.EndTime.ToString() : "");
                 e.Graphics.DrawString(timeString,
-                    e.Font, Brushes.Black, e.Bounds, rightAlignFormat);
+                    e.Font, Drawing.Brushes.Black, e.Bounds, rightAlignFormat);
 
 
 
-                e.Graphics.DrawString((thisWar.AggressorEnt == thisCiv.Entity ? "Defender: " + thisWar.DefenderEnt : "Aggressor: " + thisWar.AggressorEnt),
-                    e.Font, Brushes.Black, new PointF(e.Bounds.Width / 8.0f, e.Bounds.Top + e.Bounds.Height / 2.0f), StringFormat.GenericDefault);
+                e.Graphics.DrawString((thisWar.AggressorEnt == thisCiv.Entity ? "Defender: " + thisWar.DefenderEnt.ToString() : "Aggressor: " + thisWar.AggressorEnt.ToString()),
+                    e.Font, Drawing.Brushes.Black, new Drawing.PointF(e.Bounds.Width / 8, e.Bounds.Top + e.Bounds.Height / 2), Drawing.StringFormat.GenericDefault);
 
                 e.Graphics.DrawString((thisWar.EndTime == WorldTime.Present
                         ? "Ongoing"
                         : WorldTime.Duration(thisWar.EndTime, thisWar.StartTime)),
-                    e.Font, Brushes.Black, new PointF(e.Bounds.Width, e.Bounds.Top + e.Bounds.Height / 2.0f), rightAlignFormat);
+                    e.Font, Drawing.Brushes.Black, new Drawing.PointF(e.Bounds.Width, e.Bounds.Top + e.Bounds.Height / 2), rightAlignFormat);
 
             }
             e.DrawFocusRectangle();
@@ -1367,17 +1206,17 @@ namespace DFWV
                 var thisBattle = (EC_Battle)lstHistoricalEventCollection.SelectedItem;
                 var drawstring = thisBattle.AttackingHF[e.Index].ToString();
 
-                var mColor = Color.Black;
+                var mColor = Drawing.Color.Black;
                 if (thisBattle.AttackingHF[e.Index].Caste.HasValue && HistoricalFigure.Castes[thisBattle.AttackingHF[e.Index].Caste.Value].ToLower().StartsWith("male"))
-                    mColor = Color.Blue;
+                    mColor = Drawing.Color.Blue;
                 else if (thisBattle.AttackingHF[e.Index].Caste.HasValue && HistoricalFigure.Castes[thisBattle.AttackingHF[e.Index].Caste.Value].ToLower().StartsWith("female"))
-                    mColor = Color.Red; 
+                    mColor = Drawing.Color.Red; 
                   
 
                 if (thisBattle.AttackingDiedHF != null && thisBattle.AttackingDiedHF.Contains(thisBattle.AttackingHF[e.Index]))
-                    e.Graphics.DrawString(drawstring, new Font(e.Font.FontFamily.ToString(), e.Font.Size, FontStyle.Bold), new SolidBrush(mColor), e.Bounds);
+                    e.Graphics.DrawString(drawstring, new Drawing.Font(e.Font.FontFamily.ToString(), e.Font.Size, Drawing.FontStyle.Bold), new Drawing.SolidBrush(mColor), e.Bounds);
                 else
-                    e.Graphics.DrawString(drawstring, e.Font, new SolidBrush(mColor), e.Bounds);
+                    e.Graphics.DrawString(drawstring, e.Font, new Drawing.SolidBrush(mColor), e.Bounds);
 
             }
             e.DrawFocusRectangle();
@@ -1392,16 +1231,16 @@ namespace DFWV
                 var thisBattle = (EC_Battle)lstHistoricalEventCollection.SelectedItem;
                 var drawstring = thisBattle.DefendingHF[e.Index].ToString();
 
-                var mColor = Color.Black;
+                var mColor = Drawing.Color.Black;
                 if (thisBattle.DefendingHF[e.Index].Caste.HasValue && HistoricalFigure.Castes[thisBattle.DefendingHF[e.Index].Caste.Value].ToLower().StartsWith("male"))
-                    mColor = Color.Blue;
+                    mColor = Drawing.Color.Blue;
                 else if (thisBattle.DefendingHF[e.Index].Caste.HasValue && HistoricalFigure.Castes[thisBattle.DefendingHF[e.Index].Caste.Value].ToLower().StartsWith("female"))
-                    mColor = Color.Red;
+                    mColor = Drawing.Color.Red;
                 
                 if (thisBattle.DefendingDiedHF != null && thisBattle.DefendingDiedHF.Contains(thisBattle.DefendingHF[e.Index]))
-                    e.Graphics.DrawString(drawstring, new Font(e.Font.FontFamily.ToString(), e.Font.Size, FontStyle.Bold), new SolidBrush(mColor), e.Bounds);
+                    e.Graphics.DrawString(drawstring, new Drawing.Font(e.Font.FontFamily.ToString(), e.Font.Size, Drawing.FontStyle.Bold), new Drawing.SolidBrush(mColor), e.Bounds);
                 else
-                    e.Graphics.DrawString(drawstring, e.Font, new SolidBrush(mColor), e.Bounds);
+                    e.Graphics.DrawString(drawstring, e.Font, new Drawing.SolidBrush(mColor), e.Bounds);
             }
             e.DrawFocusRectangle();
         }
@@ -1418,7 +1257,7 @@ namespace DFWV
 
             var evt = (HistoricalEvent)listBox.SelectedItem;
                 
-            evt.WriteDetailsOnParent(this, listBox.Parent, new Point(listBox.Left, listBox.Bottom + 10));
+            evt.WriteDetailsOnParent(this, listBox.Parent, new Drawing.Point(listBox.Left, listBox.Bottom + 10));
         }
 
         #endregion 
@@ -1451,7 +1290,7 @@ namespace DFWV
                                 {
                                     if (hfLink.HF == selectedHFNode.Tag)
                                     {
-                                        evt = hfLink.AddEvent;
+                                        evt = hfLink.Event;
                                         break;
                                     }
                                 }
@@ -1461,7 +1300,7 @@ namespace DFWV
                     case "Kills":
                         if (thisHF.SlayingEvents != null)
                         {
-                            foreach (var slaying_event in thisHF.SlayingEvents)
+                            foreach (HE_HFDied slaying_event in thisHF.SlayingEvents)
                             {
                                 if (slaying_event.HF == selectedHFNode.Tag)
                                 {
@@ -1471,6 +1310,8 @@ namespace DFWV
                             }
                         }
                         break;
+                    default:
+                        break;
                 }
             }
 
@@ -1478,7 +1319,7 @@ namespace DFWV
 
             if (evt != null)
             {
-                evt.WriteDetailsOnParent(this, TreeView.Parent, new Point(TreeView.Left, TreeView.Bottom + 10));
+                evt.WriteDetailsOnParent(this, TreeView.Parent, new Drawing.Point(TreeView.Left, TreeView.Bottom + 10));
             }
         }
         #endregion
@@ -1697,8 +1538,6 @@ namespace DFWV
         private void TextFilter<T, K>(string txt, ListBox listBox, Dictionary<K, T> dict, TabPage tabPage) where T: WorldObject
         {
 
-            var tempSelected = listBox.SelectedItem;
-
             var tempFilter = "DispNameLower.Contains(\"" + txt.ToLower() + "\")";
             World.Filters[typeof(T)].Where.Add(tempFilter);
 
@@ -1706,13 +1545,6 @@ namespace DFWV
 
             World.Filters[typeof(T)].Where.Remove(tempFilter);
 
-            if (tempSelected != null)
-            { 
-            if (listBox.Items.Contains(tempSelected))
-                listBox.SelectedItem = tempSelected;
-            else
-                listBox.SelectedIndex  = -1;
-            }
         }
         
         #endregion
@@ -1746,6 +1578,7 @@ namespace DFWV
         /// <summary>
         /// When a world is Closed, the Nav must be cleared
         /// </summary>
+        /// <param name="item"></param>
         internal void ClearNav()
         {
             NavBackObjects.Clear();
@@ -1789,31 +1622,9 @@ namespace DFWV
         
         #endregion
 
-        private void lstEntityPopluationRaces_DrawItem(object sender, DrawItemEventArgs e)
-        {
-            e.DrawBackground();
 
-            if (e.Index != -1)
-            {
-                var thisEntPop = (EntityPopulation)lstEntityPopulation.SelectedItem;
-                if (thisEntPop == null)
-                {
-                    grpEntityPopulation.Visible = false;
-                    return;
-                }
-                string drawString;
-                if (thisEntPop.RaceCounts[(Race)lstEntityPopluationRaces.Items[e.Index]] == 1)
-                    drawString = thisEntPop.RaceCounts[(Race)lstEntityPopluationRaces.Items[e.Index]] +
-                        " " + lstEntityPopluationRaces.Items[e.Index];
-                else
-                    drawString = thisEntPop.RaceCounts[(Race)lstEntityPopluationRaces.Items[e.Index]] +
-                        " " + lstEntityPopluationRaces.Items[e.Index].ToString().Pluralize();
 
-                e.Graphics.DrawString(drawString,
-                    e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
-            }
-            e.DrawFocusRectangle();
-        }
+
 
 
     }

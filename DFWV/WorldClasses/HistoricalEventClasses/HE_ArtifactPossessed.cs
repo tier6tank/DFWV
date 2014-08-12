@@ -7,6 +7,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
+    //TODO: Missing Details:  UnitID does not associate with anything, "NameOnly" events aren't shown in legends
     class HE_ArtifactPossessed : HistoricalEvent
     {
         private int? SiteID { get; set; }
@@ -90,15 +91,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
             EventLabel(frm, parent, ref location, "Artifact:", Artifact);
-            if (Artifact.Type != "" && Artifact.Material != "")
-                EventLabel(frm, parent, ref location, "Item:", Artifact.Material + " " + Artifact.Type);
-            if (UnitID != null && UnitID > -1)
+            if (UnitID != null) 
                 EventLabel(frm, parent, ref location, "Unit ID:", UnitID.Value.ToString());
             EventLabel(frm, parent, ref location, "Possessor:", HistFigure);
             EventLabel(frm, parent, ref location, "Site:", Site);
         }
 
-        protected override string LegendsDescription() //Not Matched
+        protected override string LegendsDescription()
         {
             var timestring = base.LegendsDescription();
 

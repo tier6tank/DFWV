@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 using System.Drawing;
 using System.Windows.Forms;
@@ -7,6 +8,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
+    //TODO: Missing Details:  Pet details?
 
     class HE_HFNewPet : HistoricalEvent
     {
@@ -16,9 +18,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private Region Subregion { get; set; }
         private int? FeatureLayerID { get; set; }
         private Point Coords { get; set; }
-        private List<int> GroupHFIDs { get; set; }
-        private List<Race> Pets { get; set; }
-        private List<HistoricalFigure> GroupHFs { get; set; }
+        private int? GroupHFID { get; set; }
+        private HistoricalFigure GroupHF { get; set; }
 
         override public Point Location { get { return Coords; } }
 
@@ -55,9 +56,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                             Coords = new Point(Convert.ToInt32(val.Split(',')[0]), Convert.ToInt32(val.Split(',')[1]));
                         break;
                     case "group_hfid":
-                        if (GroupHFIDs == null)
-                            GroupHFIDs = new List<int>();
-                        GroupHFIDs.Add(valI);
+                        if (GroupHFID.HasValue)
+                            DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        GroupHFID = valI;
                         break;
 
                     default:
@@ -68,79 +69,27 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         }
         internal override void Link()
         {
-            //TODO: Incorporate new data
             base.Link();
             if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
                 Site = World.Sites[SiteID.Value];
             if (SubregionID.HasValue && World.Regions.ContainsKey(SubregionID.Value))
                 Subregion = World.Regions[SubregionID.Value];
-            if (GroupHFIDs != null)
-            {
-                GroupHFs = new List<HistoricalFigure>();
-                foreach (var grouphfid in GroupHFIDs)
-                {
-                    if (World.HistoricalFigures.ContainsKey(grouphfid))
-                        GroupHFs.Add(World.HistoricalFigures[grouphfid]);
-                }
-            }
-        }
-
-        internal override void Plus(XDocument xdoc)
-        {
-            foreach (var element in xdoc.Root.Elements())
-            {
-                var val = element.Value;
-                int valI;
-                Int32.TryParse(val, out valI);
-
-                switch (element.Name.LocalName)
-                {
-                    case "id":
-                    case "type":
-                        break;
-                    case "figures":
-                        if (GroupHFIDs == null)
-                            GroupHFIDs = new List<int>();
-                        if (!GroupHFIDs.Contains(valI))
-                            GroupHFIDs.Add(valI);
-                        break;
-                    case "pets":
-                        var race = World.GetAddRace(val);
-                        if (Pets == null)
-                            Pets = new List<Race>();
-                        Pets.Add(race);
-                        break;
-                    case "site":
-                        break;
-                    default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
-                        break;
-                }
-            }
+            if (GroupHFID.HasValue && World.HistoricalFigures.ContainsKey(GroupHFID.Value))
+                GroupHF = World.HistoricalFigures[GroupHFID.Value];
         }
 
         internal override void Process()
         {
-            //TODO: Incorporate new data
             base.Process();
-            if (GroupHFs != null)
-            {
-                foreach (var grouphf in GroupHFs)
-                {
-                    if (grouphf.Events == null)
-                        grouphf.Events = new List<HistoricalEvent>();
-                    grouphf.Events.Add(this);
-                }
-            }
+            if (GroupHF == null) return;
+            if (GroupHF.Events == null)
+                GroupHF.Events = new List<HistoricalEvent>();
+            GroupHF.Events.Add(this);
         }
 
-        protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location) //TODO: Test Display
+        protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            foreach (var hf in GroupHFs)
-                EventLabel(frm, parent, ref location, "HF:", hf);
-            foreach (var pet in Pets)
-                EventLabel(frm, parent, ref location, "Pet:", pet);
-                            
+            EventLabel(frm, parent, ref location, "HF:", GroupHF);
             if (Site != null)
                 EventLabel(frm, parent, ref location, "Site:", Site);
             if (Subregion != null)
@@ -152,44 +101,39 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         }
 
-        protected override string LegendsDescription() //TODO: Test Display
+        protected override string LegendsDescription()
         {
-            //TODO: Incorporate new data (multiple GroupHFs)
             var timestring = base.LegendsDescription();
 
-            if (Pets != null && Pets.Count == 1)
-            {
-                return string.Format("{0} {1} tamed the {2} of {3}.",
-                    timestring, GroupHFs[0], Pets[0],
-                    Subregion == null ? "UNKNOWN" : Subregion.ToString());
-            }
             return string.Format("{0} {1} tamed the {2} of {3}.",
-                timestring, GroupHFs[0], "UNKNOWN",
-                Subregion == null ? "UNKNOWN" : Subregion.ToString());
+                                timestring, GroupHF, "UNKNOWN", 
+                                Subregion == null ? "UNKNOWN" : Subregion.ToString());
         }
 
         internal override string ToTimelineString()
         {
-            //TODO: Incorporate new data (multiple GroupHFs)
             var timelinestring = base.ToTimelineString();
 
             return string.Format("{0} {1} got a new pet.",
-                                timelinestring, GroupHFs[0]);
+                                timelinestring, GroupHF);
         }
 
         internal override void Export(string table)
         {
-            //TODO: Incorporate new data (multiple GroupHFs)
             base.Export(table);
 
+
             table = GetType().Name;
+
+
             
-            var vals = new List<object> { ID, GroupHFIDs[0], SiteID, SubregionID, FeatureLayerID };
+            var vals = new List<object> { ID, GroupHFID, SiteID, SubregionID, FeatureLayerID };
 
             if (Coords.IsEmpty)
                 vals.Add(DBNull.Value);
             else
                 vals.Add(Coords.X + "," + Coords.Y);
+
 
             Database.ExportWorldItem(table, vals);
 

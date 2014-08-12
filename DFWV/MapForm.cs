@@ -21,9 +21,7 @@ namespace DFWV
         Site selectedSite;
         int SiteSelection;
         Region selectedRegion;
-        UndergroundRegion selectedUndergroundRegion;
-        WorldConstruction selectedWC;
-        private readonly List<string> selectedSiteTypes = new List<string>();
+        private List<string> selectedSiteTypes = new List<string>();
  
         public MapForm()
         {
@@ -36,7 +34,6 @@ namespace DFWV
             World = world;
             LoadMaps();
             LoadSiteTypes();
-            LoadUGRegionDepth();
             ChangeMap();
             DrawMaps();
         }
@@ -68,30 +65,27 @@ namespace DFWV
 
         private void LoadSiteTypes()
         {
-            lstSiteTypes.Items.Clear();
-            lstSiteTypes.View = View.Details;
-            lstSiteTypes.Columns.Add("Name");
-            lstSiteTypes.Columns[0].Width = lstSiteTypes.Width -
-            4;
-            lstSiteTypes.HeaderStyle = ColumnHeaderStyle.None;
             foreach (var siteType in WorldClasses.Site.Types)
-                lstSiteTypes.Items.Add(siteType);
+            {
+                var thisItem = new ToolStripMenuItem(siteType) { CheckOnClick = true };
+                thisItem.Click += SiteTypeSelectionClicked;
+                sitetypesToolStripMenuItem.DropDownItems.Add(thisItem);
+            }
         }
 
-        private void LoadUGRegionDepth()
+        private void SiteTypeSelectionClicked(object sender, EventArgs e)
         {
-            foreach (var ugregion in World.UndergroundRegions.Values)
+            selectedSiteTypes.Clear();
+            foreach (ToolStripMenuItem sitetypeItem in sitetypesToolStripMenuItem.DropDownItems)
             {
-                if (ugregion.Depth < ugRegionDepthPicker.Minimum)
-                    ugRegionDepthPicker.Minimum = ugregion.Depth;
-                if (ugregion.Depth > ugRegionDepthPicker.Maximum)
-                    ugRegionDepthPicker.Maximum = ugregion.Depth;
+                if (sitetypeItem.Checked)
+                    selectedSiteTypes.Add(sitetypeItem.Text);
             }
+            redrawOverlay();
         }
 
         private void ChangeMap()
         {
-            Cursor.Current = Cursors.WaitCursor;
             if (picMap.Image != null)
                 picMap.Image.Dispose();
             picMap.Image = Image.FromFile(World.Maps[selectedMap]);
@@ -107,7 +101,7 @@ namespace DFWV
             mapSize = new Size(sizeX, sizeY);
             siteSize = new Size(picMap.Image.Size.Width / mapSize.Width,
                                 picMap.Image.Size.Height / mapSize.Height);
-                     
+
             redrawOverlay();
             DrawMaps();
         }
@@ -122,7 +116,6 @@ namespace DFWV
         
         private void redrawOverlay()
         {
-            Cursor.Current = Cursors.WaitCursor;
             if (MapOverlay == null || MapOverlay.Size != new Size(picMap.Image.Width, picMap.Image.Height))
             {
                 if (MapOverlay != null)
@@ -131,23 +124,20 @@ namespace DFWV
             }
             var g = Graphics.FromImage(MapOverlay);
             g.Clear(Color.Transparent);
-            if (chkSites.Checked)
+            if (sitesToolStripMenuItem.Checked)
                 DrawSiteOverlay(g);
-            if (chkCivilizations.Checked)
+            if (civilizationsToolStripMenuItem.Checked)
                 DrawCivOverlay(g);
-            if (chkBattles.Checked)
+            if (battlesToolStripMenuItem.Checked)
                 DrawBattleOverlay(g);
-            if (chkRegions.Checked)
+            if (regionsToolStripMenuItem.Checked)
                 DrawRegionOverlay(g);
-            if (chkUGRegions.Checked)
-                DrawUndergroundRegionOverlay(g);
-            if (chkHistoricalFigures.Checked)
+            if (HFtoolStripMenuItem.Checked)
                 DrawHFOverlay(g);
-            if (chkConstructions.Checked)
+            if (constructionsToolStripMenuItem.Checked)
                 DrawWorldConstructionOverlay(g);
 
             DrawMaps();
-            Cursor.Current = Cursors.Default;
         }
 
         private void DrawSiteOverlay(Graphics g)
@@ -156,7 +146,9 @@ namespace DFWV
             {
                 if (!selectedSiteTypes.Contains(WorldClasses.Site.Types[site.Type])) 
                     continue;
-                if (site.Parent != null || !chkNeutralSites.Checked)
+                if (site.Parent == null && !neutralsitesToolStripMenuItem.Checked)
+                    continue;
+                if (site.Parent != null && !neutralsitesToolStripMenuItem.Checked)
                     continue;
 
 
@@ -164,24 +156,6 @@ namespace DFWV
                 using (var p = new Pen(myColor))
                 {
                     using (Brush b = new SolidBrush(Color.FromArgb(150,myColor)))
-                    {
-                        g.FillRectangle(b, site.Coords.X * siteSize.Width, site.Coords.Y * siteSize.Height, siteSize.Width - 1, siteSize.Height - 1);
-                        g.DrawRectangle(p, site.Coords.X * siteSize.Width, site.Coords.Y * siteSize.Height, siteSize.Width - 1, siteSize.Height - 1);
-                    }
-                }
-            }
-            foreach (var site in World.Sites.Values)
-            {
-                if (!selectedSiteTypes.Contains(WorldClasses.Site.Types[site.Type]))
-                    continue;
-                if (site.Parent == null || !chkOwnedSites.Checked)
-                    continue;
-
-
-                var myColor = site.Parent == null ? Color.White : site.Parent.Color;
-                using (var p = new Pen(myColor))
-                {
-                    using (Brush b = new SolidBrush(Color.FromArgb(150, myColor)))
                     {
                         g.FillRectangle(b, site.Coords.X * siteSize.Width, site.Coords.Y * siteSize.Height, siteSize.Width - 1, siteSize.Height - 1);
                         g.DrawRectangle(p, site.Coords.X * siteSize.Width, site.Coords.Y * siteSize.Height, siteSize.Width - 1, siteSize.Height - 1);
@@ -217,49 +191,6 @@ namespace DFWV
                     ToPoint.Y = (int)(ToPoint.Y + Math.Sin(ang) * Gap);
 
                     g.DrawLine(p, FromPoint, ToPoint);
-                }
-            }
-
-            foreach (var entity in World.Entities.Values)
-            {
-                if (entity.Coords != null && entity.Civilization != null)
-                {
-                    using (var p = new Pen(entity.Civilization.Color))
-                    {
-                        var TopLeft = new Point();
-                        var TopRight = new Point();
-                        var BottomLeft = new Point();
-                        var BottomRight = new Point();
-                        using (Brush b = new SolidBrush(Color.FromArgb(50, entity.Civilization.Color)))
-                        {
-                            foreach (var coord in entity.Coords)
-                            {
-                                const int AreaMultFactor = 16;
-                                TopLeft.X = coord.X * siteSize.Width * AreaMultFactor;
-                                TopLeft.Y = coord.Y * siteSize.Height * AreaMultFactor;
-                                BottomLeft.X = coord.X * siteSize.Width * AreaMultFactor;
-                                BottomLeft.Y = TopLeft.Y + (siteSize.Height * AreaMultFactor) - 1;
-                                TopRight.X = TopLeft.X + (siteSize.Width * AreaMultFactor) - 1;
-                                TopRight.Y = TopLeft.Y;
-                                BottomRight.X = TopRight.X;
-                                BottomRight.Y = BottomLeft.Y;
-
-                                g.FillRectangle(b, TopLeft.X, TopLeft.Y, (siteSize.Width * AreaMultFactor) - 1, (siteSize.Height * AreaMultFactor) - 1);
-
-
-                                //g.DrawRectangle(p, TopLeft.X , TopLeft.Y , siteSize.Width - 1, siteSize.Height - 1);
-                                if (!entity.Coords.Contains(new Point(coord.X, coord.Y - 1)))
-                                    g.DrawLine(p, TopLeft, TopRight);
-                                if (!entity.Coords.Contains(new Point(coord.X + 1, coord.Y)))
-                                    g.DrawLine(p, TopRight, BottomRight);
-                                if (!entity.Coords.Contains(new Point(coord.X, coord.Y + 1)))
-                                    g.DrawLine(p, BottomRight, BottomLeft);
-                                if (!entity.Coords.Contains(new Point(coord.X - 1, coord.Y)))
-                                    g.DrawLine(p, BottomLeft, TopLeft);
-                            }
-                        }
-                        
-                    }
                 }
             }
         }
@@ -326,10 +257,8 @@ namespace DFWV
             var rnd = new Random();
             
             var curDistinctColor = 0; 
-            foreach (var region in World.Regions.Values)
+            foreach (var region in World.Regions.Values.Where(region => region.Coords != null))
             {
-                if (region.Coords == null)
-                    continue;
                 curDistinctColor++;
                 Color thisColor;
                 if (curDistinctColor < ColorNames.Count)
@@ -343,109 +272,37 @@ namespace DFWV
                 }
                 using (var p = new Pen(thisColor))
                 {
-                    var TopLeft = new Point();
-                    var TopRight = new Point();
-                    var BottomLeft = new Point();
-                    var BottomRight = new Point();
-                    using (Brush b = new SolidBrush(Color.FromArgb(50, thisColor)))
+                    using (Brush b = new SolidBrush(Color.FromArgb(150, thisColor)))
                     {
+                        if (region.HighestCoord.IsEmpty)
+                            region.HighestCoord = region.Coords[0];
+                        if (region.LowestCoord.IsEmpty)
+                            region.LowestCoord = region.Coords[0];
+
                         foreach (var coord in region.Coords)
                         {
-                            TopLeft.X = coord.X * siteSize.Width;
-                            TopLeft.Y = coord.Y * siteSize.Height;
-                            BottomLeft.X = coord.X * siteSize.Width;
-                            BottomLeft.Y = TopLeft.Y + siteSize.Height - 1;
-                            TopRight.X = TopLeft.X + siteSize.Width - 1;
-                            TopRight.Y = coord.Y * siteSize.Height;
-                            BottomRight.X = TopRight.X;
-                            BottomRight.Y = BottomLeft.Y;
-
-                            g.FillRectangle(b, TopLeft.X, TopLeft.Y, siteSize.Width - 1, siteSize.Height - 1);
-                            
-
-                            //g.DrawRectangle(p, TopLeft.X , TopLeft.Y , siteSize.Width - 1, siteSize.Height - 1);
-                            if (!region.Coords.Contains(new Point(coord.X, coord.Y-1)))
-                                g.DrawLine(p, TopLeft, TopRight);
-                            if (!region.Coords.Contains(new Point(coord.X+1, coord.Y)))
-                                g.DrawLine(p, TopRight, BottomRight);
-                            if (!region.Coords.Contains(new Point(coord.X, coord.Y+1)))
-                                g.DrawLine(p, BottomRight, BottomLeft);
-                            if (!region.Coords.Contains(new Point(coord.X - 1, coord.Y)))
-                                g.DrawLine(p, BottomLeft, TopLeft);
+                            if (coord.X > region.HighestCoord.X)
+                                region.HighestCoord.X = coord.X;
+                            if (coord.Y > region.HighestCoord.Y)
+                                region.HighestCoord.Y = coord.Y;
+                            if (coord.X < region.LowestCoord.X)
+                                region.LowestCoord.X = coord.X;
+                            if (coord.Y < region.LowestCoord.Y)
+                                region.LowestCoord.Y = coord.Y;
+                                
+                            g.FillRectangle(b, coord.X * siteSize.Width, coord.Y * siteSize.Height, siteSize.Width - 1, siteSize.Height - 1);
+                            g.DrawRectangle(p, coord.X * siteSize.Width, coord.Y * siteSize.Height, siteSize.Width - 1, siteSize.Height - 1);
                         }
+                        g.FillRectangle(b, region.LowestCoord.X * siteSize.Width, region.LowestCoord.Y * siteSize.Height,
+                            (region.HighestCoord.X - region.LowestCoord.X + 1) * siteSize.Width,
+                            (region.HighestCoord.Y - region.LowestCoord.Y + 1) * siteSize.Height);
+                        g.DrawRectangle(p, region.LowestCoord.X * siteSize.Width, region.LowestCoord.Y * siteSize.Height,
+                            (region.HighestCoord.X - region.LowestCoord.X + 1) * siteSize.Width,
+                            (region.HighestCoord.Y - region.LowestCoord.Y + 1) * siteSize.Height);
                     }
                 }
             }
         }
-
-        private void DrawUndergroundRegionOverlay(Graphics g)
-        {
-            var ColorNames = new List<string>
-            {"#00FF00", "#0000FF", "#FF0000", "#01FFFE", "#FFA6FE", "#FFDB66", "#006401", "#010067", 
-                "#95003A", "#007DB5", "#FF00F6", "#FFEEE8", "#774D00", "#90FB92", "#0076FF", "#D5FF00", 
-                "#FF937E", "#6A826C", "#FF029D", "#FE8900", "#7A4782", "#7E2DD2", "#85A900", "#FF0056", 
-                "#A42400", "#00AE7E", "#683D3B", "#BDC6FF", "#263400", "#BDD393", "#00B917", "#9E008E", 
-                "#001544", "#C28C9F", "#FF74A3", "#01D0FF", "#004754", "#E56FFE", "#788231", "#0E4CA1", 
-                "#91D0CB", "#BE9970", "#968AE8", "#BB8800", "#43002C", "#DEFF74", "#00FFC6", "#FFE502", 
-                "#620E00", "#008F9C", "#98FF52", "#7544B1", "#B500FF", "#00FF78", "#FF6E41", "#005F39", 
-                "#6B6882", "#5FAD4E", "#A75740", "#A5FFD2", "#FFB167", "#009BFF", "#E85EBE"};
-            var rnd = new Random();
-
-            var curDistinctColor = 0;
-            foreach (var ugregion in World.UndergroundRegions.Values)
-            {
-                if (ugregion.Depth != ugRegionDepthPicker.Value)
-                    continue;
-                if (ugregion.Coords == null)
-                    continue;
-                curDistinctColor++;
-                Color thisColor;
-                if (curDistinctColor < ColorNames.Count)
-                {
-                    var rgb = Int32.Parse(ColorNames[curDistinctColor].Replace("#", ""), NumberStyles.HexNumber);
-                    thisColor = Color.FromArgb(255, Color.FromArgb(rgb));
-                }
-                else
-                {
-                    thisColor = Color.FromArgb(rnd.Next(150) + 100, rnd.Next(150) + 100, rnd.Next(150) + 100);
-                }
-                using (var p = new Pen(thisColor))
-                {
-                    var TopLeft = new Point();
-                    var TopRight = new Point();
-                    var BottomLeft = new Point();
-                    var BottomRight = new Point();
-                    using (Brush b = new SolidBrush(Color.FromArgb(50, thisColor)))
-                    {
-                        foreach (var coord in ugregion.Coords)
-                        {
-                            TopLeft.X = coord.X * siteSize.Width;
-                            TopLeft.Y = coord.Y * siteSize.Height;
-                            BottomLeft.X = coord.X * siteSize.Width;
-                            BottomLeft.Y = TopLeft.Y + siteSize.Height - 1;
-                            TopRight.X = TopLeft.X + siteSize.Width - 1;
-                            TopRight.Y = coord.Y * siteSize.Height;
-                            BottomRight.X = TopRight.X;
-                            BottomRight.Y = BottomLeft.Y;
-
-                            g.FillRectangle(b, TopLeft.X, TopLeft.Y, siteSize.Width - 1, siteSize.Height - 1);
-
-
-                            //g.DrawRectangle(p, TopLeft.X , TopLeft.Y , siteSize.Width - 1, siteSize.Height - 1);
-                            if (!ugregion.Coords.Contains(new Point(coord.X, coord.Y - 1)))
-                                g.DrawLine(p, TopLeft, TopRight);
-                            if (!ugregion.Coords.Contains(new Point(coord.X + 1, coord.Y)))
-                                g.DrawLine(p, TopRight, BottomRight);
-                            if (!ugregion.Coords.Contains(new Point(coord.X, coord.Y + 1)))
-                                g.DrawLine(p, BottomRight, BottomLeft);
-                            if (!ugregion.Coords.Contains(new Point(coord.X - 1, coord.Y)))
-                                g.DrawLine(p, BottomLeft, TopLeft);
-                        }
-                    }
-                }
-            }
-        }
-
 
         private void DrawHFOverlay(Graphics g)
         {
@@ -473,6 +330,12 @@ namespace DFWV
 
             foreach (var coord in CoordPop.Keys)
             {
+                //Point CoordPoint = new Point(coord.X * siteSize.Width + siteSize.Width / 2,
+                //    coord.Y * siteSize.Height + siteSize.Height / 2);
+                //int radius = (int)Math.Sqrt(CoordPop[coord]);
+                //int radius = CoordPop[coord];
+                //g.DrawEllipse(Pens.Red, CoordPoint.X - radius, CoordPoint.Y - radius, radius * 2, radius * 2);
+
                 var red = (int)(255.0f * (Math.Sqrt(CoordPop[coord]) / maxPop));
 
                 using (Brush b = new SolidBrush(Color.FromArgb(225, red, 0, 0)))
@@ -499,52 +362,20 @@ namespace DFWV
                     p.DashStyle = DashStyle.Solid;
                     p.Width = 3;
 
-                    if (wc.Coords == null)
-                    {
-                        var gap = (int) ((siteSize.Width + siteSize.Height)/4.0);
-                        var fromPoint = new Point(wc.From.Coords.X*siteSize.Width + siteSize.Width/2,
-                            wc.From.Coords.Y*siteSize.Height + siteSize.Height/2);
-                        var toPoint = new Point(wc.To.Coords.X*siteSize.Width + siteSize.Width/2,
-                            wc.To.Coords.Y*siteSize.Height + siteSize.Height/2);
-                        if (
-                            !(Math.Sqrt(Math.Pow(fromPoint.X - toPoint.X, 2) + Math.Pow(fromPoint.Y - toPoint.Y, 2)) >
-                              gap))
-                            continue;
-                        var ang = Math.Atan2(fromPoint.Y - toPoint.Y, fromPoint.X - toPoint.X);
-                        fromPoint.X = (int) (fromPoint.X - Math.Cos(ang)*gap);
-                        fromPoint.Y = (int) (fromPoint.Y - Math.Sin(ang)*gap);
-                        toPoint.X = (int) (toPoint.X + Math.Cos(ang)*gap);
-                        toPoint.Y = (int) (toPoint.Y + Math.Sin(ang)*gap);
-                        g.DrawLine(p, fromPoint, toPoint);
-                    }
-                    else
-                    {
-                        if (wc.Coords.Count > 1)
-                        {
-                            for (var i = 0; i < wc.Coords.Count - 1; i++)
-                            {
-                                var fromPoint = new Point(wc.Coords[i].X * siteSize.Width + siteSize.Width / 2,
-                                    wc.Coords[i].Y * siteSize.Height + siteSize.Height / 2);
-                                var toPoint = new Point(wc.Coords[i+1].X * siteSize.Width + siteSize.Width / 2,
-                                    wc.Coords[i+1].Y * siteSize.Height + siteSize.Height / 2);
-                                p.DashStyle = wc.ConstructionType == "tunnel" 
-                                    ? DashStyle.Dot 
-                                    : DashStyle.Solid;
-                                g.DrawLine(p, fromPoint, toPoint);
-                            }
-                        }
-                        else
-                        {
-                            //var min = Math.Min(siteSize.Width, siteSize.Height);
-                            var pt = new[] { new Point(wc.Coords[0].X * siteSize.Width,  wc.Coords[0].Y * siteSize.Height + siteSize.Height / 2),
-                                                   new Point(wc.Coords[0].X * siteSize.Width + siteSize.Width / 2,  wc.Coords[0].Y * siteSize.Height), 
-                                                   new Point(wc.Coords[0].X * siteSize.Width + siteSize.Width,  wc.Coords[0].Y * siteSize.Height + siteSize.Height / 2) };
+                    var Gap = (int)((siteSize.Width + siteSize.Height) / 4.0);
+                    var FromPoint = new Point(wc.From.Coords.X * siteSize.Width + siteSize.Width / 2,
+                                            wc.From.Coords.Y * siteSize.Height + siteSize.Height / 2);
+                    var ToPoint = new Point(wc.To.Coords.X * siteSize.Width + siteSize.Width / 2,
+                                            wc.To.Coords.Y * siteSize.Height + siteSize.Height / 2);
+                    if (!(Math.Sqrt(Math.Pow(FromPoint.X - ToPoint.X, 2) + Math.Pow(FromPoint.Y - ToPoint.Y, 2)) > Gap))
+                        continue;
+                    var ang = Math.Atan2(FromPoint.Y - ToPoint.Y, FromPoint.X - ToPoint.X);
+                    FromPoint.X = (int)(FromPoint.X - Math.Cos(ang) * Gap);
+                    FromPoint.Y = (int)(FromPoint.Y - Math.Sin(ang) * Gap);
+                    ToPoint.X = (int)(ToPoint.X + Math.Cos(ang) * Gap);
+                    ToPoint.Y = (int)(ToPoint.Y + Math.Sin(ang) * Gap);
 
-                            //g.DrawEllipse(p, new Rectangle(wc.Coords[0].X * siteSize.Width, wc.Coords[0].Y * siteSize.Height, min, min));
-                            g.DrawCurve(p, pt);
-                        }
-                    }
-                    
+                    g.DrawLine(p, FromPoint, ToPoint);
                 }
             }
 
@@ -614,34 +445,15 @@ namespace DFWV
             DrawMaps();
         }
 
-        private void lstSiteTypes_ItemChecked(object sender, ItemCheckedEventArgs e)
-        {
-            ViewOptionChanged(sender, new EventArgs());
-        }
-
-
-        private static bool isEnablingSections;
-
         private void ViewOptionChanged(object sender, EventArgs e)
         {
-            if (isEnablingSections)
-                return;
-            if (sender is CheckBox && sender == chkSites)
+            var tItem = (ToolStripMenuItem)sender;
+            if (tItem.DropDownItems.Count > 0)
             {
-                var chkbox = sender as CheckBox;
-                grpSites.Visible = chkbox.Checked;
-                isEnablingSections = true;
-                chkOwnedSites.Checked = chkbox.Checked;
-                chkNeutralSites.Checked = chkbox.Checked;
-                foreach (ListViewItem item in lstSiteTypes.Items)
-                    item.Checked = chkSites.Checked;
-                isEnablingSections = false;
-            }
-            selectedSiteTypes.Clear();
-            foreach (ListViewItem item in lstSiteTypes.Items)
-            {
-                if (item.Checked)
-                    selectedSiteTypes.Add(item.Text);
+                foreach (ToolStripMenuItem item in tItem.DropDownItems)
+                {
+                    item.Enabled = tItem.Checked;
+                }
             }
             redrawOverlay();
         }
@@ -683,126 +495,58 @@ namespace DFWV
         {
             var mouseCoord = new Point(e.X / siteSize.Width, e.Y / siteSize.Height);
             lblMapCoords.Text = string.Format("({0}, {1})", mouseCoord.X, mouseCoord.Y);
-            var selectedObject = getSelectedObject(mouseCoord);
-            var nameText = "";
-            var altNameText = "";
-            var ownerText = "";
-            var parentText = "";
-            var typeText = "";
-            var objectTypeText = "";
-            if (selectedObject is Site)
-            {
-                nameText = selectedSite.ToString();
-                altNameText = selectedSite.AltName;
-                ownerText = selectedSite.Owner != null ? selectedSite.Owner.ToString() : "";
-                parentText = selectedSite.Parent != null ? selectedSite.Parent.ToString() : "";
-                typeText = WorldClasses.Site.Types[selectedSite.Type];
-                objectTypeText = "Site";
-            }
-            if (selectedObject is WorldConstruction)
-            {
-                nameText = selectedWC.ToString();
-                typeText = selectedWC.ConstructionType;
-                if (selectedWC.CreatedEvent != null && selectedWC.CreatedEvent.Civ != null &&
-                    selectedWC.CreatedEvent.Civ.Civilization != null)
-                    ownerText = selectedWC.CreatedEvent.Civ.Civilization.ToString();
-
-                lblMapAltNameCaption.Visible = false;
-                if (selectedWC.MasterWC != null)
-                    parentText = selectedWC.MasterWC.ToString();
-                objectTypeText = "World Construction";
-            }
-            if (selectedObject is Region)
-            {
-
-                nameText = selectedRegion.ToString();
-                typeText = WorldClasses.Region.Types[selectedRegion.Type];
-                objectTypeText = "Region";
-            }
-            if (selectedObject is UndergroundRegion)
-            {
-                nameText = selectedUndergroundRegion.ToString();
-                objectTypeText = "Underground Region";
-            }
-            lblMapName.Text = nameText;
-            lblMapAltName.Text = altNameText;
-            lblMapOwner.Text = ownerText;
-            lblMapParent.Text = parentText;
-            lblMapType.Text = typeText;
-
-            lblMapNameCaption.Visible = nameText != "";
-            lblMapAltNameCaption.Visible = altNameText != "";
-            lblMapOwnerCaption.Visible = ownerText != "";
-            lblMapParentCaption.Visible = parentText != "";
-            lblMapTypeCaption.Visible = typeText != "";
-
-            lblMapObject.Text = objectTypeText;
-            lblMapObject.Visible = objectTypeText != "";
-        }
-
-        private WorldObject getSelectedObject(Point mouseCoord)
-        {
-            if (chkSites.Checked)
+            if (sitesToolStripMenuItem.Checked)
             {
                 selectedSite = GetSiteAt(mouseCoord);
                 if (selectedSite != null)
-                    return selectedSite;
+                {
+                    lblMapName.Text = selectedSite.ToString();
+                    lblMapAltName.Text = selectedSite.AltName;
+
+                    lblMapOwner.Text = selectedSite.Owner != null ? selectedSite.Owner.ToString() : "";
+                    lblMapParentCiv.Text = selectedSite.Parent != null ? selectedSite.Parent.ToString() : "";
+                    lblMapType.Text = WorldClasses.Site.Types[selectedSite.Type];
+                    lblMapNickNameCaption.Visible = true;
+                    lblMapOwnerCaption.Visible = true;
+                    lblMapParentCaption.Visible = true;
+                }
+                else
+                {
+                    lblMapName.Text = "";
+                    lblMapAltName.Text = "";
+                    lblMapOwner.Text = "";
+                    lblMapParentCiv.Text = "";
+                    lblMapType.Text = "";
+
+                }
             }
-            if (chkConstructions.Checked)
-            {
-                selectedWC = GetWorldConstructionAt(mouseCoord);
-                if (selectedWC != null)
-                    return selectedWC;
-            }
-            if (chkRegions.Checked)
+            else if (regionsToolStripMenuItem.Checked)
             {
                 selectedRegion = GetRegionAt(mouseCoord);
                 if (selectedRegion != null)
-                    return selectedRegion;
+                {
+                    lblMapName.Text = selectedRegion.ToString();
+                    lblMapType.Text = WorldClasses.Region.Types[selectedRegion.Type];
+                    lblMapNickNameCaption.Visible = true;
+                    lblMapOwnerCaption.Visible = true;
+                    lblMapParentCaption.Visible = true;
+                }
+                else
+                {
+                    lblMapName.Text = "";
+                    lblMapType.Text = "";
+                }
             }
-            if (chkUGRegions.Checked)
-            {
-                selectedUndergroundRegion = GetUndergroundRegionAt(mouseCoord);
-                if (selectedUndergroundRegion != null)
-                    return selectedUndergroundRegion;
-            }
-            return null;
-        }
-
-        private WorldConstruction GetWorldConstructionAt(Point coord)
-        {
-            if (World.hasPlusXML)
-            {
-                var returnWC = World.WorldConstructions.Values.Where(wc => wc.Coords != null && wc.ConstructionType != "road")
-                        .FirstOrDefault(wc => wc.Coords.Contains(coord));
-                if (returnWC != null)
-                    return returnWC;
-
-                return World.WorldConstructions.Values.Where(wc => wc.Coords != null && wc.ConstructionType == "road")
-                    .FirstOrDefault(wc => wc.Coords.Contains(coord));
-            }
-            return
-                World.WorldConstructions.Values.Where(wc => wc.From != null && wc.To != null)
-                    .FirstOrDefault(wc => wc.From.Coords == coord || wc.To.Coords == coord);
         }
 
         private Region GetRegionAt(Point coord)
         {
             return World.Regions.Values.Where(region => region.Coords != null).FirstOrDefault(region => region.Coords.Contains(coord));
         }
-        private UndergroundRegion GetUndergroundRegionAt(Point coord)
-        {
-            return World.UndergroundRegions.Values.Where(ugregion => ugregion.Coords != null).FirstOrDefault(ugregion => ugregion.Coords.Contains(coord) && ugregion.Depth == ugRegionDepthPicker.Value);
-        }
 
         private Site GetSiteAt(Point coord)
         {
-            return World.Sites.Values.FirstOrDefault(
-                site => selectedSiteTypes.Contains(WorldClasses.Site.Types[site.Type]) 
-                    && site.Coords == coord 
-                    && ((site.Parent == null && chkNeutralSites.Checked) 
-                       || (site.Parent != null && chkOwnedSites.Checked)) 
-                       );
+            return World.Sites.Values.FirstOrDefault(site => selectedSiteTypes.Contains(WorldClasses.Site.Types[site.Type]) && site.Coords == coord);
         }
 
         private void MapForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -817,24 +561,14 @@ namespace DFWV
             switch (e.Button)
             {
                 case MouseButtons.Left:
-                    if (chkSites.Checked && selectedSite != null)
+                    if (sitesToolStripMenuItem.Checked && selectedSite != null)
                     {
                         selectedSite.Select(Program.mainForm);
                         Program.mainForm.BringToFront();
                     }
-                    else if (chkConstructions.Checked && selectedWC != null)
-                    {
-                        selectedWC.Select(Program.mainForm);
-                        Program.mainForm.BringToFront();
-                    }
-                    else if (chkRegions.Checked && selectedRegion != null)
+                    else if (regionsToolStripMenuItem.Checked && selectedRegion != null)
                     {
                         selectedRegion.Select(Program.mainForm);
-                        Program.mainForm.BringToFront();
-                    }
-                    else if (chkUGRegions.Checked && selectedUndergroundRegion != null)
-                    {
-                        selectedUndergroundRegion.Select(Program.mainForm);
                         Program.mainForm.BringToFront();
                     }
                     break;
@@ -858,23 +592,5 @@ namespace DFWV
             Cursor.Position = new Point(loc.X * siteSize.Width + locationOnForm.X + siteSize.Width / 2, loc.Y * siteSize.Height + locationOnForm.Y + siteSize.Height / 2);
 
         }
-
-        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            grpSettings.Visible = true;
-        }
-
-        private void btnOK_Click(object sender, EventArgs e)
-        {
-            grpSettings.Visible = false;
-        }
-
-        private void MapForm_Load(object sender, EventArgs e)
-        {
-
-        }
-
-
-
     }
 }

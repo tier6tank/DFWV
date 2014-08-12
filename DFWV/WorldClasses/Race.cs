@@ -4,7 +4,6 @@ using System.Linq;
 using System.Drawing;
 using DFWV.Annotations;
 
-
 namespace DFWV.WorldClasses
 {
     class Race : WorldObject
@@ -13,7 +12,6 @@ namespace DFWV.WorldClasses
         public long Population { private get; set; }
         public bool isCivilized { get; set; }
 
-        public string PluralName { get; set; }
         [UsedImplicitly]
         public int CivCount { get { return World.Civilizations.Count(x => x.Race == this); } }
         [UsedImplicitly]
@@ -25,20 +23,18 @@ namespace DFWV.WorldClasses
 
         override public Point Location { get { return Point.Empty; } }
 
+
         public Race(string name, World world) 
             : base(world)
         {
-            if (name.isPlural())
-            {
-                Name = name.Singularize();
-                PluralName = name;
-            }
-            else
-            {
-                Name = name;
-                PluralName = name.Pluralize();
-            }
+            Name = name;
         }
+
+        //public Race(NameValueCollection data, World world) 
+        //    : base (world)
+        //{
+        //    Name = data["Name"].ToString();
+        //}
 
         public override void Select(MainForm frm)
         {
@@ -90,7 +86,7 @@ namespace DFWV.WorldClasses
 
             Database.ExportWorldItem(table, vals);
         }
-
+        
     }
 
 

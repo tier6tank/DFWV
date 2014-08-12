@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
@@ -96,16 +95,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             EventLabel(frm, parent, ref location, "Structure:", Structure);
         }
 
-        protected override string LegendsDescription() //Matched
+        protected override string LegendsDescription()
         {
             var timestring = base.LegendsDescription();
 
             return string.Format("{0} {1} formed in {2} in {3}.",
-                timestring, Entity, 
-                Structure != null ? 
-                Structure.ToString() : 
-                StructureID.ToString(),
-                Site.AltName);
+                            timestring, Entity, StructureID,
+                            Site.AltName);
         }
 
         internal override string ToTimelineString()

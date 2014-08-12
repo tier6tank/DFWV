@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Xml.Linq;
 using System.Windows.Forms;
+using System.Globalization;
 using System.Drawing;
 using DFWV.Annotations;
+using DFWV.Controls;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
 using LinkLabel = DFWV.Controls.LinkLabel;
 
@@ -30,13 +33,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public string DispNameLower { get { return ToString().ToLower(); } }
 
         override public Point Location { get { return Point.Empty; } }
-
-        public static List<string> Items = new List<string>();
-        public static List<string> ItemSubTypes = new List<string>();
-        public static List<string> Materials = new List<string>();
-        public static List<string> MeetingTopics = new List<string>();
-        public static List<string> MeetingResults = new List<string>();
-        public static List<string> Buildings = new List<string>();
 
         public static HistoricalEvent Create(XDocument xdoc, World world)
         {
@@ -208,7 +204,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
 // ReSharper restore RedundantCaseLabel
                 default:
-                    var logtext = "";
+                    string logtext = "";
                     if (xdoc.Root.Element("type").Value != "hf disturbed structure" && xdoc.Root.Element("type").Value != "site died" && xdoc.Root.Element("type").Value != "agreement concluded" && xdoc.Root.Element("type").Value != "hf reach summit")
                         logtext = "Unassessed Event Type: " + (xdoc.Root.Element("type").Value);// + raw.Replace("<", "//<") + "\n\t\t\tbreak;");
 #if DEBUG
@@ -258,7 +254,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         public override string ToString()
         {
-            return Year + " - " + Types[Type].ToTitleCase();
+            return Year + " - " + CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Types[Type]);
         }
 
         internal virtual string ToTimelineString()
@@ -274,9 +270,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public override void Select(MainForm frm)
         {
             frm.grpHistoricalEvent.Text = ToString();
-#if DEBUG
-            frm.grpHistoricalEvent.Text += string.Format(string.Format(string.Format(" - ID: {0}", ID), ID), ID);
-#endif
             frm.grpHistoricalEvent.Show();
 
             WriteDetailsOnParent(frm, frm.grpHistoricalEvent, new Point(16, 26));
@@ -294,14 +287,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Process()
         {
             
-        }
-
-        internal override void Plus(XDocument xdoc)
-        {
-            if (Types[Type] == "entity relocate" ||
-                Types[Type] == "entity primary criminals")
-                return;
-            //Entity Relocate
         }
 
         protected virtual void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
@@ -359,10 +344,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             {
                 try
                 {
-                    var description = LegendsDescription();
-                    if (description.Contains("UNKNOWN"))
-                        Console.WriteLine("");
-                    EventLabel(frm, parent, ref location, description, "");
+                    EventLabel(frm, parent, ref location, LegendsDescription(), "");
                 }
                 catch (Exception)
                 {

@@ -85,7 +85,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             
             if (BuildingID.HasValue && Site.Structures != null)
             {
-                foreach (var structure in Site.Structures)
+                foreach (Structure structure in Site.Structures)
                 {
                     if (structure.SiteID == BuildingID)
                     {
@@ -129,12 +129,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             EventLabel(frm, parent, ref location, "Coords:", new Coordinate(Coords));
         }
 
-        protected override string LegendsDescription() //Matched
+        protected override string LegendsDescription()
         {
             var timestring = base.LegendsDescription();
 
             return string.Format("{0} {1} was entombed in {2} within {3}.",
-                                    timestring, HF, Site.AltName, Structure);
+                                    timestring, HF, Site.AltName, "BUILDING " + BuildingID);
         }
 
         internal override string ToTimelineString()

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
@@ -156,12 +155,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             EventLabel(frm, parent, ref location, "To:", Site2);
         }
 
-        protected override string LegendsDescription() //Matched
+        protected override string LegendsDescription()
         {
             var timestring = base.LegendsDescription();
 
             return string.Format("{0} {1} of {2} finished contruction of {3} connecting {4} and {5}.",
-                timestring, SiteCiv, Civ, WC.Name == "" ? "CONSTRUCTION " + WC : WC.Name,
+                            timestring, SiteCiv, Civ, "CONSTRUCTION " + WC,
                             Site1, Site2);
         }
 

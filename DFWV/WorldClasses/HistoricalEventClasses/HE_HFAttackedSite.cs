@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
@@ -111,7 +110,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             return string.Format("{0} {1} attacked {2} at {3}.",
-                                    timestring, AttackerHF.FirstName.ToTitleCase(), SiteCiv,
+                                    timestring, System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(AttackerHF.FirstName), SiteCiv,
                                     Site.AltName);
         }
 

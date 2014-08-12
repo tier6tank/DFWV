@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
@@ -17,10 +16,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? SiteID { get; set; }
         private Site Site { get; set; }
         private int? SkillAtTime { get; set; }
-
-        private int? Item { get; set; }
-        private int? ItemSubType { get; set; }
-
 
         override public Point Location { get { return Site.Location; } }
 
@@ -72,43 +67,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            //TODO: Incorporate new data
             EventLabel(frm, parent, ref location, "HF:", HF);
             EventLabel(frm, parent, ref location, "Entity:", Entity);
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Skill:", SkillAtTime.ToString());
-        }
-
-        internal override void Plus(XDocument xdoc)
-        {
-            foreach (var element in xdoc.Root.Elements())
-            {
-                var val = element.Value;
-                int valI;
-                Int32.TryParse(val, out valI);
-
-                switch (element.Name.LocalName)
-                {
-                    case "id":
-                    case "type":
-                        break;
-                    case "item_id":
-                        Item = valI;
-                        break;
-                    case "item_subtype":
-                        if (!ItemSubTypes.Contains(val))
-                            ItemSubTypes.Add(val);
-                        ItemSubType = ItemSubTypes.IndexOf(val);
-                        break;
-                    case "maker":
-                    case "maker_entity":
-                    case "site":
-                        break;
-                    default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
-                        break;
-                }
-            }
         }
 
         internal override void Process()
@@ -130,19 +92,17 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             Entity.Events.Add(this);
         }
 
-        protected override string LegendsDescription() //Not Matched
+        protected override string LegendsDescription()
         {
-            //TODO: Incorporate new data
             var timestring = base.LegendsDescription();
 
             return string.Format("{0} {1} prepared a masterful {2} for {3} at {4}.",
-                    timestring, HF, ItemSubType.HasValue ? ItemSubTypes[ItemSubType.Value] : "UNKNOWN", Entity,
+                                timestring, HF, "UNKNOWN", Entity,
                                 Site.AltName);
         }
 
         internal override string ToTimelineString()
         {
-            //TODO: Incorporate new data
             var timelinestring = base.ToTimelineString();
 
             return string.Format("{0} {1} prepared a masterful meal for {2} at {3}.",
@@ -152,7 +112,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         internal override void Export(string table)
         {
-            //TODO: Incorporate new data
             base.Export(table);
 
 

@@ -28,22 +28,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? SubregionID { get; set; }
         public Region Subregion { get; private set; }
 
-        private int? Item { get; set; }
-        private int? ArtifactID { get; set; }
-        private int? ItemType { get; set; }
-        private int? ItemSubType { get; set; }
-        private int? Mat { get; set; }
-        private int? MatType { get; set; }
-        private int? MatIndex  { get; set; }
-
-        private int? BowItem { get; set; }
-        private int? BowArtifactID { get; set; }
-        private int? BowItemType { get; set; }
-        private int? BowItemSubType { get; set; }
-        private int? BowMat { get; set; }
-        private int? BowMatType { get; set; }
-        private int? BowMatIndex  { get; set; }
-
         override public Point Location { get { return Site != null ? Site.Location : (Subregion != null ? Subregion.Location : Point.Empty); } }
 
         public HE_HFDied(XDocument xdoc, World world)
@@ -110,7 +94,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         }
         internal override void Link()
         {
-            //TODO: Incorporate new data
             base.Link();
             if (HFID.HasValue && World.HistoricalFigures.ContainsKey(HFID.Value))
                 HF = World.HistoricalFigures[HFID.Value];
@@ -125,91 +108,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 SlayerRace = World.GetAddRace(SlayerRace_);
                 SlayerRace_ = null;
             }
-            if (ArtifactID.HasValue && World.Artifacts.ContainsKey(ArtifactID.Value))
-                SlayerItem = World.Artifacts[ArtifactID.Value];
-            if (BowArtifactID.HasValue && World.Artifacts.ContainsKey(BowArtifactID.Value))
-                SlayerShooterItem = World.Artifacts[BowArtifactID.Value];
-        }
-
-        internal override void Plus(XDocument xdoc)
-        {
-            foreach (var element in xdoc.Root.Elements())
-            {
-                var val = element.Value;
-                int valI;
-                Int32.TryParse(val, out valI);
-
-                switch (element.Name.LocalName)
-                {
-                    case "id":
-                    case "type":
-                        break;
-                    case "victim_hf":
-                    case "slayer_hf":
-                    case "slayer_race":
-                    case "slayer_caste":
-                    case "site":
-                    case "death_cause":
-                        break;
-                    case "item":
-                        Item = valI;
-                        break;
-                    case "artifact_id":
-                        ArtifactID = valI;
-                        break;
-                    case "item_type":
-                        if (!Items.Contains(val))
-                            Items.Add(val);
-                        ItemType = Items.IndexOf(val);
-                        break;
-                    case "item_subtype":
-                        if (!ItemSubTypes.Contains(val))
-                            ItemSubTypes.Add(val);
-                        ItemSubType = ItemSubTypes.IndexOf(val);
-                        break;
-                    case "mattype":
-                        MatType = valI;
-                        break;
-                    case "matindex":
-                        MatIndex = valI;
-                        break;
-                    case "mat":
-                        if (!Materials.Contains(val))
-                            Materials.Add(val);
-                        Mat = Materials.IndexOf(val);
-                        break;
-                    case "bow_item":
-                        BowItem = valI;
-                        break;
-                    case "bow_artifact_id":
-                        BowArtifactID = valI;
-                        break;
-                    case "bow_item_type":
-                        if (!Items.Contains(val))
-                            Items.Add(val);
-                        BowItemType = Items.IndexOf(val);
-                        break;
-                    case "bow_item_subtype":
-                        if (!ItemSubTypes.Contains(val))
-                            ItemSubTypes.Add(val);
-                        BowItemSubType = ItemSubTypes.IndexOf(val);
-                        break;
-                    case "bow_mattype":
-                        BowMatType = valI;
-                        break;
-                    case "bow_matindex":
-                        BowMatIndex = valI;
-                        break;
-                    case "bow_mat":
-                        if (!Materials.Contains(val))
-                            Materials.Add(val);
-                        BowMat = Materials.IndexOf(val);
-                        break;
-                    default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
-                        break;
-                }
-            }
+            if (SlayerItemID.HasValue && World.Artifacts.ContainsKey(SlayerItemID.Value))
+                SlayerItem = World.Artifacts[SlayerItemID.Value];
+            if (SlayerShooterItemID.HasValue && World.Artifacts.ContainsKey(SlayerShooterItemID.Value))
+                SlayerShooterItem = World.Artifacts[SlayerShooterItemID.Value];
         }
 
         internal override void Process()
@@ -249,13 +151,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            //TODO: Incorporate new data
             EventLabel(frm, parent, ref location, "HF:", HF);
             EventLabel(frm, parent, ref location, "Cause:", Causes[Cause]);
-            if (SlayerItem != null)
-                EventLabel(frm, parent, ref location, "Weapon:", SlayerItem);
-            if (SlayerShooterItem != null)
-                EventLabel(frm, parent, ref location, "Bow:", SlayerShooterItem);
             if (SlayerHF != null)
                 EventLabel(frm, parent, ref location, "Slayer:", SlayerHF);
             else if (SlayerHFID.HasValue)
@@ -276,92 +173,27 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         }
 
-        protected override string LegendsDescription() //Not Matched (Update commented out items)
+        protected override string LegendsDescription()
         {
             var timestring = base.LegendsDescription();
-
-            var locationText = "";
-            if (Site != null)
-                locationText = Site.AltName;
-            else if (Subregion != null)
-                locationText = Subregion.ToString();
 
             switch (Causes[Cause])
             {
                 case "struck":
-                    if (Item == null)
-                        return string.Format("{0} the {1} {2} was struck down by \nthe {3} {4} in {5}.",
-                            timestring, HF.Race, HF,
-                            SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                            locationText);
-                    if (SlayerItem != null)
-                        return string.Format("{0} the {1} {2} was struck down by \n the {3} {4} with {5} in {6}.",
-                            timestring, HF.Race, HF,
-                            SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                            SlayerItem, locationText);
-                    if (ItemType != null && Items[ItemType.Value] == "corpsepiece")
-                        return string.Format("{0} the {1} {2} was struck down by \nthe {3} {4} {5} in {6}.",
-                            timestring, HF.Race, HF,
-                            SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                            "with a body part", locationText);
-                    if (ItemType != null && Items[ItemType.Value] == "corpse")
-                        return string.Format("{0} the {1} {2} was struck down by \nthe {3} {4} {5} in {6}.",
-                            timestring, HF.Race, HF,
-                            SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                            "with a corpse", locationText);
-                    if (Mat != null && ItemType != null && ItemSubType == null) //Test
-                        return string.Format("{0} the {1} {2} was struck down by \nthe {3} {4} {5} in {6}.",
-                            timestring, HF.Race, HF,
-                            SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                            "with a " + Materials[Mat.Value] + " " + Items[ItemType.Value] , locationText);
-                    if (Mat != null && ItemType != null && ItemSubType != null)
-                        return string.Format("{0} the {1} {2} was struck down by \nthe {3} {4} {5} in {6}.",
-                            timestring, HF.Race, HF,
-                            SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                            "with a " + Materials[Mat.Value] + " " + ItemSubTypes[ItemSubType.Value], locationText);
-                    return string.Format("{0} the {1} {2} was struck down by \nthe {3} {4} {5} in {6}.",
+                    return string.Format("{0} the {1} {2} was struck down by \nthe {3} {4} in {5}.",
                         timestring, HF.Race, HF,
                         SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                        "with " , locationText);
+                        Site == null ? SiteID.ToString() : Site.AltName);
                 case "shot":
-                    if (BowItem == null)
-                    {
-                        if (Mat != null && ItemType != null && ItemSubType != null)
-                            return string.Format("{0} the {1} {2} was shot and killed by \nthe {3} {4} {5} in {6}.",
-                                timestring, HF.Race, HF,
-                                SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                                "with a " + Materials[Mat.Value] + " " + ItemSubTypes[ItemSubType.Value],
-                                locationText);
-                        return string.Format("{0} the {1} {2} was shot and killed by \nthe {3} {4} in {5}.",  //Test
-                            timestring, HF.Race, HF,
-                            SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                            locationText);
-                    }
-                    if (SlayerShooterItem != null)
-                        return string.Format("{0} the {1} {2} was shot and killed by \n the {3} {4} with {5} in {6}.",
-                            timestring, HF.Race, HF,
-                            SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                            SlayerShooterItem, locationText);
-                    if (BowMat != null && BowItemType != null && BowItemSubType == null && ItemType != null && Mat != null) //Test
-                        return string.Format("{0} the {1} {2} was shot and killed by \nthe {3} {4} {5} in {6}.",
-                            timestring, HF.Race, HF,
-                            SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                            "with a " + Materials[Mat.Value] + " " + Items[ItemType.Value], locationText);
-                    if (BowMat != null && BowItemType != null && BowItemSubType != null && Mat != null && ItemType != null && ItemSubType != null)
-                        return string.Format("{0} the {1} {2} was shot and killed by \nthe {3} {4} {5} in {6}.",
-                            timestring, HF.Race, HF,
-                            SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                            "with a " + Materials[Mat.Value] + " " + ItemSubTypes[ItemSubType.Value] + " from a " + Materials[BowMat.Value] + " " + ItemSubTypes[BowItemSubType.Value],
-                            locationText);
-                    return string.Format("{0} the {1} {2} was shot and killed by \nthe {3} {4} {5} in {6}.",
+                    return string.Format("{0} the {1} {2} was shot and killed by \nthe {3} {4} in {5}.",
                         timestring, HF.Race, HF,
                         SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                        "with ", locationText);
+                        Site == null ? SiteID.ToString() : Site.AltName);
                 case "murdered":
                     return string.Format("{0} the {1} {2} was murdered by \nthe {3} {4} in {5}.",
                         timestring, HF.Race, HF,
                         SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                        locationText);
+                        Site == null ? SiteID.ToString() : Site.AltName);
                 case "old age":
                     return string.Format("{0} the {1} {2} died of old age.",
                         timestring, HF.Race, HF);
@@ -369,120 +201,120 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     return string.Format("{0} the {1} {2} succumbed to infection, slain by \nthe {3} {4} in {5}.",
                         timestring, HF.Race, HF,
                         SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                        locationText);
+                        Site == null ? SiteID.ToString() : Site.AltName);
                 case "blood":
                     if (SlayerHF == null)
                         return string.Format("{0} the {1} {2} bled to death in {3}.",
                             timestring, HF.Race, HF,
-                            locationText);
+                            Site == null ? SiteID.ToString() : Site.AltName);
                     return string.Format("{0} the {1} {2} bled to death, slain by the {3} {4} with ITEM: {5} in {6}.",
                         timestring, HF.Race, HF, SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(), SlayerItemID,
-                        locationText);
+                        Site == null ? SiteID.ToString() : Site.AltName);
                 case "thirst":
                     return string.Format("{0} the {1} {2} died of thirst in {3}.",
                         timestring, HF.Race, HF,
-                        locationText);
+                        Site == null ? SiteID.ToString() : Site.AltName);
                 case "collapsed":
                     return string.Format("{0} the {1} {2} collapsed, struck down by \nthe {3} {4} in {5}.",
                         timestring, HF.Race, HF,
                         SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                        locationText);
+                        Site == null ? SiteID.ToString() : Site.AltName);
                 case "vanish":
                     return string.Format("{0} the {1} {2} vanished in {3}.",
                         timestring, HF.Race, HF,
-                        locationText);
+                        Site == null ? SiteID.ToString() : Site.AltName);
                 case "drown":
                     return string.Format("{0} the {1} {2} drowned in {3}.",
                         timestring, HF.Race, HF,
-                        locationText);
+                        Site == null ? SiteID.ToString() : Site.AltName);
                 case "crushed bridge":
                     return string.Format("{0} the {1} {2} was crushed by a drawbridge in {3}.",
                         timestring, HF.Race, HF,
-                        locationText);
+                        Site == null ? SiteID.ToString() : Site.AltName);
                 case "put to rest":
                     return string.Format("{0} the {1} {2} was put to rest in {3}.",
                         timestring, HF.Race, HF,
-                        locationText);
+                        Site == null ? SiteID.ToString() : Site.AltName);
                 case "quitdead":
                     return string.Format("{0} the {1} {2} starved to death in {3}.",
                         timestring, HF.Race, HF,
-                        locationText);
+                        Site == null ? SiteID.ToString() : Site.AltName);
                 case "exec beheaded":
                     return string.Format("{0} the {1} {2} was beheaded by \nthe {3} {4} in {5}.",
                         timestring, HF.Race, HF,
                         SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                        locationText);
+                        Site == null ? SiteID.ToString() : Site.AltName);
                 case "exec burned alive":
                     return string.Format("{0} the {1} {2} burned \nthe {3} {4} alive in {5}.",
                         timestring, HF.Race, HF,
                         SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                        locationText);
+                        Site == null ? SiteID.ToString() : Site.AltName);
                 case "exec fed to beasts":
                     return string.Format("{0} the {1} {2} fed \nthe {3} {4} to beasts in {5}.",
                         timestring, HF.Race, HF,
                         SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                        locationText);
+                        Site == null ? SiteID.ToString() : Site.AltName);
                 case "exec hacked to pieces":
                     return string.Format("{0} the {1} {2} hacked \nthe {3} {4} to pieces in {5}.",
                         timestring, HF.Race, HF,
                         SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                        locationText);
+                        Site == null ? SiteID.ToString() : Site.AltName);
                 case "exec drowned":
                     return string.Format("{0} the {1} {2} drowned \nthe {3} {4} in {5}.",
                         timestring, HF.Race, HF,
                         SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                        locationText);
+                        Site == null ? SiteID.ToString() : Site.AltName);
                 case "exec buried alive":
                     return string.Format("{0} the {1} {2} buried \nthe {3} {4} alive in {5}.",
                         timestring, HF.Race, HF,
                         SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                        locationText);
+                        Site == null ? SiteID.ToString() : Site.AltName);
                 case "exec crucified":
                     return string.Format("{0} the {1} {2} was crucified by \nthe {3} {4} alive in {5}.",
                         timestring, HF.Race, HF,
                         SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                        locationText);
+                        Site == null ? SiteID.ToString() : Site.AltName);
                 case "air":
                     return string.Format("{0} the {1} {2} suffocated, slain by {3} {4} alive in {5}.",
                         timestring, HF.Race, HF,
                         SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                        locationText);
+                        Site == null ? SiteID.ToString() : Site.AltName);
                 case "obstacle":
                     return string.Format("{0} the {1} {2} died after colliding with an obstacle, slain by {3} {4} in {5}.",
                         timestring, HF.Race, HF,
                         SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                        locationText);
+                        Site != null ? Site.AltName : (SiteID != null ? SiteID.ToString() : Subregion.ToString()));
                 case "hunger":
                     return string.Format("{0} the {1} {2} starved to death in {3}.",
                         timestring, HF.Race, HF,
-                         locationText);
+                         Site == null ? SiteID.ToString() : Site.AltName);
                 case "scuttled":
                     return string.Format("{0} {2} a {1} was scuttled in {3}.",
                         timestring, HF.Race, HF,
-                        locationText);
+                        Site == null ? SiteID.ToString() : Site.AltName);
                 case "spikes":
                     return string.Format("{0} the {1} {2} was impaled on spikes in {3}.",
                         timestring, HF.Race, HF,
-                        locationText);
+                        Site == null ? SiteID.ToString() : Site.AltName);
                 case "scared to death":
                     return string.Format("{0} the {1} {2} was scared to death by \nthe {3} {4} in {5}.",
                         timestring, HF.Race, HF,
                         SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                        locationText);
+                        Site == null ? SiteID.ToString() : Site.AltName);
                 case "slaughtered":
                     return string.Format("{0} {2} a {1} was slaughtered in {5} by {4} a {3}.",
                         timestring, HF.Race, HF,
                         SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                        locationText);
+                        Site == null ? SiteID.ToString() : Site.AltName);
                 case "trap":
                     return string.Format("{0} the {1} {2} was killed by a trap in {3}.",
                         timestring, HF.Race, HF,
-                        locationText);
+                        Site.AltName);
                 case "blood drained":
                     return string.Format("{0} the {1} {2} was drained of blood by \nthe {3} {4} in {5}.",
                         timestring, HF.Race, HF,
                         SlayerRace == null ? "" : SlayerRace.ToString(), SlayerHF == null ? SlayerHFID.ToString() : SlayerHF.ToString(),
-                        locationText);
+                        Site != null ? Site.AltName : (SiteID != null ? SiteID.ToString() : Subregion.ToString()));
 
             }
 
@@ -491,7 +323,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         internal override string ToTimelineString()
         {
-            //TODO: Incorporate new data
             var timelinestring = base.ToTimelineString();
             if (Site == null)
             {
@@ -510,12 +341,15 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         internal override void Export(string table)
         {
-            //TODO: Incorporate new data
             base.Export(table);
+
 
             table = GetType().Name;
 
+
+            
             var vals = new List<object> { ID, HFID, SlayerHFID, SlayerRace == null ? (object)DBNull.Value : SlayerRace.ToString(), HistoricalFigure.Castes[SlayerCaste], SlayerItemID, SlayerShooterItemID, Causes[Cause], SiteID, SubregionID, FeatureLayerID   };
+
 
             Database.ExportWorldItem(table, vals);
 

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
@@ -64,20 +63,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             base.Link();
             if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-            {
                 Site = World.Sites[SiteID.Value];
-                if (StructureID.HasValue)
-                { 
-                    Structure = Site.GetStructure(StructureID.Value);
-
-                    if (Structure == null)
-                    {
-                        Structure = new Structure(Site, StructureID.Value, World);
-                        Site.AddStructure(Structure);
-                    }
-                }
-            }
-
             if (CivID.HasValue && World.Entities.ContainsKey(CivID.Value))
                 Civ = World.Entities[CivID.Value];
             if (SiteCivID.HasValue && World.Entities.ContainsKey(SiteCivID.Value))
@@ -85,37 +71,21 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (BuilderHFID.HasValue && World.HistoricalFigures.ContainsKey(BuilderHFID.Value))
                 BuilderHF = World.HistoricalFigures[BuilderHFID.Value];
 
+            if (!StructureID.HasValue || StructureID.Value == -1 || Site == null) return;
 
-        }
-
-        internal override void Plus(XDocument xdoc)
-        {
-            foreach (var element in xdoc.Root.Elements())
+            Structure = Site.GetStructure(StructureID.Value);
+            if (Structure == null)
             {
-                var val = element.Value;
-                int valI;
-                Int32.TryParse(val, out valI);
-
-                switch (element.Name.LocalName)
-                {
-                    case "id":
-                    case "type":
-                        break;
-                    case "civ":
-                    case "group":
-                    case "site":
-                    case "structure":
-                        break;
-                    default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
-                        break;
-                }
+                Structure = new Structure(Site, StructureID.Value, World);
+                Site.AddStructure(Structure);
             }
         }
 
         internal override void Process()
         {
-
+            var nextEvt = NextEvent();
+            var lastEvt = LastEvent();
+            
             base.Process();
             if (Structure != null)
             {
@@ -145,9 +115,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     BuilderHF.Events = new List<HistoricalEvent>();
                 BuilderHF.Events.Add(this);
                 if (Time.Year == -1 &&
-                    NextEvent().Type == Types.IndexOf("add hf entity link") &&
-                    NextEvent().NextEvent().Type == Types.IndexOf("change hf state") &&
-                    NextEvent().NextEvent().NextEvent().Type == Types.IndexOf("add hf site link"))
+                    NextEvent().Type == HistoricalEvent.Types.IndexOf("add hf entity link") &&
+                    NextEvent().NextEvent().Type == HistoricalEvent.Types.IndexOf("change hf state") &&
+                    NextEvent().NextEvent().NextEvent().Type == HistoricalEvent.Types.IndexOf("add hf site link"))
                 {
                     ProcessSladeSpireEventSet();
                 }
@@ -157,15 +127,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         private void ProcessSladeSpireEventSet()
         {
-            var AddHFEntityLinkEvent = NextEvent() as HE_AddHFEntityLink;
-            var ChangeHFStateEvent = NextEvent().NextEvent() as HE_ChangeHFState;
-            var AddHFSiteLinkEvent = NextEvent().NextEvent().NextEvent() as HE_AddHFSiteLink;
+            HE_AddHFEntityLink AddHFEntityLinkEvent = NextEvent() as HE_AddHFEntityLink;
+            HE_ChangeHFState ChangeHFStateEvent = NextEvent().NextEvent() as HE_ChangeHFState;
+            HE_AddHFSiteLink AddHFSiteLinkEvent = NextEvent().NextEvent().NextEvent() as HE_AddHFSiteLink;
 
-            AddHFEntityLinkEvent.HF = BuilderHF;
-            AddHFSiteLinkEvent.HF = BuilderHF;
-            AddHFSiteLinkEvent.Structure = Structure;
+            AddHFEntityLinkEvent.HF = this.BuilderHF;
+            AddHFSiteLinkEvent.HF = this.BuilderHF;
+            AddHFSiteLinkEvent.Structure = this.Structure;
             AddHFSiteLinkEvent.Civ = AddHFEntityLinkEvent.Civ;
-            ChangeHFStateEvent.HF = BuilderHF;
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
@@ -180,22 +149,22 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             EventLabel(frm, parent, ref location, "Structure:", Structure);
         }
 
-        protected override string LegendsDescription() //Matched
+        protected override string LegendsDescription()
         {
             var timestring = base.LegendsDescription();
 
             if (BuilderHF != null)
                 return string.Format("{0} {1} thrust a spire of slade up from the underworld naming it {2}, and established a gateway between worlds in {3}.",
-                                timestring, BuilderHF, Structure,
+                                timestring, BuilderHF, "UNKNOWN",
                                 Site.AltName);
 
             if (SiteCiv == null)
                 return string.Format("{0} {1} constructed {2} in {3}.",
-                                timestring, Civ, Structure,
+                                timestring, Civ, "UNKNOWN",
                                 Site.AltName);
 
             return string.Format("{0} {1} of {2} constructed {3} in {4}.",
-                timestring, SiteCiv, Civ, Structure,
+                timestring, SiteCiv, Civ, "UNKNOWN",
                 Site.AltName);
 
         }

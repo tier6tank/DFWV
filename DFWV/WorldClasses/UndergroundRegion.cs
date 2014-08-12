@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Xml.Linq;
 using System.Drawing;
 using DFWV.Annotations;
@@ -11,7 +12,6 @@ namespace DFWV.WorldClasses
         private string Type { get; set; }
         [UsedImplicitly]
         public int Depth { get; set; }
-        public List<Point> Coords { get; set; }
 
 
         [UsedImplicitly]
@@ -30,7 +30,7 @@ namespace DFWV.WorldClasses
                     case "id":
                         break;
                     case "type":
-                        Type = val.ToTitleCase();
+                        Type = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(val);
                         break;
                     case "depth":
                         Depth = Convert.ToInt32(val);
@@ -73,36 +73,6 @@ namespace DFWV.WorldClasses
         internal override void Process()
         {
 
-        }
-
-        internal override void Plus(XDocument xdoc)
-        {
-            foreach (var element in xdoc.Root.Elements())
-            {
-                var val = element.Value;
-                int valI;
-                Int32.TryParse(val, out valI);
-
-                switch (element.Name.LocalName)
-                {
-                    case "id":
-                    case "type":
-                        break;
-                    case "coords":
-                        if (Coords == null)
-                            Coords = new List<Point>();
-                        foreach (var coord in val.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries))
-                        {
-                            var coordSplit = coord.Split(',');
-                            if (coordSplit.Length == 2)
-                                Coords.Add(new Point(Convert.ToInt32(coordSplit[0]), Convert.ToInt32(coordSplit[1])));
-                        }
-                        break;
-                    default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + "", element, xdoc.Root.ToString());
-                        break;
-                }
-            }
         }
 
         internal override void Export(string table)

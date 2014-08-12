@@ -151,20 +151,21 @@
             var months = secondsdiff / SecPerDay / DayPerMonth;
             secondsdiff -= (months * SecPerDay * DayPerMonth);
             var days = secondsdiff / SecPerDay;
+            var tempdays = (double)secondsdiff / SecPerDay;
 
-            var ticksleft = (int)(secondsdiff - (days * SecPerDay));
-            var timeDuration = "";
-            if (ticksleft != 0) // Double val != 0 causes issues with double conversion, as ticksleft might be very close to but not equal to zero.
+            double ticksleft = (secondsdiff - (days * SecPerDay));
+            string timeDuration = "";
+            if (ticksleft != 0)
             {
                 const int HoursPerDay = 24;
                 const int MinutesPerHour = 60;
                 const int RealSecsPerMinute = 60;
 
-                var hours = (int)((double)ticksleft / (SecPerDay / HoursPerDay));
+                var hours = (int)(ticksleft / (SecPerDay / HoursPerDay));
                 ticksleft -= (hours * (SecPerDay / HoursPerDay));
 
                 var minutes = (int)(ticksleft / ((float)SecPerDay / HoursPerDay / MinutesPerHour));
-                ticksleft -= (int)(minutes * ((float)SecPerDay / HoursPerDay / MinutesPerHour));
+                ticksleft -= (minutes * ((float)SecPerDay / HoursPerDay / MinutesPerHour));
 
                 var secs = (int)(ticksleft / ((float)SecPerDay / HoursPerDay / MinutesPerHour / RealSecsPerMinute));
                 if (hours > 0 && minutes > 0 && secs > 0)

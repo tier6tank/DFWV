@@ -5,8 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Windows.Forms;
-using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalEventClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
@@ -32,14 +30,11 @@ namespace DFWV.WorldClasses
     class World : IDisposable
     {
         #region Fields and Properties
-        public readonly string historyPath;
-        public readonly string sitesPath;
-        public readonly string paramPath;
-        public readonly string mapPath;
-        public readonly string xmlPath;
-        public readonly string xmlPlusPath;
-        public bool hasPlusXML = false;
-        public bool isPlusParsing = false;
+        private readonly string historyPath;
+        private readonly string sitesPath;
+        private readonly string paramPath;
+        private readonly string mapPath;
+        private readonly string xmlPath;
 
         public static List<Thread> Threads = new List<Thread>();
 
@@ -78,7 +73,7 @@ namespace DFWV.WorldClasses
         private VisualizationCollection Visualizations;
         #endregion
 
-        public World(string historyPath, string sitesPath, string paramPath, string xmlPath, string xmlPlusPath, string mapPath, int MapYear)
+        public World(string historyPath, string sitesPath, string paramPath, string xmlPath, string mapPath, int MapYear)
         {
             LastYear = MapYear;
             WorldTime.Present = new WorldTime(LastYear);
@@ -88,9 +83,6 @@ namespace DFWV.WorldClasses
             this.paramPath = paramPath;
             this.mapPath = mapPath;
             this.xmlPath = xmlPath;
-            this.xmlPlusPath = xmlPlusPath;
-            hasPlusXML = File.Exists(xmlPlusPath);
-            
 
             Filters = new FilterSettings(this);
         }
@@ -213,7 +205,7 @@ namespace DFWV.WorldClasses
 
             Name = lines[0];
             AltName = lines[1];
-            Program.mainForm.Text = string.Format("World Viewer v{0} - {1} \"{2}\"", Application.ProductVersion, Name, AltName);
+            Program.mainForm.Text = string.Format("World Viewer - {0} \"{1}\"", Name, AltName);
 
             lines.RemoveRange(0, 3);
 
@@ -242,7 +234,6 @@ namespace DFWV.WorldClasses
         /// </summary>
         private void LoadXML()
         {
-
             StartThread(() => DFXMLParser.Parse(this, xmlPath));
         }
 
@@ -434,6 +425,7 @@ namespace DFWV.WorldClasses
             }
             foreach (var entity in EntitiesFile.Where(entity => entity.Name == entityName))
             {
+                Program.Log(LogType.Warning, "Duplicate named Entities: " + entityName);
                 if (entity.Race == entityRace)
                     return entity;
             }
@@ -1140,14 +1132,7 @@ namespace DFWV.WorldClasses
             HistoricalEvent.Types.Clear();
             HE_ChangeHFState.States.Clear();
             HE_HFDied.Causes.Clear();
-            HE_HFSimpleBattleEvent.SubTypes.Clear();
-            HE_MasterpieceItemImprovement.ImprovementTypes.Clear();
-            HistoricalEvent.Buildings.Clear();
-            HistoricalEvent.ItemSubTypes.Clear();
-            HistoricalEvent.Items.Clear();
-            HistoricalEvent.Materials.Clear();
-            HistoricalEvent.MeetingResults.Clear();
-            HistoricalEvent.MeetingTopics.Clear();
+            HE_HFSimpleBattleEvent.Subtypes.Clear();
             
             HistoricalEventCollection.Types.Clear();
             
@@ -1157,12 +1142,11 @@ namespace DFWV.WorldClasses
             HistoricalFigure.Interactions.Clear();
             HistoricalFigure.JourneyPets.Clear();
             HistoricalFigure.Spheres.Clear();
-            HFEntityLink.LinkTypes.Clear();
-            HFEntityLink.Positions.Clear();
+            EntityLink.LinkTypes.Clear();
             HFLink.LinkTypes.Clear();
             HFSkill.Skills.Clear();
-            HFSiteLink.LinkTypes.Clear();
 
+            SiteLink.LinkTypes.Clear();
             
         }
 

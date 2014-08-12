@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Xml.Linq;
 using System.Drawing;
 using System.Windows.Forms;
-using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
@@ -136,12 +135,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} {1} attacked {2} in {3}. \n{4} led the attack, and the defenders were led by {5}.",
-                            timestring, AttackerCiv, DefenderCiv, Subregion, 
-                            AttackerGeneralHF == null ? "An unknown creature" : ("The " + AttackerGeneralHF.Race + " " + AttackerGeneralHF),
-                            DefenderGeneralHF == null ? "an unknown creature" : ("The " + DefenderGeneralHF.Race + " " + DefenderGeneralHF)
-                            );
-
+            return string.Format("{0} {1} attacked {2} in {3}. \nThe {4} {5} led the attack, \nand the defenders were led by the {6} {7}.",
+                            timestring, AttackerCiv, DefenderCiv,
+                            Subregion, AttackerGeneralHF.Race, AttackerGeneralHF,
+                            DefenderGeneralHF.Race, DefenderGeneralHF);
         }
 
         internal override string ToTimelineString()

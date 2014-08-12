@@ -84,11 +84,6 @@ namespace DFWV.WorldClasses
 
         }
 
-        internal override void Plus(XDocument xdoc)
-        {
-            
-        }
-
         internal override void Export(string table)
         {
 

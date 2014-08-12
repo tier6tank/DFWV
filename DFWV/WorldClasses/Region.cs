@@ -6,6 +6,7 @@ namespace DFWV.WorldClasses
     using System;
     using System.Collections.Generic;
     using System.Drawing;
+    using System.Globalization;
     using System.Xml.Linq;
     using HistoricalEventCollectionClasses;
     using HistoricalFigureClasses;
@@ -16,6 +17,8 @@ namespace DFWV.WorldClasses
         public int Type { get; private set; }
 
         public List<Point> Coords { get; set; }
+        public Point LowestCoord;
+        public Point HighestCoord;
 
         public List<HistoricalFigure> Inhabitants { get; set; }
 
@@ -65,13 +68,20 @@ namespace DFWV.WorldClasses
 
         }
 
+        //public Region(NameValueCollection data, World world) 
+        //    : base (world)
+        //{
+        //    Name = data["Name"].ToString();
+        //    Type = data["Type"].ToString();
+        //}
+
         public override void Select(MainForm frm)
         {
             frm.grpRegion.Text = ToString();
             frm.grpRegion.Show();
 
             frm.lblRegionName.Text = ToString();
-            frm.lblRegionType.Text = Types[Type].ToTitleCase();
+            frm.lblRegionType.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Types[Type]);
 
             frm.lstRegionFieldBattles.BeginUpdate();
             frm.lstRegionFieldBattles.Items.Clear();
@@ -110,36 +120,6 @@ namespace DFWV.WorldClasses
 
         internal override void Process()
         {
-
-        }
-        internal override void Plus(XDocument xdoc)
-        {
-            foreach (var element in xdoc.Root.Elements())
-            {
-                var val = element.Value;
-                int valI;
-                Int32.TryParse(val, out valI);
-
-                switch (element.Name.LocalName)
-                {
-                    case "id":
-                    case "type":
-                        break;
-                    case "coords":
-                        if (Coords == null)
-                            Coords = new List<Point>();
-                        foreach (var coord in val.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries))
-                        {
-                            var coordSplit = coord.Split(',');
-                            if (coordSplit.Length == 2)
-                                Coords.Add(new Point(Convert.ToInt32(coordSplit[0]), Convert.ToInt32(coordSplit[1])));
-                        }
-                        break;
-                    default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
-                        break;
-                }
-            }
 
         }
 

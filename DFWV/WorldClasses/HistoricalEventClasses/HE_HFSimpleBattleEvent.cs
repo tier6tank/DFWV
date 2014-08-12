@@ -20,7 +20,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private Region Subregion { get; set; }
         private int? FeatureLayerID { get; set; }
         private int Subtype { get; set; }
-        public static List<string> SubTypes = new List<string>();
+        public static List<string> Subtypes = new List<string>();
 
         override public Point Location { get { return Site != null ? Site.Location : (Subregion != null ? Subregion.Location : Point.Empty); } }
 
@@ -53,9 +53,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                             FeatureLayerID = valI;
                         break;
                     case "subtype":
-                        if (!SubTypes.Contains(val))
-                            SubTypes.Add(val);
-                        Subtype = SubTypes.IndexOf(val);
+                        if (!Subtypes.Contains(val))
+                            Subtypes.Add(val);
+                        Subtype = Subtypes.IndexOf(val);
                         break;
                     case "group_1_hfid":
                         if (Group1HFID == null)
@@ -120,7 +120,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "Subtype:", SubTypes[Subtype]);
+            EventLabel(frm, parent, ref location, "Subtype:", Subtypes[Subtype]);
             foreach (var hf in Group1HF)
                 EventLabel(frm, parent, ref location, "Side 1:", hf);
             foreach (var hf in Group2HF)
@@ -130,23 +130,23 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         }
 
-        protected override string LegendsDescription() //Matched
+        protected override string LegendsDescription()
         {
             var timestring = base.LegendsDescription();
 
-            switch (SubTypes[Subtype])
+            switch (Subtypes[Subtype])
             {
                 case "attacked":
                 case "ambushed":
                 case "surprised":
                     return string.Format("{0} the {1} {2} {3} the {4} {5}.",
                         timestring, Group1HF[0].Race, Group1HF[0],
-                        SubTypes[Subtype], Group2HF[0].Race, Group2HF[0]);
+                        Subtype, Group2HF[0].Race, Group2HF[0]);
                 case "corner":
                 case "confront":
                     return string.Format("{0} the {1} {2} {3}ed the {4} {5}.",
                         timestring, Group1HF[0].Race, Group1HF[0],
-                        SubTypes[Subtype], Group2HF[0].Race, Group2HF[0]);
+                        Subtype, Group2HF[0].Race, Group2HF[0]);
                 case "scuffle":
                     return string.Format("{0} the {1} {2} fought with the {3} {4}.",
                         timestring, Group1HF[0].Race, Group1HF[0], Group2HF[0].Race, Group2HF[0]);
@@ -223,7 +223,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
 
 
-            vals.AddRange(new List<object> { SubTypes[Subtype], SiteID, SubregionID, FeatureLayerID });
+
+
+            vals.AddRange(new List<object> { Subtypes[Subtype], SiteID, SubregionID, FeatureLayerID });
 
             Database.ExportWorldItem(table, vals);
 

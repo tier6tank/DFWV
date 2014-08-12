@@ -99,13 +99,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         }
 
-        protected override string LegendsDescription() // Matched
+        protected override string LegendsDescription()
         {
             var timestring = base.LegendsDescription();
 
             return string.Format("{0} {1} was abducted from {2} by {3}.",
                                     timestring, TargetHF, Site.AltName,
-                                    SnatcherHF == null ? "an unknown creature" : SnatcherHF.ToString());
+                                    SnatcherHF);
         }
 
         internal override string ToTimelineString()

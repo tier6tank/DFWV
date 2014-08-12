@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using DFWV.WorldClasses.EntityClasses;
+using System.Globalization;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
@@ -65,7 +65,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         EventCol_.Add(valI);
                         break;
                     case "name":
-                        Name = val.ToTitleCase();
+                        Name = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(val);
                         break;
                     case "aggressor_ent_id":
                         AggressorEntID = valI;

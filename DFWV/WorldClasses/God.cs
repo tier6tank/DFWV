@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using DFWV.Annotations;
 using DFWV.WorldClasses.HistoricalFigureClasses;
@@ -68,11 +69,13 @@ namespace DFWV.WorldClasses
             frm.grpGod.Show();
 
             frm.lblGodName.Text = ToString();
-            frm.lblGodType.Text = Types[Type].ToTitleCase();
+            frm.lblGodType.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Types[Type]);
             frm.lblGodHF.Data = HF;
 
             
-            frm.lblGodSpheres.Text = String.Join(", ", Spheres.Select(sphere => HistoricalFigure.Spheres[sphere]).ToList()).ToTitleCase();
+            frm.lblGodSpheres.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(
+                String.Join(", ", Spheres.Select(sphere => HistoricalFigure.Spheres[sphere]).ToList())
+                );
 
             frm.grpGodLeaders.Visible = Leaders.Count > 0;
             if (Leaders != null)

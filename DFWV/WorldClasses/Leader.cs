@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using DFWV.Annotations;
 using DFWV.WorldClasses.HistoricalFigureClasses;
@@ -43,9 +44,9 @@ namespace DFWV.WorldClasses
                 ? null
                 : (HF.HFLinks == null 
                     ? null 
-                    : (!HF.HFLinks.ContainsKey(HFLink.LinkTypes.IndexOf("spouse")) 
-                        ? null
-                        : HF.HFLinks[HFLink.LinkTypes.IndexOf("spouse")][0].HF
+                    : (!HF.HFLinks.ContainsKey("spouse") 
+                        ? null 
+                        : HF.HFLinks["spouse"][0].HF
                         )
                   );
         } }
@@ -58,7 +59,7 @@ namespace DFWV.WorldClasses
         private God Worship { get; set; }
         private int WorshipPercent { get; set; }
 
-        public Site Site { get; set; }
+        public Site Site { private get; set; }
         public Race Race { get; set; }
         [UsedImplicitly]
         public string RaceName { get { return Race != null ? Race.Name : (HF != null && HF.Race != null ? HF.Race.Name : ""); } }
@@ -198,35 +199,35 @@ namespace DFWV.WorldClasses
                 switch (InheritedFromSource)
                 {
                     case InheritanceSource.Mother:
-                        InheritanceID = HF.HFLinks[HFLink.LinkTypes.IndexOf("mother")][0].LinkedHFID;
+                        InheritanceID = HF.HFLinks["mother"][0].LinkedHFID;
                         break;
                     case InheritanceSource.Father:
-                        InheritanceID = HF.HFLinks[HFLink.LinkTypes.IndexOf("father")][0].LinkedHFID;
+                        InheritanceID = HF.HFLinks["father"][0].LinkedHFID;
                         break;
                     case InheritanceSource.PaternalGrandMother:
 
-                        InheritanceID = HF.HFLinks[HFLink.LinkTypes.IndexOf("father")][0].HF.HFLinks[HFLink.LinkTypes.IndexOf("mother")][0].LinkedHFID;
+                        InheritanceID = HF.HFLinks["father"][0].HF.HFLinks["mother"][0].LinkedHFID;
                         break;
                     case InheritanceSource.MaternalGrandMother:
-                        InheritanceID = HF.HFLinks[HFLink.LinkTypes.IndexOf("mother")][0].HF.HFLinks[HFLink.LinkTypes.IndexOf("mother")][0].LinkedHFID;
+                        InheritanceID = HF.HFLinks["mother"][0].HF.HFLinks["mother"][0].LinkedHFID;
                         break;
                     case InheritanceSource.PaternalGrandFather:
-                        InheritanceID = HF.HFLinks[HFLink.LinkTypes.IndexOf("father")][0].HF.HFLinks[HFLink.LinkTypes.IndexOf("father")][0].LinkedHFID;
+                        InheritanceID = HF.HFLinks["father"][0].HF.HFLinks["father"][0].LinkedHFID;
                         break;
                     case InheritanceSource.MaternalGrandFather:
-                        InheritanceID = HF.HFLinks[HFLink.LinkTypes.IndexOf("mother")][0].HF.HFLinks[HFLink.LinkTypes.IndexOf("father")][0].LinkedHFID;
+                        InheritanceID = HF.HFLinks["mother"][0].HF.HFLinks["father"][0].LinkedHFID;
                         break;
                     case InheritanceSource.Other:
                         var hfToCheck = new List<HistoricalFigure>();
                         var newHFs = new List<HistoricalFigure>();
                         HistoricalFigure matchHF = null;
-                        var leaderToMatch = PreviousLeader();
+                        Leader leaderToMatch = PreviousLeader();
                         hfToCheck.Add(HF);
 
                         while (hfToCheck.Count > 0)
                         {
                             newHFs.Clear();
-                            foreach (var hf in hfToCheck)
+                            foreach (HistoricalFigure hf in hfToCheck)
                             {
                                 if (hf.isLeader && hf.Leader == leaderToMatch)
                                 {
@@ -234,10 +235,10 @@ namespace DFWV.WorldClasses
                                     newHFs.Clear();
                                     break;
                                 }
-                                if (hf.HFLinks.ContainsKey(HFLink.LinkTypes.IndexOf("mother")) && hf.HFLinks[HFLink.LinkTypes.IndexOf("mother")][0].HF != null)
-                                    newHFs.Add(hf.HFLinks[HFLink.LinkTypes.IndexOf("mother")][0].HF);
-                                if (hf.HFLinks.ContainsKey(HFLink.LinkTypes.IndexOf("father")) && hf.HFLinks[HFLink.LinkTypes.IndexOf("father")][0].HF != null)
-                                    newHFs.Add(hf.HFLinks[HFLink.LinkTypes.IndexOf("father")][0].HF);
+                                if (hf.HFLinks.ContainsKey("mother") && hf.HFLinks["mother"][0].HF != null)
+                                    newHFs.Add(hf.HFLinks["mother"][0].HF);
+                                if (hf.HFLinks.ContainsKey("father") && hf.HFLinks["father"][0].HF != null)
+                                    newHFs.Add(hf.HFLinks["father"][0].HF);
                             }
                             hfToCheck.Clear();
                             hfToCheck = new List<HistoricalFigure>(newHFs);
@@ -261,15 +262,15 @@ namespace DFWV.WorldClasses
             if (branch.isLeader && branch.Leader == leaderMatch)
                 return branch;
 
-            if (branch.HFLinks.ContainsKey(HFLink.LinkTypes.IndexOf("mother")))
+            if (branch.HFLinks.ContainsKey("mother"))
             {
-                var motherMatch = ScaleFamilyTree(branch.HFLinks[HFLink.LinkTypes.IndexOf("mother")][0].HF, leaderMatch);
+                HistoricalFigure motherMatch = ScaleFamilyTree(branch.HFLinks["mother"][0].HF, leaderMatch);
                 if (motherMatch != null)
                     return motherMatch;
             }
-            if (branch.HFLinks.ContainsKey(HFLink.LinkTypes.IndexOf("father")))
+            if (branch.HFLinks.ContainsKey("father"))
             {
-                var fatherMatch = ScaleFamilyTree(branch.HFLinks[HFLink.LinkTypes.IndexOf("father")][0].HF, leaderMatch);
+                HistoricalFigure fatherMatch = ScaleFamilyTree(branch.HFLinks["father"][0].HF, leaderMatch);
                 if (fatherMatch != null)
                     return fatherMatch;
             }
@@ -279,7 +280,7 @@ namespace DFWV.WorldClasses
         private Leader PreviousLeader()
         {
             var leaderList = Civilization.Leaders[LeaderTypes[LeaderType]];
-            for (var i = 0; i < leaderList.Count; i++)
+            for (int i = 0; i < leaderList.Count; i++)
             {
                 if (leaderList[i] == this)
                 {
@@ -297,7 +298,7 @@ namespace DFWV.WorldClasses
             frm.grpLeader.Show();
 
             frm.lblLeaderName.Text = ToString();
-            frm.lblLeaderType.Text = LeaderTypes[LeaderType].ToTitleCase();
+            frm.lblLeaderType.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(LeaderTypes[LeaderType]);
             frm.lblLeaderRace.Data = Race;
             frm.lblLeaderLife.Text = Birth == null ? "" : (Birth + " – " + (Death == WorldTime.Present ? "" : Death.ToString()));
             frm.lblLeaderReignBegan.Text = ReignBegan == null ? "" : ReignBegan.ToString();

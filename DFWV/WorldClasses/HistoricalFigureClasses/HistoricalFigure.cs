@@ -1,9 +1,9 @@
 ﻿using DFWV.Annotations;
-using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalEventClasses;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -22,7 +22,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         public int? Caste { get; private set; }
         public static List<string> Castes = new List<string>();
         private int? AppearedYear { get; set; }
-        private WorldTime Appeared { get { return AppearedYear.HasValue ? new WorldTime(AppearedYear.Value) : null;} }
+        private WorldTime Appeared { get { return AppearedYear.HasValue ? null : new WorldTime(AppearedYear.Value);} }
         [UsedImplicitly]
         public int? BirthYear { get; private set; }
         private int? BirthSeconds { get; set; }
@@ -32,8 +32,8 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         public WorldTime Death { get { return DeathYear.HasValue ? new WorldTime(DeathYear.Value, DeathSeconds) : WorldTime.Present; } }
         public static List<string> AssociatedTypes = new List<string>();
         public int? AssociatedType { get; private set; }
-        public Dictionary<int, List<HFEntityLink>> EntityLinks { get; set; }
-        public Dictionary<int, List<HFSiteLink>> SiteLinks { get; set; }
+        public Dictionary<string, List<EntityLink>> EntityLinks { get; set; }
+        private Dictionary<string, List<SiteLink>> SiteLinks { get; set; }
         public List<int> Sphere { get; private set; }
         public static List<string> Spheres = new List<string>();
         private List<HFSkill> HFSkills { get; set; }
@@ -42,7 +42,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         public List<int> InteractionKnowledge { get; private set; }
         public List<int> JourneyPet { get; private set; }
         public static List<string> JourneyPets = new List<string>();
-        public Dictionary<int, List<HFLink>> HFLinks { get; private set; }
+        public Dictionary<string, List<HFLink>> HFLinks { get; private set; }
         [UsedImplicitly]
         public bool Deity { get; private set; }
         private List<EntityFormerPositionLink> EntityFormerPositionLinks { get; set; }
@@ -168,7 +168,6 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         public bool isLeader { get { return Leader != null; } }
         [UsedImplicitly]
         public bool isGod { get { return God != null; } }
-
         [UsedImplicitly]
         public int CreatedArtifactCount { get { return CreatedArtifacts == null ? 0 : CreatedArtifacts.Count; } }
         [UsedImplicitly]
@@ -252,20 +251,20 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                         AssociatedType = AssociatedTypes.IndexOf(val);
                         break;
                     case "entity_link":
-                        var newEL = new HFEntityLink(element, this);
+                        var newEL = new EntityLink(element, this);
                         if (EntityLinks == null)
-                            EntityLinks = new Dictionary<int, List<HFEntityLink>>();
-                        if (!EntityLinks.ContainsKey(newEL.LinkType))
-                            EntityLinks.Add(newEL.LinkType, new List<HFEntityLink>());
-                        EntityLinks[newEL.LinkType].Add(newEL);
+                            EntityLinks = new Dictionary<string, List<EntityLink>>();
+                        if (!EntityLinks.ContainsKey(EntityLink.LinkTypes[newEL.LinkType]))
+                            EntityLinks.Add(EntityLink.LinkTypes[newEL.LinkType], new List<EntityLink>());
+                        EntityLinks[EntityLink.LinkTypes[newEL.LinkType]].Add(newEL);
                         break;
                     case "site_link":
-                        var newSL = new HFSiteLink(element, this);
+                        var newSL = new SiteLink(element, this);
                         if (SiteLinks == null)
-                            SiteLinks = new Dictionary<int, List<HFSiteLink>>();
-                        if (!SiteLinks.ContainsKey(newSL.LinkType))
-                            SiteLinks.Add(newSL.LinkType, new List<HFSiteLink>());
-                        SiteLinks[newSL.LinkType].Add(newSL);
+                            SiteLinks = new Dictionary<string, List<SiteLink>>();
+                        if (!SiteLinks.ContainsKey(SiteLink.LinkTypes[newSL.LinkType]))
+                            SiteLinks.Add(SiteLink.LinkTypes[newSL.LinkType], new List<SiteLink>());
+                        SiteLinks[SiteLink.LinkTypes[newSL.LinkType]].Add(newSL);
                         break;
                     case "sphere":
                         if (Sphere == null)
@@ -296,10 +295,10 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                     case "hf_link":
                         var newHFL = new HFLink(element, this);
                         if (HFLinks == null)
-                            HFLinks = new Dictionary<int, List<HFLink>>();
-                        if (!HFLinks.ContainsKey(newHFL.LinkType))
-                            HFLinks.Add(newHFL.LinkType, new List<HFLink>());
-                        HFLinks[newHFL.LinkType].Add(newHFL);
+                            HFLinks = new Dictionary<string, List<HFLink>>();
+                        if (!HFLinks.ContainsKey(HFLink.LinkTypes[newHFL.LinkType]))
+                            HFLinks.Add(HFLink.LinkTypes[newHFL.LinkType], new List<HFLink>());
+                        HFLinks[HFLink.LinkTypes[newHFL.LinkType]].Add(newHFL);
                         break;
                     case "deity":
                         Deity = true;
@@ -398,9 +397,6 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             frm.grpHistoricalFigure.Text = ToString();
             if (PlayerControlled)
                 frm.grpHistoricalFigure.Text += @" (PLAYER CONTROLLED)";
-#if DEBUG
-            frm.grpHistoricalFigure.Text += string.Format(" - ID: {0}", ID);
-#endif
             frm.grpHistoricalFigure.Show();
             frm.lblHistoricalFigureName.Text = ToString();
             frm.lblHistoricalFigureRace.Data = Race;
@@ -433,7 +429,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             frm.lblHistoricalFigureGod.Data = God;
             frm.lblHistoricalFigureGod.Text = God == null ? "" : (God + " (" + (Deity ? "Deity" : "Force") + ")");
             frm.lblHistoricalFigureLeader.Data = Leader;
-            frm.lblHistoricalFigureLeader.Text = Leader == null ? "" : Leader.LeaderTypes[Leader.LeaderType].ToTitleCase();
+            frm.lblHistoricalFigureLeader.Text = Leader == null ? "" : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Leader.LeaderTypes[Leader.LeaderType]);
             frm.lblHistoricalFigureEntityPopulation.Data = EntPop;
 
             frm.grpHistoricalFigureSpheres.Visible = Sphere != null;
@@ -441,7 +437,8 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             {
                 frm.lstHistoricalFigureSpheres.Items.Clear();
                 foreach (var curSphere in Sphere)
-                    frm.lstHistoricalFigureSpheres.Items.Add(Spheres[curSphere].ToTitleCase());
+                    frm.lstHistoricalFigureSpheres.Items.Add(
+                        CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Spheres[curSphere]));
             }
 
             frm.grpHistoricalFigureKnowledge.Visible = InteractionKnowledge != null;
@@ -449,7 +446,8 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             {
                 frm.lstHistoricalFigureKnowledge.Items.Clear();
                 foreach (var curInteractionKnowledge in InteractionKnowledge)
-                    frm.lstHistoricalFigureKnowledge.Items.Add(Interactions[curInteractionKnowledge].Replace("_"," ").ToLower().ToTitleCase());
+                    frm.lstHistoricalFigureKnowledge.Items.Add(
+                        CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Interactions[curInteractionKnowledge].Replace("_"," ").ToLower()));
             }
 
             frm.grpHistoricalFigurePets.Visible = JourneyPet != null;
@@ -457,7 +455,9 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             {
                 frm.lstHistoricalFigurePets.Items.Clear();
                 foreach (var curJourneyPet in JourneyPet)
-                    frm.lstHistoricalFigurePets.Items.Add(JourneyPets[curJourneyPet].Replace("_", " ").ToLower().ToTitleCase());
+                    frm.lstHistoricalFigurePets.Items.Add(
+                        CultureInfo.CurrentCulture.TextInfo.ToTitleCase(
+                         CultureInfo.CurrentCulture.TextInfo.ToTitleCase(JourneyPets[curJourneyPet].Replace("_", " ").ToLower())));
             }
 
             frm.grpHistoricalFigureSkills.Visible = HFSkills != null;
@@ -465,7 +465,8 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             {
                 frm.lstHistoricalFigureSkills.Items.Clear();
                 foreach (var curHFSkill in HFSkills.OrderByDescending(x => x.TotalIP))
-                    frm.lstHistoricalFigureSkills.Items.Add(HFSkill.Skills[curHFSkill.Skill].Replace("_"," ").ToLower().ToTitleCase() + 
+                    frm.lstHistoricalFigureSkills.Items.Add(
+                        CultureInfo.CurrentCulture.TextInfo.ToTitleCase(HFSkill.Skills[curHFSkill.Skill].Replace("_"," ").ToLower()) + 
                         " - " + IPToTitle(curHFSkill.TotalIP));
             }
 
@@ -477,7 +478,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             {
                 foreach (var elList in EntityLinks)
                 {
-                    var thisNode = new TreeNode(HFEntityLink.LinkTypes[elList.Key].ToTitleCase());
+                    var thisNode = new TreeNode(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(elList.Key));
                     foreach (var el in elList.Value)
                     {
                         var linkStrength = el.LinkStrength.HasValue ? " (" + el.LinkStrength + "%)" : "";
@@ -492,14 +493,14 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             }
             frm.trvHistoricalFigureEntityLinks.EndUpdate();
 
-            var hasHFLinks = Spouses != null || Lovers != null || Followers != null ||
-                Deities != null || Masters != null || Apprentices != null ||
-                Prisoners != null || Imprisoners != null || Companions != null ||
+            frm.grpHistoricalFigureHFLinks.Visible =
+                Spouses != null || Lovers != null || Followers != null ||
+                Deities != null || Masters != null || Apprentices != null || 
+                Prisoners != null || Imprisoners != null || Companions != null || 
                 RelationshipProfileHFs != null;
-            frm.grpHistoricalFigureHFLinks.Visible = hasHFLinks; 
             frm.trvHistoricalFigureHFLinks.BeginUpdate();
             frm.trvHistoricalFigureHFLinks.Nodes.Clear();
-            if (hasHFLinks)
+            if (frm.grpHistoricalFigureHFLinks.Visible)
             {
                 if (RelationshipProfileHFs != null)
                 {
@@ -568,7 +569,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                 {
                     var thisNode = new TreeNode("Deities");
 
-                    foreach (var hflink in HFLinks[HFLink.LinkTypes.IndexOf("deity")])
+                    foreach (var hflink in HFLinks["deity"])
 	                {
 
                         var hfNode = new TreeNode(hflink.HF + " (" + hflink.LinkStrength + "%)") {Tag = hflink.HF};
@@ -723,7 +724,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             frm.lstHistoricalFigureArtifacts.Items.Clear();
             if (CreatedArtifacts != null)
             {
-                foreach (var artifact in CreatedArtifacts)
+                foreach (Artifact artifact in CreatedArtifacts)
                 {
                     frm.lstHistoricalFigureArtifacts.Items.Add(artifact);
                 }
@@ -942,7 +943,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                 {
                     foreach (var sl in linklist.Value)
                     {
-                        switch (HFSiteLink.LinkTypes[linklist.Key])
+                        switch (linklist.Key)
                         {
                             case "lair":
                             case "home structure":
@@ -973,7 +974,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                     {
                         if (el.Entity != null)
                         {
-                            switch (HFEntityLink.LinkTypes[linklist.Key])
+                            switch (linklist.Key)
                             {
                                 case "enemy":
 
@@ -1062,7 +1063,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                 {
                     foreach (var hfl in linklist.Value.Where(hfl => hfl.HF != null))
                     {
-                        switch (HFLink.LinkTypes[linklist.Key])
+                        switch (linklist.Key)
                         {
 
                             case "child":
@@ -1216,12 +1217,6 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                     break;
             }
         }
-
-        internal override void Plus(XDocument xdoc)
-        {
-
-        }
-
 
         #region Count Families
         internal void CountDescendents()

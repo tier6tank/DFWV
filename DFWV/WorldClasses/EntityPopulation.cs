@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using DFWV.Annotations;
-using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
 using System.Drawing;
@@ -30,11 +29,6 @@ namespace DFWV.WorldClasses
 
         override public Point Location { get { return Point.Empty; } }
 
-        public Dictionary<Race, int> RaceCounts { get; set; }
-
-        public int? EntityID { get; set; }
-        public Entity Entity { get; set; }
-
 
         public EntityPopulation(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -53,6 +47,12 @@ namespace DFWV.WorldClasses
             }
         }
 
+        //public EntityPopulation(NameValueCollection data, World world) 
+        //    : base (data, world)
+        //{
+            
+        //}
+
         public override string ToString()
         {
             return ID.ToString();
@@ -64,36 +64,28 @@ namespace DFWV.WorldClasses
             frm.grpEntityPopulation.Show();
 
             frm.lblEntityPopulationRace.Data = Race;
-            frm.lblEntityPopulationCiv.Data = Entity;
 
             frm.grpEntityPopulationBattles.Visible = BattleEventCollections != null;
             if (BattleEventCollections != null)
             {
-                BattleEventCollections = BattleEventCollections.Distinct().ToList();
-                frm.lstEntityPopulationBattles.BeginUpdate();
                 frm.lstEntityPopulationBattles.Items.Clear();
-                frm.lstEntityPopulationBattles.Items.AddRange(BattleEventCollections.ToArray());
-                frm.lstEntityPopulationBattles.EndUpdate();
+                foreach (var evtcol in BattleEventCollections)
+                {
+                    frm.lstEntityPopulationBattles.Items.Add(evtcol);
+                }
                 frm.lstEntityPopulationBattles.SelectedIndex = 0;
-                frm.grpEntityPopulationBattles.Text = String.Format("Battles ({0})",
-                    frm.lstEntityPopulationBattles.Items.Count);
             }
-
             frm.grpEntityPopulationMembers.Visible = Members != null;
             if (Members != null)
             {
                 frm.lstEntityPopulationMembers.BeginUpdate();
                 frm.lstEntityPopulationMembers.Items.Clear();
-                frm.lstEntityPopulationMembers.Items.AddRange(Members.ToArray());
+                foreach (var hf in Members.Take(50000))
+                {
+                    frm.lstEntityPopulationMembers.Items.Add(hf);
+                }
                 frm.lstEntityPopulationMembers.EndUpdate();
             }
-
-            frm.lstEntityPopluationRaces.Items.Clear();
-            frm.grpEntityPopluationRaces.Visible = RaceCounts != null;
-            if (RaceCounts != null)
-                frm.lstEntityPopluationRaces.Items.AddRange(RaceCounts.Keys.ToArray());
-
-
             frm.grpEntityPopulationMembers.Text = string.Format("Members ({0}{1})", 
                 frm.lstEntityPopulationMembers.Items.Count, 
                 (Members != null && Members.Count > 50000 ? "+" : ""));
@@ -102,43 +94,12 @@ namespace DFWV.WorldClasses
 
         internal override void Link()
         {
-            if (EntityID.HasValue && World.Entities.ContainsKey(EntityID.Value))
-                Entity = World.Entities[EntityID.Value];
+
         }
 
         internal override void Process()
         {
-            if (Race == null && RaceCounts != null)
-                Race = RaceCounts.First().Key;
-        }
 
-        internal override void Plus(XDocument xdoc)
-        {
-            foreach (var element in xdoc.Root.Elements())
-            {
-                var val = element.Value;
-                int valI;
-                Int32.TryParse(val, out valI);
-
-                switch (element.Name.LocalName)
-                {
-                    case "id":
-                        break;
-                    case "race":
-                        var raceName = val.Split(':')[0];
-                        var race = World.GetAddRace(raceName);
-                        if (RaceCounts == null)
-                            RaceCounts = new Dictionary<Race, int>();
-                        RaceCounts.Add(race, Convert.ToInt32(val.Split(':')[1]));
-                        break;
-                    case "civ_id":
-                        EntityID = valI;
-                        break;
-                    default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t", element, xdoc.Root.ToString());
-                        break;
-                }
-            }
         }
 
         internal override void Export(string table)

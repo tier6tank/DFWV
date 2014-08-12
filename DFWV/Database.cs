@@ -88,7 +88,7 @@ namespace DFWV
             _command = _connection.CreateCommand();
 
             _command.CommandText = "INSERT INTO [" + table + "] values (";
-            for (var i = 0; i < vals.Count; i++)
+            for (int i = 0; i < vals.Count; i++)
             {
                 _command.CommandText += " @" + i + ",";
                 _command.Parameters.AddWithValue("@" + i, vals[i]);

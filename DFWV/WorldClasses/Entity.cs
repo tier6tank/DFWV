@@ -134,9 +134,6 @@ namespace DFWV.WorldClasses
             frm.grpEntity.Text = ToString();
             if (isPlayerControlled)
                 frm.grpEntity.Text += @" (PLAYER CONTROLLED)";
-#if DEBUG
-            frm.grpEntity.Text += " - ID: " + ID.ToString();
-#endif
             frm.grpEntity.Show();
 
             frm.lblEntityName.Text = ToString();
@@ -237,10 +234,6 @@ namespace DFWV.WorldClasses
         }
 
         internal override void Process()
-        {
-
-        }
-        internal override void Plus(XDocument xdoc)
         {
 
         }

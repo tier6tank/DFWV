@@ -4,11 +4,9 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using DFWV.WorldClasses;
-using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalEventClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
-using Region = DFWV.WorldClasses.Region;
 
 namespace DFWV
 {
@@ -48,18 +46,10 @@ namespace DFWV
             {
                 Options = world.Filters.Options[filterType];
 
-                foreach (var option in Options)
-                {
-                    if (option.Value.Any())
-                    {
-                        cmbWhereField.Items.Add(option.Key);
-                        cmbOrderField.Items.Add(option.Key);
+                cmbWhereField.Items.AddRange(Options.Keys.ToArray<object>());
+                cmbOrderField.Items.AddRange(Options.Keys.ToArray<object>());
 
-                        cmbGroupField.Items.Add(option.Key);
-                    }
-                }
-
-                
+                cmbGroupField.Items.AddRange(Options.Keys.ToArray<object>());
             }
             else
             {
@@ -74,14 +64,13 @@ namespace DFWV
             txtTake.Text = world.Filters[filterType].Take != -1 ? world.Filters[filterType].Take.ToString() : "";
         }
 
-#if DEBUG
         private void TestAllFilters(World world)
         {
- 	        var testSettings = new FilterSettings(world);
+ 	        FilterSettings testSettings = new FilterSettings(world);
             foreach (var thisType in testSettings.Fields.Keys)
             {
 
-                var testFilter = new Filter();
+                Filter testFilter = new Filter();
 
 
                 foreach (var filterItem in testSettings.Fields[thisType])
@@ -98,48 +87,45 @@ namespace DFWV
                 {
                     foreach (var filterItem in testSettings.Options[thisType])
                     {
-                        if (filterItem.Value.Any())
-                            testFilter.Where.Add(filterItem.Key + " == \"" + filterItem.Value.ToList()[0] + "\"");
+                        testFilter.Where.Add(filterItem.Key + " == \"" + filterItem.Value.ToList()[0] + "\"");
                     }
                 }
 
-                // ReSharper disable ReturnValueOfPureMethodIsNotUsed
                 if (thisType == typeof(Civilization))
-                    testFilter.Get(world.Civilizations).ToArray();
+                    testFilter.Get(world.Civilizations).ToArray<object>();
                 else if (thisType == typeof(God))
-                    testFilter.Get(world.Gods).ToArray();
+                    testFilter.Get(world.Gods).ToArray<object>();
                 else if (thisType == typeof(Leader))
-                    testFilter.Get(world.Leaders).ToArray();
+                    testFilter.Get(world.Leaders).ToArray<object>();
                 else if (thisType == typeof(Parameter))
-                    testFilter.Get(world.Parameters).ToArray();
+                    testFilter.Get(world.Parameters).ToArray<object>();
                 else if (thisType == typeof(Race))
-                    testFilter.Get(world.Races.Values.ToList()).ToArray();
+                    testFilter.Get(world.Races.Values.ToList()).ToArray<object>();
                 else if (thisType == typeof(Artifact))
-                    testFilter.Get(world.Artifacts.Values.ToList()).ToArray();
+                    testFilter.Get(world.Artifacts.Values.ToList()).ToArray<object>();
                 else if (thisType == typeof(Entity))
-                    testFilter.Get(world.Entities.Values.ToList()).ToArray();
+                    testFilter.Get(world.Entities.Values.ToList()).ToArray<object>();
                 else if (thisType == typeof(EntityPopulation))
-                    testFilter.Get(world.EntityPopulations.Values.ToList()).ToArray();
+                    testFilter.Get(world.EntityPopulations.Values.ToList()).ToArray<object>();
                 else if (thisType == typeof(HistoricalEra))
-                    testFilter.Get(world.HistoricalEras.Values.ToList()).ToArray();
+                    testFilter.Get(world.HistoricalEras.Values.ToList()).ToArray<object>();
                 else if (thisType == typeof(HistoricalEvent))
-                    testFilter.Get(world.HistoricalEvents.Values.ToList()).ToArray();
+                    testFilter.Get(world.HistoricalEvents.Values.ToList()).ToArray<object>();
                 else if (thisType == typeof(HistoricalEventCollection))
-                    testFilter.Get(world.HistoricalEventCollections.Values.ToList()).ToArray();
+                    testFilter.Get(world.HistoricalEventCollections.Values.ToList()).ToArray<object>();
                 else if (thisType == typeof(HistoricalFigure))
-                    testFilter.Get(world.HistoricalFigures.Values.ToList()).ToArray();
-                else if (thisType == typeof(Region))
-                    testFilter.Get(world.Regions.Values.ToList()).ToArray();
+                    testFilter.Get(world.HistoricalFigures.Values.ToList()).ToArray<object>();
+                else if (thisType == typeof(WorldClasses.Region))
+                    testFilter.Get(world.Regions.Values.ToList()).ToArray<object>();
                 else if (thisType == typeof(UndergroundRegion))
-                    testFilter.Get(world.UndergroundRegions.Values.ToList()).ToArray();
+                    testFilter.Get(world.UndergroundRegions.Values.ToList()).ToArray<object>();
                 else if (thisType == typeof(Site))
-                    testFilter.Get(world.Sites.Values.ToList()).ToArray();
-                // ReSharper restore ReturnValueOfPureMethodIsNotUsed
+                    testFilter.Get(world.Sites.Values.ToList()).ToArray<object>();
 
             }
 
         }
-#endif
+
 
         private void chkTake_CheckedChanged(object sender, EventArgs e)
         {
@@ -188,7 +174,6 @@ namespace DFWV
                 WhereAdd.BackColor = Color.Red;
                 return;
             }
-            
             var selected = cmbWhereField.SelectedItem.ToString();
             var thisOp = cmbWhereOperation.SelectedItem.ToString();
             var DataInt = 0;
@@ -245,12 +230,8 @@ namespace DFWV
             }
             else
             {
-                if (((MouseEventArgs)e).X < 10)
-                    AddWhere = selected + " != \"" + thisOp + "\"";
-                else
-                    AddWhere = selected + " == \"" + thisOp + "\"";
+                AddWhere = selected + " = \"" + thisOp + "\"";
             }
-
             if (lstWhere.Items.Contains(AddWhere) || AddWhere == "")
             {
                 WhereAdd.BackColor = Color.Red;

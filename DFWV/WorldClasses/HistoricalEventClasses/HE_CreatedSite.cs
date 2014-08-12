@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
@@ -95,9 +94,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     BuilderHF.Events = new List<HistoricalEvent>();
                 BuilderHF.Events.Add(this);
                 if (Time.Year == -1 &&
-                    NextEvent().Type == Types.IndexOf("artifact created") &&
-                    NextEvent().NextEvent().Type == Types.IndexOf("agreement formed") &&
-                    NextEvent().NextEvent().NextEvent().Type == Types.IndexOf("artifact stored"))
+                    NextEvent().Type == HistoricalEvent.Types.IndexOf("artifact created") &&
+                    NextEvent().NextEvent().Type == HistoricalEvent.Types.IndexOf("agreement formed") &&
+                    NextEvent().NextEvent().NextEvent().Type == HistoricalEvent.Types.IndexOf("artifact stored"))
                 {
                     ProcessSladeSpireEventSet();
                 }
@@ -106,14 +105,17 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         private void ProcessSladeSpireEventSet()
         {
-            var artifactCreatedEvent = NextEvent() as HE_ArtifactCreated;
-            var agreementFormedEvent = NextEvent().NextEvent() as HE_AgreementFormed;
-            //HE_ArtifactStored artifactStoredEvent = NextEvent().NextEvent().NextEvent() as HE_ArtifactStored;
+            HE_ArtifactCreated ArtifactCreatedEvent = NextEvent() as HE_ArtifactCreated;
+            HE_AgreementFormed AgreementFormedEvent = NextEvent().NextEvent() as HE_AgreementFormed;
+            HE_ArtifactStored ArtifactStoredEvent = NextEvent().NextEvent().NextEvent() as HE_ArtifactStored;
 
-            artifactCreatedEvent.Site = Site;
-            agreementFormedEvent.HF = BuilderHF;
-            agreementFormedEvent.Site = Site;
-            agreementFormedEvent.Artifact = artifactCreatedEvent.Artifact;
+            ArtifactCreatedEvent.Site = this.Site;
+            AgreementFormedEvent.HF = this.BuilderHF;
+            AgreementFormedEvent.Site = this.Site;
+            AgreementFormedEvent.Artifact = ArtifactCreatedEvent.Artifact;
+
+
+
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
@@ -127,15 +129,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             EventLabel(frm, parent, ref location, "Site:", Site);
         }
 
-        protected override string LegendsDescription() //Matched
+        protected override string LegendsDescription()
         {
             var timestring = base.LegendsDescription();
 
             if (BuilderHF != null)
                 return string.Format("{0} {1} founded {2}.", timestring, BuilderHF, Site.AltName);
-            if (SiteCiv != null)
+            else if (SiteCiv != null)
                 return string.Format("{0} {1} of {2} founded {3}.", timestring, SiteCiv, Civ, Site.AltName);
-            return string.Format("{0} {1} founded {2}.", timestring, Civ, Site.AltName);
+            else
+                return string.Format("{0} {1} founded {2}.", timestring, Civ, Site.AltName);
         }
 
         internal override string ToTimelineString()
