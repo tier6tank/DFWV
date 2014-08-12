@@ -318,6 +318,30 @@ namespace DFWV.WorldClasses
             Program.MakeSelected(frm.tabLeader, frm.lstLeader, this);
         }
 
+        internal override void Export(string table)
+        {
+            var vals = new List<object>
+            {
+                Name.DBExport(),
+                HF.DBExport(),
+                LeaderType.DBExport(LeaderTypes),
+                Race.DBExport(),
+                Birth.DBExport(true),
+                Birth.DBExport(false),
+                Death.DBExport(true),
+                Death.DBExport(false),
+                ReignBegan.DBExport(true),
+                Inheritance.DBExport(InheritanceTypes),
+                InheritedFromSource.ToString(),
+                InheritedFrom.DBExport(),
+                Civilization.DBExport(),
+                Site.DBExport(),
+                Worship == null ? DBNull.Value : Worship.Name.DBExport(),
+                WorshipPercent,
+                Spouse.DBExport(),
+            };
 
+            Database.ExportWorldItem(table, vals);
+        }
     }
 }

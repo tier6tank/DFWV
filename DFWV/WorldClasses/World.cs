@@ -394,6 +394,7 @@ namespace DFWV.WorldClasses
             {
                 return god;
             }
+            tempGod.ID = Gods.Count == 0 ? 0 : Gods.Max(x => x.ID) + 1;
             Gods.Add(tempGod);
             return tempGod;
         }
@@ -404,7 +405,7 @@ namespace DFWV.WorldClasses
             {
                 return god;
             }
-            var newGod = new God(godName);
+            var newGod = new God(godName) { ID = Gods.Count == 0 ? 0 : Gods.Max(x => x.ID) + 1 };
             Gods.Add(newGod);
             return newGod;
 
@@ -1041,6 +1042,8 @@ namespace DFWV.WorldClasses
             ExportWorldItems(Structures.Values.ToArray(), "structure");
             ExportWorldItems(UndergroundRegions.Values.ToArray(), "undergroundregion");
             ExportWorldItems(WorldConstructions.Values.ToArray(), "worldconstruction");
+            ExportWorldItems(Leaders.ToArray(), "leader");
+            ExportWorldItems(Gods.ToArray(), "god");
             ExportMaps();
             ExportWorldData();
             Database.CloseConnection();

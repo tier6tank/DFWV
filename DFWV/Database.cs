@@ -25,8 +25,12 @@ namespace DFWV
 
         public static void CloseConnection()
         {
+            _command.Dispose();
             _connection.Close();
             _connection.Dispose();
+            _connection = null;
+            _command = null;
+            Reader = null;
         }
 
         private static void ExecuteNonQuery(string txtQuery)
@@ -59,12 +63,16 @@ namespace DFWV
             var dt = new DataTable();
             dt.Load(Reader);
 
+            BeginTransaction();
             foreach (DataRow row in dt.Rows)
             {
                 _command = _connection.CreateCommand();
                 _command.CommandText = "DELETE FROM [" + row["tbl_name"] + "]";
                 _command.ExecuteNonQuery();
+            
             }
+            CommitTransaction();
+            Reader.Dispose();
         }
 
 /*

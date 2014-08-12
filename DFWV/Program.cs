@@ -14,10 +14,6 @@ using SevenZip;
 
 //TODO: Group by multiple items
 
-//TODO: -----Export-------
-//TODO: Add Dynasty/Leader/God 
-
-//TODO: Properly Export Insurrection started/ended and event collections
 //TODO: Add != filter option
 
 //TODO: Add notes on event types currently On Change HF Body State
@@ -30,6 +26,10 @@ using SevenZip;
 //TODO: Fix Leader Race in filter conditions
 
 //TODO: Check if new IndexOf static Lists items export properly
+
+//TODO: Issues
+//TODO: Export doesn't properly release link to exported DB (can't be deleted while app is running following export)
+
 
 namespace DFWV
 {

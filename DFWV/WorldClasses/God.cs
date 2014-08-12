@@ -8,6 +8,7 @@ namespace DFWV.WorldClasses
 {
     class God : Person
     {
+        public int ID { get; set; }
         public static List<string> Types = new List<string>();
         public int Type { get; set; }
         [UsedImplicitly]
@@ -95,6 +96,25 @@ namespace DFWV.WorldClasses
             }
 
             Program.MakeSelected(frm.tabGod, frm.lstGod, this);
+        }
+
+        internal override void Export(string table)
+        {
+            var vals = new List<object>
+            {
+                ID,
+                Name.DBExport(),
+                GodType.DBExport(),
+                HF.DBExport(),
+                RaceName.DBExport()
+            };
+
+            Database.ExportWorldItem(table, vals);
+
+            foreach (var sphere in Spheres)
+            {
+                Database.ExportWorldItem("God_Sphere", new List<object> {ID, HistoricalFigure.Spheres[sphere]});
+            }
         }
 
     }
