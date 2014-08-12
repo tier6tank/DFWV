@@ -3,14 +3,20 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    //TODO: Missing Details:  No parties listed
     class HE_AgreementRejected : HistoricalEvent
     {
         private int? SiteID { get; set; }
         private Site Site { get; set; }
+
+        public int? Topic { get; set; }
+        public int? SourceEntID { get; set; }
+        public int? DestinationEntID { get; set; }
+        public Entity Source { get; set; }
+        public Entity Destination { get; set; }
 
         override public Point Location { get { return Site.Location; } }
 
@@ -45,6 +51,60 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             base.Link();
             if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
                 Site = World.Sites[SiteID.Value];
+            if (DestinationEntID.HasValue && World.Entities.ContainsKey(DestinationEntID.Value))
+                Destination = World.Entities[DestinationEntID.Value];
+            if (SourceEntID.HasValue && World.Entities.ContainsKey(SourceEntID.Value))
+                Source = World.Entities[SourceEntID.Value];
+        }
+
+        internal override void Process()
+        {
+            base.Process();
+            if (Destination != null)
+            {
+                if (Destination.Events == null)
+                    Destination.Events = new List<HistoricalEvent>();
+                Destination.Events.Add(this);
+            }
+            if (Source != null)
+            {
+                if (Source.Events == null)
+                    Source.Events = new List<HistoricalEvent>();
+                Source.Events.Add(this);
+            }
+        }
+
+        internal override void Plus(XDocument xdoc)
+        {
+            foreach (var element in xdoc.Root.Elements())
+            {
+                var val = element.Value;
+                int valI;
+                Int32.TryParse(val, out valI);
+
+                switch (element.Name.LocalName)
+                {
+                    case "id":
+                    case "type":
+                        break;
+                    case "topic":
+                        if (!MeetingTopics.Contains(val))
+                            MeetingTopics.Add(val);
+                        Topic = MeetingTopics.IndexOf(val);
+                        break;
+                    case "source":
+                        SourceEntID = valI;
+                        break;
+                    case "destination":
+                        DestinationEntID = valI;
+                        break;
+                    case "site":
+                        break;
+                    default:
+                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        break;
+                }
+            }
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)

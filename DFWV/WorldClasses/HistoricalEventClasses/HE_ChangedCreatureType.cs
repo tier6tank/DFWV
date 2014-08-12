@@ -114,7 +114,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} {1} {2} changed the {3} {4} from {5} into {6}.",
+            return string.Format("{0} {1} {2} changed the {3} {4} from a {5} into a {6}.",
                                     timestring, ChangerHF.Race, ChangerHF,
                                     ChangeeHF.Race, ChangeeHF, OldRace,
                                     NewRace);

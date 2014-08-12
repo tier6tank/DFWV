@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
@@ -97,11 +98,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 return string.Format("{0} {1} of {2} at the settlement of {3} regained their senses after an initial period of questionable judgement.",
                                 timestring, SiteCiv, Civ,
                                 Site.AltName);
-            else
-                return string.Format("{0} {1} of {2} abandoned the settlement of {3} regained their senses after another period of questionable judgement.",
-                                timestring, SiteCiv, Civ,
-                                Site.AltName);
-
+            return string.Format("{0} {1} of {2} abandoned the settlement of {3} regained their senses after another period of questionable judgement.",
+                timestring, SiteCiv, Civ,
+                Site.AltName);
         }
 
         internal override string ToTimelineString()

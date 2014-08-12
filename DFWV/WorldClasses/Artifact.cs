@@ -11,6 +11,14 @@ namespace DFWV.WorldClasses
     {
         private string Item { get; set; }
 
+        private int? ItemType { get; set; }
+        private int? ItemSubType { get; set; }
+        private int? Mat { get; set; }
+        private int? MatType { get; set; }
+        private int? MatIndex { get; set; }
+        private int? ItemValue { get; set; }
+
+
         public HE_ArtifactCreated CreatedEvent { get; set; }
         public List<HE_ArtifactStored> StoredEvents { get; set; }
         public List<HE_ArtifactPossessed> PossessedEvents { get; set; }
@@ -19,6 +27,25 @@ namespace DFWV.WorldClasses
 
         [UsedImplicitly]
         public bool Lost { get { return LostEvent != null; } }
+        [UsedImplicitly]
+        public int Value { get { return ItemValue.HasValue ? ItemValue.Value : 0; } }
+        [UsedImplicitly]
+        public string Type
+        {
+            get
+            {
+                return (ItemSubType.HasValue
+                    ? HistoricalEvent.ItemSubTypes[ItemSubType.Value]
+                    : (ItemType.HasValue
+                        ? HistoricalEvent.Items[ItemType.Value]
+                        : ""));
+            }
+        }
+        [UsedImplicitly]
+        public string Material
+        {
+            get { return (Mat.HasValue ? HistoricalEvent.Materials[Mat.Value] + " " : ""); }
+        }
         [UsedImplicitly]
         public string DispNameLower { get { return ToString().ToLower(); } }
 
@@ -47,20 +74,25 @@ namespace DFWV.WorldClasses
             }
         }
 
-        //public Artifact(NameValueCollection data, World world) 
-        //    : base (data, world)
-        //{
-        //    Name = data["Name"].ToString();
-        //}
-
         public override void Select(MainForm frm)
         {
             frm.grpArtifact.Text = ToString();
+#if DEBUG
+            frm.grpArtifact.Text += string.Format(" - ID: {0}", ID);
+#endif
             frm.grpArtifact.Show();
 
-            frm.lblArtifactName.Text = Name;
-            frm.lblArtifactItem.Text = Item;
+            frm.lblArtifactName.Text = Name.ToTitleCase();
+            frm.lblArtifactItem.Text = Item.ToTitleCase();
 
+            frm.lblArtifactDescription.Text = (Mat.HasValue ? HistoricalEvent.Materials[Mat.Value] + " " : "") +
+                                              (ItemSubType.HasValue
+                                                  ? HistoricalEvent.ItemSubTypes[ItemSubType.Value]
+                                                  : (ItemType.HasValue
+                                                      ? HistoricalEvent.Items[ItemType.Value]
+                                                      : ""));
+
+            frm.lblArtifactValue.Text = ItemValue.HasValue ? ItemValue.Value.ToString() : "";
 
             frm.grpArtifactCreated.Visible = CreatedEvent != null;
             if (CreatedEvent != null)
@@ -118,21 +150,68 @@ namespace DFWV.WorldClasses
         {
 
         }
+        internal override void Plus(XDocument xdoc)
+        {
+            foreach (var element in xdoc.Root.Elements())
+            {
+                var val = element.Value;
+                int valI;
+                Int32.TryParse(val, out valI);
+
+                switch (element.Name.LocalName)
+                {
+                    case "id":
+                    case "type":
+                        break;
+                    case "item_type":
+                        if (!HistoricalEvent.Items.Contains(val))
+                            HistoricalEvent.Items.Add(val);
+                        ItemType = HistoricalEvent.Items.IndexOf(val);
+                        break;
+                    case "item_subtype":
+                        if (valI != -1)
+                        {
+                            if (!HistoricalEvent.ItemSubTypes.Contains(val))
+                                HistoricalEvent.ItemSubTypes.Add(val);
+                            ItemSubType = HistoricalEvent.ItemSubTypes.IndexOf(val);
+                        }
+                        break;
+                    case "mattype":
+                        MatType = valI;
+                        break;
+                    case "matindex":
+                        MatIndex = valI;
+                        break;
+                    case "mat":
+                        if (!HistoricalEvent.Materials.Contains(val))
+                            HistoricalEvent.Materials.Add(val);
+                        Mat = HistoricalEvent.Materials.IndexOf(val);
+                        break;
+                    case "value":
+                        ItemValue = valI;
+                        break;
+                    default:
+                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" , element, xdoc.Root.ToString());
+                        break;
+                }
+            }
+
+
+        }
 
         internal override void Export(string table)
         {
 
-            var vals = new List<object> {ID};
-
-            if (Name == null)
-                vals.Add(DBNull.Value);
-            else
-                vals.Add(Name.Replace("'", "''"));
-
-            if (Item == null)
-                vals.Add(DBNull.Value);
-            else
-                vals.Add(Item.Replace("'", "''"));
+            var vals = new List<object>
+            {
+                ID,
+                Name.DBExport(),
+                Item.DBExport(),
+                Mat.DBExport(HistoricalEvent.Materials),
+                ItemType.DBExport(HistoricalEvent.Items),
+                ItemSubType.DBExport(HistoricalEvent.ItemSubTypes),
+                Value
+            };
 
 
             Database.ExportWorldItem(table, vals);

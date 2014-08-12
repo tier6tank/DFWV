@@ -7,7 +7,6 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    //TODO: Missing Details:  Job
     class HE_ChangeHFJob : HistoricalEvent
     {
         private int? HFID { get; set; }
@@ -17,6 +16,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? SubregionID { get; set; }
         private Region Subregion { get; set; }
         private int? FeatureLayerID { get; set; }
+        public int? NewJobID { get; set; }
+        public int? OldJobID { get; set; }
 
         override public Point Location { get { return Site != null ? Site.Location : (Subregion != null ? Subregion.Location : Point.Empty); } }
 
@@ -60,6 +61,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         }
         internal override void Link()
         {
+            //TODO: Incorporate new data
             base.Link();
             if (HFID.HasValue && World.HistoricalFigures.ContainsKey(HFID.Value))
                 HF = World.HistoricalFigures[HFID.Value];
@@ -67,6 +69,35 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Site = World.Sites[SiteID.Value];
             if (SubregionID.HasValue && World.Regions.ContainsKey(SubregionID.Value))
                 Subregion = World.Regions[SubregionID.Value];
+        }
+
+        internal override void Plus(XDocument xdoc)
+        {
+            foreach (var element in xdoc.Root.Elements())
+            {
+                var val = element.Value;
+                int valI;
+                Int32.TryParse(val, out valI);
+
+                switch (element.Name.LocalName)
+                {
+                    case "id":
+                    case "type":
+                        break;
+                    case "hfid":
+                    case "site":
+                        break;
+                    case "new_job":
+                        NewJobID = valI;
+                        break;
+                    case "old_job":
+                        OldJobID = valI;
+                        break;
+                    default:
+                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        break;
+                }
+            }
         }
 
         internal override void Process()
@@ -81,6 +112,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
+            //TODO: Incorporate new data
             EventLabel(frm, parent, ref location, "HF:", HF);
             if (Site != null)
                 EventLabel(frm, parent, ref location, "Site:", Site);
@@ -90,8 +122,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 EventLabel(frm, parent, ref location, "Layer:", FeatureLayerID == -1 ? "" : FeatureLayerID.ToString());
         }
 
-        protected override string LegendsDescription()
+        protected override string LegendsDescription() //Not Matched
         {
+            //TODO: Incorporate new data
             var timestring = base.LegendsDescription();
 
             return string.Format("{0} {1} {2} became {3} in {4}.",
@@ -101,6 +134,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         internal override string ToTimelineString()
         {
+            //TODO: Incorporate new data
             var timelinestring = base.ToTimelineString();
 
             if (Site != null)
@@ -113,6 +147,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         internal override void Export(string table)
         {
+            //TODO: Incorporate new data
             base.Export(table);
 
             table = GetType().Name;

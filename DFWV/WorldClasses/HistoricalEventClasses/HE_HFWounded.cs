@@ -18,6 +18,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? SubregionID { get; set; }
         private Region Subregion { get; set; }
         private int? FeatureLayerID { get; set; }
+        public int? BodyPart { get; set; }
+        public int? InjuryType { get; set; }
+        public int? PartLost { get; set; }
 
         override public Point Location { get { return Site != null ? Site.Location : (Subregion != null ? Subregion.Location : Point.Empty); } }
 
@@ -74,6 +77,41 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 WounderHF = World.HistoricalFigures[WounderHFID.Value];
         }
 
+        internal override void Plus(XDocument xdoc)
+        {
+            foreach (var element in xdoc.Root.Elements())
+            {
+                var val = element.Value;
+                int valI;
+                Int32.TryParse(val, out valI);
+
+                switch (element.Name.LocalName)
+                {
+                    case "id":
+                    case "type":
+                        break;
+                    case "victim":
+                    case "attacker":
+                    case "site":
+                    case "victim_race":
+                    case "victim_caste":
+                        break;
+                    case "body_part":
+                        BodyPart = valI;
+                        break;
+                    case "injury_type":
+                        InjuryType = valI;
+                        break;
+                    case "part_lost":
+                        PartLost = valI;
+                        break;
+                    default:
+                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        break;
+                }
+            }
+        }
+
         internal override void Process()
         {
             base.Process();
@@ -95,20 +133,23 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             EventLabel(frm, parent, ref location, "By:", WounderHF);
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Region:", Subregion);
-
         }
 
         protected override string LegendsDescription()
         {
+            //TODO: Incorporate new data
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} the {1} {2} was wounded by the {3} {4}.",
-                            timestring, WoundeeHF.Race, WoundeeHF,
-                            WounderHF.Race, WounderHF);
+            return string.Format("{0} {1} was wounded by {2}.",
+                timestring, WoundeeHF != null ? "the " + WoundeeHF.Race + " " + WoundeeHF: "an unknown creature",
+                            WounderHF != null ? "the " + WounderHF.Race + " " + WounderHF: "an unknown creature");
+
+           
         }
 
         internal override string ToTimelineString()
         {
+            //TODO: Incorporate new data
             var timelinestring = base.ToTimelineString();
 
             return string.Format("{0} {1} was wounded by the {2}.",
@@ -117,6 +158,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         internal override void Export(string table)
         {
+            //TODO: Incorporate new data
             base.Export(table);
 
 

@@ -15,6 +15,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private HistoricalFigure DoerHF { get; set; }
         private int Interaction { get; set; }
 
+        private int? SiteID { get; set; }
+        private Site Site { get; set; }
+        private int? SubregionID { get; set; }
+        private Region Subregion { get; set; }
+
         override public Point Location { get { return Point.Empty; } }
 
         public HE_HFDoesInteraction(XDocument xdoc, World world)
@@ -57,6 +62,43 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 TargetHF = World.HistoricalFigures[TargetHFID.Value];
             if (DoerHFID.HasValue && World.HistoricalFigures.ContainsKey(DoerHFID.Value))
                 DoerHF = World.HistoricalFigures[DoerHFID.Value];
+            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
+                Site = World.Sites[SiteID.Value];
+            if (SubregionID.HasValue && World.Regions.ContainsKey(SubregionID.Value))
+                Subregion = World.Regions[SubregionID.Value];
+        }
+
+        
+        internal override void Plus(XDocument xdoc)
+        {
+            foreach (var element in xdoc.Root.Elements())
+            {
+                var val = element.Value;
+                int valI;
+                Int32.TryParse(val, out valI);
+
+                switch (element.Name.LocalName)
+                {
+                    case "id":
+                    case "type":
+                        break;
+                    case "attacker":
+                    case "target":
+                    case "interaction":
+                        break;
+                    case "site_id":
+                        if (valI != -1)
+                            SiteID = valI;
+                        break;
+                    case "subregion_id":
+                        if (valI != -1)
+                            SubregionID = valI;
+                        break;
+                    default:
+                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        break;
+                }
+            }
         }
 
         internal override void Process()
@@ -76,14 +118,17 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
+            //TODO: Incorporate new data
             EventLabel(frm, parent, ref location, "HF:", DoerHF);
             EventLabel(frm, parent, ref location, "Target:", TargetHF);
             EventLabel(frm, parent, ref location, "Interaction:", HistoricalFigure.Interactions[Interaction]);
-
+            EventLabel(frm, parent, ref location, "Site:", Site);
+            EventLabel(frm, parent, ref location, "Region:", Subregion);
         }
 
-        protected override string LegendsDescription()
+        protected override string LegendsDescription() //Not Matched
         {
+            //TODO: Incorporate new data
             var timestring = base.LegendsDescription();
 
             if (HistoricalFigure.Interactions[Interaction].ToLower().Contains("curse_vampire") || HistoricalFigure.Interactions[Interaction].ToLower().Contains("master_vampire_curse"))
@@ -131,6 +176,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         internal override string ToTimelineString()
         {
+            //TODO: Incorporate new data
             var timelinestring = base.ToTimelineString();
 
             return string.Format("{0} {1} cursed {2}",
@@ -140,6 +186,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         internal override void Export(string table)
         {
+            //TODO: Incorporate new data
             base.Export(table);
 
 

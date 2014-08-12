@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalEventClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
 
@@ -199,21 +200,30 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                 var AddLinkEvent = ((HE_AddHFEntityLink)Event[i]);
                 AddLinkEvent.HF = abductedHF;
 
-                if (abductedHF.EntityLinks.ContainsKey("prisoner"))
+                if (abductedHF != null)
                 {
-                    foreach (var entityLink in abductedHF.EntityLinks["prisoner"].Where(entityLink => entityLink.Entity == AddLinkEvent.Civ))
+                    if (abductedHF.EntityLinks.ContainsKey(HFEntityLink.LinkTypes.IndexOf("prisoner")))
                     {
-                        AddLinkEvent.EntityLink = entityLink;
-                        break;
+                        foreach (
+                            var entityLink in
+                                abductedHF.EntityLinks[HFEntityLink.LinkTypes.IndexOf("prisoner")].Where(
+                                    entityLink => entityLink.Entity == AddLinkEvent.Civ))
+                        {
+                            AddLinkEvent.HFEntityLink = entityLink;
+                            break;
+                        }
                     }
-                }
-                if (AddLinkEvent.EntityLink.HF == null &&
-                    abductedHF.EntityLinks.ContainsKey("former prisoner"))
-                {
-                    foreach (var entityLink in abductedHF.EntityLinks["former prisoner"].Where(entityLink => entityLink.Entity == AddLinkEvent.Civ))
+                    if ((AddLinkEvent.HFEntityLink == null || AddLinkEvent.HFEntityLink.HF == null) &&
+                        abductedHF.EntityLinks.ContainsKey(HFEntityLink.LinkTypes.IndexOf("former prisoner")))
                     {
-                        AddLinkEvent.EntityLink = entityLink;
-                        break;
+                        foreach (
+                            var entityLink in
+                                abductedHF.EntityLinks[HFEntityLink.LinkTypes.IndexOf("former prisoner")].Where(
+                                    entityLink => entityLink.Entity == AddLinkEvent.Civ))
+                        {
+                            AddLinkEvent.HFEntityLink = entityLink;
+                            break;
+                        }
                     }
                 }
 

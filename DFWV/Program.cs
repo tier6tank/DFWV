@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Design.PluralizationServices;
 using System.Linq;
 using System.Windows.Forms;
 using System.ComponentModel;
@@ -11,9 +12,7 @@ using System.IO;
 using System.Collections;
 using SevenZip;
 
-
 //TODO: Group by multiple items
-//TODO: Better display grouping
 
 //TODO: Properly Export Insurrection started/ended and event collections
 
@@ -21,7 +20,6 @@ using SevenZip;
 //TODO: Handle "Died Event" at site level
 //TODO: Entity SiteTakenOver event not used
 
-//TODO: HE_ArtifactCreated - Unit
 //TODO: HF - CreatedArtifacts
 //TODO: Site - NewLeaderEVents
 
@@ -55,6 +53,7 @@ namespace DFWV
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            InitiailzePluralService();
             mainForm = new MainForm();
             
             Application.Run(mainForm);
@@ -76,6 +75,20 @@ namespace DFWV
                 listBox.Items.Add(item);
             listBox.SelectedItem = item;
             mainForm.AddToNav(item);
+        }
+
+        /// <summary>
+        /// This function is called when an Item on the WorldSummaryTree is double clicked.  
+        /// It 
+        ///  * Selects the appropriate tab, 
+        ///  * Selects the first item on the listbox if there are any.
+        ///  * Adds that item to the navigation system, used to scroll backward through items you've viewed
+        /// </summary>
+        public static void MakeSelected(TabPage tabPage, ListBox listBox)
+        {
+            mainForm.MainTab.SelectedTab = tabPage;
+            if (listBox.SelectedIndex == -1 && listBox.Items.Count > 0)
+                listBox.SelectedIndex = 0;
         }
 
 
@@ -178,7 +191,7 @@ namespace DFWV
         /// <summary>
         /// Handles all logging from world generation
         /// </summary>
-        private static Object thisLock = new Object();
+        private static readonly Object thisLock = new Object();
 
         public static void Log(LogType type, string txt)
         {
@@ -296,18 +309,19 @@ namespace DFWV
         /// <summary>
         /// 
         /// </summary>
-        public static void ExtractArchive(string path)
+        public static bool ExtractArchive(string path)
         {
             Console.WriteLine(Directory.GetCurrentDirectory());
-            
-            if (IntPtr.Size == 8)
-                SevenZipExtractor.SetLibraryPath(Path.Combine(Directory.GetCurrentDirectory(), @"7z64.dll"));
-            else
-                SevenZipExtractor.SetLibraryPath(Path.Combine(Directory.GetCurrentDirectory(), @"7z.dll"));
+
+            SevenZipBase.SetLibraryPath(IntPtr.Size == 8
+                ? Path.Combine(Directory.GetCurrentDirectory(), @"7z64.dll")
+                : Path.Combine(Directory.GetCurrentDirectory(), @"7z.dll"));
 
             var directory = Path.GetDirectoryName(path);
             var filename = Path.GetFileNameWithoutExtension(path);
 
+            if (directory == null)
+                return false;
             var newDirectory = Path.Combine(directory, filename);
             if (Directory.Exists(newDirectory))
                 Directory.Delete(newDirectory,true);
@@ -315,11 +329,47 @@ namespace DFWV
 
             using (var tmp = new SevenZipExtractor(path))
             {
-                for (int i = 0; i < tmp.ArchiveFileData.Count; i++)
-                    tmp.ExtractFiles(newDirectory, tmp.ArchiveFileData[i].Index);
+                foreach (var fileinfo in tmp.ArchiveFileData)
+                    tmp.ExtractFiles(newDirectory, fileinfo.Index);
             }
+            return true;
         }
 
+
+
+        #region Pluralization/Capitalization Services
+        static PluralizationService pluralService;
+        private static void InitiailzePluralService()
+        {
+            pluralService = PluralizationService.CreateService(CultureInfo.GetCultureInfo("en-us"));
+        }
+
+        static public string Pluralize(this string str)
+        {
+            return pluralService.Pluralize(str);
+        }
+
+        static public string Singularize(this string str)
+        {
+            return pluralService.Singularize(str);
+        }
+
+        static public bool isPlural(this string str)
+        {
+            return pluralService.IsPlural(str);
+        }
+
+        static public bool isSingular(this string str)
+        {
+            return pluralService.IsSingular(str);
+        }
+
+        static public string ToTitleCase(this string str)
+        {
+            return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(str ?? "");
+        }
+
+        #endregion
 
     }
 
@@ -381,5 +431,4 @@ namespace DFWV
     }
 
 #endregion
-    
 }

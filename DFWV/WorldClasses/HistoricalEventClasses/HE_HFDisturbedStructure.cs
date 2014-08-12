@@ -16,6 +16,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? StructureID { get; set; }
         private Structure Structure { get; set; }
 
+        private int? Action { get; set; }
+
         override public Point Location { get { return Site.Location; } }
 
         public HE_HFDisturbedStructure(XDocument xdoc, World world)
@@ -56,6 +58,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         internal override void Link()
         {
+            //TODO: Incorporate new data
             base.Link();
             if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
                 Site = World.Sites[SiteID.Value];
@@ -69,6 +72,33 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             {
                 Structure = new Structure(Site, StructureID.Value, World);
                 Site.AddStructure(Structure);
+            }
+        }
+
+        internal override void Plus(XDocument xdoc)
+        {
+            foreach (var element in xdoc.Root.Elements())
+            {
+                var val = element.Value;
+                int valI;
+                Int32.TryParse(val, out valI);
+
+                switch (element.Name.LocalName)
+                {
+                    case "id":
+                    case "type":
+                        break;
+                    case "histfig":
+                    case "site":
+                    case "structure":
+                        break;
+                    case "action":
+                        Action = valI;
+                        break;
+                    default:
+                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        break;
+                }
             }
         }
 
@@ -89,26 +119,24 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
+            //TODO: Incorporate new data
             EventLabel(frm, parent, ref location, "Hist Fig:", HistFig);
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Structure:", Structure);
         }
 
-        protected override string LegendsDescription()
+        protected override string LegendsDescription() //Matched
         {
             var timestring = base.LegendsDescription();
 
-            if (Site != null)
-                return string.Format("{0} {1} {2} disturbed {3} in {4}.",
-                    timestring, HistFig.Race, HistFig,
-                    "UNKNOWN", Site.AltName);
-            return string.Format("{0} {1} {2} disturbed {3}.",
-                timestring, HistFig.Race, HistFig,
-                "UNKNOWN");
+            return string.Format("{0} {1} {2} profaned the {3} in {4}.",
+                            timestring, HistFig.Race, HistFig,
+                            Structure, Site.AltName);
         }
 
         internal override string ToTimelineString()
         {
+            //TODO: Incorporate new data
             var timelinestring = base.ToTimelineString();
 
             if (Site != null)
@@ -121,6 +149,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         internal override void Export(string table)
         {
+            //TODO: Incorporate new data
             base.Export(table);
 
 

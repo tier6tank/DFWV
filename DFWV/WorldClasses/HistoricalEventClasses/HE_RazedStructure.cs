@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
@@ -92,12 +93,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             EventLabel(frm, parent, ref location, "Structure:", Structure);   
         }
 
-        protected override string LegendsDescription()
+        protected override string LegendsDescription() //Matched
         {
             var timestring = base.LegendsDescription();
 
             return string.Format("{0} {1} razed {2} in {3}.",
-                            timestring, Civ, "Structure " + StructureID,
+                            timestring, Civ, Structure,
                             Site.AltName);
         }
 

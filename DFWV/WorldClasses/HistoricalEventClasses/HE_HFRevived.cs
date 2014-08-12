@@ -94,12 +94,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             EventLabel(frm, parent, ref location, "Layer:", FeatureLayerID == -1 ? "" : FeatureLayerID.ToString());
         }
 
-        protected override string LegendsDescription()
+        protected override string LegendsDescription() //Matched
         {
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} {1} came back from the dead as a {2} in {3}.",
-                                    timestring, HF, Ghost, Site.AltName);
+            return string.Format("{0} {1} came back from the dead as in {2}.",
+                                    timestring, HF, Site.AltName);
         }
 
         internal override string ToTimelineString()

@@ -11,7 +11,7 @@ namespace DFWV.WorldClasses
     {
 
         public List<WorldConstruction> Subconstructions { get; set; }
-        public WorldConstruction MasterWC { private get; set; }
+        public WorldConstruction MasterWC { get; set; }
         public HE_CreatedWorldConstruction CreatedEvent { get; set; }
 
         public Site From { get; set; }
@@ -22,16 +22,27 @@ namespace DFWV.WorldClasses
 
         override public Point Location { get { return From.Location; } }
 
+        public List<Point> Coords { get; set; }
+
+        public int? Type { get; set; }
+        public static List<string> Types = new List<string>();
+
+        public string ConstructionType
+        {
+            get { return Type.HasValue ? Types[Type.Value] : ""; }
+        }
 
         public WorldConstruction(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
             {
-                // string val = element.Value;
                 switch (element.Name.LocalName)
                 {
                     case "id":
+                    case "name": //From Plus XML
+                    case "coords":
+                    case "type": 
                         break;
                     default:
                         DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
@@ -40,14 +51,9 @@ namespace DFWV.WorldClasses
             }
         }
 
-        //public WorldConstruction(NameValueCollection data, World world) 
-        //    : base (world)
-        //{
-            
-        //}
 
-
-        public WorldConstruction(int id, World world) : base(world) //Created from Historical Events if World Construction List is empty.
+        public WorldConstruction(int id, World world) 
+            : base(world) //Created from Historical Events if World Construction List is empty.
         {
             ID = id;
             World = world;
@@ -57,12 +63,17 @@ namespace DFWV.WorldClasses
         public override void Select(MainForm frm)
         {
             frm.grpWorldConstruction.Text = ToString();
+#if DEBUG
+            frm.grpWorldConstruction.Text += string.Format(string.Format(string.Format(" - ID: {0}", ID), ID), ID);
+#endif
             frm.grpWorldConstruction.Show();
 
             frm.lblWorldConstructionMaster.Data = MasterWC;
             frm.lblWorldConstructionFrom.Data = From;
             frm.lblWorldConstructionTo.Data = To;
-
+            if (Type.HasValue)
+                frm.lblWorldConstructionType.Text = Types[Type.Value].ToTitleCase();
+            frm.lblWorldConstructionCoord.Data = Coords != null ? new Coordinate(Coords[0]) : new Coordinate(From.Coords);
             frm.grpWorldConstruction.Visible = CreatedEvent != null;
             if (CreatedEvent != null)
             {
@@ -83,6 +94,43 @@ namespace DFWV.WorldClasses
         internal override void Process()
         {
 
+        }
+
+        internal override void Plus(XDocument xdoc)
+        {
+            foreach (var element in xdoc.Root.Elements())
+            {
+                var val = element.Value;
+                int valI;
+                Int32.TryParse(val, out valI);
+
+                switch (element.Name.LocalName)
+                {
+                    case "id":
+                        break;
+                    case "name":
+                        Name = val;
+                        break;
+                    case "coords":
+                        if (Coords == null)
+                            Coords = new List<Point>();
+                        foreach (var coord in val.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries))
+                        {
+                            var coordSplit = coord.Split(',');
+                            if (coordSplit.Length == 2)
+                                Coords.Add(new Point(Convert.ToInt32(coordSplit[0]), Convert.ToInt32(coordSplit[1])));
+                        }
+                        break;
+                    case "type":
+                        if (!Types.Contains(val))
+                            Types.Add(val);
+                        Type = Types.IndexOf(val);
+                        break;
+                    default:
+                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t", element, xdoc.Root.ToString());
+                        break;
+                }
+            }
         }
 
         internal override void Export(string table)

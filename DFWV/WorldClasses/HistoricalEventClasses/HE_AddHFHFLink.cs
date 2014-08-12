@@ -17,7 +17,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         override public Point Location { get { return Point.Empty; } }
 
+        public int LinkType { get; set; }
+
         public HFLink HFLink { get; set; }
+        public HFLink HFLink2 { get; set; }
 
         public HE_AddHFHFLink(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -67,9 +70,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             {
                 foreach (var hfLinkList in HF.HFLinks)
                 {
-                    foreach (var hflink in hfLinkList.Value.Where(hflink => hflink.HF == HFTarget))
+                    foreach (var hflink in hfLinkList.Value.Where(hflink => hflink.LinkedHFID == HFIDTarget))
                     {
-                        hflink.Event = this;
+                        hflink.AddEvent = this;
                         HFLink = hflink;
                         matched = true;
                         break;
@@ -83,10 +86,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             {
                 foreach (var hfLinkList in HFTarget.HFLinks)
                 {
-                    foreach (var hflink in hfLinkList.Value.Where(hflink => hflink.HF == HF))
+                    foreach (var hflink in hfLinkList.Value.Where(hflink => hflink.LinkedHFID == HFID))
                     {
-                        hflink.Event = this;
-                        HFLink = hflink;
+                        hflink.AddEvent = this;
+                        HFLink2 = hflink;
                         matched = true;
                         break;
                     }
@@ -109,19 +112,68 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             HFTarget.Events.Add(this);
         }
 
+        internal override void Plus(XDocument xdoc)
+        {
+            foreach (var element in xdoc.Root.Elements())
+            {
+                var val = element.Value;
+                int valI;
+                Int32.TryParse(val, out valI);
+
+                switch (element.Name.LocalName)
+                {
+                    case "id":
+                    case "type":
+                        break;
+                    case "histfig1":
+                    case "histfig2":
+                        break;
+                    case "link_type":
+                        if (!HFLink.LinkTypes.Contains(val))
+                            HFLink.LinkTypes.Add(val);
+                        LinkType = HFLink.LinkTypes.IndexOf(val);
+                        break;
+                    default:
+                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        break;
+                }
+            }
+        }
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
             EventLabel(frm, parent, ref location, "HF:", HF);
             EventLabel(frm, parent, ref location, "Target:", HFTarget);
-            EventLabel(frm, parent, ref location, "Type:", HFLink != null ? HFLink.LinkTypes[HFLink.LinkType] : "UNKNOWN");
+            EventLabel(frm, parent, ref location, "Type:", 
+                HFLink != null ?  
+                HFLink.LinkTypes[HFLink.LinkType] :
+                HFLink.LinkTypes[LinkType]);
         }
 
-        protected override string LegendsDescription()
+        protected override string LegendsDescription() //Matched
         {
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} {1} {2} {3}.",
-                                    timestring, HF, HFLink != null ? HFLink.LinkTypes[HFLink.LinkType] : "UNKNOWN", HFTarget);
+            switch (HFLink != null ? 
+                HFLink.LinkTypes[HFLink.LinkType] :
+                HFLink.LinkTypes[LinkType])
+            {
+                case "spouse":
+                    return string.Format("{0} {1} {2} {3}.",
+                        timestring, HF, "married", HFTarget == null ? "an unknown creature" : HFTarget.ToString());
+                case "prisoner":
+                    return string.Format("{0} {1} {2} {3}.",
+                        timestring, HF, "imprisoned", HFTarget == null ? "an unknown creature" : HFTarget.ToString());
+                case "apprentice":
+                    return string.Format("{0} {1} {2} {3} {4}.",
+                        timestring, HF, "became master of the", HFTarget != null && HFTarget.Race != null ? HFTarget.Race.ToString().ToLower() : "", HFTarget == null ? "an unknown creature" : HFTarget.ToString());
+                case "deity":
+                    return string.Format("{0} {1} {2} {3}.",
+                        timestring, HF, "began worshipping", HFTarget == null ? "an unknown creature" : HFTarget.ToString());
+                default:
+                    return string.Format("{0} {1} {2} {3}.",
+                                            timestring, HF, HFLink != null ? HFLink.LinkTypes[LinkType] : "UNKNOWN", HFTarget);
+
+            }
         }
 
         internal override string ToTimelineString()

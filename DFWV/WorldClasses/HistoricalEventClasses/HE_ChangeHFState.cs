@@ -16,7 +16,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int State { get; set; }
         public static List<string> States = new List<string>();
         private int? HFID { get; set; }
-        private HistoricalFigure HF { get; set; }
+        public HistoricalFigure HF { get; set; }
         private int? FeatureLayerID { get; set; }
         public Point Coords { get; private set; }
 
@@ -87,6 +87,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (HF.Events == null)
                 HF.Events = new List<HistoricalEvent>();
             HF.Events.Add(this);
+            if (HF.isLeader && States[State] == "settled" && Site != null)
+            {
+                HF.Leader.Site = Site;
+            }
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)

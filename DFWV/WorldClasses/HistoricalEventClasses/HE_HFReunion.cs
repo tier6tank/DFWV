@@ -121,16 +121,36 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Region:", Subregion);
-            EventLabel(frm, parent, ref location, "Layer:", FeatureLayerID == -1 ? "" : FeatureLayerID.ToString());
+            if (FeatureLayerID != null && FeatureLayerID > -1)
+                EventLabel(frm, parent, ref location, "Layer:", FeatureLayerID == -1 ? "" : FeatureLayerID.ToString());
         }
 
-        protected override string LegendsDescription()
+        protected override string LegendsDescription() //Matched
         {
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} {1} was reunited with {2}{3} in {4}.",
-                           timestring, Group1HF[0], Group2HF.Count == 2 ? " and " + Group2HF[1] : "",
-                           Group2HF[0], Site.AltName);
+            string reunitedText;
+            if (Group2HFID.Count == 2)
+            {
+                if (Group2HF.Count == 2)
+                    reunitedText = Group2HF[0] + " and " + Group2HF[1];
+                else if (Group2HF.Count == 0)
+                    reunitedText = "an unknown creature and an unknown creature";
+                else
+                {
+                    if (Group2HF[0].ID == Group2HFID[0])
+                        reunitedText = Group2HF[0] + " and an unknown creature";
+                    else
+                        reunitedText = "an unknown creature" + Group2HF[0];
+                }
+            }
+            else
+                reunitedText = Group2HF.Count == 0 ? "an unknown creature" : Group2HF[0].ToString();
+
+
+
+                return string.Format("{0} {1} was reunited with {2} in {3}.",
+                    timestring, Group1HF[0], reunitedText, Site.AltName);
         }
 
         internal override string ToTimelineString()

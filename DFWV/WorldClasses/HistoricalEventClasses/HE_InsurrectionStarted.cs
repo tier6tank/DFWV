@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
@@ -89,12 +90,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (Outcome == "population gone")
                 return string.Format("{0} the insurrection in {1} against {2} ended with the disappearance of hte rebelling population.",
                                         timestring, Site.AltName, TargetCiv);
-            else if (Outcome == "leadership overthrown")
+            if (Outcome == "leadership overthrown")
                 return string.Format("{0} the insurrection in {1} concluded with {2} overthrown.",
-                                        timestring, Site.AltName, TargetCiv);
-            else
-                return string.Format("{0} the insurrection in {1} against {2} - {3}.",
-                                        timestring, Site.AltName, TargetCiv, Outcome);
+                    timestring, Site.AltName, TargetCiv);
+            return string.Format("{0} the insurrection in {1} against {2} - {3}.",
+                timestring, Site.AltName, TargetCiv, Outcome);
         }
 
         internal override string ToTimelineString()

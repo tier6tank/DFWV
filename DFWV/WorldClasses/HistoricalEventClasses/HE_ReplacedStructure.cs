@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using DFWV.WorldClasses.HistoricalFigureClasses;
+using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
@@ -87,6 +87,26 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 {
                     NewStructure = new Structure(Site, NewStructureID.Value, World);
                     Site.AddStructure(NewStructure);
+                }
+            }
+        }
+
+        internal override void Plus(XDocument xdoc)
+        {
+            foreach (var element in xdoc.Root.Elements())
+            {
+                var val = element.Value;
+                int valI;
+                Int32.TryParse(val, out valI);
+
+                switch (element.Name.LocalName)
+                {
+                    case "id":
+                    case "type":
+                        break;
+                    default:
+                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        break;
                 }
             }
         }

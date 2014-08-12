@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
@@ -92,10 +93,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (Abandoned)
                 return string.Format("{0} {1} abandoned the settlement of {2}.",
                             timestring, SiteCiv, Site.AltName);
-            else
-                //TODO: Update this
-                return string.Format("{0} {1} died.",
-                            timestring, Site.AltName);
+            return string.Format("{0} {1} and {2} settlement of {3} withered.",
+                timestring, SiteCiv, Civ,  Site.AltName);
         }
 
         internal override string ToTimelineString()
@@ -105,11 +104,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (Abandoned)
                 return string.Format("{0} {1} abandoned the settlement of {2}.",
                             timelinestring, SiteCiv, Site.AltName);
-            else
-                //TODO: Update this
-                return string.Format("{0} {1} died.",
-                            timelinestring, Site.AltName);
-
+            return string.Format("{0} {1} died.",
+                timelinestring, Site.AltName);
         }
 
         internal override void Export(string table)

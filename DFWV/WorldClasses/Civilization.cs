@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Drawing;
 using DFWV.Annotations;
+using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses
 {

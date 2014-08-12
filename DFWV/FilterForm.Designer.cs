@@ -64,7 +64,7 @@
             // Apply
             // 
             this.Apply.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.Apply.Location = new System.Drawing.Point(12, 12);
+            this.Apply.Location = new System.Drawing.Point(12, 10);
             this.Apply.Name = "Apply";
             this.Apply.Size = new System.Drawing.Size(75, 23);
             this.Apply.TabIndex = 0;

@@ -1,12 +1,9 @@
-﻿using System.Data;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using DFWV.Annotations;
 using DFWV.WorldClasses.HistoricalEventClasses;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 using System.Xml.Linq;
 
 
@@ -187,7 +184,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         public override string ToString()
         {
             if (Name == null)
-                return StartYear + " - " + CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Types[Type]);
+                return StartYear + " - " + Types[Type].ToTitleCase();
             return Name;
         }
 
@@ -202,6 +199,9 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
             frm.grpHistoricalEventCollection.Text = ToString();
             frm.grpHistoricalEventCollection.Show();
+#if DEBUG
+            frm.grpHistoricalEventCollection.Text += string.Format(" - ID: {0}", ID);
+#endif
         }
 
         protected void SelectTab(MainForm frm)
@@ -236,6 +236,10 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         internal override void Process()
         {
             
+        }
+        internal override void Plus(XDocument xdoc)
+        {
+
         }
 
         internal virtual void Evaluate()

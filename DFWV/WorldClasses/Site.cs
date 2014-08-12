@@ -5,6 +5,7 @@ using System.Xml.Linq;
 using System.Drawing;
 using System.Windows.Forms;
 using DFWV.Annotations;
+using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalEventClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
@@ -137,11 +138,21 @@ namespace DFWV.WorldClasses
 
             var thisLeader = World.GetAddLeader(name);
             thisLeader.Site = this;
+            thisLeader.isCurrent = true;
             if (thisLeader.Civilization == null)
             {
                 if (Parent != null)
+                {
                     thisLeader.Civilization = Parent;
+                    if (!Parent.Leaders.ContainsKey(type))
+                    {
+                        var newLeaderList = new List<Leader>();
+                        Parent.Leaders.Add(type, newLeaderList);
+                    }
+                    Parent.Leaders[type].Add(thisLeader);
+                }
             }
+
 
             
             thisLeader.Race = World.GetAddRace(race);
@@ -157,6 +168,8 @@ namespace DFWV.WorldClasses
         {
             data = data.Substring(data.IndexOf(':') + 1).Trim();
             var race = data.Substring(data.LastIndexOf(',') + 1).Trim();
+            if (race.isPlural())
+                race = race.Singularize();
             data = data.Substring(0, data.LastIndexOf(',')).Trim();
             Parent = World.GetCiv(data);
             if (Parent == null) return;
@@ -172,7 +185,7 @@ namespace DFWV.WorldClasses
                 else
                     Program.Log(LogType.Warning, "Parent Civ Race doesn't match history file race/n" + data);
             }
-            if (Owner != null)
+            if (Owner != null && Owner.ParentCiv == null)
                 Owner.ParentCiv = Parent;
         }
 
@@ -268,6 +281,9 @@ namespace DFWV.WorldClasses
             frm.grpSite.Text = ToString();
             if (isPlayerControlled)
                 frm.grpSite.Text += @" (PLAYER CONTROLLED)";
+#if DEBUG
+            frm.grpSite.Text += string.Format(" - ID: {0}", ID);
+#endif
             frm.grpSite.Show();
 
             frm.lblSiteName.Text = ToString();
@@ -474,6 +490,58 @@ namespace DFWV.WorldClasses
         internal override void Process()
         {
 
+        }
+        internal override void Plus(XDocument xdoc)
+        {
+            foreach (var element in xdoc.Root.Elements())
+            {
+                var val = element.Value;
+                int valI;
+                Int32.TryParse(val, out valI);
+
+                switch (element.Name.LocalName)
+                {
+                    case "id":
+                    case "type":
+                        break;
+                    case "structures":
+                        foreach (var structureXML in element.Elements())
+                        {
+                            Structure thisStructure = null;
+                            foreach (var strElement in structureXML.Elements())
+                            {
+                                var strval = strElement.Value;
+                                int strvalI;
+                                Int32.TryParse(strval, out strvalI);
+                                switch (strElement.Name.LocalName)
+                                {
+                                    case "id":
+                                        thisStructure = GetStructure(strvalI);
+                                        if (thisStructure == null)
+                                        {
+                                            thisStructure = new Structure(this, strvalI, World);
+                                            AddStructure(thisStructure);
+                                        }
+                                        break;
+                                    case "type":
+                                        if (!Structure.Types.Contains(strval))
+                                            Structure.Types.Add(strval);
+                                        thisStructure.Type = Structure.Types.IndexOf(strval);
+                                        break;
+                                    case "name":
+                                        thisStructure.Name = strval;
+                                        break;
+                                    case "name2":
+                                        break;
+                                }
+                            }
+                        }
+                        break;
+                    default:
+                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        break;
+                }
+            }
         }
 
         internal override void Export(string table)

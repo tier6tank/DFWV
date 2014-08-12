@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Windows.Forms;
+using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalEventClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
@@ -30,11 +32,14 @@ namespace DFWV.WorldClasses
     class World : IDisposable
     {
         #region Fields and Properties
-        private readonly string historyPath;
-        private readonly string sitesPath;
-        private readonly string paramPath;
-        private readonly string mapPath;
-        private readonly string xmlPath;
+        public readonly string historyPath;
+        public readonly string sitesPath;
+        public readonly string paramPath;
+        public readonly string mapPath;
+        public readonly string xmlPath;
+        public readonly string xmlPlusPath;
+        public bool hasPlusXML = false;
+        public bool isPlusParsing = false;
 
         public static List<Thread> Threads = new List<Thread>();
 
@@ -73,7 +78,7 @@ namespace DFWV.WorldClasses
         private VisualizationCollection Visualizations;
         #endregion
 
-        public World(string historyPath, string sitesPath, string paramPath, string xmlPath, string mapPath, int MapYear)
+        public World(string historyPath, string sitesPath, string paramPath, string xmlPath, string xmlPlusPath, string mapPath, int MapYear)
         {
             LastYear = MapYear;
             WorldTime.Present = new WorldTime(LastYear);
@@ -83,6 +88,9 @@ namespace DFWV.WorldClasses
             this.paramPath = paramPath;
             this.mapPath = mapPath;
             this.xmlPath = xmlPath;
+            this.xmlPlusPath = xmlPlusPath;
+            hasPlusXML = File.Exists(xmlPlusPath);
+            
 
             Filters = new FilterSettings(this);
         }
@@ -159,7 +167,7 @@ namespace DFWV.WorldClasses
             var curSite = new List<string>();
             foreach (var line in lines)
             {
-                if (line == "" || line == "Sites" || line == "Outdoor Animal Populations (Including Undead)")
+                if (line == "" || line == "Sites" || line == "Outdoor Animal Populations (Including Undead)" || line == "Underground Animal Populations (Including Undead)")
                 {
                     if (curSite.Count > 0)
                     {
@@ -205,7 +213,7 @@ namespace DFWV.WorldClasses
 
             Name = lines[0];
             AltName = lines[1];
-            Program.mainForm.Text = string.Format("World Viewer - {0} \"{1}\"", Name, AltName);
+            Program.mainForm.Text = string.Format("World Viewer v{0} - {1} \"{2}\"", Application.ProductVersion, Name, AltName);
 
             lines.RemoveRange(0, 3);
 
@@ -234,6 +242,7 @@ namespace DFWV.WorldClasses
         /// </summary>
         private void LoadXML()
         {
+
             StartThread(() => DFXMLParser.Parse(this, xmlPath));
         }
 
@@ -425,7 +434,6 @@ namespace DFWV.WorldClasses
             }
             foreach (var entity in EntitiesFile.Where(entity => entity.Name == entityName))
             {
-                Program.Log(LogType.Warning, "Duplicate named Entities: " + entityName);
                 if (entity.Race == entityRace)
                     return entity;
             }
@@ -1094,11 +1102,7 @@ namespace DFWV.WorldClasses
 
         #endregion
 
-        public override string ToString()
-        {
-            return Name;
-        }
-
+        #region World Closing
         public void Dispose()
         {
             CloseActiveThreads();
@@ -1115,39 +1119,59 @@ namespace DFWV.WorldClasses
                 }
                 while (thread.IsAlive)
                 {
-                    
+
                 }
             }
+            Threads = new List<Thread>();
         }
 
         private void ClearStaticLists()
         {
-            God.Types.Clear();
-            Leader.InheritanceTypes.Clear();
-            Leader.LeaderTypes.Clear();
-            Leader.InheritanceTypes = new List<string> { "Unknown", "Inherited", "New Line", "Original Line"};
-            Region.Types.Clear();
-            Site.Types.Clear();
+            God.Types = new List<string>();
+            Leader.InheritanceTypes = new List<string>();
+            Leader.LeaderTypes = new List<string>();
+            Leader.InheritanceTypes = new List<string> { "Unknown", "Inherited", "New Line", "Original Line" };
+            Region.Types = new List<string>();
+            Site.Types = new List<string>();
+            WorldConstruction.Types = new List<string>();
             Structure.numStructures = 0;
-            HistoricalEvent.Types.Clear();
-            HE_ChangeHFState.States.Clear();
-            HE_HFDied.Causes.Clear();
-            HE_HFSimpleBattleEvent.Subtypes.Clear();
-            
-            HistoricalEventCollection.Types.Clear();
-            
-            HistoricalFigure.AssociatedTypes.Clear();
-            HistoricalFigure.Castes.Clear();
-            HistoricalFigure.Goals.Clear();
-            HistoricalFigure.Interactions.Clear();
-            HistoricalFigure.JourneyPets.Clear();
-            HistoricalFigure.Spheres.Clear();
-            EntityLink.LinkTypes.Clear();
-            HFLink.LinkTypes.Clear();
-            HFSkill.Skills.Clear();
 
-            SiteLink.LinkTypes.Clear();
-            
+            EntityEntityLink.LinkTypes = new List<string>();
+            EntitySiteLink.LinkTypes = new List<string>();
+
+            HistoricalEvent.Types = new List<string>();
+            HistoricalEvent.Buildings = new List<string>();
+            HistoricalEvent.ItemSubTypes = new List<string>();
+            HistoricalEvent.Items = new List<string>();
+            HistoricalEvent.Materials = new List<string>();
+            HistoricalEvent.MeetingResults = new List<string>();
+            HistoricalEvent.MeetingTopics = new List<string>();
+            HE_ChangeHFState.States = new List<string>();
+            HE_HFDied.Causes = new List<string>();
+            HE_HFSimpleBattleEvent.SubTypes = new List<string>();
+            HE_MasterpieceItemImprovement.ImprovementTypes = new List<string>();
+
+            HistoricalEventCollection.Types = new List<string>();
+
+            HistoricalFigure.AssociatedTypes = new List<string>();
+            HistoricalFigure.Castes = new List<string>();
+            HistoricalFigure.Goals = new List<string>();
+            HistoricalFigure.Interactions = new List<string>();
+            HistoricalFigure.JourneyPets = new List<string>();
+            HistoricalFigure.Spheres = new List<string>();
+            HFEntityLink.LinkTypes = new List<string>();
+            HFEntityLink.Positions = new List<string>();
+            HFLink.LinkTypes = new List<string>();
+            HFSkill.Skills = new List<string>();
+            HFSiteLink.LinkTypes = new List<string>();
+
+
+        }
+        #endregion
+
+        public override string ToString()
+        {
+            return Name;
         }
 
         private void StartThread(Action action)

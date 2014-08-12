@@ -6,7 +6,6 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using DFWV.WorldClasses.HistoricalEventClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
-using System.Globalization;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
@@ -106,7 +105,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         EventCol_.Add(valI);
                         break;
                     case "name":
-                        Name = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(val);
+                        Name = val.ToTitleCase();
                         break;
                     case "attacking_hfid":
                         if (AttackingHFID == null)
@@ -592,7 +591,11 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         public override string ToString()
         {
             if (Site != null)
-                return Race + " from " + Site + " - " + (Number - Deaths) + "/" + Number;
+            {
+                if (Number == 1)
+                    return Race + " from " + Site + " - " + (Number - Deaths) + "/" + Number;
+                return Race.ToString().Pluralize() + " from " + Site + " - " + (Number - Deaths) + "/" + Number;
+            }
             return Race + " - " + (Number - Deaths) + "/" + Number;
         }
     }

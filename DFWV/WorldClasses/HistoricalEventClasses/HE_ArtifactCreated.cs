@@ -15,7 +15,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? HistFigureID { get; set; }
         public HistoricalFigure HistFigure { get; private set; }
         private int? UnitID { get; set; }
-        private HistoricalFigure Unit { get; set; }
         private int? ArtifactID { get; set; }
         public Artifact Artifact { get; set; }
         private bool NameOnly { get; set; }
@@ -77,6 +76,31 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         }
 
 
+        internal override void Plus(XDocument xdoc)
+        {
+            foreach (var element in xdoc.Root.Elements())
+            {
+                var val = element.Value;
+                int valI;
+                Int32.TryParse(val, out valI);
+
+                switch (element.Name.LocalName)
+                {
+                    case "id":
+                    case "type":
+                        break;
+                    case "artifact_id":
+                    case "unit_id":
+                    case "hfid":
+                    case "site":
+                        break;
+                    default:
+                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        break;
+                }
+            }
+        }
+
         internal override void Process()
         {
             base.Process();
@@ -107,6 +131,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
             EventLabel(frm, parent, ref location, "Artifact:", Artifact);
+            if (Artifact.Type != "" && Artifact.Material != "")
+                EventLabel(frm, parent, ref location, "Item:", Artifact.Material + " " + Artifact.Type);
             if (UnitID != null)
                 EventLabel(frm, parent, ref location, "Unit ID:", UnitID.Value.ToString());
             EventLabel(frm, parent, ref location, "Made by:", HistFigure);
@@ -128,6 +154,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         internal override string ToTimelineString()
         {
+            //TODO: Incorporate new data
             var timelinestring = base.ToTimelineString();
 
             if (Site == null)
@@ -141,6 +168,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         internal override void Export(string table)
         {
+            //TODO: Incorporate new data
             base.Export(table);
 
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Drawing;
@@ -88,7 +89,7 @@ namespace DFWV
             _command = _connection.CreateCommand();
 
             _command.CommandText = "INSERT INTO [" + table + "] values (";
-            for (int i = 0; i < vals.Count; i++)
+            for (var i = 0; i < vals.Count; i++)
             {
                 _command.CommandText += " @" + i + ",";
                 _command.Parameters.AddWithValue("@" + i, vals[i]);
@@ -97,6 +98,30 @@ namespace DFWV
 
 
             _command.ExecuteNonQuery();
+        }
+
+        internal static object DBExport(this string field)
+        {
+            if (field != null)
+                return field.Replace("'", "''");
+            else
+                return DBNull.Value;
+        }
+
+        internal static object DBExport(this int? field)
+        {
+            if (field.HasValue)
+                return field.Value;
+            else
+                return DBNull.Value;
+        }
+
+        internal static object DBExport(this int? field, List<string> LookupTable)
+        {
+            if (field.HasValue && LookupTable != null && LookupTable.Count > field.Value)
+                return LookupTable[field.Value];
+            else
+                return DBNull.Value;
         }
     }
 }

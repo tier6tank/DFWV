@@ -103,7 +103,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             EventLabel(frm, parent, ref location, "Reason:", Reasons[Reason]);
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Region:", Subregion);
-            EventLabel(frm, parent, ref location, "Layer:", FeatureLayerID == -1 ? "" : FeatureLayerID.ToString());
+            if (FeatureLayerID != null && FeatureLayerID > -1)
+                EventLabel(frm, parent, ref location, "Layer:", FeatureLayerID == -1 ? "" : FeatureLayerID.ToString());
             EventLabel(frm, parent, ref location, "Coords:", new Coordinate(Coords));
         }
 

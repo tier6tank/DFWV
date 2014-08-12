@@ -16,6 +16,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? StructureID { get; set; }
         private Structure Structure { get; set; }
 
+        private int? Action { get; set; }
+
         override public Point Location { get { return Site.Location; } }
 
         public HE_HFProfanedStructure(XDocument xdoc, World world)
@@ -54,23 +56,50 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             base.Link();
             if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
+            {
                 Site = World.Sites[SiteID.Value];
+                if (StructureID.HasValue)
+                {
+                    if (Site.GetStructure(StructureID.Value) == null)
+                        Site.AddStructure(new Structure(Site, StructureID.Value, World));
+                    Structure = Site.GetStructure(StructureID.Value);
+                }
+            }
             if (HistFigID.HasValue && World.HistoricalFigures.ContainsKey(HistFigID.Value))
                 HistFig = World.HistoricalFigures[HistFigID.Value];
+        }
 
-            if (!StructureID.HasValue || StructureID.Value == -1 || Site == null) return;
-
-            Structure = Site.GetStructure(StructureID.Value);
-            if (Structure == null)
+        internal override void Plus(XDocument xdoc)
+        {
+            foreach (var element in xdoc.Root.Elements())
             {
-                Structure = new Structure(Site, StructureID.Value, World);
-                Site.AddStructure(Structure);
+                var val = element.Value;
+                int valI;
+                Int32.TryParse(val, out valI);
+
+                switch (element.Name.LocalName)
+                {
+                    case "id":
+                    case "type":
+                        break;
+                    case "histfig":
+                    case "site":
+                    case "structure":
+                        break;
+                    case "action":
+                        Action = valI;
+                        break;
+                    default:
+                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        break;
+                }
             }
         }
 
         internal override void Process()
         {
             base.Process();
+
             if (Structure != null)
             {
                 if (Structure.Events == null)
@@ -91,17 +120,18 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             EventLabel(frm, parent, ref location, "Structure:", Structure);
         }
 
-        protected override string LegendsDescription()
+        protected override string LegendsDescription() //Matched
         {
             var timestring = base.LegendsDescription();
 
             return string.Format("{0} {1} {2} profaned the {3} in {4}.",
                             timestring, HistFig.Race, HistFig,
-                            "UNKNOWN", Site.AltName);
+                            Structure, Site.AltName);
         }
 
         internal override string ToTimelineString()
         {
+            //TODO: Incorporate new data
             var timelinestring = base.ToTimelineString();
 
             return string.Format("{0} {1} profaned a structure in {2}.",
@@ -110,6 +140,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         internal override void Export(string table)
         {
+            //TODO: Incorporate new data
             base.Export(table);
 
 

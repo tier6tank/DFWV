@@ -83,10 +83,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                             Site != null ? Site.ToString() : "UNKNOWN",
                             Artifact != null ? Artifact.ToString() : "UNKNOWN"
                             );
-            else
-                return string.Format("{0} Agreement formed" ,
-                            timestring
-                            );
+            return string.Format("{0} Agreement formed" ,
+                timestring
+                );
         }
 
         internal override string ToTimelineString()
@@ -99,10 +98,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     HF != null ? HF.ToString() : "UNKNOWN",
                     Site != null ? Site.ToString() : "UNKNOWN",
                     Artifact != null ? Artifact.ToString() : "UNKNOWN");
-            else
-                return string.Format("{0} Agreement formed" ,
-                            timelinestring
-                            );
+            return string.Format("{0} Agreement formed" ,
+                timelinestring
+                );
         }
 
         internal override void Export(string table)
