@@ -47,6 +47,8 @@ namespace DFWV
             this.grpArtifactPossessed = new System.Windows.Forms.GroupBox();
             this.lstArtifactPossessed = new System.Windows.Forms.ListBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label191 = new System.Windows.Forms.Label();
+            this.lblArtifactValue = new System.Windows.Forms.Label();
             this.label181 = new System.Windows.Forms.Label();
             this.lblArtifactDescription = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -729,8 +731,6 @@ namespace DFWV
             this.closeWorldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.BacktoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ForwardtoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label191 = new System.Windows.Forms.Label();
-            this.lblArtifactValue = new System.Windows.Forms.Label();
             this.MainTab.SuspendLayout();
             this.tabWorld.SuspendLayout();
             this.grpWorld.SuspendLayout();
@@ -1149,6 +1149,24 @@ namespace DFWV
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(324, 77);
             this.panel1.TabIndex = 8;
+            // 
+            // label191
+            // 
+            this.label191.AutoSize = true;
+            this.label191.Location = new System.Drawing.Point(3, 58);
+            this.label191.Name = "label191";
+            this.label191.Size = new System.Drawing.Size(37, 13);
+            this.label191.TabIndex = 7;
+            this.label191.Text = "Value:";
+            // 
+            // lblArtifactValue
+            // 
+            this.lblArtifactValue.AutoSize = true;
+            this.lblArtifactValue.Location = new System.Drawing.Point(50, 58);
+            this.lblArtifactValue.Name = "lblArtifactValue";
+            this.lblArtifactValue.Size = new System.Drawing.Size(35, 13);
+            this.lblArtifactValue.TabIndex = 8;
+            this.lblArtifactValue.Text = "label2";
             // 
             // label181
             // 
@@ -7217,7 +7235,7 @@ namespace DFWV
             this.tableLayoutPanel34.ColumnCount = 3;
             this.tableLayoutPanel34.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 46.14004F));
             this.tableLayoutPanel34.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 53.85996F));
-            this.tableLayoutPanel34.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 461F));
+            this.tableLayoutPanel34.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 462F));
             this.tableLayoutPanel34.Controls.Add(this.grpSiteArtifacts, 0, 2);
             this.tableLayoutPanel34.Controls.Add(this.grpSiteStructures, 1, 2);
             this.tableLayoutPanel34.Controls.Add(this.panel17, 0, 0);
@@ -7246,7 +7264,7 @@ namespace DFWV
             this.grpSiteArtifacts.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpSiteArtifacts.Location = new System.Drawing.Point(3, 329);
             this.grpSiteArtifacts.Name = "grpSiteArtifacts";
-            this.grpSiteArtifacts.Size = new System.Drawing.Size(190, 157);
+            this.grpSiteArtifacts.Size = new System.Drawing.Size(189, 157);
             this.grpSiteArtifacts.TabIndex = 65;
             this.grpSiteArtifacts.TabStop = false;
             this.grpSiteArtifacts.Text = "Artifacts Created";
@@ -7257,14 +7275,14 @@ namespace DFWV
             this.lstSiteArtifacts.FormattingEnabled = true;
             this.lstSiteArtifacts.Location = new System.Drawing.Point(3, 16);
             this.lstSiteArtifacts.Name = "lstSiteArtifacts";
-            this.lstSiteArtifacts.Size = new System.Drawing.Size(184, 138);
+            this.lstSiteArtifacts.Size = new System.Drawing.Size(183, 138);
             this.lstSiteArtifacts.TabIndex = 0;
             // 
             // grpSiteStructures
             // 
             this.grpSiteStructures.Controls.Add(this.lstSiteStructures);
             this.grpSiteStructures.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpSiteStructures.Location = new System.Drawing.Point(199, 329);
+            this.grpSiteStructures.Location = new System.Drawing.Point(198, 329);
             this.grpSiteStructures.Name = "grpSiteStructures";
             this.grpSiteStructures.Size = new System.Drawing.Size(222, 157);
             this.grpSiteStructures.TabIndex = 64;
@@ -7297,7 +7315,7 @@ namespace DFWV
             this.panel17.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel17.Location = new System.Drawing.Point(3, 3);
             this.panel17.Name = "panel17";
-            this.panel17.Size = new System.Drawing.Size(190, 157);
+            this.panel17.Size = new System.Drawing.Size(189, 157);
             this.panel17.TabIndex = 63;
             // 
             // label80
@@ -7421,7 +7439,7 @@ namespace DFWV
             // 
             this.grpSiteOutcasts.Controls.Add(this.lstSiteOutcasts);
             this.grpSiteOutcasts.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpSiteOutcasts.Location = new System.Drawing.Point(199, 492);
+            this.grpSiteOutcasts.Location = new System.Drawing.Point(198, 492);
             this.grpSiteOutcasts.Name = "grpSiteOutcasts";
             this.grpSiteOutcasts.Size = new System.Drawing.Size(222, 95);
             this.grpSiteOutcasts.TabIndex = 61;
@@ -7451,7 +7469,7 @@ namespace DFWV
             this.grpSiteCreated.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpSiteCreated.Location = new System.Drawing.Point(3, 166);
             this.grpSiteCreated.Name = "grpSiteCreated";
-            this.grpSiteCreated.Size = new System.Drawing.Size(190, 157);
+            this.grpSiteCreated.Size = new System.Drawing.Size(189, 157);
             this.grpSiteCreated.TabIndex = 40;
             this.grpSiteCreated.TabStop = false;
             this.grpSiteCreated.Text = "Created";
@@ -7522,7 +7540,7 @@ namespace DFWV
             this.grpSitePrisoners.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpSitePrisoners.Location = new System.Drawing.Point(3, 492);
             this.grpSitePrisoners.Name = "grpSitePrisoners";
-            this.grpSitePrisoners.Size = new System.Drawing.Size(190, 95);
+            this.grpSitePrisoners.Size = new System.Drawing.Size(189, 95);
             this.grpSitePrisoners.TabIndex = 38;
             this.grpSitePrisoners.TabStop = false;
             this.grpSitePrisoners.Text = "Prisoners";
@@ -7535,7 +7553,7 @@ namespace DFWV
             this.lstSitePrisoners.ItemHeight = 16;
             this.lstSitePrisoners.Location = new System.Drawing.Point(3, 16);
             this.lstSitePrisoners.Name = "lstSitePrisoners";
-            this.lstSitePrisoners.Size = new System.Drawing.Size(184, 76);
+            this.lstSitePrisoners.Size = new System.Drawing.Size(183, 76);
             this.lstSitePrisoners.TabIndex = 0;
             this.lstSitePrisoners.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.lstSitePrisoners_DrawItem);
             // 
@@ -7543,7 +7561,7 @@ namespace DFWV
             // 
             this.grpSiteInhabitants.Controls.Add(this.lstSiteInhabitants);
             this.grpSiteInhabitants.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpSiteInhabitants.Location = new System.Drawing.Point(199, 3);
+            this.grpSiteInhabitants.Location = new System.Drawing.Point(198, 3);
             this.grpSiteInhabitants.Name = "grpSiteInhabitants";
             this.grpSiteInhabitants.Size = new System.Drawing.Size(222, 157);
             this.grpSiteInhabitants.TabIndex = 39;
@@ -7563,7 +7581,7 @@ namespace DFWV
             // 
             this.grpSitePopulation.Controls.Add(this.lstSitePopulation);
             this.grpSitePopulation.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpSitePopulation.Location = new System.Drawing.Point(199, 166);
+            this.grpSitePopulation.Location = new System.Drawing.Point(198, 166);
             this.grpSitePopulation.Name = "grpSitePopulation";
             this.grpSitePopulation.Size = new System.Drawing.Size(222, 157);
             this.grpSitePopulation.TabIndex = 37;
@@ -7586,10 +7604,10 @@ namespace DFWV
             // 
             this.grpSiteEventCollection.Controls.Add(this.trvSiteEventCollection);
             this.grpSiteEventCollection.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpSiteEventCollection.Location = new System.Drawing.Point(427, 3);
+            this.grpSiteEventCollection.Location = new System.Drawing.Point(426, 3);
             this.grpSiteEventCollection.Name = "grpSiteEventCollection";
             this.tableLayoutPanel34.SetRowSpan(this.grpSiteEventCollection, 2);
-            this.grpSiteEventCollection.Size = new System.Drawing.Size(456, 320);
+            this.grpSiteEventCollection.Size = new System.Drawing.Size(457, 320);
             this.grpSiteEventCollection.TabIndex = 59;
             this.grpSiteEventCollection.TabStop = false;
             this.grpSiteEventCollection.Text = "Site Event Collections";
@@ -7599,17 +7617,17 @@ namespace DFWV
             this.trvSiteEventCollection.Dock = System.Windows.Forms.DockStyle.Fill;
             this.trvSiteEventCollection.Location = new System.Drawing.Point(3, 16);
             this.trvSiteEventCollection.Name = "trvSiteEventCollection";
-            this.trvSiteEventCollection.Size = new System.Drawing.Size(450, 301);
+            this.trvSiteEventCollection.Size = new System.Drawing.Size(451, 301);
             this.trvSiteEventCollection.TabIndex = 0;
             // 
             // grpSiteEvent
             // 
             this.grpSiteEvent.Controls.Add(this.trvSiteEvent);
             this.grpSiteEvent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpSiteEvent.Location = new System.Drawing.Point(427, 329);
+            this.grpSiteEvent.Location = new System.Drawing.Point(426, 329);
             this.grpSiteEvent.Name = "grpSiteEvent";
             this.tableLayoutPanel34.SetRowSpan(this.grpSiteEvent, 2);
-            this.grpSiteEvent.Size = new System.Drawing.Size(456, 258);
+            this.grpSiteEvent.Size = new System.Drawing.Size(457, 258);
             this.grpSiteEvent.TabIndex = 58;
             this.grpSiteEvent.TabStop = false;
             this.grpSiteEvent.Text = "Site Events";
@@ -7621,7 +7639,7 @@ namespace DFWV
             | System.Windows.Forms.AnchorStyles.Right)));
             this.trvSiteEvent.Location = new System.Drawing.Point(3, 16);
             this.trvSiteEvent.Name = "trvSiteEvent";
-            this.trvSiteEvent.Size = new System.Drawing.Size(450, 149);
+            this.trvSiteEvent.Size = new System.Drawing.Size(451, 149);
             this.trvSiteEvent.TabIndex = 0;
             // 
             // FilterSite
@@ -8692,24 +8710,6 @@ namespace DFWV
             this.ForwardtoolStripMenuItem.ShowShortcutKeys = false;
             this.ForwardtoolStripMenuItem.Size = new System.Drawing.Size(28, 20);
             this.ForwardtoolStripMenuItem.Click += new System.EventHandler(this.ForwardtoolStripMenuItem_Click);
-            // 
-            // label191
-            // 
-            this.label191.AutoSize = true;
-            this.label191.Location = new System.Drawing.Point(3, 58);
-            this.label191.Name = "label191";
-            this.label191.Size = new System.Drawing.Size(37, 13);
-            this.label191.TabIndex = 7;
-            this.label191.Text = "Value:";
-            // 
-            // lblArtifactValue
-            // 
-            this.lblArtifactValue.AutoSize = true;
-            this.lblArtifactValue.Location = new System.Drawing.Point(50, 58);
-            this.lblArtifactValue.Name = "lblArtifactValue";
-            this.lblArtifactValue.Size = new System.Drawing.Size(35, 13);
-            this.lblArtifactValue.TabIndex = 8;
-            this.lblArtifactValue.Text = "label2";
             // 
             // MainForm
             // 

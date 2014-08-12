@@ -89,6 +89,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Process()
         {
             base.Process();
+
+            if (Site != null)
+            {
+                if (Site.NewSiteLeaderEvents == null)
+                    Site.NewSiteLeaderEvents = new List<HE_NewSiteLeader>();
+                Site.NewSiteLeaderEvents.Add(this);
+            }
+
             if (NewLeaderHF != null)
             {
                 if (NewLeaderHF.Events == null)

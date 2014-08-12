@@ -362,6 +362,8 @@ namespace DFWV.WorldClasses
                 var thisRaceName = race.Name.ToLower();
                 if (thisRaceName == lname)
                     return race;
+                if (thisRaceName.Pluralize() == lname || lname.Singularize() == thisRaceName)
+                    return race;
                 if (thisRaceName.EndsWith("s") && thisRaceName.Remove(thisRaceName.Length - 1) == lname)
                     return race;
                 if (thisRaceName.EndsWith("ves") && thisRaceName.Remove(thisRaceName.Length - 3) + "f" == lname)
@@ -372,9 +374,11 @@ namespace DFWV.WorldClasses
                     return race;
             }
 
-            if (Races.ContainsKey(lname)) return Races[lname];
+            if (Races.ContainsKey(lname)) 
+                return Races[lname];
+
             var newRace = new Race(lname, this);
-            Races.Add(lname, newRace);
+            Races.Add(newRace.Name, newRace);
             return newRace;
         }
 

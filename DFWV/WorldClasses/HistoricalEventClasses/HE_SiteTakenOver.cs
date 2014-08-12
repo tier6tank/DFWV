@@ -82,6 +82,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             base.Process();
 
+            if (Site != null)
+            {
+                if (Site.SiteTakenOverEvents == null)
+                    Site.SiteTakenOverEvents = new List<HE_SiteTakenOver>();
+                Site.SiteTakenOverEvents.Add(this);
+            }
+
             if (SiteCiv != null)
             {
                 if (SiteCiv.Events == null)

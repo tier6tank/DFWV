@@ -298,7 +298,10 @@ namespace DFWV.WorldClasses
 
             frm.lblLeaderName.Text = ToString();
             frm.lblLeaderType.Text = LeaderTypes[LeaderType].ToTitleCase();
-            frm.lblLeaderRace.Data = Race;
+            if (Race != null || (HF != null && HF.Race != null))
+                frm.lblLeaderRace.Data = Race ?? HF.Race;
+            else
+                frm.lblLeaderRace.Text = "";
             frm.lblLeaderLife.Text = Birth == null ? "" : (Birth + " – " + (Death == WorldTime.Present ? "" : Death.ToString()));
             frm.lblLeaderReignBegan.Text = ReignBegan == null ? "" : ReignBegan.ToString();
             frm.lblLeaderInheritance.Text = InheritanceTypes[Inheritance];

@@ -14,19 +14,6 @@ using SevenZip;
 
 //TODO: Group by multiple items
 
-//TODO: Add != filter option
-
-//TODO: Add notes on event types currently On Change HF Body State
-//TODO: Handle "Died Event" at site level
-//TODO: Entity SiteTakenOver event not used
-
-//TODO: HF - CreatedArtifacts
-//TODO: Site - NewLeaderEVents
-
-//TODO: Fix Leader Race in filter conditions
-
-//TODO: Check if new IndexOf static Lists items export properly
-
 //TODO: Issues
 //TODO: Export doesn't properly release link to exported DB (can't be deleted while app is running following export)
 

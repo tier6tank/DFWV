@@ -34,9 +34,11 @@ namespace DFWV.WorldClasses
         public HE_SiteDied DiedEvent { get; set; }
         public List<HE_PlunderedSite> PlunderedEvents { get; set; }
         public List<HE_ReclaimSite> ReclaimedEvents { get; set; }
-        private List<HistoricalEvent> NewLeaderEvents { get; set; }
         public List<HE_AttackedSite> AttackedEvents { get; set; }
         public List<HE_DestroyedSite> DestroyedEvents { get; set; }
+
+        public List<HE_NewSiteLeader> NewSiteLeaderEvents { get; set; }
+        public List<HE_SiteTakenOver> SiteTakenOverEvents { get; set; }
 
         public List<EC_BeastAttack> BeastAttackEventCollections { get; set; }
         public List<EC_Battle > BattleEventCollections { get; set; }
@@ -356,10 +358,20 @@ namespace DFWV.WorldClasses
                 thisNode.Text += string.Format(" ({0})", thisNode.Nodes.Count);
                 frm.trvSiteEvent.Nodes.Add(thisNode);
             }
-            if (NewLeaderEvents != null)
+            if (NewSiteLeaderEvents != null)
             {
                 var thisNode = new TreeNode("NewLeader");
-                foreach (var newNode in NewLeaderEvents.Select(evt => new TreeNode(evt.ToString()) {Tag = evt}))
+                foreach (var newNode in NewSiteLeaderEvents.Select(evt => new TreeNode(evt.ToString()) { Tag = evt }))
+                {
+                    thisNode.Nodes.Add(newNode);
+                }
+                thisNode.Text += string.Format(" ({0})", thisNode.Nodes.Count);
+                frm.trvSiteEvent.Nodes.Add(thisNode);
+            }
+            if (SiteTakenOverEvents != null)
+            {
+                var thisNode = new TreeNode("SiteTakenOver");
+                foreach (var newNode in SiteTakenOverEvents.Select(evt => new TreeNode(evt.ToString()) { Tag = evt }))
                 {
                     thisNode.Nodes.Add(newNode);
                 }
