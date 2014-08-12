@@ -56,6 +56,8 @@
             this.GroupMoveUp = new System.Windows.Forms.Button();
             this.cmbGroupField = new System.Windows.Forms.ComboBox();
             this.lstGroup = new System.Windows.Forms.ListBox();
+            this.optionIsRadioButton = new System.Windows.Forms.RadioButton();
+            this.optionIsNotRadioButton = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -84,6 +86,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.optionIsNotRadioButton);
+            this.groupBox1.Controls.Add(this.optionIsRadioButton);
             this.groupBox1.Controls.Add(this.WhereAdd);
             this.groupBox1.Controls.Add(this.WhereDelete);
             this.groupBox1.Controls.Add(this.cmbWhereOperation);
@@ -351,6 +355,30 @@
             this.lstGroup.Size = new System.Drawing.Size(185, 95);
             this.lstGroup.TabIndex = 1;
             // 
+            // optionIsRadioButton
+            // 
+            this.optionIsRadioButton.AutoSize = true;
+            this.optionIsRadioButton.Checked = true;
+            this.optionIsRadioButton.Location = new System.Drawing.Point(135, 36);
+            this.optionIsRadioButton.Name = "optionIsRadioButton";
+            this.optionIsRadioButton.Size = new System.Drawing.Size(32, 17);
+            this.optionIsRadioButton.TabIndex = 14;
+            this.optionIsRadioButton.TabStop = true;
+            this.optionIsRadioButton.Text = "is";
+            this.optionIsRadioButton.UseVisualStyleBackColor = true;
+            this.optionIsRadioButton.Visible = false;
+            // 
+            // optionIsNotRadioButton
+            // 
+            this.optionIsNotRadioButton.AutoSize = true;
+            this.optionIsNotRadioButton.Location = new System.Drawing.Point(173, 36);
+            this.optionIsNotRadioButton.Name = "optionIsNotRadioButton";
+            this.optionIsNotRadioButton.Size = new System.Drawing.Size(50, 17);
+            this.optionIsNotRadioButton.TabIndex = 15;
+            this.optionIsNotRadioButton.Text = "is not";
+            this.optionIsNotRadioButton.UseVisualStyleBackColor = true;
+            this.optionIsNotRadioButton.Visible = false;
+            // 
             // FilterForm
             // 
             this.AcceptButton = this.Apply;
@@ -416,5 +444,7 @@
         private System.Windows.Forms.Button GroupMoveUp;
         private System.Windows.Forms.ComboBox cmbGroupField;
         private System.Windows.Forms.ListBox lstGroup;
+        private System.Windows.Forms.RadioButton optionIsNotRadioButton;
+        private System.Windows.Forms.RadioButton optionIsRadioButton;
     }
 }

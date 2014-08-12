@@ -168,7 +168,8 @@ namespace DFWV
                     cmbWhereOperation.Items.AddRange(stringOps.ToArray<object>());
                     txtWhereData.Visible = true;
                 }
-                
+                optionIsNotRadioButton.Visible = false;
+                optionIsRadioButton.Visible = false;
             }
             else
             {
@@ -176,6 +177,8 @@ namespace DFWV
                 addRange.Sort();                
                 cmbWhereOperation.Items.AddRange(addRange.ToArray<object>());
                 txtWhereData.Visible = false;
+                optionIsNotRadioButton.Visible = true;
+                optionIsRadioButton.Visible = true;
             }
             txtWhereData.Text = "";
         }
@@ -245,10 +248,11 @@ namespace DFWV
             }
             else
             {
-                if (((MouseEventArgs)e).X < 10)
-                    AddWhere = selected + " != \"" + thisOp + "\"";
-                else
+                if (optionIsRadioButton.Checked)
                     AddWhere = selected + " == \"" + thisOp + "\"";
+                else
+                    AddWhere = selected + " != \"" + thisOp + "\"";
+
             }
 
             if (lstWhere.Items.Contains(AddWhere) || AddWhere == "")
