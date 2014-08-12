@@ -1,107 +1,32 @@
-C:\MyCode\DFWV4\DFWV\obj\Debug\ResolveAssemblyReference.cache
-C:\MyCode\DFWV4\DFWV\obj\Debug\DFWV.FilterForm.resources
-C:\MyCode\DFWV4\DFWV\obj\Debug\DFWV.MainForm.resources
-C:\MyCode\DFWV4\DFWV\obj\Debug\DFWV.MapForm.resources
-C:\MyCode\DFWV4\DFWV\obj\Debug\DFWV.Properties.Resources.resources
-C:\MyCode\DFWV4\DFWV\obj\Debug\GenerateResource.read.1.tlog
-C:\MyCode\DFWV4\DFWV\obj\Debug\GenerateResource.write.1.tlog
-C:\MyCode\DFWV4\DFWV\bin\Debug\DFWV.sqlite3
-C:\MyCode\DFWV4\DFWV\bin\Debug\DFWV.exe.config
-C:\MyCode\DFWV4\DFWV\bin\Debug\DFWV.exe.manifest
-C:\MyCode\DFWV4\DFWV\bin\Debug\DFWV.application
-C:\MyCode\DFWV4\DFWV\bin\Debug\DFWV.exe
-C:\MyCode\DFWV4\DFWV\bin\Debug\DFWV.pdb
-C:\MyCode\DFWV4\DFWV\bin\Debug\System.Data.SQLite.dll
-C:\MyCode\DFWV4\DFWV\obj\Debug\DFWV.exe.manifest
-C:\MyCode\DFWV4\DFWV\obj\Debug\DFWV.application
-C:\MyCode\DFWV4\DFWV\obj\Debug\DFWV.exe
-C:\MyCode\DFWV4\DFWV\obj\Debug\DFWV.pdb
-C:\Users\Chris\Documents\Visual Studio 2012\Projects\DFWV\DFWV\bin\Debug\DFWV.exe.config
-C:\Users\Chris\Documents\Visual Studio 2012\Projects\DFWV\DFWV\obj\Debug\DFWV.FilterForm.resources
-C:\Users\Chris\Documents\Visual Studio 2012\Projects\DFWV\DFWV\obj\Debug\DFWV.MainForm.resources
-C:\Users\Chris\Documents\Visual Studio 2012\Projects\DFWV\DFWV\obj\Debug\DFWV.MapForm.resources
-C:\Users\Chris\Documents\Visual Studio 2012\Projects\DFWV\DFWV\obj\Debug\DFWV.Properties.Resources.resources
-C:\Users\Chris\Documents\Visual Studio 2012\Projects\DFWV\DFWV\obj\Debug\DFWV.csproj.GenerateResource.Cache
-C:\Users\Chris\Documents\Visual Studio 2012\Projects\DFWV\DFWV\bin\Debug\DFWV.sqlite3
-C:\Users\Chris\Documents\Visual Studio 2012\Projects\DFWV\DFWV\bin\Debug\DFWV.exe.manifest
-C:\Users\Chris\Documents\Visual Studio 2012\Projects\DFWV\DFWV\bin\Debug\DFWV.application
-C:\Users\Chris\Documents\Visual Studio 2012\Projects\DFWV\DFWV\bin\Debug\DFWV.exe
-C:\Users\Chris\Documents\Visual Studio 2012\Projects\DFWV\DFWV\bin\Debug\DFWV.pdb
-C:\Users\Chris\Documents\Visual Studio 2012\Projects\DFWV\DFWV\bin\Debug\System.Data.SQLite.dll
-C:\Users\Chris\Documents\Visual Studio 2012\Projects\DFWV\DFWV\obj\Debug\DFWV.exe.manifest
-C:\Users\Chris\Documents\Visual Studio 2012\Projects\DFWV\DFWV\obj\Debug\DFWV.application
-C:\Users\Chris\Documents\Visual Studio 2012\Projects\DFWV\DFWV\obj\Debug\DFWV.exe
-C:\Users\Chris\Documents\Visual Studio 2012\Projects\DFWV\DFWV\obj\Debug\DFWV.pdb
-C:\MyCode\DFWV5\DFWV\bin\Debug\DFWV.exe.config
-C:\MyCode\DFWV5\DFWV\obj\Debug\DFWV.exe
-C:\MyCode\DFWV5\DFWV\obj\Debug\DFWV.pdb
-C:\MyCode\DFWV5\DFWV\obj\Debug\ResolveAssemblyReference.cache
-C:\MyCode\DFWV5\DFWV\obj\Debug\DFWV.FilterForm.resources
-C:\MyCode\DFWV5\DFWV\obj\Debug\DFWV.MainForm.resources
-C:\MyCode\DFWV5\DFWV\obj\Debug\DFWV.MapForm.resources
-C:\MyCode\DFWV5\DFWV\obj\Debug\DFWV.Properties.Resources.resources
-C:\MyCode\DFWV5\DFWV\obj\Debug\GenerateResource.read.1.tlog
-C:\MyCode\DFWV5\DFWV\obj\Debug\GenerateResource.write.1.tlog
-C:\MyCode\DFWV5\DFWV\bin\Debug\DFWV.exe.manifest
-C:\MyCode\DFWV5\DFWV\bin\Debug\DFWV.application
-C:\MyCode\DFWV5\DFWV\bin\Debug\DFWV.exe
-C:\MyCode\DFWV5\DFWV\bin\Debug\DFWV.pdb
-C:\MyCode\DFWV5\DFWV\bin\Debug\System.Data.SQLite.dll
-C:\MyCode\DFWV5\DFWV\obj\Debug\DFWV.exe.manifest
-C:\MyCode\DFWV5\DFWV\obj\Debug\DFWV.application
-C:\MyCode\DFWV5\DFWV\obj\Debug\DFWV.TimelineForm.resources
-C:\MyCode\DFWV\DFWV\obj\Debug\DFWV.exe
-C:\MyCode\DFWV\DFWV\obj\Debug\DFWV.pdb
-C:\MyCode\DFWV\DFWV\bin\Debug\DFWV.exe.manifest
-C:\MyCode\DFWV\DFWV\bin\Debug\DFWV.application
-C:\MyCode\DFWV\DFWV\bin\Debug\DFWV.exe
-C:\MyCode\DFWV\DFWV\bin\Debug\DFWV.pdb
-C:\MyCode\DFWV\DFWV\bin\Debug\System.Data.SQLite.dll
-C:\MyCode\DFWV\DFWV\obj\Debug\ResolveAssemblyReference.cache
-C:\MyCode\DFWV\DFWV\obj\Debug\DFWV.FilterForm.resources
-C:\MyCode\DFWV\DFWV\obj\Debug\DFWV.MainForm.resources
-C:\MyCode\DFWV\DFWV\obj\Debug\DFWV.MapForm.resources
-C:\MyCode\DFWV\DFWV\obj\Debug\DFWV.Properties.Resources.resources
-C:\MyCode\DFWV\DFWV\obj\Debug\DFWV.TimelineForm.resources
-C:\MyCode\DFWV\DFWV\obj\Debug\GenerateResource.read.1.tlog
-C:\MyCode\DFWV\DFWV\obj\Debug\GenerateResource.write.1.tlog
-C:\MyCode\DFWV\DFWV\obj\Debug\DFWV.exe.manifest
-C:\MyCode\DFWV\DFWV\obj\Debug\DFWV.application
-C:\MyCode\DFWV\DFWV\bin\Debug\DFWV_Template.sqlite3.backup
-C:\MyCode\DFWV\DFWV\bin\Debug\DFWV.exe.config
-D:\Documents\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\DFWV.exe.config
-D:\Documents\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.exe
-D:\Documents\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.pdb
-D:\Documents\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\DFWV_Template.sqlite3.backup
-D:\Documents\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\DFWV.exe.manifest
-D:\Documents\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\DFWV.application
-D:\Documents\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\DFWV.exe
-D:\Documents\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\DFWV.pdb
-D:\Documents\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.FilterForm.resources
-D:\Documents\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.MainForm.resources
-D:\Documents\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.MapForm.resources
-D:\Documents\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.Properties.Resources.resources
-D:\Documents\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.TimelineForm.resources
-D:\Documents\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.csproj.GenerateResource.Cache
-D:\Documents\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.exe.manifest
-D:\Documents\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.application
-D:\Documents\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.StatsForm.resources
-C:\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\DFWV.exe.config
-C:\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.exe
-C:\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.pdb
-C:\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\ResolveAssemblyReference.cache
-C:\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.FilterForm.resources
-C:\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.MainForm.resources
-C:\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.MapForm.resources
-C:\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.Properties.Resources.resources
-C:\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.StatsForm.resources
-C:\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.TimelineForm.resources
-C:\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\GenerateResource.read.1.tlog
-C:\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\GenerateResource.write.1.tlog
-C:\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\DFWV_Template.sqlite3.backup
-C:\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\DFWV.exe.manifest
-C:\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\DFWV.application
-C:\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\DFWV.exe
-C:\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\DFWV.pdb
-C:\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.exe.manifest
-C:\SkyDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.application
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\7z.dll
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\7z64.dll
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\x64\SQLite.Interop.dll
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\x86\SQLite.Interop.dll
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\DFWV_Template.sqlite3.backup
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\DFWV.exe.config
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\DFWV.exe.manifest
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\DFWV.application
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\DFWV.exe
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\DFWV.pdb
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\EntityFramework.dll
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\EntityFramework.SqlServer.dll
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\SevenZipSharp.dll
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\System.Data.SQLite.dll
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\System.Data.SQLite.EF6.dll
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\System.Data.SQLite.Linq.dll
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\EntityFramework.xml
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\EntityFramework.SqlServer.xml
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\bin\Debug\System.Data.SQLite.xml
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\ResolveAssemblyReference.cache
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.FilterForm.resources
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.MainForm.resources
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.MapForm.resources
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.Properties.Resources.resources
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.StatsForm.resources
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.TimelineForm.resources
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\GenerateResource.read.1.tlog
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\GenerateResource.write.1.tlog
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.exe.manifest
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.application
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.exe
+C:\OneDrive\Documents\Code\DotNet\DFWV\DFWV\obj\Debug\DFWV.pdb

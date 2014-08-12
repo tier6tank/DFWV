@@ -49,14 +49,22 @@
             this.lstOrder = new System.Windows.Forms.ListBox();
             this.txtTake = new System.Windows.Forms.TextBox();
             this.chkTake = new System.Windows.Forms.CheckBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.GroupAdd = new System.Windows.Forms.Button();
+            this.GroupDelete = new System.Windows.Forms.Button();
+            this.GroupMoveDown = new System.Windows.Forms.Button();
+            this.GroupMoveUp = new System.Windows.Forms.Button();
+            this.cmbGroupField = new System.Windows.Forms.ComboBox();
+            this.lstGroup = new System.Windows.Forms.ListBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // Apply
             // 
             this.Apply.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.Apply.Location = new System.Drawing.Point(12, 12);
+            this.Apply.Location = new System.Drawing.Point(12, 10);
             this.Apply.Name = "Apply";
             this.Apply.Size = new System.Drawing.Size(75, 23);
             this.Apply.TabIndex = 0;
@@ -67,7 +75,7 @@
             // Cancel
             // 
             this.Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.Cancel.Location = new System.Drawing.Point(410, 12);
+            this.Cancel.Location = new System.Drawing.Point(657, 10);
             this.Cancel.Name = "Cancel";
             this.Cancel.Size = new System.Drawing.Size(75, 23);
             this.Cancel.TabIndex = 1;
@@ -117,7 +125,6 @@
             this.cmbWhereOperation.Name = "cmbWhereOperation";
             this.cmbWhereOperation.Size = new System.Drawing.Size(121, 21);
             this.cmbWhereOperation.TabIndex = 3;
-            this.cmbWhereOperation.SelectedIndexChanged += new System.EventHandler(this.cmbWhereOperation_SelectedIndexChanged);
             // 
             // txtWhereData
             // 
@@ -253,7 +260,7 @@
             // txtTake
             // 
             this.txtTake.Enabled = false;
-            this.txtTake.Location = new System.Drawing.Point(230, 14);
+            this.txtTake.Location = new System.Drawing.Point(329, 10);
             this.txtTake.Name = "txtTake";
             this.txtTake.Size = new System.Drawing.Size(100, 20);
             this.txtTake.TabIndex = 4;
@@ -261,13 +268,88 @@
             // chkTake
             // 
             this.chkTake.AutoSize = true;
-            this.chkTake.Location = new System.Drawing.Point(151, 16);
+            this.chkTake.Location = new System.Drawing.Point(250, 12);
             this.chkTake.Name = "chkTake";
             this.chkTake.Size = new System.Drawing.Size(73, 17);
             this.chkTake.TabIndex = 5;
             this.chkTake.Text = "Take First";
             this.chkTake.UseVisualStyleBackColor = true;
             this.chkTake.CheckedChanged += new System.EventHandler(this.chkTake_CheckedChanged);
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.GroupAdd);
+            this.groupBox3.Controls.Add(this.GroupDelete);
+            this.groupBox3.Controls.Add(this.GroupMoveDown);
+            this.groupBox3.Controls.Add(this.GroupMoveUp);
+            this.groupBox3.Controls.Add(this.cmbGroupField);
+            this.groupBox3.Controls.Add(this.lstGroup);
+            this.groupBox3.Location = new System.Drawing.Point(491, 42);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(241, 208);
+            this.groupBox3.TabIndex = 13;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Group By";
+            // 
+            // GroupAdd
+            // 
+            this.GroupAdd.Location = new System.Drawing.Point(197, 72);
+            this.GroupAdd.Name = "GroupAdd";
+            this.GroupAdd.Size = new System.Drawing.Size(38, 23);
+            this.GroupAdd.TabIndex = 11;
+            this.GroupAdd.Text = "Add";
+            this.GroupAdd.UseVisualStyleBackColor = true;
+            this.GroupAdd.Click += new System.EventHandler(this.GroupAdd_Click);
+            // 
+            // GroupDelete
+            // 
+            this.GroupDelete.Location = new System.Drawing.Point(197, 138);
+            this.GroupDelete.Name = "GroupDelete";
+            this.GroupDelete.Size = new System.Drawing.Size(38, 23);
+            this.GroupDelete.TabIndex = 8;
+            this.GroupDelete.Text = "Del";
+            this.GroupDelete.UseVisualStyleBackColor = true;
+            this.GroupDelete.Click += new System.EventHandler(this.GroupDelete_Click);
+            // 
+            // GroupMoveDown
+            // 
+            this.GroupMoveDown.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GroupMoveDown.Location = new System.Drawing.Point(203, 164);
+            this.GroupMoveDown.Name = "GroupMoveDown";
+            this.GroupMoveDown.Size = new System.Drawing.Size(24, 33);
+            this.GroupMoveDown.TabIndex = 7;
+            this.GroupMoveDown.Text = "↓";
+            this.GroupMoveDown.UseVisualStyleBackColor = true;
+            this.GroupMoveDown.Click += new System.EventHandler(this.GroupMoveDown_Click);
+            // 
+            // GroupMoveUp
+            // 
+            this.GroupMoveUp.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GroupMoveUp.Location = new System.Drawing.Point(203, 104);
+            this.GroupMoveUp.Name = "GroupMoveUp";
+            this.GroupMoveUp.Size = new System.Drawing.Size(24, 33);
+            this.GroupMoveUp.TabIndex = 6;
+            this.GroupMoveUp.Text = "↑";
+            this.GroupMoveUp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.GroupMoveUp.UseVisualStyleBackColor = true;
+            this.GroupMoveUp.Click += new System.EventHandler(this.GroupMoveUp_Click);
+            // 
+            // cmbGroupField
+            // 
+            this.cmbGroupField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbGroupField.FormattingEnabled = true;
+            this.cmbGroupField.Location = new System.Drawing.Point(6, 21);
+            this.cmbGroupField.Name = "cmbGroupField";
+            this.cmbGroupField.Size = new System.Drawing.Size(121, 21);
+            this.cmbGroupField.TabIndex = 2;
+            // 
+            // lstGroup
+            // 
+            this.lstGroup.FormattingEnabled = true;
+            this.lstGroup.Location = new System.Drawing.Point(6, 104);
+            this.lstGroup.Name = "lstGroup";
+            this.lstGroup.Size = new System.Drawing.Size(185, 95);
+            this.lstGroup.TabIndex = 1;
             // 
             // FilterForm
             // 
@@ -276,8 +358,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.CancelButton = this.Cancel;
-            this.ClientSize = new System.Drawing.Size(507, 275);
+            this.ClientSize = new System.Drawing.Size(745, 261);
             this.ControlBox = false;
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.chkTake);
             this.Controls.Add(this.txtTake);
             this.Controls.Add(this.groupBox2);
@@ -293,11 +376,11 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Filter";
             this.TopMost = true;
-            this.Load += new System.EventHandler(this.FilterForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -326,5 +409,12 @@
         private System.Windows.Forms.Button OrderMoveDown;
         private System.Windows.Forms.Button OrderMoveUp;
         private System.Windows.Forms.CheckBox chkDescending;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Button GroupAdd;
+        private System.Windows.Forms.Button GroupDelete;
+        private System.Windows.Forms.Button GroupMoveDown;
+        private System.Windows.Forms.Button GroupMoveUp;
+        private System.Windows.Forms.ComboBox cmbGroupField;
+        private System.Windows.Forms.ListBox lstGroup;
     }
 }

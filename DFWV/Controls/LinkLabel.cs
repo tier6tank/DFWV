@@ -1,9 +1,10 @@
-﻿namespace DFWV.Controls
+﻿using System;
+using System.Drawing;
+using System.Windows.Forms;
+using DFWV.WorldClasses;
+
+namespace DFWV.Controls
 {
-    using System;
-    using System.Drawing;
-    using System.Windows.Forms;
-    using DFWV.WorldClasses;
 
     /// <summary>
     /// The Link Label is an extended label that allows easy navigation between various WorldObjects.  
@@ -15,26 +16,21 @@
         
         public WorldObject Data
         {
-            get { return data; }
             set 
             { 
                 data = value;
                 if (data != null)
                 {
-                    ForeColor = System.Drawing.Color.Blue;
+                    ForeColor = Color.Blue;
                     Text = data.ToString();
                 }
                 else
                 { 
-                    ForeColor = System.Drawing.Color.Black;
+                    ForeColor = Color.Black;
                     Text = "";
                 }
             }
-        }
-
-        public LinkLabel() : base()
-        {
-            
+            get { return data; }
         }
 
         protected override void OnClick(EventArgs e)
@@ -42,7 +38,7 @@
             Cursor.Current = Cursors.Default;
             Font = new Font(Font.Name, Font.Size, FontStyle.Regular);
             if (data != null)
-                data.Select((MainForm)this.FindForm());
+                data.Select((MainForm)FindForm());
 
             base.OnClick(e);
         }

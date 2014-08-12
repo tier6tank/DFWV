@@ -5,14 +5,16 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using DFWV.WorldClasses;
+using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalEventClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
-using Drawing = System.Drawing;
+using System.Drawing;
+using Region = DFWV.WorldClasses.Region;
 
 namespace DFWV
 {
-    public partial class MainForm : Form
+    public sealed partial class MainForm : Form
     {
         /// <summary>
         /// The Root object which describes everything about the DF world.
@@ -22,17 +24,20 @@ namespace DFWV
         /// <summary>
         /// Stores the dynamically generated controls for the currently viewed Historical Event, whereever it's viewed.
         /// </summary>
-        public List<Control> EventDetailControls = new List<Control>();
+        public readonly List<Control> EventDetailControls = new List<Control>();
 
         /// <summary>
-        /// Allows backwards navigation through World Objects. (See Navigation Methods Region)
+        /// Allows navigation through World Objects. (See Navigation Methods Region)
         /// </summary>
-        public Stack<WorldObject> ViewedObjects = new Stack<WorldObject>(); /// 
+        private readonly Stack<WorldObject> NavBackObjects = new Stack<WorldObject>();
+        private readonly Stack<WorldObject> NavForwardObjects = new Stack<WorldObject>();
+        private bool navigatingBack;
 
         public MainForm()
         {
             InitializeComponent();
 
+            Text = string.Format("World Viewer v{0}", Application.ProductVersion);
             LinkEvents();
             ClearTabs();
         }
@@ -46,69 +51,78 @@ namespace DFWV
         /// </summary>
         private void loadWorldToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string selectedFile = AutoFindFiles();
+            var selectedFile = AutoFindFiles();
 
             if (selectedFile == "")
             { 
-                OpenFileDialog openFileDiag = new OpenFileDialog();
+                var openFileDiag = new OpenFileDialog
+                {
+                    InitialDirectory = Program.GetDefaultPath(),
+                    Filter = @"DF Maps/Archives(*.bmp, *.png, *.7z, *.zip)|*.bmp;*.png;*.7z;*.zip"
+                };
 
-                openFileDiag.InitialDirectory = Program.GetDefaultPath();
-                openFileDiag.Filter = "DF World Maps (*.bmp, *.png)|*.bmp;*.png";//|World Viewer Export (*.sqlite3)|*.sqlite3";
 
-            
                 openFileDiag.ShowDialog();
 
                 if (openFileDiag.FileName != "")
                     selectedFile = openFileDiag.FileName;
             }
 
-            if (selectedFile != "")
+            if (!string.IsNullOrEmpty(selectedFile))
             {
-                //if (Path.GetExtension(filename) != ".sqlite3")
-                LoadFromFiles(selectedFile);
-                //else
-                //    LoadFromDB(filename);
+                if (Path.GetExtension(selectedFile) == ".7z" || Path.GetExtension(selectedFile) == ".zip")
+                {
+                    if (Program.ExtractArchive(selectedFile))
+                    {
+                        var newDirectory = Path.Combine(Path.GetDirectoryName(selectedFile), Path.GetFileNameWithoutExtension(selectedFile));
+
+                        selectedFile = Directory.GetFiles(newDirectory, "*.bmp").FirstOrDefault();
+                        
+                    }
+                }
+                if (selectedFile != null)
+                    LoadFromFiles(selectedFile);
             }
         }
 
-        
-
-        private string AutoFindFiles()
+        private static string AutoFindFiles()
         {
             try
             {
-                string selectedFile = "";
+                var selectedFile = "";
 
-                string workingFolder = Program.GetDefaultPath();
+                var workingFolder = Program.GetDefaultPath();
                 
 
-                foreach (string file in Directory.GetFiles(workingFolder))
+                foreach (var file in Directory.GetFiles(workingFolder))
                 {
-                    if ((Path.GetExtension(file) == ".bmp" || Path.GetExtension(file) == ".png") && Path.GetFileNameWithoutExtension(file).StartsWith("world_map-"))
-                    {
-                        string mapFile = Path.GetFileNameWithoutExtension(file);
-                        List<string> mapSplit = mapFile.Split("-".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList<string>();
+                    var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file);
+                    if (fileNameWithoutExtension == null ||
+                        ((Path.GetExtension(file) != ".bmp" && Path.GetExtension(file) != ".png") ||
+                         !fileNameWithoutExtension.StartsWith("world_map-"))) 
+                        continue;
+                    var mapFile = Path.GetFileNameWithoutExtension(file);
+                    if (mapFile == null) 
+                        continue;
+                    var mapSplit = mapFile.Split("-".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
 
-                        string tempName = mapSplit[1];
+                    var tempName = mapSplit[1];
 
-                        string xmlPath = workingFolder + "\\" + tempName + "-legends.xml";
-                        string paramPath = workingFolder + "\\" + tempName + "-world_gen_param.txt";
-                        string historyPath = workingFolder + "\\" + tempName + "-world_history.txt";
-                        string sitesPath = workingFolder + "\\" + tempName + "-world_sites_and_pops.txt";
 
-                        if (File.Exists(xmlPath) && File.Exists(paramPath) && File.Exists(historyPath) && File.Exists(sitesPath))
-                        {
-                            if (selectedFile == "")
-                                selectedFile = file;
-                            else
-                            { //In case of multiple possibilities, make the user decide.
-                                selectedFile = "";
-                                break;
-                            }
-                        }
-                        else
-                            continue;
+                    var xmlPath = Path.Combine(workingFolder, tempName + "-legends.xml");
+                    var paramPath = Path.Combine(workingFolder, tempName + "-world_gen_param.txt");
+                    var historyPath = Path.Combine(workingFolder, tempName + "-world_history.txt");
+                    var sitesPath = Path.Combine(workingFolder, tempName + "-world_sites_and_pops.txt");
 
+                    if (!File.Exists(xmlPath) || !File.Exists(paramPath) || !File.Exists(historyPath) ||
+                        !File.Exists(sitesPath)) 
+                        continue;
+                    if (selectedFile == "")
+                        selectedFile = file;
+                    else
+                    { //In case of multiple possibilities, make the user decide.
+                        selectedFile = "";
+                        break;
                     }
                 }
                 return selectedFile;
@@ -124,54 +138,64 @@ namespace DFWV
 
         private void LoadFromFiles(string filename)
         {
-            string mapPath = filename;
-            string path = Path.GetDirectoryName(mapPath) + "\\";
+            var mapPath = filename;
+            var path = Path.GetDirectoryName(mapPath) ?? "";
             if (mapPath.Contains("_graphic-")) //Picked wrong image
             {
-                string thisFile = Path.GetFileName(mapPath);
-                List<string> restofFile = thisFile.Split('-').ToList();
+                var thisFile = Path.GetFileName(mapPath);
+                var restofFile = thisFile.Split('-').ToList();
                 int year;
-                if (Int32.TryParse(restofFile[2], out year))
-                    restofFile.RemoveRange(0, 1);
-                else
-                    restofFile.RemoveRange(0, 2);
+                //while (restofFile.Count > 4) //If the save file contains a hypen, deal with that.
+                //{
+                //    restofFile[1] = restofFile[1] + "-" + restofFile[2];
+                //    restofFile.RemoveAt(2);
+                //}
+                restofFile.RemoveRange(0, Int32.TryParse(restofFile[2], out year) ? 1 : 2);
+
                 thisFile = String.Join("-", restofFile);
-                mapPath = path + "world_map-" + thisFile;
+                mapPath = Path.Combine(path, "world_map-" + thisFile);
             }
             if (!File.Exists(mapPath))
             {
-                MessageBox.Show("Couldn't find basic map image");
+                MessageBox.Show(@"Couldn't find basic map image");
                 return;
             }
 
-            string mapFile = Path.GetFileNameWithoutExtension(mapPath);
-            List<string> mapSplit = mapFile.Split("-".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList<string>();
+            var mapFile = Path.GetFileNameWithoutExtension(mapPath);
+            var mapSplit = mapFile.Split("-".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
 
             mapSplit.RemoveAt(0);
             mapSplit.RemoveAt(mapSplit.Count - 1);
 
-            int Year = Convert.ToInt32(mapSplit[mapSplit.Count - 1]);
+            var Year = Convert.ToInt32(mapSplit[mapSplit.Count - 1]);
 
             mapSplit.RemoveAt(mapSplit.Count - 1);
 
-            string name = string.Join("-", mapSplit);
+            var name = string.Join("-", mapSplit);
 
 
-            string xmlPath = path + name + "-legends.xml";
-            string paramPath = path + name + "-world_gen_param.txt";
-            string historyPath = path + name + "-world_history.txt";
-            string sitesPath = path + name + "-world_sites_and_pops.txt";
+            var xmlPath = Path.Combine(path, name + "-legends.xml");
+            var paramPath = Path.Combine(path, name + "-world_gen_param.txt");
+            var historyPath = Path.Combine(path, name + "-world_history.txt");
+            var sitesPath = Path.Combine(path, name + "-world_sites_and_pops.txt");
+            var xmlPlusPath = Path.Combine(path, name + "-legends_plus.xml");
 
             if (File.Exists(xmlPath) && File.Exists(paramPath) && File.Exists(historyPath) && File.Exists(sitesPath))
             {
-                DFXMLParser.FinishedSection += new XMLFinishedSectionEventHandler(XMLSectionFinished);
-                DFXMLParser.Finished += new XMLFinishedEventHandler(XMLFinished);
 
-                Program.Log(LogType.Status, "Loading World...");
+                DFXMLParser.StartedSection -= XMLSectionStarted;
+                DFXMLParser.FinishedSection -= XMLSectionFinished;
+                DFXMLParser.Finished -= XMLFinished;
+
+                DFXMLParser.StartedSection += XMLSectionStarted;
+                DFXMLParser.FinishedSection += XMLSectionFinished;
+                DFXMLParser.Finished += XMLFinished;
+
+                Program.Log(LogType.Status, "Loading XML");
 
                 Application.DoEvents();
 
-                World = new World(historyPath, sitesPath, paramPath, xmlPath, mapPath, Year);
+                World = new World(historyPath, sitesPath, paramPath, xmlPath, xmlPlusPath, mapPath, Year);
 
                 loadWorldToolStripMenuItem.Visible = false;
 
@@ -179,7 +203,7 @@ namespace DFWV
                 FillNonXMLLists();
             }
             else
-                MessageBox.Show("Files not found.  Please make sure all 5 files Legends files are located with the selected map file. See the README.txt file included for details.", "World Viewer",MessageBoxButtons.OK);
+                MessageBox.Show(@"Files not found.  Please make sure all 5 files Legends files are located with the selected map file. See the README.txt file included for details.", @"DF World Viewer",MessageBoxButtons.OK);
 
 
 
@@ -203,72 +227,6 @@ namespace DFWV
         //    FillNonXMLLists();
         //}
 
-        /// <summary>
-        /// Loads and displays the map form.
-        /// </summary>
-        private void showMapToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (Program.mapForm == null || Program.mapForm.IsDisposed)
-                Program.mapForm = new MapForm(World);
-            Program.mapForm.Location = this.Location;
-            Program.mapForm.Show();
-        }
-
-        /// <summary>
-        /// Loads and displays the map form.
-        /// </summary>
-        private void timelinetoolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (Program.timelineForm == null || Program.timelineForm.IsDisposed)
-                Program.timelineForm = new TimelineForm(World);
-            Program.timelineForm.Location = this.Location;
-            Program.timelineForm.Show();
-        }
-
-        /// <summary>
-        /// Loads and displays the stats form.
-        /// </summary>
-        private void statsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (Program.statsForm == null || Program.statsForm.IsDisposed)
-                Program.statsForm = new StatsForm(World);
-            Program.statsForm.Location = this.Location;
-            Program.statsForm.Show();
-        }
-
-        /// <summary>
-        /// Fires off the Export method of the World Object on a new thread, which outputs all relevant world data to a SQLite database.
-        /// </summary>
-        private void exportWorldToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SaveFileDialog saveFileDiag = new SaveFileDialog();
-
-            saveFileDiag.InitialDirectory = Application.StartupPath;
-            saveFileDiag.Filter = "World Viewer Export (*.sqlite3)|*.sqlite3";
-            saveFileDiag.FileName = World.Name + " Export.sqlite3";
-
-            saveFileDiag.ShowDialog();
-
-            if (saveFileDiag.FileName != "")
-            {
-                string filename = saveFileDiag.FileName;
-                if (Path.GetExtension(filename) != ".sqlite3")
-                    filename = Path.GetFileNameWithoutExtension(filename) + ".sqlite3";
-
-                if (File.Exists(filename))
-                    File.Delete(filename);
-                File.Copy(Application.StartupPath + @"\DFWV_Template.sqlite3.backup",filename);
-
-                exportWorldToolStripMenuItem.Visible = false;
-                Thread XMLThread = new Thread(() => World.Export(filename));
-
-                XMLThread.Start();
-
-            }
-
-
-
-        }
 
         /// <summary>
         /// Cleanly empties EventDetailControls, which stores controls related to displaying the current event.  
@@ -276,7 +234,7 @@ namespace DFWV
         /// </summary>
         internal void ClearEventDetails()
         {
-            foreach (Control ctrl in EventDetailControls)
+            foreach (var ctrl in EventDetailControls)
             {
                 if (ctrl.Parent != null)
                     ctrl.Parent.Controls.Remove(ctrl);
@@ -291,18 +249,15 @@ namespace DFWV
         /// </summary>
         private void ClearTabs()
         {
-            foreach (TabPage tabpage in MainTab.TabPages)
+            foreach (var tabpage in MainTab.TabPages.Cast<TabPage>().Where(tabpage => tabpage.Text != @"World"))
             {
-                if (tabpage.Text != "World")
-                    MainTab.TabPages.Remove(tabpage);
+                MainTab.TabPages.Remove(tabpage);
             }
             foreach (TabPage tabpage in MainTabEventCollectionTypes.TabPages)
             {
                 MainTabEventCollectionTypes.TabPages.Remove(tabpage);
             }
-
         }
-
 
         /// <summary>
         /// Links all listboxes and treeviews to their appropriate "generic" methods, found in the Generic Control Events region below.
@@ -311,29 +266,128 @@ namespace DFWV
         private void LinkEvents()
         {
 
-            foreach (ListBox listbox in Program.GetControlsOfType<ListBox>(this))
+            foreach (var listbox in Program.GetControlsOfType<ListBox>(this))
             {
                 if (listbox.Parent is GroupBox)
-                    listbox.DoubleClick += new EventHandler(SubListBoxDoubleClicked);
+                    listbox.DoubleClick += SubListBoxDoubleClicked;
                 else
-                    listbox.SelectedIndexChanged += new EventHandler(ListBoxSelectedIndexChanged);
+                {
+                    listbox.DrawMode = DrawMode.OwnerDrawFixed;
+                    listbox.DrawItem += ListBoxDrawItem;
+                    listbox.SelectedIndexChanged += ListBoxSelectedIndexChanged;
+                }
             }
 
-            foreach (TreeView treeview in Program.GetControlsOfType<TreeView>(this))
+            foreach (var treeview in Program.GetControlsOfType<TreeView>(this))
             {
-                treeview.DoubleClick += new EventHandler(TreeviewDoubleClicked);
-                treeview.MouseClick += new MouseEventHandler(TreeviewMouseClicked);
+                if (treeview != WorldSummaryTree)
+                {
+                    treeview.DoubleClick += TreeviewDoubleClicked;
+                    treeview.MouseClick += TreeviewMouseClicked;
+                }
             }
         }
 
 
         /// <summary>
+        /// These are events fired off when a toolstrip menu button is clicked, besdies the navigation ones
+        /// </summary>
+        #region ToolbarClickEvents
+        /// <summary>
+        /// Loads and displays the map form.
+        /// </summary>
+        private void showMapToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Program.mapForm == null || Program.mapForm.IsDisposed)
+                Program.mapForm = new MapForm(World);
+            Program.mapForm.Location = Location;
+            Program.mapForm.Show();
+        }
+
+        /// <summary>
+        /// Loads and displays the map form.
+        /// </summary>
+        private void timelinetoolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Program.timelineForm == null || Program.timelineForm.IsDisposed)
+                Program.timelineForm = new TimelineForm(World);
+            Program.timelineForm.Location = Location;
+            Program.timelineForm.Show();
+        }
+
+        /// <summary>
+        /// Loads and displays the stats form.
+        /// </summary>
+        private void statsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Program.statsForm == null || Program.statsForm.IsDisposed)
+                Program.statsForm = new StatsForm(World);
+            Program.statsForm.Location = Location;
+            Program.statsForm.Show();
+        }
+
+        /// <summary>
+        /// Fires off the Export method of the World Object on a new thread, which outputs all relevant world data to a SQLite database.
+        /// </summary>
+        private void exportWorldToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var saveFileDiag = new SaveFileDialog
+            {
+                InitialDirectory = Application.StartupPath,
+                Filter = @"World Viewer Export (*.sqlite3)|*.sqlite3",
+                FileName = Program.CleanString(World.Name) + " Export.sqlite3"
+            };
+
+            saveFileDiag.ShowDialog();
+
+            if (saveFileDiag.FileName == "")
+                return;
+            var filename = saveFileDiag.FileName;
+            if (Path.GetExtension(filename) != ".sqlite3")
+                filename = Path.GetFileNameWithoutExtension(filename) + ".sqlite3";
+
+            if (File.Exists(filename))
+                File.Delete(filename);
+            File.Copy(Application.StartupPath + @"\DFWV_Template.sqlite3.backup", filename);
+
+            exportWorldToolStripMenuItem.Visible = false;
+            var XMLThread = new Thread(() => World.Export(filename));
+
+            XMLThread.Start();
+        }
+
+        /// <summary>
+        /// Closes the existing world so allow a new world to be loaded.
+        /// </summary>
+        private void closeWorldToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ClearTabs();
+            closeWorldToolStripMenuItem.Visible = false;
+            exportWorldToolStripMenuItem.Visible = false;
+            showMapToolStripMenuItem.Visible = false;
+            statsToolStripMenuItem.Visible = false;
+            timelineToolStripMenuItem.Visible = false;
+            visualizationsToolStripMenuItem.Visible = false;
+            ClearNav();
+
+            WorldSummaryTree.Nodes.Clear();
+            StatusBox.Clear();
+            IssuesBox.Clear();
+
+            loadWorldToolStripMenuItem.Visible = true;
+
+            World.Dispose();
+            World = null;
+        }
+        #endregion
+
+        /// <summary>
         /// These are methods that are fired off for nearly every treeview and listbox, so allow easy navigation between objects on the form without a lot of coding work.
         /// </summary>
         #region Generic Control Events
-        private void TreeviewMouseClicked(object sender, MouseEventArgs e)
+        private static void TreeviewMouseClicked(object sender, MouseEventArgs e)
         {
-            TreeView treeview = (TreeView)sender; 
+            var treeview = (TreeView)sender; 
             if (e.Button == MouseButtons.Right)
                 treeview.ExpandAll();
         }
@@ -345,13 +399,12 @@ namespace DFWV
         /// </summary>
         private void TreeviewDoubleClicked(object sender, EventArgs e)
         {
-            TreeView treeview = (TreeView)sender;
-            TreeNode selectedNode = treeview.SelectedNode;
-            if (selectedNode != null && selectedNode.Tag != null)
-            {
-                WorldObject selectedItem = (WorldObject)selectedNode.Tag;
-                selectedItem.Select(this);
-            }
+            var treeview = (TreeView)sender;
+            var selectedNode = treeview.SelectedNode;
+            if (selectedNode == null || selectedNode.Tag == null) 
+                return;
+            var selectedItem = (WorldObject)selectedNode.Tag;
+            selectedItem.Select(this);
         }
 
         /// <summary>
@@ -361,11 +414,10 @@ namespace DFWV
         /// </summary>
         private void SubListBoxDoubleClicked(object sender, EventArgs e)
         {
-            ListBox listBox = (ListBox)sender;
-            if (typeof(WorldObject).IsAssignableFrom(listBox.SelectedItem.GetType()))
+            var listBox = (ListBox)sender;
+            var selectedItem = listBox.SelectedItem as WorldObject;
+            if (selectedItem != null)
             {
-                WorldObject selectedItem = (WorldObject)listBox.SelectedItem;
-
                 selectedItem.Select(this);
             }
         }
@@ -377,10 +429,33 @@ namespace DFWV
         /// </summary>
         private void ListBoxSelectedIndexChanged(object sender, EventArgs e)
         {
-            ListBox listBox = (ListBox)sender;
-            WorldObject selectedItem = (WorldObject)listBox.SelectedItem;
+            var listBox = (ListBox)sender;
+            var selectedItem = listBox.SelectedItem as WorldObject;
             if (selectedItem != null)
                 selectedItem.Select(this);
+        }
+
+        private void ListBoxDrawItem(object sender, DrawItemEventArgs e)
+        {
+            e.DrawBackground();
+
+            if (e.Index != -1)
+            {
+                var lstBox = sender as ListBox;
+                if (lstBox.Items[e.Index] is WorldObject)
+                {
+                    e.Graphics.DrawString(lstBox.Items[e.Index].ToString(),
+                            e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
+                }
+                else
+                {
+                    e.Graphics.DrawString(lstBox.Items[e.Index].ToString(),
+
+                            new Font(FontFamily.GenericMonospace, e.Font.Size, FontStyle.Bold), Brushes.Red, e.Bounds, StringFormat.GenericDefault);
+                }
+
+            }
+            e.DrawFocusRectangle();
         }
 #endregion
 
@@ -399,28 +474,28 @@ namespace DFWV
 
         private void FillNonXMLLists()
         {
-            FillList<Civilization>(lstCivilization, World.Civilizations, tabCivilization);
-            FillList<God>(lstGod, World.Gods, tabGod);
-            FillList<Leader>(lstLeader, World.Leaders, tabLeader);
-            FillList<Parameter>(lstParameter, World.Parameters, tabParameter);
-            FillList<Race, string>(lstRace, World.Races, tabRace);
-            FillList<Site, int>(lstSite, World.SitesFile, tabSite);
-            FillList<Entity>(lstEntity, World.EntitiesFile, tabEntity);
+            FillList(lstCivilization, World.Civilizations, tabCivilization);
+            FillList(lstGod, World.Gods, tabGod);
+            FillList(lstLeader, World.Leaders, tabLeader);
+            FillList(lstParameter, World.Parameters, tabParameter);
+            FillList(lstRace, World.Races, tabRace);
+            FillList(lstSite, World.SitesFile, tabSite);
+            FillList(lstEntity, World.EntitiesFile, tabEntity);
         }
 
         private void FillXMLLists()
         {
-            FillList<Region, int>(lstRegion, World.Regions, tabRegion);
-            FillList<UndergroundRegion, int>(lstUndergroundRegion, World.UndergroundRegions, tabUndergroundRegion);
-            FillList<Entity, int>(lstEntity, World.Entities, tabEntity);
-            FillList<EntityPopulation, int>(lstEntityPopulation, World.EntityPopulations, tabEntityPopulation);
-            FillList<Site, int>(lstSite, World.Sites, tabSite);
-            FillList<WorldConstruction, int>(lstWorldConstruction, World.WorldConstructions, tabWorldConstruction);
-            FillList<Artifact, int>(lstArtifact, World.Artifacts, tabArtifact);
-            FillList<HistoricalFigure, int>(lstHistoricalFigure, World.HistoricalFigures, tabHistoricalFigure);
-            FillList<HistoricalEvent, int>(lstHistoricalEvent, World.HistoricalEvents, tabHistoricalEvent);
-            FillList<HistoricalEventCollection, int>(lstHistoricalEventCollection, World.HistoricalEventCollections, tabHistoricalEventCollection);
-            FillList<HistoricalEra, int>(lstHistoricalEra , World.HistoricalEras, tabHistoricalEra);
+            FillList(lstRegion, World.Regions, tabRegion);
+            FillList(lstUndergroundRegion, World.UndergroundRegions, tabUndergroundRegion);
+            FillList(lstEntity, World.Entities, tabEntity);
+            FillList(lstEntityPopulation, World.EntityPopulations, tabEntityPopulation);
+            FillList(lstSite, World.Sites, tabSite);
+            FillList(lstWorldConstruction, World.WorldConstructions, tabWorldConstruction);
+            FillList(lstArtifact, World.Artifacts, tabArtifact);
+            FillList(lstHistoricalFigure, World.HistoricalFigures, tabHistoricalFigure);
+            FillList(lstHistoricalEvent, World.HistoricalEvents, tabHistoricalEvent);
+            FillList(lstHistoricalEventCollection, World.HistoricalEventCollections, tabHistoricalEventCollection);
+            FillList(lstHistoricalEra , World.HistoricalEras, tabHistoricalEra);
         }
 
 
@@ -432,14 +507,17 @@ namespace DFWV
         /// <param name="listBox">The listbox to fill</param>
         /// <param name="list">The list of objects to fill from</param>
         /// <param name="tabPage">The page this listbox is on</param>
-        private void FillList<T>(ListBox listBox, List<T> list, TabPage tabPage) where T : class
+        public void FillList<T>(ListBox listBox, List<T> list, TabPage tabPage) where T : class
         {
-            listBox.InvokeEx(f => f.BeginUpdate());
+            listBox.InvokeEx(f =>
+            {
+                f.BeginUpdate();
+                f.Items.Clear();
+                f.Items.AddRange(World.Filters[typeof(T)].Get(list).ToArray());
+                f.EndUpdate();
 
-            listBox.InvokeEx(f => f.Items.Clear());
-            listBox.InvokeEx(f => f.Items.AddRange(World.Filters[typeof(T)].Get<T>(list)));
+            });
 
-            listBox.InvokeEx(f => f.EndUpdate());
 
             if (!MainTab.TabPages.Contains(tabPage))
                 this.InvokeEx(f => f.MainTab.TabPages.Add(tabPage));
@@ -453,108 +531,261 @@ namespace DFWV
         /// <param name="listBox">The listbox to fill</param>
         /// <param name="dict">The dictionary of objects to fill from</param>
         /// <param name="tabPage">The page this listbox is on</param>
-        private void FillList<T, K>(ListBox listBox, Dictionary<K, T> dict, TabPage tabPage) where T : WorldObject
+        public void FillList<T, K>(ListBox listBox, Dictionary<K, T> dict, TabPage tabPage) where T : WorldObject
         {
 
-            listBox.InvokeEx(f => f.BeginUpdate());
-            listBox.InvokeEx(f => f.Items.Clear());
+            listBox.InvokeEx(f =>
+            {
+                f.BeginUpdate();
+                f.Items.Clear();
+                f.Items.AddRange(World.Filters[typeof(T)].Get(dict.Values.ToList()).ToArray());
+                f.EndUpdate();
+            });
 
-            listBox.InvokeEx(f => f.Items.AddRange(World.Filters[typeof(T)].Get<T>(dict.Values.ToList())));
-
-            listBox.InvokeEx(f => f.EndUpdate());
             if (!MainTab.TabPages.Contains(tabPage))
                 this.InvokeEx(f => f.MainTab.TabPages.Add(tabPage));
         }
 
     #endregion
 
-
+        #region Loading Events
         /// <summary>
         /// These methods are called from the World object after being subscribed to, 
         ///     they allow the UI to operate while other threads are handling world *XML* loading.
         ///     Other loading is so quick it doesn't need events.
         /// </summary>
-        #region Loading Events
+
+        /// <summary>
+        /// Called when a specific section of XML starts loading.  
+        /// </summary>
+        private void XMLSectionStarted(string section)
+        {
+            Program.Log(LogType.Status, section + " Loading...");
+        }
 
         /// <summary>
         /// Called when a specific section of XML is finished loading.  
         ///     After each is finished the details are written on the World Tab.  The first section writes the details from all the other files which are loaded first.
         /// </summary>
-        /// <param name="e"></param>
         private void XMLSectionFinished(string section)
         {
-            Program.Log(LogType.Status, section + " finished!");
+            Program.Log(LogType.Status, " Done");
+            if (DFXMLParser.MemoryFailureQuitParsing)
+                return;
+            if (World.hasPlusXML && !World.isPlusParsing) //Don't Provide Summary info or Fill Lists when there is still PlusXML to handle
+                return;
             switch (section)
             {
                 case "regions":
-                    FillList<Region, int>(lstRegion, World.Regions, tabRegion);
-                    this.InvokeEx(f => f.WorldSummary.Text = World.Name + Environment.NewLine + World.AltName + Environment.NewLine + Environment.NewLine);
-                    this.InvokeEx(f => f.WorldSummary.Text += "  Last Year: " + World.LastYear + Environment.NewLine);
-                    this.InvokeEx(f => f.WorldSummary.Text += "  Maps Found: " + World.Maps.Count + Environment.NewLine + Environment.NewLine);
-                    this.InvokeEx(f => f.WorldSummary.Text += "  History File" + Environment.NewLine);
-                    this.InvokeEx(f => f.WorldSummary.Text += "    Civilizations: " + World.Civilizations.Count + Environment.NewLine);
-                    this.InvokeEx(f => f.WorldSummary.Text += "    Gods: " + World.Gods.Count + Environment.NewLine);
-                    this.InvokeEx(f => f.WorldSummary.Text += "    Leaders: " + World.Leaders.Count + Environment.NewLine + Environment.NewLine);
-                    this.InvokeEx(f => f.WorldSummary.Text += "  Site File" + Environment.NewLine);
-                    this.InvokeEx(f => f.WorldSummary.Text += "    Sites: " + World.SitesFile.Count + Environment.NewLine);
-                    this.InvokeEx(f => f.WorldSummary.Text += "    Entities: " + World.EntitiesFile.Count + Environment.NewLine);
-                    this.InvokeEx(f => f.WorldSummary.Text += "    Races: " + World.Races.Count + Environment.NewLine + Environment.NewLine);
-                    this.InvokeEx(f => f.WorldSummary.Text += "  XML" + Environment.NewLine);
-                    this.InvokeEx(f => f.WorldSummary.Text += "    Regions: " + World.Regions.Count + Environment.NewLine);
+                    FillList(lstRegion, World.Regions, tabRegion);
+
+                    AddSummaryItem(World.Name  + World.AltName  );
+                    AddSummaryItem(@"Last Year: " + World.LastYear );
+                    AddSummaryItem(@"Maps Found: " + World.Maps.Count  );
+                    AddSummaryItem(@"History File" );
+                    AddSummaryItem(@"Civilizations: " + World.Civilizations.Count, "History File",
+                        new NavigationFilter(typeof(Civilization), new Filter("Name", "IsFull = true", "Race.Name", -1)));
+                    AddSummaryItem(@"Gods: " + World.Gods.Count, "History File",
+                        new NavigationFilter(typeof (God), new Filter("Name", null, null, -1)));
+                    AddSummaryItem(@"Leaders: " + World.Leaders.Count, "History File",
+                        new NavigationFilter(typeof (Leader), new Filter("Name", null, null, -1)));
+                    AddSummaryItem(@"Site File" );
+                    AddSummaryItem(@"Sites: " + World.SitesFile.Count, "Site File",
+                        new NavigationFilter(typeof (Site), new Filter("Name", null, null, -1)));
+                    AddSummaryItem(@"Entities: " + World.EntitiesFile.Count, "Site File",
+                        new NavigationFilter(typeof (Entity), new Filter(new List<string> {"Name", "Type"}, null, null, -1)));
+                    AddSummaryItem(@"Races: " + World.Races.Count, "Site File",
+                        new NavigationFilter(typeof (Race), new Filter(new List<string> {"Name", "!isCivilized"}, null, null, -1)));
+                    AddSummaryItem(@"XML" );
+                    AddSummaryItem(@"Regions: " + World.Regions.Count, "XML",
+                        new NavigationFilter(typeof (Region), new Filter("Name", null, null, -1)));
+                    
                     break;
                 case "underground_regions":
-                    FillList<UndergroundRegion, int>(lstUndergroundRegion, World.UndergroundRegions, tabUndergroundRegion);
-                    this.InvokeEx(f => f.WorldSummary.Text += "    Underground Regions: " + World.UndergroundRegions.Count + Environment.NewLine);
+                    FillList(lstUndergroundRegion, World.UndergroundRegions, tabUndergroundRegion);
+                    AddSummaryItem(@"Underground Regions: " + World.UndergroundRegions.Count, "XML",
+                        new NavigationFilter(typeof (UndergroundRegion),
+                            new Filter(new List<string> {"Depth", "Name"}, null, null, -1)));
                     break;
                 case "entities":
-                    FillList<Entity, int>(lstEntity, World.Entities, tabEntity);
-                    this.InvokeEx(f => f.WorldSummary.Text += "    Entities: " + World.Entities.Count + Environment.NewLine);
+                    FillList(lstEntity, World.Entities, tabEntity);
+                    AddSummaryItem(@"Entities: " + World.Entities.Count, "XML",
+                        new NavigationFilter(typeof (Entity), new Filter(new List<string> {"Name", "Type"}, null, null, -1)));
                     break;
                 case "entity_populations":
-                    FillList<EntityPopulation, int>(lstEntityPopulation, World.EntityPopulations, tabEntityPopulation);
-                    this.InvokeEx(f => f.WorldSummary.Text += "    Entity Populations: " + World.EntityPopulations.Count + Environment.NewLine);
+                    FillList(lstEntityPopulation, World.EntityPopulations, tabEntityPopulation);
+                    AddSummaryItem(@"Entity Populations: " + World.EntityPopulations.Count, "XML",
+                        new NavigationFilter(typeof (EntityPopulation),
+                            new Filter(new List<string> {"ID", "Race = null"}, null, null, -1)));
                     break;
                 case "sites":
-                    FillList<Site, int>(lstSite, World.Sites, tabSite);
-                    this.InvokeEx(f => f.WorldSummary.Text += "    Sites: " + World.Sites.Count + Environment.NewLine);
+                    FillList(lstSite, World.Sites, tabSite);
+                    AddSummaryItem(@"Sites: " + World.Sites.Count, "XML",
+                        new NavigationFilter(typeof (Site), new Filter("Name", null, null, -1)));
                     break;
                 case "world_constructions":
-                    FillList<WorldConstruction, int>(lstWorldConstruction, World.WorldConstructions, tabWorldConstruction);
+                    FillList(lstWorldConstruction, World.WorldConstructions, tabWorldConstruction);
+                    
                     break;
                 case "artifacts":
-                    FillList<Artifact, int>(lstArtifact, World.Artifacts, tabArtifact);
-                    this.InvokeEx(f => f.WorldSummary.Text += "    Artifacts: " + World.Artifacts.Count + Environment.NewLine);
+                    FillList(lstArtifact, World.Artifacts, tabArtifact);
+                    AddSummaryItem(@"Artifacts: " + World.Artifacts.Count, "XML",
+                        new NavigationFilter(typeof (Artifact), new Filter("Name", null, null, -1)));
                     break;
                 case "historical_figures":
-                    FillList<HistoricalFigure, int>(lstHistoricalFigure, World.HistoricalFigures, tabHistoricalFigure);
-                    this.InvokeEx(f => f.WorldSummary.Text += "    Historical Figures: " + World.HistoricalFigures.Count + Environment.NewLine);
+                    FillList(lstHistoricalFigure, World.HistoricalFigures, tabHistoricalFigure);
+                    var hfLabel = @"Historical Figures: " + World.HistoricalFigures.Count ;
+                    AddSummaryItem(hfLabel, "XML",
+                        new NavigationFilter(typeof (HistoricalFigure), new Filter("Name", null, null, 50000)));
+
+                    AddSummaryItem(@"Castes" , hfLabel);
+                    foreach (var hfCaste in HistoricalFigure.Castes)
+                    {
+                        AddSummaryItem(string.Format(@"{0}: {1}", hfCaste, World.HistoricalFigures.Values.Count(x => x.Caste.HasValue && HistoricalFigure.Castes[x.Caste.Value] == hfCaste)), "Castes",
+                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "HFCaste == \"" + hfCaste + "\"" }, null, -1)));
+                    }
+                    
+                    AddSummaryItem(string.Format(@"{0}: {1}", "*NONE*", World.HistoricalFigures.Values.Count(x => !x.Caste.HasValue)), "Castes");
+
+                    AddSummaryItem(@"      Associated Types" , hfLabel);
+                    foreach (var hfAssociatedType in HistoricalFigure.AssociatedTypes)
+                    {
+                        AddSummaryItem(string.Format(@"{0}: {1}", hfAssociatedType, World.HistoricalFigures.Values.Count(x => x.AssociatedType.HasValue && HistoricalFigure.AssociatedTypes[x.AssociatedType.Value] == hfAssociatedType)), "Associated Types",
+                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "Job == \"" + hfAssociatedType + "\"" }, null, -1)));
+                    }
+
+                    AddSummaryItem(string.Format(@"{0}: {1}", "*NONE*", World.HistoricalFigures.Values.Count(x => !x.AssociatedType.HasValue)), "Associated Types");
+
+
+                    AddSummaryItem(@"Adventurers: " + World.HistoricalFigures.Values.Count(x => x.Adventurer), hfLabel,
+                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "Adventurer == true" }, null, -1)));
+                    AddSummaryItem(@"Animated: " + World.HistoricalFigures.Values.Count(x => x.Animated), hfLabel,
+                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "Animated == true" }, null, -1)));
+                    AddSummaryItem(@"Ghost: " + World.HistoricalFigures.Values.Count(x => x.Ghost), hfLabel,
+                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "Ghost == true" }, null, -1)));
+                    AddSummaryItem(@"Deity: " + World.HistoricalFigures.Values.Count(x => x.Deity), hfLabel,
+                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "Deity == true" }, null, -1)));
+                    AddSummaryItem(@"Force: " + World.HistoricalFigures.Values.Count(x => x.Force), hfLabel,
+                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "Force == true" }, null, -1)));
+
+
+                    AddSummaryItem(@"Sphere Alignment", hfLabel);
+                    for (var i = 0; i < HistoricalFigure.Spheres.Count; i++)
+                    {
+                        AddSummaryItem(HistoricalFigure.Spheres[i] + ": " +  World.HistoricalFigures.Values.Count(x => x.Sphere != null && x.Sphere.Contains(i)), @"Sphere Alignment");
+                    }
+
+                    AddSummaryItem(@"Has Pet: " + World.HistoricalFigures.Values.Count(x => x.JourneyPet != null), hfLabel);
+
                     break;
                 case "historical_events":
-                    FillList<HistoricalEvent, int>(lstHistoricalEvent, World.HistoricalEvents, tabHistoricalEvent);
-                    this.InvokeEx(f => f.WorldSummary.Text += "    Historical Events: " + World.HistoricalEvents.Count + Environment.NewLine);
+                    FillList(lstHistoricalEvent, World.HistoricalEvents, tabHistoricalEvent);
+                    var evtLabel = @"    Historical Events: " + World.HistoricalEvents.Count ;
+                    AddSummaryItem(evtLabel, "XML",
+                            new NavigationFilter(typeof(HistoricalEvent), new Filter("Year", null, null, 50000)));
+                    foreach (var evtType in HistoricalEvent.Types)
+                    {
+                        AddSummaryItem(string.Format(@"      {0}: {1}", evtType, World.HistoricalEvents.Values.Count(x => x.EventType == evtType)), evtLabel,
+                            new NavigationFilter(typeof(HistoricalEvent), new Filter(new List<string> { "Year" }, new List<string> { "EventType == \"" + evtType + "\"" }, null, 50000)));
+                    }
                     break;
                 case "historical_event_collections":
-                    FillList<HistoricalEventCollection, int>(lstHistoricalEventCollection, World.HistoricalEventCollections, tabHistoricalEventCollection);
-                    this.InvokeEx(f => f.WorldSummary.Text += "    Historical Event Collections: " + World.HistoricalEventCollections.Count + Environment.NewLine);
+                    FillList(lstHistoricalEventCollection, World.HistoricalEventCollections, tabHistoricalEventCollection);
+                    var evtColLabel = @"    Historical Event Collections: " + World.HistoricalEventCollections.Count ;
+                    AddSummaryItem(evtColLabel, "XML",
+                            new NavigationFilter(typeof(HistoricalEventCollection), new Filter(new List<string> {"StartYear"}, null, null, 50000)));
+                    foreach (var evtColType in HistoricalEventCollection.Types)
+                    {
+                        AddSummaryItem(string.Format(@"      {0}: {1}", evtColType, World.HistoricalEventCollections.Values.Count(x => x.EventCollectionType == evtColType)), evtColLabel,
+                            new NavigationFilter(typeof(HistoricalEventCollection), new Filter(new List<string> { "StartYear" }, new List<string> { "EventCollectionType == \"" + evtColType + "\"" }, null, 50000)));
+                    }
                     break;
                 case "historical_eras":
-                    FillList<HistoricalEra, int>(lstHistoricalEra, World.HistoricalEras, tabHistoricalEra);
-                    this.InvokeEx(f => f.WorldSummary.Text += "    Historical Eras: " + World.HistoricalEras.Count + Environment.NewLine);
-                    break;
-                default:
+                    FillList(lstHistoricalEra, World.HistoricalEras, tabHistoricalEra);
+                    AddSummaryItem(@"    Historical Eras: " + World.HistoricalEras.Count, "XML",
+                        new NavigationFilter(typeof(HistoricalEra), new Filter("StartYear", null, null, -1)));
                     break;
             }
         }
-        
+
+        /// <summary>
+        /// Adds an additional item to the World Summary Tree, optionally under a specific parent
+        /// </summary>
+        private void AddSummaryItem(string item, string parent = null, NavigationFilter navigationFilter = null)
+        {
+            //this.InvokeEx(f => f.WorldSummary.Text += item);
+            this.InvokeEx(f =>
+            {
+                if (!(f.WorldSummaryTree.TreeViewNodeSorter is WorldSummaryNodeSorter))
+                    f.WorldSummaryTree.TreeViewNodeSorter = new WorldSummaryNodeSorter();
+            });
+            if (parent == null)
+                this.InvokeEx(f =>
+                {
+                    var itemNode = new TreeNode(item.Trim());
+                    if (navigationFilter != null)
+                    {
+                        itemNode.Tag = navigationFilter;
+                        itemNode.ForeColor = Color.Blue;
+                    }
+                    f.WorldSummaryTree.Nodes.Add(itemNode);
+                });
+
+                
+
+            else
+            {
+                this.InvokeEx(f =>
+                {
+                    var parentNode = f.WorldSummaryTree.FlattenTree().FirstOrDefault(n => n.Text == parent.Trim());
+                    if (parentNode != null)
+                    {
+                        var itemNode = new TreeNode(item.Trim());
+                        if (navigationFilter != null)
+                        {
+                            itemNode.Tag = navigationFilter;
+                            itemNode.ForeColor = Color.Blue;
+                        }
+                        parentNode.Nodes.Add(itemNode);
+                    }
+                });
+            }
+
+        }
+
+        private void WorldSummaryTree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            if (e.Node.Tag is NavigationFilter)
+            {
+                var filter = e.Node.Tag as NavigationFilter;
+                filter.Select(this);
+            }
+        }
+
+        private void WorldSummaryTree_MouseLeave(object sender, EventArgs e)
+        {
+            Cursor.Current = Cursors.Default;
+        }
+
+        private void WorldSummaryTree_MouseMove(object sender, MouseEventArgs e)
+        {
+            var node = WorldSummaryTree.GetNodeAt(e.Location);
+
+            if (node != null && node.Tag != null && node.Tag is NavigationFilter)
+                Cursor.Current = Cursors.Hand;
+            else
+                Cursor.Current = Cursors.Default;
+        }
 
         /// <summary>
         /// Once all the sections are finished we spin off 4 different threads which handle making matching up the XML with the history/site files.
         /// Since the XML is all loaded we allow world exporting at this point, since nothing else after this point is data that's exported.
         /// Events are subscribed to for the "Linking" step, which turns associations to XML objects by IDs, to actual references to the corresponding object.
         /// </summary>
+        /// /TODO: Accont for plus parsing here
         private void XMLFinished()
         {
-            Program.Log(LogType.Status, "XML finished!");
+            Program.Log(LogType.Status, "XML Loading Done"); 
 
             World.MergeSites();
             World.MergeEntities();
@@ -564,20 +795,34 @@ namespace DFWV
 
             this.InvokeEx(f => f.exportWorldToolStripMenuItem.Visible = true);
             
+            Program.Log(LogType.Status, "XML Linking Started");
 
-            World.LinkedSection += new XMLLinkedSectionEventHandler(XMLSectionLinked);
-            World.Linked += new XMLLinkedEventHandler(XMLLinked);
+            World.LinkedSectionStart -= XMLSectionLinkedStart;
+            World.LinkedSection -= XMLSectionLinked;
+            World.Linked -= XMLLinked;
+
+            World.LinkedSectionStart += XMLSectionLinkedStart;
+            World.LinkedSection += XMLSectionLinked;
+            World.Linked += XMLLinked;
 
             World.LinkXMLData();
 
         }
 
         /// <summary>
+        /// When a section linking starts it's noted.
+        /// </summary>
+        private static void XMLSectionLinkedStart(string section)
+        {
+            Program.Log(LogType.Status, section + " Linking...");
+        }
+
+        /// <summary>
         /// After a section is linked, it's noted.
         /// </summary>
-        private void XMLSectionLinked(string section)
+        private static void XMLSectionLinked(string section)
         {
-            Program.Log(LogType.Status, section + " linked!");
+            Program.Log(LogType.Status, " Done");
         }
 
         /// <summary>
@@ -587,20 +832,87 @@ namespace DFWV
         /// </summary>
         private void XMLLinked()
         {
-            Program.Log(LogType.Status, "XML linked!");
+            Program.Log(LogType.Status, "XML Linking Done");
             this.InvokeEx(f => f.showMapToolStripMenuItem.Visible = true);
             this.InvokeEx(f => f.timelineToolStripMenuItem.Visible = true);
-            this.InvokeEx(f => f.WorldSummary.Text += "    World Constructions: " + World.WorldConstructions.Count + Environment.NewLine);
+            FillList(lstStructure, World.Structures, tabStructure);
 
-            World.ProcessedSection += new XMLProcessedSectionEventHandler(XMLSectionProcessed);
-            World.Processed += new XMLProcessedEventHandler(XMLProcessed);
-            World.FamiliesCounted += new FamiliesCountedEventHandler(FamiliesCounted);
-            World.DynastiesCreated += new DynastiesCreatedEventHandler(DynastiesCreated);
-            
+            AddSummaryItemsLearnedFromLinking();
 
+            World.ProcessedSectionStart -= XMLSectionProcessedStart;
+            World.ProcessedSection -= XMLSectionProcessed;
+            World.Processed -= XMLProcessed;
+            World.FamiliesCounted -= FamiliesCounted;
+            World.DynastiesCreated -= DynastiesCreated;
+
+            World.ProcessedSectionStart += XMLSectionProcessedStart;
+            World.ProcessedSection += XMLSectionProcessed;
+            World.Processed += XMLProcessed;
+            World.FamiliesCounted += FamiliesCounted;
+            World.DynastiesCreated += DynastiesCreated;
+
+            Program.Log(LogType.Status, "XML Processing Started");
 
             World.ProcessXMLData();
         }
+
+        /// <summary>
+        /// After linking is complete, certain additional bits of World Summary Data can be dropped into the summary.
+        /// </summary>
+        private void AddSummaryItemsLearnedFromLinking()
+        {
+            AddSummaryItem(@"World Constructions: " + World.WorldConstructions.Count, null,
+                        new NavigationFilter(typeof(WorldConstruction), new Filter()));
+
+            var hfLabel = @"    Historical Figures: " + World.HistoricalFigures.Count;
+            AddSummaryItem(@"Races", hfLabel,
+                        new NavigationFilter(typeof(Race), new Filter(new List<string> {"Name", "!isCivilized"}, null, null, -1)));
+            foreach (var race in World.Races.Values)
+            {
+                var count = World.HistoricalFigures.Values.Count(x => x.Race == race);
+                if (count == 0)
+                    continue;
+                AddSummaryItem(string.Format(@"{0}: {1}", race.Name, count), "Races",
+                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "RaceName == \"" + race.Name + "\"" }, null, -1)));
+            }
+
+            AddSummaryItem(@"Alive: " + World.HistoricalFigures.Values.Count(x => !x.Dead), hfLabel,
+                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "Dead == false" }, null, -1)));
+            AddSummaryItem(@" Dead: " + World.HistoricalFigures.Values.Count(x => x.Dead), hfLabel,
+                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "Dead == true" }, null, -1)));
+            AddSummaryItem(@"Is Leader: " + World.HistoricalFigures.Values.Count(x => x.Leader != null), hfLabel,
+                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "isLeader == true" }, null, -1)));
+
+        }
+
+        /// <summary>
+        /// After processing is complete, certain additional bits of World Summary Data can be dropped into the summary.
+        /// </summary>
+        private void AddSummaryItemsLearnedFromProcessing()
+        {
+            var hfLabel = @"    Historical Figures: " + World.HistoricalFigures.Count;
+
+            AddSummaryItem(@"Prisoners: " + World.HistoricalFigures.Values.Count(x => x.PrisonerOf != null), hfLabel);
+            AddSummaryItem(@"Slaves: " +  World.HistoricalFigures.Values.Count(x => x.SlaveOf != null), hfLabel);
+            AddSummaryItem(@"Heroes: " + World.HistoricalFigures.Values.Count(x => x.HeroOf != null), hfLabel);
+            AddSummaryItem(@"Had Children: " + World.HistoricalFigures.Values.Count(x => x.Children != null), hfLabel,
+                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "ID", "Race = null" }, new List<string> { "ChildrenCount > 0" }, null, -1)));
+            AddSummaryItem(@"Childless: " + World.HistoricalFigures.Values.Count(x => x.Children == null), hfLabel,
+                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "ID", "Race = null" }, new List<string> { "ChildrenCount == 0" }, null, -1)));
+            AddSummaryItem(@"Married: " + World.HistoricalFigures.Values.Count(x => x.Spouses != null), hfLabel);
+            AddSummaryItem(@"Killers: " + World.HistoricalFigures.Values.Count(x => x.Kills > 0), hfLabel,
+                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "ID", "Race = null" }, new List<string> { "Kills > 0" }, null, -1)));
+
+        }
+
+        /// <summary>
+        /// Before a section is processed, it's noted.
+        /// </summary>
+        private void XMLSectionProcessedStart(string section)
+        {
+            Program.Log(LogType.Status, section + " Processing...");
+        }
+
 
         /// <summary>
         /// After a section is processed, it's noted.  The World.FamilyProcessing() method starts threads which create dynasties and 
@@ -608,7 +920,7 @@ namespace DFWV
         /// </summary>
         private void XMLSectionProcessed(string section)
         {
-            Program.Log(LogType.Status, section + " processed!");
+            Program.Log(LogType.Status, " Done");
             if (section == "Historical Figures")
                 World.FamilyProcessing();
         }
@@ -616,20 +928,19 @@ namespace DFWV
         /// <summary>
         /// When families are done being counted that's noted.  Once this is done the Ancestor and Descendnet counts in the Historical Figures filter option will give good results.
         /// </summary>
-        void FamiliesCounted()
+        static void FamiliesCounted()
         {
-            Program.Log(LogType.Status, "Families Counted!");
+            Program.Log(LogType.Status, "Families Counted");
         }
 
         /// <summary>
         /// Fill Dynasties when they're created.  This is a new type of World Object I came up with since the data existed and it seems interesting.  See World.CreateDynasties() for details.
         /// </summary>
-        /// <param name="e"></param>
         void DynastiesCreated()
         {
-            FillList<Dynasty>(lstDynasty, World.Dynasties, tabDynasty);
-            Program.Log(LogType.Status, "Dynasties Created!");
-            this.InvokeEx(f => f.WorldSummary.Text += "    Dynasties: " + World.Dynasties.Count + Environment.NewLine);
+            FillList(lstDynasty, World.Dynasties, tabDynasty);
+            Program.Log(LogType.Status, "Dynasties Created");
+            AddSummaryItem(@"    Dynasties: " + World.Dynasties.Count, "XML");
         }
 
         /// <summary>
@@ -641,13 +952,19 @@ namespace DFWV
         /// </summary>
         private void XMLProcessed()
         {
-            Program.Log(LogType.Status, "XML processed!");
+            Program.Log(LogType.Status, "XML Processing Done");
 
             FillAllLists();
 
-            World.EventCollectionsEvaluated += new EventCollectionsEvaluatedEventHandler(World_EventCollectionsEvaluated);
-            World.HistoricalFiguresPositioned += new HistoricalFiguresPositionedEventHandler(World_HistoricalFiguresPositioned);
-            World.StatsGathered += new StatsGatheredEventHandler(World_StatsGathered);
+            AddSummaryItemsLearnedFromProcessing();
+
+            World.EventCollectionsEvaluated -= World_EventCollectionsEvaluated;
+            World.HistoricalFiguresPositioned -= World_HistoricalFiguresPositioned;
+            World.StatsGathered -= World_StatsGathered;
+
+            World.EventCollectionsEvaluated += World_EventCollectionsEvaluated;
+            World.HistoricalFiguresPositioned += World_HistoricalFiguresPositioned;
+            World.StatsGathered += World_StatsGathered;
 
             World.EventCollectionEvaluation();
             World.HistoricalFiguresPositioning();
@@ -656,11 +973,14 @@ namespace DFWV
 
         private void World_EventCollectionsEvaluated()
         {
-            Program.Log(LogType.Status, "Event Collections Evaluated!");
+            Program.Log(LogType.Status, "Event Collections Evaluated");
 
-            World.VisualizationsCreated += new VisualizationsCreatedEventHandler(World_VisualizationsCreated);
 
-            World.VisualizationCreation();
+            //TODO: Implement Visualization Code:
+            //World.VisualizationsCreated -= World_VisualizationsCreated;
+
+            //World.VisualizationCreation();
+            this.InvokeEx(f => f.closeWorldToolStripMenuItem.Visible = true);
         }
 
         /// <summary>
@@ -668,25 +988,26 @@ namespace DFWV
         /// </summary>
         private void World_HistoricalFiguresPositioned()
         {
-            int HFsPositioned = World.HistoricalFigures.Values.Where(x => x.Site != null || x.Region != null || x.Coords != System.Drawing.Point.Empty).Count();
-            int HFsAlive = World.HistoricalFigures.Values.Where(x => x.DiedEvent == null).Count();
+            var HFsPositioned = World.HistoricalFigures.Values.Count(x => x.Site != null || x.Region != null || x.Coords != Point.Empty && !x.Dead);
+            var HFsAlive = World.HistoricalFigures.Values.Count(x => x.Dead);
 
-            Program.Log(LogType.Status, String.Format("Historical Figures Positioned (" + Math.Round((float)HFsPositioned / (float)HFsAlive * 100.0f, 0) + "% located)"));
+            Program.Log(LogType.Status, String.Format("Historical Figures Positioned (" + Math.Round(100.0f * HFsPositioned / HFsAlive, 0) + "% located)"));
 
         }
 
         private void World_StatsGathered()
         {
-            Program.Log(LogType.Status, "World Stats Gathered!");
+            Program.Log(LogType.Status, "World Stats Gathered");
 
-            statsToolStripMenuItem.Visible = true;
+            this.InvokeEx(f => f.statsToolStripMenuItem.Visible = true);
         }
 
-        private void World_VisualizationsCreated()
+        private void World_VisualizationsCreated() //Not used
         {
-            Program.Log(LogType.Status, "Visualizations Created!");
+            Program.Log(LogType.Status, "Visualizations Created");
 
-            visualizationsToolStripMenuItem.Visible = true;
+            this.InvokeEx(f => f.visualizationsToolStripMenuItem.Visible = true);
+            this.InvokeEx(f => f.closeWorldToolStripMenuItem.Visible = true);
         }
 
         #endregion
@@ -697,33 +1018,40 @@ namespace DFWV
         /// </summary>
         private void lstEntityPopulationBattles_SelectedIndexChanged(object sender, EventArgs e)
         {
-            EC_Battle evtcol = (EC_Battle)lstEntityPopulationBattles.SelectedItem;
-            EntityPopulation entpop = (EntityPopulation)lstEntityPopulation.SelectedItem;
-            Squad thisSquad = null;
-            foreach (Squad squad in evtcol.AttackingSquad)
-	        {
-                if (squad.EntityPopulation == entpop)
-                {
-                    thisSquad = squad;
-                    break;
-                }
-	        }
-            if (thisSquad == null)
+            var evtcol = (EC_Battle)lstEntityPopulationBattles.SelectedItem;
+            var entpop = (EntityPopulation)lstEntityPopulation.SelectedItem;
+
+            var number = 0;
+            var deaths = 0;
+            var squads = 0;
+            if (evtcol.AttackingSquad != null)
             {
-                foreach (Squad squad in evtcol.DefendingSquad)
-	            {
+                foreach (var squad in evtcol.AttackingSquad)
+                {
                     if (squad.EntityPopulation == entpop)
                     {
-                        thisSquad = squad;
-                        break;
+                        squads++;
+                        number += squad.Number;
+                        deaths += squad.Deaths;
                     }
-	            }
+                }
             }
-            if (thisSquad == null)
+            if (evtcol.DefendingSquad != null)
+            {
+                foreach (var squad in evtcol.DefendingSquad)
+                {
+                    if (squad.EntityPopulation == entpop)
+                    {
+                        squads++;
+                        number += squad.Number;
+                        deaths += squad.Deaths;
+                    }
+                }
+            }
+            if (squads == 0)
             {
                 lblEntityPopulationBattleDeaths.Text = "";
                 lblEntityPopulationBattleNumber.Text = "";
-                lblEntityPopulationBattleSite.Data = null;
                 lblEntityPopulationBattleTime.Data = null;
                 lblEntityPopulationBattleTime.Text = "";
                 lblEntityPopulationBattleWar.Data = null;
@@ -731,9 +1059,8 @@ namespace DFWV
             }
             else
             {
-                lblEntityPopulationBattleDeaths.Text = thisSquad.Deaths.ToString();
-                lblEntityPopulationBattleNumber.Text = thisSquad.Number.ToString();
-                lblEntityPopulationBattleSite.Data = thisSquad.Site;
+                lblEntityPopulationBattleDeaths.Text = deaths.ToString();
+                lblEntityPopulationBattleNumber.Text = number.ToString();
                 lblEntityPopulationBattleTime.Data = evtcol;
                 lblEntityPopulationBattleTime.Text = evtcol.StartTime.ToString();
                 lblEntityPopulationBattleWar.Data = evtcol.WarEventCol;
@@ -753,11 +1080,22 @@ namespace DFWV
 
             if (e.Index != -1)
             {
-                Site thisSite = (Site)lstSite.SelectedItem;
-                string drawstring = thisSite.Population[(Race)lstSitePopulation.Items[e.Index]].ToString() +
-                    " " + lstSitePopulation.Items[e.Index].ToString();
-                e.Graphics.DrawString(drawstring,
-                    e.Font, System.Drawing.Brushes.Black, e.Bounds, System.Drawing.StringFormat.GenericDefault);
+                var thisSite = (Site)lstSite.SelectedItem;
+                if (thisSite == null)
+                {
+                    grpSite.Visible = false;
+                    return;
+                }
+                string drawString;
+                if (thisSite.Population[(Race)lstSitePopulation.Items[e.Index]] == 1)
+                    drawString = thisSite.Population[(Race)lstSitePopulation.Items[e.Index]] +
+                        " " + lstSitePopulation.Items[e.Index];
+                else
+                    drawString = thisSite.Population[(Race)lstSitePopulation.Items[e.Index]] +
+                        " " + lstSitePopulation.Items[e.Index].ToString().Pluralize();
+
+                e.Graphics.DrawString(drawString,
+                    e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
             }
             e.DrawFocusRectangle();
         }
@@ -769,11 +1107,16 @@ namespace DFWV
 
             if (e.Index != -1)
             {
-                Site thisSite = (Site)lstSite.SelectedItem;
-                string drawstring = thisSite.Prisoners[(Race)lstSitePrisoners.Items[e.Index]].ToString() +
-                    " " + lstSitePrisoners.Items[e.Index].ToString();
+                var thisSite = (Site)lstSite.SelectedItem;
+                if (thisSite == null)
+                {
+                    grpSite.Visible = false;
+                    return;
+                }
+                var drawstring = thisSite.Prisoners[(Race)lstSitePrisoners.Items[e.Index]] +
+                    " " + lstSitePrisoners.Items[e.Index];
                 e.Graphics.DrawString(drawstring,
-                    e.Font, System.Drawing.Brushes.Black, e.Bounds, System.Drawing.StringFormat.GenericDefault);
+                    e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
             }
             e.DrawFocusRectangle();
         }
@@ -786,14 +1129,202 @@ namespace DFWV
 
             if (e.Index != -1)
             {
-                Site thisSite = (Site)lstSite.SelectedItem;
-                string drawstring = thisSite.Outcasts[(Race)lstSiteOutcasts.Items[e.Index]].ToString() +
-                    " " + lstSiteOutcasts.Items[e.Index].ToString();
+                var thisSite = (Site)lstSite.SelectedItem;
+                if (thisSite == null)
+                {
+                    grpSite.Visible = false;
+                    return;
+                }
+                var drawstring = thisSite.Outcasts[(Race)lstSiteOutcasts.Items[e.Index]] +
+                    " " + lstSiteOutcasts.Items[e.Index];
                 e.Graphics.DrawString(drawstring,
-                    e.Font, System.Drawing.Brushes.Black, e.Bounds, System.Drawing.StringFormat.GenericDefault);
+                    e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
             }
             e.DrawFocusRectangle();
 
+        }
+        #endregion
+
+        /// <summary>
+        /// Since civilizations contain leaders, sites, gods, and have wars...
+        ///     These methods handle modifying how items are displayed in those listboxes.
+        /// </summary>
+        #region Civilization Tab
+        private void lstCivilizationSites_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            e.DrawBackground();
+
+            if (e.Index != -1)
+            {
+                var thisSite = (Site)lstCivilizationSites.Items[e.Index];
+
+
+                e.Graphics.DrawString(thisSite.Name,
+                        e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
+
+                var lineAlignFormat = new StringFormat
+                {
+                    Alignment = StringAlignment.Center,
+                    LineAlignment = StringAlignment.Near
+                };
+
+                e.Graphics.DrawString(WorldClasses.Site.Types[thisSite.Type].ToTitleCase(),
+                        e.Font, Brushes.Black, e.Bounds, lineAlignFormat);
+
+                lineAlignFormat.Alignment = StringAlignment.Far;
+
+                if (thisSite.Parent == null)
+                    if (thisSite.Population.First().Value == 1)
+                        e.Graphics.DrawString(thisSite.Population.First().Value + " " + thisSite.Population.First().Key,
+                            e.Font, Brushes.Black, e.Bounds, lineAlignFormat);
+                    else
+                        e.Graphics.DrawString(thisSite.Population.First().Value + " " + thisSite.Population.First().Key.ToString().Pluralize(),
+                            e.Font, Brushes.Black, e.Bounds, lineAlignFormat);
+
+                else
+                {
+                    if (thisSite.Population.ContainsKey(thisSite.Parent.Race))
+                    {
+                        if (thisSite.Population[thisSite.Parent.Race] == 1)
+                            e.Graphics.DrawString(thisSite.Population[thisSite.Parent.Race] + " " + thisSite.Parent.Race,
+                                e.Font, Brushes.Black, e.Bounds, lineAlignFormat);
+                        else
+                            e.Graphics.DrawString(thisSite.Population[thisSite.Parent.Race] + " " + thisSite.Parent.Race.ToString().Pluralize(),
+                                e.Font, Brushes.Black, e.Bounds, lineAlignFormat);
+
+                    }
+                    else if (thisSite.Population.Count > 0)
+                    {
+                        if (thisSite.Population.First().Value == 1)
+                            e.Graphics.DrawString(thisSite.Population.First().Value + " " + thisSite.Population.First().Key,
+                                e.Font, Brushes.Black, e.Bounds, lineAlignFormat);
+                        else
+                            e.Graphics.DrawString(thisSite.Population.First().Value + " " + thisSite.Population.First().Key.ToString().Pluralize(),
+                                e.Font, Brushes.Black, e.Bounds, lineAlignFormat);
+                    }
+                }
+
+            }
+            e.DrawFocusRectangle();
+        }
+
+        private void lstCivilizationLeaders_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            e.DrawBackground();
+            if (e.Index != -1)
+            {
+                var thisLeader = (Leader)lstCivilizationLeaders.Items[e.Index];
+
+                e.Graphics.DrawString(
+                    thisLeader.Name.Split(new[] {" the ", " The "}, StringSplitOptions.RemoveEmptyEntries)[0],
+                    thisLeader.isCurrent
+                        ? new Font(e.Font.FontFamily.ToString(), e.Font.Size, FontStyle.Underline)
+                        : e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
+
+                var typeString = thisLeader.HF != null && thisLeader.HF.Caste.HasValue
+                    ? HistoricalFigure.Castes[thisLeader.HF.Caste.Value].ToLower().ToTitleCase() + " "
+                    : "";
+                    
+                    
+                typeString += Leader.LeaderTypes[thisLeader.LeaderType].ToTitleCase();
+
+
+                if (thisLeader.Site != null) //Leaders only in site file
+                {
+                    typeString += " at " + thisLeader.Site.Name;
+                }
+                
+                if (thisLeader.ReignBegan != null)
+                {
+                    typeString += (thisLeader.ReignBegan.Year > -1
+                           ? " from " + thisLeader.ReignBegan.Year
+                           : "");
+                }
+
+                e.Graphics.DrawString(typeString,
+                            e.Font, Brushes.Black, new PointF(e.Bounds.Width / 5 * 2, e.Bounds.Top), StringFormat.GenericDefault);
+
+                var lineAlignFormat = new StringFormat
+                {
+                    Alignment = StringAlignment.Far,
+                    LineAlignment = StringAlignment.Near
+                };
+
+                e.Graphics.DrawString(thisLeader.Race != null ? thisLeader.Race.ToString() : (thisLeader.HF != null && thisLeader.HF.Race != null ? thisLeader.HF.Race.ToString() : ""),
+                    e.Font, Brushes.Black, e.Bounds, lineAlignFormat);
+
+
+            }
+            e.DrawFocusRectangle();
+        }
+
+        private void lstCivilizationGods_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            e.DrawBackground();
+
+            if (e.Index != -1)
+            {
+                var thisGod = (God)lstCivilizationGods.Items[e.Index];
+
+                e.Graphics.DrawString(thisGod.Name.Split(new[] { " the ", " The " }, StringSplitOptions.RemoveEmptyEntries)[0],
+                        e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
+
+                var lineAlignFormat = new StringFormat
+                {
+                    Alignment = StringAlignment.Center,
+                    LineAlignment = StringAlignment.Near
+                };
+
+                e.Graphics.DrawString(God.Types[thisGod.Type],
+                        e.Font, Brushes.Black, e.Bounds, lineAlignFormat);
+
+                lineAlignFormat.Alignment = StringAlignment.Far;
+
+                e.Graphics.DrawString(thisGod.HF != null && thisGod.HF.Race != null ? thisGod.HF.Race.ToString() : "",
+                    e.Font, Brushes.Black, e.Bounds, lineAlignFormat);
+
+            }
+            e.DrawFocusRectangle();
+        }
+
+
+        private void lstCivilizationWars_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            e.DrawBackground();
+            if (e.Index != -1)
+            {
+                var thisWar = (EC_War)lstCivilizationWars.Items[e.Index];
+                if (!(lstCivilization.SelectedItem is WorldObject))
+                    return;
+                var thisCiv = (Civilization)lstCivilization.SelectedItem;
+                e.Graphics.DrawString(thisWar.ToString(),
+                        e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
+
+                // Create a StringFormat object with the each line of text, and the block 
+                // of text centered on the page.
+                var rightAlignFormat = new StringFormat
+                {
+                    Alignment = StringAlignment.Far,
+                    LineAlignment = StringAlignment.Near
+                };
+
+                var timeString = String.Format("({0} - {1})", thisWar.StartTime,
+                    thisWar.EndTime != WorldTime.Present ? thisWar.EndTime.ToString() : "");
+                e.Graphics.DrawString(timeString,
+                    e.Font, Brushes.Black, e.Bounds, rightAlignFormat);
+
+
+
+                e.Graphics.DrawString((thisWar.AggressorEnt == thisCiv.Entity ? "Defender: " + thisWar.DefenderEnt : "Aggressor: " + thisWar.AggressorEnt),
+                    e.Font, Brushes.Black, new PointF(e.Bounds.Width / 8.0f, e.Bounds.Top + e.Bounds.Height / 2.0f), StringFormat.GenericDefault);
+
+                e.Graphics.DrawString((thisWar.EndTime == WorldTime.Present
+                        ? "Ongoing"
+                        : WorldTime.Duration(thisWar.EndTime, thisWar.StartTime)),
+                    e.Font, Brushes.Black, new PointF(e.Bounds.Width, e.Bounds.Top + e.Bounds.Height / 2.0f), rightAlignFormat);
+
+            }
+            e.DrawFocusRectangle();
         }
         #endregion
 
@@ -804,7 +1335,7 @@ namespace DFWV
         /// </summary>
         private void lstBattleAttackingSquad_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Squad squad = (Squad)((ListBox)sender).SelectedItem;
+            var squad = (Squad)((ListBox)sender).SelectedItem;
 
             lblBattleAttackingSquadSite.Data = squad.Site;
             lblBattleAttackingSquadRace.Data = squad.Race;
@@ -815,7 +1346,7 @@ namespace DFWV
 
         private void lstBattleDefendingSquad_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Squad squad = (Squad)((ListBox)sender).SelectedItem;
+            var squad = (Squad)((ListBox)sender).SelectedItem;
 
             lblBattleDefendingSquadSite.Data = squad.Site;
             lblBattleDefendingSquadRace.Data = squad.Race;
@@ -833,20 +1364,20 @@ namespace DFWV
 
             if (e.Index != -1)
             {
-                EC_Battle thisBattle = (EC_Battle)lstHistoricalEventCollection.SelectedItem;
-                string drawstring = thisBattle.AttackingHF[e.Index].ToString();
+                var thisBattle = (EC_Battle)lstHistoricalEventCollection.SelectedItem;
+                var drawstring = thisBattle.AttackingHF[e.Index].ToString();
 
-                Drawing.Color mColor = Drawing.Color.Black;
+                var mColor = Color.Black;
                 if (thisBattle.AttackingHF[e.Index].Caste.HasValue && HistoricalFigure.Castes[thisBattle.AttackingHF[e.Index].Caste.Value].ToLower().StartsWith("male"))
-                    mColor = Drawing.Color.Blue;
+                    mColor = Color.Blue;
                 else if (thisBattle.AttackingHF[e.Index].Caste.HasValue && HistoricalFigure.Castes[thisBattle.AttackingHF[e.Index].Caste.Value].ToLower().StartsWith("female"))
-                    mColor = Drawing.Color.Red; 
+                    mColor = Color.Red; 
                   
 
                 if (thisBattle.AttackingDiedHF != null && thisBattle.AttackingDiedHF.Contains(thisBattle.AttackingHF[e.Index]))
-                    e.Graphics.DrawString(drawstring, new System.Drawing.Font(e.Font.FontFamily.ToString(), e.Font.Size, System.Drawing.FontStyle.Bold), new Drawing.SolidBrush(mColor), e.Bounds);
+                    e.Graphics.DrawString(drawstring, new Font(e.Font.FontFamily.ToString(), e.Font.Size, FontStyle.Bold), new SolidBrush(mColor), e.Bounds);
                 else
-                    e.Graphics.DrawString(drawstring, e.Font, new Drawing.SolidBrush(mColor), e.Bounds);
+                    e.Graphics.DrawString(drawstring, e.Font, new SolidBrush(mColor), e.Bounds);
 
             }
             e.DrawFocusRectangle();
@@ -855,24 +1386,22 @@ namespace DFWV
         private void lstBattleDefendingHF_DrawItem(object sender, DrawItemEventArgs e)
         {
             e.DrawBackground();
-            System.Drawing.Brush myBrush = System.Drawing.Brushes.Black;
-
 
             if (e.Index != -1)
             {
-                EC_Battle thisBattle = (EC_Battle)lstHistoricalEventCollection.SelectedItem;
-                string drawstring = thisBattle.DefendingHF[e.Index].ToString();
+                var thisBattle = (EC_Battle)lstHistoricalEventCollection.SelectedItem;
+                var drawstring = thisBattle.DefendingHF[e.Index].ToString();
 
-                Drawing.Color mColor = Drawing.Color.Black;
+                var mColor = Color.Black;
                 if (thisBattle.DefendingHF[e.Index].Caste.HasValue && HistoricalFigure.Castes[thisBattle.DefendingHF[e.Index].Caste.Value].ToLower().StartsWith("male"))
-                    mColor = Drawing.Color.Blue;
+                    mColor = Color.Blue;
                 else if (thisBattle.DefendingHF[e.Index].Caste.HasValue && HistoricalFigure.Castes[thisBattle.DefendingHF[e.Index].Caste.Value].ToLower().StartsWith("female"))
-                    mColor = Drawing.Color.Red;
+                    mColor = Color.Red;
                 
                 if (thisBattle.DefendingDiedHF != null && thisBattle.DefendingDiedHF.Contains(thisBattle.DefendingHF[e.Index]))
-                    e.Graphics.DrawString(drawstring, new System.Drawing.Font(e.Font.FontFamily.ToString(), e.Font.Size, System.Drawing.FontStyle.Bold), new Drawing.SolidBrush(mColor), e.Bounds);
+                    e.Graphics.DrawString(drawstring, new Font(e.Font.FontFamily.ToString(), e.Font.Size, FontStyle.Bold), new SolidBrush(mColor), e.Bounds);
                 else
-                    e.Graphics.DrawString(drawstring, e.Font, new Drawing.SolidBrush(mColor), e.Bounds);
+                    e.Graphics.DrawString(drawstring, e.Font, new SolidBrush(mColor), e.Bounds);
             }
             e.DrawFocusRectangle();
         }
@@ -883,19 +1412,76 @@ namespace DFWV
         /// </summary>
         private void EventCollection_EventsListClick(object sender, EventArgs e)
         {
-            ListBox listBox = (ListBox)sender;
-            if (typeof(HistoricalEvent).IsAssignableFrom(listBox.SelectedItem.GetType()))
-            {
-                HistoricalEvent evt = (HistoricalEvent)listBox.SelectedItem;
-                
+            var listBox = (ListBox)sender;
+            if (!(listBox.SelectedItem is HistoricalEvent)) 
+                return;
 
-                evt.WriteDetailsOnParent(this, listBox.Parent, new System.Drawing.Point(listBox.Left, listBox.Bottom + 10));
-            }
-            
+            var evt = (HistoricalEvent)listBox.SelectedItem;
+                
+            evt.WriteDetailsOnParent(this, listBox.Parent, new Point(listBox.Left, listBox.Bottom + 10));
         }
 
         #endregion 
 
+        #region Historical Figure Tab
+        /// <summary>
+        /// If a HF is clicked in the HF treeview, display event details underneath the tree view
+        /// </summary>
+        private void trvHistoricalFigureHFLinks_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            
+            var TreeView = (TreeView) sender;
+            var selectedHFNode = e.Node;
+            
+            var thisHF = (HistoricalFigure) lstHistoricalFigure.SelectedItem;
+
+            HistoricalEvent evt = null;
+            if (selectedHFNode.Parent != null)
+            {
+                switch (selectedHFNode.Parent.Text.Split(' ')[0])
+                {
+                    case "Relationships":
+
+                    case "Spouses":
+                        if (thisHF.HFLinks != null)
+                        {
+                            foreach (var hfLinkList in thisHF.HFLinks)
+                            {
+                                foreach (var hfLink in hfLinkList.Value)
+                                {
+                                    if (hfLink.HF == selectedHFNode.Tag)
+                                    {
+                                        evt = hfLink.AddEvent;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case "Kills":
+                        if (thisHF.SlayingEvents != null)
+                        {
+                            foreach (var slaying_event in thisHF.SlayingEvents)
+                            {
+                                if (slaying_event.HF == selectedHFNode.Tag)
+                                {
+                                    evt = slaying_event;
+                                    break;
+                                }
+                            }
+                        }
+                        break;
+                }
+            }
+
+
+
+            if (evt != null)
+            {
+                evt.WriteDetailsOnParent(this, TreeView.Parent, new Point(TreeView.Left, TreeView.Bottom + 10));
+            }
+        }
+        #endregion
 
         /// <summary>
         /// Filtering is handled by clicking the filter button under a primary list box or typing into the textbox under that listbox, 
@@ -909,60 +1495,62 @@ namespace DFWV
         /// </summary>
         private void FilterButton_Click(object sender, EventArgs e)
         {
+
             switch (((Button)sender).Name)
             {
                 case "FilterRegion":
-                    StartFilter<Region, int>(lstRegion, World.Regions, tabRegion);
+                    StartFilter(lstRegion, World.Regions, tabRegion);
                     break;
                 case "FilterUndergroundRegion":
-                    StartFilter<UndergroundRegion, int>(lstUndergroundRegion, World.UndergroundRegions, tabUndergroundRegion);
+                    StartFilter(lstUndergroundRegion, World.UndergroundRegions, tabUndergroundRegion);
                     break;
                 case "FilterEntity":
-                    StartFilter<Entity, int>(lstEntity, World.Entities, tabEntity);
+                    StartFilter(lstEntity, World.Entities, tabEntity);
                     break;
                 case "FilterEntityPopulation":
-                    StartFilter<EntityPopulation, int>(lstEntityPopulation, World.EntityPopulations, tabEntityPopulation);
+                    StartFilter(lstEntityPopulation, World.EntityPopulations, tabEntityPopulation);
                     break;
                 case "FilterSite":
-                    StartFilter<Site, int>(lstSite, World.Sites, tabSite);
+                    StartFilter(lstSite, World.Sites, tabSite);
                     break;
                 case "FilterWorldConstruction":
-                    StartFilter<WorldConstruction, int>(lstWorldConstruction, World.WorldConstructions, tabWorldConstruction);
+                    StartFilter(lstWorldConstruction, World.WorldConstructions, tabWorldConstruction);
                     break;
                 case "FilterArtifact":
-                    StartFilter<Artifact, int>(lstArtifact, World.Artifacts, tabArtifact);
+                    StartFilter(lstArtifact, World.Artifacts, tabArtifact);
                     break;
                 case "FilterHistoricalFigure":
-                    StartFilter<HistoricalFigure, int>(lstHistoricalFigure, World.HistoricalFigures, tabHistoricalFigure);
+                    StartFilter(lstHistoricalFigure, World.HistoricalFigures, tabHistoricalFigure);
                     break;
                 case "FilterHistoricalEvent":
-                    StartFilter<HistoricalEvent, int>(lstHistoricalEvent, World.HistoricalEvents, tabHistoricalEvent);
+                    StartFilter(lstHistoricalEvent, World.HistoricalEvents, tabHistoricalEvent);
                     break;
                 case "FilterHistoricalEventCollection":
-                    StartFilter<HistoricalEventCollection, int>(lstHistoricalEventCollection, World.HistoricalEventCollections, tabHistoricalEventCollection);
+                    StartFilter(lstHistoricalEventCollection, World.HistoricalEventCollections, tabHistoricalEventCollection);
                     break;
                 case "FilterHistoricalEra":
-                    StartFilter<HistoricalEra, int>(lstHistoricalEra, World.HistoricalEras, tabHistoricalEra);
+                    StartFilter(lstHistoricalEra, World.HistoricalEras, tabHistoricalEra);
                     break;
                 case "FilterCivilization":
-                    StartFilter<Civilization>(lstCivilization, World.Civilizations, tabCivilization);
+                    StartFilter(lstCivilization, World.Civilizations, tabCivilization);
                     break;
                 case "FilterGod":
-                    StartFilter<God>(lstGod, World.Gods, tabGod);
+                    StartFilter(lstGod, World.Gods, tabGod);
                     break;
                 case "FilterLeader":
-                    StartFilter<Leader>(lstLeader, World.Leaders, tabLeader);
+                    StartFilter(lstLeader, World.Leaders, tabLeader);
                     break;
                 case "FilterParameter":
-                    StartFilter<Parameter>(lstParameter, World.Parameters, tabParameter);
+                    StartFilter(lstParameter, World.Parameters, tabParameter);
                     break;
                 case "FilterRace":
-                    StartFilter<Race, string>(lstRace, World.Races, tabRace);
+                    StartFilter(lstRace, World.Races, tabRace);
                     break;
                 case "FilterDynasty":
-                    StartFilter<Dynasty>(lstDynasty, World.Dynasties, tabDynasty);
+                    StartFilter(lstDynasty, World.Dynasties, tabDynasty);
                     break;
-                default:
+                case "FilterStructure":
+                    StartFilter(lstStructure, World.Structures, tabStructure);
                     break;
             }
 
@@ -979,16 +1567,15 @@ namespace DFWV
         /// <param name="tabPage">The tabPage our listbox is on.</param>
         private void StartFilter<T>(ListBox listBox, List<T> list, TabPage tabPage) where T : WorldObject
         {
-            FilterForm FilterForm = new FilterForm(World, typeof(T));
-            DialogResult res = FilterForm.ShowDialog();
+            var FilterForm = new FilterForm(World, typeof(T));
+            var res = FilterForm.ShowDialog();
             if (res == DialogResult.OK)
             {
                 World.Filters[typeof(T)] = FilterForm.outFilter;
 
-                FillList<T>(listBox, list, tabPage);
+                FillList(listBox, list, tabPage);
             }
             FilterForm.Dispose();
-            FilterForm = null;
         }
 
         /// <summary>
@@ -1001,16 +1588,15 @@ namespace DFWV
         /// <param name="tabPage">The tabPage our listbox is on.</param>
         private void StartFilter<T, K>(ListBox listBox, Dictionary<K, T> dict, TabPage tabPage) where T : WorldObject
         {
-            FilterForm FilterForm = new FilterForm(World, typeof(T));
-            DialogResult res = FilterForm.ShowDialog();
+            var FilterForm = new FilterForm(World, typeof(T));
+            var res = FilterForm.ShowDialog();
             if (res == DialogResult.OK)
             {
                 World.Filters[typeof(T)] = FilterForm.outFilter;
 
-                FillList<T, K>(listBox, dict, tabPage);
+                FillList(listBox, dict, tabPage);
             }
             FilterForm.Dispose();
-            FilterForm = null;
         }
 
 
@@ -1019,59 +1605,64 @@ namespace DFWV
         /// </summary>
         private void TextFilter_Changed(object sender, EventArgs e)
         {
-            string txt = ((TextBox)sender).Text;
+            var txt = ((TextBox)sender).Text;
             switch (((TextBox)sender).Name)
             {
                 case "TextFilterRegion":
-                    TextFilter<Region, int>(txt, lstRegion, World.Regions, tabRegion);
+                    TextFilter(txt, lstRegion, World.Regions, tabRegion);
                     break;
                 case "TextFilterUndergroundRegion":
-                    TextFilter<UndergroundRegion, int>(txt, lstUndergroundRegion, World.UndergroundRegions, tabUndergroundRegion);
+                    TextFilter(txt, lstUndergroundRegion, World.UndergroundRegions, tabUndergroundRegion);
                     break;
                 case "TextFilterEntity":
-                    TextFilter<Entity, int>(txt, lstEntity, World.Entities, tabEntity);
+                    TextFilter(txt, lstEntity, World.Entities, tabEntity);
                     break;
                 case "TextFilterEntityPopulation":
-                    TextFilter<EntityPopulation, int>(txt, lstEntityPopulation, World.EntityPopulations, tabEntityPopulation);
+                    TextFilter(txt, lstEntityPopulation, World.EntityPopulations, tabEntityPopulation);
                     break;
                 case "TextFilterSite":
-                    TextFilter<Site, int>(txt, lstSite, World.Sites, tabSite);
+                    TextFilter(txt, lstSite, World.Sites, tabSite);
                     break;
                 case "TextFilterWorldConstruction":
-                    TextFilter<WorldConstruction, int>(txt, lstWorldConstruction, World.WorldConstructions, tabWorldConstruction);
+                    TextFilter(txt, lstWorldConstruction, World.WorldConstructions, tabWorldConstruction);
                     break;
                 case "TextFilterArtifact":
-                    TextFilter<Artifact, int>(txt, lstArtifact, World.Artifacts, tabArtifact);
+                    TextFilter(txt, lstArtifact, World.Artifacts, tabArtifact);
                     break;
                 case "TextFilterHistoricalFigure":
-                    TextFilter<HistoricalFigure, int>(txt, lstHistoricalFigure, World.HistoricalFigures, tabHistoricalFigure);
+                    TextFilter(txt, lstHistoricalFigure, World.HistoricalFigures, tabHistoricalFigure);
                     break;
                 case "TextFilterHistoricalEvent":
-                    TextFilter<HistoricalEvent, int>(txt, lstHistoricalEvent, World.HistoricalEvents, tabHistoricalEvent);
+                    TextFilter(txt, lstHistoricalEvent, World.HistoricalEvents, tabHistoricalEvent);
                     break;
                 case "TextFilterHistoricalEventCollection":
-                    TextFilter<HistoricalEventCollection, int>(txt, lstHistoricalEventCollection, World.HistoricalEventCollections, tabHistoricalEventCollection);
+                    TextFilter(txt, lstHistoricalEventCollection, World.HistoricalEventCollections, tabHistoricalEventCollection);
                     break;
                 case "TextFilterHistoricalEra":
-                    TextFilter<HistoricalEra, int>(txt, lstHistoricalEra, World.HistoricalEras, tabHistoricalEra);
+                    TextFilter(txt, lstHistoricalEra, World.HistoricalEras, tabHistoricalEra);
                     break;
                 case "TextFilterCivilization":
-                    TextFilter<Civilization>(txt, lstCivilization, World.Civilizations, tabCivilization);
+                    TextFilter(txt, lstCivilization, World.Civilizations, tabCivilization);
                     break;
                 case "TextFilterGod":
-                    TextFilter<God>(txt, lstGod, World.Gods, tabGod);
+                    TextFilter(txt, lstGod, World.Gods, tabGod);
                     break;
                 case "TextFilterLeader":
-                    TextFilter<Leader>(txt, lstLeader, World.Leaders, tabLeader);
+                    TextFilter(txt, lstLeader, World.Leaders, tabLeader);
                     break;
                 case "TextFilterParameter":
-                    TextFilter<Parameter>(txt, lstParameter, World.Parameters, tabParameter);
+                    TextFilter(txt, lstParameter, World.Parameters, tabParameter);
                     break;
                 case "TextFilterRace":
-                    TextFilter<Race, string>(txt, lstRace, World.Races, tabRace);
+                    TextFilter(txt, lstRace, World.Races, tabRace);
                     break;
-                default:
+                case "TextFilterDynasty":
+                    TextFilter(txt, lstDynasty, World.Dynasties, tabDynasty);
                     break;
+                case "TextFilterStructure":
+                    TextFilter(txt, lstStructure, World.Structures, tabStructure);
+                    break;
+
             }
         }
 
@@ -1086,10 +1677,10 @@ namespace DFWV
         /// <param name="tabPage">The tabPage our listbox is on.</param>
         private void TextFilter<T>(string txt, ListBox listBox, List<T> list, TabPage tabPage) where T : WorldObject
         {
-            string tempFilter = "DispNameLower.Contains(\"" + txt.ToLower() + "\")";
+            var tempFilter = "DispNameLower.Contains(\"" + txt.ToLower() + "\")";
             World.Filters[typeof(T)].Where.Add(tempFilter);
 
-            FillList<T>(listBox, list, tabPage);
+            FillList(listBox, list, tabPage);
 
             World.Filters[typeof(T)].Where.Remove(tempFilter);
         }
@@ -1106,13 +1697,22 @@ namespace DFWV
         private void TextFilter<T, K>(string txt, ListBox listBox, Dictionary<K, T> dict, TabPage tabPage) where T: WorldObject
         {
 
-            string tempFilter = "DispNameLower.Contains(\"" + txt.ToLower() + "\")";
+            var tempSelected = listBox.SelectedItem;
+
+            var tempFilter = "DispNameLower.Contains(\"" + txt.ToLower() + "\")";
             World.Filters[typeof(T)].Where.Add(tempFilter);
 
-            FillList<T, K>(listBox, dict, tabPage);
+            FillList(listBox, dict, tabPage);
 
             World.Filters[typeof(T)].Where.Remove(tempFilter);
 
+            if (tempSelected != null)
+            { 
+            if (listBox.Items.Contains(tempSelected))
+                listBox.SelectedItem = tempSelected;
+            else
+                listBox.SelectedIndex  = -1;
+            }
         }
         
         #endregion
@@ -1129,11 +1729,30 @@ namespace DFWV
         /// <param name="item"></param>
         internal void AddToNav(WorldObject item)
         {
-            if (ViewedObjects.Count > 0 && ViewedObjects.Peek() == item)
+            if (NavBackObjects.Count > 0 && NavBackObjects.Peek() == item)
+            {
                 return;
-            ViewedObjects.Push(item);
+            }
+            if (!navigatingBack)
+            {
+                NavForwardObjects.Clear();
+                ForwardtoolStripMenuItem.Enabled = false;
+            }
+            navigatingBack = false;
+            NavBackObjects.Push(item);
+            BacktoolStripMenuItem.Enabled = NavBackObjects.Count >= 2;
+        }
 
-            BacktoolStripMenuItem.Visible = ViewedObjects.Count >= 2;
+        /// <summary>
+        /// When a world is Closed, the Nav must be cleared
+        /// </summary>
+        internal void ClearNav()
+        {
+            NavBackObjects.Clear();
+            NavForwardObjects.Clear();
+
+            BacktoolStripMenuItem.Enabled = false;
+            ForwardtoolStripMenuItem.Enabled = false;
         }
 
         /// <summary>
@@ -1142,15 +1761,60 @@ namespace DFWV
         private void BacktoolStripMenuItem_Click(object sender, EventArgs e)
         {
             //Remove Top Object
-            ViewedObjects.Pop();
+            NavForwardObjects.Push(NavBackObjects.Pop());
 
-            WorldObject selObject = ViewedObjects.Pop();
+            var selObject = NavBackObjects.Pop();
+
+            navigatingBack = true;
 
             selObject.Select(this);
 
-            BacktoolStripMenuItem.Visible = ViewedObjects.Count >= 2;
+            BacktoolStripMenuItem.Enabled = NavBackObjects.Count >= 2;
+            ForwardtoolStripMenuItem.Enabled = NavForwardObjects.Count >= 1;
         }
+
+        /// <summary>
+        /// When we go forwards we first pop off the first item in the Stack then pop the previous item to travel back to it.
+        /// </summary>
+        private void ForwardtoolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Remove Top Object
+            var selObject = NavForwardObjects.Pop();
+            NavBackObjects.Push(selObject);
+            selObject.Select(this);
+
+            BacktoolStripMenuItem.Enabled = NavBackObjects.Count >= 1;
+            ForwardtoolStripMenuItem.Enabled = NavForwardObjects.Count >= 1;
+        }
+        
         #endregion
+
+        private void lstEntityPopluationRaces_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            e.DrawBackground();
+
+            if (e.Index != -1)
+            {
+                var thisEntPop = (EntityPopulation)lstEntityPopulation.SelectedItem;
+                if (thisEntPop == null)
+                {
+                    grpEntityPopulation.Visible = false;
+                    return;
+                }
+                string drawString;
+                if (thisEntPop.RaceCounts[(Race)lstEntityPopluationRaces.Items[e.Index]] == 1)
+                    drawString = thisEntPop.RaceCounts[(Race)lstEntityPopluationRaces.Items[e.Index]] +
+                        " " + lstEntityPopluationRaces.Items[e.Index];
+                else
+                    drawString = thisEntPop.RaceCounts[(Race)lstEntityPopluationRaces.Items[e.Index]] +
+                        " " + lstEntityPopluationRaces.Items[e.Index].ToString().Pluralize();
+
+                e.Graphics.DrawString(drawString,
+                    e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
+            }
+            e.DrawFocusRectangle();
+        }
+
 
     }
 }

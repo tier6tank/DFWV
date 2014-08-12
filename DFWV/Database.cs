@@ -1,52 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data.SQLite;
+﻿using System.Collections.Generic;
 using System.Data;
+using System.Data.SQLite;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
-
 
 namespace DFWV
 {
-
-    class Database
+    internal static class Database
     {
-        public static SQLiteConnection Connection;
-        public static SQLiteCommand Command;
-        //static SQLiteDataAdapter DataAdapter;
-        private DataSet DS = new DataSet();
-        private DataTable DT = new DataTable();
-        public static SQLiteDataReader Reader;
+        private static SQLiteConnection _connection;
+        private static SQLiteCommand _command;
+        private static SQLiteDataReader Reader;
 
         public static void SetConnection(string dbPath)
         {
-            Connection = new SQLiteConnection
+            _connection = new SQLiteConnection
                 ("Data Source=" + dbPath + ";Version=3;New=False;Compress=True;");
-            Connection.Open();
+            _connection.Open();
         }
 
         public static void CloseConnection()
         {
-            Connection.Close();
-            Connection.Dispose();
+            _connection.Close();
+            _connection.Dispose();
         }
 
-        public static void ExecuteNonQuery(string txtQuery)
+        private static void ExecuteNonQuery(string txtQuery)
         {
-            Command = Connection.CreateCommand();
-            Command.CommandText = txtQuery;
-            Command.ExecuteNonQuery();
-
+            _command = _connection.CreateCommand();
+            _command.CommandText = txtQuery;
+            _command.ExecuteNonQuery();
         }
 
-        public static void ExecuteQuery(string txtQuery)
+        private static void ExecuteQuery(string txtQuery)
         {
-            Command = Connection.CreateCommand();
-            Command.CommandText = txtQuery;
-            Reader = Command.ExecuteReader();
-
+            _command = _connection.CreateCommand();
+            _command.CommandText = txtQuery;
+            Reader = _command.ExecuteReader();
         }
 
         public static void BeginTransaction()
@@ -62,62 +53,50 @@ namespace DFWV
         public static void EmptyAllTables()
         {
             ExecuteQuery("Select tbl_name from sqlite_master");
-            DataTable dt = new DataTable();
-            dt.Load(Database.Reader);
+            var dt = new DataTable();
+            dt.Load(Reader);
 
             foreach (DataRow row in dt.Rows)
             {
-                Command = Connection.CreateCommand();
-                Command.CommandText = "DELETE FROM [" + row["tbl_name"] + "]";
-                Command.ExecuteNonQuery(); 
+                _command = _connection.CreateCommand();
+                _command.CommandText = "DELETE FROM [" + row["tbl_name"] + "]";
+                _command.ExecuteNonQuery();
             }
-
-
         }
 
+/*
         public static Bitmap BlobToImage(object blob)
         {
-            System.IO.MemoryStream mStream = new System.IO.MemoryStream();
+            MemoryStream mStream = new MemoryStream();
             byte[] pData = (byte[])blob;
             mStream.Write(pData, 0, Convert.ToInt32(pData.Length));
             Bitmap bm = new Bitmap(mStream, false);
             mStream.Dispose();
             return bm;
         }
-
-        public static byte[] ImageToBlob(string filePath)
-        {
-            FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-            BinaryReader br = new BinaryReader(fs);
-            byte[] bm = br.ReadBytes(Convert.ToInt32(fs.Length));
-            br.Close();
-            fs.Close();
-            return bm;
-
-        }
+*/
 
         public static byte[] ImageToBlob(Image image)
         {
-            MemoryStream ms = new MemoryStream();
-            image.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            var ms = new MemoryStream();
+            image.Save(ms, ImageFormat.Png);
             return ms.ToArray();
         }
 
         internal static void ExportWorldItem(string table, List<object> vals)
         {
+            _command = _connection.CreateCommand();
 
-            Command = Connection.CreateCommand();
-
-            Command.CommandText = "INSERT INTO [" + table + "] values (";
-            for (int i = 0; i < vals.Count; i++)
-			{
-                Command.CommandText += " @" + i + ",";
-                Command.Parameters.AddWithValue("@" + i, vals[i]);
-			}
-            Command.CommandText = Command.CommandText.TrimEnd(',') + ")";
+            _command.CommandText = "INSERT INTO [" + table + "] values (";
+            for (var i = 0; i < vals.Count; i++)
+            {
+                _command.CommandText += " @" + i + ",";
+                _command.Parameters.AddWithValue("@" + i, vals[i]);
+            }
+            _command.CommandText = _command.CommandText.TrimEnd(',') + ")";
 
 
-            Command.ExecuteNonQuery();
+            _command.ExecuteNonQuery();
         }
     }
 }

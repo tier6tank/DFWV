@@ -1,14 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Design.PluralizationServices;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Linq;
 using System.ComponentModel;
+using DFWV.Properties;
 using DFWV.WorldClasses;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Collections;
+using SevenZip;
+
+//TODO: Fix World Site file parsing, missing bottom population section
+//TODO: Verify all static lists are cleared on world close
+//TODO: Group by multiple items
+
+//TODO: Properly Export Insurrection started/ended and event collections
+
+//TODO: Add notes on event types currently On Change HF Body State
+//TODO: Handle "Died Event" at site level
+//TODO: Entity SiteTakenOver event not used
+
+//TODO: HE_ArtifactCreated - Unit
+//TODO: HF - CreatedArtifacts
+//TODO: Site - NewLeaderEVents
+
+//TODO: Fix Leader Race in filter conditions
+
+//TODO: Check if new IndexOf static Lists items export properly
 
 namespace DFWV
 {
@@ -36,6 +56,7 @@ namespace DFWV
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            InitiailzePluralService();
             mainForm = new MainForm();
             
             Application.Run(mainForm);
@@ -52,11 +73,25 @@ namespace DFWV
         /// </summary>
         public static void MakeSelected(TabPage tabPage, ListBox listBox, WorldObject item)
         {
-            Program.mainForm.MainTab.SelectedTab = tabPage;
+            mainForm.MainTab.SelectedTab = tabPage;
             if (!listBox.Items.Contains(item))
                 listBox.Items.Add(item);
             listBox.SelectedItem = item;
-            Program.mainForm.AddToNav(item);
+            mainForm.AddToNav(item);
+        }
+
+        /// <summary>
+        /// This function is called when an Item on the WorldSummaryTree is double clicked.  
+        /// It 
+        ///  * Selects the appropriate tab, 
+        ///  * Selects the first item on the listbox if there are any.
+        ///  * Adds that item to the navigation system, used to scroll backward through items you've viewed
+        /// </summary>
+        public static void MakeSelected(TabPage tabPage, ListBox listBox)
+        {
+            mainForm.MainTab.SelectedTab = tabPage;
+            if (listBox.SelectedIndex == -1 && listBox.Items.Count > 0)
+                listBox.SelectedIndex = 0;
         }
 
 
@@ -65,9 +100,9 @@ namespace DFWV
         /// one another for use in assigning colors to civilizations for mapping purposes
         /// </summary>
         #region DistinctColors
-        private static int curDistinctColor = 0;
-        private static List<string> ColorNames = new List<string>()
-                {"#00FF00", "#0000FF", "#FF0000", "#01FFFE", "#FFA6FE", "#FFDB66", "#006401", "#010067", 
+        private static int curDistinctColor;
+        public static List<string> ColorNames = new List<string>
+        {"#00FF00", "#0000FF", "#FF0000", "#01FFFE", "#FFA6FE", "#FFDB66", "#006401", "#010067", 
                     "#95003A", "#007DB5", "#FF00F6", "#FFEEE8", "#774D00", "#90FB92", "#0076FF", "#D5FF00", 
                     "#FF937E", "#6A826C", "#FF029D", "#FE8900", "#7A4782", "#7E2DD2", "#85A900", "#FF0056", 
                     "#A42400", "#00AE7E", "#683D3B", "#BDC6FF", "#263400", "#BDD393", "#00B917", "#9E008E", 
@@ -81,7 +116,7 @@ namespace DFWV
 
             if (curDistinctColor < ColorNames.Count)
             {
-                int rgb = Int32.Parse(ColorNames[curDistinctColor].Replace("#", ""), NumberStyles.HexNumber);
+                var rgb = Int32.Parse(ColorNames[curDistinctColor].Replace("#", ""), NumberStyles.HexNumber);
                 thisColor = Color.FromArgb(255,Color.FromArgb(rgb));
                 curDistinctColor++;
             }
@@ -145,54 +180,92 @@ namespace DFWV
             str = str.Replace('╜', '½');
 
             
-            foreach (char c in str)
+            foreach (var c in str.Where(c => !((c >= 'a' && c <= 'z') ||
+                                               (c >= 'A' && c <= 'Z') ||
+                                               (c == '-') ||
+                                               (c == ' ') || c == 'ê' || c == 'î' || c == 'ô' || c == 'á' || c == 'í' || c == 'ó' || c == (char)158 || c == 'ı' ||
+                                               c == 'ï' || c == '¿' || c == '½')))
             {
-                if (!((c >= 'a' && c <= 'z') ||
-                    (c >= 'A' && c <= 'Z') ||
-                    (c == '-') ||
-                    (c == ' ') || c == 'ê' || c == 'î' || c == 'ô' || c == 'á' || c == 'í' || c == 'ó' || c == (char)158 || c == 'ı' ||
-                         c == 'ï' || c == '¿' || c == '½'))
-                    Program.Log(LogType.Warning, "Unexpected character - " + c);
+                Log(LogType.Warning, "Unexpected character - " + c);
             }
             return str;
         }
 
-
         /// <summary>
         /// Handles all logging from world generation
         /// </summary>
+        private static readonly Object thisLock = new Object();
+
         public static void Log(LogType type, string txt)
         {
-            switch (type)
+            lock (thisLock)
             {
-                case LogType.Status:
-                    mainForm.InvokeEx(x => x.StatusBox.Select(x.StatusBox.TextLength, 0));
-                    mainForm.InvokeEx(x => x.StatusBox.SelectionColor = Color.Green);
-                    mainForm.InvokeEx(x => x.StatusBox.AppendText(txt + Environment.NewLine));
-                    Console.WriteLine("Status: " + txt);
-                    break;
-                case LogType.Warning:
-                    mainForm.InvokeEx(x => x.StatusBox.Select(x.StatusBox.TextLength, 0));
-                    mainForm.InvokeEx(x => x.StatusBox.SelectionColor = Color.Orange);
-                    mainForm.InvokeEx(x => x.StatusBox.AppendText(txt + Environment.NewLine));
-                    Console.WriteLine("Warning: " + txt);
-                    break;
-                case LogType.Error:
-                    mainForm.InvokeEx(x => x.StatusBox.Select(x.StatusBox.TextLength, 0));
-                    mainForm.InvokeEx(x => x.StatusBox.SelectionColor = Color.Red);
-                    mainForm.InvokeEx(x => x.StatusBox.AppendText(txt + Environment.NewLine));
-                    Console.WriteLine("ERROR: " + txt);
-                    break;
-                default:
-                    break;
+                var curText = (string) mainForm.StatusBox.Invoke(new Func<string>(() => mainForm.StatusBox.Text));
+
+                switch (type)
+                {
+                    case LogType.Status:
+                        if (txt.EndsWith("..."))
+                            mainForm.InvokeEx(x => x.StatusBox.AppendText(txt));
+                        else if (txt == " Done") //ensure that sections that are finished are put in the right place
+                        {
+
+                            if (curText.EndsWith("\n"))
+                                //Another section finished while this section was in progress
+                            {
+
+                                var elipsisPos =
+                                    (int)
+                                        mainForm.StatusBox.Invoke(
+                                            new Func<int>(() => mainForm.StatusBox.Text.LastIndexOf("...",
+                                                StringComparison.Ordinal)));
+
+                                mainForm.InvokeEx(x => x.StatusBox.Text = x.StatusBox.Text.Insert(elipsisPos + 3, txt));
+                            }
+                            else
+                                mainForm.InvokeEx(x => x.StatusBox.AppendText(txt + Environment.NewLine));
+                        }
+                        else
+                        {
+                            if (curText.EndsWith("\n") ||
+                                curText == string.Empty)
+                                mainForm.InvokeEx(x => x.StatusBox.AppendText(txt + Environment.NewLine));
+                            else //Section finished while another section is in progress
+                                mainForm.InvokeEx(
+                                    x => x.StatusBox.AppendText(Environment.NewLine + txt + Environment.NewLine));
+                        }
+                        Console.WriteLine(@"Status: {0}", txt);
+                        break;
+                    case LogType.Warning:
+                        mainForm.InvokeEx(x =>
+                        {
+                            x.IssuesBox.Select(x.IssuesBox.TextLength, 0);
+                            x.IssuesBox.SelectionColor = Color.Orange;
+                            x.IssuesBox.AppendText(txt + Environment.NewLine);
+                        });
+
+                        Console.WriteLine(@"Warning: {0}", txt);
+                        break;
+                    case LogType.Error:
+                        mainForm.InvokeEx(x =>
+                        {
+                            x.IssuesBox.Select(x.IssuesBox.TextLength, 0);
+                            x.IssuesBox.SelectionColor = Color.Red;
+                            x.IssuesBox.AppendText(txt + Environment.NewLine);
+                        });
+                        Console.WriteLine(@"ERROR: {0}", txt);
+                        break;
+                }
             }
-            
         }
 
+        /// <summary>
+        /// Handles the access to the default path, which makes it more convenient to load details from worlds.
+        /// </summary>
         public static string GetDefaultPath()
         {
-            string workingFolder = Application.StartupPath;
-            string defaultfolder = Properties.Settings.Default.DefaultFolder;
+            var workingFolder = Application.StartupPath;
+            var defaultfolder = Settings.Default.DefaultFolder;
             defaultfolder = defaultfolder.Trim('"');
             defaultfolder = defaultfolder.TrimEnd('\\');
 
@@ -201,10 +274,7 @@ namespace DFWV
                 while (defaultfolder.StartsWith(@"..\"))
                 {
                     workingFolder = Directory.GetParent(workingFolder).FullName;
-                    if (defaultfolder.Length > 3)
-                        defaultfolder = defaultfolder.Substring(3);
-                    else
-                        defaultfolder = "";
+                    defaultfolder = defaultfolder.Length > 3 ? defaultfolder.Substring(3) : "";
                 }
             }
 
@@ -226,9 +296,6 @@ namespace DFWV
         /// </summary>
         public static IEnumerable<T> GetControlsOfType<T>(Control ctrMain) where T : class
         {
-            // Determine the Type we need to look out for
-            Type searchType = typeof(T);
-
             foreach (Control c in ctrMain.Controls)
             {
 
@@ -236,11 +303,77 @@ namespace DFWV
                 if (c is T) yield return (c as T);
 
                 // If the control hosts other controls then recursively call this function again.
-                if (c.Controls.Count > 0)
-                    foreach (T t in GetControlsOfType<T>(c))
-                        yield return t;
+                if (c.Controls.Count <= 0) continue;
+                foreach (var t in GetControlsOfType<T>(c))
+                    yield return t;
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static bool ExtractArchive(string path)
+        {
+            Console.WriteLine(Directory.GetCurrentDirectory());
+
+            SevenZipBase.SetLibraryPath(IntPtr.Size == 8
+                ? Path.Combine(Directory.GetCurrentDirectory(), @"7z64.dll")
+                : Path.Combine(Directory.GetCurrentDirectory(), @"7z.dll"));
+
+            var directory = Path.GetDirectoryName(path);
+            var filename = Path.GetFileNameWithoutExtension(path);
+
+            if (directory == null)
+                return false;
+            var newDirectory = Path.Combine(directory, filename);
+            if (Directory.Exists(newDirectory))
+                Directory.Delete(newDirectory,true);
+            Directory.CreateDirectory(newDirectory);
+
+            using (var tmp = new SevenZipExtractor(path))
+            {
+                foreach (var fileinfo in tmp.ArchiveFileData)
+                    tmp.ExtractFiles(newDirectory, fileinfo.Index);
+            }
+            return true;
+        }
+
+
+
+        #region Pluralization/Capitalization Services
+        static PluralizationService pluralService;
+        private static void InitiailzePluralService()
+        {
+            pluralService = PluralizationService.CreateService(CultureInfo.GetCultureInfo("en-us"));
+        }
+
+        static public string Pluralize(this string str)
+        {
+            return pluralService.Pluralize(str);
+        }
+
+        static public string Singularize(this string str)
+        {
+            return pluralService.Singularize(str);
+        }
+
+        static public bool isPlural(this string str)
+        {
+            return pluralService.IsPlural(str);
+        }
+
+        static public bool isSingular(this string str)
+        {
+            return pluralService.IsSingular(str);
+        }
+
+        static public string ToTitleCase(this string str)
+        {
+            return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(str ?? "");
+        }
+
+        #endregion
+
     }
 
 
@@ -263,5 +396,42 @@ namespace DFWV
       }
     }
 
-    
+    /// <summary>
+    /// These methods are used with the World Summary TreeView (on the World tab on the main form) to allow it to properly sort and insert data as required.
+    /// </summary>
+    #region WorldSummaryTree Helper Functions
+    public static class SOExtension
+    {
+        public static IEnumerable<TreeNode> FlattenTree(this TreeView tv)
+        {
+            return FlattenTree(tv.Nodes);
+        }
+
+        public static IEnumerable<TreeNode> FlattenTree(this TreeNodeCollection coll)
+        {
+            return coll.Cast<TreeNode>()
+                        .Concat(coll.Cast<TreeNode>()
+                                    .SelectMany(x => FlattenTree(x.Nodes)));
+        }
+    }
+
+    // Create a node sorter that implements the IComparer interface. 
+    public class WorldSummaryNodeSorter : IComparer
+    {
+        // Compare the length of the strings, or the strings 
+        // themselves, if they are the same length. 
+        public int Compare(object x, object y)
+        {
+            var tx = x as TreeNode;
+            var ty = y as TreeNode;
+
+            if (ty != null && (tx != null && (!tx.Text.Contains(":") || tx.Nodes.Count > 0 || ty.Nodes.Count > 0)))
+                return -1;
+            if (!ty.Text.Contains(":"))
+                return 1;
+            return Convert.ToInt32(ty.Text.Split(':')[1]) - Convert.ToInt32(tx.Text.Split(':')[1]);
+        }
+    }
+
+#endregion
 }
