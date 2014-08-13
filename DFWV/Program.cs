@@ -12,8 +12,6 @@ using System.IO;
 using System.Collections;
 using SevenZip;
 
-//TODO: Group by multiple items
-
 //TODO: Issues
 //TODO: Export doesn't properly release link to exported DB (can't be deleted while app is running following export)
 
