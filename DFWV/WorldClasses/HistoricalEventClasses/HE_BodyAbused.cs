@@ -133,9 +133,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         ItemSubType = ItemSubTypes.IndexOf(val);
                         break;
                     case "props_item_mattype":
+                    case "props_item_mat_type":
                         ItemMatType = valI;
                         break;
                     case "props_item_matindex":
+                    case "props_item_mat_index":
                         ItemMatIndex = valI;
                         break;
                     case "props_item_mat":

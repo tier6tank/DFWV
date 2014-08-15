@@ -92,9 +92,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                     case "victim":
                     case "attacker":
+                    case "woundee":
+                    case "wounder":
                     case "site":
                     case "victim_race":
                     case "victim_caste":
+                    case "woundee_race":
+                    case "woundee_caste":
                         break;
                     case "body_part":
                         BodyPart = valI;

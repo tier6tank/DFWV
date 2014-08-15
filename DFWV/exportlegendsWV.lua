@@ -20,6 +20,24 @@ getItemSubTypeName = function (itemType, subType)
 	end
 end
 
+findEntity = function (id)
+	for k,v in ipairs(df.global.world.entities.all) do
+		if (v.id == id) then
+			return v
+		end
+	end
+	return nil
+end
+
+function table.contains(table, element)
+  for _, value in pairs(table) do
+    if value == element then
+      return true
+    end
+  end
+  return false
+end
+
 --dfhack.run_command("exportlegends all")
 print("Exporting extra legends mode details...")
 io.output(tostring(df.global.world.cur_savegame.save_dir).."-legends_plus.xml")
@@ -68,8 +86,10 @@ for siteK, siteV in ipairs(df.global.world.world_data.sites) do
 					io.write ("\t\t\t".."<structure>".."\n")
 					io.write ("\t\t\t\t".."<id>"..buildingV.id.."</id>".."\n")
 					io.write ("\t\t\t\t".."<type>"..df.abstract_building_type[buildingV:getType()]:lower().."</type>".."\n")
-					io.write ("\t\t\t\t".."<name>"..dfhack.TranslateName(buildingV.name, 1).."</name>".."\n")
-					io.write ("\t\t\t\t".."<name2>"..dfhack.TranslateName(buildingV.name).."</name2>".."\n")
+					if (df.abstract_building_type[buildingV:getType()]:lower() ~= "underworld_spire") then
+						io.write ("\t\t\t\t".."<name>"..dfhack.TranslateName(buildingV.name, 1).."</name>".."\n")
+						io.write ("\t\t\t\t".."<name2>"..dfhack.TranslateName(buildingV.name).."</name2>".."\n")
+					end
 					io.write ("\t\t\t".."</structure>".."\n")
 				end
 				io.write ("\t\t".."</structures>".."\n")
@@ -144,17 +164,17 @@ for entityK, entityV in ipairs(df.global.world.entities.all) do
 			print(entityV.unknown1b, entityV.unknown1b.worship, #entityV.unknown1b.worship)
 		end 
 	end
-	for id, link in ipairs(entityV.site_links) do
-		io.write ("\t\t".."<site_link>".."\n")
-			for k, v in pairs(link) do
-				if (k == "type") then
-					io.write ("\t\t\t".."<"..k..">"..tostring(df.entity_site_link_type[v]).."</"..k..">".."\n")
-				elseif (k ~= "anon_1") then
-					io.write ("\t\t\t".."<"..k..">"..v.."</"..k..">".."\n")
-				end
-			end
-		io.write ("\t\t".."</site_link>".."\n")
-	end
+--	for id, link in ipairs(entityV.site_links) do
+--		io.write ("\t\t".."<site_link>".."\n")
+--			for k, v in pairs(link) do
+--				if (k == "type") then
+--					io.write ("\t\t\t".."<"..k..">"..tostring(df.entity_site_link_type[v]).."</"..k..">".."\n")
+--				elseif (k ~= "anon_12") then
+--					io.write ("\t\t\t".."<"..k..">"..v.."</"..k..">".."\n")
+--				end
+--			end
+--		io.write ("\t\t".."</site_link>".."\n")
+--	end
 	for id, link in pairs(entityV.entity_links) do
 		io.write ("\t\t".."<entity_link>".."\n")
 			for k, v in pairs(link) do
@@ -219,14 +239,15 @@ for ID, event in ipairs(df.global.world.history.events) do
 		for k,v in pairs(event) do 
 			if k == "year" or k == "seconds" or k == "flags" or k == "id"  
 				or (k == "region" and event:getType() ~= df.history_event_type.HF_DOES_INTERACTION)
-				or k == "region_pos" or k == "layer"
+				or k == "region_pos" or k == "layer" or k == "feature_layer" or k == "subregion"
 				or k == "anon_1" or k == "anon_2" or k == "flags2" or k == "unk1" then
 				
 			elseif event:getType() == df.history_event_type.ADD_HF_ENTITY_LINK and k == "link_type" then
 				io.write ("\t\t".."<"..k..">"..df.histfig_entity_link_type[v]:lower().."</"..k..">".."\n")
 			elseif event:getType() == df.history_event_type.ADD_HF_ENTITY_LINK and k == "position_id" then
-			    if (event.civ > -1 and v > -1) then
-					for entitypositionsK, entityPositionsV in ipairs(df.global.world.entities.all[event.civ].positions.own) do
+				local entity = findEntity(event.civ)
+			    if (entity ~= nil and event.civ > -1 and v > -1) then
+					for entitypositionsK, entityPositionsV in ipairs(entity.positions.own) do
 						if entityPositionsV.id == v then
 							io.write ("\t\t".."<position>"..tostring(entityPositionsV.name[0]):lower().."</position>".."\n")
 							break
@@ -236,8 +257,9 @@ for ID, event in ipairs(df.global.world.history.events) do
 					io.write ("\t\t".."<position>-1</position>".."\n")
 				end 
 			elseif event:getType() == df.history_event_type.CREATE_ENTITY_POSITION and k == "position" then
-			    if (event.group > -1 and v > -1) then
-					for entitypositionsK, entityPositionsV in ipairs(df.global.world.entities.all[event.group].positions.own) do
+				local entity = findEntity(event.site_civ)
+			    if (entity ~= nil and v > -1) then
+					for entitypositionsK, entityPositionsV in ipairs(entity.positions.own) do
 						if entityPositionsV.id == v then
 							io.write ("\t\t".."<position>"..tostring(entityPositionsV.name[0]):lower().."</position>".."\n")
 							break
@@ -249,8 +271,9 @@ for ID, event in ipairs(df.global.world.history.events) do
 			elseif event:getType() == df.history_event_type.REMOVE_HF_ENTITY_LINK and k == "link_type" then
 				io.write ("\t\t".."<"..k..">"..df.histfig_entity_link_type[v]:lower().."</"..k..">".."\n")
 			elseif event:getType() == df.history_event_type.REMOVE_HF_ENTITY_LINK and k == "position_id" then
-			    if (event.civ > -1 and v > -1) then
-					for entitypositionsK, entityPositionsV in ipairs(df.global.world.entities.all[event.civ].positions.own) do
+			    local entity = findEntity(event.civ)
+			    if (entity ~= nil and event.civ > -1 and v > -1) then
+					for entitypositionsK, entityPositionsV in ipairs(entity.positions.own) do
 						if entityPositionsV.id == v then
 							io.write ("\t\t".."<position>"..tostring(entityPositionsV.name[0]):lower().."</position>".."\n")
 							break
@@ -273,7 +296,7 @@ for ID, event in ipairs(df.global.world.history.events) do
 			elseif (event:getType() == df.history_event_type.ITEM_STOLEN or 
 					event:getType() == df.history_event_type.MASTERPIECE_CREATED_ITEM or
 					event:getType() == df.history_event_type.MASTERPIECE_CREATED_ITEM_IMPROVEMENT					
-			        ) and k == "item_subtype" then
+					) and k == "item_subtype" then
 				--if event.item_type > -1 and v > -1 then
 					io.write ("\t\t".."<"..k..">"..getItemSubTypeName(event.item_type,v).."</"..k..">".."\n")
 				--end
@@ -327,7 +350,7 @@ for ID, event in ipairs(df.global.world.history.events) do
 			elseif event:getType() == df.history_event_type.MASTERPIECE_CREATED_ITEM_IMPROVEMENT and k == "improvement_type" then
 				io.write ("\t\t".."<improvement_type>"..df.improvement_type[v]:lower().."</improvement_type>".."\n")
 			elseif ((event:getType() == df.history_event_type.HIST_FIGURE_REACH_SUMMIT and k == "figures") or
-			        (event:getType() == df.history_event_type.HIST_FIGURE_NEW_PET and k == "figures") 
+			        (event:getType() == df.history_event_type.HIST_FIGURE_NEW_PET and k == "group") 
 			     or (event:getType() == df.history_event_type.BODY_ABUSED and k == "bodies")) then
 				for detailK,detailV in pairs(v) do 
 					io.write ("\t\t".."<"..k..">"..detailV.."</"..k..">".."\n")
@@ -409,7 +432,7 @@ for ID, event in ipairs(df.global.world.history.events) do
 						end
 					elseif (detailK == "matindex") then
 
-					elseif (detailK == "bow_item") then
+					elseif (detailK == "shooter_item") then
 						if detailV > -1 then
 							io.write ("\t\t".."<"..detailK..">"..detailV.."</"..detailK..">".."\n")
 							local thisItem = df.item.find(detailV)
@@ -417,26 +440,26 @@ for ID, event in ipairs(df.global.world.history.events) do
 								if (thisItem.flags.artifact == true) then
 									for refk,refv in pairs(thisItem.general_refs) do
 										if (refv:getType() == 1) then
-											io.write ("\t\t".."<bow_artifact_id>"..refv.artifact_id.."</bow_artifact_id>".."\n")
+											io.write ("\t\t".."<shooter_artifact_id>"..refv.artifact_id.."</shooter_artifact_id>".."\n")
 											break
 										end 
 									end
 								end
 							end
 						end
-					elseif (detailK == "bow_item_type") then
-						if event.weapon.bow_item > -1 then
+					elseif (detailK == "shooter_item_type") then
+						if event.weapon.shooter_item > -1 then
 							io.write ("\t\t".."<"..detailK..">"..tostring(df.item_type[detailV]):lower().."</"..detailK..">".."\n")
 						end
-					elseif (detailK == "bow_item_subtype") then
-						if event.weapon.bow_item > -1 and detailV > -1 then
-							io.write ("\t\t".."<"..detailK..">"..getItemSubTypeName(event.weapon.bow_item_type,detailV).."</"..detailK..">".."\n")
+					elseif (detailK == "shooter_item_subtype") then
+						if event.weapon.shooter_item > -1 and detailV > -1 then
+							io.write ("\t\t".."<"..detailK..">"..getItemSubTypeName(event.weapon.shooter_item_type,detailV).."</"..detailK..">".."\n")
 						end
-					elseif (detailK == "bow_mattype") then
+					elseif (detailK == "shooter_mattype") then
 						if (detailV > -1) then
-							io.write ("\t\t".."<bow_mat>"..dfhack.matinfo.toString(dfhack.matinfo.decode(event.weapon.bow_mattype, event.weapon.bow_matindex)).."</bow_mat>".."\n")
+							io.write ("\t\t".."<shooter_mat>"..dfhack.matinfo.toString(dfhack.matinfo.decode(event.weapon.shooter_mattype, event.weapon.shooter_matindex)).."</shooter_mat>".."\n")
 						end
-					elseif (detailK == "bow_matindex") then
+					elseif (detailK == "shooter_matindex") then
 					
 					elseif detailK == "slayer_race" or detailK == "slayer_caste" then
 					

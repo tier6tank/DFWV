@@ -63,6 +63,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         CivID = valI;
                         break;
                     case "group":
+                    case "site_civ":
                         GroupID = valI;
                         break;
                     case "position":

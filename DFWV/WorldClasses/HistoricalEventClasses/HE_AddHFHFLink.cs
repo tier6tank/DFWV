@@ -127,6 +127,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                     case "histfig1":
                     case "histfig2":
+                    case "hf":
+                    case "hf_target":
                         break;
                     case "link_type":
                         if (!HFLink.LinkTypes.Contains(val))

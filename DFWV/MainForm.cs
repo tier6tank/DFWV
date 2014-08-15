@@ -1362,7 +1362,7 @@ namespace DFWV
         {
             e.DrawBackground();
 
-            if (e.Index != -1)
+            if (e.Index != -1 && lstHistoricalEventCollection.SelectedItem is EC_Battle)
             {
                 var thisBattle = (EC_Battle)lstHistoricalEventCollection.SelectedItem;
                 var drawstring = thisBattle.AttackingHF[e.Index].ToString();
@@ -1390,18 +1390,29 @@ namespace DFWV
             if (e.Index != -1)
             {
                 var thisBattle = (EC_Battle)lstHistoricalEventCollection.SelectedItem;
-                var drawstring = thisBattle.DefendingHF[e.Index].ToString();
+                if (thisBattle.DefendingHF != null)
+                {
+                    var drawstring = thisBattle.DefendingHF[e.Index].ToString();
 
-                var mColor = Color.Black;
-                if (thisBattle.DefendingHF[e.Index].Caste.HasValue && HistoricalFigure.Castes[thisBattle.DefendingHF[e.Index].Caste.Value].ToLower().StartsWith("male"))
-                    mColor = Color.Blue;
-                else if (thisBattle.DefendingHF[e.Index].Caste.HasValue && HistoricalFigure.Castes[thisBattle.DefendingHF[e.Index].Caste.Value].ToLower().StartsWith("female"))
-                    mColor = Color.Red;
-                
-                if (thisBattle.DefendingDiedHF != null && thisBattle.DefendingDiedHF.Contains(thisBattle.DefendingHF[e.Index]))
-                    e.Graphics.DrawString(drawstring, new Font(e.Font.FontFamily.ToString(), e.Font.Size, FontStyle.Bold), new SolidBrush(mColor), e.Bounds);
-                else
-                    e.Graphics.DrawString(drawstring, e.Font, new SolidBrush(mColor), e.Bounds);
+
+                    var mColor = Color.Black;
+                    if (thisBattle.DefendingHF[e.Index].Caste.HasValue &&
+                        HistoricalFigure.Castes[thisBattle.DefendingHF[e.Index].Caste.Value].ToLower()
+                            .StartsWith("male"))
+                        mColor = Color.Blue;
+                    else if (thisBattle.DefendingHF[e.Index].Caste.HasValue &&
+                             HistoricalFigure.Castes[thisBattle.DefendingHF[e.Index].Caste.Value].ToLower()
+                                 .StartsWith("female"))
+                        mColor = Color.Red;
+
+                    if (thisBattle.DefendingDiedHF != null &&
+                        thisBattle.DefendingDiedHF.Contains(thisBattle.DefendingHF[e.Index]))
+                        e.Graphics.DrawString(drawstring,
+                            new Font(e.Font.FontFamily.ToString(), e.Font.Size, FontStyle.Bold), new SolidBrush(mColor),
+                            e.Bounds);
+                    else
+                        e.Graphics.DrawString(drawstring, e.Font, new SolidBrush(mColor), e.Bounds);
+                }
             }
             e.DrawFocusRectangle();
         }

@@ -99,7 +99,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "id":
                     case "type":
                         break;
-                    case "figures":
+                    case "group":
                         if (GroupHFIDs == null)
                             GroupHFIDs = new List<int>();
                         if (!GroupHFIDs.Contains(valI))

@@ -84,6 +84,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                     case "attacker":
                     case "target":
+                    case "doer":
                     case "interaction":
                         break;
                     case "site":

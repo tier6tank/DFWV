@@ -103,6 +103,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 {
                     case "id":
                     case "type":
+                    case "civ":
+                    case "site_civ":
+                    case "site":
+                    case "old_structure":
+                    case "new_structure":
                         break;
                     default:
                         DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
