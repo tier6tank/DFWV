@@ -140,7 +140,8 @@ namespace DFWV
         {
             var mapPath = filename;
             var path = Path.GetDirectoryName(mapPath) ?? "";
-            if (mapPath.Contains("_graphic-")) //Picked wrong image
+            int parseOut;
+            if (mapPath.Contains("_graphic")) //Picked wrong image
             {
                 var thisFile = Path.GetFileName(mapPath);
                 var restofFile = thisFile.Split('-').ToList();
@@ -150,10 +151,27 @@ namespace DFWV
                 //    restofFile[1] = restofFile[1] + "-" + restofFile[2];
                 //    restofFile.RemoveAt(2);
                 //}
-                restofFile.RemoveRange(0, Int32.TryParse(restofFile[2], out year) ? 1 : 2);
+                if ((restofFile.Count == 5 || restofFile.Count == 6) && //New Export Format (or 6 for graphic expot files for temperature/salinity/etc.)
+                    restofFile[1].Length == 5 && int.TryParse(restofFile[1], out parseOut) &&
+                    restofFile[2].Length == 2 && int.TryParse(restofFile[2], out parseOut) &&
+                    restofFile[3].Length == 2 && int.TryParse(restofFile[3], out parseOut) &&
+                    restofFile[4].Contains("world_graphic"))
+                {
+                    if (restofFile.Count == 6)
+                        restofFile.RemoveRange(4, 2);
+                    else
+                        restofFile.RemoveAt(4);
 
-                thisFile = String.Join("-", restofFile);
-                mapPath = Path.Combine(path, "world_map-" + thisFile);
+                    thisFile = String.Join("-", restofFile);
+                    mapPath = Path.Combine(path, thisFile + "-world_map.bmp");
+                }
+                else
+                {
+                    restofFile.RemoveRange(0, Int32.TryParse(restofFile[2], out year) ? 1 : 2);
+
+                    thisFile = String.Join("-", restofFile);
+                    mapPath = Path.Combine(path, "world_map-" + thisFile);
+                }
             }
             if (!File.Exists(mapPath))
             {
@@ -164,12 +182,26 @@ namespace DFWV
             var mapFile = Path.GetFileNameWithoutExtension(mapPath);
             var mapSplit = mapFile.Split("-".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
 
-            mapSplit.RemoveAt(0);
-            mapSplit.RemoveAt(mapSplit.Count - 1);
 
-            var Year = Convert.ToInt32(mapSplit[mapSplit.Count - 1]);
+            int Year;
+            if (mapSplit.Count == 5 && //New Export Format
+                mapSplit[1].Length == 5 && int.TryParse(mapSplit[1],out parseOut) &&
+                mapSplit[2].Length == 2 && int.TryParse(mapSplit[2], out parseOut) &&
+                mapSplit[3].Length == 2 && int.TryParse(mapSplit[3], out parseOut) && 
+                mapSplit[4] == "world_map")
+            {
+                Year = Convert.ToInt32(mapSplit[1]);
+                mapSplit.RemoveAt(4);
+            }
+            else
+            {
+                mapSplit.RemoveAt(mapSplit.Count - 1);
+                mapSplit.RemoveAt(0);
+                Year = Convert.ToInt32(mapSplit[mapSplit.Count - 1]);
+                mapSplit.RemoveAt(mapSplit.Count - 1);
+            }
 
-            mapSplit.RemoveAt(mapSplit.Count - 1);
+
 
             var name = string.Join("-", mapSplit);
 
