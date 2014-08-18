@@ -399,7 +399,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             if (PlayerControlled)
                 frm.grpHistoricalFigure.Text += @" (PLAYER CONTROLLED)";
 #if DEBUG
-            frm.grpHistoricalFigure.Text += string.Format(" - ID: {0}", ID);
+            frm.grpHistoricalFigure.Text += string.Format(" - ID: {0} - Notability: {1}", ID, Notability);
 #endif
             frm.grpHistoricalFigure.Show();
             frm.lblHistoricalFigureName.Text = ToString();

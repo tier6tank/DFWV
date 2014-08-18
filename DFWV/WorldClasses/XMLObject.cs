@@ -8,7 +8,7 @@ namespace DFWV.WorldClasses
     abstract class XMLObject : WorldObject
     {
         public int ID { get; protected set; }
-
+        public int Notability { get; set; }
 
         protected XMLObject(XDocument xdoc, World world) 
             : base(world)

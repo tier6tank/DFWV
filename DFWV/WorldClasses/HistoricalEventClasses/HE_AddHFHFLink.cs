@@ -21,7 +21,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         public HFLink HFLink { get; set; }
         public HFLink HFLink2 { get; set; }
-
+        
         public HE_AddHFHFLink(XDocument xdoc, World world)
             : base(xdoc, world)
         {

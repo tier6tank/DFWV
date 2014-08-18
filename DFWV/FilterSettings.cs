@@ -46,8 +46,6 @@ namespace DFWV
         {
             Fields[typeof (Artifact)] = new Dictionary<string, Type>
             {
-                {"ID", typeof (int)},
-                {"Name", typeof (string)},
                 {"Type", typeof (string)},
                 {"Material", typeof (string)},
                 {"Lost", typeof (bool)},
@@ -55,48 +53,35 @@ namespace DFWV
             };
             Fields[typeof (Civilization)] = new Dictionary<string, Type>
             {
-                {"ID", typeof (int)},
-                {"Name", typeof (string)},
                 {"isFull", typeof (bool)},
             };
             Fields[typeof (Entity)] = new Dictionary<string, Type>
             {
-                {"ID", typeof (int)},
-                {"Name", typeof (string)},
                 {"isPlayerControlled", typeof (bool)},
                 {"MemberCount", typeof (int)}
             };
             Fields[typeof (EntityPopulation)] = new Dictionary<string, Type>
             {
-                {"ID", typeof (int)},
-                {"Name", typeof (string)},
                 {"MemberCount", typeof (int)},
                 {"Battles", typeof (int)}
             };
             Fields[typeof (God)] = new Dictionary<string, Type>
             {
-                {"Name", typeof (string)},
                 {"CivilizationCount", typeof (int)},
                 {"SphereCount", typeof (int)},
                 {"LeaderCount", typeof (int)}
             };
             Fields[typeof (HistoricalEra)] = new Dictionary<string, Type>
             {
-                {"ID", typeof (int)},
-                {"Name", typeof (string)},
                 {"StartYear", typeof (int)}
             };
             Fields[typeof (HistoricalEvent)] = new Dictionary<string, Type>
             {
-                {"ID", typeof (int)},
-                {"Name", typeof (string)},
                 {"Year", typeof (int)},
                 {"InCollection", typeof (bool)}
             };
             Fields[typeof (HistoricalEventCollection)] = new Dictionary<string, Type>
             {
-                {"ID", typeof (int)},
-                {"Name", typeof (string)},
                 {"StartYear", typeof (int)},
                 {"Combatants", typeof (int)},
                 {"Casualties", typeof (int)},
@@ -104,8 +89,6 @@ namespace DFWV
             };
             Fields[typeof (HistoricalFigure)] = new Dictionary<string, Type>
             {
-                {"ID", typeof (int)},
-                {"Name", typeof (string)},
                 {"BirthYear", typeof (int)},
                 {"PlayerControlled", typeof (bool)},
                 {"EntPopID", typeof (int)},
@@ -129,14 +112,12 @@ namespace DFWV
 
             Fields[typeof (Leader)] = new Dictionary<string, Type>
             {
-                {"Name", typeof (string)},
                 {"Inherited", typeof (bool)},
                 {"Married", typeof (bool)}
             };
-            Fields[typeof (Parameter)] = new Dictionary<string, Type> {{"Name", typeof (string)}};
+            Fields[typeof (Parameter)] = new Dictionary<string, Type>();
             Fields[typeof (Race)] = new Dictionary<string, Type>
             {
-                {"Name", typeof (string)},
                 {"Population", typeof (int)},
                 {"CivCount", typeof (int)},
                 {"LeaderCount", typeof (int)},
@@ -144,15 +125,11 @@ namespace DFWV
             };
             Fields[typeof (Region)] = new Dictionary<string, Type>
             {
-                {"ID", typeof (int)},
-                {"Name", typeof (string)},
                 {"Battles", typeof (int)},
                 {"InhabitantCount", typeof (int)}
             };
             Fields[typeof (Site)] = new Dictionary<string, Type>
             {
-                {"ID", typeof (int)},
-                {"Name", typeof (string)},
                 {"AltName", typeof (string)},
                 {"isPlayerControlled", typeof (bool)},
                 {"Parent.Name", typeof (string)},
@@ -162,26 +139,31 @@ namespace DFWV
             };
             Fields[typeof (Structure)] = new Dictionary<string, Type>
             {
-                {"Name", typeof (string)},
                 {"isRazed", typeof (bool)},
                 {"Tomb", typeof (bool)}
             };
-            Fields[typeof (UndergroundRegion)] = new Dictionary<string, Type>
-            {
-                {"ID", typeof (int)},
-                {"Name", typeof (string)}
-            };
-            Fields[typeof (WorldConstruction)] = new Dictionary<string, Type>
-            {
-                {"ID", typeof (int)},
-                {"Name", typeof (string)}
-            };
+            Fields[typeof (UndergroundRegion)] = new Dictionary<string, Type>();
+            Fields[typeof (WorldConstruction)] = new Dictionary<string, Type>();
             Fields[typeof (Dynasty)] = new Dictionary<string, Type>
             {
-                {"Name", typeof (string)},
                 {"Duration", typeof (int)},
                 {"MemberCount", typeof (int)}
             };
+
+            foreach (var type in new List<Type>
+            {
+                typeof(Artifact), typeof(Civilization), typeof(Entity), typeof(EntityPopulation), typeof(God), typeof(HistoricalEra), typeof(HistoricalEvent),
+                typeof(HistoricalEventCollection), typeof(HistoricalFigure), typeof(Leader), typeof(Parameter), typeof(Race), typeof(Region), typeof(Site),
+                typeof(Structure), typeof(UndergroundRegion), typeof(WorldConstruction), typeof(Dynasty)
+            })
+            {
+                Fields[type].Add("Name", typeof (string));
+                if (type.IsSubclassOf(typeof(XMLObject)))
+                {
+                    Fields[type].Add("ID", typeof(int));
+                    Fields[type].Add("Notability", typeof(int));
+                }
+            }
         }
 
 

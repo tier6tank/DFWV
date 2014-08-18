@@ -1012,6 +1012,27 @@ namespace DFWV
             //World.VisualizationsCreated -= World_VisualizationsCreated;
 
             //World.VisualizationCreation();
+            
+            //TODO: Move to a better spot
+            foreach (var xmlObject in World.HistoricalEvents.Values.SelectMany(evt => evt.Relationships))
+            {
+                xmlObject.Notability++;
+            }
+            foreach (var evt in World.HistoricalEvents.Values)
+            {
+                foreach (var xmlObject in evt.Relationships)
+                {
+                    evt.Notability += xmlObject.Notability;
+                }
+            }
+            foreach (var evt in World.HistoricalEvents.Values)
+            {
+                foreach (var xmlObject in evt.Relationships)
+                {
+                    xmlObject.Notability += evt.Notability;
+                }
+            }
+
             this.InvokeEx(f => f.closeWorldToolStripMenuItem.Visible = true);
         }
 
