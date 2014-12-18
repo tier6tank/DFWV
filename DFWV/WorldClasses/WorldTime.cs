@@ -18,6 +18,14 @@
             TotalSeconds = seconds == -1 ? 0 : seconds;
         }
 
+        public WorldTime(int year, int month, int days)
+        {
+            const int SecPerDay = 1200;
+            const int DayPerMonth = 28;
+            Year = year;
+            TotalSeconds = (month * DayPerMonth + days) * SecPerDay;
+        }
+
         public WorldTime(int year, int? seconds)
         {
 

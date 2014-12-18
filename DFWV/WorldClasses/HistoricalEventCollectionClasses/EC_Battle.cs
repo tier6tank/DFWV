@@ -443,6 +443,8 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
             foreach (var ev in Event.Where(x => HistoricalEvent.Types[x.Type] == "hf died").Cast<HE_HFDied>())
             {
+                if (ev.HF == null)
+                    continue;
                 if (AttackingHF.Contains(ev.HF))
                 {
                     if (AttackingDiedHF == null)

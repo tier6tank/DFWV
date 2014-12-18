@@ -140,38 +140,12 @@ namespace DFWV
         {
             var mapPath = filename;
             var path = Path.GetDirectoryName(mapPath) ?? "";
-            int parseOut;
-            if (mapPath.Contains("_graphic")) //Picked wrong image
+            if (!mapPath.Contains("-world_map.bmp")) //Picked wrong image
             {
                 var thisFile = Path.GetFileName(mapPath);
                 var restofFile = thisFile.Split('-').ToList();
-                int year;
-                //while (restofFile.Count > 4) //If the save file contains a hypen, deal with that.
-                //{
-                //    restofFile[1] = restofFile[1] + "-" + restofFile[2];
-                //    restofFile.RemoveAt(2);
-                //}
-                if ((restofFile.Count == 5 || restofFile.Count == 6) && //New Export Format (or 6 for graphic expot files for temperature/salinity/etc.)
-                    restofFile[1].Length == 5 && int.TryParse(restofFile[1], out parseOut) &&
-                    restofFile[2].Length == 2 && int.TryParse(restofFile[2], out parseOut) &&
-                    restofFile[3].Length == 2 && int.TryParse(restofFile[3], out parseOut) &&
-                    restofFile[4].Contains("world_graphic"))
-                {
-                    if (restofFile.Count == 6)
-                        restofFile.RemoveRange(4, 2);
-                    else
-                        restofFile.RemoveAt(4);
-
-                    thisFile = String.Join("-", restofFile);
-                    mapPath = Path.Combine(path, thisFile + "-world_map.bmp");
-                }
-                else
-                {
-                    restofFile.RemoveRange(0, Int32.TryParse(restofFile[2], out year) ? 1 : 2);
-
-                    thisFile = String.Join("-", restofFile);
-                    mapPath = Path.Combine(path, "world_map-" + thisFile);
-                }
+                restofFile[restofFile.Count - 1] = "world_map.bmp";
+                mapPath = Path.Combine(path, String.Join("-", restofFile));
             }
             if (!File.Exists(mapPath))
             {
@@ -179,37 +153,23 @@ namespace DFWV
                 return;
             }
 
+
             var mapFile = Path.GetFileNameWithoutExtension(mapPath);
-            var mapSplit = mapFile.Split("-".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+            var mapSplit = mapFile.Split(new char[] {'-'}, StringSplitOptions.RemoveEmptyEntries).ToList();
 
+            mapSplit.Reverse();
+            mapSplit.RemoveAt(0);
 
-            int Year;
-            if (mapSplit.Count == 5 && //New Export Format
-                mapSplit[1].Length == 5 && int.TryParse(mapSplit[1],out parseOut) &&
-                mapSplit[2].Length == 2 && int.TryParse(mapSplit[2], out parseOut) &&
-                mapSplit[3].Length == 2 && int.TryParse(mapSplit[3], out parseOut) && 
-                mapSplit[4] == "world_map")
-            {
-                Year = Convert.ToInt32(mapSplit[1]);
-                mapSplit.RemoveAt(4);
-            }
-            else
-            {
-                mapSplit.RemoveAt(mapSplit.Count - 1);
-                mapSplit.RemoveAt(0);
-                Year = Convert.ToInt32(mapSplit[mapSplit.Count - 1]);
-                mapSplit.RemoveAt(mapSplit.Count - 1);
-            }
-
-
+            WorldTime WorldGenTime = new WorldTime(Convert.ToInt32(mapSplit[2]), Convert.ToInt32(mapSplit[1]) - 1, Convert.ToInt32(mapSplit[0]) - 1);
+            mapSplit.RemoveRange(0,3);
 
             var name = string.Join("-", mapSplit);
+            var nameWithTime = mapFile.Replace("-world_map", "");
 
-
-            var xmlPath = Path.Combine(path, name + "-legends.xml");
+            var xmlPath = Path.Combine(path, nameWithTime + "-legends.xml");
             var paramPath = Path.Combine(path, name + "-world_gen_param.txt");
-            var historyPath = Path.Combine(path, name + "-world_history.txt");
-            var sitesPath = Path.Combine(path, name + "-world_sites_and_pops.txt");
+            var historyPath = Path.Combine(path, nameWithTime + "-world_history.txt");
+            var sitesPath = Path.Combine(path, nameWithTime + "-world_sites_and_pops.txt");
             var xmlPlusPath = Path.Combine(path, name + "-legends_plus.xml");
 
             if (File.Exists(xmlPath) && File.Exists(paramPath) && File.Exists(historyPath) && File.Exists(sitesPath))
@@ -227,7 +187,7 @@ namespace DFWV
 
                 Application.DoEvents();
 
-                World = new World(historyPath, sitesPath, paramPath, xmlPath, xmlPlusPath, mapPath, Year);
+                World = new World(historyPath, sitesPath, paramPath, xmlPath, xmlPlusPath, mapPath, WorldGenTime);
 
                 loadWorldToolStripMenuItem.Visible = false;
 
@@ -1877,6 +1837,22 @@ namespace DFWV
                     e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
             }
             e.DrawFocusRectangle();
+        }
+
+        private void LabelSiteMap_MouseLeave(object sender, EventArgs e)
+        {
+            picSiteMap.Visible = false;
+        }
+
+        private void LabelSiteMap_MouseEnter(object sender, EventArgs e)
+        {
+            var siteMapPath = World.mapPath.Replace("world_map", "site_map-" + ((Site) lstSite.SelectedItem).ID);
+            if (File.Exists(siteMapPath))
+            {
+                picSiteMap.ImageLocation = siteMapPath;
+                picSiteMap.Load();
+                picSiteMap.Visible = true;
+            }
         }
 
 
