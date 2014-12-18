@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using System.Drawing;
@@ -16,6 +17,8 @@ namespace DFWV.WorldClasses
     {
         [UsedImplicitly]
         public string AltName { get; private set; }
+
+        public string SiteMapPath { get; set; }
 
         public Entity Owner { get; set; }
         public Civilization Parent { get; private set; }
@@ -233,7 +236,9 @@ namespace DFWV.WorldClasses
         public Site(XDocument xdoc, World world)
             : base(xdoc, world)
         {
-            //Inhabitants = new List<HistoricalFigure>();
+
+            
+
 
             foreach (var element in xdoc.Root.Elements())
             {
@@ -241,6 +246,9 @@ namespace DFWV.WorldClasses
                 switch (element.Name.LocalName)
                 {
                     case "id":
+                        SiteMapPath = World.mapPath.Replace("world_map", "site_map-" + ID);
+                        if (!File.Exists(SiteMapPath))
+                            SiteMapPath = null;
                         break;
                     case "type":
                         if (!Types.Contains(val))
@@ -294,6 +302,9 @@ namespace DFWV.WorldClasses
             frm.lblSiteCoord.Data = new Coordinate(Coords);
             frm.lblSiteOwner.Data = Owner;
             frm.lblSiteParentCiv.Data = Parent;
+
+            var siteMapPath = World.mapPath.Replace("world_map", "site_map-" + ID);
+            frm.SiteMapLabel.Visible = System.IO.File.Exists(siteMapPath);
 
             frm.grpSiteCreated.Visible = CreatedEvent != null;
             if (CreatedEvent != null)

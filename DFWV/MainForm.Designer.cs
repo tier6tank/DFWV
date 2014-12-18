@@ -513,12 +513,15 @@ namespace DFWV
             this.tableLayoutPanel14 = new System.Windows.Forms.TableLayoutPanel();
             this.TextFilterSite = new System.Windows.Forms.TextBox();
             this.grpSite = new System.Windows.Forms.GroupBox();
+            this.picSiteMapLegend = new System.Windows.Forms.PictureBox();
+            this.picSiteMap = new System.Windows.Forms.PictureBox();
             this.tableLayoutPanel34 = new System.Windows.Forms.TableLayoutPanel();
             this.grpSiteArtifacts = new System.Windows.Forms.GroupBox();
             this.lstSiteArtifacts = new System.Windows.Forms.ListBox();
             this.grpSiteStructures = new System.Windows.Forms.GroupBox();
             this.lstSiteStructures = new System.Windows.Forms.ListBox();
             this.panel17 = new System.Windows.Forms.Panel();
+            this.SiteMapLabel = new System.Windows.Forms.Label();
             this.label80 = new System.Windows.Forms.Label();
             this.lblSiteName = new System.Windows.Forms.Label();
             this.label78 = new System.Windows.Forms.Label();
@@ -622,8 +625,6 @@ namespace DFWV
             this.closeWorldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.BacktoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ForwardtoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.LabelSiteMap = new System.Windows.Forms.Label();
-            this.picSiteMap = new System.Windows.Forms.PictureBox();
             this.lblArtifactLostTime = new DFWV.Controls.LinkLabel();
             this.lblArtifactLostSite = new DFWV.Controls.LinkLabel();
             this.lblArtifactCreatedTime = new DFWV.Controls.LinkLabel();
@@ -881,6 +882,8 @@ namespace DFWV
             this.tabSite.SuspendLayout();
             this.tableLayoutPanel14.SuspendLayout();
             this.grpSite.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picSiteMapLegend)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSiteMap)).BeginInit();
             this.tableLayoutPanel34.SuspendLayout();
             this.grpSiteArtifacts.SuspendLayout();
             this.grpSiteStructures.SuspendLayout();
@@ -915,7 +918,6 @@ namespace DFWV
             this.panel18.SuspendLayout();
             this.grpDynastyMembers.SuspendLayout();
             this.menuStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picSiteMap)).BeginInit();
             this.SuspendLayout();
             // 
             // MainTab
@@ -2113,7 +2115,7 @@ namespace DFWV
             // 
             this.label36.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label36.AutoSize = true;
-            this.label36.Location = new System.Drawing.Point(6, 461);
+            this.label36.Location = new System.Drawing.Point(6, 479);
             this.label36.Name = "label36";
             this.label36.Size = new System.Drawing.Size(24, 13);
             this.label36.TabIndex = 28;
@@ -2123,7 +2125,7 @@ namespace DFWV
             // 
             this.lblEntityPopulationBattleDeaths.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblEntityPopulationBattleDeaths.AutoSize = true;
-            this.lblEntityPopulationBattleDeaths.Location = new System.Drawing.Point(70, 417);
+            this.lblEntityPopulationBattleDeaths.Location = new System.Drawing.Point(70, 435);
             this.lblEntityPopulationBattleDeaths.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblEntityPopulationBattleDeaths.Name = "lblEntityPopulationBattleDeaths";
             this.lblEntityPopulationBattleDeaths.Size = new System.Drawing.Size(41, 13);
@@ -2134,7 +2136,7 @@ namespace DFWV
             // 
             this.lblEntityPopulationBattleNumber.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblEntityPopulationBattleNumber.AutoSize = true;
-            this.lblEntityPopulationBattleNumber.Location = new System.Drawing.Point(70, 396);
+            this.lblEntityPopulationBattleNumber.Location = new System.Drawing.Point(70, 414);
             this.lblEntityPopulationBattleNumber.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblEntityPopulationBattleNumber.Name = "lblEntityPopulationBattleNumber";
             this.lblEntityPopulationBattleNumber.Size = new System.Drawing.Size(41, 13);
@@ -2145,7 +2147,7 @@ namespace DFWV
             // 
             this.label30.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(6, 438);
+            this.label30.Location = new System.Drawing.Point(6, 456);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(64, 13);
             this.label30.TabIndex = 23;
@@ -2155,7 +2157,7 @@ namespace DFWV
             // 
             this.label31.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(6, 417);
+            this.label31.Location = new System.Drawing.Point(6, 435);
             this.label31.Name = "label31";
             this.label31.Size = new System.Drawing.Size(44, 13);
             this.label31.TabIndex = 22;
@@ -2165,7 +2167,7 @@ namespace DFWV
             // 
             this.label32.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(6, 396);
+            this.label32.Location = new System.Drawing.Point(6, 414);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(47, 13);
             this.label32.TabIndex = 19;
@@ -2178,7 +2180,7 @@ namespace DFWV
             this.lstEntityPopulationBattles.FormattingEnabled = true;
             this.lstEntityPopulationBattles.Location = new System.Drawing.Point(3, 16);
             this.lstEntityPopulationBattles.Name = "lstEntityPopulationBattles";
-            this.lstEntityPopulationBattles.Size = new System.Drawing.Size(459, 316);
+            this.lstEntityPopulationBattles.Size = new System.Drawing.Size(459, 303);
             this.lstEntityPopulationBattles.TabIndex = 0;
             this.lstEntityPopulationBattles.SelectedIndexChanged += new System.EventHandler(this.lstEntityPopulationBattles_SelectedIndexChanged);
             // 
@@ -3432,7 +3434,7 @@ namespace DFWV
             this.tableLayoutPanel25.Name = "tableLayoutPanel25";
             this.tableLayoutPanel25.RowCount = 1;
             this.tableLayoutPanel25.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel25.Size = new System.Drawing.Size(887, 564);
+            this.tableLayoutPanel25.Size = new System.Drawing.Size(887, 582);
             this.tableLayoutPanel25.TabIndex = 130;
             // 
             // panel8
@@ -3458,7 +3460,7 @@ namespace DFWV
             this.panel8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel8.Location = new System.Drawing.Point(3, 3);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(194, 558);
+            this.panel8.Size = new System.Drawing.Size(194, 576);
             this.panel8.TabIndex = 131;
             // 
             // label159
@@ -3575,7 +3577,7 @@ namespace DFWV
             this.grpBeastAttackEvents.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpBeastAttackEvents.Location = new System.Drawing.Point(203, 3);
             this.grpBeastAttackEvents.Name = "grpBeastAttackEvents";
-            this.grpBeastAttackEvents.Size = new System.Drawing.Size(681, 558);
+            this.grpBeastAttackEvents.Size = new System.Drawing.Size(681, 576);
             this.grpBeastAttackEvents.TabIndex = 119;
             this.grpBeastAttackEvents.TabStop = false;
             this.grpBeastAttackEvents.Text = "Events";
@@ -3619,7 +3621,7 @@ namespace DFWV
             this.tableLayoutPanel26.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 77F));
             this.tableLayoutPanel26.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel26.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel26.Size = new System.Drawing.Size(887, 564);
+            this.tableLayoutPanel26.Size = new System.Drawing.Size(887, 582);
             this.tableLayoutPanel26.TabIndex = 58;
             // 
             // panel9
@@ -3702,11 +3704,11 @@ namespace DFWV
             this.groupBox4.Controls.Add(this.label130);
             this.groupBox4.Controls.Add(this.lblWarDefender);
             this.groupBox4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox4.Location = new System.Drawing.Point(2, 322);
+            this.groupBox4.Location = new System.Drawing.Point(2, 331);
             this.groupBox4.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox4.Size = new System.Drawing.Size(262, 240);
+            this.groupBox4.Size = new System.Drawing.Size(262, 249);
             this.groupBox4.TabIndex = 57;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Defender";
@@ -3795,9 +3797,9 @@ namespace DFWV
             // 
             this.grpWarEventCols.Controls.Add(this.lstWarEventCols);
             this.grpWarEventCols.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpWarEventCols.Location = new System.Drawing.Point(269, 323);
+            this.grpWarEventCols.Location = new System.Drawing.Point(269, 332);
             this.grpWarEventCols.Name = "grpWarEventCols";
-            this.grpWarEventCols.Size = new System.Drawing.Size(615, 238);
+            this.grpWarEventCols.Size = new System.Drawing.Size(615, 247);
             this.grpWarEventCols.TabIndex = 51;
             this.grpWarEventCols.TabStop = false;
             this.grpWarEventCols.Text = "Event Collections";
@@ -3808,7 +3810,7 @@ namespace DFWV
             this.lstWarEventCols.FormattingEnabled = true;
             this.lstWarEventCols.Location = new System.Drawing.Point(3, 16);
             this.lstWarEventCols.Name = "lstWarEventCols";
-            this.lstWarEventCols.Size = new System.Drawing.Size(609, 219);
+            this.lstWarEventCols.Size = new System.Drawing.Size(609, 228);
             this.lstWarEventCols.TabIndex = 0;
             this.lstWarEventCols.DoubleClick += new System.EventHandler(this.SubListBoxDoubleClicked);
             // 
@@ -3828,7 +3830,7 @@ namespace DFWV
             this.groupBox3.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox3.Size = new System.Drawing.Size(262, 239);
+            this.groupBox3.Size = new System.Drawing.Size(262, 248);
             this.groupBox3.TabIndex = 56;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Aggressor";
@@ -3920,7 +3922,7 @@ namespace DFWV
             this.grpWarEvents.Location = new System.Drawing.Point(269, 3);
             this.grpWarEvents.Name = "grpWarEvents";
             this.tableLayoutPanel26.SetRowSpan(this.grpWarEvents, 2);
-            this.grpWarEvents.Size = new System.Drawing.Size(615, 314);
+            this.grpWarEvents.Size = new System.Drawing.Size(615, 323);
             this.grpWarEvents.TabIndex = 50;
             this.grpWarEvents.TabStop = false;
             this.grpWarEvents.Text = "Events";
@@ -3967,7 +3969,7 @@ namespace DFWV
             this.tableLayoutPanel27.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 29.16667F));
             this.tableLayoutPanel27.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 46.73913F));
             this.tableLayoutPanel27.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 24.0942F));
-            this.tableLayoutPanel27.Size = new System.Drawing.Size(887, 564);
+            this.tableLayoutPanel27.Size = new System.Drawing.Size(887, 582);
             this.tableLayoutPanel27.TabIndex = 49;
             // 
             // panel10
@@ -3990,7 +3992,7 @@ namespace DFWV
             this.panel10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel10.Location = new System.Drawing.Point(3, 3);
             this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(430, 158);
+            this.panel10.Size = new System.Drawing.Size(430, 163);
             this.panel10.TabIndex = 50;
             // 
             // label96
@@ -4098,7 +4100,7 @@ namespace DFWV
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Padding = new System.Windows.Forms.Padding(2);
             this.tableLayoutPanel27.SetRowSpan(this.groupBox5, 3);
-            this.groupBox5.Size = new System.Drawing.Size(222, 560);
+            this.groupBox5.Size = new System.Drawing.Size(222, 578);
             this.groupBox5.TabIndex = 45;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Defenders";
@@ -4284,10 +4286,10 @@ namespace DFWV
             // 
             this.grpBattleEvents.Controls.Add(this.lstBattleEvents);
             this.grpBattleEvents.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpBattleEvents.Location = new System.Drawing.Point(185, 167);
+            this.grpBattleEvents.Location = new System.Drawing.Point(185, 172);
             this.grpBattleEvents.Name = "grpBattleEvents";
             this.tableLayoutPanel27.SetRowSpan(this.grpBattleEvents, 2);
-            this.grpBattleEvents.Size = new System.Drawing.Size(248, 394);
+            this.grpBattleEvents.Size = new System.Drawing.Size(248, 407);
             this.grpBattleEvents.TabIndex = 47;
             this.grpBattleEvents.TabStop = false;
             this.grpBattleEvents.Text = "Events";
@@ -4318,7 +4320,7 @@ namespace DFWV
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(2);
             this.tableLayoutPanel27.SetRowSpan(this.groupBox2, 3);
-            this.groupBox2.Size = new System.Drawing.Size(221, 560);
+            this.groupBox2.Size = new System.Drawing.Size(221, 578);
             this.groupBox2.TabIndex = 44;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Attackers";
@@ -4504,9 +4506,9 @@ namespace DFWV
             // 
             this.grpBattleEventCols.Controls.Add(this.lstBattleEventCols);
             this.grpBattleEventCols.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpBattleEventCols.Location = new System.Drawing.Point(3, 167);
+            this.grpBattleEventCols.Location = new System.Drawing.Point(3, 172);
             this.grpBattleEventCols.Name = "grpBattleEventCols";
-            this.grpBattleEventCols.Size = new System.Drawing.Size(176, 257);
+            this.grpBattleEventCols.Size = new System.Drawing.Size(176, 266);
             this.grpBattleEventCols.TabIndex = 48;
             this.grpBattleEventCols.TabStop = false;
             this.grpBattleEventCols.Text = "Event Collections";
@@ -4517,7 +4519,7 @@ namespace DFWV
             this.lstBattleEventCols.FormattingEnabled = true;
             this.lstBattleEventCols.Location = new System.Drawing.Point(3, 16);
             this.lstBattleEventCols.Name = "lstBattleEventCols";
-            this.lstBattleEventCols.Size = new System.Drawing.Size(170, 238);
+            this.lstBattleEventCols.Size = new System.Drawing.Size(170, 247);
             this.lstBattleEventCols.TabIndex = 0;
             this.lstBattleEventCols.DoubleClick += new System.EventHandler(this.SubListBoxDoubleClicked);
             // 
@@ -4525,9 +4527,9 @@ namespace DFWV
             // 
             this.grpBattleNonComHFs.Controls.Add(this.lstBattleNonComHFs);
             this.grpBattleNonComHFs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpBattleNonComHFs.Location = new System.Drawing.Point(3, 430);
+            this.grpBattleNonComHFs.Location = new System.Drawing.Point(3, 444);
             this.grpBattleNonComHFs.Name = "grpBattleNonComHFs";
-            this.grpBattleNonComHFs.Size = new System.Drawing.Size(176, 131);
+            this.grpBattleNonComHFs.Size = new System.Drawing.Size(176, 135);
             this.grpBattleNonComHFs.TabIndex = 46;
             this.grpBattleNonComHFs.TabStop = false;
             this.grpBattleNonComHFs.Text = "Non Combat HFs";
@@ -4538,7 +4540,7 @@ namespace DFWV
             this.lstBattleNonComHFs.FormattingEnabled = true;
             this.lstBattleNonComHFs.Location = new System.Drawing.Point(3, 16);
             this.lstBattleNonComHFs.Name = "lstBattleNonComHFs";
-            this.lstBattleNonComHFs.Size = new System.Drawing.Size(170, 112);
+            this.lstBattleNonComHFs.Size = new System.Drawing.Size(170, 116);
             this.lstBattleNonComHFs.TabIndex = 0;
             this.lstBattleNonComHFs.DoubleClick += new System.EventHandler(this.SubListBoxDoubleClicked);
             // 
@@ -4565,7 +4567,7 @@ namespace DFWV
             this.tableLayoutPanel28.Name = "tableLayoutPanel28";
             this.tableLayoutPanel28.RowCount = 1;
             this.tableLayoutPanel28.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel28.Size = new System.Drawing.Size(887, 564);
+            this.tableLayoutPanel28.Size = new System.Drawing.Size(887, 582);
             this.tableLayoutPanel28.TabIndex = 109;
             // 
             // panel11
@@ -4591,7 +4593,7 @@ namespace DFWV
             this.panel11.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel11.Location = new System.Drawing.Point(3, 3);
             this.panel11.Name = "panel11";
-            this.panel11.Size = new System.Drawing.Size(194, 558);
+            this.panel11.Size = new System.Drawing.Size(194, 576);
             this.panel11.TabIndex = 110;
             // 
             // label148
@@ -4708,7 +4710,7 @@ namespace DFWV
             this.grpDuelEvents.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpDuelEvents.Location = new System.Drawing.Point(203, 3);
             this.grpDuelEvents.Name = "grpDuelEvents";
-            this.grpDuelEvents.Size = new System.Drawing.Size(681, 558);
+            this.grpDuelEvents.Size = new System.Drawing.Size(681, 576);
             this.grpDuelEvents.TabIndex = 100;
             this.grpDuelEvents.TabStop = false;
             this.grpDuelEvents.Text = "Events";
@@ -4749,16 +4751,16 @@ namespace DFWV
             this.tableLayoutPanel29.RowCount = 2;
             this.tableLayoutPanel29.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel29.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel29.Size = new System.Drawing.Size(887, 564);
+            this.tableLayoutPanel29.Size = new System.Drawing.Size(887, 582);
             this.tableLayoutPanel29.TabIndex = 91;
             // 
             // grpAbductionEventCols
             // 
             this.grpAbductionEventCols.Controls.Add(this.lstAbductionEventCols);
             this.grpAbductionEventCols.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpAbductionEventCols.Location = new System.Drawing.Point(203, 285);
+            this.grpAbductionEventCols.Location = new System.Drawing.Point(203, 294);
             this.grpAbductionEventCols.Name = "grpAbductionEventCols";
-            this.grpAbductionEventCols.Size = new System.Drawing.Size(681, 276);
+            this.grpAbductionEventCols.Size = new System.Drawing.Size(681, 285);
             this.grpAbductionEventCols.TabIndex = 91;
             this.grpAbductionEventCols.TabStop = false;
             this.grpAbductionEventCols.Text = "Event Collections";
@@ -4769,7 +4771,7 @@ namespace DFWV
             this.lstAbductionEventCols.FormattingEnabled = true;
             this.lstAbductionEventCols.Location = new System.Drawing.Point(3, 16);
             this.lstAbductionEventCols.Name = "lstAbductionEventCols";
-            this.lstAbductionEventCols.Size = new System.Drawing.Size(675, 257);
+            this.lstAbductionEventCols.Size = new System.Drawing.Size(675, 266);
             this.lstAbductionEventCols.TabIndex = 0;
             // 
             // panel12
@@ -4796,7 +4798,7 @@ namespace DFWV
             this.panel12.Location = new System.Drawing.Point(3, 3);
             this.panel12.Name = "panel12";
             this.tableLayoutPanel29.SetRowSpan(this.panel12, 2);
-            this.panel12.Size = new System.Drawing.Size(194, 558);
+            this.panel12.Size = new System.Drawing.Size(194, 576);
             this.panel12.TabIndex = 90;
             // 
             // label138
@@ -4913,7 +4915,7 @@ namespace DFWV
             this.grpAbductionEvents.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpAbductionEvents.Location = new System.Drawing.Point(203, 3);
             this.grpAbductionEvents.Name = "grpAbductionEvents";
-            this.grpAbductionEvents.Size = new System.Drawing.Size(681, 276);
+            this.grpAbductionEvents.Size = new System.Drawing.Size(681, 285);
             this.grpAbductionEvents.TabIndex = 81;
             this.grpAbductionEvents.TabStop = false;
             this.grpAbductionEvents.Text = "Events";
@@ -4952,7 +4954,7 @@ namespace DFWV
             this.tableLayoutPanel30.Name = "tableLayoutPanel30";
             this.tableLayoutPanel30.RowCount = 1;
             this.tableLayoutPanel30.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel30.Size = new System.Drawing.Size(887, 564);
+            this.tableLayoutPanel30.Size = new System.Drawing.Size(887, 582);
             this.tableLayoutPanel30.TabIndex = 72;
             // 
             // grpSiteConqueredEvents
@@ -4961,7 +4963,7 @@ namespace DFWV
             this.grpSiteConqueredEvents.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpSiteConqueredEvents.Location = new System.Drawing.Point(203, 3);
             this.grpSiteConqueredEvents.Name = "grpSiteConqueredEvents";
-            this.grpSiteConqueredEvents.Size = new System.Drawing.Size(681, 558);
+            this.grpSiteConqueredEvents.Size = new System.Drawing.Size(681, 576);
             this.grpSiteConqueredEvents.TabIndex = 63;
             this.grpSiteConqueredEvents.TabStop = false;
             this.grpSiteConqueredEvents.Text = "Events";
@@ -4998,7 +5000,7 @@ namespace DFWV
             this.panel13.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel13.Location = new System.Drawing.Point(3, 3);
             this.panel13.Name = "panel13";
-            this.panel13.Size = new System.Drawing.Size(194, 558);
+            this.panel13.Size = new System.Drawing.Size(194, 576);
             this.panel13.TabIndex = 71;
             // 
             // label127
@@ -5125,16 +5127,16 @@ namespace DFWV
             this.tableLayoutPanel31.RowCount = 2;
             this.tableLayoutPanel31.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel31.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel31.Size = new System.Drawing.Size(887, 564);
+            this.tableLayoutPanel31.Size = new System.Drawing.Size(887, 582);
             this.tableLayoutPanel31.TabIndex = 88;
             // 
             // grpTheftEventCols
             // 
             this.grpTheftEventCols.Controls.Add(this.lstTheftEventCols);
             this.grpTheftEventCols.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpTheftEventCols.Location = new System.Drawing.Point(203, 285);
+            this.grpTheftEventCols.Location = new System.Drawing.Point(203, 294);
             this.grpTheftEventCols.Name = "grpTheftEventCols";
-            this.grpTheftEventCols.Size = new System.Drawing.Size(681, 276);
+            this.grpTheftEventCols.Size = new System.Drawing.Size(681, 285);
             this.grpTheftEventCols.TabIndex = 90;
             this.grpTheftEventCols.TabStop = false;
             this.grpTheftEventCols.Text = "Event Collections";
@@ -5145,7 +5147,7 @@ namespace DFWV
             this.lstTheftEventCols.FormattingEnabled = true;
             this.lstTheftEventCols.Location = new System.Drawing.Point(3, 16);
             this.lstTheftEventCols.Name = "lstTheftEventCols";
-            this.lstTheftEventCols.Size = new System.Drawing.Size(675, 257);
+            this.lstTheftEventCols.Size = new System.Drawing.Size(675, 266);
             this.lstTheftEventCols.TabIndex = 0;
             // 
             // panel14
@@ -5169,7 +5171,7 @@ namespace DFWV
             this.panel14.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel14.Location = new System.Drawing.Point(3, 3);
             this.panel14.Name = "panel14";
-            this.panel14.Size = new System.Drawing.Size(194, 276);
+            this.panel14.Size = new System.Drawing.Size(194, 285);
             this.panel14.TabIndex = 89;
             // 
             // label169
@@ -5277,7 +5279,7 @@ namespace DFWV
             this.grpTheftEvents.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpTheftEvents.Location = new System.Drawing.Point(203, 3);
             this.grpTheftEvents.Name = "grpTheftEvents";
-            this.grpTheftEvents.Size = new System.Drawing.Size(681, 276);
+            this.grpTheftEvents.Size = new System.Drawing.Size(681, 285);
             this.grpTheftEvents.TabIndex = 81;
             this.grpTheftEvents.TabStop = false;
             this.grpTheftEvents.Text = "Events";
@@ -5316,7 +5318,7 @@ namespace DFWV
             this.tableLayoutPanel39.Name = "tableLayoutPanel39";
             this.tableLayoutPanel39.RowCount = 1;
             this.tableLayoutPanel39.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel39.Size = new System.Drawing.Size(887, 564);
+            this.tableLayoutPanel39.Size = new System.Drawing.Size(887, 582);
             this.tableLayoutPanel39.TabIndex = 109;
             // 
             // panel20
@@ -5340,7 +5342,7 @@ namespace DFWV
             this.panel20.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel20.Location = new System.Drawing.Point(3, 3);
             this.panel20.Name = "panel20";
-            this.panel20.Size = new System.Drawing.Size(194, 558);
+            this.panel20.Size = new System.Drawing.Size(194, 576);
             this.panel20.TabIndex = 110;
             // 
             // label179
@@ -5448,7 +5450,7 @@ namespace DFWV
             this.grpInsurrectionEvents.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpInsurrectionEvents.Location = new System.Drawing.Point(203, 3);
             this.grpInsurrectionEvents.Name = "grpInsurrectionEvents";
-            this.grpInsurrectionEvents.Size = new System.Drawing.Size(681, 558);
+            this.grpInsurrectionEvents.Size = new System.Drawing.Size(681, 576);
             this.grpInsurrectionEvents.TabIndex = 100;
             this.grpInsurrectionEvents.TabStop = false;
             this.grpInsurrectionEvents.Text = "Events";
@@ -6283,6 +6285,7 @@ namespace DFWV
             // 
             // grpSite
             // 
+            this.grpSite.Controls.Add(this.picSiteMapLegend);
             this.grpSite.Controls.Add(this.picSiteMap);
             this.grpSite.Controls.Add(this.tableLayoutPanel34);
             this.grpSite.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -6294,12 +6297,36 @@ namespace DFWV
             this.grpSite.TabStop = false;
             this.grpSite.Visible = false;
             // 
+            // picSiteMapLegend
+            // 
+            this.picSiteMapLegend.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.picSiteMapLegend.Location = new System.Drawing.Point(73, 19);
+            this.picSiteMapLegend.Name = "picSiteMapLegend";
+            this.picSiteMapLegend.Size = new System.Drawing.Size(178, 587);
+            this.picSiteMapLegend.TabIndex = 63;
+            this.picSiteMapLegend.TabStop = false;
+            this.picSiteMapLegend.Visible = false;
+            // 
+            // picSiteMap
+            // 
+            this.picSiteMap.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.picSiteMap.Location = new System.Drawing.Point(257, 19);
+            this.picSiteMap.Name = "picSiteMap";
+            this.picSiteMap.Size = new System.Drawing.Size(632, 587);
+            this.picSiteMap.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picSiteMap.TabIndex = 4;
+            this.picSiteMap.TabStop = false;
+            this.picSiteMap.Visible = false;
+            // 
             // tableLayoutPanel34
             // 
             this.tableLayoutPanel34.ColumnCount = 3;
             this.tableLayoutPanel34.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 46.14004F));
             this.tableLayoutPanel34.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 53.85996F));
-            this.tableLayoutPanel34.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 465F));
+            this.tableLayoutPanel34.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 487F));
             this.tableLayoutPanel34.Controls.Add(this.grpSiteArtifacts, 0, 2);
             this.tableLayoutPanel34.Controls.Add(this.grpSiteStructures, 1, 2);
             this.tableLayoutPanel34.Controls.Add(this.panel17, 0, 0);
@@ -6328,7 +6355,7 @@ namespace DFWV
             this.grpSiteArtifacts.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpSiteArtifacts.Location = new System.Drawing.Point(3, 329);
             this.grpSiteArtifacts.Name = "grpSiteArtifacts";
-            this.grpSiteArtifacts.Size = new System.Drawing.Size(188, 157);
+            this.grpSiteArtifacts.Size = new System.Drawing.Size(178, 157);
             this.grpSiteArtifacts.TabIndex = 65;
             this.grpSiteArtifacts.TabStop = false;
             this.grpSiteArtifacts.Text = "Artifacts Created";
@@ -6339,16 +6366,16 @@ namespace DFWV
             this.lstSiteArtifacts.FormattingEnabled = true;
             this.lstSiteArtifacts.Location = new System.Drawing.Point(3, 16);
             this.lstSiteArtifacts.Name = "lstSiteArtifacts";
-            this.lstSiteArtifacts.Size = new System.Drawing.Size(182, 138);
+            this.lstSiteArtifacts.Size = new System.Drawing.Size(172, 138);
             this.lstSiteArtifacts.TabIndex = 0;
             // 
             // grpSiteStructures
             // 
             this.grpSiteStructures.Controls.Add(this.lstSiteStructures);
             this.grpSiteStructures.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpSiteStructures.Location = new System.Drawing.Point(197, 329);
+            this.grpSiteStructures.Location = new System.Drawing.Point(187, 329);
             this.grpSiteStructures.Name = "grpSiteStructures";
-            this.grpSiteStructures.Size = new System.Drawing.Size(220, 157);
+            this.grpSiteStructures.Size = new System.Drawing.Size(208, 157);
             this.grpSiteStructures.TabIndex = 64;
             this.grpSiteStructures.TabStop = false;
             this.grpSiteStructures.Text = "Structures";
@@ -6359,12 +6386,12 @@ namespace DFWV
             this.lstSiteStructures.FormattingEnabled = true;
             this.lstSiteStructures.Location = new System.Drawing.Point(3, 16);
             this.lstSiteStructures.Name = "lstSiteStructures";
-            this.lstSiteStructures.Size = new System.Drawing.Size(214, 138);
+            this.lstSiteStructures.Size = new System.Drawing.Size(202, 138);
             this.lstSiteStructures.TabIndex = 0;
             // 
             // panel17
             // 
-            this.panel17.Controls.Add(this.LabelSiteMap);
+            this.panel17.Controls.Add(this.SiteMapLabel);
             this.panel17.Controls.Add(this.label80);
             this.panel17.Controls.Add(this.lblSiteName);
             this.panel17.Controls.Add(this.label78);
@@ -6380,8 +6407,20 @@ namespace DFWV
             this.panel17.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel17.Location = new System.Drawing.Point(3, 3);
             this.panel17.Name = "panel17";
-            this.panel17.Size = new System.Drawing.Size(188, 157);
+            this.panel17.Size = new System.Drawing.Size(178, 157);
             this.panel17.TabIndex = 63;
+            // 
+            // SiteMapLabel
+            // 
+            this.SiteMapLabel.AutoSize = true;
+            this.SiteMapLabel.ForeColor = System.Drawing.Color.Blue;
+            this.SiteMapLabel.Location = new System.Drawing.Point(3, 130);
+            this.SiteMapLabel.Name = "SiteMapLabel";
+            this.SiteMapLabel.Size = new System.Drawing.Size(49, 13);
+            this.SiteMapLabel.TabIndex = 61;
+            this.SiteMapLabel.Text = "Site Map";
+            this.SiteMapLabel.MouseEnter += new System.EventHandler(this.LabelSiteMap_MouseEnter);
+            this.SiteMapLabel.MouseLeave += new System.EventHandler(this.LabelSiteMap_MouseLeave);
             // 
             // label80
             // 
@@ -6468,9 +6507,9 @@ namespace DFWV
             // 
             this.grpSiteOutcasts.Controls.Add(this.lstSiteOutcasts);
             this.grpSiteOutcasts.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpSiteOutcasts.Location = new System.Drawing.Point(197, 492);
+            this.grpSiteOutcasts.Location = new System.Drawing.Point(187, 492);
             this.grpSiteOutcasts.Name = "grpSiteOutcasts";
-            this.grpSiteOutcasts.Size = new System.Drawing.Size(220, 95);
+            this.grpSiteOutcasts.Size = new System.Drawing.Size(208, 95);
             this.grpSiteOutcasts.TabIndex = 61;
             this.grpSiteOutcasts.TabStop = false;
             this.grpSiteOutcasts.Text = "Outcasts";
@@ -6483,7 +6522,7 @@ namespace DFWV
             this.lstSiteOutcasts.ItemHeight = 16;
             this.lstSiteOutcasts.Location = new System.Drawing.Point(3, 16);
             this.lstSiteOutcasts.Name = "lstSiteOutcasts";
-            this.lstSiteOutcasts.Size = new System.Drawing.Size(214, 76);
+            this.lstSiteOutcasts.Size = new System.Drawing.Size(202, 76);
             this.lstSiteOutcasts.TabIndex = 0;
             this.lstSiteOutcasts.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.lstSiteOutcasts_DrawItem);
             // 
@@ -6498,7 +6537,7 @@ namespace DFWV
             this.grpSiteCreated.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpSiteCreated.Location = new System.Drawing.Point(3, 166);
             this.grpSiteCreated.Name = "grpSiteCreated";
-            this.grpSiteCreated.Size = new System.Drawing.Size(188, 157);
+            this.grpSiteCreated.Size = new System.Drawing.Size(178, 157);
             this.grpSiteCreated.TabIndex = 40;
             this.grpSiteCreated.TabStop = false;
             this.grpSiteCreated.Text = "Created";
@@ -6536,7 +6575,7 @@ namespace DFWV
             this.grpSitePrisoners.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpSitePrisoners.Location = new System.Drawing.Point(3, 492);
             this.grpSitePrisoners.Name = "grpSitePrisoners";
-            this.grpSitePrisoners.Size = new System.Drawing.Size(188, 95);
+            this.grpSitePrisoners.Size = new System.Drawing.Size(178, 95);
             this.grpSitePrisoners.TabIndex = 38;
             this.grpSitePrisoners.TabStop = false;
             this.grpSitePrisoners.Text = "Prisoners";
@@ -6549,7 +6588,7 @@ namespace DFWV
             this.lstSitePrisoners.ItemHeight = 16;
             this.lstSitePrisoners.Location = new System.Drawing.Point(3, 16);
             this.lstSitePrisoners.Name = "lstSitePrisoners";
-            this.lstSitePrisoners.Size = new System.Drawing.Size(182, 76);
+            this.lstSitePrisoners.Size = new System.Drawing.Size(172, 76);
             this.lstSitePrisoners.TabIndex = 0;
             this.lstSitePrisoners.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.lstSitePrisoners_DrawItem);
             // 
@@ -6557,9 +6596,9 @@ namespace DFWV
             // 
             this.grpSiteInhabitants.Controls.Add(this.lstSiteInhabitants);
             this.grpSiteInhabitants.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpSiteInhabitants.Location = new System.Drawing.Point(197, 3);
+            this.grpSiteInhabitants.Location = new System.Drawing.Point(187, 3);
             this.grpSiteInhabitants.Name = "grpSiteInhabitants";
-            this.grpSiteInhabitants.Size = new System.Drawing.Size(220, 157);
+            this.grpSiteInhabitants.Size = new System.Drawing.Size(208, 157);
             this.grpSiteInhabitants.TabIndex = 39;
             this.grpSiteInhabitants.TabStop = false;
             this.grpSiteInhabitants.Text = "Inhabitants";
@@ -6570,16 +6609,16 @@ namespace DFWV
             this.lstSiteInhabitants.FormattingEnabled = true;
             this.lstSiteInhabitants.Location = new System.Drawing.Point(3, 16);
             this.lstSiteInhabitants.Name = "lstSiteInhabitants";
-            this.lstSiteInhabitants.Size = new System.Drawing.Size(214, 138);
+            this.lstSiteInhabitants.Size = new System.Drawing.Size(202, 138);
             this.lstSiteInhabitants.TabIndex = 0;
             // 
             // grpSitePopulation
             // 
             this.grpSitePopulation.Controls.Add(this.lstSitePopulation);
             this.grpSitePopulation.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpSitePopulation.Location = new System.Drawing.Point(197, 166);
+            this.grpSitePopulation.Location = new System.Drawing.Point(187, 166);
             this.grpSitePopulation.Name = "grpSitePopulation";
-            this.grpSitePopulation.Size = new System.Drawing.Size(220, 157);
+            this.grpSitePopulation.Size = new System.Drawing.Size(208, 157);
             this.grpSitePopulation.TabIndex = 37;
             this.grpSitePopulation.TabStop = false;
             this.grpSitePopulation.Text = "Population";
@@ -6592,7 +6631,7 @@ namespace DFWV
             this.lstSitePopulation.ItemHeight = 16;
             this.lstSitePopulation.Location = new System.Drawing.Point(3, 16);
             this.lstSitePopulation.Name = "lstSitePopulation";
-            this.lstSitePopulation.Size = new System.Drawing.Size(214, 138);
+            this.lstSitePopulation.Size = new System.Drawing.Size(202, 138);
             this.lstSitePopulation.TabIndex = 0;
             this.lstSitePopulation.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.lstSitePopulation_DrawItem);
             // 
@@ -6600,10 +6639,10 @@ namespace DFWV
             // 
             this.grpSiteEventCollection.Controls.Add(this.trvSiteEventCollection);
             this.grpSiteEventCollection.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpSiteEventCollection.Location = new System.Drawing.Point(423, 3);
+            this.grpSiteEventCollection.Location = new System.Drawing.Point(401, 3);
             this.grpSiteEventCollection.Name = "grpSiteEventCollection";
             this.tableLayoutPanel34.SetRowSpan(this.grpSiteEventCollection, 2);
-            this.grpSiteEventCollection.Size = new System.Drawing.Size(460, 320);
+            this.grpSiteEventCollection.Size = new System.Drawing.Size(482, 320);
             this.grpSiteEventCollection.TabIndex = 59;
             this.grpSiteEventCollection.TabStop = false;
             this.grpSiteEventCollection.Text = "Site Event Collections";
@@ -6613,17 +6652,17 @@ namespace DFWV
             this.trvSiteEventCollection.Dock = System.Windows.Forms.DockStyle.Fill;
             this.trvSiteEventCollection.Location = new System.Drawing.Point(3, 16);
             this.trvSiteEventCollection.Name = "trvSiteEventCollection";
-            this.trvSiteEventCollection.Size = new System.Drawing.Size(454, 301);
+            this.trvSiteEventCollection.Size = new System.Drawing.Size(476, 301);
             this.trvSiteEventCollection.TabIndex = 0;
             // 
             // grpSiteEvent
             // 
             this.grpSiteEvent.Controls.Add(this.trvSiteEvent);
             this.grpSiteEvent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpSiteEvent.Location = new System.Drawing.Point(423, 329);
+            this.grpSiteEvent.Location = new System.Drawing.Point(401, 329);
             this.grpSiteEvent.Name = "grpSiteEvent";
             this.tableLayoutPanel34.SetRowSpan(this.grpSiteEvent, 2);
-            this.grpSiteEvent.Size = new System.Drawing.Size(460, 258);
+            this.grpSiteEvent.Size = new System.Drawing.Size(482, 258);
             this.grpSiteEvent.TabIndex = 58;
             this.grpSiteEvent.TabStop = false;
             this.grpSiteEvent.Text = "Site Events";
@@ -6635,7 +6674,7 @@ namespace DFWV
             | System.Windows.Forms.AnchorStyles.Right)));
             this.trvSiteEvent.Location = new System.Drawing.Point(3, 16);
             this.trvSiteEvent.Name = "trvSiteEvent";
-            this.trvSiteEvent.Size = new System.Drawing.Size(454, 157);
+            this.trvSiteEvent.Size = new System.Drawing.Size(476, 157);
             this.trvSiteEvent.TabIndex = 0;
             // 
             // FilterSite
@@ -7492,28 +7531,6 @@ namespace DFWV
             this.ForwardtoolStripMenuItem.Size = new System.Drawing.Size(28, 20);
             this.ForwardtoolStripMenuItem.Click += new System.EventHandler(this.ForwardtoolStripMenuItem_Click);
             // 
-            // LabelSiteMap
-            // 
-            this.LabelSiteMap.AutoSize = true;
-            this.LabelSiteMap.ForeColor = System.Drawing.Color.Blue;
-            this.LabelSiteMap.Location = new System.Drawing.Point(3, 130);
-            this.LabelSiteMap.Name = "LabelSiteMap";
-            this.LabelSiteMap.Size = new System.Drawing.Size(49, 13);
-            this.LabelSiteMap.TabIndex = 61;
-            this.LabelSiteMap.Text = "Site Map";
-            this.LabelSiteMap.MouseEnter += new System.EventHandler(this.LabelSiteMap_MouseEnter);
-            this.LabelSiteMap.MouseLeave += new System.EventHandler(this.LabelSiteMap_MouseLeave);
-            // 
-            // picSiteMap
-            // 
-            this.picSiteMap.Location = new System.Drawing.Point(200, 0);
-            this.picSiteMap.Name = "picSiteMap";
-            this.picSiteMap.Size = new System.Drawing.Size(689, 612);
-            this.picSiteMap.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picSiteMap.TabIndex = 3;
-            this.picSiteMap.TabStop = false;
-            this.picSiteMap.Visible = false;
-            // 
             // lblArtifactLostTime
             // 
             this.lblArtifactLostTime.AutoSize = true;
@@ -7740,7 +7757,7 @@ namespace DFWV
             this.lblEntityPopulationBattleTime.AutoSize = true;
             this.lblEntityPopulationBattleTime.Data = null;
             this.lblEntityPopulationBattleTime.ForeColor = System.Drawing.Color.Black;
-            this.lblEntityPopulationBattleTime.Location = new System.Drawing.Point(70, 461);
+            this.lblEntityPopulationBattleTime.Location = new System.Drawing.Point(70, 479);
             this.lblEntityPopulationBattleTime.Name = "lblEntityPopulationBattleTime";
             this.lblEntityPopulationBattleTime.Size = new System.Drawing.Size(55, 13);
             this.lblEntityPopulationBattleTime.TabIndex = 29;
@@ -7752,7 +7769,7 @@ namespace DFWV
             this.lblEntityPopulationBattleWar.AutoSize = true;
             this.lblEntityPopulationBattleWar.Data = null;
             this.lblEntityPopulationBattleWar.ForeColor = System.Drawing.Color.Black;
-            this.lblEntityPopulationBattleWar.Location = new System.Drawing.Point(70, 438);
+            this.lblEntityPopulationBattleWar.Location = new System.Drawing.Point(70, 456);
             this.lblEntityPopulationBattleWar.Name = "lblEntityPopulationBattleWar";
             this.lblEntityPopulationBattleWar.Size = new System.Drawing.Size(55, 13);
             this.lblEntityPopulationBattleWar.TabIndex = 25;
@@ -8945,6 +8962,8 @@ namespace DFWV
             this.tableLayoutPanel14.ResumeLayout(false);
             this.tableLayoutPanel14.PerformLayout();
             this.grpSite.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picSiteMapLegend)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSiteMap)).EndInit();
             this.tableLayoutPanel34.ResumeLayout(false);
             this.grpSiteArtifacts.ResumeLayout(false);
             this.grpSiteStructures.ResumeLayout(false);
@@ -8993,7 +9012,6 @@ namespace DFWV
             this.grpDynastyMembers.ResumeLayout(false);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picSiteMap)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -9701,8 +9719,9 @@ namespace DFWV
         private System.Windows.Forms.Label label190;
         private System.Windows.Forms.Label label191;
         public System.Windows.Forms.Label lblArtifactValue;
-        private System.Windows.Forms.Label LabelSiteMap;
-        private System.Windows.Forms.PictureBox picSiteMap;
+        public System.Windows.Forms.Label SiteMapLabel;
+        public System.Windows.Forms.PictureBox picSiteMap;
+        public System.Windows.Forms.PictureBox picSiteMapLegend;
     }
 }
 

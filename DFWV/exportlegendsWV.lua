@@ -1,9 +1,11 @@
+--[[
 io.output("research.txt")
 for k, v in ipairs(df,map) do
 	io.write (k.."\t"..tostring(v).."\n")
 end
 io.write("test")
 io.close()
+--]]
 
 getItemSubTypeName = function (itemType, subType)
 	
@@ -38,7 +40,7 @@ function table.contains(table, element)
   return false
 end
 
---dfhack.run_command("exportlegends all")
+dfhack.run_command("exportlegends all")
 print("Exporting extra legends mode details...")
 io.output(tostring(df.global.world.cur_savegame.save_dir).."-legends_plus.xml")
 

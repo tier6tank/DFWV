@@ -96,44 +96,16 @@ namespace DFWV
 
                 foreach (var file in Directory.GetFiles(workingFolder))
                 {
-                    var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file);
-                    if (fileNameWithoutExtension == null ||
-                        ((Path.GetExtension(file) != ".bmp" && Path.GetExtension(file) != ".png") ||
-                         !fileNameWithoutExtension.StartsWith("world_map-"))) 
-                        continue;
-                    var mapFile = Path.GetFileNameWithoutExtension(file);
-                    if (mapFile == null) 
-                        continue;
-                    var mapSplit = mapFile.Split("-".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
-
-                    var tempName = mapSplit[1];
-
-
-                    var xmlPath = Path.Combine(workingFolder, tempName + "-legends.xml");
-                    var paramPath = Path.Combine(workingFolder, tempName + "-world_gen_param.txt");
-                    var historyPath = Path.Combine(workingFolder, tempName + "-world_history.txt");
-                    var sitesPath = Path.Combine(workingFolder, tempName + "-world_sites_and_pops.txt");
-
-                    if (!File.Exists(xmlPath) || !File.Exists(paramPath) || !File.Exists(historyPath) ||
-                        !File.Exists(sitesPath)) 
-                        continue;
-                    if (selectedFile == "")
-                        selectedFile = file;
-                    else
-                    { //In case of multiple possibilities, make the user decide.
-                        selectedFile = "";
-                        break;
-                    }
+                    var filename = Path.GetFileName(file);
+                    if (filename.EndsWith("-world_map.bmp"))
+                        return file;
                 }
-                return selectedFile;
+                return "";
             }
             catch (Exception)
             {
                 return "";
-            }
-
-            
-            
+            } 
         }
 
         private void LoadFromFiles(string filename)
@@ -146,6 +118,8 @@ namespace DFWV
                 var restofFile = thisFile.Split('-').ToList();
                 restofFile[restofFile.Count - 1] = "world_map.bmp";
                 mapPath = Path.Combine(path, String.Join("-", restofFile));
+                //In case they picked a sitemap
+                mapPath = mapPath.Replace("-site_map-world_map.bmp", "-world_map.bmp");
             }
             if (!File.Exists(mapPath))
             {
@@ -1842,16 +1816,23 @@ namespace DFWV
         private void LabelSiteMap_MouseLeave(object sender, EventArgs e)
         {
             picSiteMap.Visible = false;
+            picSiteMapLegend.Visible = false;
         }
 
         private void LabelSiteMap_MouseEnter(object sender, EventArgs e)
         {
-            var siteMapPath = World.mapPath.Replace("world_map", "site_map-" + ((Site) lstSite.SelectedItem).ID);
-            if (File.Exists(siteMapPath))
+            picSiteMap.Visible = true;
+            var siteMapPath = ((Site)lstSite.SelectedItem).SiteMapPath;
+            if (siteMapPath != null && File.Exists(siteMapPath))
             {
                 picSiteMap.ImageLocation = siteMapPath;
                 picSiteMap.Load();
                 picSiteMap.Visible = true;
+                if (World.MapLegends.ContainsKey("site_color_key"))
+                {
+                    World.MapLegends["site_color_key"].DrawTo(picSiteMapLegend);
+                    picSiteMapLegend.Visible = true;
+                }
             }
         }
 

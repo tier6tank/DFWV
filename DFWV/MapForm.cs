@@ -1,4 +1,5 @@
 ﻿using System.Drawing.Drawing2D;
+using System.IO;
 using DFWV.WorldClasses;
 using System;
 using System.Collections.Generic;
@@ -107,7 +108,8 @@ namespace DFWV
             mapSize = new Size(sizeX, sizeY);
             siteSize = new Size(picMap.Image.Size.Width / mapSize.Width,
                                 picMap.Image.Size.Height / mapSize.Height);
-                     
+
+            updateLegend();
             redrawOverlay();
             DrawMaps();
         }
@@ -643,7 +645,39 @@ namespace DFWV
                 if (item.Checked)
                     selectedSiteTypes.Add(item.Text);
             }
+            updateLegend();
             redrawOverlay();
+
+        }
+
+        private void updateLegend()
+        {
+
+            if (chkShowLegend.Checked)
+            {
+                picLegend.Visible = true;
+                switch (selectedMap)
+                {
+                    case "Biome":
+                        World.MapLegends["biome_color_key"].DrawTo(picLegend);
+                        break;
+                    case "Hydrosphere":
+                        World.MapLegends["hydro_color_key"].DrawTo(picLegend);
+                        break;
+                    case "Diplomacy":
+                    case "Nobility":
+                    case "Structures":
+                    case "Trade":
+                        World.MapLegends["structure_color_key"].DrawTo(picLegend);
+                        break;
+                    default:
+                        picLegend.Visible = false;
+                        break;
+                }
+
+            }
+            else
+                picLegend.Visible = false;
         }
 
         private void picMiniMap_MouseDown(object sender, MouseEventArgs e)
@@ -738,6 +772,12 @@ namespace DFWV
 
             lblMapObject.Text = objectTypeText;
             lblMapObject.Visible = objectTypeText != "";
+
+            if (picLegend.Visible)
+            {
+                picLegend.Left = e.X + 10;
+                picLegend.Top = e.Y + 10;
+            }
         }
 
         private WorldObject getSelectedObject(Point mouseCoord)
@@ -873,7 +913,6 @@ namespace DFWV
         {
 
         }
-
 
 
     }

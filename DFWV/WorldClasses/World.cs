@@ -71,6 +71,7 @@ namespace DFWV.WorldClasses
         public readonly Dictionary<int, Artifact> Artifacts = new Dictionary<int, Artifact>();
 
         public Dictionary<string, string> Maps { get; private set; }
+        public Dictionary<string, MapLegend> MapLegends { get; private set; } 
 
         public readonly FilterSettings Filters;
 
@@ -128,6 +129,18 @@ namespace DFWV.WorldClasses
                 thisMap = mapPath.Replace("world_map", MapSymbols[i]);
                 if (File.Exists(thisMap))
                     Maps.Add(MapNames[i], thisMap);
+            }
+
+            var MapLegendsName = new List<string>
+                { "structure_color_key", "hydro_color_key", "biome_color_key", "site_color_key" };
+
+            MapLegends = new Dictionary<string, MapLegend>();
+            var thisLegend = "";
+            foreach (var maplegendname in MapLegendsName)
+            {
+                thisLegend = Path.Combine(Path.GetDirectoryName(mapPath), maplegendname) + ".txt";
+                if (File.Exists(thisLegend))
+                    MapLegends.Add(maplegendname, new MapLegend(thisLegend));
             }
 
         }
