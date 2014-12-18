@@ -117,6 +117,7 @@
     <Compile Include="MapForm.Designer.cs">
       <DependentUpon>MapForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MapLegend.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="StatsForm.cs">
       <SubType>Form</SubType>

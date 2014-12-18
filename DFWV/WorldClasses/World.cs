@@ -71,6 +71,7 @@ namespace DFWV.WorldClasses
         public readonly Dictionary<int, Artifact> Artifacts = new Dictionary<int, Artifact>();
 
         public Dictionary<string, string> Maps { get; private set; }
+        public Dictionary<string, MapLegend> MapLegends { get; private set; } 
 
         public readonly FilterSettings Filters;
 
@@ -78,10 +79,10 @@ namespace DFWV.WorldClasses
         private VisualizationCollection Visualizations;
         #endregion
 
-        public World(string historyPath, string sitesPath, string paramPath, string xmlPath, string xmlPlusPath, string mapPath, int MapYear)
+        public World(string historyPath, string sitesPath, string paramPath, string xmlPath, string xmlPlusPath, string mapPath, WorldTime worldGenTime)
         {
-            LastYear = MapYear;
-            WorldTime.Present = new WorldTime(LastYear);
+            LastYear = worldGenTime.Year;
+            WorldTime.Present = worldGenTime;
 
             this.historyPath = historyPath;
             this.sitesPath = sitesPath;
@@ -114,22 +115,32 @@ namespace DFWV.WorldClasses
         {
             Maps = new Dictionary<string, string> {{"Main", mapPath}};
             var MapSymbols = new List<string>
-            {"bm", "dip", "drn", "el", "elw", "evil", "hyd", "nob", "rain",
+            {"bm", "detailed", "dip", "drn", "el", "elw", "evil", "hyd", "nob", "rain",
                     "sal", "sav", "str", "tmp", "trd", "veg", "vol"};
             var MapNames = new List<string>
-            {"Biome", "Diplomacy", "Drainage", "Elevations", "Elevations w/Water", "Evil", 
+            {"Biome", "Standard+Biome", "Diplomacy", "Drainage", "Elevations", "Elevations w/Water", "Evil", 
                     "Hydrosphere", "Nobility", "Rainfall", "Sailinity", "Savagry", "Structures", 
                     "Temperature", "Trade", "Vegetation", "Volcanism"};
 
-            var thisMap = mapPath.Replace("world_map", "world_graphic");
-            if (File.Exists(thisMap))
-                Maps.Add("Standard+Biome", thisMap);
+            var thisMap = "";
 
             for (var i = 0; i < MapSymbols.Count; i++)
             {
-                thisMap = mapPath.Replace("world_map", "world_graphic-" + MapSymbols[i]);
+                thisMap = mapPath.Replace("world_map", MapSymbols[i]);
                 if (File.Exists(thisMap))
                     Maps.Add(MapNames[i], thisMap);
+            }
+
+            var MapLegendsName = new List<string>
+                { "structure_color_key", "hydro_color_key", "biome_color_key", "site_color_key" };
+
+            MapLegends = new Dictionary<string, MapLegend>();
+            var thisLegend = "";
+            foreach (var maplegendname in MapLegendsName)
+            {
+                thisLegend = Path.Combine(Path.GetDirectoryName(mapPath), maplegendname) + ".txt";
+                if (File.Exists(thisLegend))
+                    MapLegends.Add(maplegendname, new MapLegend(thisLegend));
             }
 
         }

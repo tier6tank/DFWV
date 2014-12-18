@@ -385,10 +385,9 @@ namespace DFWV
 
         /// <summary>
         /// Now at the open tag of a single object in our XML, we want to dump the entire contents into an XDocument.
-        ///   If we have a historical event or historical event collection we want to use their factory methods to create a new version of those with the given XDocument.
-        ///   For all other object types we want to use their constructor to make a new object of that type.
-        ///   In any case we add the object after making it to the appropriate dictionary.
-        /// Individual object reads are separated out to allow us to work past failing to load any specific XML item for some weird reason.
+        ///   If we have a World Construction it's a new item so it needs to be added, 
+        ///   in other cases, it already exists and details need to be added to the existing items.
+        /// Individual object reads are separated out to allow us to work past failing to load any specific XML item for any reason.
         /// </summary>
         private static void PlusLoadItem<T>(IDictionary<int, T> WorldList, World world, XmlReader xReader) where T : XMLObject
         {

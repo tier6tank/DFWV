@@ -34,8 +34,10 @@
             this.picMap = new System.Windows.Forms.PictureBox();
             this.mapTableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.pnlMap = new System.Windows.Forms.Panel();
+            this.picLegend = new System.Windows.Forms.PictureBox();
             this.picMiniMap = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lblMapObject = new System.Windows.Forms.Label();
             this.lblMapParent = new System.Windows.Forms.Label();
             this.lblMapOwner = new System.Windows.Forms.Label();
             this.lblMapCoords = new System.Windows.Forms.Label();
@@ -48,6 +50,7 @@
             this.lblMapName = new System.Windows.Forms.Label();
             this.lblMapNameCaption = new System.Windows.Forms.Label();
             this.grpSettings = new System.Windows.Forms.GroupBox();
+            this.chkShowLegend = new System.Windows.Forms.CheckBox();
             this.ugRegionDepthPicker = new System.Windows.Forms.NumericUpDown();
             this.btnOK = new System.Windows.Forms.Button();
             this.chkSites = new System.Windows.Forms.CheckBox();
@@ -61,11 +64,11 @@
             this.chkRegions = new System.Windows.Forms.CheckBox();
             this.chkBattles = new System.Windows.Forms.CheckBox();
             this.chkCivilizations = new System.Windows.Forms.CheckBox();
-            this.lblMapObject = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picMap)).BeginInit();
             this.mapTableLayout.SuspendLayout();
             this.pnlMap.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picLegend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picMiniMap)).BeginInit();
             this.panel1.SuspendLayout();
             this.grpSettings.SuspendLayout();
@@ -132,6 +135,7 @@
             // pnlMap
             // 
             this.pnlMap.AutoScroll = true;
+            this.pnlMap.Controls.Add(this.picLegend);
             this.pnlMap.Controls.Add(this.picMap);
             this.pnlMap.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlMap.Location = new System.Drawing.Point(2, 2);
@@ -141,6 +145,15 @@
             this.pnlMap.Size = new System.Drawing.Size(709, 525);
             this.pnlMap.TabIndex = 2;
             this.pnlMap.Scroll += new System.Windows.Forms.ScrollEventHandler(this.pnlMap_Scroll);
+            // 
+            // picLegend
+            // 
+            this.picLegend.Location = new System.Drawing.Point(0, 1);
+            this.picLegend.Name = "picLegend";
+            this.picLegend.Size = new System.Drawing.Size(242, 521);
+            this.picLegend.TabIndex = 6;
+            this.picLegend.TabStop = false;
+            this.picLegend.Visible = false;
             // 
             // picMiniMap
             // 
@@ -176,6 +189,16 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(184, 403);
             this.panel1.TabIndex = 4;
+            // 
+            // lblMapObject
+            // 
+            this.lblMapObject.AutoSize = true;
+            this.lblMapObject.Location = new System.Drawing.Point(70, 8);
+            this.lblMapObject.Name = "lblMapObject";
+            this.lblMapObject.Size = new System.Drawing.Size(38, 13);
+            this.lblMapObject.TabIndex = 76;
+            this.lblMapObject.Text = "Object";
+            this.lblMapObject.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // lblMapParent
             // 
@@ -279,6 +302,7 @@
             // 
             // grpSettings
             // 
+            this.grpSettings.Controls.Add(this.chkShowLegend);
             this.grpSettings.Controls.Add(this.ugRegionDepthPicker);
             this.grpSettings.Controls.Add(this.btnOK);
             this.grpSettings.Controls.Add(this.chkSites);
@@ -296,6 +320,19 @@
             this.grpSettings.TabStop = false;
             this.grpSettings.Text = "Settings";
             this.grpSettings.Visible = false;
+            // 
+            // chkShowLegend
+            // 
+            this.chkShowLegend.AutoSize = true;
+            this.chkShowLegend.Checked = true;
+            this.chkShowLegend.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkShowLegend.Location = new System.Drawing.Point(93, 196);
+            this.chkShowLegend.Name = "chkShowLegend";
+            this.chkShowLegend.Size = new System.Drawing.Size(92, 17);
+            this.chkShowLegend.TabIndex = 10;
+            this.chkShowLegend.Text = "Show Legend";
+            this.chkShowLegend.UseVisualStyleBackColor = true;
+            this.chkShowLegend.Click += new System.EventHandler(this.ViewOptionChanged);
             // 
             // ugRegionDepthPicker
             // 
@@ -451,16 +488,6 @@
             this.chkCivilizations.UseVisualStyleBackColor = true;
             this.chkCivilizations.Click += new System.EventHandler(this.ViewOptionChanged);
             // 
-            // lblMapObject
-            // 
-            this.lblMapObject.AutoSize = true;
-            this.lblMapObject.Location = new System.Drawing.Point(70, 8);
-            this.lblMapObject.Name = "lblMapObject";
-            this.lblMapObject.Size = new System.Drawing.Size(38, 13);
-            this.lblMapObject.TabIndex = 76;
-            this.lblMapObject.Text = "Object";
-            this.lblMapObject.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
             // MapForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -484,6 +511,7 @@
             this.mapTableLayout.ResumeLayout(false);
             this.pnlMap.ResumeLayout(false);
             this.pnlMap.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picLegend)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picMiniMap)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -533,5 +561,7 @@
         private System.Windows.Forms.CheckBox chkCivilizations;
         private System.Windows.Forms.NumericUpDown ugRegionDepthPicker;
         private System.Windows.Forms.Label lblMapObject;
+        private System.Windows.Forms.CheckBox chkShowLegend;
+        private System.Windows.Forms.PictureBox picLegend;
     }
 }

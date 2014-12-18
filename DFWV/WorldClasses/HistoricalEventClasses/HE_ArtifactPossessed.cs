@@ -18,7 +18,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? ArtifactID { get; set; }
         private Artifact Artifact { get; set; }
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location { get { return Site == null ? Point.Empty : Site.Location; } }
 
         public HE_ArtifactPossessed(XDocument xdoc, World world)
             : base(xdoc, world)

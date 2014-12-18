@@ -18,6 +18,21 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public int Type { get; private set; }
         public static List<string> Types = new List<string>();
 
+        public IEnumerable<XMLObject> Relationships
+        {
+            get
+            {
+                foreach (var propertyInfo in this.GetType().GetProperties())
+                {
+                    if (propertyInfo.GetValue(this, null) is XMLObject)
+                    {
+                        yield return propertyInfo.GetValue(this, null) as XMLObject;
+
+                    }
+                }
+            }
+        }
+
         public HistoricalEventCollection EventCollection { get; set; }
         public WorldTime Time { get { return new WorldTime(Year, Seconds); } }
         
