@@ -33,6 +33,7 @@ namespace DFWV
         /// 
         static public MainForm mainForm;
         static public MapForm mapForm;
+        static public SiteMapForm siteMapForm;
         static public TimelineForm timelineForm;
         static public StatsForm statsForm;
         //static public VisualizationForm visualizationForm;
@@ -335,21 +336,29 @@ namespace DFWV
 
         static public string Pluralize(this string str)
         {
+            if (pluralService == null)
+                InitiailzePluralService();
             return pluralService.Pluralize(str);
         }
 
         static public string Singularize(this string str)
         {
+            if (pluralService == null)
+                InitiailzePluralService();
             return pluralService.Singularize(str);
         }
 
         static public bool isPlural(this string str)
         {
+            if (pluralService == null)
+                InitiailzePluralService();
             return pluralService.IsPlural(str);
         }
 
         static public bool isSingular(this string str)
         {
+            if (pluralService == null)
+                InitiailzePluralService();
             return pluralService.IsSingular(str);
         }
 

@@ -29,7 +29,7 @@ namespace DFWV.WorldClasses
     public delegate void VisualizationsCreatedEventHandler();
     #endregion
 
-    class World : IDisposable
+    public class World : IDisposable
     {
         #region Fields and Properties
         public readonly string historyPath;

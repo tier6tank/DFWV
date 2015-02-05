@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace DFWV.WorldClasses
 {
-    class WorldConstruction: XMLObject
+    public class WorldConstruction: XMLObject
     {
 
         public List<WorldConstruction> Subconstructions { get; set; }

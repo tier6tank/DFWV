@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace DFWV.WorldClasses
 {
-    class Artifact : XMLObject
+    public class Artifact : XMLObject
     {
         private string Item { get; set; }
 

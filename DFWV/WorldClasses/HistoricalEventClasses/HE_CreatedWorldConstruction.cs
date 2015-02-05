@@ -7,7 +7,7 @@ using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_CreatedWorldConstruction : HistoricalEvent
+    public class HE_CreatedWorldConstruction : HistoricalEvent
     {
         private int? WCID { get; set; }
         private WorldConstruction WC { get; set; }

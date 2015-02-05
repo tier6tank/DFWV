@@ -11,7 +11,7 @@ using DFWV.WorldClasses.HistoricalEventCollectionClasses;
 
 namespace DFWV.WorldClasses.HistoricalFigureClasses
 {
-    class HistoricalFigure : XMLObject
+    public class HistoricalFigure : XMLObject
     {
 
         private string Race_ { get; set; } 

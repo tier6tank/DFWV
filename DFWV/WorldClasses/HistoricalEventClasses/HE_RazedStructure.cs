@@ -7,7 +7,7 @@ using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_RazedStructure : HistoricalEvent
+    public class HE_RazedStructure : HistoricalEvent
     {
         private int? CivID { get; set; }
         public Entity Civ { get; set; }

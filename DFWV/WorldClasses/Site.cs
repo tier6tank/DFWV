@@ -13,7 +13,7 @@ using DFWV.WorldClasses.HistoricalEventCollectionClasses;
 
 namespace DFWV.WorldClasses
 {
-    class Site : XMLObject
+    public class Site : XMLObject
     {
         [UsedImplicitly]
         public string AltName { get; private set; }
@@ -44,7 +44,7 @@ namespace DFWV.WorldClasses
         public List<HE_SiteTakenOver> SiteTakenOverEvents { get; set; }
 
         public List<EC_BeastAttack> BeastAttackEventCollections { get; set; }
-        public List<EC_Battle > BattleEventCollections { get; set; }
+        public List<EC_Battle> BattleEventCollections { get; set; }
         public List<EC_Duel> DuelEventCollections { get; set; }
         public List<EC_Abduction> AbductionEventCollections { get; set; }
         public List<EC_SiteConquered> SiteConqueredEventCollections { get; set; }
@@ -304,7 +304,7 @@ namespace DFWV.WorldClasses
             frm.lblSiteParentCiv.Data = Parent;
 
             var siteMapPath = World.mapPath.Replace("world_map", "site_map-" + ID);
-            frm.SiteMapLabel.Visible = System.IO.File.Exists(siteMapPath);
+            frm.SiteMapLabel.Visible = File.Exists(siteMapPath);
 
             frm.grpSiteCreated.Visible = CreatedEvent != null;
             if (CreatedEvent != null)

@@ -117,8 +117,14 @@
     <Compile Include="MapForm.Designer.cs">
       <DependentUpon>MapForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MapLegend.cs" />
+    <Compile Include="WorldClasses\MapLegend.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="SiteMapForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SiteMapForm.Designer.cs">
+      <DependentUpon>SiteMapForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="StatsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -284,6 +290,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="SiteMapForm.resx">
+      <DependentUpon>SiteMapForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="StatsForm.resx">
       <DependentUpon>StatsForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -291,6 +300,9 @@
       <DependentUpon>Timeline.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="DFWV.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="DFWV_Template.sqlite3.backup">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

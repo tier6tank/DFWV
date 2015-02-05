@@ -6,9 +6,9 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses
 {
-    class Leader : Person
+    public class Leader : Person
     {
-        internal enum InheritanceSource
+        public enum InheritanceSource
         {
             None,
             Mother,

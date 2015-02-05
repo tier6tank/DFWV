@@ -6,7 +6,7 @@ using DFWV.Annotations;
 
 namespace DFWV.WorldClasses
 {
-    class HistoricalEra : XMLObject
+    public class HistoricalEra : XMLObject
     {
         [UsedImplicitly]
         public int StartYear { get; set; }

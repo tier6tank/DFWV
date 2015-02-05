@@ -8,7 +8,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
-    class EC_Duel : HistoricalEventCollection
+    public class EC_Duel : HistoricalEventCollection
     {
         private int? SubregionID { get; set; }
         private Region Subregion { get; set; }

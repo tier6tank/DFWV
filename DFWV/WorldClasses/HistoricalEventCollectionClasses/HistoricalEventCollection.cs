@@ -9,8 +9,7 @@ using System.Xml.Linq;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
-
-    class HistoricalEventCollection : XMLObject
+    public class HistoricalEventCollection : XMLObject
     {
         [UsedImplicitly]
         public int StartYear { get; set; }

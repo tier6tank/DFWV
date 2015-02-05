@@ -10,7 +10,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
-    class EC_Abduction : HistoricalEventCollection
+    public class EC_Abduction : HistoricalEventCollection
     {
         private int? SubregionID { get; set; }
         private Region Subregion { get; set; }

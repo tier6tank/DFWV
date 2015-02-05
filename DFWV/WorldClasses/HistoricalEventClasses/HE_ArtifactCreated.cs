@@ -8,7 +8,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     //TODO: Missing Details:  UnitID does not associate with anything, "NameOnly" events aren't shown in legends
-    class HE_ArtifactCreated : HistoricalEvent
+    public class HE_ArtifactCreated : HistoricalEvent
     {
         private int? SiteID { get; set; }
         public Site Site { get; set; }

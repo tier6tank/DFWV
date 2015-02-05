@@ -5,7 +5,7 @@ namespace DFWV.WorldClasses
     using System.Xml.Linq;
 
 
-    abstract class XMLObject : WorldObject
+    public abstract class XMLObject : WorldObject
     {
         public int ID { get; protected set; }
         public int Notability { get; set; }

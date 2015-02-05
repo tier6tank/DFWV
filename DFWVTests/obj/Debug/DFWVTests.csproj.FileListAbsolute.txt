@@ -1,0 +1,16 @@
+D:\Documents\MyCode\DFWV\DFWVTests\obj\Debug\DFWVTests.csprojResolveAssemblyReference.cache
+D:\Documents\MyCode\DFWV\DFWVTests\bin\Debug\7z.dll
+D:\Documents\MyCode\DFWV\DFWVTests\bin\Debug\7z64.dll
+D:\Documents\MyCode\DFWV\DFWVTests\bin\Debug\x64\SQLite.Interop.dll
+D:\Documents\MyCode\DFWV\DFWVTests\bin\Debug\x86\SQLite.Interop.dll
+D:\Documents\MyCode\DFWV\DFWVTests\bin\Debug\DFWV.bat
+D:\Documents\MyCode\DFWV\DFWVTests\bin\Debug\DFWV_Template.sqlite3.backup
+D:\Documents\MyCode\DFWV\DFWVTests\bin\Debug\DFWVTests.dll
+D:\Documents\MyCode\DFWV\DFWVTests\bin\Debug\DFWVTests.pdb
+D:\Documents\MyCode\DFWV\DFWVTests\bin\Debug\DFWV.exe
+D:\Documents\MyCode\DFWV\DFWVTests\bin\Debug\System.Data.SQLite.dll
+D:\Documents\MyCode\DFWV\DFWVTests\bin\Debug\SevenZipSharp.dll
+D:\Documents\MyCode\DFWV\DFWVTests\bin\Debug\DFWV.pdb
+D:\Documents\MyCode\DFWV\DFWVTests\bin\Debug\System.Data.SQLite.xml
+D:\Documents\MyCode\DFWV\DFWVTests\obj\Debug\DFWVTests.dll
+D:\Documents\MyCode\DFWV\DFWVTests\obj\Debug\DFWVTests.pdb

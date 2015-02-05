@@ -2,7 +2,7 @@
 
 namespace DFWV.WorldClasses
 {
-    class Person : WorldObject
+    public class Person : WorldObject
     {
         override public Point Location { get { return Point.Empty; } }
 

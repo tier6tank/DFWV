@@ -1813,27 +1813,17 @@ namespace DFWV
             e.DrawFocusRectangle();
         }
 
-        private void LabelSiteMap_MouseLeave(object sender, EventArgs e)
+        private void SiteMapLabel_Click(object sender, EventArgs e)
         {
-            picSiteMap.Visible = false;
-            picSiteMapLegend.Visible = false;
-        }
-
-        private void LabelSiteMap_MouseEnter(object sender, EventArgs e)
-        {
-            picSiteMap.Visible = true;
-            var siteMapPath = ((Site)lstSite.SelectedItem).SiteMapPath;
-            if (siteMapPath != null && File.Exists(siteMapPath))
+            if (lstSite.SelectedItem == null)
+                return;
+            if (Program.siteMapForm == null || Program.siteMapForm.IsDisposed)
             {
-                picSiteMap.ImageLocation = siteMapPath;
-                picSiteMap.Load();
-                picSiteMap.Visible = true;
-                if (World.MapLegends.ContainsKey("site_color_key"))
-                {
-                    World.MapLegends["site_color_key"].DrawTo(picSiteMapLegend);
-                    picSiteMapLegend.Visible = true;
-                }
+                Program.siteMapForm = new SiteMapForm(World);
+                Program.siteMapForm.Location = Location;
             }
+            Program.siteMapForm.Site = (Site)lstSite.SelectedItem;
+            Program.siteMapForm.Show();
         }
 
 

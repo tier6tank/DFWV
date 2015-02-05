@@ -8,7 +8,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_EntityLaw : HistoricalEvent
+    public class HE_EntityLaw : HistoricalEvent
     {
         private int? HistFigureID { get; set; }
         private HistoricalFigure HistFigure { get; set; }

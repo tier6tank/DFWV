@@ -8,7 +8,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_NewSiteLeader : HistoricalEvent
+    public class HE_NewSiteLeader : HistoricalEvent
     {
         private int? SiteID { get; set; }
         private Site Site { get; set; }

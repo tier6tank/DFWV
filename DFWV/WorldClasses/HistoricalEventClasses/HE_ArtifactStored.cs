@@ -7,7 +7,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_ArtifactStored : HistoricalEvent
+    public class HE_ArtifactStored : HistoricalEvent
     {
         private int? SiteID { get; set; }
         private Site Site { get; set; }

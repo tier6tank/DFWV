@@ -6,7 +6,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses
 {
-    class God : Person
+    public class God : Person
     {
         public int ID { get; set; }
         public static List<string> Types = new List<string>();

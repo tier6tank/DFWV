@@ -15,7 +15,7 @@ namespace DFWV
     /// This class, a property of World, stores settings for how objects are currently being filtered.
     /// It also stores details on what sort of fields should be filterable/sortable.
     /// </summary>
-    internal class FilterSettings
+    public class FilterSettings
     {
         private readonly Dictionary<Type, Filter> Filters = new Dictionary<Type, Filter>();
 
@@ -285,7 +285,7 @@ namespace DFWV
     ///     A set of "OrderBy" conditions which control sorting
     ///     and a "Take" property which controls if there is a limit on items returned.
     /// </summary>
-    internal class Filter
+    public class Filter
     {
         public readonly List<string> Where = new List<string>();
         public readonly List<string> OrderBy = new List<string>();

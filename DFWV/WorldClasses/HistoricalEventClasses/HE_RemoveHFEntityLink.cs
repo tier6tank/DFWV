@@ -8,7 +8,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_RemoveHFEntityLink : HistoricalEvent
+    public class HE_RemoveHFEntityLink : HistoricalEvent
     {
         private int? CivID { get; set; }
         private Entity Civ { get; set; }

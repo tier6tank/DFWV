@@ -9,7 +9,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
-    struct BattleData
+    public struct BattleData
     {
         public int AttackingHFs;
         public int AttackingSquads;
@@ -26,7 +26,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         public int NonCombatHFs;
     }
 
-    class EC_Battle : HistoricalEventCollection
+    public class EC_Battle : HistoricalEventCollection
     {
         private int? WarEventCol_ { get; set; }
         public EC_War WarEventCol { get; private set; }
@@ -570,7 +570,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
     }
 
-    class Squad
+    public class Squad
     {
         public Squad(Race race,
                     EntityPopulation entityPopulation,

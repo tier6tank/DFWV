@@ -8,7 +8,7 @@ using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
-    struct WarData
+    public struct WarData
     {
         public int AttackingHFs;
         public int AttackingSquads;
@@ -28,7 +28,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
     }
 
 
-    class EC_War : HistoricalEventCollection
+    public class EC_War : HistoricalEventCollection
     {
         private List<int> EventCol_ { get; set; }
         public List<HistoricalEventCollection> EventCol { get; private set; }

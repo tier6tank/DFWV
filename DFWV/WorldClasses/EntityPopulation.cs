@@ -10,7 +10,7 @@ using System.Drawing;
 
 namespace DFWV.WorldClasses
 {
-    class EntityPopulation : XMLObject
+    public class EntityPopulation : XMLObject
     {
 
         public List<EC_Battle> BattleEventCollections { get; set; }

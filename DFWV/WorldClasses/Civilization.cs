@@ -6,8 +6,7 @@ using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses
 {
-
-    class Civilization : Entity 
+    public class Civilization : Entity 
     {
         public bool isFull { get; private set; }
 

@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace DFWV.WorldClasses
 {
-    class Dynasty : WorldObject
+    public class Dynasty : WorldObject
     {
         public List<HistoricalFigure> Members { get; private set; }
         private string Type { get; set; }

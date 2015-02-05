@@ -10,7 +10,7 @@ using LinkLabel = DFWV.Controls.LinkLabel;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HistoricalEvent : XMLObject
+    public class HistoricalEvent : XMLObject
     {
         [UsedImplicitly]
         public int Year { get; set; }
