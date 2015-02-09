@@ -172,6 +172,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             {
                 switch (HFSiteLink.LinkTypes[LinkType.Value])
                 {
+                    case "hangout":
                     case "seat of power":
                         return string.Format("{0} {1} stopped ruling from {2} of {3} in {4}.",
                             timestring, HF,

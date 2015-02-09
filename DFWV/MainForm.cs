@@ -157,16 +157,13 @@ namespace DFWV
                 DFXMLParser.FinishedSection += XMLSectionFinished;
                 DFXMLParser.Finished += XMLFinished;
 
-                Program.Log(LogType.Status, "Loading XML");
-
                 Application.DoEvents();
 
                 World = new World(historyPath, sitesPath, paramPath, xmlPath, xmlPlusPath, mapPath, WorldGenTime);
 
                 loadWorldToolStripMenuItem.Visible = false;
 
-                World.LoadFiles();
-                FillNonXMLLists();
+                World.StartThread(() => World.LoadFiles());
             }
             else
                 MessageBox.Show(@"Files not found.  Please make sure all 5 files Legends files are located with the selected map file. See the README.txt file included for details.", @"DF World Viewer",MessageBoxButtons.OK);
@@ -438,7 +435,7 @@ namespace DFWV
             FillXMLLists();
         }
 
-        private void FillNonXMLLists()
+        public void FillNonXMLLists()
         {
             FillList(lstCivilization, World.Civilizations, tabCivilization);
             FillList(lstGod, World.Gods, tabGod);

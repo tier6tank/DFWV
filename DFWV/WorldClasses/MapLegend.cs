@@ -13,10 +13,15 @@ namespace DFWV
         public Dictionary<string, Color> LegendItem = new Dictionary<string, Color>();
 
         public MapLegend(string path)
+            : this(Path.GetFileNameWithoutExtension(path), File.ReadAllLines(path))
         {
-            var lines = File.ReadAllLines(path);
-            Name = Path.GetFileNameWithoutExtension(path);
-            foreach (var line in lines)
+ 
+        }
+
+        public MapLegend(string name,IEnumerable<string> data)
+        {
+            Name = name;
+            foreach (var line in data)
             {
                 if (Regex.Matches(line, @"^([a-z,1-9,/]+ )+ *\(\d+,\d+,\d+\)$").Count > 0)
                     //Normal format - NAME NAME (###,###,###)
@@ -101,6 +106,59 @@ namespace DFWV
             picLegend.Image = img;
             picLegend.Height = y;
             picLegend.Width = width + 15;
+        }
+
+        public static bool operator ==(MapLegend X, MapLegend Y)
+        {
+            if (ReferenceEquals(X, null))
+                return false;
+            if (ReferenceEquals(Y, null))
+                return false;
+            var x = X.LegendItem;
+            var y = Y.LegendItem;
+            // early-exit checks
+            if (null == y)
+                return null == x;
+            if (null == x)
+                return false;
+            if (ReferenceEquals(x, y))
+                return true;
+            if (x.Count != y.Count)
+                return false;
+
+            // check keys are the same
+            foreach (var k in x.Keys)
+                if (!y.ContainsKey(k))
+                    return false;
+
+            // check values are the same
+            foreach (var k in x.Keys)
+                if (!x[k].Equals(y[k]))
+                    return false;
+
+            return true;
+        }
+
+        public static bool operator !=(MapLegend X, MapLegend Y)
+        {
+            return !(X == Y);
+        }
+
+        public string NameForColor(Color color)
+        {
+            var name = string.Empty;
+
+            foreach (var legenditem in LegendItem)
+            {
+                if (legenditem.Value == color)
+                {
+                    if (name == string.Empty)
+                        name = legenditem.Key;
+                    else
+                        name = name + Environment.NewLine + legenditem.Key;
+                }
+            }
+            return name;
         }
     }
 }

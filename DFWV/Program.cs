@@ -14,7 +14,7 @@ using SevenZip;
 
 //TODO: Issues
 //TODO: Export doesn't properly release link to exported DB (can't be deleted while app is running following export)
-
+//TODO: ExportLEgendsWV should come from the exprotlegends.wv that PeridexisErrant made, and change tabs to spaces.
 
 namespace DFWV
 {
@@ -101,6 +101,8 @@ namespace DFWV
         {
             Color thisColor;
 
+            var curDistinctColorA = curDistinctColor % ColorNames.Count;
+
             if (curDistinctColor < ColorNames.Count)
             {
                 var rgb = Int32.Parse(ColorNames[curDistinctColor].Replace("#", ""), NumberStyles.HexNumber);
@@ -185,6 +187,8 @@ namespace DFWV
 
         public static void Log(LogType type, string txt)
         {
+            if (mainForm == null)
+                return;
             lock (thisLock)
             {
                 var curText = (string) mainForm.StatusBox.Invoke(new Func<string>(() => mainForm.StatusBox.Text));

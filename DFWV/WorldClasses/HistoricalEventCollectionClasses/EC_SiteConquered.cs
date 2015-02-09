@@ -129,10 +129,12 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             if (AttackingEn.SiteConqueredEventCollections == null)
                 AttackingEn.SiteConqueredEventCollections = new List<EC_SiteConquered>();
             AttackingEn.SiteConqueredEventCollections.Add(this);
-            if (DefendingEn.SiteConqueredEventCollections == null)
-                DefendingEn.SiteConqueredEventCollections = new List<EC_SiteConquered>();
-            DefendingEn.SiteConqueredEventCollections.Add(this);
-
+            if (DefendingEn != null)
+            {
+                if (DefendingEn.SiteConqueredEventCollections == null)
+                    DefendingEn.SiteConqueredEventCollections = new List<EC_SiteConquered>();
+                DefendingEn.SiteConqueredEventCollections.Add(this);
+            }
         }
 
         internal override void Evaluate()

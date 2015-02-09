@@ -18,6 +18,7 @@ namespace DFWV.WorldClasses
         private int? MatIndex { get; set; }
         private int? ItemValue { get; set; }
 
+        public string Description { get; set; }
 
         public HE_ArtifactCreated CreatedEvent { get; set; }
         public List<HE_ArtifactStored> StoredEvents { get; set; }
@@ -189,6 +190,9 @@ namespace DFWV.WorldClasses
                         break;
                     case "value":
                         ItemValue = valI;
+                        break;
+                    case "item_description":
+                        Description = val;
                         break;
                     default:
                         DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" , element, xdoc.Root.ToString());
