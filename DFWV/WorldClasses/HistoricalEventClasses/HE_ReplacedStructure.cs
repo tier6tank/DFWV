@@ -165,17 +165,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-
-            
-
             if (SiteCiv == null)
                 return string.Format("{0} {1} replaced {2} in {3} with {4}.",
-                                timestring, Civ, "UNKNOWN",
-                                Site.AltName, "UNKNOWN");
+                    timestring, Civ, OldStructure != null ? OldStructure.Name : "UNKNOWN",
+                                Site.AltName, NewStructure != null ? OldStructure.Name : "UNKNOWN");
 
             return string.Format("{0} {1} of {2} replaced {3} in {4} with {5}.",
-                timestring, SiteCiv, Civ, "UNKNOWN",
-                Site.AltName, "UNKNOWN");
+                timestring, SiteCiv, Civ, OldStructure != null ? OldStructure.Name : "UNKNOWN",
+                Site.AltName, NewStructure != null ? OldStructure.Name : "UNKNOWN");
         }
 
         internal override string ToTimelineString()

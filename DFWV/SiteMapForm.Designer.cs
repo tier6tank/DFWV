@@ -28,9 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.picSiteMapLegend = new System.Windows.Forms.PictureBox();
             this.picSiteMap = new System.Windows.Forms.PictureBox();
             this.lblSiteName = new System.Windows.Forms.Label();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.picSiteMapLegend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSiteMap)).BeginInit();
             this.SuspendLayout();
@@ -51,6 +53,7 @@
             this.picSiteMap.TabIndex = 1;
             this.picSiteMap.TabStop = false;
             this.picSiteMap.Click += new System.EventHandler(this.picSiteMap_Click);
+            this.picSiteMap.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picSiteMap_MouseMove);
             // 
             // lblSiteName
             // 
@@ -84,5 +87,6 @@
         private System.Windows.Forms.PictureBox picSiteMapLegend;
         private System.Windows.Forms.PictureBox picSiteMap;
         private System.Windows.Forms.Label lblSiteName;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

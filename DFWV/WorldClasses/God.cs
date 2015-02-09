@@ -35,7 +35,7 @@ namespace DFWV.WorldClasses
             if (data.Contains(':'))
             {
                 //  Erib Oiledrock the Mountain of Gravel, deity: metals
-                var spherenames = data.Split(':').Last().Trim().Split(',').ToList();
+                var spherenames = data.Split(':').Last().Trim().Split(',').ToList().Select(x=>x.Trim());
 
                 foreach (var spherename in spherenames)
                 {

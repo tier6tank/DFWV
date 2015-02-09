@@ -16,6 +16,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? ArtifactID { get; set; }
         private Artifact Artifact { get; set; }
         private int Interaction { get; set; }
+        private string SecretText { get; set; }
 
         override public Point Location { get { return Point.Empty; } }
 
@@ -58,6 +59,33 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 }
             }
         }
+
+        internal override void Plus(XDocument xdoc)
+        {
+            foreach (var element in xdoc.Root.Elements())
+            {
+                var val = element.Value;
+                int valI;
+                Int32.TryParse(val, out valI);
+
+                switch (element.Name.LocalName)
+                {
+                    case "id":
+                    case "type":
+                    case "student":
+                    case "teacher":
+                    case "artifact":
+                        break;
+                    case "secret_text": //[IS_NAME:the secrets of life and death]
+                        SecretText = val.Replace("[IS_NAME:", "").TrimEnd(']').Trim();
+                        break;
+                    default:
+                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        break;
+                }
+            }
+        }
+
         internal override void Link()
         {
             base.Link();
@@ -98,7 +126,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             if (TeacherHF == null && Artifact != null)
             {
-
+                if (SecretText != null)
+                    return string.Format("{0} {1} learned {2} {3}.",
+                        timestring, StudentHF, SecretText, Artifact);
                 switch (HistoricalFigure.Interactions[Interaction])
                 {
                     case "ANIMALS_SECRET":
@@ -124,6 +154,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                             timestring, StudentHF, HistoricalFigure.Interactions[Interaction], Artifact);
                 }
             }
+            if (SecretText != null)
+                return string.Format("{0} {1} taught {2} {3}.",
+                    timestring, TeacherHF, StudentHF, SecretText);
             switch (HistoricalFigure.Interactions[Interaction])
             {
                 case "ANIMALS_SECRET":

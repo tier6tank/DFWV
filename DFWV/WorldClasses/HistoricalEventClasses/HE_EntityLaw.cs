@@ -6,6 +6,8 @@ using System.Xml.Linq;
 using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
 
+//TODO: Missing agreement details
+
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     public class HE_EntityLaw : HistoricalEvent
@@ -96,9 +98,15 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             if (LawAdd == "harsh")
-                return string.Format("{0} the {1} {2} laid a series of oppressive edicts upon {3}.",
+                return string.Format("{0} {1} laid a series of oppressive edicts upon {2}.",
                     timestring, HistFigure.Race, HistFigure,
                     Entity);
+            if (LawRemove == "harsh")
+            {
+                return string.Format("{0} {1} lifted numerous  oppressive laws from {2}.", 
+                    timestring, HistFigure.Race, HistFigure,
+                    Entity);
+            }
             return timestring;
         }
 

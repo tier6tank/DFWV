@@ -22,7 +22,7 @@ namespace DFWV.WorldClasses
 
         public Entity Owner { get; set; }
         public Civilization Parent { get; private set; }
-        private List<Leader> Leaders { get; set; }
+        public List<Leader> Leaders { get; set; }
         public Dictionary<Race, int> Population { get; private set; }
         public Dictionary<Race, int> Prisoners { get; private set; }
         public Dictionary<Race, int> Outcasts { get; private set; }
@@ -58,7 +58,7 @@ namespace DFWV.WorldClasses
         public bool isPlayerControlled { private get; set; }
 
         override public Point Location { get { return Coords; } }
-
+        public MapLegend MapLegend { get; set; }
 
         [UsedImplicitly]
         public string DispNameLower { get { return ToString().ToLower(); } }
@@ -503,6 +503,7 @@ namespace DFWV.WorldClasses
             Type = sf.Type;
             if (sf.Parent != null && sf.Parent.FirstSite == sf)
                 sf.Parent.FirstSite = this;
+            MapLegend = sf.MapLegend;
             sf.SiteFileMerged = true;
         }
         internal override void Link()
