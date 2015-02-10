@@ -91,7 +91,6 @@ namespace DFWV.WorldClasses
             this.xmlPath = xmlPath;
             this.xmlPlusPath = xmlPlusPath;
             hasPlusXML = File.Exists(xmlPlusPath);
-            
 
             Filters = new FilterSettings(this);
         }

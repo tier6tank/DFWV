@@ -67,17 +67,16 @@ end
 
 --create an extra legends xml with extra data, by Mason11987 for World Viewer
 function export_more_legends_xml()
-    -- in future versions, include date str in filename.  World Viewer doesn't recognise that yet though...
-    --[[
     local julian_day = math.floor(df.global.cur_year_tick / 1200) + 1
     local month = math.floor(julian_day / 28) + 1 --days and months are 1-indexed
-    local day = julian_day % 28
-    local year_str = string.format('%0'..math.max(5, string.len(''..df.global.cur_year)), df.global.cur_year)
+    local day = julian_day % 28 + 1
+    local year_str = string.format('%0'..math.max(5, string.len(''..df.global.cur_year))..'d', df.global.cur_year)
     local date_str = year_str..string.format('-%02d-%02d', month, day)
     
+	print(date_str)
     io.output(tostring(df.global.world.cur_savegame.save_dir).."-"..date_str.."-legends_plus.xml")
-    ]]--
-    io.output(tostring(df.global.world.cur_savegame.save_dir).."-legends_plus.xml")
+
+    --io.output(tostring(df.global.world.cur_savegame.save_dir).."-legends_plus.xml")
 
     io.write ("<?xml version=\"1.0\" encoding='UTF-8'?>".."\n")
     io.write ("<df_world>".."\n")
