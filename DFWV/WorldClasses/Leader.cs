@@ -6,9 +6,9 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses
 {
-    class Leader : Person
+    public class Leader : Person
     {
-        internal enum InheritanceSource
+        public enum InheritanceSource
         {
             None,
             Mother,
@@ -50,8 +50,8 @@ namespace DFWV.WorldClasses
                   );
         } }
 
-        private WorldTime MarriedDeath { get; set; }
-        private List<Child> Children { get; set; }
+        public WorldTime MarriedDeath { get; set; }
+        public List<Child> Children { get; set; }
         [UsedImplicitly]
         public int ChildrenCount { get; set; }
 
@@ -154,10 +154,12 @@ namespace DFWV.WorldClasses
             var dates = data.Split(':')[1];
 
             dates = dates.Replace("d. ", "d.").Trim();
+            var datesSplit = dates.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            ChildrenCount = datesSplit.Count();
 
             if (Children == null)
                 Children = new List<Child>();
-            foreach (var date in dates.Split(" ".ToCharArray(),StringSplitOptions.RemoveEmptyEntries))
+            foreach (var date in datesSplit)
                 Children.Add(new Child(date, this));
 
 

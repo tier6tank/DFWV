@@ -144,7 +144,7 @@ namespace DFWV
             var paramPath = Path.Combine(path, name + "-world_gen_param.txt");
             var historyPath = Path.Combine(path, nameWithTime + "-world_history.txt");
             var sitesPath = Path.Combine(path, nameWithTime + "-world_sites_and_pops.txt");
-            var xmlPlusPath = Path.Combine(path, name + "-legends_plus.xml");
+            var xmlPlusPath = Path.Combine(path, nameWithTime + "-legends_plus.xml");
 
             if (File.Exists(xmlPath) && File.Exists(paramPath) && File.Exists(historyPath) && File.Exists(sitesPath))
             {
@@ -157,16 +157,13 @@ namespace DFWV
                 DFXMLParser.FinishedSection += XMLSectionFinished;
                 DFXMLParser.Finished += XMLFinished;
 
-                Program.Log(LogType.Status, "Loading XML");
-
                 Application.DoEvents();
 
                 World = new World(historyPath, sitesPath, paramPath, xmlPath, xmlPlusPath, mapPath, WorldGenTime);
 
                 loadWorldToolStripMenuItem.Visible = false;
 
-                World.LoadFiles();
-                FillNonXMLLists();
+                World.StartThread(() => World.LoadFiles());
             }
             else
                 MessageBox.Show(@"Files not found.  Please make sure all 5 files Legends files are located with the selected map file. See the README.txt file included for details.", @"DF World Viewer",MessageBoxButtons.OK);
@@ -438,7 +435,7 @@ namespace DFWV
             FillXMLLists();
         }
 
-        private void FillNonXMLLists()
+        public void FillNonXMLLists()
         {
             FillList(lstCivilization, World.Civilizations, tabCivilization);
             FillList(lstGod, World.Gods, tabGod);
@@ -1813,27 +1810,17 @@ namespace DFWV
             e.DrawFocusRectangle();
         }
 
-        private void LabelSiteMap_MouseLeave(object sender, EventArgs e)
+        private void SiteMapLabel_Click(object sender, EventArgs e)
         {
-            picSiteMap.Visible = false;
-            picSiteMapLegend.Visible = false;
-        }
-
-        private void LabelSiteMap_MouseEnter(object sender, EventArgs e)
-        {
-            picSiteMap.Visible = true;
-            var siteMapPath = ((Site)lstSite.SelectedItem).SiteMapPath;
-            if (siteMapPath != null && File.Exists(siteMapPath))
+            if (lstSite.SelectedItem == null)
+                return;
+            if (Program.siteMapForm == null || Program.siteMapForm.IsDisposed)
             {
-                picSiteMap.ImageLocation = siteMapPath;
-                picSiteMap.Load();
-                picSiteMap.Visible = true;
-                if (World.MapLegends.ContainsKey("site_color_key"))
-                {
-                    World.MapLegends["site_color_key"].DrawTo(picSiteMapLegend);
-                    picSiteMapLegend.Visible = true;
-                }
+                Program.siteMapForm = new SiteMapForm(World);
+                Program.siteMapForm.Location = Location;
             }
+            Program.siteMapForm.Site = (Site)lstSite.SelectedItem;
+            Program.siteMapForm.Show();
         }
 
 

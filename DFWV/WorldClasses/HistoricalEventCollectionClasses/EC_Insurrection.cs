@@ -9,7 +9,7 @@ using DFWV.WorldClasses.HistoricalEventClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
-    class EC_Insurrection : HistoricalEventCollection
+    public class EC_Insurrection : HistoricalEventCollection
     {
         private int? SiteID { get; set; }
         private Site Site { get; set; }

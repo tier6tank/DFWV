@@ -7,7 +7,7 @@ using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_DestroyedSite : HistoricalEvent
+    public class HE_DestroyedSite : HistoricalEvent
     {
         private int? SiteID { get; set; }
         private Site Site { get; set; }

@@ -2,7 +2,7 @@
 
 namespace DFWV.WorldClasses
 {
-    internal class Child : Person
+    public class Child : Person
     {
         public Child(string data, Leader leader)
         {
@@ -15,7 +15,7 @@ namespace DFWV.WorldClasses
 
         private Leader Parent { get; set; }
 
-        private WorldTime Death { get; set; }
-        private int? AgeAtParentDeath { get; set; }
+        public  WorldTime Death { get; set; }
+        public int? AgeAtParentDeath { get; set; }
     }
 }

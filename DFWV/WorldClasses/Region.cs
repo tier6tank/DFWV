@@ -10,7 +10,7 @@ namespace DFWV.WorldClasses
     using HistoricalEventCollectionClasses;
     using HistoricalFigureClasses;
 
-    class Region : XMLObject
+    public class Region : XMLObject
     {
         public static List<string> Types = new List<string>();
         public int Type { get; private set; }

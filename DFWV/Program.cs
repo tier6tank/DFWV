@@ -14,7 +14,7 @@ using SevenZip;
 
 //TODO: Issues
 //TODO: Export doesn't properly release link to exported DB (can't be deleted while app is running following export)
-
+//TODO: ExportLEgendsWV should come from the exprotlegends.wv that PeridexisErrant made, and change tabs to spaces.
 
 namespace DFWV
 {
@@ -33,6 +33,7 @@ namespace DFWV
         /// 
         static public MainForm mainForm;
         static public MapForm mapForm;
+        static public SiteMapForm siteMapForm;
         static public TimelineForm timelineForm;
         static public StatsForm statsForm;
         //static public VisualizationForm visualizationForm;
@@ -100,17 +101,9 @@ namespace DFWV
         {
             Color thisColor;
 
-            if (curDistinctColor < ColorNames.Count)
-            {
-                var rgb = Int32.Parse(ColorNames[curDistinctColor].Replace("#", ""), NumberStyles.HexNumber);
-                thisColor = Color.FromArgb(255,Color.FromArgb(rgb));
-                curDistinctColor++;
-            }
-            else
-            {
-                return Color.White;
-
-            }
+            var rgb = Int32.Parse(ColorNames[curDistinctColor % ColorNames.Count].Replace("#", ""), NumberStyles.HexNumber);
+            thisColor = Color.FromArgb(255,Color.FromArgb(rgb));
+            curDistinctColor++;
 
             return thisColor;
         }
@@ -184,6 +177,8 @@ namespace DFWV
 
         public static void Log(LogType type, string txt)
         {
+            if (mainForm == null)
+                return;
             lock (thisLock)
             {
                 var curText = (string) mainForm.StatusBox.Invoke(new Func<string>(() => mainForm.StatusBox.Text));
@@ -335,21 +330,29 @@ namespace DFWV
 
         static public string Pluralize(this string str)
         {
+            if (pluralService == null)
+                InitiailzePluralService();
             return pluralService.Pluralize(str);
         }
 
         static public string Singularize(this string str)
         {
+            if (pluralService == null)
+                InitiailzePluralService();
             return pluralService.Singularize(str);
         }
 
         static public bool isPlural(this string str)
         {
+            if (pluralService == null)
+                InitiailzePluralService();
             return pluralService.IsPlural(str);
         }
 
         static public bool isSingular(this string str)
         {
+            if (pluralService == null)
+                InitiailzePluralService();
             return pluralService.IsSingular(str);
         }
 

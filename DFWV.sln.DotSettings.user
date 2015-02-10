@@ -2,4 +2,8 @@
 	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=CoVariantArrayConversion/@EntryIndexedValue">DO_NOT_SHOW</s:String>
 	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=PossibleNullReferenceException/@EntryIndexedValue">DO_NOT_SHOW</s:String>
 	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=SpecifyACultureInStringConversionExplicitly/@EntryIndexedValue">DO_NOT_SHOW</s:String>
+	<s:Boolean x:Key="/Default/Housekeeping/UnitTestingMru/UnitTestSessionPersistentData/=1D544C66AAD94EE6BE9503CA141D341C/@KeyIndexDefined">True</s:Boolean>
+	<s:Int64 x:Key="/Default/Housekeeping/UnitTestingMru/UnitTestSessionPersistentData/=1D544C66AAD94EE6BE9503CA141D341C/GroupingIndex/@EntryValue">4</s:Int64>
+	<s:String x:Key="/Default/Housekeeping/UnitTestingMru/UnitTestSessionPersistentData/=1D544C66AAD94EE6BE9503CA141D341C/Name/@EntryValue">All Tests in DFWV</s:String>
+	<s:String x:Key="/Default/Housekeeping/UnitTestingMru/UnitTestSessionPersistentData/=1D544C66AAD94EE6BE9503CA141D341C/XmlSerializedElements/@EntryValue">&lt;Session&gt;&lt;/Session&gt;</s:String>
 	</wpf:ResourceDictionary>

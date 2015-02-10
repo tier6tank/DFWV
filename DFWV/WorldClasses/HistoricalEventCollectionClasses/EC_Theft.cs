@@ -9,7 +9,7 @@ using DFWV.WorldClasses.HistoricalEventClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
-    class EC_Theft : HistoricalEventCollection
+    public class EC_Theft : HistoricalEventCollection
     {
         private int? WarEventCol_ { get; set; }
         private EC_War WarEventCol { get; set; }

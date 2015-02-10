@@ -8,7 +8,7 @@ namespace DFWV.WorldClasses
     using System.Collections.Generic;
     using System.Drawing;
 
-    class Structure : XMLObject
+    public class Structure : XMLObject
     {
         private Site Site { get; set; }
         public int SiteID { get; set; }

@@ -8,7 +8,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_FieldBattle : HistoricalEvent
+    public class HE_FieldBattle : HistoricalEvent
     {
         private int? SubregionID { get; set; }
         private Region Subregion { get; set; }

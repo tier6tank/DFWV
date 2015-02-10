@@ -8,7 +8,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_AddHFHFLink : HistoricalEvent
+    public class HE_AddHFHFLink : HistoricalEvent
     {
         private int? HFID { get; set; }
         private HistoricalFigure HF { get; set; }

@@ -24,13 +24,13 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>2.0.1.0</ApplicationVersion>
+    <ApplicationVersion>2.0.2.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -117,8 +117,14 @@
     <Compile Include="MapForm.Designer.cs">
       <DependentUpon>MapForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MapLegend.cs" />
+    <Compile Include="WorldClasses\MapLegend.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="SiteMapForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SiteMapForm.Designer.cs">
+      <DependentUpon>SiteMapForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="StatsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -284,6 +290,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="SiteMapForm.resx">
+      <DependentUpon>SiteMapForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="StatsForm.resx">
       <DependentUpon>StatsForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -291,9 +300,13 @@
       <DependentUpon>Timeline.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="DFWV.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="DFWV_Template.sqlite3.backup">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="exportlegends.lua" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -304,7 +317,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="exportlegendsWV.lua" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

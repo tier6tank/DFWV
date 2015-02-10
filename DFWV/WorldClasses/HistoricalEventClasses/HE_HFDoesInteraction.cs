@@ -14,6 +14,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? DoerHFID { get; set; }
         private HistoricalFigure DoerHF { get; set; }
         private int Interaction { get; set; }
+        private string InteractionString { get; set; }
+        private string InteractionAction { get; set; }
 
         private int? SiteID { get; set; }
         private Site Site { get; set; }
@@ -87,6 +89,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "doer":
                     case "interaction":
                         break;
+                    case "interaction_action": //[IS_HIST_STRING_2: to assume the form of a elephant-like monster every full moon]
+                        InteractionAction = val.Replace("[IS_HIST_STRING_1: ", "").TrimEnd(']').Trim();
+                        break;
+                    case "interaction_string": //[IS_HIST_STRING_1: cursed]
+                        InteractionString = val.Replace("[IS_HIST_STRING_2: ", "").TrimEnd(']').Trim();
+                        break;
                     case "site":
                         if (valI != -1)
                             SiteID = valI;
@@ -132,6 +140,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             //TODO: Incorporate new data
             var timestring = base.LegendsDescription();
 
+            if (InteractionAction != null && InteractionString != null)
+                return string.Format("{0} {1} {2} {3} {4} in {5}",
+                    timestring, DoerHF, InteractionAction, TargetHF, InteractionString, Site.AltName);
             if (HistoricalFigure.Interactions[Interaction].ToLower().Contains("curse_vampire") || HistoricalFigure.Interactions[Interaction].ToLower().Contains("master_vampire_curse"))
                 return string.Format("{0} {1} cursed {2} to prowl the night in search of blood in {3}.",
                     timestring, DoerHF, TargetHF, "UNKNOWN");

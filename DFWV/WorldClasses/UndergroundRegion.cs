@@ -6,7 +6,7 @@ using DFWV.Annotations;
 
 namespace DFWV.WorldClasses
 {
-    class UndergroundRegion : XMLObject
+    public class UndergroundRegion : XMLObject
     {
         private string Type { get; set; }
         [UsedImplicitly]

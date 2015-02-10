@@ -13,7 +13,7 @@ using DFWV.WorldClasses.HistoricalEventCollectionClasses;
 
 namespace DFWV.WorldClasses
 {
-    class Site : XMLObject
+    public class Site : XMLObject
     {
         [UsedImplicitly]
         public string AltName { get; private set; }
@@ -22,7 +22,7 @@ namespace DFWV.WorldClasses
 
         public Entity Owner { get; set; }
         public Civilization Parent { get; private set; }
-        private List<Leader> Leaders { get; set; }
+        public List<Leader> Leaders { get; set; }
         public Dictionary<Race, int> Population { get; private set; }
         public Dictionary<Race, int> Prisoners { get; private set; }
         public Dictionary<Race, int> Outcasts { get; private set; }
@@ -44,7 +44,7 @@ namespace DFWV.WorldClasses
         public List<HE_SiteTakenOver> SiteTakenOverEvents { get; set; }
 
         public List<EC_BeastAttack> BeastAttackEventCollections { get; set; }
-        public List<EC_Battle > BattleEventCollections { get; set; }
+        public List<EC_Battle> BattleEventCollections { get; set; }
         public List<EC_Duel> DuelEventCollections { get; set; }
         public List<EC_Abduction> AbductionEventCollections { get; set; }
         public List<EC_SiteConquered> SiteConqueredEventCollections { get; set; }
@@ -58,7 +58,7 @@ namespace DFWV.WorldClasses
         public bool isPlayerControlled { private get; set; }
 
         override public Point Location { get { return Coords; } }
-
+        public MapLegend MapLegend { get; set; }
 
         [UsedImplicitly]
         public string DispNameLower { get { return ToString().ToLower(); } }
@@ -304,7 +304,7 @@ namespace DFWV.WorldClasses
             frm.lblSiteParentCiv.Data = Parent;
 
             var siteMapPath = World.mapPath.Replace("world_map", "site_map-" + ID);
-            frm.SiteMapLabel.Visible = System.IO.File.Exists(siteMapPath);
+            frm.SiteMapLabel.Visible = File.Exists(siteMapPath);
 
             frm.grpSiteCreated.Visible = CreatedEvent != null;
             if (CreatedEvent != null)
@@ -503,6 +503,7 @@ namespace DFWV.WorldClasses
             Type = sf.Type;
             if (sf.Parent != null && sf.Parent.FirstSite == sf)
                 sf.Parent.FirstSite = this;
+            MapLegend = sf.MapLegend;
             sf.SiteFileMerged = true;
         }
         internal override void Link()

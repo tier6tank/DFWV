@@ -6,7 +6,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses
 {
-    class God : Person
+    public class God : Person
     {
         public int ID { get; set; }
         public static List<string> Types = new List<string>();
@@ -35,7 +35,7 @@ namespace DFWV.WorldClasses
             if (data.Contains(':'))
             {
                 //  Erib Oiledrock the Mountain of Gravel, deity: metals
-                var spherenames = data.Split(':').Last().Trim().Split(',').ToList();
+                var spherenames = data.Split(':').Last().Trim().Split(',').ToList().Select(x=>x.Trim());
 
                 foreach (var spherename in spherenames)
                 {

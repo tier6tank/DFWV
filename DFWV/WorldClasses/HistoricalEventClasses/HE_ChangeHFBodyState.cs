@@ -7,7 +7,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_ChangeHFBodyState : HistoricalEvent
+    public class HE_ChangeHFBodyState : HistoricalEvent
     {
         
         private int? SiteID { get; set; }

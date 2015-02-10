@@ -29,7 +29,7 @@ namespace DFWV.WorldClasses
     public delegate void VisualizationsCreatedEventHandler();
     #endregion
 
-    class World : IDisposable
+    public class World : IDisposable
     {
         #region Fields and Properties
         public readonly string historyPath;
@@ -91,7 +91,6 @@ namespace DFWV.WorldClasses
             this.xmlPath = xmlPath;
             this.xmlPlusPath = xmlPlusPath;
             hasPlusXML = File.Exists(xmlPlusPath);
-            
 
             Filters = new FilterSettings(this);
         }
@@ -104,6 +103,7 @@ namespace DFWV.WorldClasses
             LoadSites();
             LoadMaps();
             LoadParam();
+            Program.mainForm.FillNonXMLLists();
             LoadXML();
 
         }
@@ -113,6 +113,7 @@ namespace DFWV.WorldClasses
         /// </summary>
         private void LoadMaps()
         {
+            Program.Log(LogType.Status, "Loading Maps");
             Maps = new Dictionary<string, string> {{"Main", mapPath}};
             var MapSymbols = new List<string>
             {"bm", "detailed", "dip", "drn", "el", "elw", "evil", "hyd", "nob", "rain",
@@ -132,7 +133,7 @@ namespace DFWV.WorldClasses
             }
 
             var MapLegendsName = new List<string>
-                { "structure_color_key", "hydro_color_key", "biome_color_key", "site_color_key" };
+                { "structure_color_key", "hydro_color_key", "biome_color_key"};
 
             MapLegends = new Dictionary<string, MapLegend>();
             var thisLegend = "";
@@ -143,6 +144,72 @@ namespace DFWV.WorldClasses
                     MapLegends.Add(maplegendname, new MapLegend(thisLegend));
             }
 
+            MapLegends.Add("site_color_key_dark", new MapLegend("site_color_key_dark", new List<string>
+            {
+                "main tower (255,0,255)",
+                "watch tower (128,128,128)",
+                "trenches (0,0,0)",
+                "dungeon-tower interface (50,20,50)",
+                "work pits (50,30,20)",
+                "living pits (20,50,40)"
+            }));
+
+            MapLegends.Add("site_color_key", new MapLegend("site_color_key", new List<string>
+            {
+                "castle tower (110,110,110)",
+                "castle wall (70,70,70)",
+                "castle wall walkway (40,40,40)",
+                "warehouse (50,50,50)",
+                "general import market (50,30,15)",
+                "food import market (50,40,15)",
+                "clothing import market (50,30,35)",
+                "meat market (255,0,0)",
+                "edible produce market (0,255,0)",
+                "cheese market (255,255,0)",
+                "edible processed plants market (255,200,200)",
+                "general import store (192,192,192), border (128,128,128)",
+                "food import store (128,192,128), border (128,128,128)",
+                "clothing import store (255,255,255), border (128,128,128)",
+                "cloth shop (200,200,200)",
+                "tanning shop (128,100,50)",
+                "cloth clothing shop (255,255,100)",
+                "leather clothing shop (255,128,64)",
+                "bone carver shop (128,255,255)",
+                "gem cutter shop (0,255,0)",
+                "metal weapons shop (255,0,255)",
+                "wood weapons shop (255,128,128)",
+                "blacksmith shop (64,64,64)",
+                "armorsmith shop (0,0,0)",
+                "metal crafter shop (128,128,128)",
+                "leather accessories shop (100,70,30)",
+                "wooden furniture shop (255,0,0)",
+                "stone furniture shop (255,64,0)",
+                "metal furniture shop (255,0,64)",
+                "fortress (129,129,129)",
+                "underground farming (50,20,50)",
+                "underground industrial (250,50,20)",
+                "underground living (20,50,30)",
+                "trenches (0,0,0)",
+                "tavern (255,255,200)",
+                "well (0,0,255)",
+                "house (100,70,10)",
+                "cottage plot (30,100,10)",
+                "mead hall (255,128,255)",
+                "temple (170,120,230)",
+                "crops 1 (255,195,0), rows",
+                "crops 2 (195,255,0), rows",
+                "crops 3 (100,60,20), rows",
+                "meadow (100,255,0)",
+                "pasture (0,255,0)",
+                "orchard (0,100,0)/(0,200,0)",
+                "woodland (0,95,0)",
+                "waste (0,20,0)",
+                "town yards (100,50,10)",
+                "abandoned (75,50,20), border (50,50,50)",
+                "ruin (50,20,20), border (50,50,50)",
+                "unknown (100,100,100)"
+            }));
+
         }
 
         /// <summary>
@@ -150,6 +217,7 @@ namespace DFWV.WorldClasses
         /// </summary>
         private void LoadParam()
         {
+            Program.Log(LogType.Status, "Loading Params");
             var lines = File.ReadAllLines(paramPath, Encoding.GetEncoding(437)).ToList();
 
             Version = lines[0].Substring(15);
@@ -170,7 +238,7 @@ namespace DFWV.WorldClasses
         /// </summary>
         private void LoadSites()
         {
-
+            Program.Log(LogType.Status, "Loading Sites File");
             var lines = File.ReadAllLines(sitesPath, Encoding.GetEncoding(437)).ToList();
 
             lines.RemoveRange(0, 2);
@@ -220,11 +288,16 @@ namespace DFWV.WorldClasses
         /// </summary>
         private void LoadHistory()
         {
+            Program.Log(LogType.Status, "Loading History File");
             var lines = File.ReadAllLines(historyPath, Encoding.GetEncoding(437)).ToList();
 
             Name = lines[0];
             AltName = lines[1];
-            Program.mainForm.Text = string.Format("World Viewer v{0} - {1} \"{2}\"", Application.ProductVersion, Name, AltName);
+            Program.mainForm.InvokeEx(f =>
+            {
+                f.Text = string.Format("World Viewer v{0} - {1} \"{2}\"", Application.ProductVersion, Name, AltName);
+            });
+            //Program.mainForm.Text = string.Format("World Viewer v{0} - {1} \"{2}\"", Application.ProductVersion, Name, AltName);
 
             lines.RemoveRange(0, 3);
 
@@ -253,7 +326,7 @@ namespace DFWV.WorldClasses
         /// </summary>
         private void LoadXML()
         {
-
+            Program.Log(LogType.Status, "Loading XML");
             StartThread(() => DFXMLParser.Parse(this, xmlPath));
         }
 
@@ -1192,7 +1265,7 @@ namespace DFWV.WorldClasses
             return Name;
         }
 
-        private void StartThread(Action action)
+        public void StartThread(Action action)
         {
             var threadStart = new ThreadStart(action);
             var thread = new Thread(threadStart) {IsBackground = true};

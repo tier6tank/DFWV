@@ -7,7 +7,7 @@ using DFWV.Annotations;
 
 namespace DFWV.WorldClasses
 {
-    class Race : WorldObject
+    public class Race : WorldObject
     {
         [UsedImplicitly]
         public long Population { private get; set; }

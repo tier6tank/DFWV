@@ -18,6 +18,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? FeatureLayerID { get; set; }
         public int? NewJobID { get; set; }
         public int? OldJobID { get; set; }
+        public string NewJob { get; set; }
+        public string OldJob { get; set; }
 
         override public Point Location { get { return Site != null ? Site.Location : (Subregion != null ? Subregion.Location : Point.Empty); } }
 
@@ -88,10 +90,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "site":
                         break;
                     case "new_job":
-                        NewJobID = valI;
+                        NewJob = val.Replace("_", " ");
                         break;
                     case "old_job":
-                        OldJobID = valI;
+                        OldJob = val.Replace("_", " ");
                         break;
                     default:
                         DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
@@ -127,9 +129,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             //TODO: Incorporate new data
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} {1} {2} became {3} in {4}.",
-                            timestring, HF.Race, HF, "UNKNOWN",
-                            Site.AltName);
+            if (NewJob != "standard")
+                return string.Format("{0} {1} {2} became {3} in {4}.",
+                    timestring, HF.Race, HF, NewJob ?? "UNKNOWN",
+                    Site != null ? Site.AltName : Subregion.Name.ToTitleCase());
+            return string.Format("{0} {1} {2} stopped being a {3} in {4}.",
+                timestring, HF.Race, HF, OldJob ?? "UNKNOWN",
+                            Site != null ? Site.AltName : Subregion.Name);
         }
 
         internal override string ToTimelineString()

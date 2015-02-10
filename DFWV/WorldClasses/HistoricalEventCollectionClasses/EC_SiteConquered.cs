@@ -9,7 +9,7 @@ using DFWV.WorldClasses.HistoricalEventClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
-    class EC_SiteConquered : HistoricalEventCollection
+    public class EC_SiteConquered : HistoricalEventCollection
     {
         private int? WarEventCol_ { get; set; }
         private EC_War WarEventCol { get; set; }
@@ -129,10 +129,12 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             if (AttackingEn.SiteConqueredEventCollections == null)
                 AttackingEn.SiteConqueredEventCollections = new List<EC_SiteConquered>();
             AttackingEn.SiteConqueredEventCollections.Add(this);
-            if (DefendingEn.SiteConqueredEventCollections == null)
-                DefendingEn.SiteConqueredEventCollections = new List<EC_SiteConquered>();
-            DefendingEn.SiteConqueredEventCollections.Add(this);
-
+            if (DefendingEn != null)
+            {
+                if (DefendingEn.SiteConqueredEventCollections == null)
+                    DefendingEn.SiteConqueredEventCollections = new List<EC_SiteConquered>();
+                DefendingEn.SiteConqueredEventCollections.Add(this);
+            }
         }
 
         internal override void Evaluate()

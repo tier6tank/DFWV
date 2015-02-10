@@ -6,7 +6,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV
 {
-    class Stats
+    public class Stats
     {
         readonly World World;
 

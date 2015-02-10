@@ -7,7 +7,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_ArtifactPossessed : HistoricalEvent
+    public class HE_ArtifactPossessed : HistoricalEvent
     {
         private int? SiteID { get; set; }
         private Site Site { get; set; }
@@ -102,8 +102,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} the {1} {2} learned the secrets of UNKNOWN from {3}.",
-                                timestring, HistFigure.Race, HistFigure,
+            return string.Format("{0} the {1} {2} learned {3} from {4}.",
+                timestring, HistFigure.Race, HistFigure, Artifact.Description == "" ? "UNKNOWN" : Artifact.Description, 
                                 Artifact);
         }
 

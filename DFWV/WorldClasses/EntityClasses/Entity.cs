@@ -12,7 +12,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.EntityClasses
 {
-    class Entity : XMLObject
+    public class Entity : XMLObject
     {
 
         public Race Race { get; set; }

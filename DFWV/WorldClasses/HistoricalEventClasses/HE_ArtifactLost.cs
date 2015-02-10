@@ -6,7 +6,7 @@ using System.Xml.Linq;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_ArtifactLost : HistoricalEvent
+    public class HE_ArtifactLost : HistoricalEvent
     {
         private int? SiteID { get; set; }
         public Site Site { get; private set; }

@@ -7,7 +7,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_HFDied : HistoricalEvent
+    public class HE_HFDied : HistoricalEvent
     {
         private int? HFID { get; set; }
         public HistoricalFigure HF { get; private set; }

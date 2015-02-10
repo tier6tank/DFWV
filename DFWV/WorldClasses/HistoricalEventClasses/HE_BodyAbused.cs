@@ -217,19 +217,30 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 locationtext = Subregion.ToString();
 
 
-            var abusedHFtext = "";
+            var abusedHFtext = "UNKNOWN";
 
             if (BodyHFs != null && BodyHFs.Count == 1)
-                abusedHFtext = "the body of " + BodyHFs[0] + " was";
+                abusedHFtext = string.Format("the body of the {0} {1} was ", BodyHFs[0].Race.Name.ToLower(), BodyHFs[0]);
             else if (BodyHFs != null && BodyHFs.Count == 2)
-                abusedHFtext = "the bodies of" + BodyHFs[0] + " and " + BodyHFs[1] + " were";
+                abusedHFtext = string.Format("the bodies of the {0} {1} and the {2} {3} were ", 
+                    BodyHFs[0].Race.Name.ToLower(), BodyHFs[0],
+                    BodyHFs[1].Race.Name.ToLower(), BodyHFs[0]);
             else if (BodyHFs == null)
                 abusedHFtext = "the body of an unknown creature was";
             else if (BodyHFs != null && BodyHFs.Count > 2)
             {
-                abusedHFtext = BodyHFs.Aggregate("the bodies of ", (current, hf) => current + (hf + " and "));
+                abusedHFtext = BodyHFs.Aggregate("the bodies of ", (current, hf) => current + (hf + " and ")); //TODO: Remove this, change next to linq
 
-                abusedHFtext = abusedHFtext.Substring(0, abusedHFtext.Length - 5);
+                abusedHFtext = "the bodies of ";
+
+                foreach (var hf in BodyHFs)
+                {
+                    if (hf == BodyHFs.Last())
+                        break;
+                    abusedHFtext += string.Format("the {0} {1}, ", hf.Race.Name.ToLower(), hf);
+                }
+
+                abusedHFtext += string.Format("and the {0} {1} ", BodyHFs.Last().Race.Name.ToLower(), BodyHFs.Last());
             }
 
             if (AbuserEn != null && PileType == -1 && ItemMat.HasValue && ItemType.HasValue)
@@ -259,8 +270,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
 
 
-            return string.Format("{0} the bodies of {1} were added to a grisly mound by {2} in {3}.",
-                        timestring, "UNKNOWN", AbuserEn == null ? "UNKNOWN" : AbuserEn.ToString(),
+            return string.Format("{0} {1} were added to a grisly mound by {2} in {3}.",
+                        timestring, abusedHFtext, AbuserEn == null ? "UNKNOWN" : AbuserEn.ToString(),
                         Site == null ? "UNKNOWN" : Site.AltName);
 
         }
