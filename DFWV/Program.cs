@@ -101,19 +101,9 @@ namespace DFWV
         {
             Color thisColor;
 
-            var curDistinctColorA = curDistinctColor % ColorNames.Count;
-
-            if (curDistinctColor < ColorNames.Count)
-            {
-                var rgb = Int32.Parse(ColorNames[curDistinctColor].Replace("#", ""), NumberStyles.HexNumber);
-                thisColor = Color.FromArgb(255,Color.FromArgb(rgb));
-                curDistinctColor++;
-            }
-            else
-            {
-                return Color.White;
-
-            }
+            var rgb = Int32.Parse(ColorNames[curDistinctColor % ColorNames.Count].Replace("#", ""), NumberStyles.HexNumber);
+            thisColor = Color.FromArgb(255,Color.FromArgb(rgb));
+            curDistinctColor++;
 
             return thisColor;
         }
