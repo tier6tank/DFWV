@@ -144,7 +144,7 @@ namespace DFWV
             var paramPath = Path.Combine(path, name + "-world_gen_param.txt");
             var historyPath = Path.Combine(path, nameWithTime + "-world_history.txt");
             var sitesPath = Path.Combine(path, nameWithTime + "-world_sites_and_pops.txt");
-            var xmlPlusPath = Path.Combine(path, name + "-legends_plus.xml");
+            var xmlPlusPath = Path.Combine(path, nameWithTime + "-legends_plus.xml");
 
             if (File.Exists(xmlPath) && File.Exists(paramPath) && File.Exists(historyPath) && File.Exists(sitesPath))
             {

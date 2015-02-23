@@ -73,8 +73,12 @@ function export_more_legends_xml()
     local year_str = string.format('%0'..math.max(5, string.len(''..df.global.cur_year))..'d', df.global.cur_year)
     local date_str = year_str..string.format('-%02d-%02d', month, day)
     
+	print(date_str)
     io.output(tostring(df.global.world.cur_savegame.save_dir).."-"..date_str.."-legends_plus.xml")
+<<<<<<< HEAD
+=======
 
+>>>>>>> origin/dev
     --io.output(tostring(df.global.world.cur_savegame.save_dir).."-legends_plus.xml")
 
     io.write ("<?xml version=\"1.0\" encoding='UTF-8'?>".."\n")
