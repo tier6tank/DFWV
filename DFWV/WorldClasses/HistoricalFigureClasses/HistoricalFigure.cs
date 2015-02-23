@@ -13,12 +13,14 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
 {
     public class HistoricalFigure : XMLObject
     {
-
         private string Race_ { get; set; } 
         public Race Race { get; private set; }
         [UsedImplicitly]
         public string RaceName { get { return Race != null ? Race.Name : ""; } }
 
+        public int? Flags { get; set; }
+        public string CasteDescription { get; set; }
+        
         public int? Caste { get; private set; }
         public static List<string> Castes = new List<string>();
         private int? AppearedYear { get; set; }
@@ -399,7 +401,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             if (PlayerControlled)
                 frm.grpHistoricalFigure.Text += @" (PLAYER CONTROLLED)";
 #if DEBUG
-            frm.grpHistoricalFigure.Text += string.Format(" - ID: {0} - Notability: {1}", ID, Notability);
+            frm.grpHistoricalFigure.Text += string.Format(" - ID: {0} - Notability: {1} - Flags: {2}", ID, Notability, Flags);
 #endif
             frm.grpHistoricalFigure.Show();
             frm.lblHistoricalFigureName.Text = ToString();
@@ -1219,6 +1221,28 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
 
         internal override void Plus(XDocument xdoc)
         {
+            foreach (var element in xdoc.Root.Elements())
+            {
+                var val = element.Value;
+                int valI;
+                Int32.TryParse(val, out valI);
+
+                switch (element.Name.LocalName)
+                {
+                    case "id":
+                        break;
+                    case "caste_text":
+                        CasteDescription = val;
+                        break;
+                    case "flags":
+                        Flags = Convert.ToInt32(val, 2);
+                        break;
+                    default:
+                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t", element, xdoc.Root.ToString());
+                        break;
+                }
+            }
+
 
         }
 

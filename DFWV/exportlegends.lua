@@ -67,17 +67,14 @@ end
 
 --create an extra legends xml with extra data, by Mason11987 for World Viewer
 function export_more_legends_xml()
-    -- in future versions, include date str in filename.  World Viewer doesn't recognise that yet though...
-    --[[
     local julian_day = math.floor(df.global.cur_year_tick / 1200) + 1
     local month = math.floor(julian_day / 28) + 1 --days and months are 1-indexed
-    local day = julian_day % 28
-    local year_str = string.format('%0'..math.max(5, string.len(''..df.global.cur_year)), df.global.cur_year)
+    local day = julian_day % 28 + 1
+    local year_str = string.format('%0'..math.max(5, string.len(''..df.global.cur_year))..'d', df.global.cur_year)
     local date_str = year_str..string.format('-%02d-%02d', month, day)
     
     io.output(tostring(df.global.world.cur_savegame.save_dir).."-"..date_str.."-legends_plus.xml")
-    ]]--
-    io.output(tostring(df.global.world.cur_savegame.save_dir).."-legends_plus.xml")
+    --io.output(tostring(df.global.world.cur_savegame.save_dir).."-legends_plus.xml")
 
     io.write ("<?xml version=\"1.0\" encoding='UTF-8'?>".."\n")
     io.write ("<df_world>".."\n")
@@ -175,6 +172,23 @@ function export_more_legends_xml()
     io.write ("</artifacts>".."\n")
 
     io.write ("<historical_figures>".."\n")
+    for hfK, hfV in ipairs(df.global.world.history.figures) do
+        io.write ("\t".."<historical_figure>".."\n")
+        io.write ("\t\t".."<id>"..hfV.id.."</id>".."\n")
+        if (hfV.race ~= -1) then
+            io.write ("\t\t".."<caste_text>"..df.global.world.raws.creatures.all[hfV.race].caste[hfV.caste].description.."</caste_text>".."\n")
+        end
+        io.write ("\t\t".."<flags>")
+        for flagK, flagV in ipairs(hfV.flags) do
+            if (flagV == true) then
+                io.write("1")
+            else
+                io.write("0")
+            end
+        end
+        io.write ("</flags>".."\n")
+        io.write ("\t".."</historical_figure>".."\n")
+    end
     io.write ("</historical_figures>".."\n")
 
     io.write ("<entity_populations>".."\n")
@@ -569,7 +583,6 @@ function export_site_maps()
     for i=1, #vs.sites do
         gui.simulateInput(vs, 'LEGENDS_EXPORT_MAP')
         gui.simulateInput(vs, 'STANDARDSCROLL_DOWN')
-		os.rename("site_color_key.txt","site_color_key" .. i .. ".txt")
     end
     gui.simulateInput(vs, 'LEAVESCREEN')
 end

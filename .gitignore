@@ -1,2 +1,5 @@
 DFWV/bin/
 DFWV/obj/
+TestResults/
+DFWVTests/obj/
+DFWVTests/bin/

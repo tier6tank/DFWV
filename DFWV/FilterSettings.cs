@@ -107,7 +107,8 @@ namespace DFWV
                 {"Battles", typeof (int)},
                 {"DescendentCount", typeof (int)},
                 {"AncestorCount", typeof (int)},
-                {"DescendentGenerations", typeof (int)}
+                {"DescendentGenerations", typeof (int)},
+                {"Flags", typeof (int)}
             };
 
             Fields[typeof (Leader)] = new Dictionary<string, Type>
