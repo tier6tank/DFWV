@@ -170,7 +170,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (HF != null && LinkType.HasValue)
                 return string.Format("{0} {1} became {2} of {3}.",
                             timelinestring, HF,
-                                HFSiteLink.LinkTypes[LinkType.Value], Civ);
+                                HFEntityLink.LinkTypes[LinkType.Value], Civ);
             return string.Format("{0} Added HF Link to {1}.",
                 timelinestring, Civ);
         }
