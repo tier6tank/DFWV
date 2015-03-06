@@ -35,20 +35,7 @@ namespace DFWV.WorldClasses
         public WorldConstruction(XDocument xdoc, World world)
             : base(xdoc, world)
         {
-            foreach (var element in xdoc.Root.Elements())
-            {
-                switch (element.Name.LocalName)
-                {
-                    case "id":
-                    case "name": //From Plus XML
-                    case "coords":
-                    case "type": 
-                        break;
-                    default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
-                        break;
-                }
-            }
+            Plus(xdoc);
         }
 
 

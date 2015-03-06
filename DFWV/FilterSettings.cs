@@ -177,16 +177,16 @@ namespace DFWV
         {
             Options[typeof (Civilization)] = new Dictionary<string, IEnumerable<string>>
             {
-                {"RaceName", World.Races.Keys}
+                {"RaceName", World.Races.Values.Select(x=>x.Key)}
             };
             Options[typeof (Entity)] = new Dictionary<string, IEnumerable<string>>
             {
-                {"RaceName", World.Races.Keys},
+                {"RaceName", World.Races.Values.Select(x=>x.Key)},
                 {"Type", new List<string> {"Civilization", "Religion", "Group", "Site Government", "Migrating Group", "Nomadic Group", "Outcast", "Other", }}
             };
             Options[typeof (EntityPopulation)] = new Dictionary<string, IEnumerable<string>>
             {
-                {"RaceName", World.Races.Keys}
+                {"RaceName", World.Races.Values.Select(x=>x.Key)}
             };
             Options[typeof(WorldConstruction)] = new Dictionary<string, IEnumerable<string>>
             {
@@ -194,7 +194,7 @@ namespace DFWV
             };
             Options[typeof(God)] = new Dictionary<string, IEnumerable<string>>
             {
-                {"RaceName", World.Races.Keys},
+                {"RaceName", World.Races.Values.Select(x=>x.Key)},
                 {"GodType", new List<string> {"deity", "force"}}
             };
             Options[typeof (HistoricalEvent)] = new Dictionary<string, IEnumerable<string>>
@@ -210,9 +210,9 @@ namespace DFWV
             {
                 {"Job", HistoricalFigure.AssociatedTypes},
                 {"HFCaste", HistoricalFigure.Castes},
-                {"RaceName", World.Races.Keys}
+                {"RaceName", World.Races.Values.Select(x=>x.Key)}
             };
-            Options[typeof (Leader)] = new Dictionary<string, IEnumerable<string>> {{"RaceName", World.Races.Keys}};
+            Options[typeof(Leader)] = new Dictionary<string, IEnumerable<string>> { { "RaceName", World.Races.Values.Select(x => x.Key) } };
             Options[typeof (Region)] = new Dictionary<string, IEnumerable<string>> {{"RegionType", Region.Types}};
             Options[typeof(Site)] = new Dictionary<string, IEnumerable<string>> { { "SiteType", Site.Types } };
             Options[typeof(Structure)] = new Dictionary<string, IEnumerable<string>> { { "StructureType", Structure.Types } };

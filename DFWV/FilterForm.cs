@@ -174,7 +174,7 @@ namespace DFWV
             else
             {
                 var addRange = Options[selected].ToList();
-                addRange.Sort();                
+                addRange.Sort();          
                 cmbWhereOperation.Items.AddRange(addRange.ToArray<object>());
                 txtWhereData.Visible = false;
                 optionIsNotRadioButton.Visible = true;

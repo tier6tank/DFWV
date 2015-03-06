@@ -19,7 +19,6 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         public string RaceName { get { return Race != null ? Race.Name : ""; } }
 
         public int? Flags { get; set; }
-        public string CasteDescription { get; set; }
         
         public int? Caste { get; private set; }
         public static List<string> Castes = new List<string>();
@@ -1230,9 +1229,6 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                 switch (element.Name.LocalName)
                 {
                     case "id":
-                        break;
-                    case "caste_text":
-                        CasteDescription = val;
                         break;
                     case "flags":
                         Flags = Convert.ToInt32(val, 2);

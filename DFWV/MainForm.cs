@@ -1129,6 +1129,52 @@ namespace DFWV
         }
         #endregion
 
+        #region Region/UGRegion Tabs
+        private void lstRegionPopulation_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            e.DrawBackground();
+
+            if (e.Index != -1)
+            {
+                Dictionary<Race, int> pops = null;
+                if (sender == lstRegionPopulation)
+                {
+                    var thisRegion = (Region)lstRegion.SelectedItem;
+                    if (thisRegion == null)
+                    {
+                        grpRegion.Visible = false;
+                        return;
+                    }
+                    pops = thisRegion.Populations;
+                    
+                }
+                else if (sender == lstUndergroundRegion)
+                {
+                    var thisUGRegion = (UndergroundRegion)lstUndergroundRegion.SelectedItem;
+                    if (thisUGRegion == null)
+                    {
+                        grpUndergroundRegion.Visible = false;
+                        return;
+                    }
+                    pops = thisUGRegion.Populations;
+                }
+
+                Race selectedRace = (Race)(sender as ListBox).Items[e.Index];
+                string drawString;
+                if (pops[selectedRace] == 1)
+                    drawString = pops[selectedRace] +
+                        " " + selectedRace.Name.ToTitleCase();
+                else
+                    drawString = pops[selectedRace] +
+                        " " + selectedRace.PluralName.ToTitleCase();
+
+                e.Graphics.DrawString(drawString,
+                    e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
+            }
+            e.DrawFocusRectangle();
+        }
+        #endregion
+
         /// <summary>
         /// Since civilizations contain leaders, sites, gods, and have wars...
         ///     These methods handle modifying how items are displayed in those listboxes.
@@ -1200,7 +1246,7 @@ namespace DFWV
                 var thisLeader = (Leader)lstCivilizationLeaders.Items[e.Index];
 
                 e.Graphics.DrawString(
-                    thisLeader.Name.Split(new[] {" the ", " The "}, StringSplitOptions.RemoveEmptyEntries)[0],
+                    thisLeader.Name.Split(new[] { " the ", " The " }, StringSplitOptions.RemoveEmptyEntries)[0],
                     thisLeader.isCurrent
                         ? new Font(e.Font.FontFamily.ToString(), e.Font.Size, FontStyle.Underline)
                         : e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
@@ -1208,8 +1254,8 @@ namespace DFWV
                 var typeString = thisLeader.HF != null && thisLeader.HF.Caste.HasValue
                     ? HistoricalFigure.Castes[thisLeader.HF.Caste.Value].ToLower().ToTitleCase() + " "
                     : "";
-                    
-                    
+
+
                 typeString += Leader.LeaderTypes[thisLeader.LeaderType].ToTitleCase();
 
 
@@ -1217,7 +1263,7 @@ namespace DFWV
                 {
                     typeString += " at " + thisLeader.Site.Name;
                 }
-                
+
                 if (thisLeader.ReignBegan != null)
                 {
                     typeString += (thisLeader.ReignBegan.Year > -1
@@ -1310,6 +1356,54 @@ namespace DFWV
             }
             e.DrawFocusRectangle();
         }
+        #endregion
+
+        #region Race Tab
+        /// <summary>
+        /// On Race tab, if the caste list is clicked call the select method on that caste
+        /// </summary>
+        private void Caste_ListClick(object sender, EventArgs e)
+        {
+            var listBox = (ListBox)sender;
+            if (!(listBox.SelectedItem is Caste))
+                return;
+
+            (listBox.SelectedItem as Caste).Select(this);
+        }
+
+        private void lstRacePopulation_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            e.DrawBackground();
+
+            if (e.Index != -1)
+            {
+                var thisRace = (Race)lstRace.SelectedItem;
+                if (thisRace == null)
+                {
+                    grpRace.Visible = false;
+                    return;
+                }
+                string drawString = "";
+
+                if (lstRacePopulation.Items[e.Index] is Region)
+                {
+                    Region selectedRegion = (Region)lstRacePopulation.Items[e.Index];
+                    drawString = thisRace.Populations[selectedRegion] +
+                        " - " + selectedRegion.Name.ToTitleCase();
+                }
+                else if (lstRacePopulation.Items[e.Index] is UndergroundRegion)
+                {
+                    UndergroundRegion selectedUGRegion = (UndergroundRegion)lstRacePopulation.Items[e.Index];
+                    drawString = thisRace.UGPopulations[selectedUGRegion] +
+                        " - " + selectedUGRegion.ToString().ToTitleCase();
+                }
+
+                e.Graphics.DrawString(drawString,
+                    e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
+            }
+            e.DrawFocusRectangle();
+        }
+
         #endregion
 
         #region Historical Event Collection Tab
@@ -1477,6 +1571,8 @@ namespace DFWV
             }
         }
         #endregion
+
+
 
         /// <summary>
         /// Filtering is handled by clicking the filter button under a primary list box or typing into the textbox under that listbox, 

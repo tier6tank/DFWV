@@ -168,6 +168,10 @@ namespace DFWV
                                 xReader.Read();
                                 knownSection = false;
                                 break;
+                            case "races":
+                                PlusLoadSection(world.Races, world, xReader);
+                                SortRaces(world);
+                                break;
                             case "regions":
                                 PlusLoadSection(world.Regions, world, xReader);
                                 break;
@@ -215,6 +219,24 @@ namespace DFWV
             }
             OnFinished();
         }
+
+        private static void SortRaces(World world)
+        {
+            Dictionary<int, Race> newRaceList = new Dictionary<int, Race>();
+
+            foreach (var race in world.Races.Values)
+            {
+                newRaceList.Add(race.ID, race);
+            }
+
+            world.Races.Clear();
+
+            foreach (var race in newRaceList.Values.OrderBy(X=>X.ID))
+            {
+                world.Races.Add(race.ID, race);
+            }
+        }
+
 
         /// <summary>
         /// Given a specific section of type T if we encounter an open tag at one level below we want to load a new object of type T, starting at that XML.
@@ -303,8 +325,6 @@ namespace DFWV
                     var WorldObject = (T)Activator.CreateInstance(typeof(T), new object[] { xdoc, world });
                     WorldList.Add(WorldObject.ID, WorldObject);
                 }
-
-
             }
             catch (OutOfMemoryException e)
             {
@@ -403,11 +423,27 @@ namespace DFWV
                     {
                         var newWC = new WorldConstruction(xdoc, world);
                         world.WorldConstructions.Add(newWC.ID, newWC);
+                        return;
                     }
                 }
+                if (typeof(T) == typeof(Race))
+                {
+                    var key = xdoc.Root.Element("key").Value.ToLower();
+                    var associatedRace = world.FindRace(key) ?? 
+                                         world.FindRace(xdoc.Root.Element("nameS").Value.ToLower()) ?? 
+                                         world.FindRace(xdoc.Root.Element("nameP").Value.ToLower());
+                    
+                    if (associatedRace == null || associatedRace.ID > 0)
+                    {
+                        var newRace = new Race(xdoc, world);
+                        world.Races.Add(id, newRace);
+                        return;
+                    }
+                    else
+                        id = associatedRace.ID;
+
+                }
                 WorldList[id].Plus(xdoc);
-
-
             }
             catch (OutOfMemoryException e)
             {

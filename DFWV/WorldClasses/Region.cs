@@ -9,6 +9,7 @@ namespace DFWV.WorldClasses
     using System.Xml.Linq;
     using HistoricalEventCollectionClasses;
     using HistoricalFigureClasses;
+    using System.Linq;
 
     public class Region : XMLObject
     {
@@ -16,6 +17,7 @@ namespace DFWV.WorldClasses
         public int Type { get; private set; }
 
         public List<Point> Coords { get; set; }
+        public Dictionary<Race, int> Populations { get; set; }
 
         public List<HistoricalFigure> Inhabitants { get; set; }
 
@@ -100,6 +102,14 @@ namespace DFWV.WorldClasses
             frm.lstRegionInhabitants.EndUpdate();
             frm.grpRegionInhabitants.Visible = frm.lstRegionInhabitants.Items.Count > 0;
 
+            frm.lstRegionPopulation.BeginUpdate();
+            frm.lstRegionPopulation.Items.Clear();
+            if (Populations != null)
+                frm.lstRegionPopulation.Items.AddRange(Populations.Keys.ToArray());
+            frm.lstRegionPopulation.EndUpdate();
+            frm.grpRegionPopulation.Visible = frm.lstRegionPopulation.Items.Count > 0;
+
+
             Program.MakeSelected(frm.tabRegion, frm.lstRegion, this);
         }
 
@@ -135,8 +145,18 @@ namespace DFWV.WorldClasses
                                 Coords.Add(new Point(Convert.ToInt32(coordSplit[0]), Convert.ToInt32(coordSplit[1])));
                         }
                         break;
+                    case "population":
+                        if (Populations == null)
+                            Populations = new Dictionary<Race, int>();
+                        foreach (var pop in val.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries))
+                        {
+                            var popSplit = pop.Split(',');
+                            if (popSplit.Length == 2)
+                                Populations.Add(World.Races[Convert.ToInt32(popSplit[0])], Convert.ToInt32(popSplit[1]));
+                        }
+                        break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + "Region", element, xdoc.Root.ToString());
                         break;
                 }
             }

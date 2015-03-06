@@ -50,13 +50,13 @@ namespace DFWV.WorldClasses
 
         public readonly List<Civilization> Civilizations = new List<Civilization>();
         public readonly List<Leader> Leaders = new List<Leader>();
-        public readonly Dictionary<string, Race> Races = new Dictionary<string, Race>();
         public readonly List<God> Gods = new List<God>();
         public readonly Dictionary<int, Site> SitesFile = new Dictionary<int, Site>();
         public readonly List<Entity> EntitiesFile = new List<Entity>();
         public readonly List<Parameter> Parameters = new List<Parameter>();
         public readonly List<Dynasty> Dynasties = new List<Dynasty>();
 
+        public readonly Dictionary<int, Race> Races = new Dictionary<int, Race>();
         public readonly Dictionary<int, Region> Regions = new Dictionary<int, Region>();
         public readonly Dictionary<int, UndergroundRegion> UndergroundRegions = new Dictionary<int, UndergroundRegion>();
         public readonly Dictionary<int, Site> Sites = new Dictionary<int, Site>();
@@ -418,7 +418,7 @@ namespace DFWV.WorldClasses
         internal Race GetAddRace(string raceName)
         {
             var lname = raceName.ToLower();
-            lname = StripRaceNumbers(lname);
+            //lname = StripRaceNumbers(lname);
             lname = lname.Replace("_", " ");
             if (lname.Contains("prisoners"))
                 lname = lname.Replace(" prisoners", "");
@@ -429,16 +429,16 @@ namespace DFWV.WorldClasses
             else if (lname.Contains("outcast"))
                 lname = lname.Replace(" outcast", "");
 
-            if (Races.ContainsKey(lname))
-                return Races[lname];
-            if (Races.ContainsKey(lname.Remove(lname.Length - 1) + "ves"))
-                return Races[lname.Remove(lname.Length - 1) + "ves"];
-            if (Races.ContainsKey(lname + "s"))
-                return Races[lname + "s"];
-            if (lname.Contains("men") && Races.ContainsKey(lname.Replace("men", "man")))
-                return Races[lname.Replace("men", "man")];
-            if (lname.Contains("man") && Races.ContainsKey(lname.Replace("man", "men")))
-                return Races[lname.Replace("man", "men")];
+            if (ExistsRace(lname))
+                return FindRace(lname);
+            if (ExistsRace(lname.Remove(lname.Length - 1) + "ves"))
+                return FindRace(lname.Remove(lname.Length - 1) + "ves");
+            if (ExistsRace(lname + "s"))
+                return FindRace(lname + "s");
+            if (lname.Contains("men") && ExistsRace(lname.Replace("men", "man")))
+                return FindRace(lname.Replace("men", "man"));
+            if (lname.Contains("man") && ExistsRace(lname.Replace("man", "men")))
+                return FindRace(lname.Replace("man", "men"));
 
 
             foreach (var race in Races.Values)
@@ -458,12 +458,22 @@ namespace DFWV.WorldClasses
                     return race;
             }
 
-            if (Races.ContainsKey(lname)) 
-                return Races[lname];
+            if (ExistsRace(lname)) 
+                return FindRace(lname);
 
-            var newRace = new Race(lname, this);
-            Races.Add(newRace.Name, newRace);
+            var newRace = new Race(lname, -(Races.Count + 1), this);
+            Races.Add(-(Races.Count + 1), newRace);
             return newRace;
+        }
+
+        private bool ExistsRace(string name)
+        {
+            return FindRace(name) != null;
+        }
+
+        public Race FindRace(string name)
+        {
+            return Races.Values.FirstOrDefault(x => x.Key == name || x.Key.Replace("_"," ") == name || x.Name == name || x.PluralName == name);
         }
 
         private static string StripRaceNumbers(string race)

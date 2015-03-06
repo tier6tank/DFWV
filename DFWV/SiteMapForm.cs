@@ -19,7 +19,7 @@ namespace DFWV
         public MapLegend curLegend { get; set; }
 
 
-        internal Site Site
+        internal new Site Site
         {
             get { return site; }
             set
