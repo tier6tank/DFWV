@@ -255,28 +255,31 @@
                 return Year.ToString();
             if (months <= 0)
                 return "the early spring of " + Year;
-            if (months == 1)
-                return "the midspring of " + Year;
-            if (months == 2)
-                return "the late spring of " + Year;
-            if (months == 3)
-                return "the early summer of " + Year;
-            if (months == 4)
-                return "the midssummer of " + Year;
-            if (months == 5)
-                return "the late summer of " + Year;
-            if (months == 6)
-                return "the early autumn of " + Year;
-            if (months == 7)
-                return "the midautumn of " + Year;
-            if (months == 8)
-                return "the late autumn of " + Year;
-            if (months == 9)
-                return "the early winter of " + Year;
-            if (months == 10)
-                return "the midwinter of " + Year;
-            if (months == 11)
-                return "the late spring of " + Year;
+            switch (months)
+            {
+                case 1:
+                    return "the midspring of " + Year;
+                case 2:
+                    return "the late spring of " + Year;
+                case 3:
+                    return "the early summer of " + Year;
+                case 4:
+                    return "the midssummer of " + Year;
+                case 5:
+                    return "the late summer of " + Year;
+                case 6:
+                    return "the early autumn of " + Year;
+                case 7:
+                    return "the midautumn of " + Year;
+                case 8:
+                    return "the late autumn of " + Year;
+                case 9:
+                    return "the early winter of " + Year;
+                case 10:
+                    return "the midwinter of " + Year;
+                case 11:
+                    return "the late spring of " + Year;
+            }
             return Year.ToString();
         }
 

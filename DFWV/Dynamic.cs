@@ -13,7 +13,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading;
 
-namespace DFWV
+namespace System.Linq.Dynamic
 {
     public static class DynamicQueryable
     {

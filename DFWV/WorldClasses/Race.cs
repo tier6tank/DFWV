@@ -116,7 +116,7 @@ namespace DFWV.WorldClasses
 
                 frm.lstRacePopulation.EndUpdate();
                 if (frm.lstRacePopulation.Items.Count > 0)
-                    frm.grpRacePopulation.Text = "Population (" + (pops.Values.Sum() + ugpops.Values.Sum()) + ")";
+                    frm.grpRacePopulation.Text = string.Format("Population ({0})", (pops.Values.Sum() + ugpops.Values.Sum()));
                 frm.grpRacePopulation.Visible = frm.lstRacePopulation.Items.Count > 0;
                 
             }

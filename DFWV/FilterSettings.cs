@@ -7,6 +7,7 @@ using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalEventClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
+using System.Linq.Dynamic;
 
 namespace DFWV
 {
