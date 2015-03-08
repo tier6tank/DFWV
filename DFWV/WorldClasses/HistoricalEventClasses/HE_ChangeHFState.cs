@@ -22,6 +22,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         override public Point Location { get { return Coords; } }
 
+        public override IEnumerable<HistoricalFigure> HFsInvolved
+        {
+            get { yield return HF; }
+        }
         public HE_ChangeHFState(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -83,10 +87,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Process()
         {
             base.Process();
-            if (HF == null) return;
-            if (HF.Events == null)
-                HF.Events = new List<HistoricalEvent>();
-            HF.Events.Add(this);
             if (HF.isLeader && State.HasValue && States[State.Value] == "settled" && Site != null)
             {
                 HF.Leader.Site = Site;

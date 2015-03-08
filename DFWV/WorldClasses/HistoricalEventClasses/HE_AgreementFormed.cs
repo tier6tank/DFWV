@@ -21,6 +21,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public int? AgreementSubjectID { get; set; }
         public string Reason { get; set; }
 
+        public override IEnumerable<HistoricalFigure> HFsInvolved
+        {
+            get
+            {
+                yield return HF;
+                yield return ConcluderHF;
+            }
+        }
         public HE_AgreementFormed(XDocument xdoc, World world)
             : base(xdoc, world)
         {

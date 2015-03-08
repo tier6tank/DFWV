@@ -56,9 +56,14 @@ namespace DFWV
             this.label6 = new System.Windows.Forms.Label();
             this.lblArtifactItem = new System.Windows.Forms.Label();
             this.grpArtifactLost = new System.Windows.Forms.GroupBox();
+            this.lblArtifactLostTime = new DFWV.Controls.LinkLabel();
+            this.lblArtifactLostSite = new DFWV.Controls.LinkLabel();
             this.label12 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.grpArtifactCreated = new System.Windows.Forms.GroupBox();
+            this.lblArtifactCreatedTime = new DFWV.Controls.LinkLabel();
+            this.lblArtifactCreatedSite = new DFWV.Controls.LinkLabel();
+            this.lblArtifactCreatedBy = new DFWV.Controls.LinkLabel();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -77,9 +82,11 @@ namespace DFWV
             this.label17 = new System.Windows.Forms.Label();
             this.lblCivilizationName = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
+            this.lblCivilizationRace = new DFWV.Controls.LinkLabel();
             this.lblCivilizationFull = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
+            this.lblCivilizationEntity = new DFWV.Controls.LinkLabel();
             this.grpCivilizationSites = new System.Windows.Forms.GroupBox();
             this.lstCivilizationSites = new System.Windows.Forms.ListBox();
             this.grpCivilizationLeaders = new System.Windows.Forms.GroupBox();
@@ -100,22 +107,33 @@ namespace DFWV
             this.trvEntityRelatedSites = new System.Windows.Forms.TreeView();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label185 = new System.Windows.Forms.Label();
+            this.lblEntityWorshippingHF = new DFWV.Controls.LinkLabel();
             this.label20 = new System.Windows.Forms.Label();
             this.lblEntityName = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
+            this.lblEntityRace = new DFWV.Controls.LinkLabel();
             this.lblEntityType = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
             this.label50 = new System.Windows.Forms.Label();
+            this.lblEntityCivilization = new DFWV.Controls.LinkLabel();
             this.label23 = new System.Windows.Forms.Label();
+            this.lblEntityParentCiv = new DFWV.Controls.LinkLabel();
             this.grpEntitySiteTakeover = new System.Windows.Forms.GroupBox();
+            this.lblEntitySiteTakeoverTime = new DFWV.Controls.LinkLabel();
+            this.lblEntitySiteTakeoverNewLeader = new DFWV.Controls.LinkLabel();
             this.label28 = new System.Windows.Forms.Label();
             this.label29 = new System.Windows.Forms.Label();
+            this.lblEntitySiteTakeoverDefenderEntity = new DFWV.Controls.LinkLabel();
+            this.lblEntitySiteTakeoverDefenderCiv = new DFWV.Controls.LinkLabel();
             this.label26 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
+            this.lblEntitySiteTakeoverSite = new DFWV.Controls.LinkLabel();
             this.label24 = new System.Windows.Forms.Label();
             this.grpEntityEvents = new System.Windows.Forms.GroupBox();
             this.lstEntityEvents = new System.Windows.Forms.ListBox();
             this.grpEntityCreated = new System.Windows.Forms.GroupBox();
+            this.lblEntityCreatedTime = new DFWV.Controls.LinkLabel();
+            this.lblEntityCreatedSite = new DFWV.Controls.LinkLabel();
             this.label19 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.grpEntityRelatedFigures = new System.Windows.Forms.GroupBox();
@@ -131,11 +149,15 @@ namespace DFWV
             this.lstEntityPopluationRaces = new System.Windows.Forms.ListBox();
             this.panel4 = new System.Windows.Forms.Panel();
             this.label186 = new System.Windows.Forms.Label();
+            this.lblEntityPopulationCiv = new DFWV.Controls.LinkLabel();
             this.label25 = new System.Windows.Forms.Label();
+            this.lblEntityPopulationRace = new DFWV.Controls.LinkLabel();
             this.grpEntityPopulationBattles = new System.Windows.Forms.GroupBox();
+            this.lblEntityPopulationBattleTime = new DFWV.Controls.LinkLabel();
             this.label36 = new System.Windows.Forms.Label();
             this.lblEntityPopulationBattleDeaths = new System.Windows.Forms.Label();
             this.lblEntityPopulationBattleNumber = new System.Windows.Forms.Label();
+            this.lblEntityPopulationBattleWar = new DFWV.Controls.LinkLabel();
             this.label30 = new System.Windows.Forms.Label();
             this.label31 = new System.Windows.Forms.Label();
             this.label32 = new System.Windows.Forms.Label();
@@ -152,6 +174,7 @@ namespace DFWV
             this.panel5 = new System.Windows.Forms.Panel();
             this.label39 = new System.Windows.Forms.Label();
             this.lblGodName = new System.Windows.Forms.Label();
+            this.lblGodHF = new DFWV.Controls.LinkLabel();
             this.label37 = new System.Windows.Forms.Label();
             this.label38 = new System.Windows.Forms.Label();
             this.lblGodType = new System.Windows.Forms.Label();
@@ -175,6 +198,7 @@ namespace DFWV
             this.panel6 = new System.Windows.Forms.Panel();
             this.label45 = new System.Windows.Forms.Label();
             this.lblHistoricalFigureName = new System.Windows.Forms.Label();
+            this.lblHistoricalFigureCoords = new DFWV.Controls.LinkLabel();
             this.label43 = new System.Windows.Forms.Label();
             this.label172 = new System.Windows.Forms.Label();
             this.label41 = new System.Windows.Forms.Label();
@@ -187,14 +211,19 @@ namespace DFWV
             this.label49 = new System.Windows.Forms.Label();
             this.lblHistoricalFigureAssociatedType = new System.Windows.Forms.Label();
             this.label55 = new System.Windows.Forms.Label();
+            this.lblHistoricalFigureLocation = new DFWV.Controls.LinkLabel();
             this.label59 = new System.Windows.Forms.Label();
             this.lblHistoricalFigureLocationText = new System.Windows.Forms.Label();
             this.label57 = new System.Windows.Forms.Label();
             this.label63 = new System.Windows.Forms.Label();
+            this.lblHistoricalFigureRace = new DFWV.Controls.LinkLabel();
             this.lblHistoricalFigureAnimated = new System.Windows.Forms.Label();
             this.lblHistoricalFigureCaste = new System.Windows.Forms.Label();
             this.label61 = new System.Windows.Forms.Label();
+            this.lblHistoricalFigureEntityPopulation = new DFWV.Controls.LinkLabel();
             this.lblHistoricalFigureGhost = new System.Windows.Forms.Label();
+            this.lblHistoricalFigureGod = new DFWV.Controls.LinkLabel();
+            this.lblHistoricalFigureLeader = new DFWV.Controls.LinkLabel();
             this.grpHistoricalFigureEvents = new System.Windows.Forms.GroupBox();
             this.lstHistoricalFigureEvents = new System.Windows.Forms.ListBox();
             this.grpHistoricalFigureDescendents = new System.Windows.Forms.GroupBox();
@@ -205,7 +234,10 @@ namespace DFWV
             this.trvHistoricalFigureAncestors = new System.Windows.Forms.TreeView();
             this.grpHistoricalFigureDeath = new System.Windows.Forms.GroupBox();
             this.lblHistoricalFigureDeathCause = new System.Windows.Forms.Label();
+            this.lblHistoricalFigureDeathTime = new DFWV.Controls.LinkLabel();
             this.label46 = new System.Windows.Forms.Label();
+            this.lblHistoricalFigureDeathLocation = new DFWV.Controls.LinkLabel();
+            this.lblHistoricalFigureDeathSlayer = new DFWV.Controls.LinkLabel();
             this.label40 = new System.Windows.Forms.Label();
             this.label42 = new System.Windows.Forms.Label();
             this.label44 = new System.Windows.Forms.Label();
@@ -255,11 +287,17 @@ namespace DFWV
             this.tableLayoutPanel25 = new System.Windows.Forms.TableLayoutPanel();
             this.panel8 = new System.Windows.Forms.Panel();
             this.label159 = new System.Windows.Forms.Label();
+            this.lblBeastAttackParent = new DFWV.Controls.LinkLabel();
             this.label168 = new System.Windows.Forms.Label();
+            this.lblBeastAttackSite = new DFWV.Controls.LinkLabel();
             this.label137 = new System.Windows.Forms.Label();
+            this.lblBeastAttackCoords = new DFWV.Controls.LinkLabel();
             this.label143 = new System.Windows.Forms.Label();
+            this.lblBeastAttackDefender = new DFWV.Controls.LinkLabel();
             this.lblBeastAttackOrdinal = new System.Windows.Forms.Label();
+            this.lblBeastAttackRegion = new DFWV.Controls.LinkLabel();
             this.label152 = new System.Windows.Forms.Label();
+            this.lblBeastAttackBeast = new DFWV.Controls.LinkLabel();
             this.label160 = new System.Windows.Forms.Label();
             this.lblBeastAttackDuration = new System.Windows.Forms.Label();
             this.lblBeastAttackTime = new System.Windows.Forms.Label();
@@ -286,6 +324,7 @@ namespace DFWV
             this.lblWarDefenderCombatants = new System.Windows.Forms.Label();
             this.label129 = new System.Windows.Forms.Label();
             this.label130 = new System.Windows.Forms.Label();
+            this.lblWarDefender = new DFWV.Controls.LinkLabel();
             this.grpWarEventCols = new System.Windows.Forms.GroupBox();
             this.lstWarEventCols = new System.Windows.Forms.ListBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -297,12 +336,17 @@ namespace DFWV
             this.lblWarAggressorCombatants = new System.Windows.Forms.Label();
             this.label117 = new System.Windows.Forms.Label();
             this.label118 = new System.Windows.Forms.Label();
+            this.lblWarAggressor = new DFWV.Controls.LinkLabel();
             this.grpWarEvents = new System.Windows.Forms.GroupBox();
             this.lstWarEvents = new System.Windows.Forms.ListBox();
             this.tabEventCollectionBattle = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel27 = new System.Windows.Forms.TableLayoutPanel();
             this.panel10 = new System.Windows.Forms.Panel();
             this.label96 = new System.Windows.Forms.Label();
+            this.lblBattleWar = new DFWV.Controls.LinkLabel();
+            this.lblBattleRegion = new DFWV.Controls.LinkLabel();
+            this.lblBattleSite = new DFWV.Controls.LinkLabel();
+            this.lblBattleCoord = new DFWV.Controls.LinkLabel();
             this.lblBattleName = new System.Windows.Forms.Label();
             this.label94 = new System.Windows.Forms.Label();
             this.lblBattleDuration = new System.Windows.Forms.Label();
@@ -326,6 +370,9 @@ namespace DFWV
             this.label110 = new System.Windows.Forms.Label();
             this.label111 = new System.Windows.Forms.Label();
             this.label112 = new System.Windows.Forms.Label();
+            this.lblBattleDefendingSquadRace = new DFWV.Controls.LinkLabel();
+            this.lblBattleDefendingSquadEntPop = new DFWV.Controls.LinkLabel();
+            this.lblBattleDefendingSquadSite = new DFWV.Controls.LinkLabel();
             this.lstBattleDefendingSquad = new System.Windows.Forms.ListBox();
             this.grpBattleDefendingHF = new System.Windows.Forms.GroupBox();
             this.lstBattleDefendingHF = new System.Windows.Forms.ListBox();
@@ -345,6 +392,9 @@ namespace DFWV
             this.label93 = new System.Windows.Forms.Label();
             this.label100 = new System.Windows.Forms.Label();
             this.label102 = new System.Windows.Forms.Label();
+            this.lblBattleAttackingSquadRace = new DFWV.Controls.LinkLabel();
+            this.lblBattleAttackingSquadEntPop = new DFWV.Controls.LinkLabel();
+            this.lblBattleAttackingSquadSite = new DFWV.Controls.LinkLabel();
             this.lstBattleAttackingSquad = new System.Windows.Forms.ListBox();
             this.grpBattleAttackingHF = new System.Windows.Forms.GroupBox();
             this.lstBattleAttackingHF = new System.Windows.Forms.ListBox();
@@ -356,11 +406,17 @@ namespace DFWV
             this.tableLayoutPanel28 = new System.Windows.Forms.TableLayoutPanel();
             this.panel11 = new System.Windows.Forms.Panel();
             this.label148 = new System.Windows.Forms.Label();
+            this.lblDuelParent = new DFWV.Controls.LinkLabel();
             this.label125 = new System.Windows.Forms.Label();
+            this.lblDuelSite = new DFWV.Controls.LinkLabel();
             this.label133 = new System.Windows.Forms.Label();
+            this.lblDuelCoords = new DFWV.Controls.LinkLabel();
             this.lblDuelOrdinal = new System.Windows.Forms.Label();
+            this.lblDuelAttacker = new DFWV.Controls.LinkLabel();
             this.label141 = new System.Windows.Forms.Label();
+            this.lblDuelDefender = new DFWV.Controls.LinkLabel();
             this.label142 = new System.Windows.Forms.Label();
+            this.lblDuelRegion = new DFWV.Controls.LinkLabel();
             this.label149 = new System.Windows.Forms.Label();
             this.lblDuelDuration = new System.Windows.Forms.Label();
             this.lblDuelTime = new System.Windows.Forms.Label();
@@ -375,11 +431,17 @@ namespace DFWV
             this.lstAbductionEventCols = new System.Windows.Forms.ListBox();
             this.panel12 = new System.Windows.Forms.Panel();
             this.label138 = new System.Windows.Forms.Label();
+            this.lblAbductionParent = new DFWV.Controls.LinkLabel();
             this.label140 = new System.Windows.Forms.Label();
+            this.lblAbductionSite = new DFWV.Controls.LinkLabel();
             this.label123 = new System.Windows.Forms.Label();
+            this.lblAbductionCoords = new DFWV.Controls.LinkLabel();
             this.lblAbductionOrdinal = new System.Windows.Forms.Label();
+            this.lblAbductionAttacker = new DFWV.Controls.LinkLabel();
             this.label131 = new System.Windows.Forms.Label();
+            this.lblAbductionDefender = new DFWV.Controls.LinkLabel();
             this.label132 = new System.Windows.Forms.Label();
+            this.lblAbductionRegion = new DFWV.Controls.LinkLabel();
             this.label139 = new System.Windows.Forms.Label();
             this.lblAbductionDuration = new System.Windows.Forms.Label();
             this.lblAbductionTime = new System.Windows.Forms.Label();
@@ -394,10 +456,15 @@ namespace DFWV
             this.lstSiteConqueredEvents = new System.Windows.Forms.ListBox();
             this.panel13 = new System.Windows.Forms.Panel();
             this.label127 = new System.Windows.Forms.Label();
+            this.lblSiteConqueredWar = new DFWV.Controls.LinkLabel();
             this.label115 = new System.Windows.Forms.Label();
+            this.lblSiteConqueredSite = new DFWV.Controls.LinkLabel();
             this.lblSiteConqueredOrdinal = new System.Windows.Forms.Label();
+            this.lblSiteConqueredCoords = new DFWV.Controls.LinkLabel();
             this.label151 = new System.Windows.Forms.Label();
+            this.lblSiteConqueredAttacker = new DFWV.Controls.LinkLabel();
             this.label150 = new System.Windows.Forms.Label();
+            this.lblSiteConqueredDefender = new DFWV.Controls.LinkLabel();
             this.label128 = new System.Windows.Forms.Label();
             this.lblSiteConqueredDuration = new System.Windows.Forms.Label();
             this.lblSiteConqueredTime = new System.Windows.Forms.Label();
@@ -410,10 +477,15 @@ namespace DFWV
             this.lstTheftEventCols = new System.Windows.Forms.ListBox();
             this.panel14 = new System.Windows.Forms.Panel();
             this.label169 = new System.Windows.Forms.Label();
+            this.lblTheftWar = new DFWV.Controls.LinkLabel();
             this.label153 = new System.Windows.Forms.Label();
+            this.lblTheftSite = new DFWV.Controls.LinkLabel();
             this.lblTheftOrdinal = new System.Windows.Forms.Label();
+            this.lblTheftCoords = new DFWV.Controls.LinkLabel();
             this.label161 = new System.Windows.Forms.Label();
+            this.lblTheftAttacker = new DFWV.Controls.LinkLabel();
             this.label163 = new System.Windows.Forms.Label();
+            this.lblTheftDefender = new DFWV.Controls.LinkLabel();
             this.label170 = new System.Windows.Forms.Label();
             this.lblTheftDuration = new System.Windows.Forms.Label();
             this.lblTheftTime = new System.Windows.Forms.Label();
@@ -425,10 +497,15 @@ namespace DFWV
             this.tabEventCollectionInsurrection = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel39 = new System.Windows.Forms.TableLayoutPanel();
             this.panel20 = new System.Windows.Forms.Panel();
+            this.lblInsurrectionOutcome = new DFWV.Controls.LinkLabel();
             this.label179 = new System.Windows.Forms.Label();
             this.label178 = new System.Windows.Forms.Label();
+            this.lblInsurrectionParent = new DFWV.Controls.LinkLabel();
+            this.lblInsurrectionSite = new DFWV.Controls.LinkLabel();
             this.label180 = new System.Windows.Forms.Label();
+            this.lblInsurrectionCoords = new DFWV.Controls.LinkLabel();
             this.lblInsurrectionOrdinal = new System.Windows.Forms.Label();
+            this.lblInsurrectionTargetEnt = new DFWV.Controls.LinkLabel();
             this.label183 = new System.Windows.Forms.Label();
             this.label184 = new System.Windows.Forms.Label();
             this.lblInsurrectionDuration = new System.Windows.Forms.Label();
@@ -444,11 +521,18 @@ namespace DFWV
             this.tableLayoutPanel11 = new System.Windows.Forms.TableLayoutPanel();
             this.TextFilterLeader = new System.Windows.Forms.TextBox();
             this.grpLeader = new System.Windows.Forms.GroupBox();
+            this.lblLeaderMarried = new DFWV.Controls.LinkLabel();
             this.label176 = new System.Windows.Forms.Label();
             this.lblLeaderType = new System.Windows.Forms.Label();
+            this.lblLeaderHF = new DFWV.Controls.LinkLabel();
             this.label51 = new System.Windows.Forms.Label();
             this.label67 = new System.Windows.Forms.Label();
+            this.lblLeaderInheritedFrom = new DFWV.Controls.LinkLabel();
+            this.lblLeaderRace = new DFWV.Controls.LinkLabel();
             this.lblLeaderLife = new System.Windows.Forms.Label();
+            this.lblLeaderGod = new DFWV.Controls.LinkLabel();
+            this.lblLeaderCivilization = new DFWV.Controls.LinkLabel();
+            this.lblLeaderSite = new DFWV.Controls.LinkLabel();
             this.label64 = new System.Windows.Forms.Label();
             this.label65 = new System.Windows.Forms.Label();
             this.label66 = new System.Windows.Forms.Label();
@@ -528,18 +612,25 @@ namespace DFWV
             this.grpSiteStructures = new System.Windows.Forms.GroupBox();
             this.lstSiteStructures = new System.Windows.Forms.ListBox();
             this.panel17 = new System.Windows.Forms.Panel();
+            this.SiteMapLabel = new DFWV.Controls.LinkLabel();
             this.label80 = new System.Windows.Forms.Label();
             this.lblSiteName = new System.Windows.Forms.Label();
             this.label78 = new System.Windows.Forms.Label();
+            this.lblSiteCoord = new DFWV.Controls.LinkLabel();
             this.lblSiteAltName = new System.Windows.Forms.Label();
             this.label83 = new System.Windows.Forms.Label();
             this.label75 = new System.Windows.Forms.Label();
             this.label53 = new System.Windows.Forms.Label();
             this.lblSiteType = new System.Windows.Forms.Label();
             this.label81 = new System.Windows.Forms.Label();
+            this.lblSiteOwner = new DFWV.Controls.LinkLabel();
+            this.lblSiteParentCiv = new DFWV.Controls.LinkLabel();
             this.grpSiteOutcasts = new System.Windows.Forms.GroupBox();
             this.lstSiteOutcasts = new System.Windows.Forms.ListBox();
             this.grpSiteCreated = new System.Windows.Forms.GroupBox();
+            this.lblSiteCreatedTime = new DFWV.Controls.LinkLabel();
+            this.lblSiteCreatedByCiv = new DFWV.Controls.LinkLabel();
+            this.lblSiteCreatedBy = new DFWV.Controls.LinkLabel();
             this.label69 = new System.Windows.Forms.Label();
             this.label77 = new System.Windows.Forms.Label();
             this.label79 = new System.Windows.Forms.Label();
@@ -565,17 +656,25 @@ namespace DFWV
             this.grpStructureEvents = new System.Windows.Forms.GroupBox();
             this.lstStructureEvents = new System.Windows.Forms.ListBox();
             this.grpStructureRazed = new System.Windows.Forms.GroupBox();
+            this.lblStructureRazedTime = new DFWV.Controls.LinkLabel();
             this.label48 = new System.Windows.Forms.Label();
+            this.lblStructureRazedSite = new DFWV.Controls.LinkLabel();
+            this.lblStructureRazedCiv = new DFWV.Controls.LinkLabel();
             this.label175 = new System.Windows.Forms.Label();
             this.label177 = new System.Windows.Forms.Label();
             this.grpStructureCreated = new System.Windows.Forms.GroupBox();
+            this.lblStructureCreatedTime = new DFWV.Controls.LinkLabel();
             this.label7 = new System.Windows.Forms.Label();
+            this.lblStructureCreatedSite = new DFWV.Controls.LinkLabel();
+            this.lblStructureCreatedCiv = new DFWV.Controls.LinkLabel();
+            this.lblStructureCreatedSiteCiv = new DFWV.Controls.LinkLabel();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.panel19 = new System.Windows.Forms.Panel();
             this.label182 = new System.Windows.Forms.Label();
             this.lblStructureType = new System.Windows.Forms.Label();
+            this.lblStructureSite = new DFWV.Controls.LinkLabel();
             this.label3 = new System.Windows.Forms.Label();
             this.lblStructureID = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -585,10 +684,14 @@ namespace DFWV
             this.tableLayoutPanel15 = new System.Windows.Forms.TableLayoutPanel();
             this.TextFilterUndergroundRegion = new System.Windows.Forms.TextBox();
             this.grpUndergroundRegion = new System.Windows.Forms.GroupBox();
-            this.lblUndergroundRegionType = new System.Windows.Forms.Label();
-            this.label84 = new System.Windows.Forms.Label();
-            this.lblUndergroundRegionDepth = new System.Windows.Forms.Label();
+            this.tableLayoutPanel40 = new System.Windows.Forms.TableLayoutPanel();
+            this.grpUndergroundRegionPopulation = new System.Windows.Forms.GroupBox();
+            this.lstUndergroundRegionPopulation = new System.Windows.Forms.ListBox();
+            this.panel21 = new System.Windows.Forms.Panel();
             this.label86 = new System.Windows.Forms.Label();
+            this.lblUndergroundRegionType = new System.Windows.Forms.Label();
+            this.lblUndergroundRegionDepth = new System.Windows.Forms.Label();
+            this.label84 = new System.Windows.Forms.Label();
             this.FilterUndergroundRegion = new System.Windows.Forms.Button();
             this.lstUndergroundRegion = new System.Windows.Forms.ListBox();
             this.tabWorldConstruction = new System.Windows.Forms.TabPage();
@@ -596,12 +699,20 @@ namespace DFWV
             this.FilterWorldConstruction = new System.Windows.Forms.Button();
             this.TextFilterWorldConstruction = new System.Windows.Forms.TextBox();
             this.grpWorldConstruction = new System.Windows.Forms.GroupBox();
+            this.lblWorldConstructionCoord = new DFWV.Controls.LinkLabel();
             this.label190 = new System.Windows.Forms.Label();
+            this.lblWorldConstructionType = new DFWV.Controls.LinkLabel();
             this.label33 = new System.Windows.Forms.Label();
             this.grpWorldConstructionCreated = new System.Windows.Forms.GroupBox();
+            this.lblWorldConstructionCreatedTime = new DFWV.Controls.LinkLabel();
+            this.lblWorldConstructionCreatedByCiv = new DFWV.Controls.LinkLabel();
+            this.lblWorldConstructionCreatedBy = new DFWV.Controls.LinkLabel();
             this.label85 = new System.Windows.Forms.Label();
             this.label87 = new System.Windows.Forms.Label();
             this.label88 = new System.Windows.Forms.Label();
+            this.lblWorldConstructionFrom = new DFWV.Controls.LinkLabel();
+            this.lblWorldConstructionMaster = new DFWV.Controls.LinkLabel();
+            this.lblWorldConstructionTo = new DFWV.Controls.LinkLabel();
             this.label82 = new System.Windows.Forms.Label();
             this.label89 = new System.Windows.Forms.Label();
             this.label91 = new System.Windows.Forms.Label();
@@ -616,9 +727,12 @@ namespace DFWV
             this.panel18 = new System.Windows.Forms.Panel();
             this.label173 = new System.Windows.Forms.Label();
             this.label171 = new System.Windows.Forms.Label();
+            this.lblDynastyLength = new DFWV.Controls.LinkLabel();
             this.lblDynastyType = new System.Windows.Forms.Label();
+            this.lblDynastyFounder = new DFWV.Controls.LinkLabel();
             this.label164 = new System.Windows.Forms.Label();
             this.label154 = new System.Windows.Forms.Label();
+            this.lblDynastyCivilization = new DFWV.Controls.LinkLabel();
             this.grpDynastyMembers = new System.Windows.Forms.GroupBox();
             this.lstDynastyMembers = new System.Windows.Forms.ListBox();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
@@ -631,120 +745,6 @@ namespace DFWV
             this.closeWorldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.BacktoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ForwardtoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.lblArtifactLostTime = new DFWV.Controls.LinkLabel();
-            this.lblArtifactLostSite = new DFWV.Controls.LinkLabel();
-            this.lblArtifactCreatedTime = new DFWV.Controls.LinkLabel();
-            this.lblArtifactCreatedSite = new DFWV.Controls.LinkLabel();
-            this.lblArtifactCreatedBy = new DFWV.Controls.LinkLabel();
-            this.lblCivilizationRace = new DFWV.Controls.LinkLabel();
-            this.lblCivilizationEntity = new DFWV.Controls.LinkLabel();
-            this.lblEntityWorshippingHF = new DFWV.Controls.LinkLabel();
-            this.lblEntityRace = new DFWV.Controls.LinkLabel();
-            this.lblEntityCivilization = new DFWV.Controls.LinkLabel();
-            this.lblEntityParentCiv = new DFWV.Controls.LinkLabel();
-            this.lblEntitySiteTakeoverTime = new DFWV.Controls.LinkLabel();
-            this.lblEntitySiteTakeoverNewLeader = new DFWV.Controls.LinkLabel();
-            this.lblEntitySiteTakeoverDefenderEntity = new DFWV.Controls.LinkLabel();
-            this.lblEntitySiteTakeoverDefenderCiv = new DFWV.Controls.LinkLabel();
-            this.lblEntitySiteTakeoverSite = new DFWV.Controls.LinkLabel();
-            this.lblEntityCreatedTime = new DFWV.Controls.LinkLabel();
-            this.lblEntityCreatedSite = new DFWV.Controls.LinkLabel();
-            this.lblEntityPopulationCiv = new DFWV.Controls.LinkLabel();
-            this.lblEntityPopulationRace = new DFWV.Controls.LinkLabel();
-            this.lblEntityPopulationBattleTime = new DFWV.Controls.LinkLabel();
-            this.lblEntityPopulationBattleWar = new DFWV.Controls.LinkLabel();
-            this.lblGodHF = new DFWV.Controls.LinkLabel();
-            this.lblHistoricalFigureCoords = new DFWV.Controls.LinkLabel();
-            this.lblHistoricalFigureLocation = new DFWV.Controls.LinkLabel();
-            this.lblHistoricalFigureRace = new DFWV.Controls.LinkLabel();
-            this.lblHistoricalFigureEntityPopulation = new DFWV.Controls.LinkLabel();
-            this.lblHistoricalFigureGod = new DFWV.Controls.LinkLabel();
-            this.lblHistoricalFigureLeader = new DFWV.Controls.LinkLabel();
-            this.lblHistoricalFigureDeathTime = new DFWV.Controls.LinkLabel();
-            this.lblHistoricalFigureDeathLocation = new DFWV.Controls.LinkLabel();
-            this.lblHistoricalFigureDeathSlayer = new DFWV.Controls.LinkLabel();
-            this.lblBeastAttackParent = new DFWV.Controls.LinkLabel();
-            this.lblBeastAttackSite = new DFWV.Controls.LinkLabel();
-            this.lblBeastAttackCoords = new DFWV.Controls.LinkLabel();
-            this.lblBeastAttackDefender = new DFWV.Controls.LinkLabel();
-            this.lblBeastAttackRegion = new DFWV.Controls.LinkLabel();
-            this.lblBeastAttackBeast = new DFWV.Controls.LinkLabel();
-            this.lblWarDefender = new DFWV.Controls.LinkLabel();
-            this.lblWarAggressor = new DFWV.Controls.LinkLabel();
-            this.lblBattleWar = new DFWV.Controls.LinkLabel();
-            this.lblBattleRegion = new DFWV.Controls.LinkLabel();
-            this.lblBattleSite = new DFWV.Controls.LinkLabel();
-            this.lblBattleCoord = new DFWV.Controls.LinkLabel();
-            this.lblBattleDefendingSquadRace = new DFWV.Controls.LinkLabel();
-            this.lblBattleDefendingSquadEntPop = new DFWV.Controls.LinkLabel();
-            this.lblBattleDefendingSquadSite = new DFWV.Controls.LinkLabel();
-            this.lblBattleAttackingSquadRace = new DFWV.Controls.LinkLabel();
-            this.lblBattleAttackingSquadEntPop = new DFWV.Controls.LinkLabel();
-            this.lblBattleAttackingSquadSite = new DFWV.Controls.LinkLabel();
-            this.lblDuelParent = new DFWV.Controls.LinkLabel();
-            this.lblDuelSite = new DFWV.Controls.LinkLabel();
-            this.lblDuelCoords = new DFWV.Controls.LinkLabel();
-            this.lblDuelAttacker = new DFWV.Controls.LinkLabel();
-            this.lblDuelDefender = new DFWV.Controls.LinkLabel();
-            this.lblDuelRegion = new DFWV.Controls.LinkLabel();
-            this.lblAbductionParent = new DFWV.Controls.LinkLabel();
-            this.lblAbductionSite = new DFWV.Controls.LinkLabel();
-            this.lblAbductionCoords = new DFWV.Controls.LinkLabel();
-            this.lblAbductionAttacker = new DFWV.Controls.LinkLabel();
-            this.lblAbductionDefender = new DFWV.Controls.LinkLabel();
-            this.lblAbductionRegion = new DFWV.Controls.LinkLabel();
-            this.lblSiteConqueredWar = new DFWV.Controls.LinkLabel();
-            this.lblSiteConqueredSite = new DFWV.Controls.LinkLabel();
-            this.lblSiteConqueredCoords = new DFWV.Controls.LinkLabel();
-            this.lblSiteConqueredAttacker = new DFWV.Controls.LinkLabel();
-            this.lblSiteConqueredDefender = new DFWV.Controls.LinkLabel();
-            this.lblTheftWar = new DFWV.Controls.LinkLabel();
-            this.lblTheftSite = new DFWV.Controls.LinkLabel();
-            this.lblTheftCoords = new DFWV.Controls.LinkLabel();
-            this.lblTheftAttacker = new DFWV.Controls.LinkLabel();
-            this.lblTheftDefender = new DFWV.Controls.LinkLabel();
-            this.lblInsurrectionOutcome = new DFWV.Controls.LinkLabel();
-            this.lblInsurrectionParent = new DFWV.Controls.LinkLabel();
-            this.lblInsurrectionSite = new DFWV.Controls.LinkLabel();
-            this.lblInsurrectionCoords = new DFWV.Controls.LinkLabel();
-            this.lblInsurrectionTargetEnt = new DFWV.Controls.LinkLabel();
-            this.lblLeaderMarried = new DFWV.Controls.LinkLabel();
-            this.lblLeaderHF = new DFWV.Controls.LinkLabel();
-            this.lblLeaderInheritedFrom = new DFWV.Controls.LinkLabel();
-            this.lblLeaderRace = new DFWV.Controls.LinkLabel();
-            this.lblLeaderGod = new DFWV.Controls.LinkLabel();
-            this.lblLeaderCivilization = new DFWV.Controls.LinkLabel();
-            this.lblLeaderSite = new DFWV.Controls.LinkLabel();
-            this.SiteMapLabel = new DFWV.Controls.LinkLabel();
-            this.lblSiteCoord = new DFWV.Controls.LinkLabel();
-            this.lblSiteOwner = new DFWV.Controls.LinkLabel();
-            this.lblSiteParentCiv = new DFWV.Controls.LinkLabel();
-            this.lblSiteCreatedTime = new DFWV.Controls.LinkLabel();
-            this.lblSiteCreatedByCiv = new DFWV.Controls.LinkLabel();
-            this.lblSiteCreatedBy = new DFWV.Controls.LinkLabel();
-            this.lblStructureRazedTime = new DFWV.Controls.LinkLabel();
-            this.lblStructureRazedSite = new DFWV.Controls.LinkLabel();
-            this.lblStructureRazedCiv = new DFWV.Controls.LinkLabel();
-            this.lblStructureCreatedTime = new DFWV.Controls.LinkLabel();
-            this.lblStructureCreatedSite = new DFWV.Controls.LinkLabel();
-            this.lblStructureCreatedCiv = new DFWV.Controls.LinkLabel();
-            this.lblStructureCreatedSiteCiv = new DFWV.Controls.LinkLabel();
-            this.lblStructureSite = new DFWV.Controls.LinkLabel();
-            this.lblWorldConstructionCoord = new DFWV.Controls.LinkLabel();
-            this.lblWorldConstructionType = new DFWV.Controls.LinkLabel();
-            this.lblWorldConstructionCreatedTime = new DFWV.Controls.LinkLabel();
-            this.lblWorldConstructionCreatedByCiv = new DFWV.Controls.LinkLabel();
-            this.lblWorldConstructionCreatedBy = new DFWV.Controls.LinkLabel();
-            this.lblWorldConstructionFrom = new DFWV.Controls.LinkLabel();
-            this.lblWorldConstructionMaster = new DFWV.Controls.LinkLabel();
-            this.lblWorldConstructionTo = new DFWV.Controls.LinkLabel();
-            this.lblDynastyLength = new DFWV.Controls.LinkLabel();
-            this.lblDynastyFounder = new DFWV.Controls.LinkLabel();
-            this.lblDynastyCivilization = new DFWV.Controls.LinkLabel();
-            this.tableLayoutPanel40 = new System.Windows.Forms.TableLayoutPanel();
-            this.grpUndergroundRegionPopulation = new System.Windows.Forms.GroupBox();
-            this.lstUndergroundRegionPopulation = new System.Windows.Forms.ListBox();
-            this.panel21 = new System.Windows.Forms.Panel();
             this.MainTab.SuspendLayout();
             this.tabWorld.SuspendLayout();
             this.grpWorld.SuspendLayout();
@@ -919,6 +919,9 @@ namespace DFWV
             this.tabUndergroundRegion.SuspendLayout();
             this.tableLayoutPanel15.SuspendLayout();
             this.grpUndergroundRegion.SuspendLayout();
+            this.tableLayoutPanel40.SuspendLayout();
+            this.grpUndergroundRegionPopulation.SuspendLayout();
+            this.panel21.SuspendLayout();
             this.tabWorldConstruction.SuspendLayout();
             this.tableLayoutPanel16.SuspendLayout();
             this.grpWorldConstruction.SuspendLayout();
@@ -930,9 +933,6 @@ namespace DFWV
             this.panel18.SuspendLayout();
             this.grpDynastyMembers.SuspendLayout();
             this.menuStrip.SuspendLayout();
-            this.tableLayoutPanel40.SuspendLayout();
-            this.grpUndergroundRegionPopulation.SuspendLayout();
-            this.panel21.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainTab
@@ -1256,6 +1256,28 @@ namespace DFWV
             this.grpArtifactLost.TabStop = false;
             this.grpArtifactLost.Text = "Lost";
             // 
+            // lblArtifactLostTime
+            // 
+            this.lblArtifactLostTime.AutoSize = true;
+            this.lblArtifactLostTime.Data = null;
+            this.lblArtifactLostTime.ForeColor = System.Drawing.Color.Black;
+            this.lblArtifactLostTime.Location = new System.Drawing.Point(28, 37);
+            this.lblArtifactLostTime.Name = "lblArtifactLostTime";
+            this.lblArtifactLostTime.Size = new System.Drawing.Size(55, 13);
+            this.lblArtifactLostTime.TabIndex = 13;
+            this.lblArtifactLostTime.Text = "linkLabel1";
+            // 
+            // lblArtifactLostSite
+            // 
+            this.lblArtifactLostSite.AutoSize = true;
+            this.lblArtifactLostSite.Data = null;
+            this.lblArtifactLostSite.ForeColor = System.Drawing.Color.Black;
+            this.lblArtifactLostSite.Location = new System.Drawing.Point(28, 16);
+            this.lblArtifactLostSite.Name = "lblArtifactLostSite";
+            this.lblArtifactLostSite.Size = new System.Drawing.Size(55, 13);
+            this.lblArtifactLostSite.TabIndex = 12;
+            this.lblArtifactLostSite.Text = "linkLabel3";
+            // 
             // label12
             // 
             this.label12.AutoSize = true;
@@ -1289,6 +1311,39 @@ namespace DFWV
             this.grpArtifactCreated.TabIndex = 2;
             this.grpArtifactCreated.TabStop = false;
             this.grpArtifactCreated.Text = "Created";
+            // 
+            // lblArtifactCreatedTime
+            // 
+            this.lblArtifactCreatedTime.AutoSize = true;
+            this.lblArtifactCreatedTime.Data = null;
+            this.lblArtifactCreatedTime.ForeColor = System.Drawing.Color.Black;
+            this.lblArtifactCreatedTime.Location = new System.Drawing.Point(28, 64);
+            this.lblArtifactCreatedTime.Name = "lblArtifactCreatedTime";
+            this.lblArtifactCreatedTime.Size = new System.Drawing.Size(55, 13);
+            this.lblArtifactCreatedTime.TabIndex = 7;
+            this.lblArtifactCreatedTime.Text = "linkLabel1";
+            // 
+            // lblArtifactCreatedSite
+            // 
+            this.lblArtifactCreatedSite.AutoSize = true;
+            this.lblArtifactCreatedSite.Data = null;
+            this.lblArtifactCreatedSite.ForeColor = System.Drawing.Color.Black;
+            this.lblArtifactCreatedSite.Location = new System.Drawing.Point(28, 43);
+            this.lblArtifactCreatedSite.Name = "lblArtifactCreatedSite";
+            this.lblArtifactCreatedSite.Size = new System.Drawing.Size(55, 13);
+            this.lblArtifactCreatedSite.TabIndex = 6;
+            this.lblArtifactCreatedSite.Text = "linkLabel3";
+            // 
+            // lblArtifactCreatedBy
+            // 
+            this.lblArtifactCreatedBy.AutoSize = true;
+            this.lblArtifactCreatedBy.Data = null;
+            this.lblArtifactCreatedBy.ForeColor = System.Drawing.Color.Black;
+            this.lblArtifactCreatedBy.Location = new System.Drawing.Point(28, 21);
+            this.lblArtifactCreatedBy.Name = "lblArtifactCreatedBy";
+            this.lblArtifactCreatedBy.Size = new System.Drawing.Size(55, 13);
+            this.lblArtifactCreatedBy.TabIndex = 4;
+            this.lblArtifactCreatedBy.Text = "linkLabel1";
             // 
             // label5
             // 
@@ -1496,6 +1551,17 @@ namespace DFWV
             this.label15.TabIndex = 7;
             this.label15.Text = "Intelligent:";
             // 
+            // lblCivilizationRace
+            // 
+            this.lblCivilizationRace.AutoSize = true;
+            this.lblCivilizationRace.Data = null;
+            this.lblCivilizationRace.ForeColor = System.Drawing.Color.Black;
+            this.lblCivilizationRace.Location = new System.Drawing.Point(58, 44);
+            this.lblCivilizationRace.Name = "lblCivilizationRace";
+            this.lblCivilizationRace.Size = new System.Drawing.Size(55, 13);
+            this.lblCivilizationRace.TabIndex = 14;
+            this.lblCivilizationRace.Text = "linkLabel1";
+            // 
             // lblCivilizationFull
             // 
             this.lblCivilizationFull.AutoSize = true;
@@ -1522,6 +1588,17 @@ namespace DFWV
             this.label16.Size = new System.Drawing.Size(47, 13);
             this.label16.TabIndex = 9;
             this.label16.Text = "Is Entity:";
+            // 
+            // lblCivilizationEntity
+            // 
+            this.lblCivilizationEntity.AutoSize = true;
+            this.lblCivilizationEntity.Data = null;
+            this.lblCivilizationEntity.ForeColor = System.Drawing.Color.Black;
+            this.lblCivilizationEntity.Location = new System.Drawing.Point(58, 66);
+            this.lblCivilizationEntity.Name = "lblCivilizationEntity";
+            this.lblCivilizationEntity.Size = new System.Drawing.Size(55, 13);
+            this.lblCivilizationEntity.TabIndex = 10;
+            this.lblCivilizationEntity.Text = "linkLabel1";
             // 
             // grpCivilizationSites
             // 
@@ -1763,6 +1840,17 @@ namespace DFWV
             this.label185.TabIndex = 28;
             this.label185.Text = "Worshipping:";
             // 
+            // lblEntityWorshippingHF
+            // 
+            this.lblEntityWorshippingHF.AutoSize = true;
+            this.lblEntityWorshippingHF.Data = null;
+            this.lblEntityWorshippingHF.ForeColor = System.Drawing.Color.Black;
+            this.lblEntityWorshippingHF.Location = new System.Drawing.Point(68, 115);
+            this.lblEntityWorshippingHF.Name = "lblEntityWorshippingHF";
+            this.lblEntityWorshippingHF.Size = new System.Drawing.Size(55, 13);
+            this.lblEntityWorshippingHF.TabIndex = 29;
+            this.lblEntityWorshippingHF.Text = "linkLabel1";
+            // 
             // label20
             // 
             this.label20.AutoSize = true;
@@ -1789,6 +1877,17 @@ namespace DFWV
             this.label18.Size = new System.Drawing.Size(36, 13);
             this.label18.TabIndex = 17;
             this.label18.Text = "Race:";
+            // 
+            // lblEntityRace
+            // 
+            this.lblEntityRace.AutoSize = true;
+            this.lblEntityRace.Data = null;
+            this.lblEntityRace.ForeColor = System.Drawing.Color.Black;
+            this.lblEntityRace.Location = new System.Drawing.Point(69, 45);
+            this.lblEntityRace.Name = "lblEntityRace";
+            this.lblEntityRace.Size = new System.Drawing.Size(55, 13);
+            this.lblEntityRace.TabIndex = 18;
+            this.lblEntityRace.Text = "linkLabel1";
             // 
             // lblEntityType
             // 
@@ -1817,6 +1916,17 @@ namespace DFWV
             this.label50.TabIndex = 26;
             this.label50.Text = "Type:";
             // 
+            // lblEntityCivilization
+            // 
+            this.lblEntityCivilization.AutoSize = true;
+            this.lblEntityCivilization.Data = null;
+            this.lblEntityCivilization.ForeColor = System.Drawing.Color.Black;
+            this.lblEntityCivilization.Location = new System.Drawing.Point(69, 68);
+            this.lblEntityCivilization.Name = "lblEntityCivilization";
+            this.lblEntityCivilization.Size = new System.Drawing.Size(55, 13);
+            this.lblEntityCivilization.TabIndex = 20;
+            this.lblEntityCivilization.Text = "linkLabel1";
+            // 
             // label23
             // 
             this.label23.AutoSize = true;
@@ -1825,6 +1935,17 @@ namespace DFWV
             this.label23.Size = new System.Drawing.Size(59, 13);
             this.label23.TabIndex = 23;
             this.label23.Text = "Parent Civ:";
+            // 
+            // lblEntityParentCiv
+            // 
+            this.lblEntityParentCiv.AutoSize = true;
+            this.lblEntityParentCiv.Data = null;
+            this.lblEntityParentCiv.ForeColor = System.Drawing.Color.Black;
+            this.lblEntityParentCiv.Location = new System.Drawing.Point(69, 93);
+            this.lblEntityParentCiv.Name = "lblEntityParentCiv";
+            this.lblEntityParentCiv.Size = new System.Drawing.Size(55, 13);
+            this.lblEntityParentCiv.TabIndex = 24;
+            this.lblEntityParentCiv.Text = "linkLabel1";
             // 
             // grpEntitySiteTakeover
             // 
@@ -1846,6 +1967,28 @@ namespace DFWV
             this.grpEntitySiteTakeover.TabStop = false;
             this.grpEntitySiteTakeover.Text = "Created on Site Takeover";
             // 
+            // lblEntitySiteTakeoverTime
+            // 
+            this.lblEntitySiteTakeoverTime.AutoSize = true;
+            this.lblEntitySiteTakeoverTime.Data = null;
+            this.lblEntitySiteTakeoverTime.ForeColor = System.Drawing.Color.Black;
+            this.lblEntitySiteTakeoverTime.Location = new System.Drawing.Point(88, 100);
+            this.lblEntitySiteTakeoverTime.Name = "lblEntitySiteTakeoverTime";
+            this.lblEntitySiteTakeoverTime.Size = new System.Drawing.Size(55, 13);
+            this.lblEntitySiteTakeoverTime.TabIndex = 15;
+            this.lblEntitySiteTakeoverTime.Text = "linkLabel5";
+            // 
+            // lblEntitySiteTakeoverNewLeader
+            // 
+            this.lblEntitySiteTakeoverNewLeader.AutoSize = true;
+            this.lblEntitySiteTakeoverNewLeader.Data = null;
+            this.lblEntitySiteTakeoverNewLeader.ForeColor = System.Drawing.Color.Black;
+            this.lblEntitySiteTakeoverNewLeader.Location = new System.Drawing.Point(88, 79);
+            this.lblEntitySiteTakeoverNewLeader.Name = "lblEntitySiteTakeoverNewLeader";
+            this.lblEntitySiteTakeoverNewLeader.Size = new System.Drawing.Size(55, 13);
+            this.lblEntitySiteTakeoverNewLeader.TabIndex = 14;
+            this.lblEntitySiteTakeoverNewLeader.Text = "linkLabel3";
+            // 
             // label28
             // 
             this.label28.AutoSize = true;
@@ -1864,6 +2007,28 @@ namespace DFWV
             this.label29.TabIndex = 12;
             this.label29.Text = "New Leader:";
             // 
+            // lblEntitySiteTakeoverDefenderEntity
+            // 
+            this.lblEntitySiteTakeoverDefenderEntity.AutoSize = true;
+            this.lblEntitySiteTakeoverDefenderEntity.Data = null;
+            this.lblEntitySiteTakeoverDefenderEntity.ForeColor = System.Drawing.Color.Black;
+            this.lblEntitySiteTakeoverDefenderEntity.Location = new System.Drawing.Point(88, 58);
+            this.lblEntitySiteTakeoverDefenderEntity.Name = "lblEntitySiteTakeoverDefenderEntity";
+            this.lblEntitySiteTakeoverDefenderEntity.Size = new System.Drawing.Size(55, 13);
+            this.lblEntitySiteTakeoverDefenderEntity.TabIndex = 11;
+            this.lblEntitySiteTakeoverDefenderEntity.Text = "linkLabel3";
+            // 
+            // lblEntitySiteTakeoverDefenderCiv
+            // 
+            this.lblEntitySiteTakeoverDefenderCiv.AutoSize = true;
+            this.lblEntitySiteTakeoverDefenderCiv.Data = null;
+            this.lblEntitySiteTakeoverDefenderCiv.ForeColor = System.Drawing.Color.Black;
+            this.lblEntitySiteTakeoverDefenderCiv.Location = new System.Drawing.Point(88, 37);
+            this.lblEntitySiteTakeoverDefenderCiv.Name = "lblEntitySiteTakeoverDefenderCiv";
+            this.lblEntitySiteTakeoverDefenderCiv.Size = new System.Drawing.Size(55, 13);
+            this.lblEntitySiteTakeoverDefenderCiv.TabIndex = 10;
+            this.lblEntitySiteTakeoverDefenderCiv.Text = "linkLabel3";
+            // 
             // label26
             // 
             this.label26.AutoSize = true;
@@ -1881,6 +2046,17 @@ namespace DFWV
             this.label27.Size = new System.Drawing.Size(72, 13);
             this.label27.TabIndex = 8;
             this.label27.Text = "Defender Civ:";
+            // 
+            // lblEntitySiteTakeoverSite
+            // 
+            this.lblEntitySiteTakeoverSite.AutoSize = true;
+            this.lblEntitySiteTakeoverSite.Data = null;
+            this.lblEntitySiteTakeoverSite.ForeColor = System.Drawing.Color.Black;
+            this.lblEntitySiteTakeoverSite.Location = new System.Drawing.Point(88, 15);
+            this.lblEntitySiteTakeoverSite.Name = "lblEntitySiteTakeoverSite";
+            this.lblEntitySiteTakeoverSite.Size = new System.Drawing.Size(55, 13);
+            this.lblEntitySiteTakeoverSite.TabIndex = 7;
+            this.lblEntitySiteTakeoverSite.Text = "linkLabel1";
             // 
             // label24
             // 
@@ -1926,6 +2102,28 @@ namespace DFWV
             this.grpEntityCreated.TabIndex = 22;
             this.grpEntityCreated.TabStop = false;
             this.grpEntityCreated.Text = "Founded";
+            // 
+            // lblEntityCreatedTime
+            // 
+            this.lblEntityCreatedTime.AutoSize = true;
+            this.lblEntityCreatedTime.Data = null;
+            this.lblEntityCreatedTime.ForeColor = System.Drawing.Color.Black;
+            this.lblEntityCreatedTime.Location = new System.Drawing.Point(28, 37);
+            this.lblEntityCreatedTime.Name = "lblEntityCreatedTime";
+            this.lblEntityCreatedTime.Size = new System.Drawing.Size(55, 13);
+            this.lblEntityCreatedTime.TabIndex = 7;
+            this.lblEntityCreatedTime.Text = "linkLabel1";
+            // 
+            // lblEntityCreatedSite
+            // 
+            this.lblEntityCreatedSite.AutoSize = true;
+            this.lblEntityCreatedSite.Data = null;
+            this.lblEntityCreatedSite.ForeColor = System.Drawing.Color.Black;
+            this.lblEntityCreatedSite.Location = new System.Drawing.Point(28, 16);
+            this.lblEntityCreatedSite.Name = "lblEntityCreatedSite";
+            this.lblEntityCreatedSite.Size = new System.Drawing.Size(55, 13);
+            this.lblEntityCreatedSite.TabIndex = 6;
+            this.lblEntityCreatedSite.Text = "linkLabel3";
             // 
             // label19
             // 
@@ -2098,6 +2296,17 @@ namespace DFWV
             this.label186.TabIndex = 20;
             this.label186.Text = "Civ:";
             // 
+            // lblEntityPopulationCiv
+            // 
+            this.lblEntityPopulationCiv.AutoSize = true;
+            this.lblEntityPopulationCiv.Data = null;
+            this.lblEntityPopulationCiv.ForeColor = System.Drawing.Color.Black;
+            this.lblEntityPopulationCiv.Location = new System.Drawing.Point(43, 30);
+            this.lblEntityPopulationCiv.Name = "lblEntityPopulationCiv";
+            this.lblEntityPopulationCiv.Size = new System.Drawing.Size(55, 13);
+            this.lblEntityPopulationCiv.TabIndex = 21;
+            this.lblEntityPopulationCiv.Text = "linkLabel1";
+            // 
             // label25
             // 
             this.label25.AutoSize = true;
@@ -2106,6 +2315,17 @@ namespace DFWV
             this.label25.Size = new System.Drawing.Size(36, 13);
             this.label25.TabIndex = 18;
             this.label25.Text = "Race:";
+            // 
+            // lblEntityPopulationRace
+            // 
+            this.lblEntityPopulationRace.AutoSize = true;
+            this.lblEntityPopulationRace.Data = null;
+            this.lblEntityPopulationRace.ForeColor = System.Drawing.Color.Black;
+            this.lblEntityPopulationRace.Location = new System.Drawing.Point(43, 0);
+            this.lblEntityPopulationRace.Name = "lblEntityPopulationRace";
+            this.lblEntityPopulationRace.Size = new System.Drawing.Size(55, 13);
+            this.lblEntityPopulationRace.TabIndex = 19;
+            this.lblEntityPopulationRace.Text = "linkLabel1";
             // 
             // grpEntityPopulationBattles
             // 
@@ -2125,6 +2345,18 @@ namespace DFWV
             this.grpEntityPopulationBattles.TabIndex = 12;
             this.grpEntityPopulationBattles.TabStop = false;
             this.grpEntityPopulationBattles.Text = "Battles";
+            // 
+            // lblEntityPopulationBattleTime
+            // 
+            this.lblEntityPopulationBattleTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblEntityPopulationBattleTime.AutoSize = true;
+            this.lblEntityPopulationBattleTime.Data = null;
+            this.lblEntityPopulationBattleTime.ForeColor = System.Drawing.Color.Black;
+            this.lblEntityPopulationBattleTime.Location = new System.Drawing.Point(70, 461);
+            this.lblEntityPopulationBattleTime.Name = "lblEntityPopulationBattleTime";
+            this.lblEntityPopulationBattleTime.Size = new System.Drawing.Size(55, 13);
+            this.lblEntityPopulationBattleTime.TabIndex = 29;
+            this.lblEntityPopulationBattleTime.Text = "linkLabel5";
             // 
             // label36
             // 
@@ -2157,6 +2389,18 @@ namespace DFWV
             this.lblEntityPopulationBattleNumber.Size = new System.Drawing.Size(41, 13);
             this.lblEntityPopulationBattleNumber.TabIndex = 26;
             this.lblEntityPopulationBattleNumber.Text = "label34";
+            // 
+            // lblEntityPopulationBattleWar
+            // 
+            this.lblEntityPopulationBattleWar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblEntityPopulationBattleWar.AutoSize = true;
+            this.lblEntityPopulationBattleWar.Data = null;
+            this.lblEntityPopulationBattleWar.ForeColor = System.Drawing.Color.Black;
+            this.lblEntityPopulationBattleWar.Location = new System.Drawing.Point(70, 438);
+            this.lblEntityPopulationBattleWar.Name = "lblEntityPopulationBattleWar";
+            this.lblEntityPopulationBattleWar.Size = new System.Drawing.Size(55, 13);
+            this.lblEntityPopulationBattleWar.TabIndex = 25;
+            this.lblEntityPopulationBattleWar.Text = "linkLabel5";
             // 
             // label30
             // 
@@ -2342,6 +2586,18 @@ namespace DFWV
             this.lblGodName.Size = new System.Drawing.Size(35, 13);
             this.lblGodName.TabIndex = 16;
             this.lblGodName.Text = "label2";
+            // 
+            // lblGodHF
+            // 
+            this.lblGodHF.AutoSize = true;
+            this.lblGodHF.Data = null;
+            this.lblGodHF.ForeColor = System.Drawing.Color.Black;
+            this.lblGodHF.Location = new System.Drawing.Point(58, 43);
+            this.lblGodHF.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblGodHF.Name = "lblGodHF";
+            this.lblGodHF.Size = new System.Drawing.Size(55, 13);
+            this.lblGodHF.TabIndex = 22;
+            this.lblGodHF.Text = "linkLabel1";
             // 
             // label37
             // 
@@ -2631,6 +2887,18 @@ namespace DFWV
             this.lblHistoricalFigureName.TabIndex = 25;
             this.lblHistoricalFigureName.Text = "label2";
             // 
+            // lblHistoricalFigureCoords
+            // 
+            this.lblHistoricalFigureCoords.AutoSize = true;
+            this.lblHistoricalFigureCoords.Data = null;
+            this.lblHistoricalFigureCoords.ForeColor = System.Drawing.Color.Black;
+            this.lblHistoricalFigureCoords.Location = new System.Drawing.Point(92, 216);
+            this.lblHistoricalFigureCoords.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblHistoricalFigureCoords.Name = "lblHistoricalFigureCoords";
+            this.lblHistoricalFigureCoords.Size = new System.Drawing.Size(55, 13);
+            this.lblHistoricalFigureCoords.TabIndex = 69;
+            this.lblHistoricalFigureCoords.Text = "linkLabel3";
+            // 
             // label43
             // 
             this.label43.AutoSize = true;
@@ -2739,6 +3007,18 @@ namespace DFWV
             this.label55.TabIndex = 38;
             this.label55.Text = "Is God: ";
             // 
+            // lblHistoricalFigureLocation
+            // 
+            this.lblHistoricalFigureLocation.AutoSize = true;
+            this.lblHistoricalFigureLocation.Data = null;
+            this.lblHistoricalFigureLocation.ForeColor = System.Drawing.Color.Black;
+            this.lblHistoricalFigureLocation.Location = new System.Drawing.Point(92, 194);
+            this.lblHistoricalFigureLocation.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblHistoricalFigureLocation.Name = "lblHistoricalFigureLocation";
+            this.lblHistoricalFigureLocation.Size = new System.Drawing.Size(55, 13);
+            this.lblHistoricalFigureLocation.TabIndex = 60;
+            this.lblHistoricalFigureLocation.Text = "linkLabel3";
+            // 
             // label59
             // 
             this.label59.AutoSize = true;
@@ -2775,6 +3055,18 @@ namespace DFWV
             this.label63.TabIndex = 46;
             this.label63.Text = "Animated:";
             // 
+            // lblHistoricalFigureRace
+            // 
+            this.lblHistoricalFigureRace.AutoSize = true;
+            this.lblHistoricalFigureRace.Data = null;
+            this.lblHistoricalFigureRace.ForeColor = System.Drawing.Color.Black;
+            this.lblHistoricalFigureRace.Location = new System.Drawing.Point(92, 22);
+            this.lblHistoricalFigureRace.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblHistoricalFigureRace.Name = "lblHistoricalFigureRace";
+            this.lblHistoricalFigureRace.Size = new System.Drawing.Size(55, 13);
+            this.lblHistoricalFigureRace.TabIndex = 55;
+            this.lblHistoricalFigureRace.Text = "linkLabel3";
+            // 
             // lblHistoricalFigureAnimated
             // 
             this.lblHistoricalFigureAnimated.AutoSize = true;
@@ -2802,6 +3094,18 @@ namespace DFWV
             this.label61.TabIndex = 48;
             this.label61.Text = "Ghost:";
             // 
+            // lblHistoricalFigureEntityPopulation
+            // 
+            this.lblHistoricalFigureEntityPopulation.AutoSize = true;
+            this.lblHistoricalFigureEntityPopulation.Data = null;
+            this.lblHistoricalFigureEntityPopulation.ForeColor = System.Drawing.Color.Black;
+            this.lblHistoricalFigureEntityPopulation.Location = new System.Drawing.Point(92, 284);
+            this.lblHistoricalFigureEntityPopulation.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblHistoricalFigureEntityPopulation.Name = "lblHistoricalFigureEntityPopulation";
+            this.lblHistoricalFigureEntityPopulation.Size = new System.Drawing.Size(55, 13);
+            this.lblHistoricalFigureEntityPopulation.TabIndex = 53;
+            this.lblHistoricalFigureEntityPopulation.Text = "linkLabel5";
+            // 
             // lblHistoricalFigureGhost
             // 
             this.lblHistoricalFigureGhost.AutoSize = true;
@@ -2810,6 +3114,30 @@ namespace DFWV
             this.lblHistoricalFigureGhost.Size = new System.Drawing.Size(35, 13);
             this.lblHistoricalFigureGhost.TabIndex = 49;
             this.lblHistoricalFigureGhost.Text = "label2";
+            // 
+            // lblHistoricalFigureGod
+            // 
+            this.lblHistoricalFigureGod.AutoSize = true;
+            this.lblHistoricalFigureGod.Data = null;
+            this.lblHistoricalFigureGod.ForeColor = System.Drawing.Color.Black;
+            this.lblHistoricalFigureGod.Location = new System.Drawing.Point(92, 240);
+            this.lblHistoricalFigureGod.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblHistoricalFigureGod.Name = "lblHistoricalFigureGod";
+            this.lblHistoricalFigureGod.Size = new System.Drawing.Size(55, 13);
+            this.lblHistoricalFigureGod.TabIndex = 51;
+            this.lblHistoricalFigureGod.Text = "linkLabel3";
+            // 
+            // lblHistoricalFigureLeader
+            // 
+            this.lblHistoricalFigureLeader.AutoSize = true;
+            this.lblHistoricalFigureLeader.Data = null;
+            this.lblHistoricalFigureLeader.ForeColor = System.Drawing.Color.Black;
+            this.lblHistoricalFigureLeader.Location = new System.Drawing.Point(92, 262);
+            this.lblHistoricalFigureLeader.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblHistoricalFigureLeader.Name = "lblHistoricalFigureLeader";
+            this.lblHistoricalFigureLeader.Size = new System.Drawing.Size(55, 13);
+            this.lblHistoricalFigureLeader.TabIndex = 50;
+            this.lblHistoricalFigureLeader.Text = "linkLabel2";
             // 
             // grpHistoricalFigureEvents
             // 
@@ -2920,6 +3248,17 @@ namespace DFWV
             this.lblHistoricalFigureDeathCause.TabIndex = 55;
             this.lblHistoricalFigureDeathCause.Text = "label2";
             // 
+            // lblHistoricalFigureDeathTime
+            // 
+            this.lblHistoricalFigureDeathTime.AutoSize = true;
+            this.lblHistoricalFigureDeathTime.Data = null;
+            this.lblHistoricalFigureDeathTime.ForeColor = System.Drawing.Color.Black;
+            this.lblHistoricalFigureDeathTime.Location = new System.Drawing.Point(47, 86);
+            this.lblHistoricalFigureDeathTime.Name = "lblHistoricalFigureDeathTime";
+            this.lblHistoricalFigureDeathTime.Size = new System.Drawing.Size(55, 13);
+            this.lblHistoricalFigureDeathTime.TabIndex = 9;
+            this.lblHistoricalFigureDeathTime.Text = "linkLabel2";
+            // 
             // label46
             // 
             this.label46.AutoSize = true;
@@ -2928,6 +3267,28 @@ namespace DFWV
             this.label46.Size = new System.Drawing.Size(24, 13);
             this.label46.TabIndex = 8;
             this.label46.Text = "On:";
+            // 
+            // lblHistoricalFigureDeathLocation
+            // 
+            this.lblHistoricalFigureDeathLocation.AutoSize = true;
+            this.lblHistoricalFigureDeathLocation.Data = null;
+            this.lblHistoricalFigureDeathLocation.ForeColor = System.Drawing.Color.Black;
+            this.lblHistoricalFigureDeathLocation.Location = new System.Drawing.Point(47, 43);
+            this.lblHistoricalFigureDeathLocation.Name = "lblHistoricalFigureDeathLocation";
+            this.lblHistoricalFigureDeathLocation.Size = new System.Drawing.Size(55, 13);
+            this.lblHistoricalFigureDeathLocation.TabIndex = 6;
+            this.lblHistoricalFigureDeathLocation.Text = "linkLabel3";
+            // 
+            // lblHistoricalFigureDeathSlayer
+            // 
+            this.lblHistoricalFigureDeathSlayer.AutoSize = true;
+            this.lblHistoricalFigureDeathSlayer.Data = null;
+            this.lblHistoricalFigureDeathSlayer.ForeColor = System.Drawing.Color.Black;
+            this.lblHistoricalFigureDeathSlayer.Location = new System.Drawing.Point(47, 21);
+            this.lblHistoricalFigureDeathSlayer.Name = "lblHistoricalFigureDeathSlayer";
+            this.lblHistoricalFigureDeathSlayer.Size = new System.Drawing.Size(55, 13);
+            this.lblHistoricalFigureDeathSlayer.TabIndex = 4;
+            this.lblHistoricalFigureDeathSlayer.Text = "linkLabel1";
             // 
             // label40
             // 
@@ -3432,7 +3793,7 @@ namespace DFWV
             this.tabEventCollectionBeastAttack.Location = new System.Drawing.Point(4, 22);
             this.tabEventCollectionBeastAttack.Margin = new System.Windows.Forms.Padding(2);
             this.tabEventCollectionBeastAttack.Name = "tabEventCollectionBeastAttack";
-            this.tabEventCollectionBeastAttack.Size = new System.Drawing.Size(887, 582);
+            this.tabEventCollectionBeastAttack.Size = new System.Drawing.Size(887, 564);
             this.tabEventCollectionBeastAttack.TabIndex = 1;
             this.tabEventCollectionBeastAttack.Text = "Beast Attack";
             this.tabEventCollectionBeastAttack.UseVisualStyleBackColor = true;
@@ -3449,7 +3810,7 @@ namespace DFWV
             this.tableLayoutPanel25.Name = "tableLayoutPanel25";
             this.tableLayoutPanel25.RowCount = 1;
             this.tableLayoutPanel25.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel25.Size = new System.Drawing.Size(887, 582);
+            this.tableLayoutPanel25.Size = new System.Drawing.Size(887, 564);
             this.tableLayoutPanel25.TabIndex = 130;
             // 
             // panel8
@@ -3475,7 +3836,7 @@ namespace DFWV
             this.panel8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel8.Location = new System.Drawing.Point(3, 3);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(194, 576);
+            this.panel8.Size = new System.Drawing.Size(194, 558);
             this.panel8.TabIndex = 131;
             // 
             // label159
@@ -3487,6 +3848,17 @@ namespace DFWV
             this.label159.TabIndex = 111;
             this.label159.Text = "Time:";
             // 
+            // lblBeastAttackParent
+            // 
+            this.lblBeastAttackParent.AutoSize = true;
+            this.lblBeastAttackParent.Data = null;
+            this.lblBeastAttackParent.ForeColor = System.Drawing.Color.Black;
+            this.lblBeastAttackParent.Location = new System.Drawing.Point(61, 46);
+            this.lblBeastAttackParent.Name = "lblBeastAttackParent";
+            this.lblBeastAttackParent.Size = new System.Drawing.Size(55, 13);
+            this.lblBeastAttackParent.TabIndex = 110;
+            this.lblBeastAttackParent.Text = "linkLabel1";
+            // 
             // label168
             // 
             this.label168.AutoSize = true;
@@ -3495,6 +3867,17 @@ namespace DFWV
             this.label168.Size = new System.Drawing.Size(37, 13);
             this.label168.TabIndex = 128;
             this.label168.Text = "Beast:";
+            // 
+            // lblBeastAttackSite
+            // 
+            this.lblBeastAttackSite.AutoSize = true;
+            this.lblBeastAttackSite.Data = null;
+            this.lblBeastAttackSite.ForeColor = System.Drawing.Color.Black;
+            this.lblBeastAttackSite.Location = new System.Drawing.Point(60, 111);
+            this.lblBeastAttackSite.Name = "lblBeastAttackSite";
+            this.lblBeastAttackSite.Size = new System.Drawing.Size(55, 13);
+            this.lblBeastAttackSite.TabIndex = 114;
+            this.lblBeastAttackSite.Text = "linkLabel1";
             // 
             // label137
             // 
@@ -3505,6 +3888,17 @@ namespace DFWV
             this.label137.TabIndex = 126;
             this.label137.Text = "Region:";
             // 
+            // lblBeastAttackCoords
+            // 
+            this.lblBeastAttackCoords.AutoSize = true;
+            this.lblBeastAttackCoords.Data = null;
+            this.lblBeastAttackCoords.ForeColor = System.Drawing.Color.Black;
+            this.lblBeastAttackCoords.Location = new System.Drawing.Point(59, 133);
+            this.lblBeastAttackCoords.Name = "lblBeastAttackCoords";
+            this.lblBeastAttackCoords.Size = new System.Drawing.Size(55, 13);
+            this.lblBeastAttackCoords.TabIndex = 116;
+            this.lblBeastAttackCoords.Text = "linkLabel3";
+            // 
             // label143
             // 
             this.label143.AutoSize = true;
@@ -3513,6 +3907,17 @@ namespace DFWV
             this.label143.Size = new System.Drawing.Size(43, 13);
             this.label143.TabIndex = 125;
             this.label143.Text = "Ordinal:";
+            // 
+            // lblBeastAttackDefender
+            // 
+            this.lblBeastAttackDefender.AutoSize = true;
+            this.lblBeastAttackDefender.Data = null;
+            this.lblBeastAttackDefender.ForeColor = System.Drawing.Color.Black;
+            this.lblBeastAttackDefender.Location = new System.Drawing.Point(59, 154);
+            this.lblBeastAttackDefender.Name = "lblBeastAttackDefender";
+            this.lblBeastAttackDefender.Size = new System.Drawing.Size(55, 13);
+            this.lblBeastAttackDefender.TabIndex = 123;
+            this.lblBeastAttackDefender.Text = "linkLabel3";
             // 
             // lblBeastAttackOrdinal
             // 
@@ -3523,6 +3928,17 @@ namespace DFWV
             this.lblBeastAttackOrdinal.TabIndex = 124;
             this.lblBeastAttackOrdinal.Text = "label2";
             // 
+            // lblBeastAttackRegion
+            // 
+            this.lblBeastAttackRegion.AutoSize = true;
+            this.lblBeastAttackRegion.Data = null;
+            this.lblBeastAttackRegion.ForeColor = System.Drawing.Color.Black;
+            this.lblBeastAttackRegion.Location = new System.Drawing.Point(61, 89);
+            this.lblBeastAttackRegion.Name = "lblBeastAttackRegion";
+            this.lblBeastAttackRegion.Size = new System.Drawing.Size(55, 13);
+            this.lblBeastAttackRegion.TabIndex = 127;
+            this.lblBeastAttackRegion.Text = "linkLabel1";
+            // 
             // label152
             // 
             this.label152.AutoSize = true;
@@ -3531,6 +3947,17 @@ namespace DFWV
             this.label152.Size = new System.Drawing.Size(54, 13);
             this.label152.TabIndex = 122;
             this.label152.Text = "Defender:";
+            // 
+            // lblBeastAttackBeast
+            // 
+            this.lblBeastAttackBeast.AutoSize = true;
+            this.lblBeastAttackBeast.Data = null;
+            this.lblBeastAttackBeast.ForeColor = System.Drawing.Color.Black;
+            this.lblBeastAttackBeast.Location = new System.Drawing.Point(61, 67);
+            this.lblBeastAttackBeast.Name = "lblBeastAttackBeast";
+            this.lblBeastAttackBeast.Size = new System.Drawing.Size(55, 13);
+            this.lblBeastAttackBeast.TabIndex = 129;
+            this.lblBeastAttackBeast.Text = "linkLabel1";
             // 
             // label160
             // 
@@ -3592,7 +4019,7 @@ namespace DFWV
             this.grpBeastAttackEvents.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpBeastAttackEvents.Location = new System.Drawing.Point(203, 3);
             this.grpBeastAttackEvents.Name = "grpBeastAttackEvents";
-            this.grpBeastAttackEvents.Size = new System.Drawing.Size(681, 576);
+            this.grpBeastAttackEvents.Size = new System.Drawing.Size(681, 558);
             this.grpBeastAttackEvents.TabIndex = 119;
             this.grpBeastAttackEvents.TabStop = false;
             this.grpBeastAttackEvents.Text = "Events";
@@ -3614,7 +4041,7 @@ namespace DFWV
             this.tabEventCollectionWar.Location = new System.Drawing.Point(4, 22);
             this.tabEventCollectionWar.Margin = new System.Windows.Forms.Padding(2);
             this.tabEventCollectionWar.Name = "tabEventCollectionWar";
-            this.tabEventCollectionWar.Size = new System.Drawing.Size(887, 582);
+            this.tabEventCollectionWar.Size = new System.Drawing.Size(887, 564);
             this.tabEventCollectionWar.TabIndex = 2;
             this.tabEventCollectionWar.Text = "War";
             this.tabEventCollectionWar.UseVisualStyleBackColor = true;
@@ -3636,7 +4063,7 @@ namespace DFWV
             this.tableLayoutPanel26.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 77F));
             this.tableLayoutPanel26.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel26.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel26.Size = new System.Drawing.Size(887, 582);
+            this.tableLayoutPanel26.Size = new System.Drawing.Size(887, 564);
             this.tableLayoutPanel26.TabIndex = 58;
             // 
             // panel9
@@ -3719,11 +4146,11 @@ namespace DFWV
             this.groupBox4.Controls.Add(this.label130);
             this.groupBox4.Controls.Add(this.lblWarDefender);
             this.groupBox4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox4.Location = new System.Drawing.Point(2, 331);
+            this.groupBox4.Location = new System.Drawing.Point(2, 322);
             this.groupBox4.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox4.Size = new System.Drawing.Size(262, 249);
+            this.groupBox4.Size = new System.Drawing.Size(262, 240);
             this.groupBox4.TabIndex = 57;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Defender";
@@ -3808,13 +4235,24 @@ namespace DFWV
             this.label130.TabIndex = 63;
             this.label130.Text = "Combatants:";
             // 
+            // lblWarDefender
+            // 
+            this.lblWarDefender.AutoSize = true;
+            this.lblWarDefender.Data = null;
+            this.lblWarDefender.ForeColor = System.Drawing.Color.Black;
+            this.lblWarDefender.Location = new System.Drawing.Point(5, 24);
+            this.lblWarDefender.Name = "lblWarDefender";
+            this.lblWarDefender.Size = new System.Drawing.Size(55, 13);
+            this.lblWarDefender.TabIndex = 55;
+            this.lblWarDefender.Text = "linkLabel1";
+            // 
             // grpWarEventCols
             // 
             this.grpWarEventCols.Controls.Add(this.lstWarEventCols);
             this.grpWarEventCols.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpWarEventCols.Location = new System.Drawing.Point(269, 332);
+            this.grpWarEventCols.Location = new System.Drawing.Point(269, 323);
             this.grpWarEventCols.Name = "grpWarEventCols";
-            this.grpWarEventCols.Size = new System.Drawing.Size(615, 247);
+            this.grpWarEventCols.Size = new System.Drawing.Size(615, 238);
             this.grpWarEventCols.TabIndex = 51;
             this.grpWarEventCols.TabStop = false;
             this.grpWarEventCols.Text = "Event Collections";
@@ -3825,7 +4263,7 @@ namespace DFWV
             this.lstWarEventCols.FormattingEnabled = true;
             this.lstWarEventCols.Location = new System.Drawing.Point(3, 16);
             this.lstWarEventCols.Name = "lstWarEventCols";
-            this.lstWarEventCols.Size = new System.Drawing.Size(609, 228);
+            this.lstWarEventCols.Size = new System.Drawing.Size(609, 219);
             this.lstWarEventCols.TabIndex = 0;
             this.lstWarEventCols.DoubleClick += new System.EventHandler(this.SubListBoxDoubleClicked);
             // 
@@ -3845,7 +4283,7 @@ namespace DFWV
             this.groupBox3.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox3.Size = new System.Drawing.Size(262, 248);
+            this.groupBox3.Size = new System.Drawing.Size(262, 239);
             this.groupBox3.TabIndex = 56;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Aggressor";
@@ -3930,6 +4368,17 @@ namespace DFWV
             this.label118.TabIndex = 55;
             this.label118.Text = "Combatants:";
             // 
+            // lblWarAggressor
+            // 
+            this.lblWarAggressor.AutoSize = true;
+            this.lblWarAggressor.Data = null;
+            this.lblWarAggressor.ForeColor = System.Drawing.Color.Black;
+            this.lblWarAggressor.Location = new System.Drawing.Point(5, 24);
+            this.lblWarAggressor.Name = "lblWarAggressor";
+            this.lblWarAggressor.Size = new System.Drawing.Size(55, 13);
+            this.lblWarAggressor.TabIndex = 54;
+            this.lblWarAggressor.Text = "linkLabel1";
+            // 
             // grpWarEvents
             // 
             this.grpWarEvents.Controls.Add(this.lstWarEvents);
@@ -3937,7 +4386,7 @@ namespace DFWV
             this.grpWarEvents.Location = new System.Drawing.Point(269, 3);
             this.grpWarEvents.Name = "grpWarEvents";
             this.tableLayoutPanel26.SetRowSpan(this.grpWarEvents, 2);
-            this.grpWarEvents.Size = new System.Drawing.Size(615, 323);
+            this.grpWarEvents.Size = new System.Drawing.Size(615, 314);
             this.grpWarEvents.TabIndex = 50;
             this.grpWarEvents.TabStop = false;
             this.grpWarEvents.Text = "Events";
@@ -3959,7 +4408,7 @@ namespace DFWV
             this.tabEventCollectionBattle.Location = new System.Drawing.Point(4, 22);
             this.tabEventCollectionBattle.Margin = new System.Windows.Forms.Padding(2);
             this.tabEventCollectionBattle.Name = "tabEventCollectionBattle";
-            this.tabEventCollectionBattle.Size = new System.Drawing.Size(887, 582);
+            this.tabEventCollectionBattle.Size = new System.Drawing.Size(887, 564);
             this.tabEventCollectionBattle.TabIndex = 3;
             this.tabEventCollectionBattle.Text = "Battle";
             this.tabEventCollectionBattle.UseVisualStyleBackColor = true;
@@ -3984,7 +4433,7 @@ namespace DFWV
             this.tableLayoutPanel27.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 29.16667F));
             this.tableLayoutPanel27.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 46.73913F));
             this.tableLayoutPanel27.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 24.0942F));
-            this.tableLayoutPanel27.Size = new System.Drawing.Size(887, 582);
+            this.tableLayoutPanel27.Size = new System.Drawing.Size(887, 564);
             this.tableLayoutPanel27.TabIndex = 49;
             // 
             // panel10
@@ -4007,7 +4456,7 @@ namespace DFWV
             this.panel10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel10.Location = new System.Drawing.Point(3, 3);
             this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(430, 163);
+            this.panel10.Size = new System.Drawing.Size(430, 158);
             this.panel10.TabIndex = 50;
             // 
             // label96
@@ -4018,6 +4467,50 @@ namespace DFWV
             this.label96.Size = new System.Drawing.Size(41, 13);
             this.label96.TabIndex = 28;
             this.label96.Text = "Name: ";
+            // 
+            // lblBattleWar
+            // 
+            this.lblBattleWar.AutoSize = true;
+            this.lblBattleWar.Data = null;
+            this.lblBattleWar.ForeColor = System.Drawing.Color.Black;
+            this.lblBattleWar.Location = new System.Drawing.Point(61, 68);
+            this.lblBattleWar.Name = "lblBattleWar";
+            this.lblBattleWar.Size = new System.Drawing.Size(55, 13);
+            this.lblBattleWar.TabIndex = 31;
+            this.lblBattleWar.Text = "linkLabel1";
+            // 
+            // lblBattleRegion
+            // 
+            this.lblBattleRegion.AutoSize = true;
+            this.lblBattleRegion.Data = null;
+            this.lblBattleRegion.ForeColor = System.Drawing.Color.Black;
+            this.lblBattleRegion.Location = new System.Drawing.Point(62, 90);
+            this.lblBattleRegion.Name = "lblBattleRegion";
+            this.lblBattleRegion.Size = new System.Drawing.Size(55, 13);
+            this.lblBattleRegion.TabIndex = 37;
+            this.lblBattleRegion.Text = "linkLabel1";
+            // 
+            // lblBattleSite
+            // 
+            this.lblBattleSite.AutoSize = true;
+            this.lblBattleSite.Data = null;
+            this.lblBattleSite.ForeColor = System.Drawing.Color.Black;
+            this.lblBattleSite.Location = new System.Drawing.Point(62, 112);
+            this.lblBattleSite.Name = "lblBattleSite";
+            this.lblBattleSite.Size = new System.Drawing.Size(55, 13);
+            this.lblBattleSite.TabIndex = 39;
+            this.lblBattleSite.Text = "linkLabel1";
+            // 
+            // lblBattleCoord
+            // 
+            this.lblBattleCoord.AutoSize = true;
+            this.lblBattleCoord.Data = null;
+            this.lblBattleCoord.ForeColor = System.Drawing.Color.Black;
+            this.lblBattleCoord.Location = new System.Drawing.Point(61, 134);
+            this.lblBattleCoord.Name = "lblBattleCoord";
+            this.lblBattleCoord.Size = new System.Drawing.Size(55, 13);
+            this.lblBattleCoord.TabIndex = 41;
+            this.lblBattleCoord.Text = "linkLabel3";
             // 
             // lblBattleName
             // 
@@ -4115,7 +4608,7 @@ namespace DFWV
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Padding = new System.Windows.Forms.Padding(2);
             this.tableLayoutPanel27.SetRowSpan(this.groupBox5, 3);
-            this.groupBox5.Size = new System.Drawing.Size(222, 578);
+            this.groupBox5.Size = new System.Drawing.Size(222, 560);
             this.groupBox5.TabIndex = 45;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Defenders";
@@ -4259,6 +4752,39 @@ namespace DFWV
             this.label112.TabIndex = 42;
             this.label112.Text = "Site:";
             // 
+            // lblBattleDefendingSquadRace
+            // 
+            this.lblBattleDefendingSquadRace.AutoSize = true;
+            this.lblBattleDefendingSquadRace.Data = null;
+            this.lblBattleDefendingSquadRace.ForeColor = System.Drawing.Color.Black;
+            this.lblBattleDefendingSquadRace.Location = new System.Drawing.Point(62, 197);
+            this.lblBattleDefendingSquadRace.Name = "lblBattleDefendingSquadRace";
+            this.lblBattleDefendingSquadRace.Size = new System.Drawing.Size(55, 13);
+            this.lblBattleDefendingSquadRace.TabIndex = 47;
+            this.lblBattleDefendingSquadRace.Text = "linkLabel3";
+            // 
+            // lblBattleDefendingSquadEntPop
+            // 
+            this.lblBattleDefendingSquadEntPop.AutoSize = true;
+            this.lblBattleDefendingSquadEntPop.Data = null;
+            this.lblBattleDefendingSquadEntPop.ForeColor = System.Drawing.Color.Black;
+            this.lblBattleDefendingSquadEntPop.Location = new System.Drawing.Point(63, 176);
+            this.lblBattleDefendingSquadEntPop.Name = "lblBattleDefendingSquadEntPop";
+            this.lblBattleDefendingSquadEntPop.Size = new System.Drawing.Size(55, 13);
+            this.lblBattleDefendingSquadEntPop.TabIndex = 45;
+            this.lblBattleDefendingSquadEntPop.Text = "linkLabel1";
+            // 
+            // lblBattleDefendingSquadSite
+            // 
+            this.lblBattleDefendingSquadSite.AutoSize = true;
+            this.lblBattleDefendingSquadSite.Data = null;
+            this.lblBattleDefendingSquadSite.ForeColor = System.Drawing.Color.Black;
+            this.lblBattleDefendingSquadSite.Location = new System.Drawing.Point(63, 154);
+            this.lblBattleDefendingSquadSite.Name = "lblBattleDefendingSquadSite";
+            this.lblBattleDefendingSquadSite.Size = new System.Drawing.Size(55, 13);
+            this.lblBattleDefendingSquadSite.TabIndex = 43;
+            this.lblBattleDefendingSquadSite.Text = "linkLabel1";
+            // 
             // lstBattleDefendingSquad
             // 
             this.lstBattleDefendingSquad.Dock = System.Windows.Forms.DockStyle.Top;
@@ -4301,10 +4827,10 @@ namespace DFWV
             // 
             this.grpBattleEvents.Controls.Add(this.lstBattleEvents);
             this.grpBattleEvents.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpBattleEvents.Location = new System.Drawing.Point(185, 172);
+            this.grpBattleEvents.Location = new System.Drawing.Point(185, 167);
             this.grpBattleEvents.Name = "grpBattleEvents";
             this.tableLayoutPanel27.SetRowSpan(this.grpBattleEvents, 2);
-            this.grpBattleEvents.Size = new System.Drawing.Size(248, 407);
+            this.grpBattleEvents.Size = new System.Drawing.Size(248, 394);
             this.grpBattleEvents.TabIndex = 47;
             this.grpBattleEvents.TabStop = false;
             this.grpBattleEvents.Text = "Events";
@@ -4335,7 +4861,7 @@ namespace DFWV
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(2);
             this.tableLayoutPanel27.SetRowSpan(this.groupBox2, 3);
-            this.groupBox2.Size = new System.Drawing.Size(221, 578);
+            this.groupBox2.Size = new System.Drawing.Size(221, 560);
             this.groupBox2.TabIndex = 44;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Attackers";
@@ -4479,6 +5005,39 @@ namespace DFWV
             this.label102.TabIndex = 42;
             this.label102.Text = "Site:";
             // 
+            // lblBattleAttackingSquadRace
+            // 
+            this.lblBattleAttackingSquadRace.AutoSize = true;
+            this.lblBattleAttackingSquadRace.Data = null;
+            this.lblBattleAttackingSquadRace.ForeColor = System.Drawing.Color.Black;
+            this.lblBattleAttackingSquadRace.Location = new System.Drawing.Point(62, 197);
+            this.lblBattleAttackingSquadRace.Name = "lblBattleAttackingSquadRace";
+            this.lblBattleAttackingSquadRace.Size = new System.Drawing.Size(55, 13);
+            this.lblBattleAttackingSquadRace.TabIndex = 47;
+            this.lblBattleAttackingSquadRace.Text = "linkLabel3";
+            // 
+            // lblBattleAttackingSquadEntPop
+            // 
+            this.lblBattleAttackingSquadEntPop.AutoSize = true;
+            this.lblBattleAttackingSquadEntPop.Data = null;
+            this.lblBattleAttackingSquadEntPop.ForeColor = System.Drawing.Color.Black;
+            this.lblBattleAttackingSquadEntPop.Location = new System.Drawing.Point(63, 176);
+            this.lblBattleAttackingSquadEntPop.Name = "lblBattleAttackingSquadEntPop";
+            this.lblBattleAttackingSquadEntPop.Size = new System.Drawing.Size(55, 13);
+            this.lblBattleAttackingSquadEntPop.TabIndex = 45;
+            this.lblBattleAttackingSquadEntPop.Text = "linkLabel1";
+            // 
+            // lblBattleAttackingSquadSite
+            // 
+            this.lblBattleAttackingSquadSite.AutoSize = true;
+            this.lblBattleAttackingSquadSite.Data = null;
+            this.lblBattleAttackingSquadSite.ForeColor = System.Drawing.Color.Black;
+            this.lblBattleAttackingSquadSite.Location = new System.Drawing.Point(63, 154);
+            this.lblBattleAttackingSquadSite.Name = "lblBattleAttackingSquadSite";
+            this.lblBattleAttackingSquadSite.Size = new System.Drawing.Size(55, 13);
+            this.lblBattleAttackingSquadSite.TabIndex = 43;
+            this.lblBattleAttackingSquadSite.Text = "linkLabel1";
+            // 
             // lstBattleAttackingSquad
             // 
             this.lstBattleAttackingSquad.Dock = System.Windows.Forms.DockStyle.Top;
@@ -4521,9 +5080,9 @@ namespace DFWV
             // 
             this.grpBattleEventCols.Controls.Add(this.lstBattleEventCols);
             this.grpBattleEventCols.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpBattleEventCols.Location = new System.Drawing.Point(3, 172);
+            this.grpBattleEventCols.Location = new System.Drawing.Point(3, 167);
             this.grpBattleEventCols.Name = "grpBattleEventCols";
-            this.grpBattleEventCols.Size = new System.Drawing.Size(176, 266);
+            this.grpBattleEventCols.Size = new System.Drawing.Size(176, 257);
             this.grpBattleEventCols.TabIndex = 48;
             this.grpBattleEventCols.TabStop = false;
             this.grpBattleEventCols.Text = "Event Collections";
@@ -4534,7 +5093,7 @@ namespace DFWV
             this.lstBattleEventCols.FormattingEnabled = true;
             this.lstBattleEventCols.Location = new System.Drawing.Point(3, 16);
             this.lstBattleEventCols.Name = "lstBattleEventCols";
-            this.lstBattleEventCols.Size = new System.Drawing.Size(170, 247);
+            this.lstBattleEventCols.Size = new System.Drawing.Size(170, 238);
             this.lstBattleEventCols.TabIndex = 0;
             this.lstBattleEventCols.DoubleClick += new System.EventHandler(this.SubListBoxDoubleClicked);
             // 
@@ -4542,9 +5101,9 @@ namespace DFWV
             // 
             this.grpBattleNonComHFs.Controls.Add(this.lstBattleNonComHFs);
             this.grpBattleNonComHFs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpBattleNonComHFs.Location = new System.Drawing.Point(3, 444);
+            this.grpBattleNonComHFs.Location = new System.Drawing.Point(3, 430);
             this.grpBattleNonComHFs.Name = "grpBattleNonComHFs";
-            this.grpBattleNonComHFs.Size = new System.Drawing.Size(176, 135);
+            this.grpBattleNonComHFs.Size = new System.Drawing.Size(176, 131);
             this.grpBattleNonComHFs.TabIndex = 46;
             this.grpBattleNonComHFs.TabStop = false;
             this.grpBattleNonComHFs.Text = "Non Combat HFs";
@@ -4555,7 +5114,7 @@ namespace DFWV
             this.lstBattleNonComHFs.FormattingEnabled = true;
             this.lstBattleNonComHFs.Location = new System.Drawing.Point(3, 16);
             this.lstBattleNonComHFs.Name = "lstBattleNonComHFs";
-            this.lstBattleNonComHFs.Size = new System.Drawing.Size(170, 116);
+            this.lstBattleNonComHFs.Size = new System.Drawing.Size(170, 112);
             this.lstBattleNonComHFs.TabIndex = 0;
             this.lstBattleNonComHFs.DoubleClick += new System.EventHandler(this.SubListBoxDoubleClicked);
             // 
@@ -4565,7 +5124,7 @@ namespace DFWV
             this.tabEventCollectionDuel.Location = new System.Drawing.Point(4, 22);
             this.tabEventCollectionDuel.Margin = new System.Windows.Forms.Padding(2);
             this.tabEventCollectionDuel.Name = "tabEventCollectionDuel";
-            this.tabEventCollectionDuel.Size = new System.Drawing.Size(887, 582);
+            this.tabEventCollectionDuel.Size = new System.Drawing.Size(887, 564);
             this.tabEventCollectionDuel.TabIndex = 4;
             this.tabEventCollectionDuel.Text = "Duel";
             this.tabEventCollectionDuel.UseVisualStyleBackColor = true;
@@ -4582,7 +5141,7 @@ namespace DFWV
             this.tableLayoutPanel28.Name = "tableLayoutPanel28";
             this.tableLayoutPanel28.RowCount = 1;
             this.tableLayoutPanel28.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel28.Size = new System.Drawing.Size(887, 582);
+            this.tableLayoutPanel28.Size = new System.Drawing.Size(887, 564);
             this.tableLayoutPanel28.TabIndex = 109;
             // 
             // panel11
@@ -4608,7 +5167,7 @@ namespace DFWV
             this.panel11.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel11.Location = new System.Drawing.Point(3, 3);
             this.panel11.Name = "panel11";
-            this.panel11.Size = new System.Drawing.Size(194, 576);
+            this.panel11.Size = new System.Drawing.Size(194, 558);
             this.panel11.TabIndex = 110;
             // 
             // label148
@@ -4620,6 +5179,17 @@ namespace DFWV
             this.label148.TabIndex = 92;
             this.label148.Text = "Time:";
             // 
+            // lblDuelParent
+            // 
+            this.lblDuelParent.AutoSize = true;
+            this.lblDuelParent.Data = null;
+            this.lblDuelParent.ForeColor = System.Drawing.Color.Black;
+            this.lblDuelParent.Location = new System.Drawing.Point(61, 44);
+            this.lblDuelParent.Name = "lblDuelParent";
+            this.lblDuelParent.Size = new System.Drawing.Size(55, 13);
+            this.lblDuelParent.TabIndex = 91;
+            this.lblDuelParent.Text = "linkLabel1";
+            // 
             // label125
             // 
             this.label125.AutoSize = true;
@@ -4628,6 +5198,17 @@ namespace DFWV
             this.label125.Size = new System.Drawing.Size(44, 13);
             this.label125.TabIndex = 107;
             this.label125.Text = "Region:";
+            // 
+            // lblDuelSite
+            // 
+            this.lblDuelSite.AutoSize = true;
+            this.lblDuelSite.Data = null;
+            this.lblDuelSite.ForeColor = System.Drawing.Color.Black;
+            this.lblDuelSite.Location = new System.Drawing.Point(60, 88);
+            this.lblDuelSite.Name = "lblDuelSite";
+            this.lblDuelSite.Size = new System.Drawing.Size(55, 13);
+            this.lblDuelSite.TabIndex = 95;
+            this.lblDuelSite.Text = "linkLabel1";
             // 
             // label133
             // 
@@ -4638,6 +5219,17 @@ namespace DFWV
             this.label133.TabIndex = 106;
             this.label133.Text = "Ordinal:";
             // 
+            // lblDuelCoords
+            // 
+            this.lblDuelCoords.AutoSize = true;
+            this.lblDuelCoords.Data = null;
+            this.lblDuelCoords.ForeColor = System.Drawing.Color.Black;
+            this.lblDuelCoords.Location = new System.Drawing.Point(59, 110);
+            this.lblDuelCoords.Name = "lblDuelCoords";
+            this.lblDuelCoords.Size = new System.Drawing.Size(55, 13);
+            this.lblDuelCoords.TabIndex = 97;
+            this.lblDuelCoords.Text = "linkLabel3";
+            // 
             // lblDuelOrdinal
             // 
             this.lblDuelOrdinal.AutoSize = true;
@@ -4646,6 +5238,17 @@ namespace DFWV
             this.lblDuelOrdinal.Size = new System.Drawing.Size(35, 13);
             this.lblDuelOrdinal.TabIndex = 105;
             this.lblDuelOrdinal.Text = "label2";
+            // 
+            // lblDuelAttacker
+            // 
+            this.lblDuelAttacker.AutoSize = true;
+            this.lblDuelAttacker.Data = null;
+            this.lblDuelAttacker.ForeColor = System.Drawing.Color.Black;
+            this.lblDuelAttacker.Location = new System.Drawing.Point(60, 132);
+            this.lblDuelAttacker.Name = "lblDuelAttacker";
+            this.lblDuelAttacker.Size = new System.Drawing.Size(55, 13);
+            this.lblDuelAttacker.TabIndex = 102;
+            this.lblDuelAttacker.Text = "linkLabel1";
             // 
             // label141
             // 
@@ -4656,6 +5259,17 @@ namespace DFWV
             this.label141.TabIndex = 103;
             this.label141.Text = "Defender:";
             // 
+            // lblDuelDefender
+            // 
+            this.lblDuelDefender.AutoSize = true;
+            this.lblDuelDefender.Data = null;
+            this.lblDuelDefender.ForeColor = System.Drawing.Color.Black;
+            this.lblDuelDefender.Location = new System.Drawing.Point(59, 154);
+            this.lblDuelDefender.Name = "lblDuelDefender";
+            this.lblDuelDefender.Size = new System.Drawing.Size(55, 13);
+            this.lblDuelDefender.TabIndex = 104;
+            this.lblDuelDefender.Text = "linkLabel3";
+            // 
             // label142
             // 
             this.label142.AutoSize = true;
@@ -4664,6 +5278,17 @@ namespace DFWV
             this.label142.Size = new System.Drawing.Size(50, 13);
             this.label142.TabIndex = 101;
             this.label142.Text = "Attacker:";
+            // 
+            // lblDuelRegion
+            // 
+            this.lblDuelRegion.AutoSize = true;
+            this.lblDuelRegion.Data = null;
+            this.lblDuelRegion.ForeColor = System.Drawing.Color.Black;
+            this.lblDuelRegion.Location = new System.Drawing.Point(61, 66);
+            this.lblDuelRegion.Name = "lblDuelRegion";
+            this.lblDuelRegion.Size = new System.Drawing.Size(55, 13);
+            this.lblDuelRegion.TabIndex = 108;
+            this.lblDuelRegion.Text = "linkLabel1";
             // 
             // label149
             // 
@@ -4725,7 +5350,7 @@ namespace DFWV
             this.grpDuelEvents.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpDuelEvents.Location = new System.Drawing.Point(203, 3);
             this.grpDuelEvents.Name = "grpDuelEvents";
-            this.grpDuelEvents.Size = new System.Drawing.Size(681, 576);
+            this.grpDuelEvents.Size = new System.Drawing.Size(681, 558);
             this.grpDuelEvents.TabIndex = 100;
             this.grpDuelEvents.TabStop = false;
             this.grpDuelEvents.Text = "Events";
@@ -4747,7 +5372,7 @@ namespace DFWV
             this.tabEventCollectionAbduction.Location = new System.Drawing.Point(4, 22);
             this.tabEventCollectionAbduction.Margin = new System.Windows.Forms.Padding(2);
             this.tabEventCollectionAbduction.Name = "tabEventCollectionAbduction";
-            this.tabEventCollectionAbduction.Size = new System.Drawing.Size(887, 582);
+            this.tabEventCollectionAbduction.Size = new System.Drawing.Size(887, 564);
             this.tabEventCollectionAbduction.TabIndex = 5;
             this.tabEventCollectionAbduction.Text = "Abduction";
             this.tabEventCollectionAbduction.UseVisualStyleBackColor = true;
@@ -4766,16 +5391,16 @@ namespace DFWV
             this.tableLayoutPanel29.RowCount = 2;
             this.tableLayoutPanel29.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel29.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel29.Size = new System.Drawing.Size(887, 582);
+            this.tableLayoutPanel29.Size = new System.Drawing.Size(887, 564);
             this.tableLayoutPanel29.TabIndex = 91;
             // 
             // grpAbductionEventCols
             // 
             this.grpAbductionEventCols.Controls.Add(this.lstAbductionEventCols);
             this.grpAbductionEventCols.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpAbductionEventCols.Location = new System.Drawing.Point(203, 294);
+            this.grpAbductionEventCols.Location = new System.Drawing.Point(203, 285);
             this.grpAbductionEventCols.Name = "grpAbductionEventCols";
-            this.grpAbductionEventCols.Size = new System.Drawing.Size(681, 285);
+            this.grpAbductionEventCols.Size = new System.Drawing.Size(681, 276);
             this.grpAbductionEventCols.TabIndex = 91;
             this.grpAbductionEventCols.TabStop = false;
             this.grpAbductionEventCols.Text = "Event Collections";
@@ -4786,7 +5411,7 @@ namespace DFWV
             this.lstAbductionEventCols.FormattingEnabled = true;
             this.lstAbductionEventCols.Location = new System.Drawing.Point(3, 16);
             this.lstAbductionEventCols.Name = "lstAbductionEventCols";
-            this.lstAbductionEventCols.Size = new System.Drawing.Size(675, 266);
+            this.lstAbductionEventCols.Size = new System.Drawing.Size(675, 257);
             this.lstAbductionEventCols.TabIndex = 0;
             // 
             // panel12
@@ -4813,7 +5438,7 @@ namespace DFWV
             this.panel12.Location = new System.Drawing.Point(3, 3);
             this.panel12.Name = "panel12";
             this.tableLayoutPanel29.SetRowSpan(this.panel12, 2);
-            this.panel12.Size = new System.Drawing.Size(194, 576);
+            this.panel12.Size = new System.Drawing.Size(194, 558);
             this.panel12.TabIndex = 90;
             // 
             // label138
@@ -4825,6 +5450,17 @@ namespace DFWV
             this.label138.TabIndex = 73;
             this.label138.Text = "Time:";
             // 
+            // lblAbductionParent
+            // 
+            this.lblAbductionParent.AutoSize = true;
+            this.lblAbductionParent.Data = null;
+            this.lblAbductionParent.ForeColor = System.Drawing.Color.Black;
+            this.lblAbductionParent.Location = new System.Drawing.Point(61, 44);
+            this.lblAbductionParent.Name = "lblAbductionParent";
+            this.lblAbductionParent.Size = new System.Drawing.Size(55, 13);
+            this.lblAbductionParent.TabIndex = 72;
+            this.lblAbductionParent.Text = "linkLabel1";
+            // 
             // label140
             // 
             this.label140.AutoSize = true;
@@ -4833,6 +5469,17 @@ namespace DFWV
             this.label140.Size = new System.Drawing.Size(44, 13);
             this.label140.TabIndex = 88;
             this.label140.Text = "Region:";
+            // 
+            // lblAbductionSite
+            // 
+            this.lblAbductionSite.AutoSize = true;
+            this.lblAbductionSite.Data = null;
+            this.lblAbductionSite.ForeColor = System.Drawing.Color.Black;
+            this.lblAbductionSite.Location = new System.Drawing.Point(60, 88);
+            this.lblAbductionSite.Name = "lblAbductionSite";
+            this.lblAbductionSite.Size = new System.Drawing.Size(55, 13);
+            this.lblAbductionSite.TabIndex = 76;
+            this.lblAbductionSite.Text = "linkLabel1";
             // 
             // label123
             // 
@@ -4843,6 +5490,17 @@ namespace DFWV
             this.label123.TabIndex = 87;
             this.label123.Text = "Ordinal:";
             // 
+            // lblAbductionCoords
+            // 
+            this.lblAbductionCoords.AutoSize = true;
+            this.lblAbductionCoords.Data = null;
+            this.lblAbductionCoords.ForeColor = System.Drawing.Color.Black;
+            this.lblAbductionCoords.Location = new System.Drawing.Point(59, 110);
+            this.lblAbductionCoords.Name = "lblAbductionCoords";
+            this.lblAbductionCoords.Size = new System.Drawing.Size(55, 13);
+            this.lblAbductionCoords.TabIndex = 78;
+            this.lblAbductionCoords.Text = "linkLabel3";
+            // 
             // lblAbductionOrdinal
             // 
             this.lblAbductionOrdinal.AutoSize = true;
@@ -4851,6 +5509,17 @@ namespace DFWV
             this.lblAbductionOrdinal.Size = new System.Drawing.Size(35, 13);
             this.lblAbductionOrdinal.TabIndex = 86;
             this.lblAbductionOrdinal.Text = "label2";
+            // 
+            // lblAbductionAttacker
+            // 
+            this.lblAbductionAttacker.AutoSize = true;
+            this.lblAbductionAttacker.Data = null;
+            this.lblAbductionAttacker.ForeColor = System.Drawing.Color.Black;
+            this.lblAbductionAttacker.Location = new System.Drawing.Point(60, 132);
+            this.lblAbductionAttacker.Name = "lblAbductionAttacker";
+            this.lblAbductionAttacker.Size = new System.Drawing.Size(55, 13);
+            this.lblAbductionAttacker.TabIndex = 83;
+            this.lblAbductionAttacker.Text = "linkLabel1";
             // 
             // label131
             // 
@@ -4861,6 +5530,17 @@ namespace DFWV
             this.label131.TabIndex = 84;
             this.label131.Text = "Defender:";
             // 
+            // lblAbductionDefender
+            // 
+            this.lblAbductionDefender.AutoSize = true;
+            this.lblAbductionDefender.Data = null;
+            this.lblAbductionDefender.ForeColor = System.Drawing.Color.Black;
+            this.lblAbductionDefender.Location = new System.Drawing.Point(59, 154);
+            this.lblAbductionDefender.Name = "lblAbductionDefender";
+            this.lblAbductionDefender.Size = new System.Drawing.Size(55, 13);
+            this.lblAbductionDefender.TabIndex = 85;
+            this.lblAbductionDefender.Text = "linkLabel3";
+            // 
             // label132
             // 
             this.label132.AutoSize = true;
@@ -4869,6 +5549,17 @@ namespace DFWV
             this.label132.Size = new System.Drawing.Size(50, 13);
             this.label132.TabIndex = 82;
             this.label132.Text = "Attacker:";
+            // 
+            // lblAbductionRegion
+            // 
+            this.lblAbductionRegion.AutoSize = true;
+            this.lblAbductionRegion.Data = null;
+            this.lblAbductionRegion.ForeColor = System.Drawing.Color.Black;
+            this.lblAbductionRegion.Location = new System.Drawing.Point(61, 66);
+            this.lblAbductionRegion.Name = "lblAbductionRegion";
+            this.lblAbductionRegion.Size = new System.Drawing.Size(55, 13);
+            this.lblAbductionRegion.TabIndex = 89;
+            this.lblAbductionRegion.Text = "linkLabel1";
             // 
             // label139
             // 
@@ -4930,7 +5621,7 @@ namespace DFWV
             this.grpAbductionEvents.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpAbductionEvents.Location = new System.Drawing.Point(203, 3);
             this.grpAbductionEvents.Name = "grpAbductionEvents";
-            this.grpAbductionEvents.Size = new System.Drawing.Size(681, 285);
+            this.grpAbductionEvents.Size = new System.Drawing.Size(681, 276);
             this.grpAbductionEvents.TabIndex = 81;
             this.grpAbductionEvents.TabStop = false;
             this.grpAbductionEvents.Text = "Events";
@@ -4952,7 +5643,7 @@ namespace DFWV
             this.tabEventCollectionSiteConquered.Location = new System.Drawing.Point(4, 22);
             this.tabEventCollectionSiteConquered.Margin = new System.Windows.Forms.Padding(2);
             this.tabEventCollectionSiteConquered.Name = "tabEventCollectionSiteConquered";
-            this.tabEventCollectionSiteConquered.Size = new System.Drawing.Size(887, 582);
+            this.tabEventCollectionSiteConquered.Size = new System.Drawing.Size(887, 564);
             this.tabEventCollectionSiteConquered.TabIndex = 6;
             this.tabEventCollectionSiteConquered.Text = "Site Conquered";
             this.tabEventCollectionSiteConquered.UseVisualStyleBackColor = true;
@@ -4969,7 +5660,7 @@ namespace DFWV
             this.tableLayoutPanel30.Name = "tableLayoutPanel30";
             this.tableLayoutPanel30.RowCount = 1;
             this.tableLayoutPanel30.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel30.Size = new System.Drawing.Size(887, 582);
+            this.tableLayoutPanel30.Size = new System.Drawing.Size(887, 564);
             this.tableLayoutPanel30.TabIndex = 72;
             // 
             // grpSiteConqueredEvents
@@ -4978,7 +5669,7 @@ namespace DFWV
             this.grpSiteConqueredEvents.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpSiteConqueredEvents.Location = new System.Drawing.Point(203, 3);
             this.grpSiteConqueredEvents.Name = "grpSiteConqueredEvents";
-            this.grpSiteConqueredEvents.Size = new System.Drawing.Size(681, 576);
+            this.grpSiteConqueredEvents.Size = new System.Drawing.Size(681, 558);
             this.grpSiteConqueredEvents.TabIndex = 63;
             this.grpSiteConqueredEvents.TabStop = false;
             this.grpSiteConqueredEvents.Text = "Events";
@@ -5015,7 +5706,7 @@ namespace DFWV
             this.panel13.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel13.Location = new System.Drawing.Point(3, 3);
             this.panel13.Name = "panel13";
-            this.panel13.Size = new System.Drawing.Size(194, 576);
+            this.panel13.Size = new System.Drawing.Size(194, 558);
             this.panel13.TabIndex = 71;
             // 
             // label127
@@ -5027,6 +5718,17 @@ namespace DFWV
             this.label127.TabIndex = 53;
             this.label127.Text = "Time:";
             // 
+            // lblSiteConqueredWar
+            // 
+            this.lblSiteConqueredWar.AutoSize = true;
+            this.lblSiteConqueredWar.Data = null;
+            this.lblSiteConqueredWar.ForeColor = System.Drawing.Color.Black;
+            this.lblSiteConqueredWar.Location = new System.Drawing.Point(61, 44);
+            this.lblSiteConqueredWar.Name = "lblSiteConqueredWar";
+            this.lblSiteConqueredWar.Size = new System.Drawing.Size(55, 13);
+            this.lblSiteConqueredWar.TabIndex = 52;
+            this.lblSiteConqueredWar.Text = "linkLabel1";
+            // 
             // label115
             // 
             this.label115.AutoSize = true;
@@ -5035,6 +5737,17 @@ namespace DFWV
             this.label115.Size = new System.Drawing.Size(43, 13);
             this.label115.TabIndex = 70;
             this.label115.Text = "Ordinal:";
+            // 
+            // lblSiteConqueredSite
+            // 
+            this.lblSiteConqueredSite.AutoSize = true;
+            this.lblSiteConqueredSite.Data = null;
+            this.lblSiteConqueredSite.ForeColor = System.Drawing.Color.Black;
+            this.lblSiteConqueredSite.Location = new System.Drawing.Point(61, 66);
+            this.lblSiteConqueredSite.Name = "lblSiteConqueredSite";
+            this.lblSiteConqueredSite.Size = new System.Drawing.Size(55, 13);
+            this.lblSiteConqueredSite.TabIndex = 58;
+            this.lblSiteConqueredSite.Text = "linkLabel1";
             // 
             // lblSiteConqueredOrdinal
             // 
@@ -5045,6 +5758,17 @@ namespace DFWV
             this.lblSiteConqueredOrdinal.TabIndex = 69;
             this.lblSiteConqueredOrdinal.Text = "label2";
             // 
+            // lblSiteConqueredCoords
+            // 
+            this.lblSiteConqueredCoords.AutoSize = true;
+            this.lblSiteConqueredCoords.Data = null;
+            this.lblSiteConqueredCoords.ForeColor = System.Drawing.Color.Black;
+            this.lblSiteConqueredCoords.Location = new System.Drawing.Point(60, 88);
+            this.lblSiteConqueredCoords.Name = "lblSiteConqueredCoords";
+            this.lblSiteConqueredCoords.Size = new System.Drawing.Size(55, 13);
+            this.lblSiteConqueredCoords.TabIndex = 60;
+            this.lblSiteConqueredCoords.Text = "linkLabel3";
+            // 
             // label151
             // 
             this.label151.AutoSize = true;
@@ -5054,6 +5778,17 @@ namespace DFWV
             this.label151.TabIndex = 66;
             this.label151.Text = "Defender:";
             // 
+            // lblSiteConqueredAttacker
+            // 
+            this.lblSiteConqueredAttacker.AutoSize = true;
+            this.lblSiteConqueredAttacker.Data = null;
+            this.lblSiteConqueredAttacker.ForeColor = System.Drawing.Color.Black;
+            this.lblSiteConqueredAttacker.Location = new System.Drawing.Point(61, 110);
+            this.lblSiteConqueredAttacker.Name = "lblSiteConqueredAttacker";
+            this.lblSiteConqueredAttacker.Size = new System.Drawing.Size(55, 13);
+            this.lblSiteConqueredAttacker.TabIndex = 65;
+            this.lblSiteConqueredAttacker.Text = "linkLabel1";
+            // 
             // label150
             // 
             this.label150.AutoSize = true;
@@ -5062,6 +5797,17 @@ namespace DFWV
             this.label150.Size = new System.Drawing.Size(50, 13);
             this.label150.TabIndex = 64;
             this.label150.Text = "Attacker:";
+            // 
+            // lblSiteConqueredDefender
+            // 
+            this.lblSiteConqueredDefender.AutoSize = true;
+            this.lblSiteConqueredDefender.Data = null;
+            this.lblSiteConqueredDefender.ForeColor = System.Drawing.Color.Black;
+            this.lblSiteConqueredDefender.Location = new System.Drawing.Point(60, 132);
+            this.lblSiteConqueredDefender.Name = "lblSiteConqueredDefender";
+            this.lblSiteConqueredDefender.Size = new System.Drawing.Size(55, 13);
+            this.lblSiteConqueredDefender.TabIndex = 67;
+            this.lblSiteConqueredDefender.Text = "linkLabel3";
             // 
             // label128
             // 
@@ -5123,7 +5869,7 @@ namespace DFWV
             this.tabEventCollectionTheft.Location = new System.Drawing.Point(4, 22);
             this.tabEventCollectionTheft.Margin = new System.Windows.Forms.Padding(2);
             this.tabEventCollectionTheft.Name = "tabEventCollectionTheft";
-            this.tabEventCollectionTheft.Size = new System.Drawing.Size(887, 582);
+            this.tabEventCollectionTheft.Size = new System.Drawing.Size(887, 564);
             this.tabEventCollectionTheft.TabIndex = 7;
             this.tabEventCollectionTheft.Text = "Theft";
             this.tabEventCollectionTheft.UseVisualStyleBackColor = true;
@@ -5142,16 +5888,16 @@ namespace DFWV
             this.tableLayoutPanel31.RowCount = 2;
             this.tableLayoutPanel31.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel31.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel31.Size = new System.Drawing.Size(887, 582);
+            this.tableLayoutPanel31.Size = new System.Drawing.Size(887, 564);
             this.tableLayoutPanel31.TabIndex = 88;
             // 
             // grpTheftEventCols
             // 
             this.grpTheftEventCols.Controls.Add(this.lstTheftEventCols);
             this.grpTheftEventCols.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpTheftEventCols.Location = new System.Drawing.Point(203, 294);
+            this.grpTheftEventCols.Location = new System.Drawing.Point(203, 285);
             this.grpTheftEventCols.Name = "grpTheftEventCols";
-            this.grpTheftEventCols.Size = new System.Drawing.Size(681, 285);
+            this.grpTheftEventCols.Size = new System.Drawing.Size(681, 276);
             this.grpTheftEventCols.TabIndex = 90;
             this.grpTheftEventCols.TabStop = false;
             this.grpTheftEventCols.Text = "Event Collections";
@@ -5162,7 +5908,7 @@ namespace DFWV
             this.lstTheftEventCols.FormattingEnabled = true;
             this.lstTheftEventCols.Location = new System.Drawing.Point(3, 16);
             this.lstTheftEventCols.Name = "lstTheftEventCols";
-            this.lstTheftEventCols.Size = new System.Drawing.Size(675, 266);
+            this.lstTheftEventCols.Size = new System.Drawing.Size(675, 257);
             this.lstTheftEventCols.TabIndex = 0;
             // 
             // panel14
@@ -5186,7 +5932,7 @@ namespace DFWV
             this.panel14.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel14.Location = new System.Drawing.Point(3, 3);
             this.panel14.Name = "panel14";
-            this.panel14.Size = new System.Drawing.Size(194, 285);
+            this.panel14.Size = new System.Drawing.Size(194, 276);
             this.panel14.TabIndex = 89;
             // 
             // label169
@@ -5198,6 +5944,17 @@ namespace DFWV
             this.label169.TabIndex = 73;
             this.label169.Text = "Time:";
             // 
+            // lblTheftWar
+            // 
+            this.lblTheftWar.AutoSize = true;
+            this.lblTheftWar.Data = null;
+            this.lblTheftWar.ForeColor = System.Drawing.Color.Black;
+            this.lblTheftWar.Location = new System.Drawing.Point(61, 44);
+            this.lblTheftWar.Name = "lblTheftWar";
+            this.lblTheftWar.Size = new System.Drawing.Size(55, 13);
+            this.lblTheftWar.TabIndex = 72;
+            this.lblTheftWar.Text = "linkLabel1";
+            // 
             // label153
             // 
             this.label153.AutoSize = true;
@@ -5206,6 +5963,17 @@ namespace DFWV
             this.label153.Size = new System.Drawing.Size(43, 13);
             this.label153.TabIndex = 87;
             this.label153.Text = "Ordinal:";
+            // 
+            // lblTheftSite
+            // 
+            this.lblTheftSite.AutoSize = true;
+            this.lblTheftSite.Data = null;
+            this.lblTheftSite.ForeColor = System.Drawing.Color.Black;
+            this.lblTheftSite.Location = new System.Drawing.Point(61, 66);
+            this.lblTheftSite.Name = "lblTheftSite";
+            this.lblTheftSite.Size = new System.Drawing.Size(55, 13);
+            this.lblTheftSite.TabIndex = 76;
+            this.lblTheftSite.Text = "linkLabel1";
             // 
             // lblTheftOrdinal
             // 
@@ -5216,6 +5984,17 @@ namespace DFWV
             this.lblTheftOrdinal.TabIndex = 86;
             this.lblTheftOrdinal.Text = "label2";
             // 
+            // lblTheftCoords
+            // 
+            this.lblTheftCoords.AutoSize = true;
+            this.lblTheftCoords.Data = null;
+            this.lblTheftCoords.ForeColor = System.Drawing.Color.Black;
+            this.lblTheftCoords.Location = new System.Drawing.Point(60, 88);
+            this.lblTheftCoords.Name = "lblTheftCoords";
+            this.lblTheftCoords.Size = new System.Drawing.Size(55, 13);
+            this.lblTheftCoords.TabIndex = 78;
+            this.lblTheftCoords.Text = "linkLabel3";
+            // 
             // label161
             // 
             this.label161.AutoSize = true;
@@ -5225,6 +6004,17 @@ namespace DFWV
             this.label161.TabIndex = 84;
             this.label161.Text = "Defender:";
             // 
+            // lblTheftAttacker
+            // 
+            this.lblTheftAttacker.AutoSize = true;
+            this.lblTheftAttacker.Data = null;
+            this.lblTheftAttacker.ForeColor = System.Drawing.Color.Black;
+            this.lblTheftAttacker.Location = new System.Drawing.Point(61, 110);
+            this.lblTheftAttacker.Name = "lblTheftAttacker";
+            this.lblTheftAttacker.Size = new System.Drawing.Size(55, 13);
+            this.lblTheftAttacker.TabIndex = 83;
+            this.lblTheftAttacker.Text = "linkLabel1";
+            // 
             // label163
             // 
             this.label163.AutoSize = true;
@@ -5233,6 +6023,17 @@ namespace DFWV
             this.label163.Size = new System.Drawing.Size(50, 13);
             this.label163.TabIndex = 82;
             this.label163.Text = "Attacker:";
+            // 
+            // lblTheftDefender
+            // 
+            this.lblTheftDefender.AutoSize = true;
+            this.lblTheftDefender.Data = null;
+            this.lblTheftDefender.ForeColor = System.Drawing.Color.Black;
+            this.lblTheftDefender.Location = new System.Drawing.Point(60, 132);
+            this.lblTheftDefender.Name = "lblTheftDefender";
+            this.lblTheftDefender.Size = new System.Drawing.Size(55, 13);
+            this.lblTheftDefender.TabIndex = 85;
+            this.lblTheftDefender.Text = "linkLabel3";
             // 
             // label170
             // 
@@ -5294,7 +6095,7 @@ namespace DFWV
             this.grpTheftEvents.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpTheftEvents.Location = new System.Drawing.Point(203, 3);
             this.grpTheftEvents.Name = "grpTheftEvents";
-            this.grpTheftEvents.Size = new System.Drawing.Size(681, 285);
+            this.grpTheftEvents.Size = new System.Drawing.Size(681, 276);
             this.grpTheftEvents.TabIndex = 81;
             this.grpTheftEvents.TabStop = false;
             this.grpTheftEvents.Text = "Events";
@@ -5316,7 +6117,7 @@ namespace DFWV
             this.tabEventCollectionInsurrection.Location = new System.Drawing.Point(4, 22);
             this.tabEventCollectionInsurrection.Margin = new System.Windows.Forms.Padding(2);
             this.tabEventCollectionInsurrection.Name = "tabEventCollectionInsurrection";
-            this.tabEventCollectionInsurrection.Size = new System.Drawing.Size(887, 582);
+            this.tabEventCollectionInsurrection.Size = new System.Drawing.Size(887, 564);
             this.tabEventCollectionInsurrection.TabIndex = 8;
             this.tabEventCollectionInsurrection.Text = "Insurrection";
             this.tabEventCollectionInsurrection.UseVisualStyleBackColor = true;
@@ -5333,7 +6134,7 @@ namespace DFWV
             this.tableLayoutPanel39.Name = "tableLayoutPanel39";
             this.tableLayoutPanel39.RowCount = 1;
             this.tableLayoutPanel39.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel39.Size = new System.Drawing.Size(887, 582);
+            this.tableLayoutPanel39.Size = new System.Drawing.Size(887, 564);
             this.tableLayoutPanel39.TabIndex = 109;
             // 
             // panel20
@@ -5357,8 +6158,19 @@ namespace DFWV
             this.panel20.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel20.Location = new System.Drawing.Point(3, 3);
             this.panel20.Name = "panel20";
-            this.panel20.Size = new System.Drawing.Size(194, 576);
+            this.panel20.Size = new System.Drawing.Size(194, 558);
             this.panel20.TabIndex = 110;
+            // 
+            // lblInsurrectionOutcome
+            // 
+            this.lblInsurrectionOutcome.AutoSize = true;
+            this.lblInsurrectionOutcome.Data = null;
+            this.lblInsurrectionOutcome.ForeColor = System.Drawing.Color.Black;
+            this.lblInsurrectionOutcome.Location = new System.Drawing.Point(61, 132);
+            this.lblInsurrectionOutcome.Name = "lblInsurrectionOutcome";
+            this.lblInsurrectionOutcome.Size = new System.Drawing.Size(55, 13);
+            this.lblInsurrectionOutcome.TabIndex = 108;
+            this.lblInsurrectionOutcome.Text = "linkLabel1";
             // 
             // label179
             // 
@@ -5378,6 +6190,28 @@ namespace DFWV
             this.label178.TabIndex = 92;
             this.label178.Text = "Time:";
             // 
+            // lblInsurrectionParent
+            // 
+            this.lblInsurrectionParent.AutoSize = true;
+            this.lblInsurrectionParent.Data = null;
+            this.lblInsurrectionParent.ForeColor = System.Drawing.Color.Black;
+            this.lblInsurrectionParent.Location = new System.Drawing.Point(61, 44);
+            this.lblInsurrectionParent.Name = "lblInsurrectionParent";
+            this.lblInsurrectionParent.Size = new System.Drawing.Size(55, 13);
+            this.lblInsurrectionParent.TabIndex = 91;
+            this.lblInsurrectionParent.Text = "linkLabel1";
+            // 
+            // lblInsurrectionSite
+            // 
+            this.lblInsurrectionSite.AutoSize = true;
+            this.lblInsurrectionSite.Data = null;
+            this.lblInsurrectionSite.ForeColor = System.Drawing.Color.Black;
+            this.lblInsurrectionSite.Location = new System.Drawing.Point(61, 66);
+            this.lblInsurrectionSite.Name = "lblInsurrectionSite";
+            this.lblInsurrectionSite.Size = new System.Drawing.Size(55, 13);
+            this.lblInsurrectionSite.TabIndex = 95;
+            this.lblInsurrectionSite.Text = "linkLabel1";
+            // 
             // label180
             // 
             this.label180.AutoSize = true;
@@ -5387,6 +6221,17 @@ namespace DFWV
             this.label180.TabIndex = 106;
             this.label180.Text = "Ordinal:";
             // 
+            // lblInsurrectionCoords
+            // 
+            this.lblInsurrectionCoords.AutoSize = true;
+            this.lblInsurrectionCoords.Data = null;
+            this.lblInsurrectionCoords.ForeColor = System.Drawing.Color.Black;
+            this.lblInsurrectionCoords.Location = new System.Drawing.Point(60, 88);
+            this.lblInsurrectionCoords.Name = "lblInsurrectionCoords";
+            this.lblInsurrectionCoords.Size = new System.Drawing.Size(55, 13);
+            this.lblInsurrectionCoords.TabIndex = 97;
+            this.lblInsurrectionCoords.Text = "linkLabel3";
+            // 
             // lblInsurrectionOrdinal
             // 
             this.lblInsurrectionOrdinal.AutoSize = true;
@@ -5395,6 +6240,17 @@ namespace DFWV
             this.lblInsurrectionOrdinal.Size = new System.Drawing.Size(35, 13);
             this.lblInsurrectionOrdinal.TabIndex = 105;
             this.lblInsurrectionOrdinal.Text = "label2";
+            // 
+            // lblInsurrectionTargetEnt
+            // 
+            this.lblInsurrectionTargetEnt.AutoSize = true;
+            this.lblInsurrectionTargetEnt.Data = null;
+            this.lblInsurrectionTargetEnt.ForeColor = System.Drawing.Color.Black;
+            this.lblInsurrectionTargetEnt.Location = new System.Drawing.Point(61, 110);
+            this.lblInsurrectionTargetEnt.Name = "lblInsurrectionTargetEnt";
+            this.lblInsurrectionTargetEnt.Size = new System.Drawing.Size(55, 13);
+            this.lblInsurrectionTargetEnt.TabIndex = 102;
+            this.lblInsurrectionTargetEnt.Text = "linkLabel1";
             // 
             // label183
             // 
@@ -5465,7 +6321,7 @@ namespace DFWV
             this.grpInsurrectionEvents.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpInsurrectionEvents.Location = new System.Drawing.Point(203, 3);
             this.grpInsurrectionEvents.Name = "grpInsurrectionEvents";
-            this.grpInsurrectionEvents.Size = new System.Drawing.Size(681, 576);
+            this.grpInsurrectionEvents.Size = new System.Drawing.Size(681, 558);
             this.grpInsurrectionEvents.TabIndex = 100;
             this.grpInsurrectionEvents.TabStop = false;
             this.grpInsurrectionEvents.Text = "Events";
@@ -5574,6 +6430,18 @@ namespace DFWV
             this.grpLeader.TabStop = false;
             this.grpLeader.Visible = false;
             // 
+            // lblLeaderMarried
+            // 
+            this.lblLeaderMarried.AutoSize = true;
+            this.lblLeaderMarried.Data = null;
+            this.lblLeaderMarried.ForeColor = System.Drawing.Color.Black;
+            this.lblLeaderMarried.Location = new System.Drawing.Point(101, 237);
+            this.lblLeaderMarried.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblLeaderMarried.Name = "lblLeaderMarried";
+            this.lblLeaderMarried.Size = new System.Drawing.Size(55, 13);
+            this.lblLeaderMarried.TabIndex = 92;
+            this.lblLeaderMarried.Text = "linkLabel5";
+            // 
             // label176
             // 
             this.label176.AutoSize = true;
@@ -5593,6 +6461,18 @@ namespace DFWV
             this.lblLeaderType.TabIndex = 90;
             this.lblLeaderType.Text = "label53";
             // 
+            // lblLeaderHF
+            // 
+            this.lblLeaderHF.AutoSize = true;
+            this.lblLeaderHF.Data = null;
+            this.lblLeaderHF.ForeColor = System.Drawing.Color.Black;
+            this.lblLeaderHF.Location = new System.Drawing.Point(101, 260);
+            this.lblLeaderHF.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblLeaderHF.Name = "lblLeaderHF";
+            this.lblLeaderHF.Size = new System.Drawing.Size(55, 13);
+            this.lblLeaderHF.TabIndex = 89;
+            this.lblLeaderHF.Text = "linkLabel5";
+            // 
             // label51
             // 
             this.label51.AutoSize = true;
@@ -5611,6 +6491,30 @@ namespace DFWV
             this.label67.TabIndex = 86;
             this.label67.Text = "Type:";
             // 
+            // lblLeaderInheritedFrom
+            // 
+            this.lblLeaderInheritedFrom.AutoSize = true;
+            this.lblLeaderInheritedFrom.Data = null;
+            this.lblLeaderInheritedFrom.ForeColor = System.Drawing.Color.Black;
+            this.lblLeaderInheritedFrom.Location = new System.Drawing.Point(101, 151);
+            this.lblLeaderInheritedFrom.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblLeaderInheritedFrom.Name = "lblLeaderInheritedFrom";
+            this.lblLeaderInheritedFrom.Size = new System.Drawing.Size(55, 13);
+            this.lblLeaderInheritedFrom.TabIndex = 85;
+            this.lblLeaderInheritedFrom.Text = "linkLabel2";
+            // 
+            // lblLeaderRace
+            // 
+            this.lblLeaderRace.AutoSize = true;
+            this.lblLeaderRace.Data = null;
+            this.lblLeaderRace.ForeColor = System.Drawing.Color.Black;
+            this.lblLeaderRace.Location = new System.Drawing.Point(101, 66);
+            this.lblLeaderRace.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblLeaderRace.Name = "lblLeaderRace";
+            this.lblLeaderRace.Size = new System.Drawing.Size(55, 13);
+            this.lblLeaderRace.TabIndex = 82;
+            this.lblLeaderRace.Text = "linkLabel3";
+            // 
             // lblLeaderLife
             // 
             this.lblLeaderLife.AutoSize = true;
@@ -5619,6 +6523,42 @@ namespace DFWV
             this.lblLeaderLife.Size = new System.Drawing.Size(35, 13);
             this.lblLeaderLife.TabIndex = 81;
             this.lblLeaderLife.Text = "label2";
+            // 
+            // lblLeaderGod
+            // 
+            this.lblLeaderGod.AutoSize = true;
+            this.lblLeaderGod.Data = null;
+            this.lblLeaderGod.ForeColor = System.Drawing.Color.Black;
+            this.lblLeaderGod.Location = new System.Drawing.Point(101, 215);
+            this.lblLeaderGod.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblLeaderGod.Name = "lblLeaderGod";
+            this.lblLeaderGod.Size = new System.Drawing.Size(55, 13);
+            this.lblLeaderGod.TabIndex = 80;
+            this.lblLeaderGod.Text = "linkLabel5";
+            // 
+            // lblLeaderCivilization
+            // 
+            this.lblLeaderCivilization.AutoSize = true;
+            this.lblLeaderCivilization.Data = null;
+            this.lblLeaderCivilization.ForeColor = System.Drawing.Color.Black;
+            this.lblLeaderCivilization.Location = new System.Drawing.Point(101, 172);
+            this.lblLeaderCivilization.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblLeaderCivilization.Name = "lblLeaderCivilization";
+            this.lblLeaderCivilization.Size = new System.Drawing.Size(55, 13);
+            this.lblLeaderCivilization.TabIndex = 79;
+            this.lblLeaderCivilization.Text = "linkLabel3";
+            // 
+            // lblLeaderSite
+            // 
+            this.lblLeaderSite.AutoSize = true;
+            this.lblLeaderSite.Data = null;
+            this.lblLeaderSite.ForeColor = System.Drawing.Color.Black;
+            this.lblLeaderSite.Location = new System.Drawing.Point(101, 193);
+            this.lblLeaderSite.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblLeaderSite.Name = "lblLeaderSite";
+            this.lblLeaderSite.Size = new System.Drawing.Size(55, 13);
+            this.lblLeaderSite.TabIndex = 78;
+            this.lblLeaderSite.Text = "linkLabel2";
             // 
             // label64
             // 
@@ -6416,7 +7356,7 @@ namespace DFWV
             this.tableLayoutPanel34.ColumnCount = 3;
             this.tableLayoutPanel34.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 46.14004F));
             this.tableLayoutPanel34.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 53.85996F));
-            this.tableLayoutPanel34.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 504F));
+            this.tableLayoutPanel34.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 505F));
             this.tableLayoutPanel34.Controls.Add(this.grpSiteArtifacts, 0, 2);
             this.tableLayoutPanel34.Controls.Add(this.grpSiteStructures, 1, 2);
             this.tableLayoutPanel34.Controls.Add(this.panel17, 0, 0);
@@ -6445,7 +7385,7 @@ namespace DFWV
             this.grpSiteArtifacts.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpSiteArtifacts.Location = new System.Drawing.Point(3, 329);
             this.grpSiteArtifacts.Name = "grpSiteArtifacts";
-            this.grpSiteArtifacts.Size = new System.Drawing.Size(170, 157);
+            this.grpSiteArtifacts.Size = new System.Drawing.Size(169, 157);
             this.grpSiteArtifacts.TabIndex = 65;
             this.grpSiteArtifacts.TabStop = false;
             this.grpSiteArtifacts.Text = "Artifacts Created";
@@ -6456,14 +7396,14 @@ namespace DFWV
             this.lstSiteArtifacts.FormattingEnabled = true;
             this.lstSiteArtifacts.Location = new System.Drawing.Point(3, 16);
             this.lstSiteArtifacts.Name = "lstSiteArtifacts";
-            this.lstSiteArtifacts.Size = new System.Drawing.Size(164, 138);
+            this.lstSiteArtifacts.Size = new System.Drawing.Size(163, 138);
             this.lstSiteArtifacts.TabIndex = 0;
             // 
             // grpSiteStructures
             // 
             this.grpSiteStructures.Controls.Add(this.lstSiteStructures);
             this.grpSiteStructures.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpSiteStructures.Location = new System.Drawing.Point(179, 329);
+            this.grpSiteStructures.Location = new System.Drawing.Point(178, 329);
             this.grpSiteStructures.Name = "grpSiteStructures";
             this.grpSiteStructures.Size = new System.Drawing.Size(199, 157);
             this.grpSiteStructures.TabIndex = 64;
@@ -6497,8 +7437,20 @@ namespace DFWV
             this.panel17.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel17.Location = new System.Drawing.Point(3, 3);
             this.panel17.Name = "panel17";
-            this.panel17.Size = new System.Drawing.Size(170, 157);
+            this.panel17.Size = new System.Drawing.Size(169, 157);
             this.panel17.TabIndex = 63;
+            // 
+            // SiteMapLabel
+            // 
+            this.SiteMapLabel.AutoSize = true;
+            this.SiteMapLabel.Data = null;
+            this.SiteMapLabel.ForeColor = System.Drawing.Color.Black;
+            this.SiteMapLabel.Location = new System.Drawing.Point(19, 132);
+            this.SiteMapLabel.Name = "SiteMapLabel";
+            this.SiteMapLabel.Size = new System.Drawing.Size(49, 13);
+            this.SiteMapLabel.TabIndex = 61;
+            this.SiteMapLabel.Text = "Site Map";
+            this.SiteMapLabel.Click += new System.EventHandler(this.SiteMapLabel_Click);
             // 
             // label80
             // 
@@ -6526,6 +7478,18 @@ namespace DFWV
             this.label78.Size = new System.Drawing.Size(58, 13);
             this.label78.TabIndex = 25;
             this.label78.Text = "Nickname:";
+            // 
+            // lblSiteCoord
+            // 
+            this.lblSiteCoord.AutoSize = true;
+            this.lblSiteCoord.Data = null;
+            this.lblSiteCoord.ForeColor = System.Drawing.Color.Black;
+            this.lblSiteCoord.Location = new System.Drawing.Point(58, 64);
+            this.lblSiteCoord.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblSiteCoord.Name = "lblSiteCoord";
+            this.lblSiteCoord.Size = new System.Drawing.Size(55, 13);
+            this.lblSiteCoord.TabIndex = 36;
+            this.lblSiteCoord.Text = "linkLabel1";
             // 
             // lblSiteAltName
             // 
@@ -6581,11 +7545,35 @@ namespace DFWV
             this.label81.TabIndex = 31;
             this.label81.Text = "Parent Civ:";
             // 
+            // lblSiteOwner
+            // 
+            this.lblSiteOwner.AutoSize = true;
+            this.lblSiteOwner.Data = null;
+            this.lblSiteOwner.ForeColor = System.Drawing.Color.Black;
+            this.lblSiteOwner.Location = new System.Drawing.Point(58, 85);
+            this.lblSiteOwner.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblSiteOwner.Name = "lblSiteOwner";
+            this.lblSiteOwner.Size = new System.Drawing.Size(55, 13);
+            this.lblSiteOwner.TabIndex = 35;
+            this.lblSiteOwner.Text = "linkLabel1";
+            // 
+            // lblSiteParentCiv
+            // 
+            this.lblSiteParentCiv.AutoSize = true;
+            this.lblSiteParentCiv.Data = null;
+            this.lblSiteParentCiv.ForeColor = System.Drawing.Color.Black;
+            this.lblSiteParentCiv.Location = new System.Drawing.Point(58, 107);
+            this.lblSiteParentCiv.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblSiteParentCiv.Name = "lblSiteParentCiv";
+            this.lblSiteParentCiv.Size = new System.Drawing.Size(55, 13);
+            this.lblSiteParentCiv.TabIndex = 36;
+            this.lblSiteParentCiv.Text = "linkLabel2";
+            // 
             // grpSiteOutcasts
             // 
             this.grpSiteOutcasts.Controls.Add(this.lstSiteOutcasts);
             this.grpSiteOutcasts.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpSiteOutcasts.Location = new System.Drawing.Point(179, 492);
+            this.grpSiteOutcasts.Location = new System.Drawing.Point(178, 492);
             this.grpSiteOutcasts.Name = "grpSiteOutcasts";
             this.grpSiteOutcasts.Size = new System.Drawing.Size(199, 95);
             this.grpSiteOutcasts.TabIndex = 61;
@@ -6615,10 +7603,43 @@ namespace DFWV
             this.grpSiteCreated.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpSiteCreated.Location = new System.Drawing.Point(3, 166);
             this.grpSiteCreated.Name = "grpSiteCreated";
-            this.grpSiteCreated.Size = new System.Drawing.Size(170, 157);
+            this.grpSiteCreated.Size = new System.Drawing.Size(169, 157);
             this.grpSiteCreated.TabIndex = 40;
             this.grpSiteCreated.TabStop = false;
             this.grpSiteCreated.Text = "Created";
+            // 
+            // lblSiteCreatedTime
+            // 
+            this.lblSiteCreatedTime.AutoSize = true;
+            this.lblSiteCreatedTime.Data = null;
+            this.lblSiteCreatedTime.ForeColor = System.Drawing.Color.Black;
+            this.lblSiteCreatedTime.Location = new System.Drawing.Point(28, 58);
+            this.lblSiteCreatedTime.Name = "lblSiteCreatedTime";
+            this.lblSiteCreatedTime.Size = new System.Drawing.Size(55, 13);
+            this.lblSiteCreatedTime.TabIndex = 7;
+            this.lblSiteCreatedTime.Text = "linkLabel1";
+            // 
+            // lblSiteCreatedByCiv
+            // 
+            this.lblSiteCreatedByCiv.AutoSize = true;
+            this.lblSiteCreatedByCiv.Data = null;
+            this.lblSiteCreatedByCiv.ForeColor = System.Drawing.Color.Black;
+            this.lblSiteCreatedByCiv.Location = new System.Drawing.Point(28, 37);
+            this.lblSiteCreatedByCiv.Name = "lblSiteCreatedByCiv";
+            this.lblSiteCreatedByCiv.Size = new System.Drawing.Size(55, 13);
+            this.lblSiteCreatedByCiv.TabIndex = 6;
+            this.lblSiteCreatedByCiv.Text = "linkLabel3";
+            // 
+            // lblSiteCreatedBy
+            // 
+            this.lblSiteCreatedBy.AutoSize = true;
+            this.lblSiteCreatedBy.Data = null;
+            this.lblSiteCreatedBy.ForeColor = System.Drawing.Color.Black;
+            this.lblSiteCreatedBy.Location = new System.Drawing.Point(28, 15);
+            this.lblSiteCreatedBy.Name = "lblSiteCreatedBy";
+            this.lblSiteCreatedBy.Size = new System.Drawing.Size(55, 13);
+            this.lblSiteCreatedBy.TabIndex = 4;
+            this.lblSiteCreatedBy.Text = "linkLabel1";
             // 
             // label69
             // 
@@ -6653,7 +7674,7 @@ namespace DFWV
             this.grpSitePrisoners.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpSitePrisoners.Location = new System.Drawing.Point(3, 492);
             this.grpSitePrisoners.Name = "grpSitePrisoners";
-            this.grpSitePrisoners.Size = new System.Drawing.Size(170, 95);
+            this.grpSitePrisoners.Size = new System.Drawing.Size(169, 95);
             this.grpSitePrisoners.TabIndex = 38;
             this.grpSitePrisoners.TabStop = false;
             this.grpSitePrisoners.Text = "Prisoners";
@@ -6666,7 +7687,7 @@ namespace DFWV
             this.lstSitePrisoners.ItemHeight = 16;
             this.lstSitePrisoners.Location = new System.Drawing.Point(3, 16);
             this.lstSitePrisoners.Name = "lstSitePrisoners";
-            this.lstSitePrisoners.Size = new System.Drawing.Size(164, 76);
+            this.lstSitePrisoners.Size = new System.Drawing.Size(163, 76);
             this.lstSitePrisoners.TabIndex = 0;
             this.lstSitePrisoners.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.lstSitePrisoners_DrawItem);
             // 
@@ -6674,7 +7695,7 @@ namespace DFWV
             // 
             this.grpSiteInhabitants.Controls.Add(this.lstSiteInhabitants);
             this.grpSiteInhabitants.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpSiteInhabitants.Location = new System.Drawing.Point(179, 3);
+            this.grpSiteInhabitants.Location = new System.Drawing.Point(178, 3);
             this.grpSiteInhabitants.Name = "grpSiteInhabitants";
             this.grpSiteInhabitants.Size = new System.Drawing.Size(199, 157);
             this.grpSiteInhabitants.TabIndex = 39;
@@ -6694,7 +7715,7 @@ namespace DFWV
             // 
             this.grpSitePopulation.Controls.Add(this.lstSitePopulation);
             this.grpSitePopulation.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpSitePopulation.Location = new System.Drawing.Point(179, 166);
+            this.grpSitePopulation.Location = new System.Drawing.Point(178, 166);
             this.grpSitePopulation.Name = "grpSitePopulation";
             this.grpSitePopulation.Size = new System.Drawing.Size(199, 157);
             this.grpSitePopulation.TabIndex = 37;
@@ -6717,10 +7738,10 @@ namespace DFWV
             // 
             this.grpSiteEventCollection.Controls.Add(this.trvSiteEventCollection);
             this.grpSiteEventCollection.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpSiteEventCollection.Location = new System.Drawing.Point(384, 3);
+            this.grpSiteEventCollection.Location = new System.Drawing.Point(383, 3);
             this.grpSiteEventCollection.Name = "grpSiteEventCollection";
             this.tableLayoutPanel34.SetRowSpan(this.grpSiteEventCollection, 2);
-            this.grpSiteEventCollection.Size = new System.Drawing.Size(499, 320);
+            this.grpSiteEventCollection.Size = new System.Drawing.Size(500, 320);
             this.grpSiteEventCollection.TabIndex = 59;
             this.grpSiteEventCollection.TabStop = false;
             this.grpSiteEventCollection.Text = "Site Event Collections";
@@ -6730,17 +7751,17 @@ namespace DFWV
             this.trvSiteEventCollection.Dock = System.Windows.Forms.DockStyle.Fill;
             this.trvSiteEventCollection.Location = new System.Drawing.Point(3, 16);
             this.trvSiteEventCollection.Name = "trvSiteEventCollection";
-            this.trvSiteEventCollection.Size = new System.Drawing.Size(493, 301);
+            this.trvSiteEventCollection.Size = new System.Drawing.Size(494, 301);
             this.trvSiteEventCollection.TabIndex = 0;
             // 
             // grpSiteEvent
             // 
             this.grpSiteEvent.Controls.Add(this.trvSiteEvent);
             this.grpSiteEvent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpSiteEvent.Location = new System.Drawing.Point(384, 329);
+            this.grpSiteEvent.Location = new System.Drawing.Point(383, 329);
             this.grpSiteEvent.Name = "grpSiteEvent";
             this.tableLayoutPanel34.SetRowSpan(this.grpSiteEvent, 2);
-            this.grpSiteEvent.Size = new System.Drawing.Size(499, 258);
+            this.grpSiteEvent.Size = new System.Drawing.Size(500, 258);
             this.grpSiteEvent.TabIndex = 58;
             this.grpSiteEvent.TabStop = false;
             this.grpSiteEvent.Text = "Site Events";
@@ -6752,7 +7773,7 @@ namespace DFWV
             | System.Windows.Forms.AnchorStyles.Right)));
             this.trvSiteEvent.Location = new System.Drawing.Point(3, 16);
             this.trvSiteEvent.Name = "trvSiteEvent";
-            this.trvSiteEvent.Size = new System.Drawing.Size(493, 157);
+            this.trvSiteEvent.Size = new System.Drawing.Size(494, 157);
             this.trvSiteEvent.TabIndex = 0;
             // 
             // FilterSite
@@ -6906,6 +7927,17 @@ namespace DFWV
             this.grpStructureRazed.TabStop = false;
             this.grpStructureRazed.Text = "Razed";
             // 
+            // lblStructureRazedTime
+            // 
+            this.lblStructureRazedTime.AutoSize = true;
+            this.lblStructureRazedTime.Data = null;
+            this.lblStructureRazedTime.ForeColor = System.Drawing.Color.Black;
+            this.lblStructureRazedTime.Location = new System.Drawing.Point(28, 60);
+            this.lblStructureRazedTime.Name = "lblStructureRazedTime";
+            this.lblStructureRazedTime.Size = new System.Drawing.Size(55, 13);
+            this.lblStructureRazedTime.TabIndex = 17;
+            this.lblStructureRazedTime.Text = "linkLabel7";
+            // 
             // label48
             // 
             this.label48.AutoSize = true;
@@ -6914,6 +7946,28 @@ namespace DFWV
             this.label48.Size = new System.Drawing.Size(24, 13);
             this.label48.TabIndex = 16;
             this.label48.Text = "On:";
+            // 
+            // lblStructureRazedSite
+            // 
+            this.lblStructureRazedSite.AutoSize = true;
+            this.lblStructureRazedSite.Data = null;
+            this.lblStructureRazedSite.ForeColor = System.Drawing.Color.Black;
+            this.lblStructureRazedSite.Location = new System.Drawing.Point(28, 38);
+            this.lblStructureRazedSite.Name = "lblStructureRazedSite";
+            this.lblStructureRazedSite.Size = new System.Drawing.Size(55, 13);
+            this.lblStructureRazedSite.TabIndex = 15;
+            this.lblStructureRazedSite.Text = "linkLabel1";
+            // 
+            // lblStructureRazedCiv
+            // 
+            this.lblStructureRazedCiv.AutoSize = true;
+            this.lblStructureRazedCiv.Data = null;
+            this.lblStructureRazedCiv.ForeColor = System.Drawing.Color.Black;
+            this.lblStructureRazedCiv.Location = new System.Drawing.Point(28, 16);
+            this.lblStructureRazedCiv.Name = "lblStructureRazedCiv";
+            this.lblStructureRazedCiv.Size = new System.Drawing.Size(55, 13);
+            this.lblStructureRazedCiv.TabIndex = 13;
+            this.lblStructureRazedCiv.Text = "linkLabel1";
             // 
             // label175
             // 
@@ -6951,6 +8005,17 @@ namespace DFWV
             this.grpStructureCreated.TabStop = false;
             this.grpStructureCreated.Text = "Created";
             // 
+            // lblStructureCreatedTime
+            // 
+            this.lblStructureCreatedTime.AutoSize = true;
+            this.lblStructureCreatedTime.Data = null;
+            this.lblStructureCreatedTime.ForeColor = System.Drawing.Color.Black;
+            this.lblStructureCreatedTime.Location = new System.Drawing.Point(28, 80);
+            this.lblStructureCreatedTime.Name = "lblStructureCreatedTime";
+            this.lblStructureCreatedTime.Size = new System.Drawing.Size(55, 13);
+            this.lblStructureCreatedTime.TabIndex = 9;
+            this.lblStructureCreatedTime.Text = "linkLabel7";
+            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -6959,6 +8024,39 @@ namespace DFWV
             this.label7.Size = new System.Drawing.Size(24, 13);
             this.label7.TabIndex = 8;
             this.label7.Text = "On:";
+            // 
+            // lblStructureCreatedSite
+            // 
+            this.lblStructureCreatedSite.AutoSize = true;
+            this.lblStructureCreatedSite.Data = null;
+            this.lblStructureCreatedSite.ForeColor = System.Drawing.Color.Black;
+            this.lblStructureCreatedSite.Location = new System.Drawing.Point(28, 58);
+            this.lblStructureCreatedSite.Name = "lblStructureCreatedSite";
+            this.lblStructureCreatedSite.Size = new System.Drawing.Size(55, 13);
+            this.lblStructureCreatedSite.TabIndex = 7;
+            this.lblStructureCreatedSite.Text = "linkLabel1";
+            // 
+            // lblStructureCreatedCiv
+            // 
+            this.lblStructureCreatedCiv.AutoSize = true;
+            this.lblStructureCreatedCiv.Data = null;
+            this.lblStructureCreatedCiv.ForeColor = System.Drawing.Color.Black;
+            this.lblStructureCreatedCiv.Location = new System.Drawing.Point(28, 37);
+            this.lblStructureCreatedCiv.Name = "lblStructureCreatedCiv";
+            this.lblStructureCreatedCiv.Size = new System.Drawing.Size(55, 13);
+            this.lblStructureCreatedCiv.TabIndex = 6;
+            this.lblStructureCreatedCiv.Text = "linkLabel3";
+            // 
+            // lblStructureCreatedSiteCiv
+            // 
+            this.lblStructureCreatedSiteCiv.AutoSize = true;
+            this.lblStructureCreatedSiteCiv.Data = null;
+            this.lblStructureCreatedSiteCiv.ForeColor = System.Drawing.Color.Black;
+            this.lblStructureCreatedSiteCiv.Location = new System.Drawing.Point(28, 15);
+            this.lblStructureCreatedSiteCiv.Name = "lblStructureCreatedSiteCiv";
+            this.lblStructureCreatedSiteCiv.Size = new System.Drawing.Size(55, 13);
+            this.lblStructureCreatedSiteCiv.TabIndex = 4;
+            this.lblStructureCreatedSiteCiv.Text = "linkLabel1";
             // 
             // label9
             // 
@@ -7018,6 +8116,18 @@ namespace DFWV
             this.lblStructureType.Size = new System.Drawing.Size(35, 13);
             this.lblStructureType.TabIndex = 38;
             this.lblStructureType.Text = "label2";
+            // 
+            // lblStructureSite
+            // 
+            this.lblStructureSite.AutoSize = true;
+            this.lblStructureSite.Data = null;
+            this.lblStructureSite.ForeColor = System.Drawing.Color.Black;
+            this.lblStructureSite.Location = new System.Drawing.Point(61, 24);
+            this.lblStructureSite.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblStructureSite.Name = "lblStructureSite";
+            this.lblStructureSite.Size = new System.Drawing.Size(55, 13);
+            this.lblStructureSite.TabIndex = 36;
+            this.lblStructureSite.Text = "linkLabel1";
             // 
             // label3
             // 
@@ -7117,6 +8227,67 @@ namespace DFWV
             this.grpUndergroundRegion.TabStop = false;
             this.grpUndergroundRegion.Visible = false;
             // 
+            // tableLayoutPanel40
+            // 
+            this.tableLayoutPanel40.ColumnCount = 2;
+            this.tableLayoutPanel40.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel40.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel40.Controls.Add(this.grpUndergroundRegionPopulation, 0, 1);
+            this.tableLayoutPanel40.Controls.Add(this.panel21, 0, 0);
+            this.tableLayoutPanel40.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel40.Location = new System.Drawing.Point(3, 16);
+            this.tableLayoutPanel40.Name = "tableLayoutPanel40";
+            this.tableLayoutPanel40.RowCount = 2;
+            this.tableLayoutPanel40.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel40.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 519F));
+            this.tableLayoutPanel40.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel40.Size = new System.Drawing.Size(886, 590);
+            this.tableLayoutPanel40.TabIndex = 42;
+            // 
+            // grpUndergroundRegionPopulation
+            // 
+            this.grpUndergroundRegionPopulation.Controls.Add(this.lstUndergroundRegionPopulation);
+            this.grpUndergroundRegionPopulation.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grpUndergroundRegionPopulation.Location = new System.Drawing.Point(3, 74);
+            this.grpUndergroundRegionPopulation.Name = "grpUndergroundRegionPopulation";
+            this.grpUndergroundRegionPopulation.Size = new System.Drawing.Size(437, 513);
+            this.grpUndergroundRegionPopulation.TabIndex = 43;
+            this.grpUndergroundRegionPopulation.TabStop = false;
+            this.grpUndergroundRegionPopulation.Text = "Population";
+            // 
+            // lstUndergroundRegionPopulation
+            // 
+            this.lstUndergroundRegionPopulation.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lstUndergroundRegionPopulation.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.lstUndergroundRegionPopulation.FormattingEnabled = true;
+            this.lstUndergroundRegionPopulation.ItemHeight = 16;
+            this.lstUndergroundRegionPopulation.Location = new System.Drawing.Point(3, 16);
+            this.lstUndergroundRegionPopulation.Name = "lstUndergroundRegionPopulation";
+            this.lstUndergroundRegionPopulation.Size = new System.Drawing.Size(431, 494);
+            this.lstUndergroundRegionPopulation.TabIndex = 0;
+            this.lstUndergroundRegionPopulation.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.lstRegionPopulation_DrawItem);
+            // 
+            // panel21
+            // 
+            this.panel21.Controls.Add(this.label86);
+            this.panel21.Controls.Add(this.lblUndergroundRegionType);
+            this.panel21.Controls.Add(this.lblUndergroundRegionDepth);
+            this.panel21.Controls.Add(this.label84);
+            this.panel21.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel21.Location = new System.Drawing.Point(3, 3);
+            this.panel21.Name = "panel21";
+            this.panel21.Size = new System.Drawing.Size(437, 65);
+            this.panel21.TabIndex = 42;
+            // 
+            // label86
+            // 
+            this.label86.AutoSize = true;
+            this.label86.Location = new System.Drawing.Point(3, 0);
+            this.label86.Name = "label86";
+            this.label86.Size = new System.Drawing.Size(39, 13);
+            this.label86.TabIndex = 32;
+            this.label86.Text = "Depth:";
+            // 
             // lblUndergroundRegionType
             // 
             this.lblUndergroundRegionType.AccessibleDescription = "";
@@ -7127,15 +8298,6 @@ namespace DFWV
             this.lblUndergroundRegionType.TabIndex = 35;
             this.lblUndergroundRegionType.Text = "label2";
             // 
-            // label84
-            // 
-            this.label84.AutoSize = true;
-            this.label84.Location = new System.Drawing.Point(3, 24);
-            this.label84.Name = "label84";
-            this.label84.Size = new System.Drawing.Size(34, 13);
-            this.label84.TabIndex = 34;
-            this.label84.Text = "Type:";
-            // 
             // lblUndergroundRegionDepth
             // 
             this.lblUndergroundRegionDepth.AutoSize = true;
@@ -7145,14 +8307,14 @@ namespace DFWV
             this.lblUndergroundRegionDepth.TabIndex = 33;
             this.lblUndergroundRegionDepth.Text = "label2";
             // 
-            // label86
+            // label84
             // 
-            this.label86.AutoSize = true;
-            this.label86.Location = new System.Drawing.Point(3, 0);
-            this.label86.Name = "label86";
-            this.label86.Size = new System.Drawing.Size(39, 13);
-            this.label86.TabIndex = 32;
-            this.label86.Text = "Depth:";
+            this.label84.AutoSize = true;
+            this.label84.Location = new System.Drawing.Point(3, 24);
+            this.label84.Name = "label84";
+            this.label84.Size = new System.Drawing.Size(34, 13);
+            this.label84.TabIndex = 34;
+            this.label84.Text = "Type:";
             // 
             // FilterUndergroundRegion
             // 
@@ -7248,6 +8410,18 @@ namespace DFWV
             this.grpWorldConstruction.TabStop = false;
             this.grpWorldConstruction.Visible = false;
             // 
+            // lblWorldConstructionCoord
+            // 
+            this.lblWorldConstructionCoord.AutoSize = true;
+            this.lblWorldConstructionCoord.Data = null;
+            this.lblWorldConstructionCoord.ForeColor = System.Drawing.Color.Black;
+            this.lblWorldConstructionCoord.Location = new System.Drawing.Point(67, 208);
+            this.lblWorldConstructionCoord.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblWorldConstructionCoord.Name = "lblWorldConstructionCoord";
+            this.lblWorldConstructionCoord.Size = new System.Drawing.Size(55, 13);
+            this.lblWorldConstructionCoord.TabIndex = 41;
+            this.lblWorldConstructionCoord.Text = "linkLabel2";
+            // 
             // label190
             // 
             this.label190.AutoSize = true;
@@ -7256,6 +8430,18 @@ namespace DFWV
             this.label190.Size = new System.Drawing.Size(38, 13);
             this.label190.TabIndex = 40;
             this.label190.Text = "Coord:";
+            // 
+            // lblWorldConstructionType
+            // 
+            this.lblWorldConstructionType.AutoSize = true;
+            this.lblWorldConstructionType.Data = null;
+            this.lblWorldConstructionType.ForeColor = System.Drawing.Color.Black;
+            this.lblWorldConstructionType.Location = new System.Drawing.Point(67, 186);
+            this.lblWorldConstructionType.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblWorldConstructionType.Name = "lblWorldConstructionType";
+            this.lblWorldConstructionType.Size = new System.Drawing.Size(55, 13);
+            this.lblWorldConstructionType.TabIndex = 39;
+            this.lblWorldConstructionType.Text = "linkLabel2";
             // 
             // label33
             // 
@@ -7280,6 +8466,39 @@ namespace DFWV
             this.grpWorldConstructionCreated.TabIndex = 33;
             this.grpWorldConstructionCreated.TabStop = false;
             this.grpWorldConstructionCreated.Text = "Created";
+            // 
+            // lblWorldConstructionCreatedTime
+            // 
+            this.lblWorldConstructionCreatedTime.AutoSize = true;
+            this.lblWorldConstructionCreatedTime.Data = null;
+            this.lblWorldConstructionCreatedTime.ForeColor = System.Drawing.Color.Black;
+            this.lblWorldConstructionCreatedTime.Location = new System.Drawing.Point(28, 64);
+            this.lblWorldConstructionCreatedTime.Name = "lblWorldConstructionCreatedTime";
+            this.lblWorldConstructionCreatedTime.Size = new System.Drawing.Size(55, 13);
+            this.lblWorldConstructionCreatedTime.TabIndex = 7;
+            this.lblWorldConstructionCreatedTime.Text = "linkLabel1";
+            // 
+            // lblWorldConstructionCreatedByCiv
+            // 
+            this.lblWorldConstructionCreatedByCiv.AutoSize = true;
+            this.lblWorldConstructionCreatedByCiv.Data = null;
+            this.lblWorldConstructionCreatedByCiv.ForeColor = System.Drawing.Color.Black;
+            this.lblWorldConstructionCreatedByCiv.Location = new System.Drawing.Point(28, 43);
+            this.lblWorldConstructionCreatedByCiv.Name = "lblWorldConstructionCreatedByCiv";
+            this.lblWorldConstructionCreatedByCiv.Size = new System.Drawing.Size(55, 13);
+            this.lblWorldConstructionCreatedByCiv.TabIndex = 6;
+            this.lblWorldConstructionCreatedByCiv.Text = "linkLabel3";
+            // 
+            // lblWorldConstructionCreatedBy
+            // 
+            this.lblWorldConstructionCreatedBy.AutoSize = true;
+            this.lblWorldConstructionCreatedBy.Data = null;
+            this.lblWorldConstructionCreatedBy.ForeColor = System.Drawing.Color.Black;
+            this.lblWorldConstructionCreatedBy.Location = new System.Drawing.Point(28, 21);
+            this.lblWorldConstructionCreatedBy.Name = "lblWorldConstructionCreatedBy";
+            this.lblWorldConstructionCreatedBy.Size = new System.Drawing.Size(55, 13);
+            this.lblWorldConstructionCreatedBy.TabIndex = 4;
+            this.lblWorldConstructionCreatedBy.Text = "linkLabel1";
             // 
             // label85
             // 
@@ -7307,6 +8526,42 @@ namespace DFWV
             this.label88.Size = new System.Drawing.Size(25, 13);
             this.label88.TabIndex = 0;
             this.label88.Text = "By: ";
+            // 
+            // lblWorldConstructionFrom
+            // 
+            this.lblWorldConstructionFrom.AutoSize = true;
+            this.lblWorldConstructionFrom.Data = null;
+            this.lblWorldConstructionFrom.ForeColor = System.Drawing.Color.Black;
+            this.lblWorldConstructionFrom.Location = new System.Drawing.Point(67, 37);
+            this.lblWorldConstructionFrom.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblWorldConstructionFrom.Name = "lblWorldConstructionFrom";
+            this.lblWorldConstructionFrom.Size = new System.Drawing.Size(55, 13);
+            this.lblWorldConstructionFrom.TabIndex = 32;
+            this.lblWorldConstructionFrom.Text = "linkLabel3";
+            // 
+            // lblWorldConstructionMaster
+            // 
+            this.lblWorldConstructionMaster.AutoSize = true;
+            this.lblWorldConstructionMaster.Data = null;
+            this.lblWorldConstructionMaster.ForeColor = System.Drawing.Color.Black;
+            this.lblWorldConstructionMaster.Location = new System.Drawing.Point(67, 15);
+            this.lblWorldConstructionMaster.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblWorldConstructionMaster.Name = "lblWorldConstructionMaster";
+            this.lblWorldConstructionMaster.Size = new System.Drawing.Size(55, 13);
+            this.lblWorldConstructionMaster.TabIndex = 31;
+            this.lblWorldConstructionMaster.Text = "linkLabel2";
+            // 
+            // lblWorldConstructionTo
+            // 
+            this.lblWorldConstructionTo.AutoSize = true;
+            this.lblWorldConstructionTo.Data = null;
+            this.lblWorldConstructionTo.ForeColor = System.Drawing.Color.Black;
+            this.lblWorldConstructionTo.Location = new System.Drawing.Point(67, 58);
+            this.lblWorldConstructionTo.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblWorldConstructionTo.Name = "lblWorldConstructionTo";
+            this.lblWorldConstructionTo.Size = new System.Drawing.Size(55, 13);
+            this.lblWorldConstructionTo.TabIndex = 30;
+            this.lblWorldConstructionTo.Text = "linkLabel1";
             // 
             // label82
             // 
@@ -7467,6 +8722,17 @@ namespace DFWV
             this.label171.TabIndex = 17;
             this.label171.Text = "Civilization:";
             // 
+            // lblDynastyLength
+            // 
+            this.lblDynastyLength.AutoSize = true;
+            this.lblDynastyLength.Data = null;
+            this.lblDynastyLength.ForeColor = System.Drawing.Color.Black;
+            this.lblDynastyLength.Location = new System.Drawing.Point(67, 66);
+            this.lblDynastyLength.Name = "lblDynastyLength";
+            this.lblDynastyLength.Size = new System.Drawing.Size(35, 13);
+            this.lblDynastyLength.TabIndex = 23;
+            this.lblDynastyLength.Text = "label1";
+            // 
             // lblDynastyType
             // 
             this.lblDynastyType.AutoSize = true;
@@ -7475,6 +8741,17 @@ namespace DFWV
             this.lblDynastyType.Size = new System.Drawing.Size(35, 13);
             this.lblDynastyType.TabIndex = 18;
             this.lblDynastyType.Text = "label2";
+            // 
+            // lblDynastyFounder
+            // 
+            this.lblDynastyFounder.AutoSize = true;
+            this.lblDynastyFounder.Data = null;
+            this.lblDynastyFounder.ForeColor = System.Drawing.Color.Black;
+            this.lblDynastyFounder.Location = new System.Drawing.Point(67, 0);
+            this.lblDynastyFounder.Name = "lblDynastyFounder";
+            this.lblDynastyFounder.Size = new System.Drawing.Size(55, 13);
+            this.lblDynastyFounder.TabIndex = 22;
+            this.lblDynastyFounder.Text = "linkLabel1";
             // 
             // label164
             // 
@@ -7493,6 +8770,17 @@ namespace DFWV
             this.label154.Size = new System.Drawing.Size(34, 13);
             this.label154.TabIndex = 21;
             this.label154.Text = "Type:";
+            // 
+            // lblDynastyCivilization
+            // 
+            this.lblDynastyCivilization.AutoSize = true;
+            this.lblDynastyCivilization.Data = null;
+            this.lblDynastyCivilization.ForeColor = System.Drawing.Color.Black;
+            this.lblDynastyCivilization.Location = new System.Drawing.Point(67, 22);
+            this.lblDynastyCivilization.Name = "lblDynastyCivilization";
+            this.lblDynastyCivilization.Size = new System.Drawing.Size(55, 13);
+            this.lblDynastyCivilization.TabIndex = 20;
+            this.lblDynastyCivilization.Text = "linkLabel1";
             // 
             // grpDynastyMembers
             // 
@@ -7605,1294 +8893,6 @@ namespace DFWV
             this.ForwardtoolStripMenuItem.ShowShortcutKeys = false;
             this.ForwardtoolStripMenuItem.Size = new System.Drawing.Size(28, 20);
             this.ForwardtoolStripMenuItem.Click += new System.EventHandler(this.ForwardtoolStripMenuItem_Click);
-            // 
-            // lblArtifactLostTime
-            // 
-            this.lblArtifactLostTime.AutoSize = true;
-            this.lblArtifactLostTime.Data = null;
-            this.lblArtifactLostTime.ForeColor = System.Drawing.Color.Black;
-            this.lblArtifactLostTime.Location = new System.Drawing.Point(28, 37);
-            this.lblArtifactLostTime.Name = "lblArtifactLostTime";
-            this.lblArtifactLostTime.Size = new System.Drawing.Size(55, 13);
-            this.lblArtifactLostTime.TabIndex = 13;
-            this.lblArtifactLostTime.Text = "linkLabel1";
-            // 
-            // lblArtifactLostSite
-            // 
-            this.lblArtifactLostSite.AutoSize = true;
-            this.lblArtifactLostSite.Data = null;
-            this.lblArtifactLostSite.ForeColor = System.Drawing.Color.Black;
-            this.lblArtifactLostSite.Location = new System.Drawing.Point(28, 16);
-            this.lblArtifactLostSite.Name = "lblArtifactLostSite";
-            this.lblArtifactLostSite.Size = new System.Drawing.Size(55, 13);
-            this.lblArtifactLostSite.TabIndex = 12;
-            this.lblArtifactLostSite.Text = "linkLabel3";
-            // 
-            // lblArtifactCreatedTime
-            // 
-            this.lblArtifactCreatedTime.AutoSize = true;
-            this.lblArtifactCreatedTime.Data = null;
-            this.lblArtifactCreatedTime.ForeColor = System.Drawing.Color.Black;
-            this.lblArtifactCreatedTime.Location = new System.Drawing.Point(28, 64);
-            this.lblArtifactCreatedTime.Name = "lblArtifactCreatedTime";
-            this.lblArtifactCreatedTime.Size = new System.Drawing.Size(55, 13);
-            this.lblArtifactCreatedTime.TabIndex = 7;
-            this.lblArtifactCreatedTime.Text = "linkLabel1";
-            // 
-            // lblArtifactCreatedSite
-            // 
-            this.lblArtifactCreatedSite.AutoSize = true;
-            this.lblArtifactCreatedSite.Data = null;
-            this.lblArtifactCreatedSite.ForeColor = System.Drawing.Color.Black;
-            this.lblArtifactCreatedSite.Location = new System.Drawing.Point(28, 43);
-            this.lblArtifactCreatedSite.Name = "lblArtifactCreatedSite";
-            this.lblArtifactCreatedSite.Size = new System.Drawing.Size(55, 13);
-            this.lblArtifactCreatedSite.TabIndex = 6;
-            this.lblArtifactCreatedSite.Text = "linkLabel3";
-            // 
-            // lblArtifactCreatedBy
-            // 
-            this.lblArtifactCreatedBy.AutoSize = true;
-            this.lblArtifactCreatedBy.Data = null;
-            this.lblArtifactCreatedBy.ForeColor = System.Drawing.Color.Black;
-            this.lblArtifactCreatedBy.Location = new System.Drawing.Point(28, 21);
-            this.lblArtifactCreatedBy.Name = "lblArtifactCreatedBy";
-            this.lblArtifactCreatedBy.Size = new System.Drawing.Size(55, 13);
-            this.lblArtifactCreatedBy.TabIndex = 4;
-            this.lblArtifactCreatedBy.Text = "linkLabel1";
-            // 
-            // lblCivilizationRace
-            // 
-            this.lblCivilizationRace.AutoSize = true;
-            this.lblCivilizationRace.Data = null;
-            this.lblCivilizationRace.ForeColor = System.Drawing.Color.Black;
-            this.lblCivilizationRace.Location = new System.Drawing.Point(58, 44);
-            this.lblCivilizationRace.Name = "lblCivilizationRace";
-            this.lblCivilizationRace.Size = new System.Drawing.Size(55, 13);
-            this.lblCivilizationRace.TabIndex = 14;
-            this.lblCivilizationRace.Text = "linkLabel1";
-            // 
-            // lblCivilizationEntity
-            // 
-            this.lblCivilizationEntity.AutoSize = true;
-            this.lblCivilizationEntity.Data = null;
-            this.lblCivilizationEntity.ForeColor = System.Drawing.Color.Black;
-            this.lblCivilizationEntity.Location = new System.Drawing.Point(58, 66);
-            this.lblCivilizationEntity.Name = "lblCivilizationEntity";
-            this.lblCivilizationEntity.Size = new System.Drawing.Size(55, 13);
-            this.lblCivilizationEntity.TabIndex = 10;
-            this.lblCivilizationEntity.Text = "linkLabel1";
-            // 
-            // lblEntityWorshippingHF
-            // 
-            this.lblEntityWorshippingHF.AutoSize = true;
-            this.lblEntityWorshippingHF.Data = null;
-            this.lblEntityWorshippingHF.ForeColor = System.Drawing.Color.Black;
-            this.lblEntityWorshippingHF.Location = new System.Drawing.Point(68, 115);
-            this.lblEntityWorshippingHF.Name = "lblEntityWorshippingHF";
-            this.lblEntityWorshippingHF.Size = new System.Drawing.Size(55, 13);
-            this.lblEntityWorshippingHF.TabIndex = 29;
-            this.lblEntityWorshippingHF.Text = "linkLabel1";
-            // 
-            // lblEntityRace
-            // 
-            this.lblEntityRace.AutoSize = true;
-            this.lblEntityRace.Data = null;
-            this.lblEntityRace.ForeColor = System.Drawing.Color.Black;
-            this.lblEntityRace.Location = new System.Drawing.Point(69, 45);
-            this.lblEntityRace.Name = "lblEntityRace";
-            this.lblEntityRace.Size = new System.Drawing.Size(55, 13);
-            this.lblEntityRace.TabIndex = 18;
-            this.lblEntityRace.Text = "linkLabel1";
-            // 
-            // lblEntityCivilization
-            // 
-            this.lblEntityCivilization.AutoSize = true;
-            this.lblEntityCivilization.Data = null;
-            this.lblEntityCivilization.ForeColor = System.Drawing.Color.Black;
-            this.lblEntityCivilization.Location = new System.Drawing.Point(69, 68);
-            this.lblEntityCivilization.Name = "lblEntityCivilization";
-            this.lblEntityCivilization.Size = new System.Drawing.Size(55, 13);
-            this.lblEntityCivilization.TabIndex = 20;
-            this.lblEntityCivilization.Text = "linkLabel1";
-            // 
-            // lblEntityParentCiv
-            // 
-            this.lblEntityParentCiv.AutoSize = true;
-            this.lblEntityParentCiv.Data = null;
-            this.lblEntityParentCiv.ForeColor = System.Drawing.Color.Black;
-            this.lblEntityParentCiv.Location = new System.Drawing.Point(69, 93);
-            this.lblEntityParentCiv.Name = "lblEntityParentCiv";
-            this.lblEntityParentCiv.Size = new System.Drawing.Size(55, 13);
-            this.lblEntityParentCiv.TabIndex = 24;
-            this.lblEntityParentCiv.Text = "linkLabel1";
-            // 
-            // lblEntitySiteTakeoverTime
-            // 
-            this.lblEntitySiteTakeoverTime.AutoSize = true;
-            this.lblEntitySiteTakeoverTime.Data = null;
-            this.lblEntitySiteTakeoverTime.ForeColor = System.Drawing.Color.Black;
-            this.lblEntitySiteTakeoverTime.Location = new System.Drawing.Point(88, 100);
-            this.lblEntitySiteTakeoverTime.Name = "lblEntitySiteTakeoverTime";
-            this.lblEntitySiteTakeoverTime.Size = new System.Drawing.Size(55, 13);
-            this.lblEntitySiteTakeoverTime.TabIndex = 15;
-            this.lblEntitySiteTakeoverTime.Text = "linkLabel5";
-            // 
-            // lblEntitySiteTakeoverNewLeader
-            // 
-            this.lblEntitySiteTakeoverNewLeader.AutoSize = true;
-            this.lblEntitySiteTakeoverNewLeader.Data = null;
-            this.lblEntitySiteTakeoverNewLeader.ForeColor = System.Drawing.Color.Black;
-            this.lblEntitySiteTakeoverNewLeader.Location = new System.Drawing.Point(88, 79);
-            this.lblEntitySiteTakeoverNewLeader.Name = "lblEntitySiteTakeoverNewLeader";
-            this.lblEntitySiteTakeoverNewLeader.Size = new System.Drawing.Size(55, 13);
-            this.lblEntitySiteTakeoverNewLeader.TabIndex = 14;
-            this.lblEntitySiteTakeoverNewLeader.Text = "linkLabel3";
-            // 
-            // lblEntitySiteTakeoverDefenderEntity
-            // 
-            this.lblEntitySiteTakeoverDefenderEntity.AutoSize = true;
-            this.lblEntitySiteTakeoverDefenderEntity.Data = null;
-            this.lblEntitySiteTakeoverDefenderEntity.ForeColor = System.Drawing.Color.Black;
-            this.lblEntitySiteTakeoverDefenderEntity.Location = new System.Drawing.Point(88, 58);
-            this.lblEntitySiteTakeoverDefenderEntity.Name = "lblEntitySiteTakeoverDefenderEntity";
-            this.lblEntitySiteTakeoverDefenderEntity.Size = new System.Drawing.Size(55, 13);
-            this.lblEntitySiteTakeoverDefenderEntity.TabIndex = 11;
-            this.lblEntitySiteTakeoverDefenderEntity.Text = "linkLabel3";
-            // 
-            // lblEntitySiteTakeoverDefenderCiv
-            // 
-            this.lblEntitySiteTakeoverDefenderCiv.AutoSize = true;
-            this.lblEntitySiteTakeoverDefenderCiv.Data = null;
-            this.lblEntitySiteTakeoverDefenderCiv.ForeColor = System.Drawing.Color.Black;
-            this.lblEntitySiteTakeoverDefenderCiv.Location = new System.Drawing.Point(88, 37);
-            this.lblEntitySiteTakeoverDefenderCiv.Name = "lblEntitySiteTakeoverDefenderCiv";
-            this.lblEntitySiteTakeoverDefenderCiv.Size = new System.Drawing.Size(55, 13);
-            this.lblEntitySiteTakeoverDefenderCiv.TabIndex = 10;
-            this.lblEntitySiteTakeoverDefenderCiv.Text = "linkLabel3";
-            // 
-            // lblEntitySiteTakeoverSite
-            // 
-            this.lblEntitySiteTakeoverSite.AutoSize = true;
-            this.lblEntitySiteTakeoverSite.Data = null;
-            this.lblEntitySiteTakeoverSite.ForeColor = System.Drawing.Color.Black;
-            this.lblEntitySiteTakeoverSite.Location = new System.Drawing.Point(88, 15);
-            this.lblEntitySiteTakeoverSite.Name = "lblEntitySiteTakeoverSite";
-            this.lblEntitySiteTakeoverSite.Size = new System.Drawing.Size(55, 13);
-            this.lblEntitySiteTakeoverSite.TabIndex = 7;
-            this.lblEntitySiteTakeoverSite.Text = "linkLabel1";
-            // 
-            // lblEntityCreatedTime
-            // 
-            this.lblEntityCreatedTime.AutoSize = true;
-            this.lblEntityCreatedTime.Data = null;
-            this.lblEntityCreatedTime.ForeColor = System.Drawing.Color.Black;
-            this.lblEntityCreatedTime.Location = new System.Drawing.Point(28, 37);
-            this.lblEntityCreatedTime.Name = "lblEntityCreatedTime";
-            this.lblEntityCreatedTime.Size = new System.Drawing.Size(55, 13);
-            this.lblEntityCreatedTime.TabIndex = 7;
-            this.lblEntityCreatedTime.Text = "linkLabel1";
-            // 
-            // lblEntityCreatedSite
-            // 
-            this.lblEntityCreatedSite.AutoSize = true;
-            this.lblEntityCreatedSite.Data = null;
-            this.lblEntityCreatedSite.ForeColor = System.Drawing.Color.Black;
-            this.lblEntityCreatedSite.Location = new System.Drawing.Point(28, 16);
-            this.lblEntityCreatedSite.Name = "lblEntityCreatedSite";
-            this.lblEntityCreatedSite.Size = new System.Drawing.Size(55, 13);
-            this.lblEntityCreatedSite.TabIndex = 6;
-            this.lblEntityCreatedSite.Text = "linkLabel3";
-            // 
-            // lblEntityPopulationCiv
-            // 
-            this.lblEntityPopulationCiv.AutoSize = true;
-            this.lblEntityPopulationCiv.Data = null;
-            this.lblEntityPopulationCiv.ForeColor = System.Drawing.Color.Black;
-            this.lblEntityPopulationCiv.Location = new System.Drawing.Point(43, 30);
-            this.lblEntityPopulationCiv.Name = "lblEntityPopulationCiv";
-            this.lblEntityPopulationCiv.Size = new System.Drawing.Size(55, 13);
-            this.lblEntityPopulationCiv.TabIndex = 21;
-            this.lblEntityPopulationCiv.Text = "linkLabel1";
-            // 
-            // lblEntityPopulationRace
-            // 
-            this.lblEntityPopulationRace.AutoSize = true;
-            this.lblEntityPopulationRace.Data = null;
-            this.lblEntityPopulationRace.ForeColor = System.Drawing.Color.Black;
-            this.lblEntityPopulationRace.Location = new System.Drawing.Point(43, 0);
-            this.lblEntityPopulationRace.Name = "lblEntityPopulationRace";
-            this.lblEntityPopulationRace.Size = new System.Drawing.Size(55, 13);
-            this.lblEntityPopulationRace.TabIndex = 19;
-            this.lblEntityPopulationRace.Text = "linkLabel1";
-            // 
-            // lblEntityPopulationBattleTime
-            // 
-            this.lblEntityPopulationBattleTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblEntityPopulationBattleTime.AutoSize = true;
-            this.lblEntityPopulationBattleTime.Data = null;
-            this.lblEntityPopulationBattleTime.ForeColor = System.Drawing.Color.Black;
-            this.lblEntityPopulationBattleTime.Location = new System.Drawing.Point(70, 461);
-            this.lblEntityPopulationBattleTime.Name = "lblEntityPopulationBattleTime";
-            this.lblEntityPopulationBattleTime.Size = new System.Drawing.Size(55, 13);
-            this.lblEntityPopulationBattleTime.TabIndex = 29;
-            this.lblEntityPopulationBattleTime.Text = "linkLabel5";
-            // 
-            // lblEntityPopulationBattleWar
-            // 
-            this.lblEntityPopulationBattleWar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblEntityPopulationBattleWar.AutoSize = true;
-            this.lblEntityPopulationBattleWar.Data = null;
-            this.lblEntityPopulationBattleWar.ForeColor = System.Drawing.Color.Black;
-            this.lblEntityPopulationBattleWar.Location = new System.Drawing.Point(70, 438);
-            this.lblEntityPopulationBattleWar.Name = "lblEntityPopulationBattleWar";
-            this.lblEntityPopulationBattleWar.Size = new System.Drawing.Size(55, 13);
-            this.lblEntityPopulationBattleWar.TabIndex = 25;
-            this.lblEntityPopulationBattleWar.Text = "linkLabel5";
-            // 
-            // lblGodHF
-            // 
-            this.lblGodHF.AutoSize = true;
-            this.lblGodHF.Data = null;
-            this.lblGodHF.ForeColor = System.Drawing.Color.Black;
-            this.lblGodHF.Location = new System.Drawing.Point(58, 43);
-            this.lblGodHF.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblGodHF.Name = "lblGodHF";
-            this.lblGodHF.Size = new System.Drawing.Size(55, 13);
-            this.lblGodHF.TabIndex = 22;
-            this.lblGodHF.Text = "linkLabel1";
-            // 
-            // lblHistoricalFigureCoords
-            // 
-            this.lblHistoricalFigureCoords.AutoSize = true;
-            this.lblHistoricalFigureCoords.Data = null;
-            this.lblHistoricalFigureCoords.ForeColor = System.Drawing.Color.Black;
-            this.lblHistoricalFigureCoords.Location = new System.Drawing.Point(92, 216);
-            this.lblHistoricalFigureCoords.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblHistoricalFigureCoords.Name = "lblHistoricalFigureCoords";
-            this.lblHistoricalFigureCoords.Size = new System.Drawing.Size(55, 13);
-            this.lblHistoricalFigureCoords.TabIndex = 69;
-            this.lblHistoricalFigureCoords.Text = "linkLabel3";
-            // 
-            // lblHistoricalFigureLocation
-            // 
-            this.lblHistoricalFigureLocation.AutoSize = true;
-            this.lblHistoricalFigureLocation.Data = null;
-            this.lblHistoricalFigureLocation.ForeColor = System.Drawing.Color.Black;
-            this.lblHistoricalFigureLocation.Location = new System.Drawing.Point(92, 194);
-            this.lblHistoricalFigureLocation.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblHistoricalFigureLocation.Name = "lblHistoricalFigureLocation";
-            this.lblHistoricalFigureLocation.Size = new System.Drawing.Size(55, 13);
-            this.lblHistoricalFigureLocation.TabIndex = 60;
-            this.lblHistoricalFigureLocation.Text = "linkLabel3";
-            // 
-            // lblHistoricalFigureRace
-            // 
-            this.lblHistoricalFigureRace.AutoSize = true;
-            this.lblHistoricalFigureRace.Data = null;
-            this.lblHistoricalFigureRace.ForeColor = System.Drawing.Color.Black;
-            this.lblHistoricalFigureRace.Location = new System.Drawing.Point(92, 22);
-            this.lblHistoricalFigureRace.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblHistoricalFigureRace.Name = "lblHistoricalFigureRace";
-            this.lblHistoricalFigureRace.Size = new System.Drawing.Size(55, 13);
-            this.lblHistoricalFigureRace.TabIndex = 55;
-            this.lblHistoricalFigureRace.Text = "linkLabel3";
-            // 
-            // lblHistoricalFigureEntityPopulation
-            // 
-            this.lblHistoricalFigureEntityPopulation.AutoSize = true;
-            this.lblHistoricalFigureEntityPopulation.Data = null;
-            this.lblHistoricalFigureEntityPopulation.ForeColor = System.Drawing.Color.Black;
-            this.lblHistoricalFigureEntityPopulation.Location = new System.Drawing.Point(92, 284);
-            this.lblHistoricalFigureEntityPopulation.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblHistoricalFigureEntityPopulation.Name = "lblHistoricalFigureEntityPopulation";
-            this.lblHistoricalFigureEntityPopulation.Size = new System.Drawing.Size(55, 13);
-            this.lblHistoricalFigureEntityPopulation.TabIndex = 53;
-            this.lblHistoricalFigureEntityPopulation.Text = "linkLabel5";
-            // 
-            // lblHistoricalFigureGod
-            // 
-            this.lblHistoricalFigureGod.AutoSize = true;
-            this.lblHistoricalFigureGod.Data = null;
-            this.lblHistoricalFigureGod.ForeColor = System.Drawing.Color.Black;
-            this.lblHistoricalFigureGod.Location = new System.Drawing.Point(92, 240);
-            this.lblHistoricalFigureGod.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblHistoricalFigureGod.Name = "lblHistoricalFigureGod";
-            this.lblHistoricalFigureGod.Size = new System.Drawing.Size(55, 13);
-            this.lblHistoricalFigureGod.TabIndex = 51;
-            this.lblHistoricalFigureGod.Text = "linkLabel3";
-            // 
-            // lblHistoricalFigureLeader
-            // 
-            this.lblHistoricalFigureLeader.AutoSize = true;
-            this.lblHistoricalFigureLeader.Data = null;
-            this.lblHistoricalFigureLeader.ForeColor = System.Drawing.Color.Black;
-            this.lblHistoricalFigureLeader.Location = new System.Drawing.Point(92, 262);
-            this.lblHistoricalFigureLeader.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblHistoricalFigureLeader.Name = "lblHistoricalFigureLeader";
-            this.lblHistoricalFigureLeader.Size = new System.Drawing.Size(55, 13);
-            this.lblHistoricalFigureLeader.TabIndex = 50;
-            this.lblHistoricalFigureLeader.Text = "linkLabel2";
-            // 
-            // lblHistoricalFigureDeathTime
-            // 
-            this.lblHistoricalFigureDeathTime.AutoSize = true;
-            this.lblHistoricalFigureDeathTime.Data = null;
-            this.lblHistoricalFigureDeathTime.ForeColor = System.Drawing.Color.Black;
-            this.lblHistoricalFigureDeathTime.Location = new System.Drawing.Point(47, 86);
-            this.lblHistoricalFigureDeathTime.Name = "lblHistoricalFigureDeathTime";
-            this.lblHistoricalFigureDeathTime.Size = new System.Drawing.Size(55, 13);
-            this.lblHistoricalFigureDeathTime.TabIndex = 9;
-            this.lblHistoricalFigureDeathTime.Text = "linkLabel2";
-            // 
-            // lblHistoricalFigureDeathLocation
-            // 
-            this.lblHistoricalFigureDeathLocation.AutoSize = true;
-            this.lblHistoricalFigureDeathLocation.Data = null;
-            this.lblHistoricalFigureDeathLocation.ForeColor = System.Drawing.Color.Black;
-            this.lblHistoricalFigureDeathLocation.Location = new System.Drawing.Point(47, 43);
-            this.lblHistoricalFigureDeathLocation.Name = "lblHistoricalFigureDeathLocation";
-            this.lblHistoricalFigureDeathLocation.Size = new System.Drawing.Size(55, 13);
-            this.lblHistoricalFigureDeathLocation.TabIndex = 6;
-            this.lblHistoricalFigureDeathLocation.Text = "linkLabel3";
-            // 
-            // lblHistoricalFigureDeathSlayer
-            // 
-            this.lblHistoricalFigureDeathSlayer.AutoSize = true;
-            this.lblHistoricalFigureDeathSlayer.Data = null;
-            this.lblHistoricalFigureDeathSlayer.ForeColor = System.Drawing.Color.Black;
-            this.lblHistoricalFigureDeathSlayer.Location = new System.Drawing.Point(47, 21);
-            this.lblHistoricalFigureDeathSlayer.Name = "lblHistoricalFigureDeathSlayer";
-            this.lblHistoricalFigureDeathSlayer.Size = new System.Drawing.Size(55, 13);
-            this.lblHistoricalFigureDeathSlayer.TabIndex = 4;
-            this.lblHistoricalFigureDeathSlayer.Text = "linkLabel1";
-            // 
-            // lblBeastAttackParent
-            // 
-            this.lblBeastAttackParent.AutoSize = true;
-            this.lblBeastAttackParent.Data = null;
-            this.lblBeastAttackParent.ForeColor = System.Drawing.Color.Black;
-            this.lblBeastAttackParent.Location = new System.Drawing.Point(61, 46);
-            this.lblBeastAttackParent.Name = "lblBeastAttackParent";
-            this.lblBeastAttackParent.Size = new System.Drawing.Size(55, 13);
-            this.lblBeastAttackParent.TabIndex = 110;
-            this.lblBeastAttackParent.Text = "linkLabel1";
-            // 
-            // lblBeastAttackSite
-            // 
-            this.lblBeastAttackSite.AutoSize = true;
-            this.lblBeastAttackSite.Data = null;
-            this.lblBeastAttackSite.ForeColor = System.Drawing.Color.Black;
-            this.lblBeastAttackSite.Location = new System.Drawing.Point(60, 111);
-            this.lblBeastAttackSite.Name = "lblBeastAttackSite";
-            this.lblBeastAttackSite.Size = new System.Drawing.Size(55, 13);
-            this.lblBeastAttackSite.TabIndex = 114;
-            this.lblBeastAttackSite.Text = "linkLabel1";
-            // 
-            // lblBeastAttackCoords
-            // 
-            this.lblBeastAttackCoords.AutoSize = true;
-            this.lblBeastAttackCoords.Data = null;
-            this.lblBeastAttackCoords.ForeColor = System.Drawing.Color.Black;
-            this.lblBeastAttackCoords.Location = new System.Drawing.Point(59, 133);
-            this.lblBeastAttackCoords.Name = "lblBeastAttackCoords";
-            this.lblBeastAttackCoords.Size = new System.Drawing.Size(55, 13);
-            this.lblBeastAttackCoords.TabIndex = 116;
-            this.lblBeastAttackCoords.Text = "linkLabel3";
-            // 
-            // lblBeastAttackDefender
-            // 
-            this.lblBeastAttackDefender.AutoSize = true;
-            this.lblBeastAttackDefender.Data = null;
-            this.lblBeastAttackDefender.ForeColor = System.Drawing.Color.Black;
-            this.lblBeastAttackDefender.Location = new System.Drawing.Point(59, 154);
-            this.lblBeastAttackDefender.Name = "lblBeastAttackDefender";
-            this.lblBeastAttackDefender.Size = new System.Drawing.Size(55, 13);
-            this.lblBeastAttackDefender.TabIndex = 123;
-            this.lblBeastAttackDefender.Text = "linkLabel3";
-            // 
-            // lblBeastAttackRegion
-            // 
-            this.lblBeastAttackRegion.AutoSize = true;
-            this.lblBeastAttackRegion.Data = null;
-            this.lblBeastAttackRegion.ForeColor = System.Drawing.Color.Black;
-            this.lblBeastAttackRegion.Location = new System.Drawing.Point(61, 89);
-            this.lblBeastAttackRegion.Name = "lblBeastAttackRegion";
-            this.lblBeastAttackRegion.Size = new System.Drawing.Size(55, 13);
-            this.lblBeastAttackRegion.TabIndex = 127;
-            this.lblBeastAttackRegion.Text = "linkLabel1";
-            // 
-            // lblBeastAttackBeast
-            // 
-            this.lblBeastAttackBeast.AutoSize = true;
-            this.lblBeastAttackBeast.Data = null;
-            this.lblBeastAttackBeast.ForeColor = System.Drawing.Color.Black;
-            this.lblBeastAttackBeast.Location = new System.Drawing.Point(61, 67);
-            this.lblBeastAttackBeast.Name = "lblBeastAttackBeast";
-            this.lblBeastAttackBeast.Size = new System.Drawing.Size(55, 13);
-            this.lblBeastAttackBeast.TabIndex = 129;
-            this.lblBeastAttackBeast.Text = "linkLabel1";
-            // 
-            // lblWarDefender
-            // 
-            this.lblWarDefender.AutoSize = true;
-            this.lblWarDefender.Data = null;
-            this.lblWarDefender.ForeColor = System.Drawing.Color.Black;
-            this.lblWarDefender.Location = new System.Drawing.Point(5, 24);
-            this.lblWarDefender.Name = "lblWarDefender";
-            this.lblWarDefender.Size = new System.Drawing.Size(55, 13);
-            this.lblWarDefender.TabIndex = 55;
-            this.lblWarDefender.Text = "linkLabel1";
-            // 
-            // lblWarAggressor
-            // 
-            this.lblWarAggressor.AutoSize = true;
-            this.lblWarAggressor.Data = null;
-            this.lblWarAggressor.ForeColor = System.Drawing.Color.Black;
-            this.lblWarAggressor.Location = new System.Drawing.Point(5, 24);
-            this.lblWarAggressor.Name = "lblWarAggressor";
-            this.lblWarAggressor.Size = new System.Drawing.Size(55, 13);
-            this.lblWarAggressor.TabIndex = 54;
-            this.lblWarAggressor.Text = "linkLabel1";
-            // 
-            // lblBattleWar
-            // 
-            this.lblBattleWar.AutoSize = true;
-            this.lblBattleWar.Data = null;
-            this.lblBattleWar.ForeColor = System.Drawing.Color.Black;
-            this.lblBattleWar.Location = new System.Drawing.Point(61, 68);
-            this.lblBattleWar.Name = "lblBattleWar";
-            this.lblBattleWar.Size = new System.Drawing.Size(55, 13);
-            this.lblBattleWar.TabIndex = 31;
-            this.lblBattleWar.Text = "linkLabel1";
-            // 
-            // lblBattleRegion
-            // 
-            this.lblBattleRegion.AutoSize = true;
-            this.lblBattleRegion.Data = null;
-            this.lblBattleRegion.ForeColor = System.Drawing.Color.Black;
-            this.lblBattleRegion.Location = new System.Drawing.Point(62, 90);
-            this.lblBattleRegion.Name = "lblBattleRegion";
-            this.lblBattleRegion.Size = new System.Drawing.Size(55, 13);
-            this.lblBattleRegion.TabIndex = 37;
-            this.lblBattleRegion.Text = "linkLabel1";
-            // 
-            // lblBattleSite
-            // 
-            this.lblBattleSite.AutoSize = true;
-            this.lblBattleSite.Data = null;
-            this.lblBattleSite.ForeColor = System.Drawing.Color.Black;
-            this.lblBattleSite.Location = new System.Drawing.Point(62, 112);
-            this.lblBattleSite.Name = "lblBattleSite";
-            this.lblBattleSite.Size = new System.Drawing.Size(55, 13);
-            this.lblBattleSite.TabIndex = 39;
-            this.lblBattleSite.Text = "linkLabel1";
-            // 
-            // lblBattleCoord
-            // 
-            this.lblBattleCoord.AutoSize = true;
-            this.lblBattleCoord.Data = null;
-            this.lblBattleCoord.ForeColor = System.Drawing.Color.Black;
-            this.lblBattleCoord.Location = new System.Drawing.Point(61, 134);
-            this.lblBattleCoord.Name = "lblBattleCoord";
-            this.lblBattleCoord.Size = new System.Drawing.Size(55, 13);
-            this.lblBattleCoord.TabIndex = 41;
-            this.lblBattleCoord.Text = "linkLabel3";
-            // 
-            // lblBattleDefendingSquadRace
-            // 
-            this.lblBattleDefendingSquadRace.AutoSize = true;
-            this.lblBattleDefendingSquadRace.Data = null;
-            this.lblBattleDefendingSquadRace.ForeColor = System.Drawing.Color.Black;
-            this.lblBattleDefendingSquadRace.Location = new System.Drawing.Point(62, 197);
-            this.lblBattleDefendingSquadRace.Name = "lblBattleDefendingSquadRace";
-            this.lblBattleDefendingSquadRace.Size = new System.Drawing.Size(55, 13);
-            this.lblBattleDefendingSquadRace.TabIndex = 47;
-            this.lblBattleDefendingSquadRace.Text = "linkLabel3";
-            // 
-            // lblBattleDefendingSquadEntPop
-            // 
-            this.lblBattleDefendingSquadEntPop.AutoSize = true;
-            this.lblBattleDefendingSquadEntPop.Data = null;
-            this.lblBattleDefendingSquadEntPop.ForeColor = System.Drawing.Color.Black;
-            this.lblBattleDefendingSquadEntPop.Location = new System.Drawing.Point(63, 176);
-            this.lblBattleDefendingSquadEntPop.Name = "lblBattleDefendingSquadEntPop";
-            this.lblBattleDefendingSquadEntPop.Size = new System.Drawing.Size(55, 13);
-            this.lblBattleDefendingSquadEntPop.TabIndex = 45;
-            this.lblBattleDefendingSquadEntPop.Text = "linkLabel1";
-            // 
-            // lblBattleDefendingSquadSite
-            // 
-            this.lblBattleDefendingSquadSite.AutoSize = true;
-            this.lblBattleDefendingSquadSite.Data = null;
-            this.lblBattleDefendingSquadSite.ForeColor = System.Drawing.Color.Black;
-            this.lblBattleDefendingSquadSite.Location = new System.Drawing.Point(63, 154);
-            this.lblBattleDefendingSquadSite.Name = "lblBattleDefendingSquadSite";
-            this.lblBattleDefendingSquadSite.Size = new System.Drawing.Size(55, 13);
-            this.lblBattleDefendingSquadSite.TabIndex = 43;
-            this.lblBattleDefendingSquadSite.Text = "linkLabel1";
-            // 
-            // lblBattleAttackingSquadRace
-            // 
-            this.lblBattleAttackingSquadRace.AutoSize = true;
-            this.lblBattleAttackingSquadRace.Data = null;
-            this.lblBattleAttackingSquadRace.ForeColor = System.Drawing.Color.Black;
-            this.lblBattleAttackingSquadRace.Location = new System.Drawing.Point(62, 197);
-            this.lblBattleAttackingSquadRace.Name = "lblBattleAttackingSquadRace";
-            this.lblBattleAttackingSquadRace.Size = new System.Drawing.Size(55, 13);
-            this.lblBattleAttackingSquadRace.TabIndex = 47;
-            this.lblBattleAttackingSquadRace.Text = "linkLabel3";
-            // 
-            // lblBattleAttackingSquadEntPop
-            // 
-            this.lblBattleAttackingSquadEntPop.AutoSize = true;
-            this.lblBattleAttackingSquadEntPop.Data = null;
-            this.lblBattleAttackingSquadEntPop.ForeColor = System.Drawing.Color.Black;
-            this.lblBattleAttackingSquadEntPop.Location = new System.Drawing.Point(63, 176);
-            this.lblBattleAttackingSquadEntPop.Name = "lblBattleAttackingSquadEntPop";
-            this.lblBattleAttackingSquadEntPop.Size = new System.Drawing.Size(55, 13);
-            this.lblBattleAttackingSquadEntPop.TabIndex = 45;
-            this.lblBattleAttackingSquadEntPop.Text = "linkLabel1";
-            // 
-            // lblBattleAttackingSquadSite
-            // 
-            this.lblBattleAttackingSquadSite.AutoSize = true;
-            this.lblBattleAttackingSquadSite.Data = null;
-            this.lblBattleAttackingSquadSite.ForeColor = System.Drawing.Color.Black;
-            this.lblBattleAttackingSquadSite.Location = new System.Drawing.Point(63, 154);
-            this.lblBattleAttackingSquadSite.Name = "lblBattleAttackingSquadSite";
-            this.lblBattleAttackingSquadSite.Size = new System.Drawing.Size(55, 13);
-            this.lblBattleAttackingSquadSite.TabIndex = 43;
-            this.lblBattleAttackingSquadSite.Text = "linkLabel1";
-            // 
-            // lblDuelParent
-            // 
-            this.lblDuelParent.AutoSize = true;
-            this.lblDuelParent.Data = null;
-            this.lblDuelParent.ForeColor = System.Drawing.Color.Black;
-            this.lblDuelParent.Location = new System.Drawing.Point(61, 44);
-            this.lblDuelParent.Name = "lblDuelParent";
-            this.lblDuelParent.Size = new System.Drawing.Size(55, 13);
-            this.lblDuelParent.TabIndex = 91;
-            this.lblDuelParent.Text = "linkLabel1";
-            // 
-            // lblDuelSite
-            // 
-            this.lblDuelSite.AutoSize = true;
-            this.lblDuelSite.Data = null;
-            this.lblDuelSite.ForeColor = System.Drawing.Color.Black;
-            this.lblDuelSite.Location = new System.Drawing.Point(60, 88);
-            this.lblDuelSite.Name = "lblDuelSite";
-            this.lblDuelSite.Size = new System.Drawing.Size(55, 13);
-            this.lblDuelSite.TabIndex = 95;
-            this.lblDuelSite.Text = "linkLabel1";
-            // 
-            // lblDuelCoords
-            // 
-            this.lblDuelCoords.AutoSize = true;
-            this.lblDuelCoords.Data = null;
-            this.lblDuelCoords.ForeColor = System.Drawing.Color.Black;
-            this.lblDuelCoords.Location = new System.Drawing.Point(59, 110);
-            this.lblDuelCoords.Name = "lblDuelCoords";
-            this.lblDuelCoords.Size = new System.Drawing.Size(55, 13);
-            this.lblDuelCoords.TabIndex = 97;
-            this.lblDuelCoords.Text = "linkLabel3";
-            // 
-            // lblDuelAttacker
-            // 
-            this.lblDuelAttacker.AutoSize = true;
-            this.lblDuelAttacker.Data = null;
-            this.lblDuelAttacker.ForeColor = System.Drawing.Color.Black;
-            this.lblDuelAttacker.Location = new System.Drawing.Point(60, 132);
-            this.lblDuelAttacker.Name = "lblDuelAttacker";
-            this.lblDuelAttacker.Size = new System.Drawing.Size(55, 13);
-            this.lblDuelAttacker.TabIndex = 102;
-            this.lblDuelAttacker.Text = "linkLabel1";
-            // 
-            // lblDuelDefender
-            // 
-            this.lblDuelDefender.AutoSize = true;
-            this.lblDuelDefender.Data = null;
-            this.lblDuelDefender.ForeColor = System.Drawing.Color.Black;
-            this.lblDuelDefender.Location = new System.Drawing.Point(59, 154);
-            this.lblDuelDefender.Name = "lblDuelDefender";
-            this.lblDuelDefender.Size = new System.Drawing.Size(55, 13);
-            this.lblDuelDefender.TabIndex = 104;
-            this.lblDuelDefender.Text = "linkLabel3";
-            // 
-            // lblDuelRegion
-            // 
-            this.lblDuelRegion.AutoSize = true;
-            this.lblDuelRegion.Data = null;
-            this.lblDuelRegion.ForeColor = System.Drawing.Color.Black;
-            this.lblDuelRegion.Location = new System.Drawing.Point(61, 66);
-            this.lblDuelRegion.Name = "lblDuelRegion";
-            this.lblDuelRegion.Size = new System.Drawing.Size(55, 13);
-            this.lblDuelRegion.TabIndex = 108;
-            this.lblDuelRegion.Text = "linkLabel1";
-            // 
-            // lblAbductionParent
-            // 
-            this.lblAbductionParent.AutoSize = true;
-            this.lblAbductionParent.Data = null;
-            this.lblAbductionParent.ForeColor = System.Drawing.Color.Black;
-            this.lblAbductionParent.Location = new System.Drawing.Point(61, 44);
-            this.lblAbductionParent.Name = "lblAbductionParent";
-            this.lblAbductionParent.Size = new System.Drawing.Size(55, 13);
-            this.lblAbductionParent.TabIndex = 72;
-            this.lblAbductionParent.Text = "linkLabel1";
-            // 
-            // lblAbductionSite
-            // 
-            this.lblAbductionSite.AutoSize = true;
-            this.lblAbductionSite.Data = null;
-            this.lblAbductionSite.ForeColor = System.Drawing.Color.Black;
-            this.lblAbductionSite.Location = new System.Drawing.Point(60, 88);
-            this.lblAbductionSite.Name = "lblAbductionSite";
-            this.lblAbductionSite.Size = new System.Drawing.Size(55, 13);
-            this.lblAbductionSite.TabIndex = 76;
-            this.lblAbductionSite.Text = "linkLabel1";
-            // 
-            // lblAbductionCoords
-            // 
-            this.lblAbductionCoords.AutoSize = true;
-            this.lblAbductionCoords.Data = null;
-            this.lblAbductionCoords.ForeColor = System.Drawing.Color.Black;
-            this.lblAbductionCoords.Location = new System.Drawing.Point(59, 110);
-            this.lblAbductionCoords.Name = "lblAbductionCoords";
-            this.lblAbductionCoords.Size = new System.Drawing.Size(55, 13);
-            this.lblAbductionCoords.TabIndex = 78;
-            this.lblAbductionCoords.Text = "linkLabel3";
-            // 
-            // lblAbductionAttacker
-            // 
-            this.lblAbductionAttacker.AutoSize = true;
-            this.lblAbductionAttacker.Data = null;
-            this.lblAbductionAttacker.ForeColor = System.Drawing.Color.Black;
-            this.lblAbductionAttacker.Location = new System.Drawing.Point(60, 132);
-            this.lblAbductionAttacker.Name = "lblAbductionAttacker";
-            this.lblAbductionAttacker.Size = new System.Drawing.Size(55, 13);
-            this.lblAbductionAttacker.TabIndex = 83;
-            this.lblAbductionAttacker.Text = "linkLabel1";
-            // 
-            // lblAbductionDefender
-            // 
-            this.lblAbductionDefender.AutoSize = true;
-            this.lblAbductionDefender.Data = null;
-            this.lblAbductionDefender.ForeColor = System.Drawing.Color.Black;
-            this.lblAbductionDefender.Location = new System.Drawing.Point(59, 154);
-            this.lblAbductionDefender.Name = "lblAbductionDefender";
-            this.lblAbductionDefender.Size = new System.Drawing.Size(55, 13);
-            this.lblAbductionDefender.TabIndex = 85;
-            this.lblAbductionDefender.Text = "linkLabel3";
-            // 
-            // lblAbductionRegion
-            // 
-            this.lblAbductionRegion.AutoSize = true;
-            this.lblAbductionRegion.Data = null;
-            this.lblAbductionRegion.ForeColor = System.Drawing.Color.Black;
-            this.lblAbductionRegion.Location = new System.Drawing.Point(61, 66);
-            this.lblAbductionRegion.Name = "lblAbductionRegion";
-            this.lblAbductionRegion.Size = new System.Drawing.Size(55, 13);
-            this.lblAbductionRegion.TabIndex = 89;
-            this.lblAbductionRegion.Text = "linkLabel1";
-            // 
-            // lblSiteConqueredWar
-            // 
-            this.lblSiteConqueredWar.AutoSize = true;
-            this.lblSiteConqueredWar.Data = null;
-            this.lblSiteConqueredWar.ForeColor = System.Drawing.Color.Black;
-            this.lblSiteConqueredWar.Location = new System.Drawing.Point(61, 44);
-            this.lblSiteConqueredWar.Name = "lblSiteConqueredWar";
-            this.lblSiteConqueredWar.Size = new System.Drawing.Size(55, 13);
-            this.lblSiteConqueredWar.TabIndex = 52;
-            this.lblSiteConqueredWar.Text = "linkLabel1";
-            // 
-            // lblSiteConqueredSite
-            // 
-            this.lblSiteConqueredSite.AutoSize = true;
-            this.lblSiteConqueredSite.Data = null;
-            this.lblSiteConqueredSite.ForeColor = System.Drawing.Color.Black;
-            this.lblSiteConqueredSite.Location = new System.Drawing.Point(61, 66);
-            this.lblSiteConqueredSite.Name = "lblSiteConqueredSite";
-            this.lblSiteConqueredSite.Size = new System.Drawing.Size(55, 13);
-            this.lblSiteConqueredSite.TabIndex = 58;
-            this.lblSiteConqueredSite.Text = "linkLabel1";
-            // 
-            // lblSiteConqueredCoords
-            // 
-            this.lblSiteConqueredCoords.AutoSize = true;
-            this.lblSiteConqueredCoords.Data = null;
-            this.lblSiteConqueredCoords.ForeColor = System.Drawing.Color.Black;
-            this.lblSiteConqueredCoords.Location = new System.Drawing.Point(60, 88);
-            this.lblSiteConqueredCoords.Name = "lblSiteConqueredCoords";
-            this.lblSiteConqueredCoords.Size = new System.Drawing.Size(55, 13);
-            this.lblSiteConqueredCoords.TabIndex = 60;
-            this.lblSiteConqueredCoords.Text = "linkLabel3";
-            // 
-            // lblSiteConqueredAttacker
-            // 
-            this.lblSiteConqueredAttacker.AutoSize = true;
-            this.lblSiteConqueredAttacker.Data = null;
-            this.lblSiteConqueredAttacker.ForeColor = System.Drawing.Color.Black;
-            this.lblSiteConqueredAttacker.Location = new System.Drawing.Point(61, 110);
-            this.lblSiteConqueredAttacker.Name = "lblSiteConqueredAttacker";
-            this.lblSiteConqueredAttacker.Size = new System.Drawing.Size(55, 13);
-            this.lblSiteConqueredAttacker.TabIndex = 65;
-            this.lblSiteConqueredAttacker.Text = "linkLabel1";
-            // 
-            // lblSiteConqueredDefender
-            // 
-            this.lblSiteConqueredDefender.AutoSize = true;
-            this.lblSiteConqueredDefender.Data = null;
-            this.lblSiteConqueredDefender.ForeColor = System.Drawing.Color.Black;
-            this.lblSiteConqueredDefender.Location = new System.Drawing.Point(60, 132);
-            this.lblSiteConqueredDefender.Name = "lblSiteConqueredDefender";
-            this.lblSiteConqueredDefender.Size = new System.Drawing.Size(55, 13);
-            this.lblSiteConqueredDefender.TabIndex = 67;
-            this.lblSiteConqueredDefender.Text = "linkLabel3";
-            // 
-            // lblTheftWar
-            // 
-            this.lblTheftWar.AutoSize = true;
-            this.lblTheftWar.Data = null;
-            this.lblTheftWar.ForeColor = System.Drawing.Color.Black;
-            this.lblTheftWar.Location = new System.Drawing.Point(61, 44);
-            this.lblTheftWar.Name = "lblTheftWar";
-            this.lblTheftWar.Size = new System.Drawing.Size(55, 13);
-            this.lblTheftWar.TabIndex = 72;
-            this.lblTheftWar.Text = "linkLabel1";
-            // 
-            // lblTheftSite
-            // 
-            this.lblTheftSite.AutoSize = true;
-            this.lblTheftSite.Data = null;
-            this.lblTheftSite.ForeColor = System.Drawing.Color.Black;
-            this.lblTheftSite.Location = new System.Drawing.Point(61, 66);
-            this.lblTheftSite.Name = "lblTheftSite";
-            this.lblTheftSite.Size = new System.Drawing.Size(55, 13);
-            this.lblTheftSite.TabIndex = 76;
-            this.lblTheftSite.Text = "linkLabel1";
-            // 
-            // lblTheftCoords
-            // 
-            this.lblTheftCoords.AutoSize = true;
-            this.lblTheftCoords.Data = null;
-            this.lblTheftCoords.ForeColor = System.Drawing.Color.Black;
-            this.lblTheftCoords.Location = new System.Drawing.Point(60, 88);
-            this.lblTheftCoords.Name = "lblTheftCoords";
-            this.lblTheftCoords.Size = new System.Drawing.Size(55, 13);
-            this.lblTheftCoords.TabIndex = 78;
-            this.lblTheftCoords.Text = "linkLabel3";
-            // 
-            // lblTheftAttacker
-            // 
-            this.lblTheftAttacker.AutoSize = true;
-            this.lblTheftAttacker.Data = null;
-            this.lblTheftAttacker.ForeColor = System.Drawing.Color.Black;
-            this.lblTheftAttacker.Location = new System.Drawing.Point(61, 110);
-            this.lblTheftAttacker.Name = "lblTheftAttacker";
-            this.lblTheftAttacker.Size = new System.Drawing.Size(55, 13);
-            this.lblTheftAttacker.TabIndex = 83;
-            this.lblTheftAttacker.Text = "linkLabel1";
-            // 
-            // lblTheftDefender
-            // 
-            this.lblTheftDefender.AutoSize = true;
-            this.lblTheftDefender.Data = null;
-            this.lblTheftDefender.ForeColor = System.Drawing.Color.Black;
-            this.lblTheftDefender.Location = new System.Drawing.Point(60, 132);
-            this.lblTheftDefender.Name = "lblTheftDefender";
-            this.lblTheftDefender.Size = new System.Drawing.Size(55, 13);
-            this.lblTheftDefender.TabIndex = 85;
-            this.lblTheftDefender.Text = "linkLabel3";
-            // 
-            // lblInsurrectionOutcome
-            // 
-            this.lblInsurrectionOutcome.AutoSize = true;
-            this.lblInsurrectionOutcome.Data = null;
-            this.lblInsurrectionOutcome.ForeColor = System.Drawing.Color.Black;
-            this.lblInsurrectionOutcome.Location = new System.Drawing.Point(61, 132);
-            this.lblInsurrectionOutcome.Name = "lblInsurrectionOutcome";
-            this.lblInsurrectionOutcome.Size = new System.Drawing.Size(55, 13);
-            this.lblInsurrectionOutcome.TabIndex = 108;
-            this.lblInsurrectionOutcome.Text = "linkLabel1";
-            // 
-            // lblInsurrectionParent
-            // 
-            this.lblInsurrectionParent.AutoSize = true;
-            this.lblInsurrectionParent.Data = null;
-            this.lblInsurrectionParent.ForeColor = System.Drawing.Color.Black;
-            this.lblInsurrectionParent.Location = new System.Drawing.Point(61, 44);
-            this.lblInsurrectionParent.Name = "lblInsurrectionParent";
-            this.lblInsurrectionParent.Size = new System.Drawing.Size(55, 13);
-            this.lblInsurrectionParent.TabIndex = 91;
-            this.lblInsurrectionParent.Text = "linkLabel1";
-            // 
-            // lblInsurrectionSite
-            // 
-            this.lblInsurrectionSite.AutoSize = true;
-            this.lblInsurrectionSite.Data = null;
-            this.lblInsurrectionSite.ForeColor = System.Drawing.Color.Black;
-            this.lblInsurrectionSite.Location = new System.Drawing.Point(61, 66);
-            this.lblInsurrectionSite.Name = "lblInsurrectionSite";
-            this.lblInsurrectionSite.Size = new System.Drawing.Size(55, 13);
-            this.lblInsurrectionSite.TabIndex = 95;
-            this.lblInsurrectionSite.Text = "linkLabel1";
-            // 
-            // lblInsurrectionCoords
-            // 
-            this.lblInsurrectionCoords.AutoSize = true;
-            this.lblInsurrectionCoords.Data = null;
-            this.lblInsurrectionCoords.ForeColor = System.Drawing.Color.Black;
-            this.lblInsurrectionCoords.Location = new System.Drawing.Point(60, 88);
-            this.lblInsurrectionCoords.Name = "lblInsurrectionCoords";
-            this.lblInsurrectionCoords.Size = new System.Drawing.Size(55, 13);
-            this.lblInsurrectionCoords.TabIndex = 97;
-            this.lblInsurrectionCoords.Text = "linkLabel3";
-            // 
-            // lblInsurrectionTargetEnt
-            // 
-            this.lblInsurrectionTargetEnt.AutoSize = true;
-            this.lblInsurrectionTargetEnt.Data = null;
-            this.lblInsurrectionTargetEnt.ForeColor = System.Drawing.Color.Black;
-            this.lblInsurrectionTargetEnt.Location = new System.Drawing.Point(61, 110);
-            this.lblInsurrectionTargetEnt.Name = "lblInsurrectionTargetEnt";
-            this.lblInsurrectionTargetEnt.Size = new System.Drawing.Size(55, 13);
-            this.lblInsurrectionTargetEnt.TabIndex = 102;
-            this.lblInsurrectionTargetEnt.Text = "linkLabel1";
-            // 
-            // lblLeaderMarried
-            // 
-            this.lblLeaderMarried.AutoSize = true;
-            this.lblLeaderMarried.Data = null;
-            this.lblLeaderMarried.ForeColor = System.Drawing.Color.Black;
-            this.lblLeaderMarried.Location = new System.Drawing.Point(101, 237);
-            this.lblLeaderMarried.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblLeaderMarried.Name = "lblLeaderMarried";
-            this.lblLeaderMarried.Size = new System.Drawing.Size(55, 13);
-            this.lblLeaderMarried.TabIndex = 92;
-            this.lblLeaderMarried.Text = "linkLabel5";
-            // 
-            // lblLeaderHF
-            // 
-            this.lblLeaderHF.AutoSize = true;
-            this.lblLeaderHF.Data = null;
-            this.lblLeaderHF.ForeColor = System.Drawing.Color.Black;
-            this.lblLeaderHF.Location = new System.Drawing.Point(101, 260);
-            this.lblLeaderHF.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblLeaderHF.Name = "lblLeaderHF";
-            this.lblLeaderHF.Size = new System.Drawing.Size(55, 13);
-            this.lblLeaderHF.TabIndex = 89;
-            this.lblLeaderHF.Text = "linkLabel5";
-            // 
-            // lblLeaderInheritedFrom
-            // 
-            this.lblLeaderInheritedFrom.AutoSize = true;
-            this.lblLeaderInheritedFrom.Data = null;
-            this.lblLeaderInheritedFrom.ForeColor = System.Drawing.Color.Black;
-            this.lblLeaderInheritedFrom.Location = new System.Drawing.Point(101, 151);
-            this.lblLeaderInheritedFrom.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblLeaderInheritedFrom.Name = "lblLeaderInheritedFrom";
-            this.lblLeaderInheritedFrom.Size = new System.Drawing.Size(55, 13);
-            this.lblLeaderInheritedFrom.TabIndex = 85;
-            this.lblLeaderInheritedFrom.Text = "linkLabel2";
-            // 
-            // lblLeaderRace
-            // 
-            this.lblLeaderRace.AutoSize = true;
-            this.lblLeaderRace.Data = null;
-            this.lblLeaderRace.ForeColor = System.Drawing.Color.Black;
-            this.lblLeaderRace.Location = new System.Drawing.Point(101, 66);
-            this.lblLeaderRace.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblLeaderRace.Name = "lblLeaderRace";
-            this.lblLeaderRace.Size = new System.Drawing.Size(55, 13);
-            this.lblLeaderRace.TabIndex = 82;
-            this.lblLeaderRace.Text = "linkLabel3";
-            // 
-            // lblLeaderGod
-            // 
-            this.lblLeaderGod.AutoSize = true;
-            this.lblLeaderGod.Data = null;
-            this.lblLeaderGod.ForeColor = System.Drawing.Color.Black;
-            this.lblLeaderGod.Location = new System.Drawing.Point(101, 215);
-            this.lblLeaderGod.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblLeaderGod.Name = "lblLeaderGod";
-            this.lblLeaderGod.Size = new System.Drawing.Size(55, 13);
-            this.lblLeaderGod.TabIndex = 80;
-            this.lblLeaderGod.Text = "linkLabel5";
-            // 
-            // lblLeaderCivilization
-            // 
-            this.lblLeaderCivilization.AutoSize = true;
-            this.lblLeaderCivilization.Data = null;
-            this.lblLeaderCivilization.ForeColor = System.Drawing.Color.Black;
-            this.lblLeaderCivilization.Location = new System.Drawing.Point(101, 172);
-            this.lblLeaderCivilization.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblLeaderCivilization.Name = "lblLeaderCivilization";
-            this.lblLeaderCivilization.Size = new System.Drawing.Size(55, 13);
-            this.lblLeaderCivilization.TabIndex = 79;
-            this.lblLeaderCivilization.Text = "linkLabel3";
-            // 
-            // lblLeaderSite
-            // 
-            this.lblLeaderSite.AutoSize = true;
-            this.lblLeaderSite.Data = null;
-            this.lblLeaderSite.ForeColor = System.Drawing.Color.Black;
-            this.lblLeaderSite.Location = new System.Drawing.Point(101, 193);
-            this.lblLeaderSite.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblLeaderSite.Name = "lblLeaderSite";
-            this.lblLeaderSite.Size = new System.Drawing.Size(55, 13);
-            this.lblLeaderSite.TabIndex = 78;
-            this.lblLeaderSite.Text = "linkLabel2";
-            // 
-            // SiteMapLabel
-            // 
-            this.SiteMapLabel.AutoSize = true;
-            this.SiteMapLabel.Data = null;
-            this.SiteMapLabel.ForeColor = System.Drawing.Color.Black;
-            this.SiteMapLabel.Location = new System.Drawing.Point(19, 132);
-            this.SiteMapLabel.Name = "SiteMapLabel";
-            this.SiteMapLabel.Size = new System.Drawing.Size(49, 13);
-            this.SiteMapLabel.TabIndex = 61;
-            this.SiteMapLabel.Text = "Site Map";
-            this.SiteMapLabel.Click += new System.EventHandler(this.SiteMapLabel_Click);
-            // 
-            // lblSiteCoord
-            // 
-            this.lblSiteCoord.AutoSize = true;
-            this.lblSiteCoord.Data = null;
-            this.lblSiteCoord.ForeColor = System.Drawing.Color.Black;
-            this.lblSiteCoord.Location = new System.Drawing.Point(58, 64);
-            this.lblSiteCoord.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblSiteCoord.Name = "lblSiteCoord";
-            this.lblSiteCoord.Size = new System.Drawing.Size(55, 13);
-            this.lblSiteCoord.TabIndex = 36;
-            this.lblSiteCoord.Text = "linkLabel1";
-            // 
-            // lblSiteOwner
-            // 
-            this.lblSiteOwner.AutoSize = true;
-            this.lblSiteOwner.Data = null;
-            this.lblSiteOwner.ForeColor = System.Drawing.Color.Black;
-            this.lblSiteOwner.Location = new System.Drawing.Point(58, 85);
-            this.lblSiteOwner.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblSiteOwner.Name = "lblSiteOwner";
-            this.lblSiteOwner.Size = new System.Drawing.Size(55, 13);
-            this.lblSiteOwner.TabIndex = 35;
-            this.lblSiteOwner.Text = "linkLabel1";
-            // 
-            // lblSiteParentCiv
-            // 
-            this.lblSiteParentCiv.AutoSize = true;
-            this.lblSiteParentCiv.Data = null;
-            this.lblSiteParentCiv.ForeColor = System.Drawing.Color.Black;
-            this.lblSiteParentCiv.Location = new System.Drawing.Point(58, 107);
-            this.lblSiteParentCiv.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblSiteParentCiv.Name = "lblSiteParentCiv";
-            this.lblSiteParentCiv.Size = new System.Drawing.Size(55, 13);
-            this.lblSiteParentCiv.TabIndex = 36;
-            this.lblSiteParentCiv.Text = "linkLabel2";
-            // 
-            // lblSiteCreatedTime
-            // 
-            this.lblSiteCreatedTime.AutoSize = true;
-            this.lblSiteCreatedTime.Data = null;
-            this.lblSiteCreatedTime.ForeColor = System.Drawing.Color.Black;
-            this.lblSiteCreatedTime.Location = new System.Drawing.Point(28, 58);
-            this.lblSiteCreatedTime.Name = "lblSiteCreatedTime";
-            this.lblSiteCreatedTime.Size = new System.Drawing.Size(55, 13);
-            this.lblSiteCreatedTime.TabIndex = 7;
-            this.lblSiteCreatedTime.Text = "linkLabel1";
-            // 
-            // lblSiteCreatedByCiv
-            // 
-            this.lblSiteCreatedByCiv.AutoSize = true;
-            this.lblSiteCreatedByCiv.Data = null;
-            this.lblSiteCreatedByCiv.ForeColor = System.Drawing.Color.Black;
-            this.lblSiteCreatedByCiv.Location = new System.Drawing.Point(28, 37);
-            this.lblSiteCreatedByCiv.Name = "lblSiteCreatedByCiv";
-            this.lblSiteCreatedByCiv.Size = new System.Drawing.Size(55, 13);
-            this.lblSiteCreatedByCiv.TabIndex = 6;
-            this.lblSiteCreatedByCiv.Text = "linkLabel3";
-            // 
-            // lblSiteCreatedBy
-            // 
-            this.lblSiteCreatedBy.AutoSize = true;
-            this.lblSiteCreatedBy.Data = null;
-            this.lblSiteCreatedBy.ForeColor = System.Drawing.Color.Black;
-            this.lblSiteCreatedBy.Location = new System.Drawing.Point(28, 15);
-            this.lblSiteCreatedBy.Name = "lblSiteCreatedBy";
-            this.lblSiteCreatedBy.Size = new System.Drawing.Size(55, 13);
-            this.lblSiteCreatedBy.TabIndex = 4;
-            this.lblSiteCreatedBy.Text = "linkLabel1";
-            // 
-            // lblStructureRazedTime
-            // 
-            this.lblStructureRazedTime.AutoSize = true;
-            this.lblStructureRazedTime.Data = null;
-            this.lblStructureRazedTime.ForeColor = System.Drawing.Color.Black;
-            this.lblStructureRazedTime.Location = new System.Drawing.Point(28, 60);
-            this.lblStructureRazedTime.Name = "lblStructureRazedTime";
-            this.lblStructureRazedTime.Size = new System.Drawing.Size(55, 13);
-            this.lblStructureRazedTime.TabIndex = 17;
-            this.lblStructureRazedTime.Text = "linkLabel7";
-            // 
-            // lblStructureRazedSite
-            // 
-            this.lblStructureRazedSite.AutoSize = true;
-            this.lblStructureRazedSite.Data = null;
-            this.lblStructureRazedSite.ForeColor = System.Drawing.Color.Black;
-            this.lblStructureRazedSite.Location = new System.Drawing.Point(28, 38);
-            this.lblStructureRazedSite.Name = "lblStructureRazedSite";
-            this.lblStructureRazedSite.Size = new System.Drawing.Size(55, 13);
-            this.lblStructureRazedSite.TabIndex = 15;
-            this.lblStructureRazedSite.Text = "linkLabel1";
-            // 
-            // lblStructureRazedCiv
-            // 
-            this.lblStructureRazedCiv.AutoSize = true;
-            this.lblStructureRazedCiv.Data = null;
-            this.lblStructureRazedCiv.ForeColor = System.Drawing.Color.Black;
-            this.lblStructureRazedCiv.Location = new System.Drawing.Point(28, 16);
-            this.lblStructureRazedCiv.Name = "lblStructureRazedCiv";
-            this.lblStructureRazedCiv.Size = new System.Drawing.Size(55, 13);
-            this.lblStructureRazedCiv.TabIndex = 13;
-            this.lblStructureRazedCiv.Text = "linkLabel1";
-            // 
-            // lblStructureCreatedTime
-            // 
-            this.lblStructureCreatedTime.AutoSize = true;
-            this.lblStructureCreatedTime.Data = null;
-            this.lblStructureCreatedTime.ForeColor = System.Drawing.Color.Black;
-            this.lblStructureCreatedTime.Location = new System.Drawing.Point(28, 80);
-            this.lblStructureCreatedTime.Name = "lblStructureCreatedTime";
-            this.lblStructureCreatedTime.Size = new System.Drawing.Size(55, 13);
-            this.lblStructureCreatedTime.TabIndex = 9;
-            this.lblStructureCreatedTime.Text = "linkLabel7";
-            // 
-            // lblStructureCreatedSite
-            // 
-            this.lblStructureCreatedSite.AutoSize = true;
-            this.lblStructureCreatedSite.Data = null;
-            this.lblStructureCreatedSite.ForeColor = System.Drawing.Color.Black;
-            this.lblStructureCreatedSite.Location = new System.Drawing.Point(28, 58);
-            this.lblStructureCreatedSite.Name = "lblStructureCreatedSite";
-            this.lblStructureCreatedSite.Size = new System.Drawing.Size(55, 13);
-            this.lblStructureCreatedSite.TabIndex = 7;
-            this.lblStructureCreatedSite.Text = "linkLabel1";
-            // 
-            // lblStructureCreatedCiv
-            // 
-            this.lblStructureCreatedCiv.AutoSize = true;
-            this.lblStructureCreatedCiv.Data = null;
-            this.lblStructureCreatedCiv.ForeColor = System.Drawing.Color.Black;
-            this.lblStructureCreatedCiv.Location = new System.Drawing.Point(28, 37);
-            this.lblStructureCreatedCiv.Name = "lblStructureCreatedCiv";
-            this.lblStructureCreatedCiv.Size = new System.Drawing.Size(55, 13);
-            this.lblStructureCreatedCiv.TabIndex = 6;
-            this.lblStructureCreatedCiv.Text = "linkLabel3";
-            // 
-            // lblStructureCreatedSiteCiv
-            // 
-            this.lblStructureCreatedSiteCiv.AutoSize = true;
-            this.lblStructureCreatedSiteCiv.Data = null;
-            this.lblStructureCreatedSiteCiv.ForeColor = System.Drawing.Color.Black;
-            this.lblStructureCreatedSiteCiv.Location = new System.Drawing.Point(28, 15);
-            this.lblStructureCreatedSiteCiv.Name = "lblStructureCreatedSiteCiv";
-            this.lblStructureCreatedSiteCiv.Size = new System.Drawing.Size(55, 13);
-            this.lblStructureCreatedSiteCiv.TabIndex = 4;
-            this.lblStructureCreatedSiteCiv.Text = "linkLabel1";
-            // 
-            // lblStructureSite
-            // 
-            this.lblStructureSite.AutoSize = true;
-            this.lblStructureSite.Data = null;
-            this.lblStructureSite.ForeColor = System.Drawing.Color.Black;
-            this.lblStructureSite.Location = new System.Drawing.Point(61, 24);
-            this.lblStructureSite.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblStructureSite.Name = "lblStructureSite";
-            this.lblStructureSite.Size = new System.Drawing.Size(55, 13);
-            this.lblStructureSite.TabIndex = 36;
-            this.lblStructureSite.Text = "linkLabel1";
-            // 
-            // lblWorldConstructionCoord
-            // 
-            this.lblWorldConstructionCoord.AutoSize = true;
-            this.lblWorldConstructionCoord.Data = null;
-            this.lblWorldConstructionCoord.ForeColor = System.Drawing.Color.Black;
-            this.lblWorldConstructionCoord.Location = new System.Drawing.Point(67, 208);
-            this.lblWorldConstructionCoord.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblWorldConstructionCoord.Name = "lblWorldConstructionCoord";
-            this.lblWorldConstructionCoord.Size = new System.Drawing.Size(55, 13);
-            this.lblWorldConstructionCoord.TabIndex = 41;
-            this.lblWorldConstructionCoord.Text = "linkLabel2";
-            // 
-            // lblWorldConstructionType
-            // 
-            this.lblWorldConstructionType.AutoSize = true;
-            this.lblWorldConstructionType.Data = null;
-            this.lblWorldConstructionType.ForeColor = System.Drawing.Color.Black;
-            this.lblWorldConstructionType.Location = new System.Drawing.Point(67, 186);
-            this.lblWorldConstructionType.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblWorldConstructionType.Name = "lblWorldConstructionType";
-            this.lblWorldConstructionType.Size = new System.Drawing.Size(55, 13);
-            this.lblWorldConstructionType.TabIndex = 39;
-            this.lblWorldConstructionType.Text = "linkLabel2";
-            // 
-            // lblWorldConstructionCreatedTime
-            // 
-            this.lblWorldConstructionCreatedTime.AutoSize = true;
-            this.lblWorldConstructionCreatedTime.Data = null;
-            this.lblWorldConstructionCreatedTime.ForeColor = System.Drawing.Color.Black;
-            this.lblWorldConstructionCreatedTime.Location = new System.Drawing.Point(28, 64);
-            this.lblWorldConstructionCreatedTime.Name = "lblWorldConstructionCreatedTime";
-            this.lblWorldConstructionCreatedTime.Size = new System.Drawing.Size(55, 13);
-            this.lblWorldConstructionCreatedTime.TabIndex = 7;
-            this.lblWorldConstructionCreatedTime.Text = "linkLabel1";
-            // 
-            // lblWorldConstructionCreatedByCiv
-            // 
-            this.lblWorldConstructionCreatedByCiv.AutoSize = true;
-            this.lblWorldConstructionCreatedByCiv.Data = null;
-            this.lblWorldConstructionCreatedByCiv.ForeColor = System.Drawing.Color.Black;
-            this.lblWorldConstructionCreatedByCiv.Location = new System.Drawing.Point(28, 43);
-            this.lblWorldConstructionCreatedByCiv.Name = "lblWorldConstructionCreatedByCiv";
-            this.lblWorldConstructionCreatedByCiv.Size = new System.Drawing.Size(55, 13);
-            this.lblWorldConstructionCreatedByCiv.TabIndex = 6;
-            this.lblWorldConstructionCreatedByCiv.Text = "linkLabel3";
-            // 
-            // lblWorldConstructionCreatedBy
-            // 
-            this.lblWorldConstructionCreatedBy.AutoSize = true;
-            this.lblWorldConstructionCreatedBy.Data = null;
-            this.lblWorldConstructionCreatedBy.ForeColor = System.Drawing.Color.Black;
-            this.lblWorldConstructionCreatedBy.Location = new System.Drawing.Point(28, 21);
-            this.lblWorldConstructionCreatedBy.Name = "lblWorldConstructionCreatedBy";
-            this.lblWorldConstructionCreatedBy.Size = new System.Drawing.Size(55, 13);
-            this.lblWorldConstructionCreatedBy.TabIndex = 4;
-            this.lblWorldConstructionCreatedBy.Text = "linkLabel1";
-            // 
-            // lblWorldConstructionFrom
-            // 
-            this.lblWorldConstructionFrom.AutoSize = true;
-            this.lblWorldConstructionFrom.Data = null;
-            this.lblWorldConstructionFrom.ForeColor = System.Drawing.Color.Black;
-            this.lblWorldConstructionFrom.Location = new System.Drawing.Point(67, 37);
-            this.lblWorldConstructionFrom.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblWorldConstructionFrom.Name = "lblWorldConstructionFrom";
-            this.lblWorldConstructionFrom.Size = new System.Drawing.Size(55, 13);
-            this.lblWorldConstructionFrom.TabIndex = 32;
-            this.lblWorldConstructionFrom.Text = "linkLabel3";
-            // 
-            // lblWorldConstructionMaster
-            // 
-            this.lblWorldConstructionMaster.AutoSize = true;
-            this.lblWorldConstructionMaster.Data = null;
-            this.lblWorldConstructionMaster.ForeColor = System.Drawing.Color.Black;
-            this.lblWorldConstructionMaster.Location = new System.Drawing.Point(67, 15);
-            this.lblWorldConstructionMaster.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblWorldConstructionMaster.Name = "lblWorldConstructionMaster";
-            this.lblWorldConstructionMaster.Size = new System.Drawing.Size(55, 13);
-            this.lblWorldConstructionMaster.TabIndex = 31;
-            this.lblWorldConstructionMaster.Text = "linkLabel2";
-            // 
-            // lblWorldConstructionTo
-            // 
-            this.lblWorldConstructionTo.AutoSize = true;
-            this.lblWorldConstructionTo.Data = null;
-            this.lblWorldConstructionTo.ForeColor = System.Drawing.Color.Black;
-            this.lblWorldConstructionTo.Location = new System.Drawing.Point(67, 58);
-            this.lblWorldConstructionTo.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblWorldConstructionTo.Name = "lblWorldConstructionTo";
-            this.lblWorldConstructionTo.Size = new System.Drawing.Size(55, 13);
-            this.lblWorldConstructionTo.TabIndex = 30;
-            this.lblWorldConstructionTo.Text = "linkLabel1";
-            // 
-            // lblDynastyLength
-            // 
-            this.lblDynastyLength.AutoSize = true;
-            this.lblDynastyLength.Data = null;
-            this.lblDynastyLength.ForeColor = System.Drawing.Color.Black;
-            this.lblDynastyLength.Location = new System.Drawing.Point(67, 66);
-            this.lblDynastyLength.Name = "lblDynastyLength";
-            this.lblDynastyLength.Size = new System.Drawing.Size(35, 13);
-            this.lblDynastyLength.TabIndex = 23;
-            this.lblDynastyLength.Text = "label1";
-            // 
-            // lblDynastyFounder
-            // 
-            this.lblDynastyFounder.AutoSize = true;
-            this.lblDynastyFounder.Data = null;
-            this.lblDynastyFounder.ForeColor = System.Drawing.Color.Black;
-            this.lblDynastyFounder.Location = new System.Drawing.Point(67, 0);
-            this.lblDynastyFounder.Name = "lblDynastyFounder";
-            this.lblDynastyFounder.Size = new System.Drawing.Size(55, 13);
-            this.lblDynastyFounder.TabIndex = 22;
-            this.lblDynastyFounder.Text = "linkLabel1";
-            // 
-            // lblDynastyCivilization
-            // 
-            this.lblDynastyCivilization.AutoSize = true;
-            this.lblDynastyCivilization.Data = null;
-            this.lblDynastyCivilization.ForeColor = System.Drawing.Color.Black;
-            this.lblDynastyCivilization.Location = new System.Drawing.Point(67, 22);
-            this.lblDynastyCivilization.Name = "lblDynastyCivilization";
-            this.lblDynastyCivilization.Size = new System.Drawing.Size(55, 13);
-            this.lblDynastyCivilization.TabIndex = 20;
-            this.lblDynastyCivilization.Text = "linkLabel1";
-            // 
-            // tableLayoutPanel40
-            // 
-            this.tableLayoutPanel40.ColumnCount = 2;
-            this.tableLayoutPanel40.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel40.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel40.Controls.Add(this.grpUndergroundRegionPopulation, 0, 1);
-            this.tableLayoutPanel40.Controls.Add(this.panel21, 0, 0);
-            this.tableLayoutPanel40.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel40.Location = new System.Drawing.Point(3, 16);
-            this.tableLayoutPanel40.Name = "tableLayoutPanel40";
-            this.tableLayoutPanel40.RowCount = 2;
-            this.tableLayoutPanel40.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel40.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 519F));
-            this.tableLayoutPanel40.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel40.Size = new System.Drawing.Size(886, 590);
-            this.tableLayoutPanel40.TabIndex = 42;
-            // 
-            // grpUndergroundRegionPopulation
-            // 
-            this.grpUndergroundRegionPopulation.Controls.Add(this.lstUndergroundRegionPopulation);
-            this.grpUndergroundRegionPopulation.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpUndergroundRegionPopulation.Location = new System.Drawing.Point(3, 74);
-            this.grpUndergroundRegionPopulation.Name = "grpUndergroundRegionPopulation";
-            this.grpUndergroundRegionPopulation.Size = new System.Drawing.Size(437, 513);
-            this.grpUndergroundRegionPopulation.TabIndex = 43;
-            this.grpUndergroundRegionPopulation.TabStop = false;
-            this.grpUndergroundRegionPopulation.Text = "Population";
-            // 
-            // lstUndergroundRegionPopulation
-            // 
-            this.lstUndergroundRegionPopulation.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lstUndergroundRegionPopulation.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.lstUndergroundRegionPopulation.FormattingEnabled = true;
-            this.lstUndergroundRegionPopulation.ItemHeight = 16;
-            this.lstUndergroundRegionPopulation.Location = new System.Drawing.Point(3, 16);
-            this.lstUndergroundRegionPopulation.Name = "lstUndergroundRegionPopulation";
-            this.lstUndergroundRegionPopulation.Size = new System.Drawing.Size(431, 494);
-            this.lstUndergroundRegionPopulation.TabIndex = 0;
-            this.lstUndergroundRegionPopulation.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.lstRegionPopulation_DrawItem);
-            // 
-            // panel21
-            // 
-            this.panel21.Controls.Add(this.label86);
-            this.panel21.Controls.Add(this.lblUndergroundRegionType);
-            this.panel21.Controls.Add(this.lblUndergroundRegionDepth);
-            this.panel21.Controls.Add(this.label84);
-            this.panel21.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel21.Location = new System.Drawing.Point(3, 3);
-            this.panel21.Name = "panel21";
-            this.panel21.Size = new System.Drawing.Size(437, 65);
-            this.panel21.TabIndex = 42;
             // 
             // MainForm
             // 
@@ -9135,6 +9135,10 @@ namespace DFWV
             this.tableLayoutPanel15.ResumeLayout(false);
             this.tableLayoutPanel15.PerformLayout();
             this.grpUndergroundRegion.ResumeLayout(false);
+            this.tableLayoutPanel40.ResumeLayout(false);
+            this.grpUndergroundRegionPopulation.ResumeLayout(false);
+            this.panel21.ResumeLayout(false);
+            this.panel21.PerformLayout();
             this.tabWorldConstruction.ResumeLayout(false);
             this.tableLayoutPanel16.ResumeLayout(false);
             this.tableLayoutPanel16.PerformLayout();
@@ -9152,10 +9156,6 @@ namespace DFWV
             this.grpDynastyMembers.ResumeLayout(false);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
-            this.tableLayoutPanel40.ResumeLayout(false);
-            this.grpUndergroundRegionPopulation.ResumeLayout(false);
-            this.panel21.ResumeLayout(false);
-            this.panel21.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

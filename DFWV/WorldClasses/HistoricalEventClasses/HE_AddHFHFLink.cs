@@ -21,7 +21,15 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         public HFLink HFLink { get; set; }
         public HFLink HFLink2 { get; set; }
-        
+
+        public override IEnumerable<HistoricalFigure> HFsInvolved
+        {
+            get
+            {
+                yield return HF;
+                yield return HFTarget;
+            }
+        }
         public HE_AddHFHFLink(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -97,19 +105,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                 }
             }
-
-            if (HF != null)
-            {
-                if (HF.Events == null)
-                    HF.Events = new List<HistoricalEvent>();
-                HF.Events.Add(this);
-            }
-
-
-            if (HFTarget == null) return;
-            if (HFTarget.Events == null)
-                HFTarget.Events = new List<HistoricalEvent>();
-            HFTarget.Events.Add(this);
         }
 
         internal override void Plus(XDocument xdoc)

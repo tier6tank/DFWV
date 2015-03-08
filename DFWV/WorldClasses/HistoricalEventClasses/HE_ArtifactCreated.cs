@@ -21,6 +21,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         override public Point Location { get { return Site != null ? Site.Location : Point.Empty; } }
 
+        public override IEnumerable<HistoricalFigure> HFsInvolved
+        {
+            get { yield return HistFigure; }
+        }
         public HE_ArtifactCreated(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -116,11 +120,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Site.CreatedArtifacts.Add(Artifact);
             }
 
-
-            if (HistFigure == null) return;
-            if (HistFigure.Events == null)
-                HistFigure.Events = new List<HistoricalEvent>();
-            HistFigure.Events.Add(this);
 
             if (HistFigure.CreatedArtifacts == null)
                 HistFigure.CreatedArtifacts = new List<Artifact>();

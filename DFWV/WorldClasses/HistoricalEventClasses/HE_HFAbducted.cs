@@ -20,7 +20,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? FeatureLayerID { get; set; }
 
         override public Point Location { get { return Site.Location; } }
-
+        public override IEnumerable<HistoricalFigure> HFsInvolved
+        {
+            get
+            {
+                yield return SnatcherHF;
+                yield return TargetHF;
+            }
+        }
         public HE_HFAbducted(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -75,20 +82,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 SnatcherHF = World.HistoricalFigures[SnatcherHFID.Value];
         }
 
-        internal override void Process()
-        {
-            base.Process();
-            if (TargetHF != null)
-            {
-                if (TargetHF.Events == null)
-                    TargetHF.Events = new List<HistoricalEvent>();
-                TargetHF.Events.Add(this);
-            }
-            if (SnatcherHF == null) return;
-            if (SnatcherHF.Events == null)
-                SnatcherHF.Events = new List<HistoricalEvent>();
-            SnatcherHF.Events.Add(this);
-        }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {

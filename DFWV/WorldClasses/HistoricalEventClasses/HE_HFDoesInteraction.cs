@@ -23,7 +23,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private Region Subregion { get; set; }
 
         override public Point Location { get { return Point.Empty; } }
-
+        public override IEnumerable<HistoricalFigure> HFsInvolved
+        {
+            get
+            {
+                yield return TargetHF;
+                yield return DoerHF;
+            }
+        }
         public HE_HFDoesInteraction(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -108,21 +115,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                 }
             }
-        }
-
-        internal override void Process()
-        {
-            base.Process();
-            if (TargetHF != null)
-            {
-                if (TargetHF.Events == null)
-                    TargetHF.Events = new List<HistoricalEvent>();
-                TargetHF.Events.Add(this);
-            }
-            if (DoerHF == null) return;
-            if (DoerHF.Events == null)
-                DoerHF.Events = new List<HistoricalEvent>();
-            DoerHF.Events.Add(this);
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)

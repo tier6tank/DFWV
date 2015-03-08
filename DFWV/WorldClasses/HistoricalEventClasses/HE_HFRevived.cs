@@ -20,7 +20,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? FeatureLayerID { get; set; }
 
         override public Point Location { get { return Site != null ? Site.Location : Subregion.Location; } }
-
+        public override IEnumerable<HistoricalFigure> HFsInvolved
+        {
+            get { yield return HF; }
+        }
         public HE_HFRevived(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -74,15 +77,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Site = World.Sites[SiteID.Value];
             if (SubregionID.HasValue && World.Regions.ContainsKey(SubregionID.Value))
                 Subregion = World.Regions[SubregionID.Value];
-        }
-
-        internal override void Process()
-        {
-            base.Process();
-            if (HF == null) return;
-            if (HF.Events == null)
-                HF.Events = new List<HistoricalEvent>();
-            HF.Events.Add(this);
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)

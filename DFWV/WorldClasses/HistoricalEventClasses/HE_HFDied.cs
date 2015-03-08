@@ -45,7 +45,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? BowMatIndex  { get; set; }
 
         override public Point Location { get { return Site != null ? Site.Location : (Subregion != null ? Subregion.Location : Point.Empty); } }
-
+        public override IEnumerable<HistoricalFigure> HFsInvolved
+        {
+            get
+            {
+                yield return HF;
+                yield return SlayerHF;
+            }
+        }
         public HE_HFDied(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -235,16 +242,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     SlayerShooterItem.Kills = new List<HE_HFDied>();
                 SlayerShooterItem.Kills.Add(this);
             }
-            if (HF != null)
-            {
-                if (HF.Events == null)
-                    HF.Events = new List<HistoricalEvent>();
-                HF.Events.Add(this);
-            }
-            if (SlayerHF == null) return;
-            if (SlayerHF.Events == null)
-                SlayerHF.Events = new List<HistoricalEvent>();
-            SlayerHF.Events.Add(this);
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)

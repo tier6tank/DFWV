@@ -34,6 +34,15 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         
         override public Point Location { get { return Coords != Point.Empty ? Coords : (Site != null ? Site.Location : Subregion.Location); } }
 
+        public override IEnumerable<HistoricalFigure> HFsInvolved
+        {
+            get
+            {
+                yield return HF;
+                foreach (var historicalFigure in BodyHFs)
+                    yield return historicalFigure;
+            }
+        }
         public HE_BodyAbused(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -170,21 +179,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 if (AbuserEn.Events == null)
                     AbuserEn.Events = new List<HistoricalEvent>();
                 AbuserEn.Events.Add(this);
-            }
-            if (HF != null)
-            {
-                if (HF.Events == null)
-                    HF.Events = new List<HistoricalEvent>();
-                HF.Events.Add(this);
-            }
-            if (BodyHFs != null)
-            {
-                foreach (var bodyhf in BodyHFs)
-                {
-                    if (bodyhf.Events == null)
-                        bodyhf.Events = new List<HistoricalEvent>();
-                    bodyhf.Events.Add(this);
-                }
             }
         }
 

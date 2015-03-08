@@ -24,6 +24,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         override public Point Location { get { return Coords; } }
 
+        public override IEnumerable<HistoricalFigure> HFsInvolved
+        {
+            get { yield return HF; }
+        }
         public HE_ChangeHFBodyState(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -104,10 +108,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             base.Process();
 
-            if (HF == null) return;
-            if (HF.Events == null)
-                HF.Events = new List<HistoricalEvent>();
-            HF.Events.Add(this);
+
             if (BodyState == "entombed at site")
             {
                 HF.EntombedEvent = this;

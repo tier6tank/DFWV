@@ -827,7 +827,7 @@ namespace DFWV.WorldClasses
 
             foreach (var hf in HistoricalFigures.Values.Where(x => x.DiedEvent == null))
             {
-                if (hf.Events == null || hf.Events.All(x => HistoricalEvent.Types[x.Type] != "change hf state"))
+                if (hf.Events.All(x => HistoricalEvent.Types[x.Type] != "change hf state"))
                     continue;
                 var evt = (HE_ChangeHFState)hf.Events.Last(x => HistoricalEvent.Types[x.Type] == "change hf state");
 

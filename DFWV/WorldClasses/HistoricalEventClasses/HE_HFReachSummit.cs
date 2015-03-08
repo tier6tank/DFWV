@@ -20,6 +20,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         override public Point Location { get { return Coords != Point.Empty ? Coords : Subregion.Location; } }
 
+        public override IEnumerable<HistoricalFigure> HFsInvolved
+        {
+            get { return GroupHF; }
+        }
         public HE_HFReachSummit(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -102,21 +106,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                 }
             }
-        }
-
-        internal override void Process()
-        {
-            base.Process();
-            if (GroupHF != null)
-            {
-                foreach (var hf in GroupHF)
-                {
-                    if (hf.Events == null)
-                        hf.Events = new List<HistoricalEvent>();
-                    hf.Events.Add(this);
-                }
-            }
-
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)

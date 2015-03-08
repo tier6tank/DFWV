@@ -22,6 +22,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         override public Point Location { get { return Entity.Location; } }
 
+        public override IEnumerable<HistoricalFigure> HFsInvolved
+        {
+            get { yield return HistFigure; }
+        }
         public HE_EntityLaw(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -70,12 +74,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Process()
         {
             base.Process();
-            if (HistFigure != null)
-            {
-                if (HistFigure.Events == null)
-                    HistFigure.Events = new List<HistoricalEvent>();
-                HistFigure.Events.Add(this);
-            }
 
             if (Entity == null) return;
             if (Entity.Events == null)

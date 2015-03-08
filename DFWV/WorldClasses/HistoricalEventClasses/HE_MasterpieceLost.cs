@@ -12,6 +12,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public int? SiteID { get; set; }
         public Site Site { get; set; }
         public int? Method { get; set; }
+        public override IEnumerable<HistoricalFigure> HFsInvolved
+        {
+            get { yield return HF; }
+        }
 
         public HE_MasterpieceLost(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -77,18 +81,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         }
 
-        internal override void Process()
-        {
-            //TODO: Investigate why HFID is so huge
-            base.Process();
-
-            if (HF != null)
-            {
-                if (HF.Events == null)
-                    HF.Events = new List<HistoricalEvent>();
-                HF.Events.Add(this);
-            }
-        }
 
         protected override string LegendsDescription() //Matched (add method to write hf and site alt name)
         {

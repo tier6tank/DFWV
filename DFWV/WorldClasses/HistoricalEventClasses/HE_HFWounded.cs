@@ -23,7 +23,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public int? PartLost { get; set; }
 
         override public Point Location { get { return Site != null ? Site.Location : (Subregion != null ? Subregion.Location : Point.Empty); } }
-
+        public override IEnumerable<HistoricalFigure> HFsInvolved
+        {
+            get
+            {
+                yield return WoundeeHF;
+                yield return WounderHF;
+            }
+        }
         public HE_HFWounded(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -114,21 +121,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                 }
             }
-        }
-
-        internal override void Process()
-        {
-            base.Process();
-            if (WoundeeHF != null)
-            {
-                if (WoundeeHF.Events == null)
-                    WoundeeHF.Events = new List<HistoricalEvent>();
-                WoundeeHF.Events.Add(this);
-            }
-            if (WounderHF == null) return;
-            if (WounderHF.Events == null)
-                WounderHF.Events = new List<HistoricalEvent>();
-            WounderHF.Events.Add(this);
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)

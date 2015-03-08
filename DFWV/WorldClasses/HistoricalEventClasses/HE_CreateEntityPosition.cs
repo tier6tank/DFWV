@@ -20,6 +20,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public int? Position { get; set; }
         public int? Reason { get; set; }
 
+        public override IEnumerable<HistoricalFigure> HFsInvolved
+        {
+            get { yield return HF; }
+        }
         public HE_CreateEntityPosition(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -112,12 +116,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 if (Group.Events == null)
                     Group.Events = new List<HistoricalEvent>();
                 Group.Events.Add(this);
-            }
-            if (HF != null)
-            {
-                if (HF.Events == null)
-                    HF.Events = new List<HistoricalEvent>();
-                HF.Events.Add(this);
             }
         }
 

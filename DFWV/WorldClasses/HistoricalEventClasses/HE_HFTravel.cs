@@ -21,7 +21,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private Point Coords { get; set; }
 
         override public Point Location { get { return Coords; } }
-
+        public override IEnumerable<HistoricalFigure> HFsInvolved
+        {
+            get { yield return GroupHF; }
+        }
         public HE_HFTravel(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -80,15 +83,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Subregion = World.Regions[SubregionID.Value];
             if (GroupHFID.HasValue && World.HistoricalFigures.ContainsKey(GroupHFID.Value))
                 GroupHF = World.HistoricalFigures[GroupHFID.Value];
-        }
-
-        internal override void Process()
-        {
-            base.Process();
-            if (GroupHF == null) return;
-            if (GroupHF.Events == null)
-                GroupHF.Events = new List<HistoricalEvent>();
-            GroupHF.Events.Add(this);
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)

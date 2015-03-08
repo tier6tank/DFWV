@@ -21,6 +21,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         override public Point Location { get { return Civ.Location; } }
 
+        public override IEnumerable<HistoricalFigure> HFsInvolved
+        {
+            get { yield return HF; }
+        }
 
         public HE_RemoveHFEntityLink(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -126,13 +130,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     Civ.Events = new List<HistoricalEvent>();
                 Civ.Events.Add(this);
             }
-            if (HF != null)
-            {
-                if (HF.Events == null)
-                    HF.Events = new List<HistoricalEvent>();
-                HF.Events.Add(this);
-            }
-
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)

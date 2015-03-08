@@ -22,7 +22,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private List<HistoricalFigure> GroupHFs { get; set; }
 
         override public Point Location { get { return Coords; } }
-
+        public override IEnumerable<HistoricalFigure> HFsInvolved
+        {
+            get { return GroupHFs; }
+        }
         public HE_HFNewPet(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -116,21 +119,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     default:
                         DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
-                }
-            }
-        }
-
-        internal override void Process()
-        {
-            //TODO: Incorporate new data
-            base.Process();
-            if (GroupHFs != null)
-            {
-                foreach (var grouphf in GroupHFs)
-                {
-                    if (grouphf.Events == null)
-                        grouphf.Events = new List<HistoricalEvent>();
-                    grouphf.Events.Add(this);
                 }
             }
         }

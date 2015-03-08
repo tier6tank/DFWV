@@ -105,7 +105,10 @@ namespace DFWV.WorldClasses
             frm.lstRegionPopulation.BeginUpdate();
             frm.lstRegionPopulation.Items.Clear();
             if (Populations != null)
+            {
                 frm.lstRegionPopulation.Items.AddRange(Populations.Keys.ToArray());
+                frm.grpRegionPopulation.Text = "Population (" + Populations.Values.Sum() + ")";
+            }
             frm.lstRegionPopulation.EndUpdate();
             frm.grpRegionPopulation.Visible = frm.lstRegionPopulation.Items.Count > 0;
 

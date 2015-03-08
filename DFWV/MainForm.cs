@@ -1148,7 +1148,7 @@ namespace DFWV
                     pops = thisRegion.Populations;
                     
                 }
-                else if (sender == lstUndergroundRegion)
+                else if (sender == lstUndergroundRegionPopulation)
                 {
                     var thisUGRegion = (UndergroundRegion)lstUndergroundRegion.SelectedItem;
                     if (thisUGRegion == null)

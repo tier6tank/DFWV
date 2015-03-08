@@ -22,6 +22,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         override public Point Location { get { return Point.Empty ; } }
 
+        public override IEnumerable<HistoricalFigure> HFsInvolved
+        {
+            get
+            {
+                yield return ChangeeHF;
+                yield return ChangerHF;
+            }
+        }
         public HE_ChangedCreatureType(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -82,21 +90,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (NewRace_ == null) return;
             NewRace = World.GetAddRace(NewRace_);
             NewRace_ = null;
-        }
-
-        internal override void Process()
-        {
-            base.Process();
-            if (ChangeeHF != null)
-            {
-                if (ChangeeHF.Events == null)
-                    ChangeeHF.Events = new List<HistoricalEvent>();
-                ChangeeHF.Events.Add(this);
-            }
-            if (ChangerHF == null) return;
-            if (ChangerHF.Events == null)
-                ChangerHF.Events = new List<HistoricalEvent>();
-            ChangerHF.Events.Add(this);
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)

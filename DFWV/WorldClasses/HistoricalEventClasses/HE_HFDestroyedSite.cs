@@ -21,7 +21,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         override public Point Location { get { return Site.Location; } }
 
-
+        public override IEnumerable<HistoricalFigure> HFsInvolved
+        {
+            get { yield return AttackerHF; }
+        }
         public HE_HFDestroyedSite(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -80,13 +83,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 if (SiteCiv.Events == null)
                     SiteCiv.Events = new List<HistoricalEvent>();
                 SiteCiv.Events.Add(this);
-            }
-
-            if (AttackerHF != null)
-            {
-                if (AttackerHF.Events == null)
-                    AttackerHF.Events = new List<HistoricalEvent>();
-                AttackerHF.Events.Add(this);
             }
 
 

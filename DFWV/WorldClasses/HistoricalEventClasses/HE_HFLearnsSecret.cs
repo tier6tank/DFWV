@@ -19,7 +19,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private string SecretText { get; set; }
 
         override public Point Location { get { return Point.Empty; } }
-
+        public override IEnumerable<HistoricalFigure> HFsInvolved
+        {
+            get
+            {
+                yield return StudentHF;
+                yield return TeacherHF;
+            }
+        }
         public HE_HFLearnsSecret(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -95,21 +102,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 TeacherHF = World.HistoricalFigures[TeacherHFID.Value];
             if (ArtifactID.HasValue && World.Artifacts.ContainsKey(ArtifactID.Value))
                 Artifact = World.Artifacts[ArtifactID.Value];
-        }
-
-        internal override void Process()
-        {
-            base.Process();
-            if (StudentHF != null)
-            {
-                if (StudentHF.Events == null)
-                    StudentHF.Events = new List<HistoricalEvent>();
-                StudentHF.Events.Add(this);
-            }
-            if (TeacherHF == null) return;
-            if (TeacherHF.Events == null)
-                TeacherHF.Events = new List<HistoricalEvent>();
-            TeacherHF.Events.Add(this);
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)

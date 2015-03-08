@@ -23,7 +23,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public static List<string> SubTypes = new List<string>();
 
         override public Point Location { get { return Site != null ? Site.Location : (Subregion != null ? Subregion.Location : Point.Empty); } }
-
+        public override IEnumerable<HistoricalFigure> HFsInvolved
+        {
+            get
+            {
+                foreach (var historicalFigure in Group1HF)
+                    yield return historicalFigure;
+                foreach (var historicalFigure in Group2HF)
+                    yield return historicalFigure;
+            }
+        }
         public HE_HFSimpleBattleEvent(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -93,28 +102,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             foreach (var group2hfid in Group2HFID.Where(group2hfid => World.HistoricalFigures.ContainsKey(group2hfid)))
             {
                 Group2HF.Add(World.HistoricalFigures[group2hfid]);
-            }
-        }
-
-
-        internal override void Process()
-        {
-            base.Process();
-            if (Group1HF != null)
-            {
-                foreach (var hf in Group1HF)
-                {
-                    if (hf.Events == null)
-                        hf.Events = new List<HistoricalEvent>();
-                    hf.Events.Add(this);
-                }
-            }
-            if (Group2HF == null) return;
-            foreach (var hf in Group2HF)
-            {
-                if (hf.Events == null)
-                    hf.Events = new List<HistoricalEvent>();
-                hf.Events.Add(this);
             }
         }
 

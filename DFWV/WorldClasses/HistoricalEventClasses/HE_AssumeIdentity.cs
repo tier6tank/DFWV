@@ -24,6 +24,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         
         override public Point Location { get { return TargetEn.Location; } }
 
+        public override IEnumerable<HistoricalFigure> HFsInvolved
+        {
+            get
+            {
+                yield return TricksterHF;
+                yield return IdentityHF;
+            }
+        }
         public HE_AssumeIdentity(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -117,21 +125,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         internal override void Process()
         {
-            //TODO: Incorporate new data
             base.Process();
-            if (TricksterHF != null)
-            {
-                if (TricksterHF.Events == null)
-                    TricksterHF.Events = new List<HistoricalEvent>();
-                TricksterHF.Events.Add(this);
-            }
-
-            if (IdentityHF != null)
-            {
-                if (IdentityHF.Events == null)
-                    IdentityHF.Events = new List<HistoricalEvent>();
-                IdentityHF.Events.Add(this);
-            }
 
             if (TargetEn != null)
             {

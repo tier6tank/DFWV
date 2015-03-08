@@ -26,6 +26,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         override public Point Location { get { return Site != null ? Site.Location : Point.Empty; } }
 
+        public override IEnumerable<HistoricalFigure> HFsInvolved
+        {
+            get { yield return HF; }
+        }
 
         public HE_RemoveHFSiteLink(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -101,12 +105,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 if (Civ.Events == null)
                     Civ.Events = new List<HistoricalEvent>();
                 Civ.Events.Add(this);
-            }
-            if (HF != null)
-            {
-                if (HF.Events == null)
-                    HF.Events = new List<HistoricalEvent>();
-                HF.Events.Add(this);
             }
         }
         internal override void Plus(XDocument xdoc)

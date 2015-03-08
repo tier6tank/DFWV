@@ -25,6 +25,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         override public Point Location { get { return Site.Location; } }
 
+        public override IEnumerable<HistoricalFigure> HFsInvolved
+        {
+            get { yield return NewLeaderHF; }
+        }
 
 
         public HE_NewSiteLeader(XDocument xdoc, World world)
@@ -95,13 +99,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 if (Site.NewSiteLeaderEvents == null)
                     Site.NewSiteLeaderEvents = new List<HE_NewSiteLeader>();
                 Site.NewSiteLeaderEvents.Add(this);
-            }
-
-            if (NewLeaderHF != null)
-            {
-                if (NewLeaderHF.Events == null)
-                    NewLeaderHF.Events = new List<HistoricalEvent>();
-                NewLeaderHF.Events.Add(this);
             }
             if (SiteCiv != null)
             {

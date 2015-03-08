@@ -27,6 +27,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         override public Point Location { get { return Site != null ? Site.Location : Subregion.Location; } }
 
+        public override IEnumerable<HistoricalFigure> HFsInvolved
+        {
+            get
+            {
+                yield return Devourer;
+                yield return Victim;
+            }
+        }
         public HE_CreatureDevoured(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -85,18 +93,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Process()
         {
             base.Process();
-            if (Victim != null)
-            {
-                if (Victim.Events == null)
-                    Victim.Events = new List<HistoricalEvent>();
-                Victim.Events.Add(this);
-            }
-            if (Devourer != null)
-            {
-                if (Devourer.Events == null)
-                    Devourer.Events = new List<HistoricalEvent>();
-                Devourer.Events.Add(this);
-            }
             if (Entity != null)
             {
                 if (Entity.Events == null)

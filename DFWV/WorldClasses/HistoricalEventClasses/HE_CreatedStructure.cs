@@ -23,6 +23,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         override public Point Location { get { return Site.Location; } }
 
+        public override IEnumerable<HistoricalFigure> HFsInvolved
+        {
+            get { yield return BuilderHF; }
+        }
         public HE_CreatedStructure(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -143,9 +147,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             if (BuilderHF != null)
             {
-                if (BuilderHF.Events == null)
-                    BuilderHF.Events = new List<HistoricalEvent>();
-                BuilderHF.Events.Add(this);
                 if (Time.Year == -1 &&
                     NextEvent().Type == Types.IndexOf("add hf entity link") &&
                     NextEvent().NextEvent().Type == Types.IndexOf("change hf state") &&

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Xml.Linq;
 using System.Drawing;
+using System.Linq;
 using DFWV.Annotations;
 
 namespace DFWV.WorldClasses
@@ -67,9 +68,8 @@ namespace DFWV.WorldClasses
             frm.lstUndergroundRegionPopulation.Items.Clear();
             if (Populations != null)
             {
-                Race[] array = new Race[25];
-                Populations.Keys.CopyTo(array, 0);
-                frm.lstUndergroundRegionPopulation.Items.AddRange(array);
+                frm.lstUndergroundRegionPopulation.Items.AddRange(Populations.Keys.ToArray());
+                frm.grpUndergroundRegionPopulation.Text = "Population (" + Populations.Values.Sum() + ")";
             }
             frm.lstUndergroundRegionPopulation.EndUpdate();
             frm.grpUndergroundRegionPopulation.Visible = frm.lstUndergroundRegionPopulation.Items.Count > 0;

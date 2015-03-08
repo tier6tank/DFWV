@@ -76,7 +76,14 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         [UsedImplicitly]
         public bool isPlayerControlled { private get; set; }
 
-
+        public IEnumerable<HistoricalEvent> Events
+        {
+            get
+            {
+                return World.HistoricalEvents.Values.Where(x=>x.HFsInvolved.Contains(this));
+            }
+        }
+            
         [UsedImplicitly]
         public string FirstName
         {
@@ -151,7 +158,6 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         private List<HistoricalFigure> Ancestors;
 
         public HE_HFDied DiedEvent { get; set; }
-        public List<HistoricalEvent> Events { get; set; }
         public List<HE_HFDied> SlayingEvents { get; set; }
         public HE_ChangeHFBodyState EntombedEvent { get; set; }
 
@@ -173,7 +179,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         [UsedImplicitly]
         public int CreatedArtifactCount { get { return CreatedArtifacts == null ? 0 : CreatedArtifacts.Count; } }
         [UsedImplicitly]
-        public int CreatedMasterpieceCount { get { return Events == null ? 0 : Events.Count(x => HistoricalEvent.Types[x.Type].Contains("masterpiece")); } }
+        public int CreatedMasterpieceCount { get { return Events.Count(x => HistoricalEvent.Types[x.Type].Contains("masterpiece")); } }
         [UsedImplicitly]
         public int ChildrenCount { get { return Children == null ? 0 : Children.Count; } }
         [UsedImplicitly]
@@ -690,14 +696,14 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             }
             frm.trvHistoricalFigureHFLinks.EndUpdate();
 
+
             frm.lstHistoricalFigureEvents.BeginUpdate();
             frm.lstHistoricalFigureEvents.Items.Clear();
-
             if (Events != null)
             {
                 foreach (var evt in Events)
                     frm.lstHistoricalFigureEvents.Items.Add(evt);
-            }
+            }                
             frm.lstHistoricalFigureEvents.EndUpdate();
 
             if (frm.lstHistoricalFigureEvents.Items.Count > 0)
@@ -707,6 +713,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             }
             else
                 frm.grpHistoricalFigureEvents.Hide();
+            
 
 
 
