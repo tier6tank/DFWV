@@ -18,6 +18,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         override public Point Location { get { return Site.Location; } }
 
+        public override IEnumerable<Entity> EntitiesInvolved
+        {
+            get
+            {
+                yield return ContactorEn;
+                yield return ContactedEn;
+            }
+        }
 
         public HE_FirstContact(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -61,21 +69,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 ContactedEn = World.Entities[ContactedEnID.Value];
         }
 
-        internal override void Process()
-        {
-            base.Process();
-            if (ContactorEn != null)
-            {
-                if (ContactorEn.Events == null)
-                    ContactorEn.Events = new List<HistoricalEvent>();
-                ContactorEn.Events.Add(this);
-            }
 
-            if (ContactedEn == null) return;
-            if (ContactedEn.Events == null)
-                ContactedEn.Events = new List<HistoricalEvent>();
-            ContactedEn.Events.Add(this);
-        }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {

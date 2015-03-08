@@ -35,6 +35,15 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 yield return DefenderGeneralHF;
             }
         }
+        public override IEnumerable<Entity> EntitiesInvolved
+        {
+            get
+            {
+                yield return SiteCiv;
+                yield return AttackerCiv;
+                yield return DefenderCiv;
+            }
+        }
         public HE_AttackedSite(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -99,22 +108,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (Site.AttackedEvents == null)
                 Site.AttackedEvents = new List<HE_AttackedSite>();
             Site.AttackedEvents.Add(this);
-            if (SiteCiv != null)
-            {
-                if (SiteCiv.Events == null)
-                    SiteCiv.Events = new List<HistoricalEvent>();
-                SiteCiv.Events.Add(this);
-            }
-            if (AttackerCiv != null)
-            {
-                if (AttackerCiv.Events == null)
-                    AttackerCiv.Events = new List<HistoricalEvent>();
-                AttackerCiv.Events.Add(this);
-            }
-            if (DefenderCiv == null) return;
-            if (DefenderCiv.Events == null)
-                DefenderCiv.Events = new List<HistoricalEvent>();
-            DefenderCiv.Events.Add(this);
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)

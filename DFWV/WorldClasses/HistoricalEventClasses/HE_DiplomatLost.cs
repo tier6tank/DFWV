@@ -19,6 +19,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public Entity Involved { get; set; }
 
         override public Point Location { get { return Site.Location; } }
+        public override IEnumerable<Entity> EntitiesInvolved
+        {
+            get
+            {
+                yield return Entity;
+                yield return Involved;
+            }
+        }
 
         public HE_DiplomatLost(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -58,22 +66,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         }
 
-        internal override void Process()
-        {
-            base.Process();
-            if (Involved != null)
-            {
-                if (Involved.Events == null)
-                    Involved.Events = new List<HistoricalEvent>();
-                Involved.Events.Add(this);
-            }
-            if (Entity != null)
-            {
-                if (Entity.Events == null)
-                    Entity.Events = new List<HistoricalEvent>();
-                Entity.Events.Add(this);
-            }
-        }
         internal override void Plus(XDocument xdoc)
         {
             foreach (var element in xdoc.Root.Elements())

@@ -64,17 +64,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 TargetCiv = World.Entities[TargetCivID.Value];
         }
 
-        internal override void Process()
-        {
-            base.Process();
-
-            if (TargetCiv != null)
-            {
-                if (TargetCiv.Events == null)
-                    TargetCiv.Events = new List<HistoricalEvent>();
-                TargetCiv.Events.Add(this);
-            }
-        }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {

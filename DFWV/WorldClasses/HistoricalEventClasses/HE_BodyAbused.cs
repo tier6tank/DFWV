@@ -43,6 +43,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     yield return historicalFigure;
             }
         }
+        public override IEnumerable<Entity> EntitiesInvolved
+        {
+            get { yield return AbuserEn; }
+        }
         public HE_BodyAbused(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -167,18 +171,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
-            }
-        }
-
-        internal override void Process()
-        {
-            base.Process();
-
-            if (AbuserEn != null)
-            {
-                if (AbuserEn.Events == null)
-                    AbuserEn.Events = new List<HistoricalEvent>();
-                AbuserEn.Events.Add(this);
             }
         }
 

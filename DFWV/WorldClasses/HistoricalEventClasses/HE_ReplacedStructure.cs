@@ -21,6 +21,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public Entity Civ { get; set; }
 
         override public Point Location { get { return Site.Location; } }
+        public override IEnumerable<Entity> EntitiesInvolved
+        {
+            get
+            {
+                yield return SiteCiv;
+                yield return Civ;
+            }
+        }
 
         public HE_ReplacedStructure(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -132,21 +140,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     NewStructure.Events = new List<HistoricalEvent>();
                 NewStructure.Events.Add(this);
             }
-
-            if (SiteCiv != null)
-            {
-                if (SiteCiv.Events == null)
-                    SiteCiv.Events = new List<HistoricalEvent>();
-                SiteCiv.Events.Add(this);
-            }
-
-            if (Civ != null)
-            {
-                if (Civ.Events == null)
-                    Civ.Events = new List<HistoricalEvent>();
-                Civ.Events.Add(this);
-            }
-
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)

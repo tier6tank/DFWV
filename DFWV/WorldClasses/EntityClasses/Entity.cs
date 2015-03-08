@@ -37,8 +37,6 @@ namespace DFWV.WorldClasses.EntityClasses
 
         public List<WorldConstruction> ConstructionsBuilt { get; set; }
 
-        public List<HistoricalEvent> Events { get; set; }
-
         private HE_SiteTakenOver SiteTakeoverEvent { get; set; }
         public HE_EntityCreated CreatedEvent { private get; set; }
 
@@ -59,6 +57,14 @@ namespace DFWV.WorldClasses.EntityClasses
 
         [UsedImplicitly]
         public bool isPlayerControlled { get; set; }
+
+        public IEnumerable<HistoricalEvent> Events
+        {
+            get
+            {
+                return World.HistoricalEvents.Values.Where(x => x.EntitiesInvolved.Contains(this));
+            }
+        }
 
         override public Point Location 
         { 
@@ -272,15 +278,9 @@ namespace DFWV.WorldClasses.EntityClasses
 
             frm.lstEntityEvents.BeginUpdate();
             frm.lstEntityEvents.Items.Clear();
-
-            if (Events != null)
+            if (Events.Any())
             {
-                foreach (var evt in Events)
-                    frm.lstEntityEvents.Items.Add(evt);
-            }
-
-            if (frm.lstEntityEvents.Items.Count > 0)
-            {
+                frm.lstEntityEvents.Items.AddRange(Events.ToArray());
                 frm.grpEntityEvents.Show();
                 frm.lstEntityEvents.SelectedIndex = 0;
             }

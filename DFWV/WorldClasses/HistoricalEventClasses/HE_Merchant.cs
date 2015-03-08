@@ -14,6 +14,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public int? SiteID { get; set; }
         public Site Site { get; set; }
 
+        public override IEnumerable<Entity> EntitiesInvolved
+        {
+            get
+            {
+                yield return Source;
+                yield return Destination;
+            }
+        }
 
         public HE_Merchant(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -76,24 +84,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Destination = World.Entities[DestinationID.Value];
             if (SourceID.HasValue && World.Entities.ContainsKey(SourceID.Value))
                 Source = World.Entities[SourceID.Value];
-        }
-
-        internal override void Process()
-        {
-            //TODO: Incorporate new data
-            base.Process();
-            if (Destination != null)
-            {
-                if (Destination.Events == null)
-                    Destination.Events = new List<HistoricalEvent>();
-                Destination.Events.Add(this);
-            }
-            if (Source != null)
-            {
-                if (Source.Events == null)
-                    Source.Events = new List<HistoricalEvent>();
-                Source.Events.Add(this);
-            }
         }
 
         protected override string LegendsDescription() //Matched

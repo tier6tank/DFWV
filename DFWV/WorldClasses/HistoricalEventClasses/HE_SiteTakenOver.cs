@@ -23,6 +23,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         override public Point Location { get { return Site.Location; } }
 
+        public override IEnumerable<Entity> EntitiesInvolved
+        {
+            get
+            {
+                yield return SiteCiv;
+                yield return AttackerCiv;
+                yield return DefenderCiv;
+                yield return NewSiteCiv;
+            }
+        }
 
         public HE_SiteTakenOver(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -88,33 +98,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     Site.SiteTakenOverEvents = new List<HE_SiteTakenOver>();
                 Site.SiteTakenOverEvents.Add(this);
             }
-
-            if (SiteCiv != null)
-            {
-                if (SiteCiv.Events == null)
-                    SiteCiv.Events = new List<HistoricalEvent>();
-                SiteCiv.Events.Add(this);
-            }
-
-            if (AttackerCiv != null)
-            {
-                if (AttackerCiv.Events == null)
-                    AttackerCiv.Events = new List<HistoricalEvent>();
-                AttackerCiv.Events.Add(this);
-            }
-
-
-            if (DefenderCiv != null)
-            {
-                if (AttackerCiv.Events == null)
-                    AttackerCiv.Events = new List<HistoricalEvent>();
-                AttackerCiv.Events.Add(this);
-            }
-
-            if (NewSiteCiv == null) return;
-            if (NewSiteCiv.Events == null)
-                NewSiteCiv.Events = new List<HistoricalEvent>();
-            NewSiteCiv.Events.Add(this);
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)

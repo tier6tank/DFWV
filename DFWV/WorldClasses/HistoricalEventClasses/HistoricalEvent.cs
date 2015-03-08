@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using System.Windows.Forms;
 using System.Drawing;
 using DFWV.Annotations;
+using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
 using LinkLabel = DFWV.Controls.LinkLabel;
@@ -38,6 +39,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public virtual IEnumerable<HistoricalFigure> HFsInvolved
         {
             get { return Enumerable.Empty<HistoricalFigure>(); }
+        }
+
+        public virtual IEnumerable<Entity> EntitiesInvolved
+        {
+            get { return Enumerable.Empty<Entity>(); }
         }
 
         public HistoricalEventCollection EventCollection { get; set; }

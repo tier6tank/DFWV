@@ -33,6 +33,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 yield return DefenderGeneralHF;
             }
         }
+        public override IEnumerable<Entity> EntitiesInvolved
+        {
+            get
+            {
+                yield return DefenderCiv;
+                yield return AttackerCiv;
+            }
+        }
         public HE_FieldBattle(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -103,18 +111,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Subregion.FieldBattleEvents = new List<HE_FieldBattle>();
             Subregion.FieldBattleEvents.Add(this);
 
-            if (AttackerCiv != null)
-            {
-                if (AttackerCiv.Events == null)
-                    AttackerCiv.Events = new List<HistoricalEvent>();
-                AttackerCiv.Events.Add(this);
-            }
-
-
-            if (DefenderCiv == null) return;
-            if (AttackerCiv.Events == null)
-                AttackerCiv.Events = new List<HistoricalEvent>();
-            AttackerCiv.Events.Add(this);
         }
 
 

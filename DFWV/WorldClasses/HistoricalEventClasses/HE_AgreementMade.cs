@@ -19,7 +19,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public Entity Destination { get; set; }
 
         override public Point Location { get { return Site != null ? Site.Location : Point.Empty; } }
-
+        public override IEnumerable<Entity> EntitiesInvolved
+        {
+            get
+            {
+                yield return Source;
+                yield return Destination;
+            }
+        }
         public HE_AgreementMade(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -91,22 +98,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        internal override void Process()
-        {
-            base.Process();
-            if (Destination != null)
-            {
-                if (Destination.Events == null)
-                    Destination.Events = new List<HistoricalEvent>();
-                Destination.Events.Add(this);
-            }
-            if (Source != null)
-            {
-                if (Source.Events == null)
-                    Source.Events = new List<HistoricalEvent>();
-                Source.Events.Add(this);
-            }
-        }
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
             //TODO: Incorporate new data

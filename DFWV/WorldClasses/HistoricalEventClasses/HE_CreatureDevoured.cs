@@ -35,6 +35,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 yield return Victim;
             }
         }
+        public override IEnumerable<Entity> EntitiesInvolved
+        {
+            get { yield return Entity; }
+        }
+
         public HE_CreatureDevoured(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -88,17 +93,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Devourer = World.HistoricalFigures[DevourerID.Value];
 
             
-        }
-
-        internal override void Process()
-        {
-            base.Process();
-            if (Entity != null)
-            {
-                if (Entity.Events == null)
-                    Entity.Events = new List<HistoricalEvent>();
-                Entity.Events.Add(this);
-            }
         }
 
         internal override void Plus(XDocument xdoc)

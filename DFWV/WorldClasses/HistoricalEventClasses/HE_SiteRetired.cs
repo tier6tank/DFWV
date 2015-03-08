@@ -20,6 +20,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         override public Point Location { get { return Site.Location; } }
 
 
+        public override IEnumerable<Entity> EntitiesInvolved
+        {
+            get
+            {
+                yield return SiteCiv;
+                yield return Civ;
+            }
+        }
 
         public HE_SiteRetired(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -65,22 +73,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Civ = World.Entities[CivID.Value];
             if (SiteCivID.HasValue && World.Entities.ContainsKey(SiteCivID.Value))
                 SiteCiv = World.Entities[SiteCivID.Value];
-        }
-
-        internal override void Process()
-        {
-            base.Process();
-
-            if (SiteCiv != null)
-            {
-                if (SiteCiv.Events == null)
-                    SiteCiv.Events = new List<HistoricalEvent>();
-                SiteCiv.Events.Add(this);
-            }
-            if (Civ == null) return;
-            if (Civ.Events == null)
-                Civ.Events = new List<HistoricalEvent>();
-            Civ.Events.Add(this);
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)

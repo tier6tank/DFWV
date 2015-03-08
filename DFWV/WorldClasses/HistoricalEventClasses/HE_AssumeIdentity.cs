@@ -32,6 +32,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 yield return IdentityHF;
             }
         }
+        public override IEnumerable<Entity> EntitiesInvolved
+        {
+            get { yield return TargetEn; }
+        }
         public HE_AssumeIdentity(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -120,18 +124,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
 
             
-            }
-        }
-
-        internal override void Process()
-        {
-            base.Process();
-
-            if (TargetEn != null)
-            {
-                if (TargetEn.Events == null)
-                    TargetEn.Events = new List<HistoricalEvent>();
-                TargetEn.Events.Add(this);
             }
         }
 

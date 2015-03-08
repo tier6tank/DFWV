@@ -17,7 +17,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public Entity Source { get; set; }
         public Entity Destination { get; set; }
 
-
+        public override IEnumerable<Entity> EntitiesInvolved
+        {
+            get
+            {
+                yield return Source;
+                yield return Destination;
+            }
+        }
         public HE_AgreementConcluded(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -54,23 +61,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Destination = World.Entities[DestinationEntID.Value];
             if (SourceEntID.HasValue && World.Entities.ContainsKey(SourceEntID.Value))
                 Source = World.Entities[SourceEntID.Value];
-        }
-
-        internal override void Process()
-        {
-            base.Process();
-            if (Destination != null)
-            {
-                if (Destination.Events == null)
-                    Destination.Events = new List<HistoricalEvent>();
-                Destination.Events.Add(this);
-            }
-            if (Source != null)
-            {
-                if (Source.Events == null)
-                    Source.Events = new List<HistoricalEvent>();
-                Source.Events.Add(this);
-            }
         }
 
         internal override void Plus(XDocument xdoc)

@@ -27,6 +27,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get { yield return BuilderHF; }
         }
+        public override IEnumerable<Entity> EntitiesInvolved
+        {
+            get
+            {
+                yield return Civ;
+                yield return SiteCiv;
+            }
+        }
         public HE_CreatedStructure(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -128,21 +136,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 if (Structure.Events == null)
                     Structure.Events = new List<HistoricalEvent>();
                 Structure.Events.Add(this);
-            }
-
-
-            if (SiteCiv != null)
-            {
-                if (SiteCiv.Events == null)
-                    SiteCiv.Events = new List<HistoricalEvent>();
-                SiteCiv.Events.Add(this);
-            }
-
-            if (Civ != null)
-            {
-                if (Civ.Events == null)
-                    Civ.Events = new List<HistoricalEvent>();
-                Civ.Events.Add(this);
             }
 
             if (BuilderHF != null)

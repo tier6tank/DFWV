@@ -36,6 +36,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get { yield return HF; }
         }
+        public override IEnumerable<Entity> EntitiesInvolved
+        {
+            get { yield return Entity; }
+        }
 
         public HE_MasterpieceItemImprovement(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -155,10 +159,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Site.isPlayerControlled = true;
             if (Entity != null)
                 Entity.MakePlayer();
-            if (Entity == null) return;
-            if (Entity.Events == null)
-                Entity.Events = new List<HistoricalEvent>();
-            Entity.Events.Add(this);
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)

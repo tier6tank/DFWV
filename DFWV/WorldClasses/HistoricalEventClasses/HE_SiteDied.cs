@@ -18,6 +18,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public bool Abandoned { get; set; }
 
         override public Point Location { get { return Site.Location; } }
+        public override IEnumerable<Entity> EntitiesInvolved
+        {
+            get
+            {
+                yield return SiteCiv;
+                yield return Civ;
+            }
+        }
 
         public HE_SiteDied(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -71,11 +79,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             base.Process();
             Site.DiedEvent = this;
-
-            if (SiteCiv == null) return;
-            if (SiteCiv.Events == null)
-                SiteCiv.Events = new List<HistoricalEvent>();
-            SiteCiv.Events.Add(this);
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)

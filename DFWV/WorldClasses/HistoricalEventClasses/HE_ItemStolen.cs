@@ -35,6 +35,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get { yield return HF; }
         }
+        public override IEnumerable<Entity> EntitiesInvolved
+        {
+            get
+            {
+                yield return AttackerCiv;
+                yield return DefenderCiv;
+                yield return Entity;
+            }
+        }
+
         public HE_ItemStolen(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -144,24 +154,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Process()
         {
             base.Process();
-            if (AttackerCiv != null)
-            {
-                if (AttackerCiv.Events == null)
-                    AttackerCiv.Events = new List<HistoricalEvent>();
-                AttackerCiv.Events.Add(this);
-            }
-            if (DefenderCiv != null)
-            {
-                if (DefenderCiv.Events == null)
-                    DefenderCiv.Events = new List<HistoricalEvent>();
-                DefenderCiv.Events.Add(this);
-            }
-            if (Entity != null && AttackerCiv != Entity && DefenderCiv != Entity)
-            {
-                if (Entity.Events == null)
-                    Entity.Events = new List<HistoricalEvent>();
-                Entity.Events.Add(this);
-            }
             if (Structure != null)
             {
                 if (Structure.Events == null)

@@ -18,6 +18,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         override public Point Location { get { return Site.Location; } }
 
+        public override IEnumerable<Entity> EntitiesInvolved
+        {
+            get
+            {
+                yield return ContactorEn;
+                yield return RejectorEn;
+            }
+        }
 
         public HE_FirstContactFailed(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -62,21 +70,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 RejectorEn = World.Entities[RejectorEnID.Value];
         }
 
-        internal override void Process()
-        {
-            base.Process();
-            if (ContactorEn != null)
-            {
-                if (ContactorEn.Events == null)
-                    ContactorEn.Events = new List<HistoricalEvent>();
-                ContactorEn.Events.Add(this);
-            }
-
-            if (RejectorEn == null) return;
-            if (RejectorEn.Events == null)
-                RejectorEn.Events = new List<HistoricalEvent>();
-            RejectorEn.Events.Add(this);
-        }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {

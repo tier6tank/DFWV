@@ -18,6 +18,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         override public Point Location { get { return Site.Location; } }
 
+        public override IEnumerable<Entity> EntitiesInvolved
+        {
+            get { yield return Civ; }
+        }
+
         public HE_RazedStructure(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -74,10 +79,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Process()
         {
             base.Process();
-            if (Civ == null) return;
-            if (Civ.Events == null)
-                Civ.Events = new List<HistoricalEvent>();
-            Civ.Events.Add(this);
             if (Structure != null)
             {
                 if (Structure.Events == null)

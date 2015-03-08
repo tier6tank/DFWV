@@ -29,6 +29,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get { yield return NewLeaderHF; }
         }
+        public override IEnumerable<Entity> EntitiesInvolved
+        {
+            get
+            {
+                yield return SiteCiv;
+                yield return AttackerCiv;
+                yield return DefenderCiv;
+                yield return NewSiteCiv;
+            }
+        }
 
 
         public HE_NewSiteLeader(XDocument xdoc, World world)
@@ -100,32 +110,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     Site.NewSiteLeaderEvents = new List<HE_NewSiteLeader>();
                 Site.NewSiteLeaderEvents.Add(this);
             }
-            if (SiteCiv != null)
-            {
-                if (SiteCiv.Events == null)
-                    SiteCiv.Events = new List<HistoricalEvent>();
-                SiteCiv.Events.Add(this);
-            }
-
-            if (AttackerCiv != null)
-            {
-                if (AttackerCiv.Events == null)
-                    AttackerCiv.Events = new List<HistoricalEvent>();
-                AttackerCiv.Events.Add(this);
-            }
-
-
-            if (DefenderCiv != null)
-            {
-                if (AttackerCiv.Events == null)
-                    AttackerCiv.Events = new List<HistoricalEvent>();
-                AttackerCiv.Events.Add(this);
-            }
-
-            if (NewSiteCiv == null) return;
-            if (NewSiteCiv.Events == null)
-                NewSiteCiv.Events = new List<HistoricalEvent>();
-            NewSiteCiv.Events.Add(this);
+           
         }
 
 

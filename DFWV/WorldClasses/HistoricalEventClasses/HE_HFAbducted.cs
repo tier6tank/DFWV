@@ -28,6 +28,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 yield return TargetHF;
             }
         }
+
         public HE_HFAbducted(XDocument xdoc, World world)
             : base(xdoc, world)
         {

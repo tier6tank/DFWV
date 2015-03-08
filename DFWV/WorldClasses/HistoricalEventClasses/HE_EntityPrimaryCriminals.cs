@@ -17,6 +17,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private Structure Structure { get; set; }
 
         override public Point Location { get { return Site.Location; } }
+        public override IEnumerable<Entity> EntitiesInvolved
+        {
+            get { yield return Entity; }
+        }
 
         public HE_EntityPrimaryCriminals(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -68,21 +72,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        internal override void Process()
-        {
-            base.Process();
-            if (Entity == null) return;
-            if (Entity.Events == null)
-                Entity.Events = new List<HistoricalEvent>();
-            Entity.Events.Add(this);
-
-            if (Structure != null)
-            {
-                if (Structure.Events == null)
-                    Structure.Events = new List<HistoricalEvent>();
-                Structure.Events.Add(this);
-            }
-        }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {

@@ -24,6 +24,15 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get { yield return HF; }
         }
+        public override IEnumerable<Entity> EntitiesInvolved
+        {
+            get
+            {
+                yield return Civ;
+                yield return Group;
+            }
+        }
+
         public HE_CreateEntityPosition(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -99,24 +108,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (HFID.HasValue && World.HistoricalFigures.ContainsKey(HFID.Value))
                 HF = World.HistoricalFigures[HFID.Value];
        
-        }
-
-        internal override void Process()
-        {
-
-            base.Process();
-            if (Civ != null)
-            {
-                if (Civ.Events == null)
-                    Civ.Events = new List<HistoricalEvent>();
-                Civ.Events.Add(this);
-            }
-            if (Group != null)
-            {
-                if (Group.Events == null)
-                    Group.Events = new List<HistoricalEvent>();
-                Group.Events.Add(this);
-            }
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)

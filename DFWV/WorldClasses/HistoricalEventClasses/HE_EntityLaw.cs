@@ -26,6 +26,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get { yield return HistFigure; }
         }
+        public override IEnumerable<Entity> EntitiesInvolved
+        {
+            get { yield return Entity; }
+        }
+
         public HE_EntityLaw(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -70,16 +75,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 HistFigure = World.HistoricalFigures[HistFigureID.Value];
         }
 
-
-        internal override void Process()
-        {
-            base.Process();
-
-            if (Entity == null) return;
-            if (Entity.Events == null)
-                Entity.Events = new List<HistoricalEvent>();
-            Entity.Events.Add(this);
-        }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {

@@ -18,6 +18,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         override public Point Location { get { return Site.Location; } }
 
+        public override IEnumerable<Entity> EntitiesInvolved
+        {
+            get { yield return Entity; }
+        }
         public HE_EntityRelocate(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -75,10 +79,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Process()
         {
             base.Process();
-            if (Entity == null) return;
-            if (Entity.Events == null)
-                Entity.Events = new List<HistoricalEvent>();
-            Entity.Events.Add(this);
 
             if (Structure != null)
             {

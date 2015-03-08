@@ -21,6 +21,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         override public Point Location { get { return Site != null ? Site.Location : Point.Empty ; } }
 
+        public override IEnumerable<Entity> EntitiesInvolved
+        {
+            get
+            {
+                yield return Source;
+                yield return Destination;
+            }
+        }
 
         public HE_PeaceAccepted(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -58,25 +66,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Destination = World.Entities[DestinationEntID.Value];
             if (SourceEntID.HasValue && World.Entities.ContainsKey(SourceEntID.Value))
                 Source = World.Entities[SourceEntID.Value];
-        }
-
-        internal override void Process()
-        {
-            base.Process();
-
-            if (Source != null)
-            {
-                if (Source.Events == null)
-                    Source.Events = new List<HistoricalEvent>();
-                Source.Events.Add(this);
-            }
-
-            if (Destination != null)
-            {
-                if (Destination.Events == null)
-                    Destination.Events = new List<HistoricalEvent>();
-                Destination.Events.Add(this);
-            }
         }
 
         internal override void Plus(XDocument xdoc)

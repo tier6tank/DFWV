@@ -19,6 +19,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public Site Site1 { get; set; }
         public int? SiteID2 { get; set; }
         public Site Site2 { get; set; }
+        public override IEnumerable<Entity> EntitiesInvolved
+        {
+            get
+            {
+                yield return Entity1;
+                yield return Entity2;
+            }
+        }
 
         public HE_SiteDispute(XDocument xdoc, World world)
             : base(xdoc, world)
