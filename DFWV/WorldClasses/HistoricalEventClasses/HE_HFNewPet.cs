@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Xml.Linq;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
@@ -26,6 +26,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get { return GroupHFs; }
         }
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
+
         public HE_HFNewPet(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -78,14 +83,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Site = World.Sites[SiteID.Value];
             if (SubregionID.HasValue && World.Regions.ContainsKey(SubregionID.Value))
                 Subregion = World.Regions[SubregionID.Value];
-            if (GroupHFIDs != null)
+            if (GroupHFIDs == null) return;
+            GroupHFs = new List<HistoricalFigure>();
+            foreach (var grouphfid in GroupHFIDs.Where(grouphfid => World.HistoricalFigures.ContainsKey(grouphfid)))
             {
-                GroupHFs = new List<HistoricalFigure>();
-                foreach (var grouphfid in GroupHFIDs)
-                {
-                    if (World.HistoricalFigures.ContainsKey(grouphfid))
-                        GroupHFs.Add(World.HistoricalFigures[grouphfid]);
-                }
+                GroupHFs.Add(World.HistoricalFigures[grouphfid]);
             }
         }
 

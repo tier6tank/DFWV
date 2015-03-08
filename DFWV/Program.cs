@@ -1,15 +1,15 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Data.Entity.Design.PluralizationServices;
-using System.Linq;
-using System.Windows.Forms;
 using System.ComponentModel;
-using DFWV.Properties;
-using DFWV.WorldClasses;
+using System.Data.Entity.Design.PluralizationServices;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
-using System.Collections;
+using System.Linq;
+using System.Windows.Forms;
+using DFWV.Properties;
+using DFWV.WorldClasses;
 using SevenZip;
 
 //TODO: Issues
@@ -99,10 +99,8 @@ namespace DFWV
                     "#6B6882", "#5FAD4E", "#A75740", "#A5FFD2", "#FFB167", "#009BFF", "#E85EBE"};
         public static Color NextDistinctColor()
         {
-            Color thisColor;
-
             var rgb = Int32.Parse(ColorNames[curDistinctColor % ColorNames.Count].Replace("#", ""), NumberStyles.HexNumber);
-            thisColor = Color.FromArgb(255,Color.FromArgb(rgb));
+            var thisColor = Color.FromArgb(255,Color.FromArgb(rgb));
             curDistinctColor++;
 
             return thisColor;

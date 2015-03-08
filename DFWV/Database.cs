@@ -121,73 +121,56 @@ namespace DFWV
         {
             if (field != null)
                 return field.Replace("'", "''");
-            else
-                return DBNull.Value;
+            return DBNull.Value;
         }
 
         internal static object DBExport(this int? field)
         {
             if (field.HasValue)
                 return field.Value;
-            else
-                return DBNull.Value;
+            return DBNull.Value;
         }
 
         internal static object DBExport(this int? field, List<string> LookupTable)
         {
             if (field.HasValue && LookupTable != null && LookupTable.Count > field.Value)
                 return LookupTable[field.Value];
-            else
-                return DBNull.Value;
+            return DBNull.Value;
         }
 
         internal static object DBExport(this int field, List<string> LookupTable)
         {
             if (LookupTable != null && LookupTable.Count > field)
                 return LookupTable[field];
-            else
-                return DBNull.Value;
+            return DBNull.Value;
         }
 
         internal static object DBExport(this Race race)
         {
             if (race != null)
                 return race.ToString();
-            else
-                return DBNull.Value;
+            return DBNull.Value;
         }
 
         internal static object DBExport(this XMLObject xmlobject)
         {
             if (xmlobject != null)
                 return xmlobject.ID;
-            else
-                return DBNull.Value;
+            return DBNull.Value;
         }
 
         internal static object DBExport(this WorldTime time, bool year)
         {
-            if (time != null)
-            {
-                if (year)
-                    return time.Year;
-                else
-                    return time.TotalSeconds;
-            }
-            else
-                return DBNull.Value;
+            if (time == null) return DBNull.Value;
+            return year ? time.Year : time.TotalSeconds;
         }
 
         internal static object DBExport(this List<int> field, List<string> LookupTable)
         {
-            if (field != null)
-            {
-                var exportText = field.Aggregate("", (current, curItem) => current + (LookupTable[curItem] + ","));
-                exportText = exportText.TrimEnd(',');
-                return exportText;
-            }
-            else
-                return DBNull.Value;
+            if (field == null) return DBNull.Value;
+            var exportText = field.Aggregate("", (current, curItem) => current + (LookupTable[curItem] + ","));
+            exportText = exportText.TrimEnd(',');
+            return exportText;
         }
 
         internal static object DBExport(this List<int> field)
@@ -196,17 +179,16 @@ namespace DFWV
             {
                 return String.Join(",",field);
             }
-            else
-                return DBNull.Value;
+            return DBNull.Value;
         }
 
         internal static object DBExport(this Point pt)
         {
             if (pt.IsEmpty)
                 return pt.X + "," + pt.Y;
-            else
-                return DBNull.Value;
+            return DBNull.Value;
         }
+
         #endregion
     }
 }

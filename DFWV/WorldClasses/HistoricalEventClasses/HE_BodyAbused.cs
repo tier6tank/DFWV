@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Xml.Linq;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
 
@@ -43,6 +43,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     yield return historicalFigure;
             }
         }
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
+
         public override IEnumerable<Entity> EntitiesInvolved
         {
             get { yield return AbuserEn; }
@@ -95,14 +100,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Subregion = World.Regions[SubregionID.Value];
             if (BodyHFIDs != null)
             {
-                foreach (var hfid in BodyHFIDs)
+                foreach (var hfid in BodyHFIDs.Where(hfid => World.HistoricalFigures.ContainsKey(hfid)))
                 {
-                    if (World.HistoricalFigures.ContainsKey(hfid))
-                    {
-                        if (BodyHFs == null)
-                            BodyHFs = new List<HistoricalFigure>();
-                        BodyHFs.Add(World.HistoricalFigures[hfid]);
-                    }
+                    if (BodyHFs == null)
+                        BodyHFs = new List<HistoricalFigure>();
+                    BodyHFs.Add(World.HistoricalFigures[hfid]);
                 }
             }
             if (AbuserEnID.HasValue && World.Entities.ContainsKey(AbuserEnID.Value))
@@ -215,16 +217,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 abusedHFtext = "the body of an unknown creature was";
             else if (BodyHFs != null && BodyHFs.Count > 2)
             {
-                abusedHFtext = BodyHFs.Aggregate("the bodies of ", (current, hf) => current + (hf + " and ")); //TODO: Remove this, change next to linq
-
-                abusedHFtext = "the bodies of ";
-
-                foreach (var hf in BodyHFs)
-                {
-                    if (hf == BodyHFs.Last())
-                        break;
-                    abusedHFtext += string.Format("the {0} {1}, ", hf.Race.Name.ToLower(), hf);
-                }
+                abusedHFtext = BodyHFs.TakeWhile(hf => hf != BodyHFs.Last()).Aggregate("the bodies of ", (current, hf) => current + string.Format("the {0} {1}, ", hf.Race.Name.ToLower(), hf));
 
                 abusedHFtext += string.Format("and the {0} {1} ", BodyHFs.Last().Race.Name.ToLower(), BodyHFs.Last());
             }

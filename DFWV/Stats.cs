@@ -181,13 +181,11 @@ namespace DFWV
                         if (HF.Race != null)
                             KilledHFs[HF.Race]++;
                     }
-                    if (HF.DiedEvent != null)
-                    {
-                        var lifeSpan = (HF.DiedEvent.Time - HF.Birth);
-                        if (HF.Race != null)
-                            TotalLifeSpan[HF.Race] += lifeSpan;
-                        OverallTotalLifeSpan += lifeSpan;
-                    }
+                    if (HF.DiedEvent == null) continue;
+                    var lifeSpan = (HF.DiedEvent.Time - HF.Birth);
+                    if (HF.Race != null)
+                        TotalLifeSpan[HF.Race] += lifeSpan;
+                    OverallTotalLifeSpan += lifeSpan;
                 }
                 else
                 {

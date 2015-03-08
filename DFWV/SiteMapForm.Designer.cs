@@ -1,11 +1,14 @@
-﻿namespace DFWV
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace DFWV
 {
     partial class SiteMapForm
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -84,9 +87,9 @@
 
         #endregion
 
-        private System.Windows.Forms.PictureBox picSiteMapLegend;
-        private System.Windows.Forms.PictureBox picSiteMap;
-        private System.Windows.Forms.Label lblSiteName;
-        private System.Windows.Forms.ToolTip toolTip;
+        private PictureBox picSiteMapLegend;
+        private PictureBox picSiteMap;
+        private Label lblSiteName;
+        private ToolTip toolTip;
     }
 }

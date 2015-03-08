@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Xml.Linq;
-using System.Windows.Forms;
 using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
+using System.Xml.Linq;
 using DFWV.Annotations;
 using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
@@ -44,6 +43,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public virtual IEnumerable<Entity> EntitiesInvolved
         {
             get { return Enumerable.Empty<Entity>(); }
+        }
+        public virtual IEnumerable<Site> SitesInvolved
+        {
+            get { return Enumerable.Empty<Site>(); }
         }
 
         public HistoricalEventCollection EventCollection { get; set; }

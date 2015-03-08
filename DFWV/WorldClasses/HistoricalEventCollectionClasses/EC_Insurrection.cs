@@ -151,7 +151,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
             table = GetType().Name;
 
-            var vals = new List<object> { ID, ParentEventCol_.HasValue ? ParentEventCol_.Value : -1, Ordinal, SiteID, TargetEntID, Outcome };
+            var vals = new List<object> { ID, ParentEventCol_ ?? -1, Ordinal, SiteID, TargetEntID, Outcome };
 
             Database.ExportWorldItem(table, vals);
 

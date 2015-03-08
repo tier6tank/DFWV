@@ -97,7 +97,7 @@ namespace DFWVTests
                 "  [*] Atho (b.???, Reign Began: 1), *** Original Line, Never Married",
                 "      No Children"
             };
-            var leaderType = "master";
+            const string leaderType = "master";
 
             // act
             var leader = new Leader(data, leaderType, GetTestCivilization());

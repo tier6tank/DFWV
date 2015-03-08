@@ -27,6 +27,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 yield return Civ;
             }
         }
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
+
 
         public HE_ReclaimSite(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -106,11 +111,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timelinestring = base.ToTimelineString();
 
-            if (UnRetire)
-                return string.Format("{0} {1} unretired {2}.",
-                                    timelinestring, SiteCiv, Site.AltName);
-            return string.Format("{0} {1} reclaimed {2}.",
-                timelinestring, SiteCiv, Site.AltName);
+            return string.Format(UnRetire ? "{0} {1} unretired {2}." : "{0} {1} reclaimed {2}.", timelinestring, SiteCiv, Site.AltName);
         }
 
         internal override void Export(string table)

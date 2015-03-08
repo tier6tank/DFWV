@@ -23,6 +23,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get { yield return HistFig; }
         }
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
+
         public HE_HFProfanedStructure(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -103,12 +108,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             base.Process();
 
-            if (Structure != null)
-            {
-                if (Structure.Events == null)
-                    Structure.Events = new List<HistoricalEvent>();
-                Structure.Events.Add(this);
-            }
+            if (Structure == null) return;
+            if (Structure.Events == null)
+                Structure.Events = new List<HistoricalEvent>();
+            Structure.Events.Add(this);
         }
 
 

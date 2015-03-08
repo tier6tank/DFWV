@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Drawing;
 using System.Xml.Linq;
 
 namespace DFWV.WorldClasses
@@ -42,9 +40,9 @@ namespace DFWV.WorldClasses
             throw new NotImplementedException();
         }
 
-        public override System.Drawing.Point Location
+        public override Point Location
         {
-            get { return System.Drawing.Point.Empty; }
+            get { return Point.Empty; }
         }
 
         internal override void Export(string table)

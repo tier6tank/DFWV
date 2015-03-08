@@ -1,12 +1,12 @@
-﻿using DFWV.Annotations;
-using DFWV.WorldClasses.EntityClasses;
-using DFWV.WorldClasses.HistoricalEventClasses;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using DFWV.Annotations;
+using DFWV.WorldClasses.EntityClasses;
+using DFWV.WorldClasses.HistoricalEventClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
 
 namespace DFWV.WorldClasses.HistoricalFigureClasses
@@ -977,89 +977,86 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             {
                 foreach (var linklist in EntityLinks)
                 {
-                    foreach (var el in linklist.Value)
+                    foreach (var el in linklist.Value.Where(el => el.Entity != null))
                     {
-                        if (el.Entity != null)
+                        switch (HFEntityLink.LinkTypes[linklist.Key])
                         {
-                            switch (HFEntityLink.LinkTypes[linklist.Key])
-                            {
-                                case "enemy":
+                            case "enemy":
 
-                                    if (el.Entity.Enemies == null)
-                                        el.Entity.Enemies = new List<HistoricalFigure>();
-                                    el.Entity.Enemies.Add(this);
-                                    if (EnemyOf == null)
-                                        EnemyOf = new List<Entity>();
-                                    EnemyOf.Add(el.Entity);
-                                    break;
-                                case "member":
-                                    if (el.Entity.Members == null)
-                                        el.Entity.Members = new List<HistoricalFigure>();
-                                    el.Entity.Members.Add(this);
-                                    if (MemberOf == null)
-                                        MemberOf = new List<Entity>();
-                                    MemberOf.Add(el.Entity);
-                                    break;
-                                case "former member":
-                                    if (el.Entity.FormerMembers == null)
-                                        el.Entity.FormerMembers = new List<HistoricalFigure>();
-                                    el.Entity.FormerMembers.Add(this);
-                                    if (FormerMemberOf == null)
-                                        FormerMemberOf = new List<Entity>();
-                                    FormerMemberOf.Add(el.Entity);
-                                    break;
-                                case "prisoner":
-                                    if (el.Entity.Prisoners == null)
-                                        el.Entity.Prisoners = new List<HistoricalFigure>();
-                                    el.Entity.Prisoners.Add(this);
-                                    if (PrisonerOf == null)
-                                        PrisonerOf = new List<Entity>();
-                                    PrisonerOf.Add(el.Entity);
-                                    break;
-                                case "former prisoner":
-                                    if (el.Entity.FormerPrisoners == null)
-                                        el.Entity.FormerPrisoners = new List<HistoricalFigure>();
-                                    el.Entity.FormerPrisoners.Add(this);
-                                    if (FormerPrisonerOf == null)
-                                        FormerPrisonerOf = new List<Entity>();
-                                    FormerPrisonerOf.Add(el.Entity);
-                                    break;
-                                case "criminal":
-                                    if (el.Entity.Criminals == null)
-                                        el.Entity.Criminals = new List<HistoricalFigure>();
-                                    el.Entity.Criminals.Add(this);
-                                    if (CriminalOf == null)
-                                        CriminalOf = new List<Entity>();
-                                    CriminalOf.Add(el.Entity);
-                                    break;
-                                case "slave":
-                                    if (el.Entity.Slaves == null)
-                                        el.Entity.Slaves = new List<HistoricalFigure>();
-                                    el.Entity.Slaves.Add(this);
-                                    if (SlaveOf == null)
-                                        SlaveOf = new List<Entity>();
-                                    SlaveOf.Add(el.Entity);
-                                    break;
-                                case "former slave":
-                                    if (el.Entity.FormerSlaves == null)
-                                        el.Entity.FormerSlaves = new List<HistoricalFigure>();
-                                    el.Entity.FormerSlaves.Add(this);
-                                    if (FormerSlaveOf == null)
-                                        FormerSlaveOf = new List<Entity>();
-                                    FormerSlaveOf.Add(el.Entity);
-                                    break;
-                                case "hero":
-                                    if (el.Entity.Heroes == null)
-                                        el.Entity.Heroes = new List<HistoricalFigure>();
-                                    el.Entity.Heroes.Add(this);
-                                    if (HeroOf == null)
-                                        HeroOf = new List<Entity>();
-                                    HeroOf.Add(el.Entity);
-                                    break;
-                                default:
-                                    Program.Log(LogType.Warning, "Unknown HF Entity Link: " + linklist.Key);
-                                    break;
-                            }
+                                if (el.Entity.Enemies == null)
+                                    el.Entity.Enemies = new List<HistoricalFigure>();
+                                el.Entity.Enemies.Add(this);
+                                if (EnemyOf == null)
+                                    EnemyOf = new List<Entity>();
+                                EnemyOf.Add(el.Entity);
+                                break;
+                            case "member":
+                                if (el.Entity.Members == null)
+                                    el.Entity.Members = new List<HistoricalFigure>();
+                                el.Entity.Members.Add(this);
+                                if (MemberOf == null)
+                                    MemberOf = new List<Entity>();
+                                MemberOf.Add(el.Entity);
+                                break;
+                            case "former member":
+                                if (el.Entity.FormerMembers == null)
+                                    el.Entity.FormerMembers = new List<HistoricalFigure>();
+                                el.Entity.FormerMembers.Add(this);
+                                if (FormerMemberOf == null)
+                                    FormerMemberOf = new List<Entity>();
+                                FormerMemberOf.Add(el.Entity);
+                                break;
+                            case "prisoner":
+                                if (el.Entity.Prisoners == null)
+                                    el.Entity.Prisoners = new List<HistoricalFigure>();
+                                el.Entity.Prisoners.Add(this);
+                                if (PrisonerOf == null)
+                                    PrisonerOf = new List<Entity>();
+                                PrisonerOf.Add(el.Entity);
+                                break;
+                            case "former prisoner":
+                                if (el.Entity.FormerPrisoners == null)
+                                    el.Entity.FormerPrisoners = new List<HistoricalFigure>();
+                                el.Entity.FormerPrisoners.Add(this);
+                                if (FormerPrisonerOf == null)
+                                    FormerPrisonerOf = new List<Entity>();
+                                FormerPrisonerOf.Add(el.Entity);
+                                break;
+                            case "criminal":
+                                if (el.Entity.Criminals == null)
+                                    el.Entity.Criminals = new List<HistoricalFigure>();
+                                el.Entity.Criminals.Add(this);
+                                if (CriminalOf == null)
+                                    CriminalOf = new List<Entity>();
+                                CriminalOf.Add(el.Entity);
+                                break;
+                            case "slave":
+                                if (el.Entity.Slaves == null)
+                                    el.Entity.Slaves = new List<HistoricalFigure>();
+                                el.Entity.Slaves.Add(this);
+                                if (SlaveOf == null)
+                                    SlaveOf = new List<Entity>();
+                                SlaveOf.Add(el.Entity);
+                                break;
+                            case "former slave":
+                                if (el.Entity.FormerSlaves == null)
+                                    el.Entity.FormerSlaves = new List<HistoricalFigure>();
+                                el.Entity.FormerSlaves.Add(this);
+                                if (FormerSlaveOf == null)
+                                    FormerSlaveOf = new List<Entity>();
+                                FormerSlaveOf.Add(el.Entity);
+                                break;
+                            case "hero":
+                                if (el.Entity.Heroes == null)
+                                    el.Entity.Heroes = new List<HistoricalFigure>();
+                                el.Entity.Heroes.Add(this);
+                                if (HeroOf == null)
+                                    HeroOf = new List<Entity>();
+                                HeroOf.Add(el.Entity);
+                                break;
+                            default:
+                                Program.Log(LogType.Warning, "Unknown HF Entity Link: " + linklist.Key);
+                                break;
                         }
                     }
                 }
@@ -1326,7 +1323,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             {
                 ID,
                 Name.DBExport(),
-                Race == null ? (object) DBNull.Value : Race.ToString().DBExport(),
+                Race == null ? DBNull.Value : Race.ToString().DBExport(),
                 Caste.DBExport(Castes),
                 Appeared.DBExport(true),
                 Birth.DBExport(true),
@@ -1343,7 +1340,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                 Goal.DBExport(Goals),
                 Sphere.DBExport(Spheres),
                 InteractionKnowledge.DBExport(Interactions),
-                JourneyPet.DBExport(JourneyPets),
+                JourneyPet.DBExport(JourneyPets)
             };
 
                 

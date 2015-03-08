@@ -72,16 +72,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (SubregionID.HasValue && World.Regions.ContainsKey(SubregionID.Value))
                 Subregion = World.Regions[SubregionID.Value];
 
-            if (GroupHFID != null)
+            if (GroupHFID == null) return;
+            GroupHF = new List<HistoricalFigure>();
+            foreach (var group1hfid in GroupHFID.Where(group1hfid => World.HistoricalFigures.ContainsKey(group1hfid)))
             {
-                GroupHF = new List<HistoricalFigure>();
-                foreach (var group1hfid in GroupHFID.Where(group1hfid => World.HistoricalFigures.ContainsKey(group1hfid)))
-                {
-                    GroupHF.Add(World.HistoricalFigures[group1hfid]);
-                }
+                GroupHF.Add(World.HistoricalFigures[group1hfid]);
             }
-
-
         }
 
         internal override void Plus(XDocument xdoc)

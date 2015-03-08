@@ -181,7 +181,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 IdentityHFID.DBExport(),
                 IdentityName.DBExport(),
                 IdentityRace.DBExport(),
-                IdentityCaste.DBExport(HistoricalFigure.Castes),
+                IdentityCaste.DBExport(HistoricalFigure.Castes)
             };
 
             Database.ExportWorldItem(table, vals);

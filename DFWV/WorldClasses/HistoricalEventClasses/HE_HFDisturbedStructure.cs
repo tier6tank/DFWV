@@ -23,6 +23,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get { yield return HistFig; }
         }
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
+
         public HE_HFDisturbedStructure(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -71,11 +76,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (!StructureID.HasValue || StructureID.Value == -1 || Site == null) return;
 
             Structure = Site.GetStructure(StructureID.Value);
-            if (Structure == null)
-            {
-                Structure = new Structure(Site, StructureID.Value, World);
-                Site.AddStructure(Structure);
-            }
+            if (Structure != null) return;
+            Structure = new Structure(Site, StructureID.Value, World);
+            Site.AddStructure(Structure);
         }
 
         internal override void Plus(XDocument xdoc)
@@ -108,12 +111,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Process()
         {
             base.Process();
-            if (Structure != null)
-            {
-                if (Structure.Events == null)
-                    Structure.Events = new List<HistoricalEvent>();
-                Structure.Events.Add(this);
-            }
+            if (Structure == null) return;
+            if (Structure.Events == null)
+                Structure.Events = new List<HistoricalEvent>();
+            Structure.Events.Add(this);
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)

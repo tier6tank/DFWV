@@ -34,6 +34,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get { yield return Civ; }
         }
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
+
 
         public HE_RemoveHFSiteLink(XDocument xdoc, World world)
             : base(xdoc, world)

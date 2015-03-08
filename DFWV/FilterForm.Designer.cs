@@ -1,11 +1,14 @@
-﻿namespace DFWV
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace DFWV
 {
     partial class FilterForm
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -416,35 +419,35 @@
 
         #endregion
 
-        private System.Windows.Forms.Button Apply;
-        private System.Windows.Forms.Button Cancel;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.TextBox txtTake;
-        private System.Windows.Forms.CheckBox chkTake;
-        private System.Windows.Forms.ComboBox cmbWhereOperation;
-        private System.Windows.Forms.TextBox txtWhereData;
-        private System.Windows.Forms.ComboBox cmbWhereField;
-        private System.Windows.Forms.ListBox lstWhere;
-        private System.Windows.Forms.ComboBox cmbOrderOperation;
-        private System.Windows.Forms.TextBox txtOrderData;
-        private System.Windows.Forms.ComboBox cmbOrderField;
-        private System.Windows.Forms.ListBox lstOrder;
-        private System.Windows.Forms.Button WhereAdd;
-        private System.Windows.Forms.Button WhereDelete;
-        private System.Windows.Forms.Button OrderAdd;
-        private System.Windows.Forms.Button OrderDelete;
-        private System.Windows.Forms.Button OrderMoveDown;
-        private System.Windows.Forms.Button OrderMoveUp;
-        private System.Windows.Forms.CheckBox chkDescending;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Button GroupAdd;
-        private System.Windows.Forms.Button GroupDelete;
-        private System.Windows.Forms.Button GroupMoveDown;
-        private System.Windows.Forms.Button GroupMoveUp;
-        private System.Windows.Forms.ComboBox cmbGroupField;
-        private System.Windows.Forms.ListBox lstGroup;
-        private System.Windows.Forms.RadioButton optionIsNotRadioButton;
-        private System.Windows.Forms.RadioButton optionIsRadioButton;
+        private Button Apply;
+        private Button Cancel;
+        private GroupBox groupBox1;
+        private GroupBox groupBox2;
+        private TextBox txtTake;
+        private CheckBox chkTake;
+        private ComboBox cmbWhereOperation;
+        private TextBox txtWhereData;
+        private ComboBox cmbWhereField;
+        private ListBox lstWhere;
+        private ComboBox cmbOrderOperation;
+        private TextBox txtOrderData;
+        private ComboBox cmbOrderField;
+        private ListBox lstOrder;
+        private Button WhereAdd;
+        private Button WhereDelete;
+        private Button OrderAdd;
+        private Button OrderDelete;
+        private Button OrderMoveDown;
+        private Button OrderMoveUp;
+        private CheckBox chkDescending;
+        private GroupBox groupBox3;
+        private Button GroupAdd;
+        private Button GroupDelete;
+        private Button GroupMoveDown;
+        private Button GroupMoveUp;
+        private ComboBox cmbGroupField;
+        private ListBox lstGroup;
+        private RadioButton optionIsNotRadioButton;
+        private RadioButton optionIsRadioButton;
     }
 }

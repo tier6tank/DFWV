@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using DFWV.WorldClasses.EntityClasses;
@@ -72,25 +73,19 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             base.Process();
             var matched = false;
 
-            if (HF != null && HF.EntityLinks != null)
+            if (HF == null || HF.EntityLinks == null) return;
+            foreach (var entityLinkList in HF.EntityLinks)
             {
-                foreach (var entityLinkList in HF.EntityLinks)
+                foreach (var entityLink in entityLinkList.Value.Where(entityLink => entityLink.Entity == Civ))
                 {
-                    foreach (var entityLink in entityLinkList.Value)
-                    {
-                        if (entityLink.Entity == Civ)
-                        {
-                            entityLink.AddEvent = this;
-                            HFEntityLink = entityLink;
-                            matched = true;
-                            break;
-                        }
-                    }
-                    if (matched)
-                        break;
+                    entityLink.AddEvent = this;
+                    HFEntityLink = entityLink;
+                    matched = true;
+                    break;
                 }
+                if (matched)
+                    break;
             }
-
         }
 
         internal override void Plus(XDocument xdoc)

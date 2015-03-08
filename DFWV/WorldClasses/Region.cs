@@ -1,16 +1,15 @@
-﻿using DFWV.Annotations;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Xml.Linq;
+using DFWV.Annotations;
+using DFWV.WorldClasses.HistoricalEventClasses;
+using DFWV.WorldClasses.HistoricalEventCollectionClasses;
+using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses
 {
-    using HistoricalEventClasses;
-    using System;
-    using System.Collections.Generic;
-    using System.Drawing;
-    using System.Xml.Linq;
-    using HistoricalEventCollectionClasses;
-    using HistoricalFigureClasses;
-    using System.Linq;
-
     public class Region : XMLObject
     {
         public static List<string> Types = new List<string>();
@@ -107,7 +106,7 @@ namespace DFWV.WorldClasses
             if (Populations != null)
             {
                 frm.lstRegionPopulation.Items.AddRange(Populations.Keys.ToArray());
-                frm.grpRegionPopulation.Text = "Population (" + Populations.Values.Sum() + ")";
+                frm.grpRegionPopulation.Text = string.Format("Population ({0})", Populations.Values.Sum());
             }
             frm.lstRegionPopulation.EndUpdate();
             frm.grpRegionPopulation.Visible = frm.lstRegionPopulation.Items.Count > 0;
@@ -141,21 +140,17 @@ namespace DFWV.WorldClasses
                     case "coords":
                         if (Coords == null)
                             Coords = new List<Point>();
-                        foreach (var coord in val.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries))
+                        foreach (var coordSplit in val.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries).Select(coord => coord.Split(',')).Where(coordSplit => coordSplit.Length == 2))
                         {
-                            var coordSplit = coord.Split(',');
-                            if (coordSplit.Length == 2)
-                                Coords.Add(new Point(Convert.ToInt32(coordSplit[0]), Convert.ToInt32(coordSplit[1])));
+                            Coords.Add(new Point(Convert.ToInt32(coordSplit[0]), Convert.ToInt32(coordSplit[1])));
                         }
                         break;
                     case "population":
                         if (Populations == null)
                             Populations = new Dictionary<Race, int>();
-                        foreach (var pop in val.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries))
+                        foreach (var popSplit in val.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries).Select(pop => pop.Split(',')).Where(popSplit => popSplit.Length == 2))
                         {
-                            var popSplit = pop.Split(',');
-                            if (popSplit.Length == 2)
-                                Populations.Add(World.Races[Convert.ToInt32(popSplit[0])], Convert.ToInt32(popSplit[1]));
+                            Populations.Add(World.Races[Convert.ToInt32(popSplit[0])], Convert.ToInt32(popSplit[1]));
                         }
                         break;
                     default:

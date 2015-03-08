@@ -30,6 +30,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 yield return DefenderCiv;
             }
         }
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
+
 
         public HE_SiteTributeForced(XDocument xdoc, World world)
             : base(xdoc, world)

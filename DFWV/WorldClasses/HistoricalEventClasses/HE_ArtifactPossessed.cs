@@ -24,6 +24,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get { yield return HistFigure; }
         }
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
+
         public HE_ArtifactPossessed(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -79,12 +84,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             base.Process();
 
 
-            if (Artifact != null)
-            {
-                if (Artifact.PossessedEvents == null)
-                    Artifact.PossessedEvents = new List<HE_ArtifactPossessed>();
-                Artifact.PossessedEvents.Add(this);
-            }
+            if (Artifact == null) return;
+            if (Artifact.PossessedEvents == null)
+                Artifact.PossessedEvents = new List<HE_ArtifactPossessed>();
+            Artifact.PossessedEvents.Add(this);
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)

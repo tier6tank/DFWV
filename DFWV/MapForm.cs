@@ -1,12 +1,11 @@
-﻿using System.Drawing.Drawing2D;
-using System.IO;
-using DFWV.WorldClasses;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using DFWV.WorldClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
 using Region = DFWV.WorldClasses.Region;
 
@@ -58,10 +57,8 @@ namespace DFWV
             var  newItem = new ToolStripMenuItem("Main") {CheckOnClick = true, Checked = true};
             newItem.Click += MapSelectionClicked;
             mapsToolStripMenuItem.DropDownItems.Add(newItem);
-            foreach (var mapitem in World.Maps)
+            foreach (var thisItem in from mapitem in World.Maps where mapitem.Key != "Main" select new ToolStripMenuItem(mapitem.Key) {CheckOnClick = true})
             {
-                if (mapitem.Key == "Main") continue;
-                var thisItem = new ToolStripMenuItem(mapitem.Key) {CheckOnClick = true};
                 thisItem.Click += MapSelectionClicked;
                 mapsToolStripMenuItem.DropDownItems.Add(thisItem);
             }
@@ -222,46 +219,43 @@ namespace DFWV
                 }
             }
 
-            foreach (var entity in World.Entities.Values)
+            foreach (var entity in World.Entities.Values.Where(entity => entity.Coords != null && entity.Civilization != null))
             {
-                if (entity.Coords != null && entity.Civilization != null)
+                using (var p = new Pen(entity.Civilization.Color))
                 {
-                    using (var p = new Pen(entity.Civilization.Color))
+                    var TopLeft = new Point();
+                    var TopRight = new Point();
+                    var BottomLeft = new Point();
+                    var BottomRight = new Point();
+                    using (Brush b = new SolidBrush(Color.FromArgb(50, entity.Civilization.Color)))
                     {
-                        var TopLeft = new Point();
-                        var TopRight = new Point();
-                        var BottomLeft = new Point();
-                        var BottomRight = new Point();
-                        using (Brush b = new SolidBrush(Color.FromArgb(50, entity.Civilization.Color)))
+                        foreach (var coord in entity.Coords)
                         {
-                            foreach (var coord in entity.Coords)
-                            {
-                                const int AreaMultFactor = 16;
-                                TopLeft.X = coord.X * siteSize.Width * AreaMultFactor;
-                                TopLeft.Y = coord.Y * siteSize.Height * AreaMultFactor;
-                                BottomLeft.X = coord.X * siteSize.Width * AreaMultFactor;
-                                BottomLeft.Y = TopLeft.Y + (siteSize.Height * AreaMultFactor) - 1;
-                                TopRight.X = TopLeft.X + (siteSize.Width * AreaMultFactor) - 1;
-                                TopRight.Y = TopLeft.Y;
-                                BottomRight.X = TopRight.X;
-                                BottomRight.Y = BottomLeft.Y;
+                            const int AreaMultFactor = 16;
+                            TopLeft.X = coord.X * siteSize.Width * AreaMultFactor;
+                            TopLeft.Y = coord.Y * siteSize.Height * AreaMultFactor;
+                            BottomLeft.X = coord.X * siteSize.Width * AreaMultFactor;
+                            BottomLeft.Y = TopLeft.Y + (siteSize.Height * AreaMultFactor) - 1;
+                            TopRight.X = TopLeft.X + (siteSize.Width * AreaMultFactor) - 1;
+                            TopRight.Y = TopLeft.Y;
+                            BottomRight.X = TopRight.X;
+                            BottomRight.Y = BottomLeft.Y;
 
-                                g.FillRectangle(b, TopLeft.X, TopLeft.Y, (siteSize.Width * AreaMultFactor) - 1, (siteSize.Height * AreaMultFactor) - 1);
+                            g.FillRectangle(b, TopLeft.X, TopLeft.Y, (siteSize.Width * AreaMultFactor) - 1, (siteSize.Height * AreaMultFactor) - 1);
 
 
-                                //g.DrawRectangle(p, TopLeft.X , TopLeft.Y , siteSize.Width - 1, siteSize.Height - 1);
-                                if (!entity.Coords.Contains(new Point(coord.X, coord.Y - 1)))
-                                    g.DrawLine(p, TopLeft, TopRight);
-                                if (!entity.Coords.Contains(new Point(coord.X + 1, coord.Y)))
-                                    g.DrawLine(p, TopRight, BottomRight);
-                                if (!entity.Coords.Contains(new Point(coord.X, coord.Y + 1)))
-                                    g.DrawLine(p, BottomRight, BottomLeft);
-                                if (!entity.Coords.Contains(new Point(coord.X - 1, coord.Y)))
-                                    g.DrawLine(p, BottomLeft, TopLeft);
-                            }
+                            //g.DrawRectangle(p, TopLeft.X , TopLeft.Y , siteSize.Width - 1, siteSize.Height - 1);
+                            if (!entity.Coords.Contains(new Point(coord.X, coord.Y - 1)))
+                                g.DrawLine(p, TopLeft, TopRight);
+                            if (!entity.Coords.Contains(new Point(coord.X + 1, coord.Y)))
+                                g.DrawLine(p, TopRight, BottomRight);
+                            if (!entity.Coords.Contains(new Point(coord.X, coord.Y + 1)))
+                                g.DrawLine(p, BottomRight, BottomLeft);
+                            if (!entity.Coords.Contains(new Point(coord.X - 1, coord.Y)))
+                                g.DrawLine(p, BottomLeft, TopLeft);
                         }
-                        
                     }
+                        
                 }
             }
         }
@@ -328,10 +322,8 @@ namespace DFWV
             var rnd = new Random();
             
             var curDistinctColor = 0; 
-            foreach (var region in World.Regions.Values)
+            foreach (var region in World.Regions.Values.Where(region => region.Coords != null))
             {
-                if (region.Coords == null)
-                    continue;
                 curDistinctColor++;
                 Color thisColor;
                 if (curDistinctColor < ColorNames.Count)
@@ -394,12 +386,8 @@ namespace DFWV
             var rnd = new Random();
 
             var curDistinctColor = 0;
-            foreach (var ugregion in World.UndergroundRegions.Values)
+            foreach (var ugregion in World.UndergroundRegions.Values.Where(ugregion => ugregion.Depth == ugRegionDepthPicker.Value).Where(ugregion => ugregion.Coords != null))
             {
-                if (ugregion.Depth != ugRegionDepthPicker.Value)
-                    continue;
-                if (ugregion.Coords == null)
-                    continue;
                 curDistinctColor++;
                 Color thisColor;
                 if (curDistinctColor < ColorNames.Count)
@@ -811,19 +799,17 @@ namespace DFWV
 
         private WorldConstruction GetWorldConstructionAt(Point coord)
         {
-            if (World.hasPlusXML)
-            {
-                var returnWC = World.WorldConstructions.Values.Where(wc => wc.Coords != null && wc.ConstructionType != "road")
-                        .FirstOrDefault(wc => wc.Coords.Contains(coord));
-                if (returnWC != null)
-                    return returnWC;
+            if (!World.hasPlusXML)
+                return
+                    World.WorldConstructions.Values.Where(wc => wc.From != null && wc.To != null)
+                        .FirstOrDefault(wc => wc.From.Coords == coord || wc.To.Coords == coord);
+            var returnWC = World.WorldConstructions.Values.Where(wc => wc.Coords != null && wc.ConstructionType != "road")
+                .FirstOrDefault(wc => wc.Coords.Contains(coord));
+            if (returnWC != null)
+                return returnWC;
 
-                return World.WorldConstructions.Values.Where(wc => wc.Coords != null && wc.ConstructionType == "road")
-                    .FirstOrDefault(wc => wc.Coords.Contains(coord));
-            }
-            return
-                World.WorldConstructions.Values.Where(wc => wc.From != null && wc.To != null)
-                    .FirstOrDefault(wc => wc.From.Coords == coord || wc.To.Coords == coord);
+            return World.WorldConstructions.Values.Where(wc => wc.Coords != null && wc.ConstructionType == "road")
+                .FirstOrDefault(wc => wc.Coords.Contains(coord));
         }
 
         private Region GetRegionAt(Point coord)

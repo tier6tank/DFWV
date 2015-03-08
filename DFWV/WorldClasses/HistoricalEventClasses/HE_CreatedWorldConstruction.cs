@@ -31,6 +31,15 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 yield return SiteCiv;
             }
         }
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get
+            {
+                yield return Site1;
+                yield return Site2;
+            }
+        }
+
         public HE_CreatedWorldConstruction(XDocument xdoc, World world)
             : base(xdoc, world)
         {

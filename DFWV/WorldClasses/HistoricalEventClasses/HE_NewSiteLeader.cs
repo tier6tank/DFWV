@@ -39,6 +39,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 yield return NewSiteCiv;
             }
         }
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
+
 
 
         public HE_NewSiteLeader(XDocument xdoc, World world)

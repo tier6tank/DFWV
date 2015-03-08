@@ -6,10 +6,30 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-namespace DFWV
+namespace DFWV.WorldClasses
 {
     public class MapLegend
     {
+        protected bool Equals(MapLegend other)
+        {
+            return Equals(LegendItem, other.LegendItem) && string.Equals(Name, other.Name);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return obj.GetType() == GetType() && Equals((MapLegend) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return ((LegendItem != null ? LegendItem.GetHashCode() : 0)*397) ^ (Name != null ? Name.GetHashCode() : 0);
+            }
+        }
+
         public Dictionary<string, Color> LegendItem = new Dictionary<string, Color>();
 
         public MapLegend(string path)
@@ -93,10 +113,9 @@ namespace DFWV
             g.Clear(Color.Black);
             var y = 5;
             var width = 0;
-            Brush b;
             foreach (var legenditem in LegendItem)
             {
-                b = new SolidBrush(legenditem.Value);
+                Brush b = new SolidBrush(legenditem.Value);
                 g.DrawString(legenditem.Key, picLegend.Font, Brushes.White, new PointF(15, y - 3));
                 g.FillRectangle(b, new Rectangle(5, y, 10, 10));
                 g.DrawRectangle(Pens.White, new Rectangle(5, y, 10, 10));
@@ -127,16 +146,9 @@ namespace DFWV
                 return false;
 
             // check keys are the same
-            foreach (var k in x.Keys)
-                if (!y.ContainsKey(k))
-                    return false;
+            return !x.Keys.Any(k => !y.ContainsKey(k)) && x.Keys.All(k => x[k].Equals(y[k]));
 
             // check values are the same
-            foreach (var k in x.Keys)
-                if (!x[k].Equals(y[k]))
-                    return false;
-
-            return true;
         }
 
         public static bool operator !=(MapLegend X, MapLegend Y)
@@ -148,15 +160,12 @@ namespace DFWV
         {
             var name = string.Empty;
 
-            foreach (var legenditem in LegendItem)
+            foreach (var legenditem in LegendItem.Where(legenditem => legenditem.Value == color))
             {
-                if (legenditem.Value == color)
-                {
-                    if (name == string.Empty)
-                        name = legenditem.Key;
-                    else
-                        name = name + Environment.NewLine + legenditem.Key;
-                }
+                if (name == string.Empty)
+                    name = legenditem.Key;
+                else
+                    name = name + Environment.NewLine + legenditem.Key;
             }
             return name;
         }

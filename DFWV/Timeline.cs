@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Resources;
 using System.Windows.Forms;
 using DFWV.WorldClasses;
 using DFWV.WorldClasses.HistoricalEventClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
-using System.Resources;
 
 namespace DFWV
 {
@@ -159,10 +159,7 @@ namespace DFWV
                     penCol = (nextItem as HE_ReclaimSite).Civ.Civilization.Color;
                 else if (nextItem is HE_NewSiteLeader)
                 {
-                    if ((nextItem as HE_NewSiteLeader).AttackerCiv.Civilization != null)
-                        penCol = (nextItem as HE_NewSiteLeader).AttackerCiv.Civilization.Color;
-                    else
-                        penCol = Color.White;
+                    penCol = (nextItem as HE_NewSiteLeader).AttackerCiv.Civilization != null ? (nextItem as HE_NewSiteLeader).AttackerCiv.Civilization.Color : Color.White;
                 }
                 else if (nextItem is HE_SiteTakenOver)
                     penCol = (nextItem as HE_SiteTakenOver).AttackerCiv.Civilization.Color;

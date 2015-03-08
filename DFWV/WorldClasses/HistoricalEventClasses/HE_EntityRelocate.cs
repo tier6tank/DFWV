@@ -22,6 +22,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get { yield return Entity; }
         }
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
+
         public HE_EntityRelocate(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -80,13 +85,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             base.Process();
 
-            if (Structure != null)
-            {
-                if (Structure.Events == null)
-                    Structure.Events = new List<HistoricalEvent>();
-                Structure.Events.Add(this);
-            }
-
+            if (Structure == null) return;
+            if (Structure.Events == null)
+                Structure.Events = new List<HistoricalEvent>();
+            Structure.Events.Add(this);
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)

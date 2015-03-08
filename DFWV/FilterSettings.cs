@@ -7,7 +7,6 @@ using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalEventClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
-using System.Linq.Dynamic;
 
 namespace DFWV
 {
@@ -53,7 +52,7 @@ namespace DFWV
             };
             Fields[typeof (Civilization)] = new Dictionary<string, Type>
             {
-                {"isFull", typeof (bool)},
+                {"isFull", typeof (bool)}
             };
             Fields[typeof (Entity)] = new Dictionary<string, Type>
             {
@@ -122,7 +121,7 @@ namespace DFWV
                 {"Population", typeof (int)},
                 {"CivCount", typeof (int)},
                 {"LeaderCount", typeof (int)},
-                {"HFCount", typeof (int)},
+                {"HFCount", typeof (int)}
             };
             Fields[typeof (Region)] = new Dictionary<string, Type>
             {
@@ -159,11 +158,9 @@ namespace DFWV
             })
             {
                 Fields[type].Add("Name", typeof (string));
-                if (type.IsSubclassOf(typeof(XMLObject)))
-                {
-                    Fields[type].Add("ID", typeof(int));
-                    Fields[type].Add("Notability", typeof(int));
-                }
+                if (!type.IsSubclassOf(typeof (XMLObject))) continue;
+                Fields[type].Add("ID", typeof(int));
+                Fields[type].Add("Notability", typeof(int));
             }
         }
 
@@ -182,7 +179,7 @@ namespace DFWV
             Options[typeof (Entity)] = new Dictionary<string, IEnumerable<string>>
             {
                 {"RaceName", World.Races.Values.Select(x=>x.Key)},
-                {"Type", new List<string> {"Civilization", "Religion", "Group", "Site Government", "Migrating Group", "Nomadic Group", "Outcast", "Other", }}
+                {"Type", new List<string> {"Civilization", "Religion", "Group", "Site Government", "Migrating Group", "Nomadic Group", "Outcast", "Other" }}
             };
             Options[typeof (EntityPopulation)] = new Dictionary<string, IEnumerable<string>>
             {

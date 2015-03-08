@@ -160,7 +160,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
             table = GetType().Name;
 
-            var vals = new List<object> { ID, WarEventCol_.HasValue ? WarEventCol_.Value : -1, Ordinal, AttackingEnid, DefendingEnid, SiteID};
+            var vals = new List<object> { ID, WarEventCol_ ?? -1, Ordinal, AttackingEnid, DefendingEnid, SiteID};
 
 
 

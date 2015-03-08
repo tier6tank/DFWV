@@ -1,10 +1,9 @@
-﻿using DFWV.Annotations;
+﻿using System.Collections.Generic;
+using System.Drawing;
+using DFWV.Annotations;
 
 namespace DFWV.WorldClasses
 {
-    using System.Collections.Generic;
-    using System.Drawing;
-
     public class Parameter : WorldObject
     {
         public string Value { get; private set; }

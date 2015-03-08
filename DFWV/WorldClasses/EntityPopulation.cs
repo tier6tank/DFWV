@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Xml.Linq;
 using DFWV.Annotations;
 using DFWV.WorldClasses.EntityClasses;
-using DFWV.WorldClasses.HistoricalFigureClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
-using System.Drawing;
+using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses
 {
@@ -153,11 +153,9 @@ namespace DFWV.WorldClasses
 
             Database.ExportWorldItem(table, vals);
 
-            if (RaceCounts != null)
-            {
-                foreach (var raceCount in RaceCounts)
-                    Database.ExportWorldItem("EntityPop_RaceCounts", new List<object> { ID, raceCount.Key.ToString(), raceCount.Value });
-            }
+            if (RaceCounts == null) return;
+            foreach (var raceCount in RaceCounts)
+                Database.ExportWorldItem("EntityPop_RaceCounts", new List<object> { ID, raceCount.Key.ToString(), raceCount.Value });
         }
 
     }

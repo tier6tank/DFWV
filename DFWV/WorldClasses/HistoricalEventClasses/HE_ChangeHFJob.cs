@@ -27,6 +27,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get { yield return HF; }
         }
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
+
         public HE_ChangeHFJob(XDocument xdoc, World world)
             : base(xdoc, world)
         {

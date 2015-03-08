@@ -272,8 +272,7 @@ namespace DFWV.WorldClasses
             if (branch.HFLinks.ContainsKey(HFLink.LinkTypes.IndexOf("father")))
             {
                 var fatherMatch = ScaleFamilyTree(branch.HFLinks[HFLink.LinkTypes.IndexOf("father")][0].HF, leaderMatch);
-                if (fatherMatch != null)
-                    return fatherMatch;
+                return fatherMatch;
             }
             return null;
         }
@@ -283,12 +282,8 @@ namespace DFWV.WorldClasses
             var leaderList = Civilization.Leaders[LeaderTypes[LeaderType]];
             for (var i = 0; i < leaderList.Count; i++)
             {
-                if (leaderList[i] == this)
-                {
-                    if (i == 0)
-                        return null;
-                    return leaderList[i - 1];
-                }
+                if (leaderList[i] != this) continue;
+                return i == 0 ? null : leaderList[i - 1];
             }
             return null;
         }
@@ -343,7 +338,7 @@ namespace DFWV.WorldClasses
                 Site.DBExport(),
                 Worship == null ? DBNull.Value : Worship.Name.DBExport(),
                 WorshipPercent,
-                Spouse.DBExport(),
+                Spouse.DBExport()
             };
 
             Database.ExportWorldItem(table, vals);

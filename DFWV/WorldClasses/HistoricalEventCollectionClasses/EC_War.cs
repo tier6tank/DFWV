@@ -189,9 +189,8 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
         public void TotalWar()
         {
-            foreach (var evtcol in EventCol.Where(x => Types[x.Type] == "battle"))
+            foreach (var battle in EventCol.Where(x => Types[x.Type] == "battle").Cast<EC_Battle>())
             {
-                var battle = (EC_Battle)evtcol;
                 if (!battle.battleTotaled)
                     battle.TotalBattle();
 
@@ -215,7 +214,6 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                     WarData.DefendingWins++;
                 else
                     break;
-
             }
         }
 

@@ -1,8 +1,8 @@
-﻿namespace DFWV.WorldClasses
-{
-    using System.Drawing;
-    using System.Globalization;
+﻿using System.Drawing;
+using System.Globalization;
 
+namespace DFWV.WorldClasses
+{
     public abstract class WorldObject
     {
         public string Name { get; protected set; }

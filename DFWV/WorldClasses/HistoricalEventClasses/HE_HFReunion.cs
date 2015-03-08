@@ -31,6 +31,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     yield return historicalFigure;
             }
         }
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
+
         public HE_HFReunion(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -119,16 +124,20 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             string reunitedText;
             if (Group2HFID.Count == 2)
             {
-                if (Group2HF.Count == 2)
-                    reunitedText = Group2HF[0] + " and " + Group2HF[1];
-                else if (Group2HF.Count == 0)
-                    reunitedText = "an unknown creature and an unknown creature";
-                else
+                switch (Group2HF.Count)
                 {
-                    if (Group2HF[0].ID == Group2HFID[0])
-                        reunitedText = Group2HF[0] + " and an unknown creature";
-                    else
-                        reunitedText = "an unknown creature" + Group2HF[0];
+                    case 2:
+                        reunitedText = Group2HF[0] + " and " + Group2HF[1];
+                        break;
+                    case 0:
+                        reunitedText = "an unknown creature and an unknown creature";
+                        break;
+                    default:
+                        if (Group2HF[0].ID == Group2HFID[0])
+                            reunitedText = Group2HF[0] + " and an unknown creature";
+                        else
+                            reunitedText = "an unknown creature" + Group2HF[0];
+                        break;
                 }
             }
             else

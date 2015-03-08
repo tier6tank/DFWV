@@ -1,11 +1,14 @@
-﻿namespace DFWV
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace DFWV
 {
     partial class MapForm
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -527,41 +530,41 @@
 
         #endregion
 
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.PictureBox picMap;
-        private System.Windows.Forms.TableLayoutPanel mapTableLayout;
-        private System.Windows.Forms.Panel pnlMap;
-        private System.Windows.Forms.PictureBox picMiniMap;
-        private System.Windows.Forms.ToolStripMenuItem mapsToolStripMenuItem;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label lblMapOwnerCaption;
-        private System.Windows.Forms.Label lblMapTypeCaption;
-        private System.Windows.Forms.Label lblMapParentCaption;
-        public System.Windows.Forms.Label lblMapAltName;
-        private System.Windows.Forms.Label lblMapAltNameCaption;
-        public System.Windows.Forms.Label lblMapName;
-        private System.Windows.Forms.Label lblMapNameCaption;
-        public System.Windows.Forms.Label lblMapCoords;
-        public System.Windows.Forms.Label lblMapParent;
-        public System.Windows.Forms.Label lblMapOwner;
-        public System.Windows.Forms.Label lblMapType;
-        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
-        private System.Windows.Forms.GroupBox grpSettings;
-        private System.Windows.Forms.Button btnOK;
-        private System.Windows.Forms.CheckBox chkSites;
-        private System.Windows.Forms.GroupBox grpSites;
-        private System.Windows.Forms.ListView lstSiteTypes;
-        private System.Windows.Forms.CheckBox chkOwnedSites;
-        private System.Windows.Forms.CheckBox chkNeutralSites;
-        private System.Windows.Forms.CheckBox chkConstructions;
-        private System.Windows.Forms.CheckBox chkHistoricalFigures;
-        private System.Windows.Forms.CheckBox chkUGRegions;
-        private System.Windows.Forms.CheckBox chkRegions;
-        private System.Windows.Forms.CheckBox chkBattles;
-        private System.Windows.Forms.CheckBox chkCivilizations;
-        private System.Windows.Forms.NumericUpDown ugRegionDepthPicker;
-        private System.Windows.Forms.Label lblMapObject;
-        private System.Windows.Forms.CheckBox chkShowLegend;
-        private System.Windows.Forms.PictureBox picLegend;
+        private MenuStrip menuStrip1;
+        private PictureBox picMap;
+        private TableLayoutPanel mapTableLayout;
+        private Panel pnlMap;
+        private PictureBox picMiniMap;
+        private ToolStripMenuItem mapsToolStripMenuItem;
+        private Panel panel1;
+        private Label lblMapOwnerCaption;
+        private Label lblMapTypeCaption;
+        private Label lblMapParentCaption;
+        public Label lblMapAltName;
+        private Label lblMapAltNameCaption;
+        public Label lblMapName;
+        private Label lblMapNameCaption;
+        public Label lblMapCoords;
+        public Label lblMapParent;
+        public Label lblMapOwner;
+        public Label lblMapType;
+        private ToolStripMenuItem settingsToolStripMenuItem;
+        private GroupBox grpSettings;
+        private Button btnOK;
+        private CheckBox chkSites;
+        private GroupBox grpSites;
+        private ListView lstSiteTypes;
+        private CheckBox chkOwnedSites;
+        private CheckBox chkNeutralSites;
+        private CheckBox chkConstructions;
+        private CheckBox chkHistoricalFigures;
+        private CheckBox chkUGRegions;
+        private CheckBox chkRegions;
+        private CheckBox chkBattles;
+        private CheckBox chkCivilizations;
+        private NumericUpDown ugRegionDepthPicker;
+        private Label lblMapObject;
+        private CheckBox chkShowLegend;
+        private PictureBox picLegend;
     }
 }

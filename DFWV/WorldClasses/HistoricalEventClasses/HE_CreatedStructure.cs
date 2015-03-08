@@ -35,6 +35,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 yield return SiteCiv;
             }
         }
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
+
         public HE_CreatedStructure(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -138,15 +143,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Structure.Events.Add(this);
             }
 
-            if (BuilderHF != null)
+            if (BuilderHF == null) return;
+            if (Time.Year == -1 &&
+                NextEvent().Type == Types.IndexOf("add hf entity link") &&
+                NextEvent().NextEvent().Type == Types.IndexOf("change hf state") &&
+                NextEvent().NextEvent().NextEvent().Type == Types.IndexOf("add hf site link"))
             {
-                if (Time.Year == -1 &&
-                    NextEvent().Type == Types.IndexOf("add hf entity link") &&
-                    NextEvent().NextEvent().Type == Types.IndexOf("change hf state") &&
-                    NextEvent().NextEvent().NextEvent().Type == Types.IndexOf("add hf site link"))
-                {
-                    ProcessSladeSpireEventSet();
-                }
+                ProcessSladeSpireEventSet();
             }
         }
 

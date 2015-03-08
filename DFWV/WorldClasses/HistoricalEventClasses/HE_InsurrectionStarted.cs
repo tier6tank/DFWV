@@ -18,7 +18,15 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
 
         override public Point Location { get { return Site.Location; } }
+        public override IEnumerable<Entity> EntitiesInvolved
+        {
+            get { yield return TargetCiv; }
+        }
 
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
 
         public HE_InsurrectionStarted(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -76,12 +84,15 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            if (Outcome == "population gone")
-                return string.Format("{0} the insurrection in {1} against {2} ended with the disappearance of hte rebelling population.",
-                                        timestring, Site.AltName, TargetCiv);
-            if (Outcome == "leadership overthrown")
-                return string.Format("{0} the insurrection in {1} concluded with {2} overthrown.",
-                    timestring, Site.AltName, TargetCiv);
+            switch (Outcome)
+            {
+                case "population gone":
+                    return string.Format("{0} the insurrection in {1} against {2} ended with the disappearance of hte rebelling population.",
+                        timestring, Site.AltName, TargetCiv);
+                case "leadership overthrown":
+                    return string.Format("{0} the insurrection in {1} concluded with {2} overthrown.",
+                        timestring, Site.AltName, TargetCiv);
+            }
             return string.Format("{0} the insurrection in {1} against {2} - {3}.",
                 timestring, Site.AltName, TargetCiv, Outcome);
         }

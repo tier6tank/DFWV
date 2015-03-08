@@ -3,15 +3,17 @@
 // I didn't write this, credit to MS for this beautiful thing.
 // More details here: http://weblogs.asp.net/scottgu/archive/2008/01/07/dynamic-linq-part-1-using-the-linq-dynamic-query-library.aspx
 
+using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Text;
 using System.Threading;
 
-namespace System.Linq.Dynamic
+namespace DFWV
 {
     public static class DynamicQueryable
     {
@@ -53,7 +55,7 @@ namespace System.Linq.Dynamic
         {
             if (source == null) throw new ArgumentNullException("source");
             if (ordering == null) throw new ArgumentNullException("ordering");
-            var parameters = new ParameterExpression[] {
+            var parameters = new[] {
                 Expression.Parameter(source.ElementType, "") };
             var parser = new ExpressionParser(parameters, ordering, values);
             var orderings = parser.ParseOrdering();
@@ -1013,9 +1015,9 @@ namespace System.Linq.Dynamic
                 if (!UInt64.TryParse(text, out value))
                     throw ParseError(Res.InvalidIntegerLiteral, text);
                 NextToken();
-                if (value <= (ulong)Int32.MaxValue) return CreateLiteral((int)value, text);
-                if (value <= (ulong)UInt32.MaxValue) return CreateLiteral((uint)value, text);
-                if (value <= (ulong)Int64.MaxValue) return CreateLiteral((long)value, text);
+                if (value <= Int32.MaxValue) return CreateLiteral((int)value, text);
+                if (value <= UInt32.MaxValue) return CreateLiteral((uint)value, text);
+                if (value <= Int64.MaxValue) return CreateLiteral((long)value, text);
                 return CreateLiteral(value, text);
             }
             else
@@ -1075,9 +1077,9 @@ namespace System.Linq.Dynamic
             if (keywords.TryGetValue(token.text, out value))
             {
                 if (value is Type) return ParseTypeAccess((Type)value);
-                if (value == (object)keywordIt) return ParseIt();
-                if (value == (object)keywordIif) return ParseIif();
-                if (value == (object)keywordNew) return ParseNew();
+                if (value == keywordIt) return ParseIt();
+                if (value == keywordIif) return ParseIif();
+                if (value == keywordNew) return ParseNew();
                 NextToken();
                 return (Expression)value;
             }
@@ -1279,7 +1281,7 @@ namespace System.Linq.Dynamic
                         if (method.ReturnType == typeof(void))
                             throw ParseError(errorPos, Res.MethodIsVoid,
                                 id, GetTypeName(method.DeclaringType));
-                        return Expression.Call(instance, (MethodInfo)method, args);
+                        return Expression.Call(instance, method, args);
                     default:
                         throw ParseError(errorPos, Res.AmbiguousMethodInvocation,
                             id, GetTypeName(type));
@@ -1467,7 +1469,7 @@ namespace System.Linq.Dynamic
 
         void CheckAndPromoteOperand(Type signatures, string opName, ref Expression expr, int errorPos)
         {
-            var args = new Expression[] { expr };
+            var args = new[] { expr };
             MethodBase method;
             if (FindMethod(signatures, "F", false, args, out method) != 1)
                 throw ParseError(errorPos, Res.IncompatibleOperand,
@@ -1477,7 +1479,7 @@ namespace System.Linq.Dynamic
 
         void CheckAndPromoteOperands(Type signatures, string opName, ref Expression left, ref Expression right, int errorPos)
         {
-            var args = new Expression[] { left, right };
+            var args = new[] { left, right };
             MethodBase method;
             if (FindMethod(signatures, "F", false, args, out method) != 1)
                 throw IncompatibleOperandsError(opName, left, right, errorPos);

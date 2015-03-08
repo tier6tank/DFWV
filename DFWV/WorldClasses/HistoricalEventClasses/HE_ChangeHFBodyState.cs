@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Drawing;
 using System.Collections.Generic;
-using System.Xml.Linq;
+using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
@@ -28,6 +29,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get { yield return HF; }
         }
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
+
         public HE_ChangeHFBodyState(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -86,20 +92,15 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Site = World.Sites[SiteID.Value];
             if (SubregionID.HasValue && World.Regions.ContainsKey(SubregionID.Value))
                 Subregion = World.Regions[SubregionID.Value];
-            
-            if (BuildingID.HasValue && Site.Structures != null)
+
+            if (!BuildingID.HasValue || Site.Structures == null) return;
+            foreach (var structure in Site.Structures.Where(structure => structure.SiteID == BuildingID))
             {
-                foreach (var structure in Site.Structures)
-                {
-                    if (structure.SiteID == BuildingID)
-                    {
-                        Structure = structure;
-                        if (Structure.Events == null)
-                            Structure.Events = new List<HistoricalEvent>();
-                        Structure.Events.Add(this);
-                        break;
-                    }
-                }
+                Structure = structure;
+                if (Structure.Events == null)
+                    Structure.Events = new List<HistoricalEvent>();
+                Structure.Events.Add(this);
+                break;
             }
         }
 

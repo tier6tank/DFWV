@@ -27,6 +27,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 yield return Involved;
             }
         }
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
 
         public HE_DiplomatLost(XDocument xdoc, World world)
             : base(xdoc, world)

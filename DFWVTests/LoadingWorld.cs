@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using DFWV.WorldClasses;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using DFWV;
-using DFWV.WorldClasses;
-using DFWV.WorldClasses.HistoricalFigureClasses;
-
 
 namespace DFWVTests
 {

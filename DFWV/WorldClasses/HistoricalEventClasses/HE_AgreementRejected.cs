@@ -27,6 +27,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 yield return Destination;
             }
         }
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
+
         public HE_AgreementRejected(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -132,7 +137,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Topic.DBExport(MeetingTopics),
                 SourceEntID.DBExport(),
                 DestinationEntID.DBExport(),
-                SiteID.DBExport(),
+                SiteID.DBExport()
             };
 
             Database.ExportWorldItem(table, vals);

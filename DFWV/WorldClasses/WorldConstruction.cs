@@ -1,9 +1,10 @@
-﻿using DFWV.Annotations;
-using DFWV.WorldClasses.HistoricalEventClasses;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Xml.Linq;
 using System.Drawing;
+using System.Linq;
+using System.Xml.Linq;
+using DFWV.Annotations;
+using DFWV.WorldClasses.HistoricalEventClasses;
 
 namespace DFWV.WorldClasses
 {
@@ -101,11 +102,9 @@ namespace DFWV.WorldClasses
                     case "coords":
                         if (Coords == null)
                             Coords = new List<Point>();
-                        foreach (var coord in val.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries))
+                        foreach (var coordSplit in val.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries).Select(coord => coord.Split(',')).Where(coordSplit => coordSplit.Length == 2))
                         {
-                            var coordSplit = coord.Split(',');
-                            if (coordSplit.Length == 2)
-                                Coords.Add(new Point(Convert.ToInt32(coordSplit[0]), Convert.ToInt32(coordSplit[1])));
+                            Coords.Add(new Point(Convert.ToInt32(coordSplit[0]), Convert.ToInt32(coordSplit[1])));
                         }
                         break;
                     case "type":

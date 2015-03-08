@@ -26,6 +26,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 yield return ContactedEn;
             }
         }
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
 
         public HE_FirstContact(XDocument xdoc, World world)
             : base(xdoc, world)

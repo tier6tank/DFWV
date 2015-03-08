@@ -116,10 +116,7 @@ namespace DFWV.WorldClasses.EntityClasses
                     return "Civilization";
                 if (CreatedEvent != null)
                     return "Religion";
-                if (ParentCiv != null)
-                    return "Group";
-                
-                return "Other";
+                return ParentCiv != null ? "Group" : "Other";
             }
         }
 
@@ -225,9 +222,8 @@ namespace DFWV.WorldClasses.EntityClasses
                 foreach (var entityLinkList in EntityLinks)
                 {
                     var thisNode = new TreeNode(EntityEntityLink.LinkTypes[entityLinkList.Key].ToLower().ToTitleCase() + " (" + entityLinkList.Value.Count() + ")");
-                    foreach (var entityLink in entityLinkList.Value)
+                    foreach (var newNode in entityLinkList.Value.Select(entityLink => new TreeNode(entityLink.Target.ToString()) {Tag = entityLink.Target}))
                     {
-                        var newNode = new TreeNode(entityLink.Target.ToString()) {Tag = entityLink.Target};
                         thisNode.Nodes.Add(newNode);
                     }
                     frm.trvEntityRelatedEntities.Nodes.Add(thisNode);
@@ -245,9 +241,8 @@ namespace DFWV.WorldClasses.EntityClasses
                 foreach (var siteLinkList in SiteLinks)
                 {
                     var thisNode = new TreeNode(EntitySiteLink.LinkTypes[siteLinkList.Key].ToLower().ToTitleCase() + " (" + siteLinkList.Value.Count() + ")");
-                    foreach (var siteLink in siteLinkList.Value)
+                    foreach (var newNode in siteLinkList.Value.Select(siteLink => new TreeNode(siteLink.Site.AltName) {Tag = siteLink.Site}))
                     {
-                        var newNode = new TreeNode(siteLink.Site.AltName) {Tag = siteLink.Site};
                         thisNode.Nodes.Add(newNode);
                     }
                     frm.trvEntityRelatedSites.Nodes.Add(thisNode);
@@ -380,11 +375,9 @@ namespace DFWV.WorldClasses.EntityClasses
                     case "coords":
                         if (Coords == null)
                             Coords = new List<Point>();
-                        foreach (var coord in val.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries))
+                        foreach (var coordSplit in val.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries).Select(coord => coord.Split(',')).Where(coordSplit => coordSplit.Length == 2))
                         {
-                            var coordSplit = coord.Split(',');
-                            if (coordSplit.Length == 2)
-                                Coords.Add(new Point(Convert.ToInt32(coordSplit[0]), Convert.ToInt32(coordSplit[1])));
+                            Coords.Add(new Point(Convert.ToInt32(coordSplit[0]), Convert.ToInt32(coordSplit[1])));
                         }
                         break;
                     default:
@@ -434,7 +427,7 @@ namespace DFWV.WorldClasses.EntityClasses
                 Name.DBExport(),
                 Type,
                 Race.DBExport(),
-                WorshipHFID.DBExport(),
+                WorshipHFID.DBExport()
             };
 
             Database.ExportWorldItem(table, vals);
@@ -451,12 +444,9 @@ namespace DFWV.WorldClasses.EntityClasses
                     siteLink.Export(ID);
             }
 
-            if (Children != null)
-            {
-                foreach (var child in ChildrenIDs)
-                    Database.ExportWorldItem("Entity_EntityChild", new List<object>{ID, child});
-            }
-
+            if (Children == null) return;
+            foreach (var child in ChildrenIDs)
+                Database.ExportWorldItem("Entity_EntityChild", new List<object>{ID, child});
         }
     }
 }

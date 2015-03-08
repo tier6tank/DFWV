@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Drawing;
-using DFWV.Annotations;
+using System.Linq;
 using System.Xml.Linq;
-
+using DFWV.Annotations;
 
 namespace DFWV.WorldClasses
 {
@@ -33,32 +32,18 @@ namespace DFWV.WorldClasses
 
         public Dictionary<Region, int> Populations
         {
-            get 
+            get
             {
-                var populations = new Dictionary<Region, int>();
-                foreach (var region in World.Regions.Values)
-                {
-                    if (region.Populations.ContainsKey(this))
-                        populations.Add(region, region.Populations[this]);
-                }
-                return populations;
+                return World.Regions.Values.Where(region => region.Populations.ContainsKey(this)).ToDictionary(region => region, region => region.Populations[this]);
             }
-
         }
 
         public Dictionary<UndergroundRegion, int> UGPopulations
         {
             get
             {
-                var populations = new Dictionary<UndergroundRegion, int>();
-                foreach (var ugregion in World.UndergroundRegions.Values)
-                {
-                    if (ugregion.Populations.ContainsKey(this))
-                        populations.Add(ugregion, ugregion.Populations[this]);
-                }
-                return populations;
+                return World.UndergroundRegions.Values.Where(ugregion => ugregion.Populations.ContainsKey(this)).ToDictionary(ugregion => ugregion, ugregion => ugregion.Populations[this]);
             }
-
         }
 
         public Race(string name, int id, World world) 
@@ -169,7 +154,7 @@ namespace DFWV.WorldClasses
             throw new NotImplementedException();
         }
 
-        internal override void Plus(System.Xml.Linq.XDocument xdoc)
+        internal override void Plus(XDocument xdoc)
         {
             foreach (var element in xdoc.Root.Elements())
             {

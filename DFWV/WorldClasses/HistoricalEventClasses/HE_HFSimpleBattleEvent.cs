@@ -33,6 +33,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     yield return historicalFigure;
             }
         }
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
+
         public HE_HFSimpleBattleEvent(XDocument xdoc, World world)
             : base(xdoc, world)
         {

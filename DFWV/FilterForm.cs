@@ -48,18 +48,13 @@ namespace DFWV
             {
                 Options = world.Filters.Options[filterType];
 
-                foreach (var option in Options)
+                foreach (var option in Options.Where(option => option.Value.Any()))
                 {
-                    if (option.Value.Any())
-                    {
-                        cmbWhereField.Items.Add(option.Key);
-                        cmbOrderField.Items.Add(option.Key);
+                    cmbWhereField.Items.Add(option.Key);
+                    cmbOrderField.Items.Add(option.Key);
 
-                        cmbGroupField.Items.Add(option.Key);
-                    }
+                    cmbGroupField.Items.Add(option.Key);
                 }
-
-                
             }
             else
             {
@@ -96,10 +91,9 @@ namespace DFWV
 
                 if (testSettings.Options.ContainsKey(thisType))
                 {
-                    foreach (var filterItem in testSettings.Options[thisType])
+                    foreach (var filterItem in testSettings.Options[thisType].Where(filterItem => filterItem.Value.Any()))
                     {
-                        if (filterItem.Value.Any())
-                            testFilter.Where.Add(filterItem.Key + " == \"" + filterItem.Value.ToList()[0] + "\"");
+                        testFilter.Where.Add(filterItem.Key + " == \"" + filterItem.Value.ToList()[0] + "\"");
                     }
                 }
 

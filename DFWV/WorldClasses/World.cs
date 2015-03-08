@@ -8,8 +8,8 @@ using System.Threading;
 using System.Windows.Forms;
 using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalEventClasses;
-using DFWV.WorldClasses.HistoricalFigureClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
+using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses 
 {
@@ -38,7 +38,7 @@ namespace DFWV.WorldClasses
         public readonly string mapPath;
         public readonly string xmlPath;
         public readonly string xmlPlusPath;
-        public bool hasPlusXML = false;
+        public bool hasPlusXML;
         public bool isPlusParsing = false;
 
         public static List<Thread> Threads = new List<Thread>();
@@ -123,11 +123,9 @@ namespace DFWV.WorldClasses
                     "Hydrosphere", "Nobility", "Rainfall", "Sailinity", "Savagry", "Structures", 
                     "Temperature", "Trade", "Vegetation", "Volcanism"};
 
-            var thisMap = "";
-
             for (var i = 0; i < MapSymbols.Count; i++)
             {
-                thisMap = mapPath.Replace("world_map", MapSymbols[i]);
+                var thisMap = mapPath.Replace("world_map", MapSymbols[i]);
                 if (File.Exists(thisMap))
                     Maps.Add(MapNames[i], thisMap);
             }
@@ -136,10 +134,9 @@ namespace DFWV.WorldClasses
                 { "structure_color_key", "hydro_color_key", "biome_color_key"};
 
             MapLegends = new Dictionary<string, MapLegend>();
-            var thisLegend = "";
             foreach (var maplegendname in MapLegendsName)
             {
-                thisLegend = Path.Combine(Path.GetDirectoryName(mapPath), maplegendname) + ".txt";
+                var thisLegend = Path.Combine(Path.GetDirectoryName(mapPath), maplegendname) + ".txt";
                 if (File.Exists(thisLegend))
                     MapLegends.Add(maplegendname, new MapLegend(thisLegend));
             }
@@ -476,16 +473,6 @@ namespace DFWV.WorldClasses
             return Races.Values.FirstOrDefault(x => x.Key == name || x.Key.Replace("_"," ") == name || x.Name == name || x.PluralName == name);
         }
 
-        private static string StripRaceNumbers(string race)
-        {
-            int num;
-            while (Int32.TryParse(race.Substring(race.Length - 1, 1), out num) || race[race.Length - 1] == '_')
-            {
-                race = race.Remove(race.Length - 1);
-            }
-            return race;
-        }
-
         internal God GetAddGod(God tempGod)
         {
             foreach (var god in Gods.Where(god => String.Equals(god.Name, tempGod.Name, StringComparison.CurrentCultureIgnoreCase)))
@@ -531,10 +518,9 @@ namespace DFWV.WorldClasses
             {
                 return civ;
             }
-            foreach (var entity in EntitiesFile.Where(entity => entity.Name == entityName))
+            foreach (var entity in EntitiesFile.Where(entity => entity.Name == entityName).Where(entity => entity.Race == entityRace))
             {
-                if (entity.Race == entityRace)
-                    return entity;
+                return entity;
             }
             var newEntity = new Entity(entityName, this) {Race = entityRace};
             EntitiesFile.Add(newEntity);
@@ -941,7 +927,7 @@ namespace DFWV.WorldClasses
             foreach (var ent in EntitiesFile)
             {
                 var entname = ent.Name.ToLower();
-                foreach (var entxml in Entities.Values.Where(entxml => entxml.Name == entname && (entxml.Race == null || entxml.Race == ent.Race)))
+                foreach (var entxml in Entities.Values.Where(entxml => entxml.Name == ent.Name.ToLower() && (entxml.Race == null || entxml.Race == ent.Race)))
                 {
                     entxml.MergeInEntityFile(ent);
                     break;
@@ -1210,7 +1196,7 @@ namespace DFWV.WorldClasses
             ClearStaticLists();
         }
 
-        private void CloseActiveThreads()
+        private static void CloseActiveThreads()
         {
             foreach (var thread in Threads)
             {
@@ -1226,7 +1212,7 @@ namespace DFWV.WorldClasses
             Threads = new List<Thread>();
         }
 
-        private void ClearStaticLists()
+        private static void ClearStaticLists()
         {
             God.Types = new List<string>();
             Leader.InheritanceTypes = new List<string>();

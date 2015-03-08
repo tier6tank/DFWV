@@ -1,11 +1,15 @@
-﻿namespace DFWV
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+using DFWV.Controls;
+
+namespace DFWV
 {
     partial class TimelineForm
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -235,20 +239,20 @@
 
         #endregion
 
-        private DFWV.Controls.FlickerFreeListBox lstEvents;
-        private System.Windows.Forms.Button Start;
-        private System.Windows.Forms.Timer EventTimer;
-        private System.Windows.Forms.Button Restart;
-        private System.Windows.Forms.CheckBox chkEventCritical;
-        private System.Windows.Forms.CheckBox chkEventMajor;
-        private System.Windows.Forms.CheckBox chkEventMinor;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.CheckBox chkEventCollectionMinor;
-        private System.Windows.Forms.CheckBox chkEventCollectionCritical;
-        private System.Windows.Forms.Button Clear;
-        private System.Windows.Forms.Button ShowMap;
-        private System.Windows.Forms.PictureBox picMap;
-        private System.Windows.Forms.TrackBar trackSpeed;
+        private FlickerFreeListBox lstEvents;
+        private Button Start;
+        private Timer EventTimer;
+        private Button Restart;
+        private CheckBox chkEventCritical;
+        private CheckBox chkEventMajor;
+        private CheckBox chkEventMinor;
+        private GroupBox groupBox1;
+        private GroupBox groupBox2;
+        private CheckBox chkEventCollectionMinor;
+        private CheckBox chkEventCollectionCritical;
+        private Button Clear;
+        private Button ShowMap;
+        private PictureBox picMap;
+        private TrackBar trackSpeed;
     }
 }

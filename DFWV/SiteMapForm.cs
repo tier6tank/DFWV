@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using DFWV.WorldClasses;
 
@@ -33,10 +28,7 @@ namespace DFWV
                     picSiteMap.SizeMode = PictureBoxSizeMode.AutoSize;
                     Width = picSiteMap.Right + 27;
                     Height = Math.Max(picSiteMap.Bottom, picSiteMapLegend.Bottom) + 51;
-                    if (Site.Types[site.Type.Value].Contains("dark"))
-                        curLegend = World.MapLegends["site_color_key_dark"];
-                    else
-                        curLegend = World.MapLegends["site_color_key"];
+                    curLegend = Site.Types[site.Type.Value].Contains("dark") ? World.MapLegends["site_color_key_dark"] : World.MapLegends["site_color_key"];
                     curLegend.DrawTo(picSiteMapLegend);
 
                 }
@@ -51,7 +43,7 @@ namespace DFWV
             InitializeComponent();
         }
 
-        internal SiteMapForm(World world) : base()
+        internal SiteMapForm(World world)
         {
             InitializeComponent();
             World = world;
@@ -82,12 +74,12 @@ namespace DFWV
 
             if (pixeltext != string.Empty)
             {
-                this.toolTip.SetToolTip(picSiteMap, pixeltext);
-                if (!this.toolTip.Active)
-                    this.toolTip.Active = true;
+                toolTip.SetToolTip(picSiteMap, pixeltext);
+                if (!toolTip.Active)
+                    toolTip.Active = true;
             }
             else
-                this.toolTip.Active = false;
+                toolTip.Active = false;
         }
     }
 }

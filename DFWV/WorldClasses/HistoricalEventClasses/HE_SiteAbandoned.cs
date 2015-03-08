@@ -26,6 +26,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 yield return Civ;
             }
         }
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
+
 
 
         public HE_SiteAbandoned(XDocument xdoc, World world)

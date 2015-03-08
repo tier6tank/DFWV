@@ -14,6 +14,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private Artifact Artifact { get; set; }
 
         override public Point Location { get { return Site != null ? Site.Location : Point.Empty; } }
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
 
         public HE_ArtifactLost(XDocument xdoc, World world)
             : base(xdoc, world)

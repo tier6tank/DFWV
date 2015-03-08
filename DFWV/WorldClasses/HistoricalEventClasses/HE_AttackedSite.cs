@@ -35,6 +35,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 yield return DefenderGeneralHF;
             }
         }
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
+
         public override IEnumerable<Entity> EntitiesInvolved
         {
             get

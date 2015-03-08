@@ -25,6 +25,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 yield return Destination;
             }
         }
+
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
         public HE_AgreementConcluded(XDocument xdoc, World world)
             : base(xdoc, world)
         {

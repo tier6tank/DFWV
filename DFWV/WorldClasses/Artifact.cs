@@ -1,9 +1,9 @@
-﻿using DFWV.Annotations;
-using DFWV.WorldClasses.HistoricalEventClasses;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Xml.Linq;
 using System.Drawing;
+using System.Xml.Linq;
+using DFWV.Annotations;
+using DFWV.WorldClasses.HistoricalEventClasses;
 
 namespace DFWV.WorldClasses
 {
@@ -29,7 +29,7 @@ namespace DFWV.WorldClasses
         [UsedImplicitly]
         public bool Lost { get { return LostEvent != null; } }
         [UsedImplicitly]
-        public int Value { get { return ItemValue.HasValue ? ItemValue.Value : 0; } }
+        public int Value { get { return ItemValue ?? 0; } }
         [UsedImplicitly]
         public string Type
         {

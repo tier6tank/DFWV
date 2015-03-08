@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -9,7 +10,6 @@ using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalEventClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
-using System.Drawing;
 using Region = DFWV.WorldClasses.Region;
 
 namespace DFWV
@@ -68,21 +68,19 @@ namespace DFWV
                     selectedFile = openFileDiag.FileName;
             }
 
-            if (!string.IsNullOrEmpty(selectedFile))
+            if (string.IsNullOrEmpty(selectedFile)) return;
+            if (Path.GetExtension(selectedFile) == ".7z" || Path.GetExtension(selectedFile) == ".zip")
             {
-                if (Path.GetExtension(selectedFile) == ".7z" || Path.GetExtension(selectedFile) == ".zip")
+                if (Program.ExtractArchive(selectedFile))
                 {
-                    if (Program.ExtractArchive(selectedFile))
-                    {
-                        var newDirectory = Path.Combine(Path.GetDirectoryName(selectedFile), Path.GetFileNameWithoutExtension(selectedFile));
+                    var newDirectory = Path.Combine(Path.GetDirectoryName(selectedFile), Path.GetFileNameWithoutExtension(selectedFile));
 
-                        selectedFile = Directory.GetFiles(newDirectory, "*.bmp").FirstOrDefault();
+                    selectedFile = Directory.GetFiles(newDirectory, "*.bmp").FirstOrDefault();
                         
-                    }
                 }
-                if (selectedFile != null)
-                    LoadFromFiles(selectedFile);
             }
+            if (selectedFile != null)
+                LoadFromFiles(selectedFile);
         }
 
         private static string AutoFindFiles()
@@ -94,11 +92,9 @@ namespace DFWV
                 var workingFolder = Program.GetDefaultPath();
                 
 
-                foreach (var file in Directory.GetFiles(workingFolder))
+                foreach (var file in from file in Directory.GetFiles(workingFolder) let filename = Path.GetFileName(file) where filename.EndsWith("-world_map.bmp") select file)
                 {
-                    var filename = Path.GetFileName(file);
-                    if (filename.EndsWith("-world_map.bmp"))
-                        return file;
+                    return file;
                 }
                 return "";
             }
@@ -129,7 +125,7 @@ namespace DFWV
 
 
             var mapFile = Path.GetFileNameWithoutExtension(mapPath);
-            var mapSplit = mapFile.Split(new char[] {'-'}, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var mapSplit = mapFile.Split(new[] {'-'}, StringSplitOptions.RemoveEmptyEntries).ToList();
 
             mapSplit.Reverse();
             mapSplit.RemoveAt(0);
@@ -228,7 +224,6 @@ namespace DFWV
         /// </summary>
         private void LinkEvents()
         {
-
             foreach (var listbox in Program.GetControlsOfType<ListBox>(this))
             {
                 if (listbox.Parent is GroupBox)
@@ -241,13 +236,10 @@ namespace DFWV
                 }
             }
 
-            foreach (var treeview in Program.GetControlsOfType<TreeView>(this))
+            foreach (var treeview in Program.GetControlsOfType<TreeView>(this).Where(treeview => treeview != WorldSummaryTree))
             {
-                if (treeview != WorldSummaryTree)
-                {
-                    treeview.DoubleClick += TreeviewDoubleClicked;
-                    treeview.MouseClick += TreeviewMouseClicked;
-                }
+                treeview.DoubleClick += TreeviewDoubleClicked;
+                treeview.MouseClick += TreeviewMouseClicked;
             }
         }
 
@@ -701,16 +693,14 @@ namespace DFWV
                 this.InvokeEx(f =>
                 {
                     var parentNode = f.WorldSummaryTree.FlattenTree().FirstOrDefault(n => n.Text == parent.Trim());
-                    if (parentNode != null)
+                    if (parentNode == null) return;
+                    var itemNode = new TreeNode(item.Trim());
+                    if (navigationFilter != null)
                     {
-                        var itemNode = new TreeNode(item.Trim());
-                        if (navigationFilter != null)
-                        {
-                            itemNode.Tag = navigationFilter;
-                            itemNode.ForeColor = Color.Blue;
-                        }
-                        parentNode.Nodes.Add(itemNode);
+                        itemNode.Tag = navigationFilter;
+                        itemNode.ForeColor = Color.Blue;
                     }
+                    parentNode.Nodes.Add(itemNode);
                 });
             }
 
@@ -718,11 +708,9 @@ namespace DFWV
 
         private void WorldSummaryTree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            if (e.Node.Tag is NavigationFilter)
-            {
-                var filter = e.Node.Tag as NavigationFilter;
-                filter.Select(this);
-            }
+            if (!(e.Node.Tag is NavigationFilter)) return;
+            var filter = e.Node.Tag as NavigationFilter;
+            filter.Select(this);
         }
 
         private void WorldSummaryTree_MouseLeave(object sender, EventArgs e)
@@ -734,7 +722,7 @@ namespace DFWV
         {
             var node = WorldSummaryTree.GetNodeAt(e.Location);
 
-            if (node != null && node.Tag != null && node.Tag is NavigationFilter)
+            if (node != null && node.Tag is NavigationFilter)
                 Cursor.Current = Cursors.Hand;
             else
                 Cursor.Current = Cursors.Default;
@@ -1010,26 +998,20 @@ namespace DFWV
             var squads = 0;
             if (evtcol.AttackingSquad != null)
             {
-                foreach (var squad in evtcol.AttackingSquad)
+                foreach (var squad in evtcol.AttackingSquad.Where(squad => squad.EntityPopulation == entpop))
                 {
-                    if (squad.EntityPopulation == entpop)
-                    {
-                        squads++;
-                        number += squad.Number;
-                        deaths += squad.Deaths;
-                    }
+                    squads++;
+                    number += squad.Number;
+                    deaths += squad.Deaths;
                 }
             }
             if (evtcol.DefendingSquad != null)
             {
-                foreach (var squad in evtcol.DefendingSquad)
+                foreach (var squad in evtcol.DefendingSquad.Where(squad => squad.EntityPopulation == entpop))
                 {
-                    if (squad.EntityPopulation == entpop)
-                    {
-                        squads++;
-                        number += squad.Number;
-                        deaths += squad.Deaths;
-                    }
+                    squads++;
+                    number += squad.Number;
+                    deaths += squad.Deaths;
                 }
             }
             if (squads == 0)
@@ -1536,13 +1518,10 @@ namespace DFWV
                         {
                             foreach (var hfLinkList in thisHF.HFLinks)
                             {
-                                foreach (var hfLink in hfLinkList.Value)
+                                foreach (var hfLink in hfLinkList.Value.Where(hfLink => hfLink.HF == selectedHFNode.Tag))
                                 {
-                                    if (hfLink.HF == selectedHFNode.Tag)
-                                    {
-                                        evt = hfLink.AddEvent;
-                                        break;
-                                    }
+                                    evt = hfLink.AddEvent;
+                                    break;
                                 }
                             }
                         }
@@ -1550,13 +1529,10 @@ namespace DFWV
                     case "Kills":
                         if (thisHF.SlayingEvents != null)
                         {
-                            foreach (var slaying_event in thisHF.SlayingEvents)
+                            foreach (var slaying_event in thisHF.SlayingEvents.Where(slaying_event => slaying_event.HF == selectedHFNode.Tag))
                             {
-                                if (slaying_event.HF == selectedHFNode.Tag)
-                                {
-                                    evt = slaying_event;
-                                    break;
-                                }
+                                evt = slaying_event;
+                                break;
                             }
                         }
                         break;
@@ -1912,8 +1888,7 @@ namespace DFWV
                 return;
             if (Program.siteMapForm == null || Program.siteMapForm.IsDisposed)
             {
-                Program.siteMapForm = new SiteMapForm(World);
-                Program.siteMapForm.Location = Location;
+                Program.siteMapForm = new SiteMapForm(World) {Location = Location};
             }
             Program.siteMapForm.Site = (Site)lstSite.SelectedItem;
             Program.siteMapForm.Show();

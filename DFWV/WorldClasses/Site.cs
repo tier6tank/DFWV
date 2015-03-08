@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Xml.Linq;
-using System.Drawing;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using DFWV.Annotations;
 using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalEventClasses;
-using DFWV.WorldClasses.HistoricalFigureClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
+using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses
 {
@@ -56,6 +56,14 @@ namespace DFWV.WorldClasses
 
         [UsedImplicitly]
         public bool isPlayerControlled { private get; set; }
+
+        public IEnumerable<HistoricalEvent> Events
+        {
+            get
+            {
+                return World.HistoricalEvents.Values.Where(x => x.SitesInvolved.Contains(this));
+            }
+        }
 
         override public Point Location { get { return Coords; } }
         public MapLegend MapLegend { get; set; }
@@ -348,6 +356,7 @@ namespace DFWV.WorldClasses
             frm.grpSiteInhabitants.Visible = frm.lstSiteInhabitants.Items.Count > 0;
             frm.grpSiteInhabitants.Text = string.Format("Historical Figures ({0})", frm.lstSiteInhabitants.Items.Count);
 
+            
             frm.trvSiteEvent.Nodes.Clear();
             if (AttackedEvents != null)
             {
@@ -409,8 +418,8 @@ namespace DFWV.WorldClasses
                 thisNode.Text += string.Format(" ({0})", thisNode.Nodes.Count);
                 frm.trvSiteEvent.Nodes.Add(thisNode);
             }
-
             frm.grpSiteEvent.Visible = frm.trvSiteEvent.Nodes.Count > 0;
+
 
             frm.trvSiteEventCollection.Nodes.Clear();
             if (AbductionEventCollections != null)

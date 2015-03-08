@@ -1,13 +1,12 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 using System.Xml.Linq;
 using DFWV.Annotations;
+using DFWV.WorldClasses.HistoricalEventClasses;
 
 namespace DFWV.WorldClasses
 {
-    using HistoricalEventClasses;
-    using System.Collections.Generic;
-    using System.Drawing;
-
     public class Structure : XMLObject
     {
         private Site Site { get; set; }
@@ -84,10 +83,9 @@ namespace DFWV.WorldClasses
             frm.lstStructureEntombedHF.Items.Clear();
             if (ChangeHFBodyStateEvents != null)
             {
-                foreach (var changeHfBodyStateEvent in ChangeHFBodyStateEvents)
+                foreach (var changeHfBodyStateEvent in ChangeHFBodyStateEvents.Where(changeHfBodyStateEvent => changeHfBodyStateEvent.BodyState == "entombed at site"))
                 {
-                    if (changeHfBodyStateEvent.BodyState == "entombed at site")
-                        frm.lstStructureEntombedHF.Items.Add(changeHfBodyStateEvent.HF);
+                    frm.lstStructureEntombedHF.Items.Add(changeHfBodyStateEvent.HF);
                 }
             }
             frm.grpStructureEntombedHF.Visible = frm.lstStructureEntombedHF.Items.Count > 0;

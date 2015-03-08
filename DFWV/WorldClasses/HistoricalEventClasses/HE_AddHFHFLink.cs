@@ -90,20 +90,18 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 }
             }
             matched = false;
-            if (HFTarget != null && HFTarget.HFLinks != null)
+            if (HFTarget == null || HFTarget.HFLinks == null) return;
+            foreach (var hfLinkList in HFTarget.HFLinks)
             {
-                foreach (var hfLinkList in HFTarget.HFLinks)
+                foreach (var hflink in hfLinkList.Value.Where(hflink => hflink.LinkedHFID == HFID))
                 {
-                    foreach (var hflink in hfLinkList.Value.Where(hflink => hflink.LinkedHFID == HFID))
-                    {
-                        hflink.AddEvent = this;
-                        HFLink2 = hflink;
-                        matched = true;
-                        break;
-                    }
-                    if (matched)
-                        break;
+                    hflink.AddEvent = this;
+                    HFLink2 = hflink;
+                    matched = true;
+                    break;
                 }
+                if (matched)
+                    break;
             }
         }
 

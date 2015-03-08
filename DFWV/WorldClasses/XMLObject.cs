@@ -1,10 +1,9 @@
 ﻿
+using System;
+using System.Xml.Linq;
+
 namespace DFWV.WorldClasses
 {
-    using System;
-    using System.Xml.Linq;
-
-
     public abstract class XMLObject : WorldObject
     {
         public int ID { get; protected set; }

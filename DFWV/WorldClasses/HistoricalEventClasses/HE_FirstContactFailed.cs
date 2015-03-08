@@ -26,6 +26,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 yield return RejectorEn;
             }
         }
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
 
         public HE_FirstContactFailed(XDocument xdoc, World world)
             : base(xdoc, world)

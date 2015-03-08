@@ -53,6 +53,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 yield return SlayerHF;
             }
         }
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
+
         public HE_HFDied(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -236,12 +241,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     SlayerItem.Kills = new List<HE_HFDied>();
                 SlayerItem.Kills.Add(this);
             }
-            if (SlayerShooterItem != null)
-            {
-                if (SlayerShooterItem.Kills == null)
-                    SlayerShooterItem.Kills = new List<HE_HFDied>();
-                SlayerShooterItem.Kills.Add(this);
-            }
+            if (SlayerShooterItem == null) return;
+            if (SlayerShooterItem.Kills == null)
+                SlayerShooterItem.Kills = new List<HE_HFDied>();
+            SlayerShooterItem.Kills.Add(this);
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
@@ -533,7 +536,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 BowArtifactID.DBExport(),
                 BowItemType.DBExport(ItemTypes),
                 BowItemSubType.DBExport(ItemSubTypes),
-                BowMat.DBExport(Materials),
+                BowMat.DBExport(Materials)
             };
 
             Database.ExportWorldItem(table, vals);

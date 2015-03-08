@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Xml.Linq;
 using System.Drawing;
 using System.Linq;
+using System.Xml.Linq;
 using DFWV.Annotations;
 
 namespace DFWV.WorldClasses
 {
     public class UndergroundRegion : XMLObject
     {
+        [UsedImplicitly]
         private string Type { get; set; }
         [UsedImplicitly]
         public int Depth { get; set; }
@@ -103,21 +104,17 @@ namespace DFWV.WorldClasses
                     case "coords":
                         if (Coords == null)
                             Coords = new List<Point>();
-                        foreach (var coord in val.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries))
+                        foreach (var coordSplit in val.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries).Select(coord => coord.Split(',')).Where(coordSplit => coordSplit.Length == 2))
                         {
-                            var coordSplit = coord.Split(',');
-                            if (coordSplit.Length == 2)
-                                Coords.Add(new Point(Convert.ToInt32(coordSplit[0]), Convert.ToInt32(coordSplit[1])));
+                            Coords.Add(new Point(Convert.ToInt32(coordSplit[0]), Convert.ToInt32(coordSplit[1])));
                         }
                         break;
                     case "population":
                         if (Populations == null)
                             Populations = new Dictionary<Race, int>();
-                        foreach (var pop in val.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries))
+                        foreach (var popSplit in val.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries).Select(pop => pop.Split(',')).Where(popSplit => popSplit.Length == 2))
                         {
-                            var popSplit = pop.Split(',');
-                            if (popSplit.Length == 2)
-                                Populations.Add(World.Races[Convert.ToInt32(popSplit[0])], Convert.ToInt32(popSplit[1]));
+                            Populations.Add(World.Races[Convert.ToInt32(popSplit[0])], Convert.ToInt32(popSplit[1]));
                         }
                         break;
                     default:

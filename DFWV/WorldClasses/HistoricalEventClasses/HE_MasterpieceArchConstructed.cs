@@ -31,6 +31,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get { yield return Entity; }
         }
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
+
 
         public HE_MasterpieceArchConstructed(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -144,14 +149,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            if (BuildingType.HasValue)
-                return string.Format("{0} {1} constructed a masterful {2} for {3} at {4}.",
-                                    timestring, HF, Buildings[BuildingType.Value], Entity,
-                                    Site.AltName);
-
-            return string.Format("{0} {1} constructed a masterful {2} for {3} at {4}.",
-                                timestring, HF, "UNKNOWN", Entity,
-                                Site.AltName);
+            return string.Format("{0} {1} constructed a masterful {2} for {3} at {4}.", timestring, HF, BuildingType.HasValue ? Buildings[BuildingType.Value] : "UNKNOWN", Entity, Site.AltName);
         }
 
         internal override string ToTimelineString()

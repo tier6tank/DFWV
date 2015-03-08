@@ -7,7 +7,6 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    //TODO: Verify new event
     class HE_AgreementFormed : HistoricalEvent
     {
         public int AgreementID { get; set; }
@@ -29,6 +28,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 yield return ConcluderHF;
             }
         }
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
+
         public HE_AgreementFormed(XDocument xdoc, World world)
             : base(xdoc, world)
         {

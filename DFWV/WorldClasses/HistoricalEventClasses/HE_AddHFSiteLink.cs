@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using DFWV.WorldClasses.EntityClasses;
@@ -91,15 +92,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             {
                 foreach (var siteLinkList in HF.SiteLinks)
                 {
-                    foreach (var siteLink in siteLinkList.Value)
+                    foreach (var siteLink in siteLinkList.Value.Where(siteLink => siteLink.Site == Site && LinkType == siteLink.LinkType))
                     {
-                        if (siteLink.Site == Site && LinkType == siteLink.LinkType)
-                        {
-                            siteLink.AddEvent = this;
-                            HFSiteLink = siteLink;
-                            matched = true;
-                            break;
-                        }
+                        siteLink.AddEvent = this;
+                        HFSiteLink = siteLink;
+                        matched = true;
+                        break;
                     }
                     if (matched)
                         break;

@@ -441,10 +441,8 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             // For battle event collections, if we have hf died events we can add that HF as a casualty of the battle, 
             //      which will be displayed in bold when viewing participating HFs.
 
-            foreach (var ev in Event.Where(x => HistoricalEvent.Types[x.Type] == "hf died").Cast<HE_HFDied>())
+            foreach (var ev in Event.Where(x => HistoricalEvent.Types[x.Type] == "hf died").Cast<HE_HFDied>().Where(ev => ev.HF != null))
             {
-                if (ev.HF == null)
-                    continue;
                 if (AttackingHF.Contains(ev.HF))
                 {
                     if (AttackingDiedHF == null)

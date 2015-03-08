@@ -33,6 +33,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 yield return SiteCiv;
             }
         }
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
+
         public HE_CreatedSite(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -88,15 +93,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             base.Process();
             Site.CreatedEvent = this;
 
-            if (BuilderHF != null)
+            if (BuilderHF == null) return;
+            if (Time.Year == -1 &&
+                NextEvent().Type == Types.IndexOf("artifact created") &&
+                NextEvent().NextEvent().Type == Types.IndexOf("agreement formed") &&
+                NextEvent().NextEvent().NextEvent().Type == Types.IndexOf("artifact stored"))
             {
-                if (Time.Year == -1 &&
-                    NextEvent().Type == Types.IndexOf("artifact created") &&
-                    NextEvent().NextEvent().Type == Types.IndexOf("agreement formed") &&
-                    NextEvent().NextEvent().NextEvent().Type == Types.IndexOf("artifact stored"))
-                {
-                    ProcessSladeSpireEventSet();
-                }
+                ProcessSladeSpireEventSet();
             }
         }
 
@@ -129,9 +132,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             if (BuilderHF != null)
                 return string.Format("{0} {1} founded {2}.", timestring, BuilderHF, Site.AltName);
-            if (SiteCiv != null)
-                return string.Format("{0} {1} of {2} founded {3}.", timestring, SiteCiv, Civ, Site.AltName);
-            return string.Format("{0} {1} founded {2}.", timestring, Civ, Site.AltName);
+            return SiteCiv != null ? 
+                string.Format("{0} {1} of {2} founded {3}.", timestring, SiteCiv, Civ, Site.AltName) : 
+                string.Format("{0} {1} founded {2}.", timestring, Civ, Site.AltName);
         }
 
         internal override string ToTimelineString()

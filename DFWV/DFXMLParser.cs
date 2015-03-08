@@ -1,17 +1,16 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Xml;
+using System.Xml.Linq;
+using DFWV.WorldClasses;
+using DFWV.WorldClasses.HistoricalEventClasses;
+using DFWV.WorldClasses.HistoricalEventCollectionClasses;
 
 namespace DFWV
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Text;
-    using System.Xml;
-    using System.Xml.Linq;
-    using WorldClasses;
-    using WorldClasses.HistoricalEventClasses;
-    using WorldClasses.HistoricalEventCollectionClasses;
-
     public delegate void XMLFinishedSectionEventHandler(string section);
     public delegate void XMLFinishedEventHandler();
 
@@ -222,12 +221,7 @@ namespace DFWV
 
         private static void SortRaces(World world)
         {
-            Dictionary<int, Race> newRaceList = new Dictionary<int, Race>();
-
-            foreach (var race in world.Races.Values)
-            {
-                newRaceList.Add(race.ID, race);
-            }
+            Dictionary<int, Race> newRaceList = world.Races.Values.ToDictionary(race => race.ID);
 
             world.Races.Clear();
 
@@ -322,7 +316,7 @@ namespace DFWV
                 }
                 else
                 {
-                    var WorldObject = (T)Activator.CreateInstance(typeof(T), new object[] { xdoc, world });
+                    var WorldObject = (T)Activator.CreateInstance(typeof(T), xdoc, world);
                     WorldList.Add(WorldObject.ID, WorldObject);
                 }
             }
@@ -363,28 +357,28 @@ namespace DFWV
 
                         if (id < 0)
                         {
-                            if (xdoc.Root.Name.LocalName == "historical_event")
+                            switch (xdoc.Root.Name.LocalName)
                             {
-                                if (!workflowDetected)
-                                {
+                                case "historical_event":
+                                    if (!workflowDetected)
+                                    {
+                                        Program.Log(LogType.Error,
+                                            "Negative ID historical event.  Likely due to dfHack Workflow, ignoring\n" + xdoc);
+                                        workflowDetected = true;
+                                    }
+                                    break;
+                                case "historical_figure":
+                                    if (!autochopDetected)
+                                    {
+                                        Program.Log(LogType.Error,
+                                            "Negative ID historical figure detected. Likely due to autochop, ignoring\n" + xdoc);
+                                        autochopDetected = true;
+                                    }
+                                    break;
+                                default:
                                     Program.Log(LogType.Error,
-                                        "Negative ID historical event.  Likely due to dfHack Workflow, ignoring\n" + xdoc);
-                                    workflowDetected = true;
-                                }
-                            }
-                            else if (xdoc.Root.Name.LocalName == "historical_figure")
-                            {
-                                if (!autochopDetected)
-                                {
-                                    Program.Log(LogType.Error,
-                                        "Negative ID historical figure detected. Likely due to autochop, ignoring\n" + xdoc);
-                                    autochopDetected = true;
-                                }
-                            }
-                            else
-                            {
-                                Program.Log(LogType.Error,
-                                    "Negative ID " + xdoc.Root.Name.LocalName + " detected. Unknown cause, ignoring\n" + xdoc);
+                                        "Negative ID " + xdoc.Root.Name.LocalName + " detected. Unknown cause, ignoring\n" + xdoc);
+                                    break;
                             }
                         }
                         else
@@ -439,9 +433,7 @@ namespace DFWV
                         world.Races.Add(id, newRace);
                         return;
                     }
-                    else
-                        id = associatedRace.ID;
-
+                    id = associatedRace.ID;
                 }
                 WorldList[id].Plus(xdoc);
             }
@@ -482,28 +474,28 @@ namespace DFWV
 
                         if (id < 0)
                         {
-                            if (xdoc.Root.Name.LocalName == "historical_event")
+                            switch (xdoc.Root.Name.LocalName)
                             {
-                                if (!workflowDetected)
-                                {
+                                case "historical_event":
+                                    if (!workflowDetected)
+                                    {
+                                        Program.Log(LogType.Error,
+                                            "Negative ID historical event.  Likely due to dfHack Workflow, ignoring\n" + xdoc);
+                                        workflowDetected = true;
+                                    }
+                                    break;
+                                case "historical_figure":
+                                    if (!autochopDetected)
+                                    {
+                                        Program.Log(LogType.Error,
+                                            "Negative ID historical figure detected. Likely due to autochop, ignoring\n" + xdoc);
+                                        autochopDetected = true;
+                                    }
+                                    break;
+                                default:
                                     Program.Log(LogType.Error,
-                                        "Negative ID historical event.  Likely due to dfHack Workflow, ignoring\n" + xdoc);
-                                    workflowDetected = true;
-                                }
-                            }
-                            else if (xdoc.Root.Name.LocalName == "historical_figure")
-                            {
-                                if (!autochopDetected)
-                                {
-                                    Program.Log(LogType.Error,
-                                        "Negative ID historical figure detected. Likely due to autochop, ignoring\n" + xdoc);
-                                    autochopDetected = true;
-                                }
-                            }
-                            else
-                            {
-                                Program.Log(LogType.Error,
-                                    "Negative ID " + xdoc.Root.Name.LocalName + " detected. Unknown cause, ignoring\n" + xdoc);
+                                        "Negative ID " + xdoc.Root.Name.LocalName + " detected. Unknown cause, ignoring\n" + xdoc);
+                                    break;
                             }
                         }
                         else

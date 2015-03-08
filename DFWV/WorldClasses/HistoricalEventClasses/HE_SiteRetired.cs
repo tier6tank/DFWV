@@ -28,6 +28,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 yield return Civ;
             }
         }
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
+
 
         public HE_SiteRetired(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -86,13 +91,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            if (First)
-                return string.Format("{0} {1} of {2} at the settlement of {3} regained their senses after an initial period of questionable judgement.",
-                                timestring, SiteCiv, Civ,
-                                Site.AltName);
-            return string.Format("{0} {1} of {2} abandoned the settlement of {3} regained their senses after another period of questionable judgement.",
-                timestring, SiteCiv, Civ,
-                Site.AltName);
+            return string.Format(First ? 
+                "{0} {1} of {2} at the settlement of {3} regained their senses after an initial period of questionable judgement." : 
+                "{0} {1} of {2} abandoned the settlement of {3} regained their senses after another period of questionable judgement.", 
+                timestring, SiteCiv, Civ, Site.AltName);
         }
 
         internal override string ToTimelineString()

@@ -27,6 +27,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 yield return Destination;
             }
         }
+        public override IEnumerable<Site> SitesInvolved
+        {
+            get { yield return Site; }
+        }
+
         public HE_AgreementMade(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -123,6 +128,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         internal override void Export(string table)
         {
+            base.Export(table);
+
             table = GetType().Name;
 
             var vals = new List<object>
@@ -131,7 +138,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Topic.DBExport(MeetingTopics),
                 SourceEntID.DBExport(),
                 DestinationEntID.DBExport(),
-                SiteID.DBExport(),
+                SiteID.DBExport()
             };
 
 
