@@ -703,7 +703,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             {
                 foreach (var evt in Events)
                     frm.lstHistoricalFigureEvents.Items.Add(evt);
-            }                
+            }
             frm.lstHistoricalFigureEvents.EndUpdate();
 
             if (frm.lstHistoricalFigureEvents.Items.Count > 0)

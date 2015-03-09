@@ -1146,6 +1146,8 @@ namespace DFWV
                 if (pops[selectedRace] == 1)
                     drawString = pops[selectedRace] +
                         " " + selectedRace.Name.ToTitleCase();
+                else if (pops[selectedRace] == 10000001)
+                    drawString = "Unnumbered " + selectedRace.PluralName.ToTitleCase();
                 else
                     drawString = pops[selectedRace] +
                         " " + selectedRace.PluralName.ToTitleCase();
@@ -1370,14 +1372,20 @@ namespace DFWV
                 if (lstRacePopulation.Items[e.Index] is Region)
                 {
                     Region selectedRegion = (Region)lstRacePopulation.Items[e.Index];
-                    drawString = thisRace.Populations[selectedRegion] +
-                        " - " + selectedRegion.Name.ToTitleCase();
+                    if (thisRace.Populations[selectedRegion] == 10000001)
+                        drawString = "Unnumbered - " + selectedRegion.Name.ToTitleCase();
+                    else
+                        drawString = thisRace.Populations[selectedRegion] +
+                            " - " + selectedRegion.Name.ToTitleCase();
                 }
                 else if (lstRacePopulation.Items[e.Index] is UndergroundRegion)
                 {
                     UndergroundRegion selectedUGRegion = (UndergroundRegion)lstRacePopulation.Items[e.Index];
-                    drawString = thisRace.UGPopulations[selectedUGRegion] +
-                        " - " + selectedUGRegion.ToString().ToTitleCase();
+                    if (thisRace.UGPopulations[selectedUGRegion] == 10000001)
+                        drawString = "Unnumbered - " + selectedUGRegion.ToString().ToTitleCase();
+                    else
+                        drawString = thisRace.UGPopulations[selectedUGRegion] +
+                                     " - " + selectedUGRegion.ToString().ToTitleCase();
                 }
 
                 e.Graphics.DrawString(drawString,

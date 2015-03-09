@@ -24,7 +24,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         override public Point Location { get { return Coords; } }
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
-            get { return GroupHFs; }
+            get { return GroupHFs ?? Enumerable.Empty<HistoricalFigure>(); }
         }
         public override IEnumerable<Site> SitesInvolved
         {

@@ -80,13 +80,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 SiteCiv = World.Entities[SiteCivID.Value];
         }
 
-        internal override void Process()
-        {
-            base.Process();
-            if (Site.ReclaimedEvents == null)
-                Site.ReclaimedEvents = new List<HE_ReclaimSite>();
-            Site.ReclaimedEvents.Add(this);
-        }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {

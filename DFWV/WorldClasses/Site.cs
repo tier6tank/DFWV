@@ -35,13 +35,6 @@ namespace DFWV.WorldClasses
 
         public HE_CreatedSite CreatedEvent { get; set; }
         public HE_SiteDied DiedEvent { get; set; }
-        public List<HE_PlunderedSite> PlunderedEvents { get; set; }
-        public List<HE_ReclaimSite> ReclaimedEvents { get; set; }
-        public List<HE_AttackedSite> AttackedEvents { get; set; }
-        public List<HE_DestroyedSite> DestroyedEvents { get; set; }
-
-        public List<HE_NewSiteLeader> NewSiteLeaderEvents { get; set; }
-        public List<HE_SiteTakenOver> SiteTakenOverEvents { get; set; }
 
         public List<EC_BeastAttack> BeastAttackEventCollections { get; set; }
         public List<EC_Battle> BattleEventCollections { get; set; }
@@ -356,71 +349,23 @@ namespace DFWV.WorldClasses
             frm.grpSiteInhabitants.Visible = frm.lstSiteInhabitants.Items.Count > 0;
             frm.grpSiteInhabitants.Text = string.Format("Historical Figures ({0})", frm.lstSiteInhabitants.Items.Count);
 
+            frm.lstSiteEvent.BeginUpdate();
+            frm.lstSiteEvent.Items.Clear();
+            if (Events != null)
+            {
+                foreach (var evt in Events)
+                    frm.lstSiteEvent.Items.Add(evt);
+            }
+            frm.lstSiteEvent.EndUpdate();
+
+            if (frm.lstSiteEvent.Items.Count > 0)
+            {
+                frm.grpSiteEvent.Show();
+                frm.lstSiteEvent.SelectedIndex = 0;
+            }
+            else
+                frm.grpSiteEvent.Hide();
             
-            frm.trvSiteEvent.Nodes.Clear();
-            if (AttackedEvents != null)
-            {
-                var thisNode = new TreeNode("Attacked");
-                foreach (var newNode in AttackedEvents.Select(evt => new TreeNode(evt.ToString()) {Tag = evt}))
-                {
-                    thisNode.Nodes.Add(newNode);
-                }
-                thisNode.Text += string.Format(" ({0})", thisNode.Nodes.Count);
-                frm.trvSiteEvent.Nodes.Add(thisNode);
-            }
-            if (DestroyedEvents != null)
-            {
-                var thisNode = new TreeNode("Destroyed");
-                foreach (var newNode in DestroyedEvents.Select(evt => new TreeNode(evt.ToString()) {Tag = evt}))
-                {
-                    thisNode.Nodes.Add(newNode);
-                }
-                thisNode.Text += string.Format(" ({0})", thisNode.Nodes.Count);
-                frm.trvSiteEvent.Nodes.Add(thisNode);
-            }
-            if (NewSiteLeaderEvents != null)
-            {
-                var thisNode = new TreeNode("NewLeader");
-                foreach (var newNode in NewSiteLeaderEvents.Select(evt => new TreeNode(evt.ToString()) { Tag = evt }))
-                {
-                    thisNode.Nodes.Add(newNode);
-                }
-                thisNode.Text += string.Format(" ({0})", thisNode.Nodes.Count);
-                frm.trvSiteEvent.Nodes.Add(thisNode);
-            }
-            if (SiteTakenOverEvents != null)
-            {
-                var thisNode = new TreeNode("SiteTakenOver");
-                foreach (var newNode in SiteTakenOverEvents.Select(evt => new TreeNode(evt.ToString()) { Tag = evt }))
-                {
-                    thisNode.Nodes.Add(newNode);
-                }
-                thisNode.Text += string.Format(" ({0})", thisNode.Nodes.Count);
-                frm.trvSiteEvent.Nodes.Add(thisNode);
-            }
-            if (PlunderedEvents != null)
-            {
-                var thisNode = new TreeNode("Plundered");
-                foreach (var newNode in PlunderedEvents.Select(evt => new TreeNode(evt.ToString()) {Tag = evt}))
-                {
-                    thisNode.Nodes.Add(newNode);
-                }
-                thisNode.Text += string.Format(" ({0})", thisNode.Nodes.Count);
-                frm.trvSiteEvent.Nodes.Add(thisNode);
-            }
-            if (ReclaimedEvents != null)
-            {
-                var thisNode = new TreeNode("Reclaimed");
-                foreach (var newNode in ReclaimedEvents.Select(evt => new TreeNode(evt.ToString()) {Tag = evt}))
-                {
-                    thisNode.Nodes.Add(newNode);
-                }
-                thisNode.Text += string.Format(" ({0})", thisNode.Nodes.Count);
-                frm.trvSiteEvent.Nodes.Add(thisNode);
-            }
-            frm.grpSiteEvent.Visible = frm.trvSiteEvent.Nodes.Count > 0;
-
-
             frm.trvSiteEventCollection.Nodes.Clear();
             if (AbductionEventCollections != null)
             {

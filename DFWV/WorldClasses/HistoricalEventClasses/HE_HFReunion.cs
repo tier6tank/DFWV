@@ -25,10 +25,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get 
             {
-                foreach (var historicalFigure in Group1HF)
-                    yield return historicalFigure;
-                foreach (var historicalFigure in Group2HF)
-                    yield return historicalFigure;
+                if (Group1HF != null)
+                {
+                    foreach (var historicalFigure in Group1HF)
+                        yield return historicalFigure;
+                }
+                if (Group2HF != null)
+                {
+                    foreach (var historicalFigure in Group2HF)
+                        yield return historicalFigure;
+                }
             }
         }
         public override IEnumerable<Site> SitesInvolved

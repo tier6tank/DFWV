@@ -105,19 +105,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 NewLeaderHF = World.HistoricalFigures[NewLeaderHFID.Value];
         }
 
-        internal override void Process()
-        {
-            base.Process();
-
-            if (Site != null)
-            {
-                if (Site.NewSiteLeaderEvents == null)
-                    Site.NewSiteLeaderEvents = new List<HE_NewSiteLeader>();
-                Site.NewSiteLeaderEvents.Add(this);
-            }
-           
-        }
-
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {

@@ -107,14 +107,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 DefenderGeneralHF = World.HistoricalFigures[DefenderGeneralHFID.Value];
         }
 
-        internal override void Process()
-        {
-            base.Process();
-            if (Site.AttackedEvents == null)
-                Site.AttackedEvents = new List<HE_AttackedSite>();
-            Site.AttackedEvents.Add(this);
-        }
-
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
             EventLabel(frm, parent, ref location, "Attacker:", AttackerCiv);

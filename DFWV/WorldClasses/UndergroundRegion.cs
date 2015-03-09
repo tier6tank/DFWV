@@ -70,7 +70,7 @@ namespace DFWV.WorldClasses
             if (Populations != null)
             {
                 frm.lstUndergroundRegionPopulation.Items.AddRange(Populations.Keys.ToArray());
-                frm.grpUndergroundRegionPopulation.Text = string.Format("Population ({0})", Populations.Values.Sum());
+                frm.grpUndergroundRegionPopulation.Text = string.Format("Population ({0})", Populations.Values.Contains(10000001) ? "Unnumbered" : Populations.Values.Sum().ToString());
             }
             frm.lstUndergroundRegionPopulation.EndUpdate();
             frm.grpUndergroundRegionPopulation.Visible = frm.lstUndergroundRegionPopulation.Items.Count > 0;

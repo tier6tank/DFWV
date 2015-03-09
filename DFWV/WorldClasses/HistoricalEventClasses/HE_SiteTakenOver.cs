@@ -93,18 +93,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 NewSiteCiv = World.Entities[NewSiteCivID.Value];
         }
 
-        internal override void Process()
-        {
-            base.Process();
-
-            if (Site != null)
-            {
-                if (Site.SiteTakenOverEvents == null)
-                    Site.SiteTakenOverEvents = new List<HE_SiteTakenOver>();
-                Site.SiteTakenOverEvents.Add(this);
-            }
-        }
-
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
             EventLabel(frm, parent, ref location, "Attacker:", AttackerCiv);

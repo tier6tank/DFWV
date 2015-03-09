@@ -82,13 +82,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 DefenderCiv = World.Entities[DefenderCivID.Value];
         }
 
-        internal override void Process()
-        {
-            base.Process();
-            if (Site.PlunderedEvents == null)
-                Site.PlunderedEvents = new List<HE_PlunderedSite>();
-            Site.PlunderedEvents.Add(this);
-        }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {

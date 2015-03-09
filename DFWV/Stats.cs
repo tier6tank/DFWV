@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DFWV.WorldClasses;
+using DFWV.WorldClasses.HistoricalEventClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV
@@ -278,24 +279,21 @@ namespace DFWV
                 else if (createdYear > latestSiteBuilt)
                     latestSiteBuilt = createdYear;
 
-                if (site.ReclaimedEvents != null)
-                {
-                    foreach (var evt in site.ReclaimedEvents)
-                    {
-                        if (!SitesBuiltInYear.ContainsKey(evt.Time.Year))
-                            SitesBuiltInYear.Add(evt.Time.Year, 1);
-                        else
-                            SitesBuiltInYear[evt.Time.Year]++;
 
-                        if (evt.Time.Year < earliestSiteBuilt)
-                            earliestSiteBuilt = evt.Time.Year;
-                        else if (evt.Time.Year > latestSiteBuilt)
-                            latestSiteBuilt = evt.Time.Year;
-                    }
+                foreach (var evt in site.Events.OfType<HE_ReclaimSite>())
+                {
+                    if (!SitesBuiltInYear.ContainsKey(evt.Time.Year))
+                        SitesBuiltInYear.Add(evt.Time.Year, 1);
+                    else
+                        SitesBuiltInYear[evt.Time.Year]++;
+
+                    if (evt.Time.Year < earliestSiteBuilt)
+                        earliestSiteBuilt = evt.Time.Year;
+                    else if (evt.Time.Year > latestSiteBuilt)
+                        latestSiteBuilt = evt.Time.Year;
                 }
 
-                if (site.DestroyedEvents == null) continue;
-                foreach (var evt in site.DestroyedEvents)
+                foreach (var evt in site.Events.OfType<HE_DestroyedSite>())
                 {
                     if (!SitesDestroyedInYear.ContainsKey(evt.Time.Year))
                         SitesDestroyedInYear.Add(evt.Time.Year, 1);

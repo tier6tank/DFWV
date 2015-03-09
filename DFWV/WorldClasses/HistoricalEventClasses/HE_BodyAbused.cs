@@ -39,8 +39,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get
             {
                 yield return HF;
-                foreach (var historicalFigure in BodyHFs)
-                    yield return historicalFigure;
+                if (BodyHFs != null)
+                {
+                    foreach (var historicalFigure in BodyHFs)
+                        yield return historicalFigure;
+                }
             }
         }
         public override IEnumerable<Site> SitesInvolved

@@ -104,6 +104,8 @@ namespace DFWV.WorldClasses
                     frm.lstRaceCastes.Items.AddRange(Castes.ToArray());
                 frm.lstRaceCastes.EndUpdate();
                 frm.grpRaceCastes.Visible = frm.lstRaceCastes.Items.Count > 0;
+                if (frm.lstRaceCastes.Items.Count > 0)
+                    frm.lstRaceCastes.SelectedIndex = 0;
 
                 frm.lstRacePopulation.BeginUpdate();
                 frm.lstRacePopulation.Items.Clear();
@@ -116,9 +118,8 @@ namespace DFWV.WorldClasses
 
                 frm.lstRacePopulation.EndUpdate();
                 if (frm.lstRacePopulation.Items.Count > 0)
-                    frm.grpRacePopulation.Text = string.Format("Population ({0})", (pops.Values.Sum() + ugpops.Values.Sum()));
+                    frm.grpRacePopulation.Text = string.Format("Population ({0})", pops.Values.Contains(10000001) || ugpops.Values.Contains(10000001) ? "Unnumbered" : (pops.Values.Sum() + ugpops.Values.Sum()).ToString());
                 frm.grpRacePopulation.Visible = frm.lstRacePopulation.Items.Count > 0;
-                
             }
             finally
             {

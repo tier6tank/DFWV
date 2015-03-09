@@ -106,7 +106,7 @@ namespace DFWV.WorldClasses
             if (Populations != null)
             {
                 frm.lstRegionPopulation.Items.AddRange(Populations.Keys.ToArray());
-                frm.grpRegionPopulation.Text = string.Format("Population ({0})", Populations.Values.Sum());
+                frm.grpRegionPopulation.Text = string.Format("Population ({0})", Populations.Values.Contains(10000001) ? "Unnumbered" : Populations.Values.Sum().ToString());
             }
             frm.lstRegionPopulation.EndUpdate();
             frm.grpRegionPopulation.Visible = frm.lstRegionPopulation.Items.Count > 0;
@@ -150,7 +150,10 @@ namespace DFWV.WorldClasses
                             Populations = new Dictionary<Race, int>();
                         foreach (var popSplit in val.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries).Select(pop => pop.Split(',')).Where(popSplit => popSplit.Length == 2))
                         {
-                            Populations.Add(World.Races[Convert.ToInt32(popSplit[0])], Convert.ToInt32(popSplit[1]));
+                            if (Populations.ContainsKey(World.Races[Convert.ToInt32(popSplit[0])]))
+                                Populations[World.Races[Convert.ToInt32(popSplit[0])]] += Convert.ToInt32(popSplit[1]);
+                            else
+                                Populations.Add(World.Races[Convert.ToInt32(popSplit[0])], Convert.ToInt32(popSplit[1]));
                         }
                         break;
                     default:

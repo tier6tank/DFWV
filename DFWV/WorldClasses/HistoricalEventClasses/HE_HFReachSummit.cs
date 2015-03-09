@@ -22,7 +22,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
-            get { return GroupHF; }
+            get { return GroupHF ?? Enumerable.Empty<HistoricalFigure>(); ; }
         }
         public HE_HFReachSummit(XDocument xdoc, World world)
             : base(xdoc, world)
