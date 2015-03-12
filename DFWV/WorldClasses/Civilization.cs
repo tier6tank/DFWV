@@ -134,56 +134,10 @@ namespace DFWV.WorldClasses
             frm.lblCivilizationEntity.Data = Entity;
             frm.lblCivilizationRace.Data = Race;
 
-            frm.grpCivilizationLeaders.Visible = Leaders.Count > 0;
-            if (Leaders.Count > 0)
-            {
-                frm.lstCivilizationLeaders.BeginUpdate();
-                frm.lstCivilizationLeaders.Items.Clear();
-                foreach (var leader in Leaders.Values.SelectMany(leaderlist => leaderlist))
-                {
-                    frm.lstCivilizationLeaders.Items.Add(leader);
-                }
-                frm.lstCivilizationLeaders.EndUpdate();
-            }
-            frm.grpCivilizationGods.Visible = Gods.Count > 0;
-            if (Gods.Count > 0)
-            {
-                frm.lstCivilizationGods.BeginUpdate();
-                frm.lstCivilizationGods.Items.Clear();
-
-                foreach (var god in Gods)
-                {
-                    frm.lstCivilizationGods.Items.Add(god);
-                }
-                frm.lstCivilizationGods.EndUpdate();
-            }
-
-            frm.lstCivilizationSites.BeginUpdate();
-
-            frm.lstCivilizationSites.Items.Clear();
-
-            foreach (var site in World.Sites.Values.Where(x => x.Parent != null && x.Parent == this))
-            {
-                frm.lstCivilizationSites.Items.Add(site);
-            }
-            frm.lstCivilizationSites.EndUpdate();
-
-            frm.grpCivilizationSites.Visible = frm.lstCivilizationSites.Items.Count > 0;
-
-            frm.lstCivilizationWars.BeginUpdate();
-            frm.lstCivilizationWars.Items.Clear();
-
-            if (Entity != null && Entity.WarEventCollections != null)
-            {
-                foreach (var evtcol in Entity.WarEventCollections)
-                {
-                    frm.lstCivilizationWars.Items.Add(evtcol);
-                }
-            }
-
-            frm.lstCivilizationWars.EndUpdate();
-
-            frm.grpCivilizationWars.Visible = frm.lstCivilizationWars.Items.Count > 0;
+            frm.grpCivilizationLeaders.FillListboxWith(frm.lstCivilizationLeaders, Leaders.Values.SelectMany(leaderlist => leaderlist));
+            frm.grpCivilizationGods.FillListboxWith(frm.lstCivilizationGods, Gods);
+            frm.grpCivilizationSites.FillListboxWith(frm.lstCivilizationSites, World.Sites.Values.Where(x => x.Parent != null && x.Parent == this));
+            frm.grpCivilizationWars.FillListboxWith(frm.lstCivilizationWars, (Entity != null && Entity.WarEventCollections != null) ? Entity.WarEventCollections : null);
 
 
             Program.MakeSelected(frm.tabCivilization, frm.lstCivilization, this);

@@ -53,6 +53,8 @@ namespace DFWV
             this.lblMapName = new System.Windows.Forms.Label();
             this.lblMapNameCaption = new System.Windows.Forms.Label();
             this.grpSettings = new System.Windows.Forms.GroupBox();
+            this.chkRivers = new System.Windows.Forms.CheckBox();
+            this.chkMountains = new System.Windows.Forms.CheckBox();
             this.chkShowLegend = new System.Windows.Forms.CheckBox();
             this.ugRegionDepthPicker = new System.Windows.Forms.NumericUpDown();
             this.btnOK = new System.Windows.Forms.Button();
@@ -157,6 +159,7 @@ namespace DFWV
             this.picLegend.TabIndex = 6;
             this.picLegend.TabStop = false;
             this.picLegend.Visible = false;
+            this.picLegend.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picLegend_MouseMove);
             // 
             // picMiniMap
             // 
@@ -305,6 +308,8 @@ namespace DFWV
             // 
             // grpSettings
             // 
+            this.grpSettings.Controls.Add(this.chkRivers);
+            this.grpSettings.Controls.Add(this.chkMountains);
             this.grpSettings.Controls.Add(this.chkShowLegend);
             this.grpSettings.Controls.Add(this.ugRegionDepthPicker);
             this.grpSettings.Controls.Add(this.btnOK);
@@ -318,18 +323,40 @@ namespace DFWV
             this.grpSettings.Controls.Add(this.chkCivilizations);
             this.grpSettings.Location = new System.Drawing.Point(64, 80);
             this.grpSettings.Name = "grpSettings";
-            this.grpSettings.Size = new System.Drawing.Size(361, 226);
+            this.grpSettings.Size = new System.Drawing.Size(361, 241);
             this.grpSettings.TabIndex = 5;
             this.grpSettings.TabStop = false;
             this.grpSettings.Text = "Settings";
             this.grpSettings.Visible = false;
+            // 
+            // chkRivers
+            // 
+            this.chkRivers.AutoSize = true;
+            this.chkRivers.Location = new System.Drawing.Point(6, 181);
+            this.chkRivers.Name = "chkRivers";
+            this.chkRivers.Size = new System.Drawing.Size(56, 17);
+            this.chkRivers.TabIndex = 12;
+            this.chkRivers.Text = "Rivers";
+            this.chkRivers.UseVisualStyleBackColor = true;
+            this.chkRivers.Click += new System.EventHandler(this.ViewOptionChanged);
+            // 
+            // chkMountains
+            // 
+            this.chkMountains.AutoSize = true;
+            this.chkMountains.Location = new System.Drawing.Point(6, 158);
+            this.chkMountains.Name = "chkMountains";
+            this.chkMountains.Size = new System.Drawing.Size(75, 17);
+            this.chkMountains.TabIndex = 11;
+            this.chkMountains.Text = "Mountains";
+            this.chkMountains.UseVisualStyleBackColor = true;
+            this.chkMountains.Click += new System.EventHandler(this.ViewOptionChanged);
             // 
             // chkShowLegend
             // 
             this.chkShowLegend.AutoSize = true;
             this.chkShowLegend.Checked = true;
             this.chkShowLegend.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkShowLegend.Location = new System.Drawing.Point(93, 196);
+            this.chkShowLegend.Location = new System.Drawing.Point(94, 208);
             this.chkShowLegend.Name = "chkShowLegend";
             this.chkShowLegend.Size = new System.Drawing.Size(92, 17);
             this.chkShowLegend.TabIndex = 10;
@@ -362,7 +389,7 @@ namespace DFWV
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(7, 192);
+            this.btnOK.Location = new System.Drawing.Point(6, 204);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 8;
@@ -388,7 +415,7 @@ namespace DFWV
             this.grpSites.Controls.Add(this.chkNeutralSites);
             this.grpSites.Location = new System.Drawing.Point(186, 19);
             this.grpSites.Name = "grpSites";
-            this.grpSites.Size = new System.Drawing.Size(163, 197);
+            this.grpSites.Size = new System.Drawing.Size(163, 208);
             this.grpSites.TabIndex = 7;
             this.grpSites.TabStop = false;
             this.grpSites.Visible = false;
@@ -566,5 +593,7 @@ namespace DFWV
         private Label lblMapObject;
         private CheckBox chkShowLegend;
         private PictureBox picLegend;
+        private CheckBox chkRivers;
+        private CheckBox chkMountains;
     }
 }

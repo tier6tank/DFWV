@@ -23,6 +23,8 @@ namespace DFWV
         Region selectedRegion;
         UndergroundRegion selectedUndergroundRegion;
         WorldConstruction selectedWC;
+        River selectedRiver;
+        Mountain selectedMountain;
         private readonly List<string> selectedSiteTypes = new List<string>();
  
         public MapForm()
@@ -130,20 +132,24 @@ namespace DFWV
             }
             var g = Graphics.FromImage(MapOverlay);
             g.Clear(Color.Transparent);
+            if (chkRivers.Checked)
+                DrawRiverOverlay(g);
+            if (chkUGRegions.Checked)
+                DrawUndergroundRegionOverlay(g);
+            if (chkRegions.Checked)
+                DrawRegionOverlay(g);
+            if (chkConstructions.Checked)
+                DrawWorldConstructionOverlay(g);
+            if (chkMountains.Checked)
+                DrawMountainOverlay(g);
             if (chkSites.Checked)
                 DrawSiteOverlay(g);
             if (chkCivilizations.Checked)
                 DrawCivOverlay(g);
             if (chkBattles.Checked)
                 DrawBattleOverlay(g);
-            if (chkRegions.Checked)
-                DrawRegionOverlay(g);
-            if (chkUGRegions.Checked)
-                DrawUndergroundRegionOverlay(g);
             if (chkHistoricalFigures.Checked)
                 DrawHFOverlay(g);
-            if (chkConstructions.Checked)
-                DrawWorldConstructionOverlay(g);
 
             DrawMaps();
             Cursor.Current = Cursors.Default;
@@ -540,6 +546,57 @@ namespace DFWV
 
         }
 
+        private void DrawMountainOverlay(Graphics g)
+        {
+            foreach (var mnt in World.Mountains.Values)
+            {
+                using (var p = new Pen(Color.White))
+                {
+
+                    p.DashStyle = DashStyle.Solid;
+                    p.Width = 2;
+
+
+                    g.DrawPolygon(p, new []{new Point(mnt.Coords.X * siteSize.Width + 1, mnt.Coords.Y * siteSize.Height + siteSize.Height - 1),
+                                     new Point(mnt.Coords.X * siteSize.Width + siteSize.Width / 2, mnt.Coords.Y * siteSize.Height + 1),
+                                     new Point(mnt.Coords.X * siteSize.Width + siteSize.Width - 1, mnt.Coords.Y * siteSize.Height + siteSize.Height - 1)});
+                }
+            }
+        }
+
+        private void DrawRiverOverlay(Graphics g)
+        {
+            foreach (var river in World.Rivers.Values)
+            {
+                Color myColor = Color.FromArgb(100,100,255);
+
+                if (river.Parent == null)
+                    myColor = Color.Blue;
+                using (var p = new Pen(myColor))
+                {
+
+                    p.DashStyle = DashStyle.Solid;
+                    p.Width = 2;
+
+
+                    var Points = new List<Point>();
+
+                    foreach (var coord in river.Coords)
+                    {
+                        Points.Add(new Point(coord.X * siteSize.Width + siteSize.Width / 2, coord.Y * siteSize.Height + siteSize.Height / 2));
+                    }
+
+
+                    g.DrawLines(p, Points.ToArray());
+
+                    if (river.Parent == null)
+                        g.DrawEllipse(p, Points.Last().X - 2, Points.Last().Y - 2, 5, 5);
+                }
+            }
+
+        }
+
+        
         #endregion
         
         #region Form Events
@@ -721,6 +778,14 @@ namespace DFWV
                 typeText = selectedSite.SiteType;
                 objectTypeText = "Site";
             }
+            if (selectedObject is Mountain)
+            {
+                nameText = selectedMountain.ToString();
+                altNameText = selectedMountain.AltName;
+
+                objectTypeText = "Mountain";
+
+            }
             if (selectedObject is WorldConstruction)
             {
                 nameText = selectedWC.ToString();
@@ -736,7 +801,6 @@ namespace DFWV
             }
             if (selectedObject is Region)
             {
-
                 nameText = selectedRegion.ToString();
                 typeText = WorldClasses.Region.Types[selectedRegion.Type];
                 objectTypeText = "Region";
@@ -745,6 +809,12 @@ namespace DFWV
             {
                 nameText = selectedUndergroundRegion.ToString();
                 objectTypeText = "Underground Region";
+            }
+            if (selectedObject is River)
+            {
+                nameText = selectedRiver.ToString();
+                altNameText = selectedRiver.AltName;
+                objectTypeText = "River";
             }
             lblMapName.Text = nameText;
             lblMapAltName.Text = altNameText;
@@ -763,8 +833,8 @@ namespace DFWV
 
             if (picLegend.Visible)
             {
-                picLegend.Left = e.X + 10;
-                picLegend.Top = e.Y + 10;
+                picLegend.Left = e.X + 10 + picMap.Left;
+                picLegend.Top = e.Y + 10 + picMap.Top;
             }
         }
 
@@ -782,6 +852,18 @@ namespace DFWV
                 if (selectedWC != null)
                     return selectedWC;
             }
+            if (chkMountains.Checked)
+            {
+                selectedMountain = GetMountainAt(mouseCoord);
+                if (selectedMountain != null)
+                    return selectedMountain;
+            }
+            if (chkRivers.Checked)
+            {
+                selectedRiver = GetRiverAt(mouseCoord);
+                if (selectedRiver != null)
+                    return selectedRiver;
+            }
             if (chkRegions.Checked)
             {
                 selectedRegion = GetRegionAt(mouseCoord);
@@ -795,6 +877,31 @@ namespace DFWV
                     return selectedUndergroundRegion;
             }
             return null;
+        }
+
+        private River GetRiverAt(Point mouseCoord)
+        {
+            if (!World.hasPlusXML)
+                return null;
+            var rivermatches = World.Rivers.Values.Where(x => x.Coords.Contains(mouseCoord));
+            if (rivermatches.Count() == 0)
+                return null;
+            var nonparentMatch = rivermatches.Where(x => x.Parent == null);
+            if (nonparentMatch.Count() == 1)
+                return nonparentMatch.First();
+            if (nonparentMatch.Count() > 1)
+                return nonparentMatch.OrderByDescending(x => x.Coords.Count).FirstOrDefault();
+            return rivermatches.OrderByDescending(x => x.Coords.Count).FirstOrDefault();
+        }
+
+        private Mountain GetMountainAt(Point mouseCoord)
+        {
+            if (!World.hasPlusXML)
+                return null;
+
+
+            return World.Mountains.Values.Where(x => x.Coords == mouseCoord).FirstOrDefault();
+
         }
 
         private WorldConstruction GetWorldConstructionAt(Point coord)
@@ -848,9 +955,19 @@ namespace DFWV
                         selectedSite.Select(Program.mainForm);
                         Program.mainForm.BringToFront();
                     }
+                    else if (chkMountains.Checked && selectedMountain != null)
+                    {
+                        selectedMountain.Select(Program.mainForm);
+                        Program.mainForm.BringToFront();
+                    }
                     else if (chkConstructions.Checked && selectedWC != null)
                     {
                         selectedWC.Select(Program.mainForm);
+                        Program.mainForm.BringToFront();
+                    }
+                    else if (chkRivers.Checked && selectedRiver != null)
+                    {
+                        selectedRiver.Select(Program.mainForm);
                         Program.mainForm.BringToFront();
                     }
                     else if (chkRegions.Checked && selectedRegion != null)
@@ -898,6 +1015,12 @@ namespace DFWV
         private void MapForm_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void picLegend_MouseMove(object sender, MouseEventArgs e)
+        {
+            picLegend.Left += e.X + 10;
+            picLegend.Top += e.Y + 10;
         }
 
 

@@ -289,7 +289,7 @@ namespace DFWV
         }
 
         /// <summary>
-        /// 
+        /// Extracts a 7z archive at the given path for file loading
         /// </summary>
         public static bool ExtractArchive(string path)
         {
@@ -306,7 +306,7 @@ namespace DFWV
                 return false;
             var newDirectory = Path.Combine(directory, filename);
             if (Directory.Exists(newDirectory))
-                Directory.Delete(newDirectory,true);
+                Directory.Delete(newDirectory, true);
             Directory.CreateDirectory(newDirectory);
 
             using (var tmp = new SevenZipExtractor(path))
@@ -316,6 +316,27 @@ namespace DFWV
             }
             return true;
         }
+
+        /// <summary>
+        /// Takes a groupbox and loads an inner Listbox with a list of objects efficiently
+        /// </summary>
+        internal static void FillListboxWith(this GroupBox groupbox, ListBox listbox, IEnumerable<object> objects)
+        {
+            if (objects == null || objects.Count() == 0)
+            {
+                groupbox.Visible = false;
+                return;
+            }
+            groupbox.Visible = true;
+            listbox.BeginUpdate();
+            listbox.Items.Clear();
+            listbox.Items.AddRange(objects.ToArray());
+            listbox.EndUpdate();
+            listbox.SelectedIndex = 0;
+            var title = groupbox.Text.Split('(')[0].Trim();
+            groupbox.Text = string.Format("{0} ({1})", title, listbox.Items.Count);
+        }
+
 
 
 

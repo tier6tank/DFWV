@@ -58,7 +58,8 @@ namespace DFWV
             Fields[typeof (Entity)] = new Dictionary<string, Type>
             {
                 {"isPlayerControlled", typeof (bool)},
-                {"MemberCount", typeof (int)}
+                {"MemberCount", typeof (int)},
+                {"EventCount", typeof (int)}
             };
             Fields[typeof (EntityPopulation)] = new Dictionary<string, Type>
             {
@@ -108,7 +109,8 @@ namespace DFWV
                 {"DescendentCount", typeof (int)},
                 {"AncestorCount", typeof (int)},
                 {"DescendentGenerations", typeof (int)},
-                {"Flags", typeof (int)}
+                {"Flags", typeof (int)},
+                {"EventCount", typeof (int)}
             };
 
             Fields[typeof (Leader)] = new Dictionary<string, Type>
@@ -136,7 +138,8 @@ namespace DFWV
                 {"Parent.Name", typeof (string)},
                 {"HFInhabitantCount", typeof (int)},
                 {"TotalPopulation", typeof (int)},
-                {"CreatedArtifactCount", typeof (int)}
+                {"CreatedArtifactCount", typeof (int)},
+                {"EventCount", typeof (int)}
             };
             Fields[typeof (Structure)] = new Dictionary<string, Type>
             {
@@ -145,17 +148,22 @@ namespace DFWV
             };
             Fields[typeof (UndergroundRegion)] = new Dictionary<string, Type>();
             Fields[typeof (WorldConstruction)] = new Dictionary<string, Type>();
-            Fields[typeof (Dynasty)] = new Dictionary<string, Type>
+            Fields[typeof(Dynasty)] = new Dictionary<string, Type>
             {
                 {"Duration", typeof (int)},
                 {"MemberCount", typeof (int)}
+            };
+            Fields[typeof(River)] = new Dictionary<string, Type>();
+            Fields[typeof(Mountain)] = new Dictionary<string, Type>
+            {
+                {"Height", typeof (int)},
             };
 
             foreach (var type in new List<Type>
             {
                 typeof(Artifact), typeof(Civilization), typeof(Entity), typeof(EntityPopulation), typeof(God), typeof(HistoricalEra), typeof(HistoricalEvent),
                 typeof(HistoricalEventCollection), typeof(HistoricalFigure), typeof(Leader), typeof(Parameter), typeof(Race), typeof(Region), typeof(Site),
-                typeof(Structure), typeof(UndergroundRegion), typeof(WorldConstruction), typeof(Dynasty)
+                typeof(Structure), typeof(UndergroundRegion), typeof(WorldConstruction), typeof(Dynasty), typeof(River), typeof(Mountain)
             })
             {
                 Fields[type].Add("Name", typeof (string));
@@ -237,24 +245,26 @@ namespace DFWV
         /// </summary>
         private void SetDefaultFilters()
         {
-            this[typeof (Artifact)] = new Filter("Name", null, null, -1);
-            this[typeof (Civilization)] = new Filter("Name", "IsFull = true", "Race.Name", -1);
-            this[typeof (Entity)] = new Filter(new List<string> {"Name", "Type"}, null, null, -1);
-            this[typeof (EntityPopulation)] = new Filter(new List<string> {"ID", "Race = null"}, null, null, -1);
-            this[typeof (God)] = new Filter("Name", null, null, -1);
-            this[typeof (HistoricalEra)] = new Filter("StartYear", null, null, -1);
-            this[typeof (HistoricalEvent)] = new Filter("Year", null, null, 50000);
-            this[typeof (HistoricalEventCollection)] = new Filter("StartYear", null, null, 50000);
-            this[typeof (HistoricalFigure)] = new Filter("Name", null, null, 50000);
-            this[typeof (Leader)] = new Filter("Name", null, null, -1);
-            this[typeof (Parameter)] = new Filter();
-            this[typeof (Race)] = new Filter(new List<string> {"Name", "!isCivilized"}, null, null, -1);
-            this[typeof (Region)] = new Filter("Name", null, null, -1);
-            this[typeof (Site)] = new Filter("Name", null, null, -1);
-            this[typeof (Structure)] = new Filter("Name", null, null, -1);
-            this[typeof (UndergroundRegion)] = new Filter(new List<string> {"Depth", "Name"}, null, null, -1);
-            this[typeof (WorldConstruction)] = new Filter();
-            this[typeof (Dynasty)] = new Filter();
+            this[typeof(Artifact)] = new Filter("Name", null, null, -1);
+            this[typeof(Civilization)] = new Filter("Name", "IsFull = true", "Race.Name", -1);
+            this[typeof(Entity)] = new Filter(new List<string> {"Name", "Type"}, null, null, -1);
+            this[typeof(EntityPopulation)] = new Filter(new List<string> {"ID", "Race = null"}, null, null, -1);
+            this[typeof(God)] = new Filter("Name", null, null, -1);
+            this[typeof(HistoricalEra)] = new Filter("StartYear", null, null, -1);
+            this[typeof(HistoricalEvent)] = new Filter("Year", null, null, 50000);
+            this[typeof(HistoricalEventCollection)] = new Filter("StartYear", null, null, 50000);
+            this[typeof(HistoricalFigure)] = new Filter("Name", null, null, 50000);
+            this[typeof(Leader)] = new Filter("Name", null, null, -1);
+            this[typeof(Parameter)] = new Filter();
+            this[typeof(Race)] = new Filter(new List<string> {"Name", "!isCivilized"}, null, null, -1);
+            this[typeof(Region)] = new Filter("Name", null, null, -1);
+            this[typeof(Site)] = new Filter("Name", null, null, -1);
+            this[typeof(Structure)] = new Filter("Name", null, null, -1);
+            this[typeof(UndergroundRegion)] = new Filter(new List<string> {"Depth", "Name"}, null, null, -1);
+            this[typeof(WorldConstruction)] = new Filter();
+            this[typeof(Dynasty)] = new Filter("Name", null, null, -1);
+            this[typeof(River)] = new Filter("Name", null, null, -1);
+            this[typeof(Mountain)] = new Filter("Name", null, null, -1);
 
 
         }

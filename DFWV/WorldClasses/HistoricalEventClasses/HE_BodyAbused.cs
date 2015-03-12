@@ -50,6 +50,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get { yield return Site; }
         }
+        public override IEnumerable<Region> RegionsInvolved
+        {
+            get { yield return Subregion; }
+        }
 
         public override IEnumerable<Entity> EntitiesInvolved
         {

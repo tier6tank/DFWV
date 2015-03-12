@@ -25,8 +25,17 @@ namespace DFWV.WorldClasses
         public List<EC_Duel> DuelEventCollections { get; set; }
         public List<EC_Abduction> AbductionEventCollections { get; set; }
         public List<EC_Theft> TheftEventCollections { get; set; }
-        public List<HE_FieldBattle> FieldBattleEvents { get; set; }
 
+        public IEnumerable<HistoricalEvent> Events
+        {
+            get
+            {
+                return World.HistoricalEvents.Values.Where(x => x.RegionsInvolved.Contains(this));
+            }
+        }
+
+        [UsedImplicitly]
+        public int EventCount { get; set; }
 
         [UsedImplicitly]
         public int Battles { get { return BattleEventCollections == null ? 0 : BattleEventCollections.Count; } }
@@ -74,42 +83,13 @@ namespace DFWV.WorldClasses
             frm.lblRegionName.Text = ToString();
             frm.lblRegionType.Text = Types[Type].ToTitleCase();
 
-            frm.lstRegionFieldBattles.BeginUpdate();
-            frm.lstRegionFieldBattles.Items.Clear();
-            if (FieldBattleEvents != null)
-                frm.lstRegionFieldBattles.Items.AddRange(FieldBattleEvents.ToArray());
-            frm.lstRegionFieldBattles.EndUpdate();
-            frm.grpRegionFieldBattles.Visible = frm.lstRegionFieldBattles.Items.Count > 0;
-            frm.grpRegionFieldBattles.Text = string.Format("Field Battles ({0})", frm.lstRegionFieldBattles.Items.Count);
+            frm.grpRegionEvents.FillListboxWith(frm.lstRegionEvents, Events);
+            frm.grpRegionBattles.FillListboxWith(frm.lstRegionBattles, BattleEventCollections);
+            frm.grpRegionInhabitants.FillListboxWith(frm.lstRegionInhabitants, Inhabitants);
+            frm.grpRegionPopulation.FillListboxWith(frm.lstRegionPopulation, Populations.Keys);
 
-            if (frm.lstRegionFieldBattles.Items.Count > 0)
-                frm.lstRegionFieldBattles.SelectedIndex = 0;
-
-
-            frm.lstRegionBattles.BeginUpdate();
-            frm.lstRegionBattles.Items.Clear();
-            if (BattleEventCollections != null)
-                frm.lstRegionBattles.Items.AddRange(BattleEventCollections.ToArray());
-            frm.lstRegionBattles.EndUpdate();
-            frm.grpRegionBattles.Visible = frm.lstRegionBattles.Items.Count > 0;
-            frm.grpRegionBattles.Text = string.Format(" Battles ({0})", frm.lstRegionBattles.Items.Count);
-
-            frm.lstRegionInhabitants.BeginUpdate();
-            frm.lstRegionInhabitants.Items.Clear();
-            if (Inhabitants != null)
-                frm.lstRegionInhabitants.Items.AddRange(Inhabitants.ToArray());
-            frm.lstRegionInhabitants.EndUpdate();
-            frm.grpRegionInhabitants.Visible = frm.lstRegionInhabitants.Items.Count > 0;
-
-            frm.lstRegionPopulation.BeginUpdate();
-            frm.lstRegionPopulation.Items.Clear();
             if (Populations != null)
-            {
-                frm.lstRegionPopulation.Items.AddRange(Populations.Keys.ToArray());
                 frm.grpRegionPopulation.Text = string.Format("Population ({0})", Populations.Values.Contains(10000001) ? "Unnumbered" : Populations.Values.Sum().ToString());
-            }
-            frm.lstRegionPopulation.EndUpdate();
-            frm.grpRegionPopulation.Visible = frm.lstRegionPopulation.Items.Count > 0;
 
 
             Program.MakeSelected(frm.tabRegion, frm.lstRegion, this);

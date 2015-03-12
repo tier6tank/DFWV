@@ -75,25 +75,9 @@ namespace DFWV.WorldClasses
             
             frm.lblGodSpheres.Text = String.Join(", ", Spheres.Select(sphere => HistoricalFigure.Spheres[sphere]).ToList()).ToTitleCase();
 
-            frm.grpGodLeaders.Visible = Leaders.Count > 0;
-            if (Leaders != null)
-            {
-                frm.lstGodLeaders.Items.Clear();
-                foreach (var leader in Leaders)
-                {
-                    frm.lstGodLeaders.Items.Add(leader);
-                }
-            }
+            frm.grpGodLeaders.FillListboxWith(frm.lstGodLeaders, Leaders);
+            frm.grpGodCivilizations.FillListboxWith(frm.lstGodCivilizations, Civilizations);
 
-            frm.grpGodCivilizations.Visible = Civilizations.Count > 0;
-            if (Civilizations != null)
-            {
-                frm.lstGodCivilizations.Items.Clear();
-                foreach (var civ in Civilizations)
-                {
-                    frm.lstGodCivilizations.Items.Add(civ);
-                }
-            }
 
             Program.MakeSelected(frm.tabGod, frm.lstGod, this);
         }

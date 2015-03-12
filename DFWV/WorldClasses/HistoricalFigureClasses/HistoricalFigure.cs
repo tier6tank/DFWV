@@ -83,7 +83,10 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                 return World.HistoricalEvents.Values.Where(x=>x.HFsInvolved.Contains(this));
             }
         }
-            
+
+        [UsedImplicitly]
+        public int EventCount { get; set; }
+
         [UsedImplicitly]
         public string FirstName
         {
@@ -443,37 +446,22 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             frm.lblHistoricalFigureLeader.Text = Leader == null ? "" : Leader.LeaderTypes[Leader.LeaderType].ToTitleCase();
             frm.lblHistoricalFigureEntityPopulation.Data = EntPop;
 
-            frm.grpHistoricalFigureSpheres.Visible = Sphere != null;
-            if (Sphere != null)
-            {
-                frm.lstHistoricalFigureSpheres.Items.Clear();
-                foreach (var curSphere in Sphere)
-                    frm.lstHistoricalFigureSpheres.Items.Add(Spheres[curSphere].ToTitleCase());
-            }
+            frm.grpHistoricalFigureSpheres.FillListboxWith(frm.lstHistoricalFigureSpheres, Sphere == null ? null : Sphere.Select(x => Spheres[x].ToTitleCase()));
+            frm.grpHistoricalFigureKnowledge.FillListboxWith(frm.lstHistoricalFigureKnowledge, InteractionKnowledge == null ? null : InteractionKnowledge.Select(x => Interactions[x].Replace("_", " ").ToLower().ToTitleCase()));
+            frm.grpHistoricalFigurePets.FillListboxWith(frm.lstHistoricalFigurePets, JourneyPet == null ? null : JourneyPet.Select(x => JourneyPets[x].Replace("_", " ").ToLower().ToTitleCase()));
+            frm.grpHistoricalFigureSkills.FillListboxWith(frm.lstHistoricalFigureSkills, HFSkills == null ? null : 
+                HFSkills.OrderByDescending(x => x.TotalIP)
+                .Select(x => HFSkill.Skills[x.Skill].Replace("_", " ").ToLower().ToTitleCase() + " - " + IPToTitle(x.TotalIP)));
 
-            frm.grpHistoricalFigureKnowledge.Visible = InteractionKnowledge != null;
-            if (InteractionKnowledge != null)
-            {
-                frm.lstHistoricalFigureKnowledge.Items.Clear();
-                foreach (var curInteractionKnowledge in InteractionKnowledge)
-                    frm.lstHistoricalFigureKnowledge.Items.Add(Interactions[curInteractionKnowledge].Replace("_"," ").ToLower().ToTitleCase());
-            }
 
-            frm.grpHistoricalFigurePets.Visible = JourneyPet != null;
-            if (JourneyPet != null)
+            if (!frm.chkHistoricalFigureDetailedView.Checked)
             {
-                frm.lstHistoricalFigurePets.Items.Clear();
-                foreach (var curJourneyPet in JourneyPet)
-                    frm.lstHistoricalFigurePets.Items.Add(JourneyPets[curJourneyPet].Replace("_", " ").ToLower().ToTitleCase());
-            }
-
-            frm.grpHistoricalFigureSkills.Visible = HFSkills != null;
-            if (HFSkills != null)
-            {
-                frm.lstHistoricalFigureSkills.Items.Clear();
-                foreach (var curHFSkill in HFSkills.OrderByDescending(x => x.TotalIP))
-                    frm.lstHistoricalFigureSkills.Items.Add(HFSkill.Skills[curHFSkill.Skill].Replace("_"," ").ToLower().ToTitleCase() + 
-                        " - " + IPToTitle(curHFSkill.TotalIP));
+                frm.grpHistoricalFigureEntityLinks.Visible = false;
+                frm.grpHistoricalFigureHFLinks.Visible = false;
+                frm.grpHistoricalFigureEvents.Visible = false;
+                frm.grpHistoricalFigureAncestors.Visible = false;
+                frm.grpHistoricalFigureDescendents.Visible = false;
+                return;
             }
 
 
@@ -669,8 +657,6 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                     frm.trvHistoricalFigureHFLinks.ExpandAll();
             }
             
-
-
             if (SlayingEvents != null)
                 frm.grpHistoricalFigureHFLinks.Show();
             if (SlayingEvents != null)
@@ -697,26 +683,6 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             frm.trvHistoricalFigureHFLinks.EndUpdate();
 
 
-            frm.lstHistoricalFigureEvents.BeginUpdate();
-            frm.lstHistoricalFigureEvents.Items.Clear();
-            if (Events != null)
-            {
-                foreach (var evt in Events)
-                    frm.lstHistoricalFigureEvents.Items.Add(evt);
-            }
-            frm.lstHistoricalFigureEvents.EndUpdate();
-
-            if (frm.lstHistoricalFigureEvents.Items.Count > 0)
-            {
-                frm.grpHistoricalFigureEvents.Show();
-                frm.lstHistoricalFigureEvents.SelectedIndex = 0;
-            }
-            else
-                frm.grpHistoricalFigureEvents.Hide();
-            
-
-
-
             frm.grpHistoricalFigureDeath.Visible = DiedEvent != null;
             if (DiedEvent != null)
             {
@@ -727,16 +693,8 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                 frm.lblHistoricalFigureDeathTime.Text = DiedEvent.Time.ToString();
             }
 
-            frm.grpHistoricalFigureArtifacts.Visible = CreatedArtifacts != null;
-            frm.lstHistoricalFigureArtifacts.Items.Clear();
-            if (CreatedArtifacts != null)
-            {
-                foreach (var artifact in CreatedArtifacts)
-                {
-                    frm.lstHistoricalFigureArtifacts.Items.Add(artifact);
-                }
-            }
-
+            frm.grpHistoricalFigureEvents.FillListboxWith(frm.lstHistoricalFigureEvents, Events);
+            frm.grpHistoricalFigureArtifacts.FillListboxWith(frm.lstHistoricalFigureArtifacts, CreatedArtifacts);
 
 
             frm.grpHistoricalFigureAncestors.Visible = (Mother != null || Father != null);

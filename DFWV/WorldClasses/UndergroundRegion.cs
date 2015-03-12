@@ -65,15 +65,12 @@ namespace DFWV.WorldClasses
             frm.lblUndergroundRegionDepth.Text = Depth.ToString();
             frm.lblUndergroundRegionType.Text = Type;
 
-            frm.lstUndergroundRegionPopulation.BeginUpdate();
-            frm.lstUndergroundRegionPopulation.Items.Clear();
+            frm.grpUndergroundRegionPopulation.FillListboxWith(frm.lstUndergroundRegionPopulation, Populations.Keys);
+
+
             if (Populations != null)
-            {
-                frm.lstUndergroundRegionPopulation.Items.AddRange(Populations.Keys.ToArray());
                 frm.grpUndergroundRegionPopulation.Text = string.Format("Population ({0})", Populations.Values.Contains(10000001) ? "Unnumbered" : Populations.Values.Sum().ToString());
-            }
-            frm.lstUndergroundRegionPopulation.EndUpdate();
-            frm.grpUndergroundRegionPopulation.Visible = frm.lstUndergroundRegionPopulation.Items.Count > 0;
+
 
             Program.MakeSelected(frm.tabUndergroundRegion, frm.lstUndergroundRegion, this);
         }

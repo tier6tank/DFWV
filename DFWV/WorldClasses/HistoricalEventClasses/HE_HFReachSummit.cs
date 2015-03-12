@@ -24,6 +24,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get { return GroupHF ?? Enumerable.Empty<HistoricalFigure>(); ; }
         }
+        public override IEnumerable<Region> RegionsInvolved
+        {
+            get { yield return Subregion; }
+        }
+
         public HE_HFReachSummit(XDocument xdoc, World world)
             : base(xdoc, world)
         {

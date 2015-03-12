@@ -184,7 +184,7 @@ namespace DFWV
 
         internal static object DBExport(this Point pt)
         {
-            if (pt.IsEmpty)
+            if (!pt.IsEmpty)
                 return pt.X + "," + pt.Y;
             return DBNull.Value;
         }

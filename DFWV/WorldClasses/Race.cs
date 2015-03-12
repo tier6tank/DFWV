@@ -79,33 +79,14 @@ namespace DFWV.WorldClasses
                 frm.lblRaceName.Text = ToString();
                 frm.lblRacePopulation.Text = Population == Int64.MaxValue ? "Unnumbered" :  Population.ToString();
 
-                frm.lstRaceLeaders.BeginUpdate();
-                frm.lstRaceLeaders.Items.Clear();
-                frm.lstRaceLeaders.Items.AddRange(World.Leaders.Where(x => x.Race == this).ToArray());
-                frm.lstRaceLeaders.EndUpdate();
-                frm.grpRaceLeaders.Name = "Leaders (" + frm.lstRaceLeaders.Items.Count + ")";
+                frm.grpRaceLeaders.FillListboxWith(frm.lstRaceLeaders, World.Leaders.Where(x => x.Race == this));
+                frm.grpRaceCivilizations.FillListboxWith(frm.lstRaceCivilizations, World.Civilizations.Where(x => x.Race == this));
+                frm.grpRaceHistoricalFigures.FillListboxWith(frm.lstRaceHistoricalFigures, World.HistoricalFigures.Values.Where(x => x.Race == this).Take(50000));
+                if (frm.lstRaceHistoricalFigures.Items.Count == 50000)
+                    frm.grpRaceHistoricalFigures.Text = "Historical Figures (50000+)";
 
-                frm.lstRaceCivilizations.BeginUpdate();
-                frm.lstRaceCivilizations.Items.Clear();
-                frm.lstRaceCivilizations.Items.AddRange(World.Civilizations.Where(x => x.Race == this).ToArray());
-                frm.lstRaceCivilizations.EndUpdate();
-                frm.grpRaceCivilizations.Name = "Civilizations (" + frm.lstRaceCivilizations.Items.Count + ")";
+                frm.grpRaceCastes.FillListboxWith(frm.lstRaceCastes, Castes);
 
-                frm.lstRaceHistoricalFigures.BeginUpdate();
-                frm.lstRaceHistoricalFigures.Items.Clear();
-                frm.lstRaceHistoricalFigures.Items.AddRange(World.HistoricalFigures.Values.Where(x => x.Race == this).Take(50000).ToArray());
-                frm.lstRaceHistoricalFigures.EndUpdate();
-                frm.grpRaceHistoricalFigures.Name = "Historical Figures (" + frm.lstRaceHistoricalFigures.Items.Count + (frm.lstRaceHistoricalFigures.Items.Count == 50000 ? "+" : "") + ")";
-
-
-                frm.lstRaceCastes.BeginUpdate();
-                frm.lstRaceCastes.Items.Clear();
-                if (Castes != null)
-                    frm.lstRaceCastes.Items.AddRange(Castes.ToArray());
-                frm.lstRaceCastes.EndUpdate();
-                frm.grpRaceCastes.Visible = frm.lstRaceCastes.Items.Count > 0;
-                if (frm.lstRaceCastes.Items.Count > 0)
-                    frm.lstRaceCastes.SelectedIndex = 0;
 
                 frm.lstRacePopulation.BeginUpdate();
                 frm.lstRacePopulation.Items.Clear();

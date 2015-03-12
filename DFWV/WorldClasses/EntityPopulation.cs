@@ -66,32 +66,9 @@ namespace DFWV.WorldClasses
             frm.lblEntityPopulationRace.Data = Race;
             frm.lblEntityPopulationCiv.Data = Entity;
 
-            frm.grpEntityPopulationBattles.Visible = BattleEventCollections != null;
-            if (BattleEventCollections != null)
-            {
-                BattleEventCollections = BattleEventCollections.Distinct().ToList();
-                frm.lstEntityPopulationBattles.BeginUpdate();
-                frm.lstEntityPopulationBattles.Items.Clear();
-                frm.lstEntityPopulationBattles.Items.AddRange(BattleEventCollections.ToArray());
-                frm.lstEntityPopulationBattles.EndUpdate();
-                frm.lstEntityPopulationBattles.SelectedIndex = 0;
-                frm.grpEntityPopulationBattles.Text = String.Format("Battles ({0})",
-                    frm.lstEntityPopulationBattles.Items.Count);
-            }
-
-            frm.grpEntityPopulationMembers.Visible = Members != null;
-            if (Members != null)
-            {
-                frm.lstEntityPopulationMembers.BeginUpdate();
-                frm.lstEntityPopulationMembers.Items.Clear();
-                frm.lstEntityPopulationMembers.Items.AddRange(Members.ToArray());
-                frm.lstEntityPopulationMembers.EndUpdate();
-            }
-
-            frm.lstEntityPopluationRaces.Items.Clear();
-            frm.grpEntityPopluationRaces.Visible = RaceCounts != null;
-            if (RaceCounts != null)
-                frm.lstEntityPopluationRaces.Items.AddRange(RaceCounts.Keys.ToArray());
+            frm.grpEntityPopulationBattles.FillListboxWith(frm.lstEntityPopulationBattles, BattleEventCollections);
+            frm.grpEntityPopulationMembers.FillListboxWith(frm.lstEntityPopulationMembers, Members);
+            frm.grpEntityPopluationRaces.FillListboxWith(frm.lstEntityPopluationRaces, RaceCounts.Keys);
 
 
             frm.grpEntityPopulationMembers.Text = string.Format("Members ({0}{1})", 

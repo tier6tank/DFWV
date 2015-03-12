@@ -58,6 +58,9 @@ namespace DFWV.WorldClasses
             }
         }
 
+        [UsedImplicitly]
+        public int EventCount { get; set; }
+
         override public Point Location { get { return Coords; } }
         public MapLegend MapLegend { get; set; }
 
@@ -307,6 +310,8 @@ namespace DFWV.WorldClasses
             var siteMapPath = World.mapPath.Replace("world_map", "site_map-" + ID);
             frm.SiteMapLabel.Visible = File.Exists(siteMapPath);
 
+            
+
             frm.grpSiteCreated.Visible = CreatedEvent != null;
             if (CreatedEvent != null)
             {
@@ -315,56 +320,17 @@ namespace DFWV.WorldClasses
                 frm.lblSiteCreatedTime.Data = CreatedEvent;
                 frm.lblSiteCreatedTime.Text = CreatedEvent.Time.ToString();
             }
-            frm.lstSitePopulation.Items.Clear();
+
+            frm.grpSitePopulation.FillListboxWith(frm.lstSitePopulation, Population.Keys);
             if (Population != null)
-                frm.lstSitePopulation.Items.AddRange(Population.Keys.ToArray());
-            frm.grpSitePopulation.Visible = frm.lstSitePopulation.Items.Count > 0;
+                frm.grpSitePopulation.Text = string.Format("Population ({0})", Population.Values.Sum().ToString());
+            frm.grpSiteArtifacts.FillListboxWith(frm.lstSiteArtifacts, CreatedArtifacts);
+            frm.grpSiteStructures.FillListboxWith(frm.lstSiteStructures, Structures);
+            frm.grpSitePrisoners.FillListboxWith(frm.lstSitePrisoners, Prisoners.Keys);
+            frm.grpSiteOutcasts.FillListboxWith(frm.lstSiteOutcasts, Outcasts.Keys);
+            frm.grpSiteInhabitants.FillListboxWith(frm.lstSiteInhabitants, Inhabitants);
+            frm.grpSiteEvent.FillListboxWith(frm.lstSiteEvent, Events);
 
-            frm.lstSiteArtifacts.Items.Clear();
-            if (CreatedArtifacts != null)
-                frm.lstSiteArtifacts.Items.AddRange(CreatedArtifacts.ToArray());
-            frm.grpSiteArtifacts.Visible = frm.lstSiteArtifacts.Items.Count > 0;
-
-
-            frm.lstSiteStructures.Items.Clear();
-            if (Structures != null)
-                frm.lstSiteStructures.Items.AddRange(Structures.ToArray());
-            frm.grpSiteStructures.Visible = frm.lstSiteStructures.Items.Count > 0;
-
-            frm.lstSitePrisoners.Items.Clear();
-            if (Outcasts != null)
-                frm.lstSitePrisoners.Items.AddRange(Prisoners.Keys.ToArray());
-            frm.grpSitePrisoners.Visible = frm.lstSitePrisoners.Items.Count > 0;
-
-            frm.lstSiteOutcasts.Items.Clear();
-            if (Outcasts != null)
-                frm.lstSiteOutcasts.Items.AddRange(Outcasts.Keys.ToArray());
-            frm.grpSiteOutcasts.Visible = frm.lstSiteOutcasts.Items.Count > 0;
-
-            frm.lstSiteInhabitants.BeginUpdate();
-            frm.lstSiteInhabitants.Items.Clear();
-            if (Inhabitants != null)
-                frm.lstSiteInhabitants.Items.AddRange(Inhabitants.ToArray());
-            frm.lstSiteInhabitants.EndUpdate();
-            frm.grpSiteInhabitants.Visible = frm.lstSiteInhabitants.Items.Count > 0;
-            frm.grpSiteInhabitants.Text = string.Format("Historical Figures ({0})", frm.lstSiteInhabitants.Items.Count);
-
-            frm.lstSiteEvent.BeginUpdate();
-            frm.lstSiteEvent.Items.Clear();
-            if (Events != null)
-            {
-                foreach (var evt in Events)
-                    frm.lstSiteEvent.Items.Add(evt);
-            }
-            frm.lstSiteEvent.EndUpdate();
-
-            if (frm.lstSiteEvent.Items.Count > 0)
-            {
-                frm.grpSiteEvent.Show();
-                frm.lstSiteEvent.SelectedIndex = 0;
-            }
-            else
-                frm.grpSiteEvent.Hide();
             
             frm.trvSiteEventCollection.Nodes.Clear();
             if (AbductionEventCollections != null)
@@ -460,15 +426,7 @@ namespace DFWV.WorldClasses
             MapLegend = sf.MapLegend;
             sf.SiteFileMerged = true;
         }
-        internal override void Link()
-        {
 
-        }
-
-        internal override void Process()
-        {
-
-        }
         internal override void Plus(XDocument xdoc)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -547,6 +505,16 @@ namespace DFWV.WorldClasses
         internal Structure GetStructure(int structSiteId)
         {
             return Structures == null ? null : Structures.FirstOrDefault(structure => structure.SiteID == structSiteId);
+        }
+
+        internal override void Link()
+        {
+           
+        }
+
+        internal override void Process()
+        {
+            
         }
     }
 }

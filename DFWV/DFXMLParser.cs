@@ -171,6 +171,12 @@ namespace DFWV
                                 PlusLoadSection(world.Races, world, xReader);
                                 SortRaces(world);
                                 break;
+                            case "mountains":
+                                PlusLoadSection(world.Mountains, world, xReader);
+                                break;
+                            case "rivers":
+                                PlusLoadSection(world.Rivers, world, xReader);
+                                break;
                             case "regions":
                                 PlusLoadSection(world.Regions, world, xReader);
                                 break;
@@ -417,6 +423,18 @@ namespace DFWV
                     {
                         var newWC = new WorldConstruction(xdoc, world);
                         world.WorldConstructions.Add(newWC.ID, newWC);
+                        return;
+                    }
+                    else if (typeof(T) == typeof(Mountain))
+                    {
+                        var newMountain = new Mountain(xdoc, world);
+                        world.Mountains.Add(newMountain.ID, newMountain);
+                        return;
+                    }
+                    else if (typeof(T) == typeof(River))
+                    {
+                        var newRiver = new River(xdoc, world);
+                        world.Rivers.Add(newRiver.ID, newRiver);
                         return;
                     }
                 }

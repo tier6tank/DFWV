@@ -29,7 +29,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     if (propertyInfo.GetValue(this, null) is XMLObject)
                     {
                         yield return propertyInfo.GetValue(this, null) as XMLObject;
-
                     }
                 }
             }
@@ -39,14 +38,18 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get { return Enumerable.Empty<HistoricalFigure>(); }
         }
-
         public virtual IEnumerable<Entity> EntitiesInvolved
         {
             get { return Enumerable.Empty<Entity>(); }
         }
+        
         public virtual IEnumerable<Site> SitesInvolved
         {
             get { return Enumerable.Empty<Site>(); }
+        }
+        public virtual IEnumerable<Region> RegionsInvolved
+        {
+            get { return Enumerable.Empty<Region>(); }
         }
 
         public HistoricalEventCollection EventCollection { get; set; }

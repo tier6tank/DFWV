@@ -55,8 +55,7 @@ namespace DFWV.WorldClasses
             if (Members.Last().Leader.Death == WorldTime.Present)
                 frm.lblDynastyLength.Text += @"+";
 
-            frm.lstDynastyMembers.Items.Clear();
-            frm.lstDynastyMembers.Items.AddRange(Members.ToArray());
+            frm.grpDynastyMembers.FillListboxWith(frm.lstDynastyMembers, Members);
 
             Program.MakeSelected(frm.tabDynasty, frm.lstDynasty, this);
         }

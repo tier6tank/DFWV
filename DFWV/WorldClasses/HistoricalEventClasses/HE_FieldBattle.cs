@@ -41,6 +41,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 yield return AttackerCiv;
             }
         }
+        public override IEnumerable<Region> RegionsInvolved
+        {
+            get { yield return Subregion; }
+        }
+
         public HE_FieldBattle(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -103,16 +108,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (DefenderGeneralHFID.HasValue && World.HistoricalFigures.ContainsKey(DefenderGeneralHFID.Value))
                 DefenderGeneralHF = World.HistoricalFigures[DefenderGeneralHFID.Value];
         }
-
-        internal override void Process()
-        {
-            base.Process();
-            if (Subregion.FieldBattleEvents == null)
-                Subregion.FieldBattleEvents = new List<HE_FieldBattle>();
-            Subregion.FieldBattleEvents.Add(this);
-
-        }
-
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {

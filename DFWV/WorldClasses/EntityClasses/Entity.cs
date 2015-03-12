@@ -66,6 +66,9 @@ namespace DFWV.WorldClasses.EntityClasses
             }
         }
 
+        [UsedImplicitly]
+        public int EventCount { get; set; }
+
         override public Point Location 
         { 
             get
@@ -271,18 +274,7 @@ namespace DFWV.WorldClasses.EntityClasses
                 frm.lblEntitySiteTakeoverTime.Text = SiteTakeoverEvent.Time.ToString();
             }
 
-            frm.lstEntityEvents.BeginUpdate();
-            frm.lstEntityEvents.Items.Clear();
-            if (Events.Any())
-            {
-                frm.lstEntityEvents.Items.AddRange(Events.ToArray());
-                frm.grpEntityEvents.Show();
-                frm.lstEntityEvents.SelectedIndex = 0;
-            }
-            else
-                frm.grpEntityEvents.Hide();
-
-            frm.lstEntityEvents.EndUpdate();
+            frm.grpEntityEvents.FillListboxWith(frm.lstEntityEvents, Events);
 
             Program.MakeSelected(frm.tabEntity, frm.lstEntity, this);
         }

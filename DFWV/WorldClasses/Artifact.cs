@@ -112,32 +112,9 @@ namespace DFWV.WorldClasses
                 frm.lblArtifactLostTime.Text = LostEvent.Time.ToString();
             }
 
-            frm.grpArtifactStored.Visible = StoredEvents != null;
-            if (StoredEvents != null)
-            {
-                frm.lstArtifactStored.Items.Clear();
-                foreach (var evt in StoredEvents)
-                {
-                    frm.lstArtifactStored.Items.Add(evt);
-                }
-                frm.lstArtifactStored.SelectedIndex = 0;
-            }
-
-            frm.grpArtifactPossessed.Visible = PossessedEvents != null;
-            if (PossessedEvents != null)
-            {
-                frm.lstArtifactPossessed.Items.Clear();
-                foreach (var evt in PossessedEvents)
-                {
-                    frm.lstArtifactPossessed.Items.Add(evt);
-                }
-                frm.lstArtifactPossessed.SelectedIndex = 0;
-            }
-
-            frm.lstArtifactKills.Items.Clear();
-            if (Kills != null)
-                frm.lstArtifactKills.Items.AddRange(Kills.ToArray());
-            frm.grpArtifactKills.Visible = frm.lstArtifactKills.Items.Count > 0;
+            frm.grpArtifactStored.FillListboxWith(frm.lstArtifactStored, StoredEvents);
+            frm.grpArtifactPossessed.FillListboxWith(frm.lstArtifactPossessed, PossessedEvents);
+            frm.grpArtifactKills.FillListboxWith(frm.lstArtifactKills, Kills);
 
             Program.MakeSelected(frm.tabArtifact, frm.lstArtifact, this);
         }

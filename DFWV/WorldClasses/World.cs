@@ -23,6 +23,7 @@ namespace DFWV.WorldClasses
 
     public delegate void FamiliesCountedEventHandler();
     public delegate void DynastiesCreatedEventHandler();
+    public delegate void EventsCountedEventHandler();
     public delegate void EventCollectionsEvaluatedEventHandler();
     public delegate void HistoricalFiguresPositionedEventHandler();
     public delegate void StatsGatheredEventHandler();
@@ -57,6 +58,8 @@ namespace DFWV.WorldClasses
         public readonly List<Dynasty> Dynasties = new List<Dynasty>();
 
         public readonly Dictionary<int, Race> Races = new Dictionary<int, Race>();
+        public readonly Dictionary<int, Mountain> Mountains = new Dictionary<int, Mountain>();
+        public readonly Dictionary<int, River> Rivers = new Dictionary<int, River>();
         public readonly Dictionary<int, Region> Regions = new Dictionary<int, Region>();
         public readonly Dictionary<int, UndergroundRegion> UndergroundRegions = new Dictionary<int, UndergroundRegion>();
         public readonly Dictionary<int, Site> Sites = new Dictionary<int, Site>();
@@ -578,6 +581,8 @@ namespace DFWV.WorldClasses
             LinkSection(Sites.Values, "Sites");
             LinkSection(UndergroundRegions.Values, "Underground Regions");
             LinkSection(WorldConstructions.Values, "World Constructions");
+            LinkSection(Rivers.Values, "Rivers");
+            LinkSection(Mountains.Values, "Mountains");
 
             OnLinked();
         }
@@ -611,6 +616,7 @@ namespace DFWV.WorldClasses
         public static event XMLProcessedEventHandler Processed;
         public static event FamiliesCountedEventHandler FamiliesCounted;
         public static event DynastiesCreatedEventHandler DynastiesCreated;
+        public static event EventsCountedEventHandler EventsCounted;
         public static event EventCollectionsEvaluatedEventHandler EventCollectionsEvaluated;
         public static event HistoricalFiguresPositionedEventHandler HistoricalFiguresPositioned;
         public static event StatsGatheredEventHandler StatsGathered;
@@ -634,6 +640,8 @@ namespace DFWV.WorldClasses
             ProcessSection(HistoricalFigures.Values, "Historical Figures");
             ProcessSection(HistoricalEvents.Values, "Historical Events");
             ProcessSection(HistoricalEventCollections.Values, "Historical Event Collections");
+            ProcessSection(Rivers.Values, "Rivers");
+            ProcessSection(Mountains.Values, "Mountains");
 
             OnProcessed();
         }
@@ -759,6 +767,38 @@ namespace DFWV.WorldClasses
                 DynastiesCreated();
         }
 
+        #endregion
+
+        /// <summary>
+        /// These methods handle getting event counts for every object, to make sorting by event count feasible
+        /// </summary>
+        #region Event Counting
+
+        internal void CountEvents()
+        {
+            StartThread(CountingEvents);
+        }
+
+        private void CountingEvents()
+        {
+            foreach (var evt in HistoricalEvents.Values)
+            {
+                foreach (var hf in evt.HFsInvolved.Where(x => x != null))
+                    hf.EventCount++;
+                foreach (var site in evt.SitesInvolved.Where(x => x != null))
+                    site.EventCount++;
+                foreach (var entity in evt.EntitiesInvolved.Where(x => x != null))
+                    entity.EventCount++;
+            }
+
+            OnEventsCounted();
+        }
+
+        private static void OnEventsCounted()
+        {
+            if (EventsCounted != null)
+                EventsCounted();
+        }
         #endregion
 
         /// <summary>
@@ -1126,6 +1166,8 @@ namespace DFWV.WorldClasses
             ExportWorldItems(Structures.Values.ToArray(), "structure");
             ExportWorldItems(UndergroundRegions.Values.ToArray(), "undergroundregion");
             ExportWorldItems(WorldConstructions.Values.ToArray(), "worldconstruction");
+            ExportWorldItems(Rivers.Values.ToArray(), "river");
+            ExportWorldItems(Mountains.Values.ToArray(), "mountain");
             ExportWorldItems(Leaders.ToArray(), "leader");
             ExportWorldItems(Gods.ToArray(), "god");
             ExportMaps();

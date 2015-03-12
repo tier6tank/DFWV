@@ -74,21 +74,11 @@ namespace DFWV.WorldClasses
             }
             frm.grpStructureRazed.Visible = RazedEvent != null;
 
-            frm.lstStructureEvents.Items.Clear();
-            if (Events != null)
-                frm.lstStructureEvents.Items.AddRange(Events.ToArray());
-            frm.grpStructureEvents.Visible = frm.lstStructureEvents.Items.Count > 0;
+            frm.grpStructureEvents.FillListboxWith(frm.lstStructureEvents, Events);
+            frm.grpStructureEntombedHF.FillListboxWith(frm.lstStructureEntombedHF, 
+                ChangeHFBodyStateEvents.Where(changeHfBodyStateEvent => changeHfBodyStateEvent.BodyState == "entombed at site").Select(x=>x.HF));
 
 
-            frm.lstStructureEntombedHF.Items.Clear();
-            if (ChangeHFBodyStateEvents != null)
-            {
-                foreach (var changeHfBodyStateEvent in ChangeHFBodyStateEvents.Where(changeHfBodyStateEvent => changeHfBodyStateEvent.BodyState == "entombed at site"))
-                {
-                    frm.lstStructureEntombedHF.Items.Add(changeHfBodyStateEvent.HF);
-                }
-            }
-            frm.grpStructureEntombedHF.Visible = frm.lstStructureEntombedHF.Items.Count > 0;
 
             Program.MakeSelected(frm.tabStructure, frm.lstStructure, this);
         }

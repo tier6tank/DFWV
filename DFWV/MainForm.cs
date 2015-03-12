@@ -87,8 +87,6 @@ namespace DFWV
         {
             try
             {
-                var selectedFile = "";
-
                 var workingFolder = Program.GetDefaultPath();
                 
 
@@ -306,9 +304,9 @@ namespace DFWV
             File.Copy(Application.StartupPath + @"\DFWV_Template.sqlite3.backup", filename);
 
             exportWorldToolStripMenuItem.Visible = false;
-            var XMLThread = new Thread(() => World.Export(filename));
+            var ExportThread = new Thread(() => World.Export(filename));
 
-            XMLThread.Start();
+            ExportThread.Start();
         }
 
         /// <summary>
@@ -440,6 +438,8 @@ namespace DFWV
 
         private void FillXMLLists()
         {
+            FillList(lstRiver, World.Rivers, tabRiver);
+            FillList(lstMountain, World.Mountains, tabMountain);
             FillList(lstRegion, World.Regions, tabRegion);
             FillList(lstUndergroundRegion, World.UndergroundRegions, tabUndergroundRegion);
             FillList(lstEntity, World.Entities, tabEntity);
@@ -801,6 +801,7 @@ namespace DFWV
             World.Processed += XMLProcessed;
             World.FamiliesCounted += FamiliesCounted;
             World.DynastiesCreated += DynastiesCreated;
+            World.EventsCounted += EventsCounted;
 
             Program.Log(LogType.Status, "XML Processing Started");
 
@@ -874,6 +875,8 @@ namespace DFWV
             Program.Log(LogType.Status, " Done");
             if (section == "Historical Figures")
                 World.FamilyProcessing();
+            if (section == "Historical Events")
+                World.CountEvents();
         }
 
         /// <summary>
@@ -892,6 +895,14 @@ namespace DFWV
             FillList(lstDynasty, World.Dynasties, tabDynasty);
             Program.Log(LogType.Status, "Dynasties Created");
             AddSummaryItem(@"    Dynasties: " + World.Dynasties.Count, "XML");
+        }
+
+        /// <summary>
+        /// When events are done being counted that's noted.  Once this is done the sort by event counts will work
+        /// </summary>
+        static void EventsCounted()
+        {
+            Program.Log(LogType.Status, "Events Counted");
         }
 
         /// <summary>
@@ -1556,8 +1567,6 @@ namespace DFWV
         }
         #endregion
 
-
-
         /// <summary>
         /// Filtering is handled by clicking the filter button under a primary list box or typing into the textbox under that listbox, 
         ///     these methods handle those controls.
@@ -1626,6 +1635,12 @@ namespace DFWV
                     break;
                 case "FilterStructure":
                     StartFilter(lstStructure, World.Structures, tabStructure);
+                    break;
+                case "FilterRiver":
+                    StartFilter(lstRiver, World.Rivers, tabRiver);
+                    break;
+                case "FilterMountain":
+                    StartFilter(lstMountain, World.Mountains, tabMountain);
                     break;
             }
 
@@ -1736,6 +1751,12 @@ namespace DFWV
                     break;
                 case "TextFilterStructure":
                     TextFilter(txt, lstStructure, World.Structures, tabStructure);
+                    break;
+                case "TextFilterRiver":
+                    TextFilter(txt, lstRiver, World.Rivers, tabRiver);
+                    break;
+                case "TextFilterMountain":
+                    TextFilter(txt, lstMountain, World.Mountains, tabMountain);
                     break;
 
             }
@@ -1901,7 +1922,6 @@ namespace DFWV
             Program.siteMapForm.Site = (Site)lstSite.SelectedItem;
             Program.siteMapForm.Show();
         }
-
 
     }
 }
