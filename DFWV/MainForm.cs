@@ -157,7 +157,7 @@ namespace DFWV
 
                 loadWorldToolStripMenuItem.Visible = false;
 
-                World.StartThread(() => World.LoadFiles());
+                World.StartThread(() => World.LoadFiles(), "World Loading");
             }
             else
                 MessageBox.Show(@"Files not found.  Please make sure all 5 files Legends files are located with the selected map file. See the README.txt file included for details.", @"DF World Viewer",MessageBoxButtons.OK);
@@ -304,9 +304,8 @@ namespace DFWV
             File.Copy(Application.StartupPath + @"\DFWV_Template.sqlite3.backup", filename);
 
             exportWorldToolStripMenuItem.Visible = false;
-            var ExportThread = new Thread(() => World.Export(filename));
 
-            ExportThread.Start();
+            World.StartThread(() => World.Export(filename), "Exporting World");
         }
 
         /// <summary>

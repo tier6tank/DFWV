@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Xml.Linq;
+using System.Collections.Generic;
 
 namespace DFWV.WorldClasses
 {
@@ -47,7 +48,15 @@ namespace DFWV.WorldClasses
 
         internal override void Export(string table)
         {
-            throw new NotImplementedException();
+            var vals = new List<object>
+            {
+                CasteID,
+                Race.ID,
+                Gender,
+                Description.DBExport(),
+            };
+
+            Database.ExportWorldItem(table, vals);
         }
 
         public override string ToString()

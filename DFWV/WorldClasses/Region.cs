@@ -165,6 +165,15 @@ namespace DFWV.WorldClasses
                     coordID++;
                 }
             }
+
+            if (Populations != null)
+            {
+                foreach (var pop in Populations)
+                {
+                    Database.ExportWorldItem("Region_Population", new List<object> { ID, pop.Key.ID, pop.Value });
+                }
+            }
+
         }
     }
 }

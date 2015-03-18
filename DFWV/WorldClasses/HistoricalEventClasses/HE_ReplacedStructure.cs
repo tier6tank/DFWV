@@ -166,11 +166,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (SiteCiv == null)
                 return string.Format("{0} {1} replaced {2} in {3} with {4}.",
                     timestring, Civ, OldStructure != null ? OldStructure.Name : "UNKNOWN",
-                                Site.AltName, NewStructure != null ? OldStructure.Name : "UNKNOWN");
+                                Site.AltName, NewStructure != null ? NewStructure.Name : "UNKNOWN");
 
             return string.Format("{0} {1} of {2} replaced {3} in {4} with {5}.",
                 timestring, SiteCiv, Civ, OldStructure != null ? OldStructure.Name : "UNKNOWN",
-                Site.AltName, NewStructure != null ? OldStructure.Name : "UNKNOWN");
+                Site.AltName, NewStructure != null ? NewStructure.Name : "UNKNOWN");
         }
 
         internal override string ToTimelineString()

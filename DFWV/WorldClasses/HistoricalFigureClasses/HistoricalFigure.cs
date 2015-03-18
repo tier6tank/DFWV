@@ -396,13 +396,6 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             }
         }
 
-        //public HistoricalFigure(NameValueCollection data, World world) 
-        //    : base (world)
-        //{
-        //    Name = data["Name"].ToString();
-
-        //}
-
         public override void Select(MainForm frm)
         {
             frm.grpHistoricalFigure.Text = ToString();
@@ -1281,7 +1274,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             {
                 ID,
                 Name.DBExport(),
-                Race == null ? DBNull.Value : Race.ToString().DBExport(),
+                Race.DBExport(),
                 Caste.DBExport(Castes),
                 Appeared.DBExport(true),
                 Birth.DBExport(true),

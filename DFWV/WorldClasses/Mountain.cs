@@ -69,15 +69,15 @@ namespace DFWV.WorldClasses
         internal override void Export(string table)
         {
 
-            //var vals = new List<object>
-            //{
-            //    Name.DBExport(),
-            //    PluralName.DBExport(),
-            //    isCivilized,
-            //    Population == Int64.MaxValue ? -1 : Population
-            //};
+            var vals = new List<object>
+            {
+                ID, 
+                Name.DBExport(), 
+                AltName.DBExport(),
+                Height
+            };
 
-            //Database.ExportWorldItem(table, vals);
+            Database.ExportWorldItem(table, vals);
         }
 
         internal override void Link()

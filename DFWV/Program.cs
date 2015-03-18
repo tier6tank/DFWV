@@ -322,7 +322,7 @@ namespace DFWV
         /// </summary>
         internal static void FillListboxWith(this GroupBox groupbox, ListBox listbox, IEnumerable<object> objects)
         {
-            if (objects == null || objects.Count() == 0)
+            if (objects == null || !objects.Any())
             {
                 groupbox.Visible = false;
                 return;

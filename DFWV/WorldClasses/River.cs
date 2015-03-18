@@ -82,15 +82,36 @@ namespace DFWV.WorldClasses
         internal override void Export(string table)
         {
 
-            //var vals = new List<object>
-            //{
-            //    Name.DBExport(),
-            //    PluralName.DBExport(),
-            //    isCivilized,
-            //    Population == Int64.MaxValue ? -1 : Population
-            //};
+            var vals = new List<object>
+            {
+                ID, 
+                Name.DBExport(), 
+                AltName.DBExport(),
+                Parent.DBExport()
+            };
 
-            //Database.ExportWorldItem(table, vals);
+            Database.ExportWorldItem(table, vals);
+
+
+            if (Coords != null)
+            {
+                int coordID = 0;
+                foreach (var coord in Coords)
+                {
+                    Database.ExportWorldItem("River_Coords", new List<object> { ID, coordID, coord.X, coord.Y });
+                    coordID++;
+                }
+            }
+
+            if (Elevation != null)
+            {
+                int elevationID = 0;
+                foreach (var elevation in Elevation)
+                {
+                    Database.ExportWorldItem("River_Elevation", new List<object> { ID, elevationID, elevation });
+                    elevationID++;
+                }
+            }
         }
 
         internal override void Link()

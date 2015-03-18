@@ -327,7 +327,7 @@ namespace DFWV.WorldClasses
         private void LoadXML()
         {
             Program.Log(LogType.Status, "Loading XML");
-            StartThread(() => DFXMLParser.Parse(this, xmlPath));
+            StartThread(() => DFXMLParser.Parse(this, xmlPath), "XML Parsing");
         }
 
         #endregion
@@ -554,7 +554,7 @@ namespace DFWV.WorldClasses
 
         internal void LinkXMLData()
         {
-            StartThread(Link);
+            StartThread(Link, "XML Linking");
         }
 
         private static void LinkSection<T>(IEnumerable<T> List, string sectionName) where T : XMLObject
@@ -624,7 +624,7 @@ namespace DFWV.WorldClasses
 
         internal void ProcessXMLData()
         {
-            StartThread(Process);
+            StartThread(Process, "XML Processing");
         }
 
         private void Process()
@@ -684,8 +684,8 @@ namespace DFWV.WorldClasses
         #region Family Processing
         internal void FamilyProcessing()
         {
-            StartThread(CountFamilies);
-            StartThread(CreateDynasties);
+            StartThread(CountFamilies, "Counting Familes");
+            StartThread(CreateDynasties, "Creating Dynasties");
         }
 
         private void CountFamilies()
@@ -776,7 +776,7 @@ namespace DFWV.WorldClasses
 
         internal void CountEvents()
         {
-            StartThread(CountingEvents);
+            StartThread(CountingEvents, "Counting Events");
         }
 
         private void CountingEvents()
@@ -808,7 +808,7 @@ namespace DFWV.WorldClasses
         #region Event Collection Evaluation
         internal void EventCollectionEvaluation()
         {
-            StartThread(EvaluateEventCollections);
+            StartThread(EvaluateEventCollections, "Evaluating Event Collections");
         }
 
         /// <summary>
@@ -842,7 +842,7 @@ namespace DFWV.WorldClasses
         #region Historical Figures Positioning
         internal void HistoricalFiguresPositioning()
         {
-            StartThread(PositionHistoricalFigures);
+            StartThread(PositionHistoricalFigures, "Positioning HFs");
         }
 
         /// <summary>
@@ -895,7 +895,7 @@ namespace DFWV.WorldClasses
         #region Stats Gathering
         internal void StatsGathering()
         {
-            StartThread(GatherStats);
+            StartThread(GatherStats, "Gathering Stats");
         }
 
         private void GatherStats()
@@ -920,7 +920,7 @@ namespace DFWV.WorldClasses
         #region Visualization Creation
         internal void VisualizationCreation()
         {
-            StartThread(CreateVisualizations);
+            StartThread(CreateVisualizations, "Creating Visualizations");
         }
 
         private void CreateVisualizations()
@@ -1152,24 +1152,24 @@ namespace DFWV.WorldClasses
             Database.SetConnection(dbPath);
             Database.EmptyAllTables();
 
-            ExportWorldItems(Artifacts.Values.ToArray(), "artifact");
-            ExportWorldItems(Entities.Values.ToArray(), "entity");
-            ExportWorldItems(EntityPopulations.Values.ToArray(), "entitypopulation");
-            ExportWorldItems(HistoricalFigures.Values.ToArray(), "historicalfigure"); //
-            ExportWorldItems(HistoricalEras.Values.ToArray(), "historicalera");
-            ExportWorldItems(HistoricalEvents.Values.ToArray(), "historicalevent"); //
-            ExportWorldItems(HistoricalEventCollections.Values.ToArray(), "historicaleventcollection"); //
-            ExportWorldItems(Parameters.ToArray(), "parameter");
-            ExportWorldItems(Races.Values.ToArray(), "race");
-            ExportWorldItems(Regions.Values.ToArray(), "region");
-            ExportWorldItems(Sites.Values.ToArray(), "site");
-            ExportWorldItems(Structures.Values.ToArray(), "structure");
-            ExportWorldItems(UndergroundRegions.Values.ToArray(), "undergroundregion");
-            ExportWorldItems(WorldConstructions.Values.ToArray(), "worldconstruction");
-            ExportWorldItems(Rivers.Values.ToArray(), "river");
-            ExportWorldItems(Mountains.Values.ToArray(), "mountain");
-            ExportWorldItems(Leaders.ToArray(), "leader");
-            ExportWorldItems(Gods.ToArray(), "god");
+            ExportWorldItems(Artifacts.Values, "artifact");
+            ExportWorldItems(Entities.Values, "entity");
+            ExportWorldItems(EntityPopulations.Values, "entitypopulation");
+            ExportWorldItems(HistoricalFigures.Values, "historicalfigure"); //
+            ExportWorldItems(HistoricalEras.Values, "historicalera");
+            ExportWorldItems(HistoricalEvents.Values, "historicalevent"); //
+            ExportWorldItems(HistoricalEventCollections.Values, "historicaleventcollection"); //
+            ExportWorldItems(Parameters, "parameter");
+            ExportWorldItems(Races.Values, "race");
+            ExportWorldItems(Regions.Values, "region");
+            ExportWorldItems(Sites.Values, "site");
+            ExportWorldItems(Structures.Values, "structure");
+            ExportWorldItems(UndergroundRegions.Values, "undergroundregion");
+            ExportWorldItems(WorldConstructions.Values, "worldconstruction");
+            ExportWorldItems(Rivers.Values, "river");
+            ExportWorldItems(Mountains.Values, "mountain");
+            ExportWorldItems(Leaders, "leader");
+            ExportWorldItems(Gods, "god");
             ExportMaps();
             ExportWorldData();
             Database.CloseConnection();
@@ -1303,10 +1303,10 @@ namespace DFWV.WorldClasses
             return Name;
         }
 
-        public void StartThread(Action action)
+        public void StartThread(Action action, string name = "Unnamed")
         {
             var threadStart = new ThreadStart(action);
-            var thread = new Thread(threadStart) {IsBackground = true};
+            var thread = new Thread(threadStart) {IsBackground = true, Name = name};
             Threads.Add(thread);
 
             thread.Start();

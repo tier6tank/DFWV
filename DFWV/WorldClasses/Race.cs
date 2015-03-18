@@ -104,9 +104,6 @@ namespace DFWV.WorldClasses
             }
             finally
             {
-                frm.grpRaceLeaders.Visible = frm.lstRaceLeaders.Items.Count > 0;
-                frm.grpRaceCivilizations.Visible = frm.lstRaceCivilizations.Items.Count > 0;
-                frm.grpRaceHistoricalFigures.Visible = frm.lstRaceHistoricalFigures.Items.Count > 0;
                 Program.MakeSelected(frm.tabRace, frm.lstRace, this);
             }
         }
@@ -116,6 +113,8 @@ namespace DFWV.WorldClasses
 
             var vals = new List<object>
             {
+                ID,
+                Key.DBExport(),
                 Name.DBExport(),
                 PluralName.DBExport(),
                 isCivilized,
@@ -123,6 +122,9 @@ namespace DFWV.WorldClasses
             };
 
             Database.ExportWorldItem(table, vals);
+
+            Castes.ForEach(x => x.Export("Race_Castes"));
+
         }
 
 
