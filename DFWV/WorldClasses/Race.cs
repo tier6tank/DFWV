@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -34,7 +34,7 @@ namespace DFWV.WorldClasses
         {
             get
             {
-                return World.Regions.Values.Where(region => region.Populations.ContainsKey(this)).ToDictionary(region => region, region => region.Populations[this]);
+                return World.Regions.Values.Where(region => region.Populations != null && region.Populations.ContainsKey(this)).ToDictionary(region => region, region => region.Populations[this]);
             }
         }
 
@@ -42,7 +42,7 @@ namespace DFWV.WorldClasses
         {
             get
             {
-                return World.UndergroundRegions.Values.Where(ugregion => ugregion.Populations.ContainsKey(this)).ToDictionary(ugregion => ugregion, ugregion => ugregion.Populations[this]);
+                return World.UndergroundRegions.Values.Where(ugregion => ugregion.Populations != null && ugregion.Populations.ContainsKey(this)).ToDictionary(ugregion => ugregion, ugregion => ugregion.Populations[this]);
             }
         }
 

@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Linq;
 using DFWV.WorldClasses;
 using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalEventClasses;
@@ -708,7 +710,7 @@ namespace DFWV
         private void WorldSummaryTree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             if (!(e.Node.Tag is NavigationFilter)) return;
-            var filter = e.Node.Tag as NavigationFilter;
+            var filter = (NavigationFilter) e.Node.Tag;
             filter.Select(this);
         }
 
@@ -820,7 +822,7 @@ namespace DFWV
                         new NavigationFilter(typeof(Race), new Filter(new List<string> {"Name", "!isCivilized"}, null, null, -1)));
             foreach (var race in World.Races.Values)
             {
-                var count = World.HistoricalFigures.Values.Count(x => x.Race == race);
+                var count = World.HistoricalFigures.Values.Count(x => Equals(x.Race, race));
                 if (count == 0)
                     continue;
                 AddSummaryItem(string.Format(@"{0}: {1}", race.Name, count), "Races",

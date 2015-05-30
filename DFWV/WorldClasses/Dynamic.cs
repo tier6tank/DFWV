@@ -1,4 +1,4 @@
-﻿//Copyright (C) Microsoft Corporation.  All rights reserved.
+//Copyright (C) Microsoft Corporation.  All rights reserved.
 
 // I didn't write this, credit to MS for this beautiful thing.
 // More details here: http://weblogs.asp.net/scottgu/archive/2008/01/07/dynamic-linq-part-1-using-the-linq-dynamic-query-library.aspx

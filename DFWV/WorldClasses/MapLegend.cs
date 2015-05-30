@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -146,7 +146,7 @@ namespace DFWV.WorldClasses
                 return false;
 
             // check keys are the same
-            return !x.Keys.Any(k => !y.ContainsKey(k)) && x.Keys.All(k => x[k].Equals(y[k]));
+            return x.Keys.All(k => y.ContainsKey(k)) && x.Keys.All(k => x[k].Equals(y[k]));
 
             // check values are the same
         }

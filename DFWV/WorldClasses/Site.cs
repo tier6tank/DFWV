@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -240,10 +240,6 @@ namespace DFWV.WorldClasses
         public Site(XDocument xdoc, World world)
             : base(xdoc, world)
         {
-
-            
-
-
             foreach (var element in xdoc.Root.Elements())
             {
                 var val = element.Value.Trim();

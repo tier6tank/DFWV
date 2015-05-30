@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Xml.Linq;
 using System.Collections.Generic;

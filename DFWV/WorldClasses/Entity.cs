@@ -1,4 +1,3 @@
-﻿
 using DFWV.Annotations;
 
 namespace DFWV.WorldClasses

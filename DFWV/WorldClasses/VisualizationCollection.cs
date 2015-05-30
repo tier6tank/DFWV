@@ -1,4 +1,4 @@
-﻿namespace DFWV.WorldClasses
+namespace DFWV.WorldClasses
 {
     class VisualizationCollection
     {

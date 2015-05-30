@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Xml.Linq;
@@ -137,6 +137,7 @@ namespace DFWV.WorldClasses
                 int valI;
                 Int32.TryParse(val, out valI);
 
+                
                 switch (element.Name.LocalName)
                 {
                     case "id":

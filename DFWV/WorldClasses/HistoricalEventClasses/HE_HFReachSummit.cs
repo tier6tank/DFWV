@@ -22,7 +22,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
-            get { return GroupHF ?? Enumerable.Empty<HistoricalFigure>(); ; }
+            get { return GroupHF ?? Enumerable.Empty<HistoricalFigure>(); }
         }
         public override IEnumerable<Region> RegionsInvolved
         {

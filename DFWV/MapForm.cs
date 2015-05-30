@@ -349,7 +349,7 @@ namespace DFWV
                     var BottomRight = new Point();
                     using (Brush b = new SolidBrush(Color.FromArgb(50, thisColor)))
                     {
-                        foreach (var coord in region.Coords)
+                        foreach (var coord in region.Coords.Distinct())
                         {
                             TopLeft.X = coord.X * siteSize.Width;
                             TopLeft.Y = coord.Y * siteSize.Height;
@@ -579,18 +579,15 @@ namespace DFWV
                     p.Width = 2;
 
 
-                    var Points = new List<Point>();
-
-                    foreach (var coord in river.Coords)
-                    {
-                        Points.Add(new Point(coord.X * siteSize.Width + siteSize.Width / 2, coord.Y * siteSize.Height + siteSize.Height / 2));
-                    }
+                    var points = river.Coords.Select(coord => new Point(coord.X*siteSize.Width + siteSize.Width/2, coord.Y*siteSize.Height + siteSize.Height/2)).ToList();
 
 
-                    g.DrawLines(p, Points.ToArray());
+                    g.DrawLines(p, points.ToArray());
 
                     if (river.Parent == null)
-                        g.DrawEllipse(p, Points.Last().X - 2, Points.Last().Y - 2, 5, 5);
+                        g.DrawEllipse(p, points.Last().X - 2, points.Last().Y - 2, 5, 5);
+
+                    g.DrawEllipse(p, points.First().X - 2, points.First().Y - 2, 5, 5);
                 }
             }
 
@@ -704,16 +701,25 @@ namespace DFWV
                 switch (selectedMap)
                 {
                     case "Biome":
-                        World.MapLegends["biome_color_key"].DrawTo(picLegend);
+                        if (World.MapLegends.ContainsKey("biome_color_key"))
+                            World.MapLegends["biome_color_key"].DrawTo(picLegend);
+                        else
+                            picLegend.Visible = false;
                         break;
                     case "Hydrosphere":
-                        World.MapLegends["hydro_color_key"].DrawTo(picLegend);
+                        if (World.MapLegends.ContainsKey("hydro_color_key"))
+                            World.MapLegends["hydro_color_key"].DrawTo(picLegend);
+                        else
+                            picLegend.Visible = false;
                         break;
                     case "Diplomacy":
                     case "Nobility":
                     case "Structures":
                     case "Trade":
-                        World.MapLegends["structure_color_key"].DrawTo(picLegend);
+                        if (World.MapLegends.ContainsKey("structure_color_key"))
+                            World.MapLegends["structure_color_key"].DrawTo(picLegend);
+                        else
+                            picLegend.Visible = false;
                         break;
                     default:
                         picLegend.Visible = false;
@@ -884,7 +890,7 @@ namespace DFWV
             if (!World.hasPlusXML)
                 return null;
             var rivermatches = World.Rivers.Values.Where(x => x.Coords.Contains(mouseCoord));
-            if (rivermatches.Count() == 0)
+            if (!rivermatches.Any())
                 return null;
             var nonparentMatch = rivermatches.Where(x => x.Parent == null);
             if (nonparentMatch.Count() == 1)
@@ -900,7 +906,7 @@ namespace DFWV
                 return null;
 
 
-            return World.Mountains.Values.Where(x => x.Coords == mouseCoord).FirstOrDefault();
+            return World.Mountains.Values.FirstOrDefault(x => x.Coords == mouseCoord);
 
         }
 

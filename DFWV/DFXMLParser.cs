@@ -61,7 +61,6 @@ namespace DFWV
             using (var streamReader = new StreamReader(path, Encoding.GetEncoding("ISO-8859-9")))
             using (var xReader = XmlReader.Create(streamReader))
             {
-
                 xReader.Read();
                 while (xReader.Read())
                 {
@@ -131,6 +130,7 @@ namespace DFWV
             else
                 OnFinished();
         }
+
 
         /// <summary>
         /// Parses a DF Legends Plus XML file using XmlReader.  
@@ -236,7 +236,6 @@ namespace DFWV
                 world.Races.Add(race.ID, race);
             }
         }
-
 
         /// <summary>
         /// Given a specific section of type T if we encounter an open tag at one level below we want to load a new object of type T, starting at that XML.
@@ -359,7 +358,7 @@ namespace DFWV
                 {
                     if (xdoc != null)
                     {
-                        var id = Int32.Parse(((XElement)xdoc.Root.Nodes().ToArray()[1]).Value);
+                        var id = int.Parse(((XElement)xdoc.Root.Nodes().ToArray()[1]).Value);
 
                         if (id < 0)
                         {
@@ -547,5 +546,23 @@ namespace DFWV
             MissingXMLElements.Add(ElementType + "-" + ProblemElement.Name.LocalName, ProblemElement.Value);
         }
 
+        ///// <summary>
+        ///// Returns a sequence of <see cref="XElement">XElements</see> corresponding to the currently
+        ///// positioned element and all following sibling elements which match the specified name.
+        ///// </summary>
+        ///// <param name="reader">The xml reader positioned at the desired hierarchy level.</param>
+        ///// <param name="elementName">An <see cref="XName"/> representing the name of the desired element.</param>
+        ///// <returns>A sequence of <see cref="XElement">XElements</see>.</returns>
+        ///// <remarks>At the end of the sequence, the reader will be positioned on the end tag of the parent element.</remarks>
+        //public static IEnumerable<XElement> ReadElements(this XmlReader reader, XName elementName)
+        //{
+        //    if (reader.Name == elementName.LocalName && reader.NamespaceURI == elementName.NamespaceName)
+        //        yield return (XElement)XElement.ReadFrom(reader);
+
+        //    while (reader.ReadToNextSibling(elementName.LocalName, elementName.NamespaceName))
+        //        yield return (XElement)XElement.ReadFrom(reader);
+        //}
     }
+
+
 }

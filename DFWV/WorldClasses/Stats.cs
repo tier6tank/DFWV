@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using DFWV.WorldClasses.HistoricalFigureClasses;
 using System;
 using System.Collections.Generic;
