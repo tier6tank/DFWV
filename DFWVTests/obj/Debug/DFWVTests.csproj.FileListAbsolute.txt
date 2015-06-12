@@ -30,5 +30,3 @@ C:\MyCode\DFWV\DFWVTests\obj\Debug\DFWVTests.csprojResolveAssemblyReference.cach
 C:\MyCode\DFWV\DFWVTests\obj\Debug\DFWVTests.dll
 C:\MyCode\DFWV\DFWVTests\obj\Debug\DFWVTests.pdb
 C:\MyCode\DFWV\DFWVTests\bin\Debug\DFWV_Template.sqlite3.backup
-C:\MyCode\DFWV\DFWVTests\bin\Debug\DFWVTests.dll.CodeAnalysisLog.xml
-C:\MyCode\DFWV\DFWVTests\bin\Debug\DFWVTests.dll.lastcodeanalysissucceeded

@@ -187,7 +187,7 @@ namespace DFWV.WorldClasses
                 Parent.Color = Program.NextDistinctColor();
                 Parent.FirstSite = this;
             }
-            if (Parent.Race == null || !String.Equals(Parent.Race.Name, race, StringComparison.CurrentCultureIgnoreCase))
+            if (Parent.Race == null || !string.Equals(Parent.Race.Name, race, StringComparison.CurrentCultureIgnoreCase))
             {
                 if (Parent.Race == null)
                     Parent.Race = World.GetAddRace(race);
@@ -235,7 +235,7 @@ namespace DFWV.WorldClasses
         public List<Structure> Structures { get; set; }
 
         [UsedImplicitly]
-        public string SiteType { get { return Type.HasValue ? Types[Type.Value] : String.Empty; } }
+        public string SiteType { get { return Type.HasValue ? Types[Type.Value] : string.Empty; } }
 
         public Site(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -266,7 +266,7 @@ namespace DFWV.WorldClasses
                     case "structures":
                         StructureList = val;
                         if (val != "")
-                            Program.Log(LogType.Warning, String.Format("Unexpected structures list for site: {0} - {1}", Name, val));
+                            Program.Log(LogType.Warning, string.Format("Unexpected structures list for site: {0} - {1}", Name, val));
                         break;
                     
                     default:
@@ -317,13 +317,35 @@ namespace DFWV.WorldClasses
                 frm.lblSiteCreatedTime.Text = CreatedEvent.Time.ToString();
             }
 
-            frm.grpSitePopulation.FillListboxWith(frm.lstSitePopulation, Population.Keys);
             if (Population != null)
-                frm.grpSitePopulation.Text = string.Format("Population ({0})", Population.Values.Sum().ToString());
+            {
+                frm.grpSitePopulation.FillListboxWith(frm.lstSitePopulation, Population.Keys);
+                frm.grpSitePopulation.Text = string.Format("Population ({0})", Population.Sum(x => x.Value));
+            }
+            else
+            {
+                frm.grpSitePopulation.Visible = false;
+            }
             frm.grpSiteArtifacts.FillListboxWith(frm.lstSiteArtifacts, CreatedArtifacts);
             frm.grpSiteStructures.FillListboxWith(frm.lstSiteStructures, Structures);
-            frm.grpSitePrisoners.FillListboxWith(frm.lstSitePrisoners, Prisoners.Keys);
-            frm.grpSiteOutcasts.FillListboxWith(frm.lstSiteOutcasts, Outcasts.Keys);
+            if (Prisoners != null)
+            {
+                frm.grpSitePrisoners.FillListboxWith(frm.lstSitePrisoners, Prisoners.Keys);
+                frm.grpSitePrisoners.Text = string.Format("Prisoners ({0})", Prisoners.Sum(x => x.Value));
+            }
+            else
+            {
+                frm.grpSitePrisoners.Visible = false;
+            }
+            if (Outcasts != null)
+            {
+                frm.grpSiteOutcasts.FillListboxWith(frm.lstSiteOutcasts, Outcasts.Keys);
+                frm.grpSiteOutcasts.Text = string.Format("Outcasts ({0})", Outcasts.Sum(x => x.Value));
+            }
+            else
+            {
+                frm.grpSiteOutcasts.Visible = false;
+            }
             frm.grpSiteInhabitants.FillListboxWith(frm.lstSiteInhabitants, Inhabitants);
             frm.grpSiteEvent.FillListboxWith(frm.lstSiteEvent, Events);
 
@@ -429,7 +451,7 @@ namespace DFWV.WorldClasses
             {
                 var val = element.Value;
                 int valI;
-                Int32.TryParse(val, out valI);
+                int.TryParse(val, out valI);
 
                 switch (element.Name.LocalName)
                 {
@@ -444,7 +466,7 @@ namespace DFWV.WorldClasses
                             {
                                 var strval = strElement.Value;
                                 int strvalI;
-                                Int32.TryParse(strval, out strvalI);
+                                int.TryParse(strval, out strvalI);
                                 switch (strElement.Name.LocalName)
                                 {
                                     case "id":

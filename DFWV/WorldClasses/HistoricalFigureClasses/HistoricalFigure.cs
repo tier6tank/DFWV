@@ -16,14 +16,14 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         private string Race_ { get; set; } 
         public Race Race { get; private set; }
         [UsedImplicitly]
-        public string RaceName { get { return Race != null ? Race.Name : ""; } }
+        public string RaceName { get { return Race != null ? Race.Name : Race_ ?? ""; } }
 
         public int? Flags { get; set; }
         
         public int? Caste { get; private set; }
         public static List<string> Castes = new List<string>();
         private int? AppearedYear { get; set; }
-        private WorldTime Appeared { get { return AppearedYear.HasValue ? new WorldTime(AppearedYear.Value) : null;} }
+        public WorldTime Appeared { get { return AppearedYear.HasValue ? new WorldTime(AppearedYear.Value) : null;} }
         [UsedImplicitly]
         public int? BirthYear { get; private set; }
         private int? BirthSeconds { get; set; }
@@ -37,7 +37,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         public Dictionary<int, List<HFSiteLink>> SiteLinks { get; set; }
         public List<int> Sphere { get; private set; }
         public static List<string> Spheres = new List<string>();
-        private List<HFSkill> HFSkills { get; set; }
+        public List<HFSkill> HFSkills { get; set; }
         private List<RelationshipProfileHF> RelationshipProfileHFs { get; set; }
         public static List<string> Interactions = new List<string>();
         public List<int> InteractionKnowledge { get; private set; }
@@ -46,7 +46,8 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         public Dictionary<int, List<HFLink>> HFLinks { get; private set; }
         [UsedImplicitly]
         public bool Deity { get; private set; }
-        private List<EntityFormerPositionLink> EntityFormerPositionLinks { get; set; }
+
+        public List<EntityFormerPositionLink> EntityFormerPositionLinks { get; set; }
         private List<EntityPositionLink> EntityPositionLinks { get; set; }
         private List<EntitySquadLink> EntitySquadLinks { get; set; }
         private List<EntityFormerSquadLink> EntityFormerSquadLinks { get; set; }
@@ -192,7 +193,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         [UsedImplicitly]
         public string DispNameLower { get { return ToString().ToLower(); } }
         [UsedImplicitly]
-        public int EntPopID { get { return EntPop == null ? -1 : EntPop.ID; } }
+        public int EntPopID { get { return EntPop == null ? (EntPop_ ?? -1) : EntPop.ID; } }
         [UsedImplicitly]
         public int DescendentCount { get; set; }
         [UsedImplicitly]
@@ -215,7 +216,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             {
                 var val = element.Value;
                 int valI;
-                Int32.TryParse(val, out valI);
+                int.TryParse(val, out valI);
                 string[] exclude = { "entity_link", "hf_link", "hf_skill", "site_link", "entity_position_link",
                                    "entity_former_position_link", "entity_reputation", "entity_squad_link",
                                    "entity_former_squad_link", "relationship_profile_hf"};
@@ -1179,7 +1180,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             {
                 var val = element.Value;
                 int valI;
-                Int32.TryParse(val, out valI);
+                int.TryParse(val, out valI);
 
                 switch (element.Name.LocalName)
                 {

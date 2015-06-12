@@ -57,7 +57,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             {
                 var val = element.Value;
                 int valI;
-                Int32.TryParse(val, out valI);
+                int.TryParse(val, out valI);
 
                 switch (element.Name.LocalName)
                 {
@@ -79,7 +79,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             {
                 var val = element.Value;
                 int valI;
-                Int32.TryParse(val, out valI);
+                int.TryParse(val, out valI);
 
                 switch (element.Name.LocalName)
                 {
@@ -173,7 +173,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             EventLabel(frm, parent, ref location, "Theif:", AttackerCiv);
             EventLabel(frm, parent, ref location, "Theif:", HF);
             if (Mat != null || ItemType != null)
-                EventLabel(frm, parent, ref location, "Item:", String.Format("{0} {1}",Mat != null ? Materials[Mat.Value] : "UNKNOWN", ItemType != null ? ItemTypes[ItemType.Value] : "UNKNOWN"));
+                EventLabel(frm, parent, ref location, "Item:", string.Format("{0} {1}",Mat != null ? Materials[Mat.Value] : "UNKNOWN", ItemType != null ? ItemTypes[ItemType.Value] : "UNKNOWN"));
             
             EventLabel(frm, parent, ref location, "Item:", HF);
             EventLabel(frm, parent, ref location, "Site:", Site);

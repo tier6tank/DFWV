@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows.Forms;
 using DFWV.WorldClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
+using DFWV.WorldClasses.HistoricalFigureClasses;
 using Region = DFWV.WorldClasses.Region;
 
 namespace DFWV
@@ -38,9 +39,18 @@ namespace DFWV
             World = world;
             LoadMaps();
             LoadSiteTypes();
+            LoadHFs();
             LoadUGRegionDepth();
             ChangeMap();
             DrawMaps();
+        }
+
+        private void LoadHFs()
+        {
+            if (cmbHFTravels.Items.Count == 0)
+                cmbHFTravels.Items.AddRange(World.HistoricalFigures.Values.ToArray());
+            cmbHFTravels.SelectedItem = cmbHFTravels.Items[0];
+            cmbHFTravels.Text = cmbHFTravels.SelectedItem.ToString();
         }
 
         private Size MiniMapBoxSize 
@@ -150,9 +160,32 @@ namespace DFWV
                 DrawBattleOverlay(g);
             if (chkHistoricalFigures.Checked)
                 DrawHFOverlay(g);
+            if (chkHFTravels.Checked)
+                DrawHFTravelsOverlay(g);
 
             DrawMaps();
             Cursor.Current = Cursors.Default;
+        }
+
+        private void DrawHFTravelsOverlay(Graphics g)
+        {
+            var hf = cmbHFTravels.SelectedItem as HistoricalFigure;
+
+            Color myColor = Color.FromArgb(255, 100, 255);
+            using (var p = new Pen(myColor))
+            {
+                var events = hf.Events.Where(x => !x.Location.IsEmpty).ConsecutiveDistict();
+
+                var points = new List<Point>();
+                foreach (var evt in events)
+                {
+                    points.Add(new Point(evt.Location.X*siteSize.Width + siteSize.Width/2,
+                        evt.Location.Y*siteSize.Height + siteSize.Height/2));
+                }
+                g.DrawLines(p, points.ToArray());
+
+            }
+
         }
 
         private void DrawSiteOverlay(Graphics g)
@@ -334,7 +367,7 @@ namespace DFWV
                 Color thisColor;
                 if (curDistinctColor < ColorNames.Count)
                 {
-                    var rgb = Int32.Parse(ColorNames[curDistinctColor].Replace("#", ""), NumberStyles.HexNumber);
+                    var rgb = int.Parse(ColorNames[curDistinctColor].Replace("#", ""), NumberStyles.HexNumber);
                     thisColor = Color.FromArgb(255,Color.FromArgb(rgb));
                 }
                 else
@@ -398,7 +431,7 @@ namespace DFWV
                 Color thisColor;
                 if (curDistinctColor < ColorNames.Count)
                 {
-                    var rgb = Int32.Parse(ColorNames[curDistinctColor].Replace("#", ""), NumberStyles.HexNumber);
+                    var rgb = int.Parse(ColorNames[curDistinctColor].Replace("#", ""), NumberStyles.HexNumber);
                     thisColor = Color.FromArgb(255, Color.FromArgb(rgb));
                 }
                 else
@@ -687,6 +720,7 @@ namespace DFWV
                 if (item.Checked)
                     selectedSiteTypes.Add(item.Text);
             }
+
             updateLegend();
             redrawOverlay();
 
@@ -1029,6 +1063,21 @@ namespace DFWV
             picLegend.Top += e.Y + 10;
         }
 
+        private void cmbHFTravels_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            ComboBox cmbBox = sender as ComboBox;
 
+            var selectedItem = cmbBox.Items.Cast<object>().FirstOrDefault(item => item.ToString() == cmbBox.Text);
+
+            if (selectedItem == null)
+            {
+                e.Cancel = true;
+                cmbBox.BackColor = Color.Red;
+            }
+            else
+            {
+                cmbBox.BackColor = Color.White;
+            }
+        }
     }
 }

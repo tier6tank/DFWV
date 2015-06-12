@@ -55,7 +55,8 @@ namespace DFWV.WorldClasses
             frm.grpHistoricalEra.Show();
 
             frm.lblHistoricalEraName.Text = ToString();
-            frm.lblHistoricalEraStartYear.Text = string.Format("{0} - {1}", (Start.Year == -1 ? 0 : Start.Year ), (End == WorldTime.Present ? "" : End.ToString()));
+            if (Start != null && End != null)
+                frm.lblHistoricalEraStartYear.Text = string.Format("{0} - {1}", (Start.Year == -1 ? 0 : Start.Year ), (End == WorldTime.Present ? "" : End.ToString()));
             Program.MakeSelected(frm.tabHistoricalEra, frm.lstHistoricalEra, this);
         }
 

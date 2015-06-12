@@ -113,7 +113,7 @@ namespace DFWV
                 var thisFile = Path.GetFileName(mapPath);
                 var restofFile = thisFile.Split('-').ToList();
                 restofFile[restofFile.Count - 1] = "world_map.bmp";
-                mapPath = Path.Combine(path, String.Join("-", restofFile));
+                mapPath = Path.Combine(path, string.Join("-", restofFile));
                 //In case they picked a sitemap
                 mapPath = mapPath.Replace("-site_map-world_map.bmp", "-world_map.bmp");
             }
@@ -975,7 +975,7 @@ namespace DFWV
             var HFsPositioned = World.HistoricalFigures.Values.Count(x => x.Site != null || x.Region != null || x.Coords != Point.Empty && !x.Dead);
             var HFsAlive = World.HistoricalFigures.Values.Count(x => x.Dead);
 
-            Program.Log(LogType.Status, String.Format("Historical Figures Positioned (" + Math.Round(100.0f * HFsPositioned / HFsAlive, 0) + "% located)"));
+            Program.Log(LogType.Status, string.Format("Historical Figures Positioned (" + Math.Round(100.0f * HFsPositioned / HFsAlive, 0) + "% located)"));
 
         }
 
@@ -1065,12 +1065,13 @@ namespace DFWV
                     return;
                 }
                 string drawString;
+
                 if (thisSite.Population[(Race)lstSitePopulation.Items[e.Index]] == 1)
                     drawString = thisSite.Population[(Race)lstSitePopulation.Items[e.Index]] +
                         " " + lstSitePopulation.Items[e.Index];
                 else
                     drawString = thisSite.Population[(Race)lstSitePopulation.Items[e.Index]] +
-                        " " + lstSitePopulation.Items[e.Index].ToString().Pluralize();
+                        " " + ((Race)lstSitePopulation.Items[e.Index]).PluralizeName();
 
                 e.Graphics.DrawString(drawString,
                     e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
@@ -1091,9 +1092,17 @@ namespace DFWV
                     grpSite.Visible = false;
                     return;
                 }
-                var drawstring = thisSite.Prisoners[(Race)lstSitePrisoners.Items[e.Index]] +
-                    " " + lstSitePrisoners.Items[e.Index];
-                e.Graphics.DrawString(drawstring,
+
+                string drawString;
+
+                if (thisSite.Prisoners[(Race)lstSitePrisoners.Items[e.Index]] == 1)
+                    drawString = thisSite.Prisoners[(Race)lstSitePrisoners.Items[e.Index]] +
+                        " " + lstSitePrisoners.Items[e.Index];
+                else
+                    drawString = thisSite.Prisoners[(Race)lstSitePrisoners.Items[e.Index]] +
+                        " " + ((Race)lstSitePrisoners.Items[e.Index]).PluralizeName();
+
+                e.Graphics.DrawString(drawString,
                     e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
             }
             e.DrawFocusRectangle();
@@ -1113,9 +1122,16 @@ namespace DFWV
                     grpSite.Visible = false;
                     return;
                 }
-                var drawstring = thisSite.Outcasts[(Race)lstSiteOutcasts.Items[e.Index]] +
-                    " " + lstSiteOutcasts.Items[e.Index];
-                e.Graphics.DrawString(drawstring,
+                string drawString;
+
+                if (thisSite.Outcasts[(Race)lstSiteOutcasts.Items[e.Index]] == 1)
+                    drawString = thisSite.Outcasts[(Race)lstSiteOutcasts.Items[e.Index]] +
+                        " " + lstSiteOutcasts.Items[e.Index];
+                else
+                    drawString = thisSite.Outcasts[(Race)lstSiteOutcasts.Items[e.Index]] +
+                        " " + ((Race)lstSiteOutcasts.Items[e.Index]).PluralizeName();
+
+                e.Graphics.DrawString(drawString,
                     e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
             }
             e.DrawFocusRectangle();
@@ -1133,18 +1149,18 @@ namespace DFWV
                 Dictionary<Race, int> pops = null;
                 if (sender == lstRegionPopulation)
                 {
-                    var thisRegion = (Region)lstRegion.SelectedItem;
+                    var thisRegion = (Region) lstRegion.SelectedItem;
                     if (thisRegion == null)
                     {
                         grpRegion.Visible = false;
                         return;
                     }
                     pops = thisRegion.Populations;
-                    
+
                 }
                 else if (sender == lstUndergroundRegionPopulation)
                 {
-                    var thisUGRegion = (UndergroundRegion)lstUndergroundRegion.SelectedItem;
+                    var thisUGRegion = (UndergroundRegion) lstUndergroundRegion.SelectedItem;
                     if (thisUGRegion == null)
                     {
                         grpUndergroundRegion.Visible = false;
@@ -1153,16 +1169,19 @@ namespace DFWV
                     pops = thisUGRegion.Populations;
                 }
 
-                Race selectedRace = (Race)(sender as ListBox).Items[e.Index];
-                string drawString;
-                if (pops[selectedRace] == 1)
-                    drawString = pops[selectedRace] +
-                        " " + selectedRace.Name.ToTitleCase();
-                else if (pops[selectedRace] == 10000001)
-                    drawString = "Unnumbered " + selectedRace.PluralName.ToTitleCase();
-                else
-                    drawString = pops[selectedRace] +
-                        " " + selectedRace.PluralName.ToTitleCase();
+                Race selectedRace = (Race) (sender as ListBox).Items[e.Index];
+                string drawString = string.Empty;
+                if (selectedRace != null && pops.ContainsKey(selectedRace))
+                {
+                    if (pops[selectedRace] == 1)
+                        drawString = pops[selectedRace] +
+                                     " " + selectedRace.Name.ToTitleCase();
+                    else if (pops[selectedRace] == 10000001)
+                        drawString = "Unnumbered " + selectedRace.PluralName.ToTitleCase();
+                    else
+                        drawString = pops[selectedRace] +
+                                     " " + selectedRace.PluralName.ToTitleCase();
+                }
 
                 e.Graphics.DrawString(drawString,
                     e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
@@ -1204,7 +1223,7 @@ namespace DFWV
                         e.Graphics.DrawString(thisSite.Population.First().Value + " " + thisSite.Population.First().Key,
                             e.Font, Brushes.Black, e.Bounds, lineAlignFormat);
                     else
-                        e.Graphics.DrawString(thisSite.Population.First().Value + " " + thisSite.Population.First().Key.ToString().Pluralize(),
+                        e.Graphics.DrawString(thisSite.Population.First().Value + " " + thisSite.Population.First().Key.PluralizeName(),
                             e.Font, Brushes.Black, e.Bounds, lineAlignFormat);
 
                 else
@@ -1215,7 +1234,7 @@ namespace DFWV
                             e.Graphics.DrawString(thisSite.Population[thisSite.Parent.Race] + " " + thisSite.Parent.Race,
                                 e.Font, Brushes.Black, e.Bounds, lineAlignFormat);
                         else
-                            e.Graphics.DrawString(thisSite.Population[thisSite.Parent.Race] + " " + thisSite.Parent.Race.ToString().Pluralize(),
+                            e.Graphics.DrawString(thisSite.Population[thisSite.Parent.Race] + " " + thisSite.Parent.Race.PluralizeName(),
                                 e.Font, Brushes.Black, e.Bounds, lineAlignFormat);
 
                     }
@@ -1225,7 +1244,7 @@ namespace DFWV
                             e.Graphics.DrawString(thisSite.Population.First().Value + " " + thisSite.Population.First().Key,
                                 e.Font, Brushes.Black, e.Bounds, lineAlignFormat);
                         else
-                            e.Graphics.DrawString(thisSite.Population.First().Value + " " + thisSite.Population.First().Key.ToString().Pluralize(),
+                            e.Graphics.DrawString(thisSite.Population.First().Value + " " + thisSite.Population.First().Key.PluralizeName(),
                                 e.Font, Brushes.Black, e.Bounds, lineAlignFormat);
                     }
                 }
@@ -1334,7 +1353,7 @@ namespace DFWV
                     LineAlignment = StringAlignment.Near
                 };
 
-                var timeString = String.Format("({0} - {1})", thisWar.StartTime,
+                var timeString = string.Format("({0} - {1})", thisWar.StartTime,
                     thisWar.EndTime != WorldTime.Present ? thisWar.EndTime.ToString() : "");
                 e.Graphics.DrawString(timeString,
                     e.Font, Brushes.Black, e.Bounds, rightAlignFormat);

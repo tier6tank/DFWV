@@ -28,35 +28,35 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
     public class EC_Battle : HistoricalEventCollection
     {
-        private int? WarEventCol_ { get; set; }
+        public int? WarEventColID { get; set; }
         public EC_War WarEventCol { get; private set; }
-        private int? SubregionID { get; set; }
+        public int? SubregionID { get; set; }
         private Region Subregion { get; set; }
-        private int? FeatureLayerID { get; set; }
-        private int? SiteID { get; set; }
+        public int? FeatureLayerID { get; set; }
+        public int? SiteID { get; set; }
         private Site Site { get; set; }
         public Point Coords { get; private set; }
         public string Outcome { get; private set; }
-        private List<int> NonComHFID { get; set; }
+        public List<int> NonComHFID { get; set; }
         private List<HistoricalFigure> NonComHF;
         public List<Squad> AttackingSquad { get; private set; }
-        private List<string> AttackingSquadRace { get; set; }
-        private List<int> AttackingSquadEntityPop { get; set; }
-        private List<int> AttackingSquadNumber { get; set; }
-        private List<int> AttackingSquadDeaths { get; set; }
-        private List<int> AttackingSquadSite { get; set; }
+        public List<string> AttackingSquadRace { get; set; }
+        public List<int> AttackingSquadEntityPop { get; set; }
+        public List<int> AttackingSquadNumber { get; set; }
+        public List<int> AttackingSquadDeaths { get; set; }
+        public List<int> AttackingSquadSite { get; set; }
         public List<Squad> DefendingSquad { get; private set; }
-        private List<string> DefendingSquadRace { get; set; }
-        private List<int> DefendingSquadEntityPop { get; set; }
-        private List<int> DefendingSquadNumber { get; set; }
-        private List<int> DefendingSquadDeaths { get; set; }
-        private List<int> DefendingSquadSite { get; set; }
-        private List<int> EventCol_ { get; set; }
+        public List<string> DefendingSquadRace { get; set; }
+        public List<int> DefendingSquadEntityPop { get; set; }
+        public List<int> DefendingSquadNumber { get; set; }
+        public List<int> DefendingSquadDeaths { get; set; }
+        public List<int> DefendingSquadSite { get; set; }
+        public List<int> EventColIDs { get; set; }
         private List<HistoricalEventCollection> EventCol { get; set; }
-        private List<int> AttackingHFID { get; set; }
+        public List<int> AttackingHFID { get; set; }
         public List<HistoricalFigure> AttackingHF;
         public List<HistoricalFigure> AttackingDiedHF;
-        private List<int> DefendingHFID { get; set; }
+        public List<int> DefendingHFID { get; set; }
         public List<HistoricalFigure> DefendingHF;
         public List<HistoricalFigure> DefendingDiedHF;
 
@@ -72,7 +72,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             {
                 var val = element.Value;
                 int valI;
-                Int32.TryParse(val, out valI);
+                int.TryParse(val, out valI);
 
                 switch (element.Name.LocalName)
                 {
@@ -100,9 +100,9 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         Coords = new Point(Convert.ToInt32(val.Split(',')[0]), Convert.ToInt32(val.Split(',')[1]));
                         break;
                     case "eventcol":
-                        if (EventCol_ == null)
-                            EventCol_ = new List<int>();
-                        EventCol_.Add(valI);
+                        if (EventColIDs == null)
+                            EventColIDs = new List<int>();
+                        EventColIDs.Add(valI);
                         break;
                     case "name":
                         Name = val.ToTitleCase();
@@ -118,7 +118,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         DefendingHFID.Add(valI);
                         break;
                     case "war_eventcol":
-                        WarEventCol_ = valI;
+                        WarEventColID = valI;
                         break;
                     case "noncom_hfid":
                         if (NonComHFID == null)
@@ -194,12 +194,12 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                 Subregion = World.Regions[SubregionID.Value];
             if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
                 Site = World.Sites[SiteID.Value];
-            if (WarEventCol_.HasValue && World.HistoricalEventCollections.ContainsKey(WarEventCol_.Value))
-                WarEventCol = (EC_War)World.HistoricalEventCollections[WarEventCol_.Value];
+            if (WarEventColID.HasValue && World.HistoricalEventCollections.ContainsKey(WarEventColID.Value))
+                WarEventCol = (EC_War)World.HistoricalEventCollections[WarEventColID.Value];
 
-            if (EventCol_ != null)
+            if (EventColIDs != null)
                 EventCol = new List<HistoricalEventCollection>();
-            LinkFieldList(EventCol_,
+            LinkFieldList(EventColIDs,
                 EventCol, World.HistoricalEventCollections);
             if (AttackingHFID != null)
                 AttackingHF = new List<HistoricalFigure>();
@@ -465,7 +465,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
             table = GetType().Name;
 
-            var vals = new List<object> { ID, WarEventCol_, Outcome, SiteID, SubregionID, FeatureLayerID };
+            var vals = new List<object> { ID, WarEventColID, Outcome, SiteID, SubregionID, FeatureLayerID };
 
             if (Coords.IsEmpty)
                 vals.Add(DBNull.Value);

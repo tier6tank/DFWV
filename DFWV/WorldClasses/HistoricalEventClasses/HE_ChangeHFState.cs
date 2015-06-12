@@ -7,17 +7,17 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_ChangeHFState : HistoricalEvent
+    public class HE_ChangeHFState : HistoricalEvent
     {
-        private int? SiteID { get; set; }
+        public int? SiteID { get; set; }
         public Site Site { get; private set; }
-        private int? SubregionID { get; set; }
+        public int? SubregionID { get; set; }
         public Region Subregion { get; private set; }
-        private int? State { get; set; }
+        public int? State { get; set; }
         public static List<string> States = new List<string>();
-        private int? HFID { get; set; }
+        public int? HFID { get; set; }
         public HistoricalFigure HF { get; set; }
-        private int? FeatureLayerID { get; set; }
+        public int? FeatureLayerID { get; set; }
         public Point Coords { get; private set; }
 
         override public Point Location { get { return Coords; } }
@@ -42,7 +42,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             {
                 var val = element.Value;
                 int valI;
-                Int32.TryParse(val, out valI);
+                int.TryParse(val, out valI);
 
                 switch (element.Name.LocalName)
                 {

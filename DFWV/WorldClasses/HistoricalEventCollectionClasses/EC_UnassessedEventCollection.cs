@@ -4,7 +4,7 @@ using System.Xml.Linq;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
-    class EC_UnassessedEventCollection : HistoricalEventCollection
+    public class EC_UnassessedEventCollection : HistoricalEventCollection
     {
         public EC_UnassessedEventCollection(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -13,7 +13,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             {
                 var val = element.Value;
                 int valI;
-                Int32.TryParse(val, out valI);
+                int.TryParse(val, out valI);
 
                 switch (element.Name.LocalName)
                 {

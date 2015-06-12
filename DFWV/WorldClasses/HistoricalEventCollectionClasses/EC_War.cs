@@ -30,11 +30,11 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
     public class EC_War : HistoricalEventCollection
     {
-        private List<int> EventCol_ { get; set; }
+        public List<int> EventColIDs { get; set; }
         public List<HistoricalEventCollection> EventCol { get; private set; }
-        private int? AggressorEntID { get; set; }
+        public int? AggressorEntID { get; set; }
         public Entity AggressorEnt { get; private set; }
-        private int? DefenderEntID { get; set; }
+        public int? DefenderEntID { get; set; }
         public Entity DefenderEnt { get; private set; }
         public WarData WarData;
 
@@ -47,7 +47,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             {
                 var val = element.Value;
                 int valI;
-                Int32.TryParse(val, out valI);
+                int.TryParse(val, out valI);
 
                 switch (element.Name.LocalName)
                 {
@@ -60,9 +60,9 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                     case "type":
                         break;
                     case "eventcol":
-                        if (EventCol_ == null)
-                            EventCol_ = new List<int>();
-                        EventCol_.Add(valI);
+                        if (EventColIDs == null)
+                            EventColIDs = new List<int>();
+                        EventColIDs.Add(valI);
                         break;
                     case "name":
                         Name = val.ToTitleCase();
@@ -90,9 +90,9 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             if (DefenderEntID.HasValue && World.Entities.ContainsKey(DefenderEntID.Value))
                 DefenderEnt = World.Entities[DefenderEntID.Value];
 
-            if (EventCol_ != null)
+            if (EventColIDs != null)
                 EventCol = new List<HistoricalEventCollection>();
-            LinkFieldList(EventCol_,
+            LinkFieldList(EventColIDs,
                 EventCol, World.HistoricalEventCollections);
 
         }

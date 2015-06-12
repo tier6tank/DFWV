@@ -9,9 +9,7 @@ namespace DFWV.WorldClasses
 {
     public class UndergroundRegion : XMLObject
     {
-        [UsedImplicitly]
-        private string Type { get; set; }
-        [UsedImplicitly]
+        public string Type { get; set; }
         public int Depth { get; set; }
         public List<Point> Coords { get; set; }
         public Dictionary<Race, int> Populations { get; set; }
@@ -65,11 +63,20 @@ namespace DFWV.WorldClasses
             frm.lblUndergroundRegionDepth.Text = Depth.ToString();
             frm.lblUndergroundRegionType.Text = Type;
 
-            frm.grpUndergroundRegionPopulation.FillListboxWith(frm.lstUndergroundRegionPopulation, Populations.Keys);
+
 
 
             if (Populations != null)
-                frm.grpUndergroundRegionPopulation.Text = string.Format("Population ({0})", Populations.Values.Contains(10000001) ? "Unnumbered" : Populations.Values.Sum().ToString());
+            {
+                frm.grpUndergroundRegionPopulation.FillListboxWith(frm.lstUndergroundRegionPopulation, Populations.Keys);
+                frm.grpUndergroundRegionPopulation.Text = string.Format("Population ({0})",
+                    Populations.Values.Contains(10000001) ? "Unnumbered" : Populations.Values.Sum().ToString());
+                frm.grpUndergroundRegionPopulation.Visible = true;
+            }
+            else
+            {
+                frm.grpUndergroundRegionPopulation.Visible = false;
+            }
 
 
             Program.MakeSelected(frm.tabUndergroundRegion, frm.lstUndergroundRegion, this);
@@ -91,7 +98,7 @@ namespace DFWV.WorldClasses
             {
                 var val = element.Value;
                 int valI;
-                Int32.TryParse(val, out valI);
+                int.TryParse(val, out valI);
 
                 switch (element.Name.LocalName)
                 {
@@ -109,7 +116,7 @@ namespace DFWV.WorldClasses
                     case "population":
                         if (Populations == null)
                             Populations = new Dictionary<Race, int>();
-                        foreach (var popSplit in val.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries).Select(pop => pop.Split(',')).Where(popSplit => popSplit.Length == 2))
+                        foreach (var popSplit in val.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries).Select(pop => pop.Split(',')).Where(popSplit => popSplit.Length == 3))
                         {
                             Populations.Add(World.Races[Convert.ToInt32(popSplit[0])], Convert.ToInt32(popSplit[1]));
                         }

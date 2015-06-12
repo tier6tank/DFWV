@@ -133,7 +133,6 @@ namespace DFWV.WorldClasses.EntityClasses
         #region Parse from Sites Files
         public Entity(string name, World world) : base(world)
         {
-            World = world;
             Name = name;
         }
         #endregion
@@ -326,7 +325,7 @@ namespace DFWV.WorldClasses.EntityClasses
             {
                 var val = element.Value;
                 int valI;
-                Int32.TryParse(val, out valI);
+                int.TryParse(val, out valI);
 
                 switch (element.Name.LocalName)
                 {

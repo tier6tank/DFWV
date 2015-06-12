@@ -73,7 +73,7 @@ namespace DFWV.WorldClasses
             frm.lblGodHF.Data = HF;
 
             
-            frm.lblGodSpheres.Text = String.Join(", ", Spheres.Select(sphere => HistoricalFigure.Spheres[sphere]).ToList()).ToTitleCase();
+            frm.lblGodSpheres.Text = string.Join(", ", Spheres.Select(sphere => HistoricalFigure.Spheres[sphere]).ToList()).ToTitleCase();
 
             frm.grpGodLeaders.FillListboxWith(frm.lstGodLeaders, Leaders);
             frm.grpGodCivilizations.FillListboxWith(frm.lstGodCivilizations, Civilizations);

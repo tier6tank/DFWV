@@ -1,10 +1,12 @@
+using System;
+
 namespace DFWV.WorldClasses
 {
 
     /// <summary>
     /// This class represents a unit of time in a DF World.
     /// </summary>
-    public class WorldTime
+    public class WorldTime 
     {
         public int Year { get; private set; }
         public int TotalSeconds { get; private set; }
@@ -36,6 +38,25 @@ namespace DFWV.WorldClasses
                 TotalSeconds = seconds.Value;
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+
+            WorldTime t = obj as WorldTime;
+            if (t == null)
+                return false;
+
+            return (Year == t.Year) && (TotalSeconds == t.TotalSeconds);
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 13;
+            hash = (hash*7) + Year.GetHashCode();
+            hash = (hash*7) + TotalSeconds.GetHashCode();
+            return hash;
+        }
 
         /// <summary>
         /// Display the time in number format, on standard display pages
@@ -50,6 +71,7 @@ namespace DFWV.WorldClasses
                 return "Before Time";
             return (day + 1) + "." + (month + 1) + "." + Year;
         }
+
 
         /// <summary>
         /// Display the time in reverse number format, on the timeline.

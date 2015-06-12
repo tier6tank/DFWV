@@ -4,7 +4,7 @@ using System.Xml.Linq;
 
 namespace DFWV.WorldClasses.HistoricalFigureClasses
 {
-    struct HFSkill
+    public struct HFSkill
     {
         public int Skill { get; private set; }
         public int TotalIP { get; private set; }

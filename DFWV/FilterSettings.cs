@@ -359,7 +359,7 @@ namespace DFWV
                 {
                     var returnList = new List<object>();
 
-                    var newquery = query.GroupBy("new (" + String.Join(", ", GroupBy) + ")", "it");
+                    var newquery = query.GroupBy("new (" + string.Join(", ", GroupBy) + ")", "it");
 
                     var eq = newquery.Select("new(it.Key as Key, it as Items)");
 

@@ -15,7 +15,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         private int StartSeconds { get; set; }
         private int EndYear { get; set; }
         private int EndSeconds { get; set; }
-        private List<int> Event_ { get; set; }
+        public List<int> EventIDs { get; set; }
         public List<HistoricalEvent> Event { get; private set; }
         public static List<string> Types = new List<string>();
         public int Type { get; private set; }
@@ -123,7 +123,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             {
                 var val = element.Value;
                 int valI;
-                Int32.TryParse(val, out valI);
+                int.TryParse(val, out valI);
                 switch (element.Name.LocalName)
                 {
                     case "id":
@@ -145,9 +145,9 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                             EndSeconds = valI;
                         break;
                     case "event":
-                        if (Event_ == null)
-                            Event_ = new List<int>();
-                        Event_.Add(valI);
+                        if (EventIDs == null)
+                            EventIDs = new List<int>();
+                        EventIDs.Add(valI);
                         break;
                     case "type":
                         if (!Types.Contains(val))
@@ -222,9 +222,9 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         {
             //StartTime = new WorldTime(StartYear, StartSeconds);
             //EndTime = EndYear == -1 ? WorldTime.Present : new WorldTime(EndYear, EndSeconds);
-            if (Event_ == null) return;
+            if (EventIDs == null) return;
             Event = new List<HistoricalEvent>();
-            LinkFieldList(Event_,
+            LinkFieldList(EventIDs,
                 Event, World.HistoricalEvents);
             foreach (var evt in Event)
                 evt.EventCollection = this;

@@ -9,7 +9,7 @@ namespace DFWV.WorldClasses
 {
     public class Artifact : XMLObject
     {
-        private string Item { get; set; }
+        public string Item { get; set; }
 
         private int? ItemType { get; set; }
         private int? ItemSubType { get; set; }
@@ -135,7 +135,7 @@ namespace DFWV.WorldClasses
             {
                 var val = element.Value;
                 int valI;
-                Int32.TryParse(val, out valI);
+                int.TryParse(val, out valI);
 
                 
                 switch (element.Name.LocalName)

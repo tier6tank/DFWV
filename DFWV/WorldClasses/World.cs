@@ -478,7 +478,7 @@ namespace DFWV.WorldClasses
 
         internal God GetAddGod(God tempGod)
         {
-            foreach (var god in Gods.Where(god => String.Equals(god.Name, tempGod.Name, StringComparison.CurrentCultureIgnoreCase)))
+            foreach (var god in Gods.Where(god => string.Equals(god.Name, tempGod.Name, StringComparison.CurrentCultureIgnoreCase)))
             {
                 return god;
             }
@@ -489,7 +489,7 @@ namespace DFWV.WorldClasses
 
         internal God GetAddGod(string godName)
         {
-            foreach (var god in Gods.Where(god => String.Equals(god.Name, godName, StringComparison.CurrentCultureIgnoreCase)))
+            foreach (var god in Gods.Where(god => string.Equals(god.Name, godName, StringComparison.CurrentCultureIgnoreCase)))
             {
                 return god;
             }
@@ -532,7 +532,7 @@ namespace DFWV.WorldClasses
 
         internal Leader GetAddLeader(string leaderName)
         {
-            foreach (var leader in Leaders.Where(leader => String.Equals(leader.Name, leaderName, StringComparison.CurrentCultureIgnoreCase)))
+            foreach (var leader in Leaders.Where(leader => string.Equals(leader.Name, leaderName, StringComparison.CurrentCultureIgnoreCase)))
             {
                 return leader;
             }

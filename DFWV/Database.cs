@@ -177,7 +177,7 @@ namespace DFWV
         {
             if (field != null)
             {
-                return String.Join(",",field);
+                return string.Join(",",field);
             }
             return DBNull.Value;
         }

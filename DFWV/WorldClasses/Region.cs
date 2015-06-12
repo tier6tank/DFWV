@@ -78,6 +78,9 @@ namespace DFWV.WorldClasses
         public override void Select(MainForm frm)
         {
             frm.grpRegion.Text = ToString();
+#if DEBUG
+            frm.grpRegion.Text += string.Format(" - ID: {0}", ID);
+#endif
             frm.grpRegion.Show();
 
             frm.lblRegionName.Text = ToString();
@@ -86,10 +89,18 @@ namespace DFWV.WorldClasses
             frm.grpRegionEvents.FillListboxWith(frm.lstRegionEvents, Events);
             frm.grpRegionBattles.FillListboxWith(frm.lstRegionBattles, BattleEventCollections);
             frm.grpRegionInhabitants.FillListboxWith(frm.lstRegionInhabitants, Inhabitants);
-            frm.grpRegionPopulation.FillListboxWith(frm.lstRegionPopulation, Populations.Keys);
+
 
             if (Populations != null)
+            {
+                frm.grpRegionPopulation.FillListboxWith(frm.lstRegionPopulation, Populations.Keys);
                 frm.grpRegionPopulation.Text = string.Format("Population ({0})", Populations.Values.Contains(10000001) ? "Unnumbered" : Populations.Values.Sum().ToString());
+                frm.grpRegionPopulation.Visible = true;
+            }
+            else
+            {
+                frm.grpRegionPopulation.Visible = false;
+            }
 
 
             Program.MakeSelected(frm.tabRegion, frm.lstRegion, this);
@@ -110,7 +121,7 @@ namespace DFWV.WorldClasses
             {
                 var val = element.Value;
                 int valI;
-                Int32.TryParse(val, out valI);
+                int.TryParse(val, out valI);
 
                 switch (element.Name.LocalName)
                 {
@@ -128,7 +139,7 @@ namespace DFWV.WorldClasses
                     case "population":
                         if (Populations == null)
                             Populations = new Dictionary<Race, int>();
-                        foreach (var popSplit in val.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries).Select(pop => pop.Split(',')).Where(popSplit => popSplit.Length == 2))
+                        foreach (var popSplit in val.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries).Select(pop => pop.Split(',')).Where(popSplit => popSplit.Length == 3))
                         {
                             if (Populations.ContainsKey(World.Races[Convert.ToInt32(popSplit[0])]))
                                 Populations[World.Races[Convert.ToInt32(popSplit[0])]] += Convert.ToInt32(popSplit[1]);

@@ -16,7 +16,7 @@ namespace DFWV
 
     public delegate void XMLStartedSectionEventHandler(string section);
 
-    static class DFXMLParser
+    public static class DFXMLParser
     {
 
         private static string _path;
@@ -446,11 +446,14 @@ namespace DFWV
                     
                     if (associatedRace == null || associatedRace.ID > 0)
                     {
-                        var newRace = new Race(xdoc, world);
+                        var newRace = new Race(xdoc, world)
+                        {
+                            AddedOrder = world.Races.Keys.Min() - 1
+                        };
                         world.Races.Add(id, newRace);
                         return;
                     }
-                    id = associatedRace.ID;
+                    id = associatedRace.AddedOrder;
                 }
                 WorldList[id].Plus(xdoc);
             }
@@ -487,7 +490,7 @@ namespace DFWV
                 {
                     if (xdoc != null)
                     {
-                        var id = Int32.Parse(((XElement)xdoc.Root.Nodes().ToArray()[1]).Value);
+                        var id = int.Parse(((XElement)xdoc.Root.Nodes().ToArray()[1]).Value);
 
                         if (id < 0)
                         {

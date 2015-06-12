@@ -200,7 +200,7 @@ namespace DFWV
                         WhereAdd.BackColor = Color.Red;
                         return;
                     }
-                    if (!Int32.TryParse(txtWhereData.Text, out DataInt))
+                    if (!int.TryParse(txtWhereData.Text, out DataInt))
                     {
                         WhereAdd.BackColor = Color.Red;
                         return;
@@ -291,7 +291,7 @@ namespace DFWV
                         OrderAdd.BackColor = Color.Red;
                         return;
                     }
-                    if (!Int32.TryParse(txtOrderData.Text, out DataInt) && cmbOrderOperation.SelectedIndex != -1)
+                    if (!int.TryParse(txtOrderData.Text, out DataInt) && cmbOrderOperation.SelectedIndex != -1)
                     {
                         OrderAdd.BackColor = Color.Red;
                         return;
@@ -418,7 +418,7 @@ namespace DFWV
                 Groups = lstGroup.Items.Cast<string>().ToList();
 
             int TakeI;
-            if (!(chkTake.Checked && Int32.TryParse(txtTake.Text,out TakeI)))
+            if (!(chkTake.Checked && int.TryParse(txtTake.Text,out TakeI)))
                 TakeI = -1;
 
             outFilter = new Filter(Orders, Wheres, Groups, TakeI);

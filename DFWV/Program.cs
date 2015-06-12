@@ -14,7 +14,6 @@ using SevenZip;
 
 //TODO: Issues
 //TODO: Export doesn't properly release link to exported DB (can't be deleted while app is running following export)
-//TODO: ExportLEgendsWV should come from the exprotlegends.wv that PeridexisErrant made, and change tabs to spaces.
 
 namespace DFWV
 {
@@ -63,7 +62,8 @@ namespace DFWV
             mainForm.MainTab.SelectedTab = tabPage;
             if (!listBox.Items.Contains(item))
                 listBox.Items.Add(item);
-            listBox.SelectedItem = item;
+            if (listBox.SelectedItem != item)
+                listBox.SelectedItem = item;
             mainForm.AddToNav(item);
         }
 
@@ -99,7 +99,7 @@ namespace DFWV
                     "#6B6882", "#5FAD4E", "#A75740", "#A5FFD2", "#FFB167", "#009BFF", "#E85EBE"};
         public static Color NextDistinctColor()
         {
-            var rgb = Int32.Parse(ColorNames[curDistinctColor % ColorNames.Count].Replace("#", ""), NumberStyles.HexNumber);
+            var rgb = int.Parse(ColorNames[curDistinctColor % ColorNames.Count].Replace("#", ""), NumberStyles.HexNumber);
             var thisColor = Color.FromArgb(255,Color.FromArgb(rgb));
             curDistinctColor++;
 
@@ -156,6 +156,7 @@ namespace DFWV
             str = str.Replace('┐', '¿');
             str = str.Replace('╜', '½');
 
+
             
             foreach (var c in str.Where(c => !((c >= 'a' && c <= 'z') ||
                                                (c >= 'A' && c <= 'Z') ||
@@ -171,7 +172,7 @@ namespace DFWV
         /// <summary>
         /// Handles all logging from world generation
         /// </summary>
-        private static readonly Object thisLock = new Object();
+        private static readonly object thisLock = new object();
 
         public static void Log(LogType type, string txt)
         {
@@ -322,19 +323,35 @@ namespace DFWV
         /// </summary>
         internal static void FillListboxWith(this GroupBox groupbox, ListBox listbox, IEnumerable<object> objects)
         {
-            if (objects == null || !objects.Any())
+            try
             {
-                groupbox.Visible = false;
-                return;
+                if (objects == null || !objects.Any())
+                {
+                    groupbox.Visible = false;
+                    return;
+                }
+                groupbox.Visible = true;
+                listbox.BeginUpdate();
+                listbox.Items.Clear();
+                listbox.Items.AddRange(objects.ToArray());
+                listbox.EndUpdate();
+                listbox.SelectedIndex = 0;
+                var title = groupbox.Text.Split('(')[0].Trim();
+                groupbox.Text = string.Format("{0} ({1})", title, listbox.Items.Count);
             }
-            groupbox.Visible = true;
-            listbox.BeginUpdate();
-            listbox.Items.Clear();
-            listbox.Items.AddRange(objects.ToArray());
-            listbox.EndUpdate();
-            listbox.SelectedIndex = 0;
-            var title = groupbox.Text.Split('(')[0].Trim();
-            groupbox.Text = string.Format("{0} ({1})", title, listbox.Items.Count);
+            catch (InvalidOperationException e)
+            {
+                if (e.Message == "Collection was modified; enumeration operation may not execute.")
+                {
+                    groupbox.Visible = false;
+                    listbox.EndUpdate();
+                }
+                else
+                {
+                    throw;
+                }
+                
+            }
         }
 
 
@@ -420,6 +437,27 @@ namespace DFWV
             return coll.Cast<TreeNode>()
                         .Concat(coll.Cast<TreeNode>()
                                     .SelectMany(x => FlattenTree(x.Nodes)));
+        }
+
+        public static IEnumerable<T> ConsecutiveDistict<T>(this IEnumerable<T> input)
+        {
+            if (input == null) throw new ArgumentNullException("input");
+            return ConsecutiveDistictImplementation(input);
+        }
+
+        static IEnumerable<T> ConsecutiveDistictImplementation<T>(this IEnumerable<T> input)
+        {
+            bool isFirst = true;
+            T last = default(T);
+            foreach (var item in input)
+            {
+                if (isFirst || !object.Equals(item, last))
+                {
+                    yield return item;
+                    last = item;
+                    isFirst = false;
+                }
+            }
         }
     }
 

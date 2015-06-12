@@ -80,36 +80,19 @@ function export_more_legends_xml()
     io.write ("<name>"..dfhack.df2utf(dfhack.TranslateName(df.global.world.world_data.name)).."</name>".."\n")
     io.write ("<altname>"..dfhack.df2utf(dfhack.TranslateName(df.global.world.world_data.name,1)).."</altname>".."\n")
 
+	--[[  geo_biomes can't be easily associated with map tiles or biomes without embarking, I think.
 	io.write ("<geo_biomes>".."\n")
     for geobiomeK, geobiomeV in ipairs(df.global.world.world_data.geo_biomes) do
 		io.write ("\t".."<geo_biome>".."\n")
 		io.write ("\t\t\t".."<id>"..geobiomeK.."</id>".."\n")
 		for layerK, layerV in ipairs(geobiomeV.layers) do
 			io.write ("\t\t".."<layer>".."\n")
-			
 			io.write ("\t\t\t".."<id>"..layerK.."</id>".."\n")
 			io.write ("\t\t\t".."<mat>"..dfhack.matinfo.toString(dfhack.matinfo.decode(0, layerV.mat_index))..":"..layerV.type.."-"..layerV.mat_index.."</mat>".."\n")
-			
-			-- if (dfhack.matinfo.decode(layerV.type, layerV.mat_index) == nil) then
-				-- io.write ("\t\t\t".."<mat_type>"..layerV.type.."</mat_type>".."\n")
-				-- io.write ("\t\t\t".."<mat_index>"..layerV.mat_index.."</mat_index>".."\n")
-			-- else
-				-- io.write ("\t\t\t".."<mat>"..dfhack.matinfo.toString(dfhack.matinfo.decode(layerV.type, layerV.mat_index))..":"..layerV.type.."-"..layerV.mat_index.."</mat>".."\n")
-			-- end
-			
 			for k, v in ipairs(layerV.vein_mat) do
 				io.write ("\t\t\t".."<vein>"..dfhack.matinfo.toString(dfhack.matinfo.decode(0, v))..":"..layerV.vein_type[k].."-"..v.."</vein>".."\n")
-				-- if (dfhack.matinfo.decode(v, layerV.vein_mat[k]) == nil) then
-					-- io.write ("\t\t\t".."<vein_type>"..v.."</vein_type>".."\n")
-					-- io.write ("\t\t\t".."<vein_mat>"..layerV.vein_mat[k].."</vein_mat>".."\n")
-				-- else
-					-- io.write ("\t\t\t".."<vein>"..dfhack.matinfo.toString(dfhack.matinfo.decode(v, layerV.vein_mat[k]))..":"..v.."-"..layerV.vein_mat[k].."</vein>".."\n")
-				-- end			
-				--io.write ("\t\t\t".."<vein_type>"..k.." "..v.."</vein_type>".."\n")
+		
 			end
-			--for k, v in ipairs(layerV.vein_mat) do
-				--io.write ("\t\t\t".."<vein_mat>"..k.." "..v.."</vein_mat>".."\n")
-			--end
 			for k, v in ipairs(layerV.vein_nested_in) do
 				if (v ~= -1) then
 					io.write ("\t\t\t".."<vein_nested_in>"..k..","..v.."</vein_nested_in>".."\n")
@@ -122,7 +105,7 @@ function export_more_legends_xml()
 		io.write ("\t".."</geo_biome>".."\n")
     end
     io.write ("</geo_biomes>".."\n")
-	
+	--]]
 	
 	io.write ("<races>".."\n")
     for raceK, raceV in ipairs(df.global.world.raws.creatures.all) do
@@ -132,12 +115,12 @@ function export_more_legends_xml()
 		io.write ("\t\t".."<nameS>"..raceV.name[0].."</nameS>".."\n")
 		io.write ("\t\t".."<nameP>"..raceV.name[1].."</nameP>".."\n")
 		for casteK, casteV in ipairs(raceV.caste) do
-			io.write ("\t\t".."<caste>")
+			io.write ("\t\t".."<caste>".."\n")
 			io.write ("\t\t\t".."<id>"..casteK.."</id>".."\n")
 			io.write ("\t\t\t".."<name>"..casteV.caste_id.."</name>".."\n")
 			io.write ("\t\t\t".."<gender>"..casteV.gender.."</gender>".."\n")
 			io.write ("\t\t\t".."<description>"..casteV.description.."</description>".."\n")
-			io.write ("\t\t".."</caste>")
+			io.write ("\t\t".."</caste>".."\n")
 		end
 		io.write ("\t".."</race>".."\n")
     end
@@ -201,6 +184,13 @@ function export_more_legends_xml()
                 io.write (xVal..","..regionV.region_coords.y[xK].."|")
             end
         io.write ("</coords>\n")
+        io.write ("\t\t".."<population>")
+            for popK, popV in ipairs(regionV.population) do
+				if (popV.type ~= 7 and popV.type ~= 6 and popV.type ~= 5) then
+					io.write (popV.race..","..popV.count_min..","..popV.type.."|")
+				end
+            end
+        io.write ("</population>\n")		
         io.write ("\t".."</region>".."\n")
     end
     io.write ("</regions>".."\n")
@@ -214,6 +204,13 @@ function export_more_legends_xml()
                 io.write (xVal..","..regionV.region_coords.y[xK].."|")
             end
         io.write ("</coords>\n")
+        io.write ("\t\t".."<population>")
+            for popK, popV in ipairs(regionV.feature_init.feature.population) do
+				if (popV.type ~= 7 and popV.type ~= 6 and popV.type ~= 5) then
+					io.write (popV.race..","..popV.count_min..","..popV.type.."|")
+				end
+            end
+        io.write ("</population>\n")				
         io.write ("\t".."</underground_region>".."\n")
     end
     io.write ("</underground_regions>".."\n")
@@ -628,9 +625,9 @@ end
 -- export information and XML ('p, x')
 function export_legends_info()
     print('    Exporting:  World map/gen info')
-    --gui.simulateInput(vs, 'LEGENDS_EXPORT_MAP')
+    gui.simulateInput(vs, 'LEGENDS_EXPORT_MAP')
     print('    Exporting:  Legends xml')
-    --gui.simulateInput(vs, 'LEGENDS_EXPORT_XML')
+    gui.simulateInput(vs, 'LEGENDS_EXPORT_XML')
     print("    Exporting:  Extra legends_plus xml")
     export_more_legends_xml()
 end

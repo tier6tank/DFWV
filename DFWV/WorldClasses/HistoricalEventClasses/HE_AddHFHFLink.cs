@@ -37,7 +37,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             {
                 var val = element.Value;
                 int valI;
-                Int32.TryParse(val, out valI);
+                int.TryParse(val, out valI);
 
                 switch (element.Name.LocalName)
                 {
@@ -111,7 +111,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             {
                 var val = element.Value;
                 int valI;
-                Int32.TryParse(val, out valI);
+                int.TryParse(val, out valI);
 
                 switch (element.Name.LocalName)
                 {
@@ -150,7 +150,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             switch (HFLink != null ? 
                 HFLink.LinkTypes[HFLink.LinkType] :
-                (LinkType.HasValue ? HFLink.LinkTypes[LinkType.Value] : String.Empty))
+                (LinkType.HasValue ? HFLink.LinkTypes[LinkType.Value] : string.Empty))
             {
                 case "spouse":
                     return string.Format("{0} {1} {2} {3}.",

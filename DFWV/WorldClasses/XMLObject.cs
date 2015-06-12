@@ -17,7 +17,7 @@ namespace DFWV.WorldClasses
 
         protected XMLObject(World world) : base(world)
         {
-            World = world;
+            
         }
 
         internal abstract void Link();

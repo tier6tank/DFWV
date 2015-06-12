@@ -5,9 +5,9 @@ using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalFigureClasses
 {
-    struct EntityFormerPositionLink
+    public struct EntityFormerPositionLink
     {
-        private int PositionProfileID { get; set; }
+        public int PositionProfileID { get; set; }
         public int EntityID { get; private set; }
         public HistoricalFigure HF { get; private set; }
 
@@ -19,8 +19,8 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             }
         }
 
-        private int StartYear { get; set; }
-        private int EndYear { get; set; }
+        public int StartYear { get; set; }
+        public int EndYear { get; set; }
 
         public EntityFormerPositionLink(XContainer data, HistoricalFigure hf) : this()
         {
@@ -28,7 +28,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             {
                 var val = element.Value;
                 int valI;
-                Int32.TryParse(val, out valI);
+                int.TryParse(val, out valI);
                 switch (element.Name.LocalName)
                 {
                     case "position_profile_id":

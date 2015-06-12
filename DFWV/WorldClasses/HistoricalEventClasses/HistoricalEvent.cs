@@ -277,8 +277,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             : base(xdoc, world)
         {
 
-            Year = Int32.Parse(xdoc.Root.Element("year").Value);
-            Seconds = Int32.Parse(xdoc.Root.Element("seconds72").Value);
+            Year = int.Parse(xdoc.Root.Element("year").Value);
+            Seconds = int.Parse(xdoc.Root.Element("seconds72").Value);
 
             var type = xdoc.Root.Element("type").Value;
             if (!Types.Contains(type))

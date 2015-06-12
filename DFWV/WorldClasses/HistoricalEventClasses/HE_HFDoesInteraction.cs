@@ -43,7 +43,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             {
                 var val = element.Value;
                 int valI;
-                Int32.TryParse(val, out valI);
+                int.TryParse(val, out valI);
 
                 switch (element.Name.LocalName)
                 {
@@ -89,7 +89,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             {
                 var val = element.Value;
                 int valI;
-                Int32.TryParse(val, out valI);
+                int.TryParse(val, out valI);
 
                 switch (element.Name.LocalName)
                 {

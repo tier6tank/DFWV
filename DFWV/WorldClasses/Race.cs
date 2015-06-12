@@ -12,7 +12,7 @@ namespace DFWV.WorldClasses
         [UsedImplicitly]
         public long Population { private get; set; }
         public bool isCivilized { get; set; }
-
+        public int AddedOrder { get; set; }
         public string Key { get; set; }
         [UsedImplicitly]
         public string PluralName { get; set; }
@@ -46,7 +46,7 @@ namespace DFWV.WorldClasses
             }
         }
 
-        public Race(string name, int id, World world) 
+        public Race(string name, int addedorder, World world) 
             : base(world)
         {
             if (name.isPlural())
@@ -60,7 +60,8 @@ namespace DFWV.WorldClasses
                 PluralName = name.Pluralize();
             }
             Key = Name;
-            ID = id;
+            AddedOrder = addedorder;
+            ID = addedorder;
         }
 
         public Race(XDocument xdoc, World world) 
@@ -77,7 +78,7 @@ namespace DFWV.WorldClasses
                 frm.grpRace.Show();
 
                 frm.lblRaceName.Text = ToString();
-                frm.lblRacePopulation.Text = Population == Int64.MaxValue ? "Unnumbered" :  Population.ToString();
+                frm.lblRacePopulation.Text = Population == long.MaxValue ? "Unnumbered" :  Population.ToString();
 
                 frm.grpRaceLeaders.FillListboxWith(frm.lstRaceLeaders, World.Leaders.Where(x => x.Race == this));
                 frm.grpRaceCivilizations.FillListboxWith(frm.lstRaceCivilizations, World.Civilizations.Where(x => x.Race == this));
@@ -118,7 +119,7 @@ namespace DFWV.WorldClasses
                 Name.DBExport(),
                 PluralName.DBExport(),
                 isCivilized,
-                Population == Int64.MaxValue ? -1 : Population
+                Population == long.MaxValue ? -1 : Population
             };
 
             Database.ExportWorldItem(table, vals);
@@ -144,7 +145,7 @@ namespace DFWV.WorldClasses
             {
                 var val = element.Value;
                 int valI;
-                Int32.TryParse(val, out valI);
+                int.TryParse(val, out valI);
 
                 switch (element.Name.LocalName)
                 {
@@ -171,6 +172,16 @@ namespace DFWV.WorldClasses
                         break;
                 }
             }
+        }
+
+        public override int GetHashCode()
+        {
+            return AddedOrder.GetHashCode() * 7 + GetType().GetHashCode();
+        }
+
+        internal string PluralizeName()
+        {
+            return PluralName == string.Empty ? ToString().Pluralize() : PluralName.ToTitleCase();
         }
     }
 
