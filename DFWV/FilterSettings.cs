@@ -158,12 +158,28 @@ namespace DFWV
             {
                 {"Height", typeof (int)},
             };
+            Fields[typeof(Army)] = new Dictionary<string, Type>();
+            Fields[typeof(Unit)] = new Dictionary<string, Type>();
+            Fields[typeof(Vehicle)] = new Dictionary<string, Type>();
+            Fields[typeof(Engraving)] = new Dictionary<string, Type>();
+            Fields[typeof(Incident)] = new Dictionary<string, Type>();
+            Fields[typeof(Crime)] = new Dictionary<string, Type>();
+            Fields[typeof(AdamantineTube)] = new Dictionary<string, Type>();
+            Fields[typeof(Report)] = new Dictionary<string, Type>();
+            Fields[typeof(Announcement)] = new Dictionary<string, Type>();
+            Fields[typeof(Building)] = new Dictionary<string, Type>();
+            Fields[typeof(Construction)] = new Dictionary<string, Type>();
+            Fields[typeof(Item)] = new Dictionary<string, Type>();
+            Fields[typeof(Plant)] = new Dictionary<string, Type>();
+            Fields[typeof(WorldClasses.Squad)] = new Dictionary<string, Type>();
 
             foreach (var type in new List<Type>
             {
                 typeof(Artifact), typeof(Civilization), typeof(Entity), typeof(EntityPopulation), typeof(God), typeof(HistoricalEra), typeof(HistoricalEvent),
                 typeof(HistoricalEventCollection), typeof(HistoricalFigure), typeof(Leader), typeof(Parameter), typeof(Race), typeof(Region), typeof(Site),
-                typeof(Structure), typeof(UndergroundRegion), typeof(WorldConstruction), typeof(Dynasty), typeof(River), typeof(Mountain)
+                typeof(Structure), typeof(UndergroundRegion), typeof(WorldConstruction), typeof(Dynasty), typeof(River), typeof(Mountain),
+                typeof(Army), typeof(Unit), typeof(Vehicle), typeof(Engraving), typeof(Incident), typeof(Crime), typeof(AdamantineTube),
+                typeof(Report), typeof(Announcement), typeof(Building), typeof(Construction), typeof(Item), typeof(Plant), typeof(WorldClasses.Squad)
             })
             {
                 Fields[type].Add("Name", typeof (string));
@@ -265,8 +281,20 @@ namespace DFWV
             this[typeof(Dynasty)] = new Filter("Name", null, null, -1);
             this[typeof(River)] = new Filter("Name", null, null, -1);
             this[typeof(Mountain)] = new Filter("Name", null, null, -1);
-
-
+            this[typeof(Army)] = new Filter("Name", null, null, -1);
+            this[typeof(Unit)] = new Filter("Name", null, null, -1);
+            this[typeof(Vehicle)] = new Filter("Name", null, null, -1);
+            this[typeof(Engraving)] = new Filter("Name", null, null, -1);
+            this[typeof(Incident)] = new Filter("Name", null, null, -1);
+            this[typeof(Crime)] = new Filter("Name", null, null, -1);
+            this[typeof(AdamantineTube)] = new Filter("Name", null, null, -1);
+            this[typeof(Report)] = new Filter("Name", null, null, -1);
+            this[typeof(Announcement)] = new Filter("Name", null, null, -1);
+            this[typeof(Building)] = new Filter("Name", null, null, -1);
+            this[typeof(Construction)] = new Filter("Name", null, null, -1);
+            this[typeof(Item)] = new Filter("Name", null, null, -1);
+            this[typeof(Plant)] = new Filter("Name", null, null, -1);
+            this[typeof(WorldClasses.Squad)] = new Filter("Name", null, null, -1);
         }
 
 

@@ -117,7 +117,21 @@
     <Compile Include="MapForm.Designer.cs">
       <DependentUpon>MapForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="WorldClasses\AdamantineTube.cs" />
+    <Compile Include="WorldClasses\Announcement.cs" />
+    <Compile Include="WorldClasses\Squad.cs" />
+    <Compile Include="WorldClasses\Plant.cs" />
+    <Compile Include="WorldClasses\Item.cs" />
+    <Compile Include="WorldClasses\Construction.cs" />
+    <Compile Include="WorldClasses\Report.cs" />
+    <Compile Include="WorldClasses\Crime.cs" />
+    <Compile Include="WorldClasses\Incident.cs" />
+    <Compile Include="WorldClasses\Engraving.cs" />
+    <Compile Include="WorldClasses\Building.cs" />
+    <Compile Include="WorldClasses\Vehicle.cs" />
+    <Compile Include="WorldClasses\Unit.cs" />
     <Compile Include="WorldClasses\Caste.cs" />
+    <Compile Include="WorldClasses\Army.cs" />
     <Compile Include="WorldClasses\River.cs" />
     <Compile Include="WorldClasses\Mountain.cs" />
     <Compile Include="WorldClasses\MapLegend.cs" />

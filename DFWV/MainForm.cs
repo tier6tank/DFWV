@@ -439,6 +439,20 @@ namespace DFWV
 
         private void FillXMLLists()
         {
+            FillList(lstArmy, World.Armies, tabArmy);
+            FillList(lstUnit, World.Units, tabUnit);
+            FillList(lstVehicle, World.Vehicles, tabVehicle);
+            FillList(lstEngraving, World.Engravings, tabEngraving);
+            FillList(lstIncident, World.Incidents, tabIncident);
+            FillList(lstCrime, World.Crimes, tabCrime);
+            FillList(lstAdamantineTube, World.AdamantineTubes, tabAdamantineTube);
+            FillList(lstReport, World.Reports, tabReport);
+            FillList(lstAnnouncement, World.Announcements, tabAnnouncement);
+            FillList(lstBuilding, World.Buildings, tabBuilding);
+            FillList(lstConstruction, World.Constructions, tabConstruction);
+            FillList(lstItem, World.Items, tabItem);
+            FillList(lstPlant, World.Plants, tabPlant);
+            FillList(lstSquad, World.Squads, tabSquad);
             FillList(lstRiver, World.Rivers, tabRiver);
             FillList(lstMountain, World.Mountains, tabMountain);
             FillList(lstRegion, World.Regions, tabRegion);
@@ -1434,7 +1448,7 @@ namespace DFWV
         /// </summary>
         private void lstBattleAttackingSquad_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var squad = (Squad)((ListBox)sender).SelectedItem;
+            var squad = (WorldClasses.HistoricalEventCollectionClasses.Squad)((ListBox)sender).SelectedItem;
 
             lblBattleAttackingSquadSite.Data = squad.Site;
             lblBattleAttackingSquadRace.Data = squad.Race;
@@ -1445,7 +1459,7 @@ namespace DFWV
 
         private void lstBattleDefendingSquad_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var squad = (Squad)((ListBox)sender).SelectedItem;
+            var squad = (WorldClasses.HistoricalEventCollectionClasses.Squad)((ListBox)sender).SelectedItem;
 
             lblBattleDefendingSquadSite.Data = squad.Site;
             lblBattleDefendingSquadRace.Data = squad.Race;

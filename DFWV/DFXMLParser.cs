@@ -167,6 +167,48 @@ namespace DFWV
                                 xReader.Read();
                                 knownSection = false;
                                 break;
+                            case "armies":
+                                PlusLoadSection(world.Armies, world, xReader);
+                                break;
+                            case "units":
+                                PlusLoadSection(world.Units, world, xReader);
+                                break;
+                            case "vehicles":
+                                PlusLoadSection(world.Vehicles, world, xReader);
+                                break;
+                            case "engravings":
+                                PlusLoadSection(world.Engravings, world, xReader);
+                                break;
+                            case "incidents":
+                                PlusLoadSection(world.Incidents, world, xReader);
+                                break;
+                            case "crimes":
+                                PlusLoadSection(world.Crimes, world, xReader);
+                                break;
+                            case "adamantine_tubes":
+                                PlusLoadSection(world.AdamantineTubes, world, xReader);
+                                break;
+                            case "reports":
+                                PlusLoadSection(world.Reports, world, xReader);
+                                break;
+                            case "announcements":
+                                PlusLoadSection(world.Announcements, world, xReader);
+                                break;
+                            case "buildings":
+                                PlusLoadSection(world.Buildings, world, xReader);
+                                break;
+                            case "constructions":
+                                PlusLoadSection(world.Constructions, world, xReader);
+                                break;
+                            case "items":
+                                PlusLoadSection(world.Items, world, xReader);
+                                break;
+                            case "plants":
+                                PlusLoadSection(world.Plants, world, xReader);
+                                break;
+                            case "squads":
+                                PlusLoadSection(world.Squads, world, xReader);
+                                break;
                             case "races":
                                 PlusLoadSection(world.Races, world, xReader);
                                 SortRaces(world);
@@ -424,16 +466,100 @@ namespace DFWV
                         world.WorldConstructions.Add(newWC.ID, newWC);
                         return;
                     }
-                    else if (typeof(T) == typeof(Mountain))
+                    if (typeof(T) == typeof(Mountain))
                     {
                         var newMountain = new Mountain(xdoc, world);
                         world.Mountains.Add(newMountain.ID, newMountain);
                         return;
                     }
-                    else if (typeof(T) == typeof(River))
+                    if (typeof(T) == typeof(River))
                     {
                         var newRiver = new River(xdoc, world);
                         world.Rivers.Add(newRiver.ID, newRiver);
+                        return;
+                    }
+                    if (typeof(T) == typeof(Army))
+                    {
+                        var newArmy = new Army(xdoc, world);
+                        world.Armies.Add(newArmy.ID, newArmy);
+                        return;
+                    }
+                    if (typeof(T) == typeof(Unit))
+                    {
+                        var newUnit = new Unit(xdoc, world);
+                        world.Units.Add(newUnit.ID, newUnit);
+                        return;
+                    }
+                    if (typeof(T) == typeof(Vehicle))
+                    {
+                        var newVehicle = new Vehicle(xdoc, world);
+                        world.Vehicles.Add(newVehicle.ID, newVehicle);
+                        return;
+                    }
+                    if (typeof(T) == typeof(Engraving))
+                    {
+                        var newEngraving = new Engraving(xdoc, world);
+                        world.Engravings.Add(newEngraving.ID, newEngraving);
+                        return;
+                    }
+                    if (typeof(T) == typeof(Incident))
+                    {
+                        var newIncident = new Incident(xdoc, world);
+                        world.Incidents.Add(newIncident.ID, newIncident);
+                        return;
+                    }
+                    if (typeof(T) == typeof(Crime))
+                    {
+                        var newCrime = new Crime(xdoc, world);
+                        world.Crimes.Add(newCrime.ID, newCrime);
+                        return;
+                    }
+                    if (typeof(T) == typeof(AdamantineTube))
+                    {
+                        var newAdamantineTube = new AdamantineTube(xdoc, world);
+                        world.AdamantineTubes.Add(newAdamantineTube.ID, newAdamantineTube);
+                        return;
+                    }
+                    if (typeof(T) == typeof(Report))
+                    {
+                        var newReport = new Report(xdoc, world);
+                        world.Reports.Add(newReport.ID, newReport);
+                        return;
+                    }
+                    if (typeof(T) == typeof(Announcement))
+                    {
+                        var newAnnouncement = new Announcement(xdoc, world);
+                        world.Announcements.Add(newAnnouncement.ID, newAnnouncement);
+                        return;
+                    }
+                    if (typeof(T) == typeof(Building))
+                    {
+                        var newBuilding = new Building(xdoc, world);
+                        world.Buildings.Add(newBuilding.ID, newBuilding);
+                        return;
+                    }
+                    if (typeof(T) == typeof(Construction))
+                    {
+                        var newConstruction = new Construction(xdoc, world);
+                        world.Constructions.Add(newConstruction.ID, newConstruction);
+                        return;
+                    }
+                    if (typeof(T) == typeof(Item))
+                    {
+                        var newItem = new Item(xdoc, world);
+                        world.Items.Add(newItem.ID, newItem);
+                        return;
+                    }
+                    if (typeof(T) == typeof(Plant))
+                    {
+                        var newPlant = new Plant(xdoc, world);
+                        world.Plants.Add(newPlant.ID, newPlant);
+                        return;
+                    }
+                    if (typeof(T) == typeof(WorldClasses.Squad))
+                    {
+                        var newSquad = new WorldClasses.Squad(xdoc, world);
+                        world.Squads.Add(newSquad.ID, newSquad);
                         return;
                     }
                 }

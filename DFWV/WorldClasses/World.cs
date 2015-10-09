@@ -57,6 +57,20 @@ namespace DFWV.WorldClasses
         public readonly List<Parameter> Parameters = new List<Parameter>();
         public readonly List<Dynasty> Dynasties = new List<Dynasty>();
 
+        public readonly Dictionary<int, Army> Armies = new Dictionary<int, Army>();
+        public readonly Dictionary<int, Unit> Units = new Dictionary<int, Unit>();
+        public readonly Dictionary<int, Vehicle> Vehicles = new Dictionary<int, Vehicle>();
+        public readonly Dictionary<int, Engraving> Engravings = new Dictionary<int, Engraving>();
+        public readonly Dictionary<int, Incident> Incidents = new Dictionary<int, Incident>();
+        public readonly Dictionary<int, Crime> Crimes = new Dictionary<int, Crime>();
+        public readonly Dictionary<int, AdamantineTube> AdamantineTubes = new Dictionary<int, AdamantineTube>();
+        public readonly Dictionary<int, Report> Reports = new Dictionary<int, Report>();
+        public readonly Dictionary<int, Announcement> Announcements = new Dictionary<int, Announcement>();
+        public readonly Dictionary<int, Building> Buildings = new Dictionary<int, Building>();
+        public readonly Dictionary<int, Construction> Constructions = new Dictionary<int, Construction>();
+        public readonly Dictionary<int, Item> Items = new Dictionary<int, Item>();
+        public readonly Dictionary<int, Plant> Plants = new Dictionary<int, Plant>();
+        public readonly Dictionary<int, Squad> Squads = new Dictionary<int, Squad>();
         public readonly Dictionary<int, Race> Races = new Dictionary<int, Race>();
         public readonly Dictionary<int, Mountain> Mountains = new Dictionary<int, Mountain>();
         public readonly Dictionary<int, River> Rivers = new Dictionary<int, River>();
@@ -93,7 +107,20 @@ namespace DFWV.WorldClasses
             this.mapPath = mapPath;
             this.xmlPath = xmlPath;
             this.xmlPlusPath = xmlPlusPath;
+            
             hasPlusXML = File.Exists(xmlPlusPath);
+            if (!hasPlusXML) //Check if used open-legends for extraxml
+            {
+                var directory = Path.GetDirectoryName(this.xmlPath);
+                var saveName = xmlPlusPath.Replace(directory, "").Trim('\\').Split('-')[0];
+                var xmlpluspaths = Directory.GetFiles(directory, "*legends_plus.xml");
+                var xmlpluspath = xmlpluspaths.FirstOrDefault(x => x.StartsWith(Path.Combine(directory, saveName)));
+                if (xmlpluspath != null)
+                {
+                    hasPlusXML = true;
+                    this.xmlPlusPath = xmlpluspath;
+                }
+            }
 
             Filters = new FilterSettings(this);
         }
@@ -583,6 +610,20 @@ namespace DFWV.WorldClasses
             LinkSection(WorldConstructions.Values, "World Constructions");
             LinkSection(Rivers.Values, "Rivers");
             LinkSection(Mountains.Values, "Mountains");
+            LinkSection(Squads.Values, "Squads");
+            LinkSection(Plants.Values, "Plants");
+            LinkSection(Items.Values, "Items");
+            LinkSection(Constructions.Values, "Constructions");
+            LinkSection(Buildings.Values, "Buildings");
+            LinkSection(Announcements.Values, "Announcements");
+            LinkSection(Reports.Values, "Reports");
+            LinkSection(AdamantineTubes.Values, "AdamantineTubes");
+            LinkSection(Crimes.Values, "Crimes");
+            LinkSection(Incidents.Values, "Incidents");
+            LinkSection(Engravings.Values, "Engravings");
+            LinkSection(Vehicles.Values, "Vehicles");
+            LinkSection(Units.Values, "Units");
+            LinkSection(Armies.Values, "Armies");
 
             OnLinked();
         }
