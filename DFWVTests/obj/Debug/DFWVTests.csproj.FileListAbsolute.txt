@@ -34,7 +34,6 @@ D:\Code\DFWV\DFWVTests\bin\Debug\7z.dll
 D:\Code\DFWV\DFWVTests\bin\Debug\7z64.dll
 D:\Code\DFWV\DFWVTests\bin\Debug\x64\SQLite.Interop.dll
 D:\Code\DFWV\DFWVTests\bin\Debug\x86\SQLite.Interop.dll
-D:\Code\DFWV\DFWVTests\bin\Debug\Deploy.bat
 D:\Code\DFWV\DFWVTests\bin\Debug\DFWV.bat
 D:\Code\DFWV\DFWVTests\bin\Debug\DFWV_Template.sqlite3.backup
 D:\Code\DFWV\DFWVTests\bin\Debug\DFWVTests.dll
@@ -48,3 +47,5 @@ D:\Code\DFWV\DFWVTests\bin\Debug\System.Data.SQLite.xml
 D:\Code\DFWV\DFWVTests\obj\Debug\DFWVTests.csprojResolveAssemblyReference.cache
 D:\Code\DFWV\DFWVTests\obj\Debug\DFWVTests.dll
 D:\Code\DFWV\DFWVTests\obj\Debug\DFWVTests.pdb
+D:\Code\DFWV\DFWVTests\bin\Debug\Readme.txt
+D:\Code\DFWV\DFWVTests\bin\Debug\exportlegends.lua

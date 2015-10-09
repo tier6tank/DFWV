@@ -176,13 +176,15 @@ namespace DFWV
             {
                 var events = hf.Events.Where(x => !x.Location.IsEmpty).ConsecutiveDistict();
 
+                
                 var points = new List<Point>();
                 foreach (var evt in events)
                 {
                     points.Add(new Point(evt.Location.X*siteSize.Width + siteSize.Width/2,
                         evt.Location.Y*siteSize.Height + siteSize.Height/2));
                 }
-                g.DrawLines(p, points.ToArray());
+                if (points.Count > 0)
+                    g.DrawLines(p, points.ToArray());
 
             }
 
