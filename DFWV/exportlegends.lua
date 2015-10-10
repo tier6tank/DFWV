@@ -667,7 +667,7 @@ end
 -- export site maps
 function export_site_maps()
     local vs = dfhack.gui.getCurViewscreen()
-	if (not table.contains(vs, "main_cursor")) then -- Using open-legends
+	if ((dfhack.gui.getCurFocus() ~= "legends" ) and (not table.contains(vs, "main_cursor"))) then -- Using open-legends
 		vs = vs.parent
 	end 
     print('    Exporting:  All possible site maps')
