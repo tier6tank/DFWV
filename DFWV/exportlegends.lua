@@ -107,6 +107,127 @@ function export_more_legends_xml()
     io.write ("</geo_biomes>".."\n")
 	--]]
 	
+		io.write ("<armies>".."\n")
+    for armyK, armyV in ipairs(df.global.world.armies.all) do
+		io.write ("\t".."<army>".."\n")
+		io.write ("\t\t".."<id>"..armyV.id.."</id>".."\n")
+		io.write ("\t".."</army>".."\n")
+    end
+    io.write ("</armies>".."\n")
+
+	io.write ("<units>".."\n")
+    for unitK, unitV in ipairs(df.global.world.units.all) do
+		io.write ("\t".."<unit>".."\n")
+		io.write ("\t\t".."<id>"..unitV.id.."</id>".."\n")
+		io.write ("\t".."</unit>".."\n")
+    end
+    io.write ("</units>".."\n")
+	
+	io.write ("<vehicles>".."\n")
+    for vehicleK, vehicleV in ipairs(df.global.world.vehicles.all) do
+		io.write ("\t".."<vehicle>".."\n")
+		io.write ("\t\t".."<id>"..vehicleV.id.."</id>".."\n")
+		io.write ("\t".."</vehicle>".."\n")
+    end
+    io.write ("</vehicles>".."\n")
+	
+	io.write ("<engravings>".."\n")
+    for engravingK, engravingV in ipairs(df.global.world.engravings) do
+		io.write ("\t".."<engraving>".."\n")
+		io.write ("\t\t".."<id>"..engravingK.."</id>".."\n")
+		io.write ("\t".."</engraving>".."\n")
+    end
+    io.write ("</engravings>".."\n")
+	
+	io.write ("<incidents>".."\n")
+    for incidentK, incidentV in ipairs(df.global.world.incidents.all) do
+		io.write ("\t".."<incident>".."\n")
+		io.write ("\t\t".."<id>"..incidentV.id.."</id>".."\n")
+		io.write ("\t".."</incident>".."\n")
+    end
+    io.write ("</incidents>".."\n")
+	
+	io.write ("<crimes>".."\n")
+    for crimeK, crimeV in ipairs(df.global.world.crimes.all) do
+		io.write ("\t".."<crime>".."\n")
+		io.write ("\t\t".."<id>"..crimeV.id.."</id>".."\n")
+		io.write ("\t".."</crime>".."\n")
+    end
+    io.write ("</crimes>".."\n")
+	
+	io.write ("<adamantine_tubes>".."\n")
+    for adamantine_tubeK, adamantine_tubeV in ipairs(df.global.world.deep_vein_hollows) do
+		io.write ("\t".."<adamantine_tube>".."\n")
+		io.write ("\t\t".."<id>"..adamantine_tubeK.."</id>".."\n")
+		io.write ("\t".."</adamantine_tube>".."\n")
+    end
+    io.write ("</adamantine_tubes>".."\n")
+	
+	io.write ("<reports>".."\n")
+    for reportK, reportV in ipairs(df.global.world.status.reports) do
+		io.write ("\t".."<report>".."\n")
+		io.write ("\t\t".."<id>"..reportV.id.."</id>".."\n")
+		io.write ("\t".."</report>".."\n")
+    end
+    io.write ("</reports>".."\n")
+	
+	io.write ("<announcements>".."\n")
+    for announcementK, announcementV in ipairs(df.global.world.status.announcements) do
+		io.write ("\t".."<announcement>".."\n")
+		io.write ("\t\t".."<id>"..announcementV.id.."</id>".."\n")
+		io.write ("\t".."</announcement>".."\n")
+    end
+    io.write ("</announcements>".."\n")
+	
+	io.write ("<buildings>".."\n")
+    for buildingK, buildingV in ipairs(df.global.world.buildings.all) do
+		io.write ("\t".."<building>".."\n")
+		io.write ("\t\t".."<id>"..buildingV.id.."</id>".."\n")
+		io.write ("\t".."</building>".."\n")
+    end
+    io.write ("</buildings>".."\n")
+	
+	io.write ("<constructions>".."\n")
+    for constructionK, constructionV in ipairs(df.global.world.constructions) do
+		io.write ("\t".."<construction>".."\n")
+		io.write ("\t\t".."<id>"..constructionK.."</id>".."\n")
+		io.write ("\t".."</construction>".."\n")
+    end
+    io.write ("</constructions>".."\n")
+	
+	
+	io.write ("<items>".."\n")
+    for itemK, itemV in ipairs(df.global.world.items.all) do
+		io.write ("\t".."<item>".."\n")
+		io.write ("\t\t".."<id>"..itemV.id.."</id>".."\n")
+		io.write ("\t".."</item>".."\n")
+    end
+    io.write ("</items>".."\n")
+	
+	--io.write ("<stockpiles>".."\n")
+    --for stockpileK, stockpileV in ipairs(df.global.world.stockpiles.all) do
+	--	io.write ("\t".."<stockpile>".."\n")
+	--	io.write ("\t\t".."<id>"..stockpileK.id.."</id>".."\n")
+	--	io.write ("\t".."</stockpile>".."\n")
+    --end
+    --io.write ("</stockpiles>".."\n")
+	
+	io.write ("<plants>".."\n")
+    for plantK, plantV in ipairs(df.global.world.plants.all) do
+		io.write ("\t".."<plant>".."\n")
+		io.write ("\t\t".."<id>"..plantK.."</id>".."\n")
+		io.write ("\t".."</plant>".."\n")
+    end
+    io.write ("</plants>".."\n")
+	
+	io.write ("<squads>".."\n")
+    for squadK, squadV in ipairs(df.global.world.squads.all) do
+		io.write ("\t".."<squad>".."\n")
+		io.write ("\t\t".."<id>"..squadV.id.."</id>".."\n")
+		io.write ("\t".."</squad>".."\n")
+    end
+    io.write ("</squads>".."\n")
+
 	io.write ("<races>".."\n")
     for raceK, raceV in ipairs(df.global.world.raws.creatures.all) do
 		io.write ("\t".."<race>".."\n")
