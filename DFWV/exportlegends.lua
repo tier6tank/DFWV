@@ -638,6 +638,9 @@ end
 function wait_for_legends_vs()
     local vs = dfhack.gui.getCurViewscreen()
     if i <= #MAPS then
+		if df.viewscreen_legendsst:is_instance(vs.parent) then
+			vs = vs.parent
+		end
         if df.viewscreen_legendsst:is_instance(vs) then
             gui.simulateInput(vs, 'LEGENDS_EXPORT_DETAILED_MAP')
             dfhack.timeout(10,'frames',wait_for_export_maps_vs)
