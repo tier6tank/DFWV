@@ -132,6 +132,7 @@ namespace DFWV
 
             WorldTime WorldGenTime = new WorldTime(Convert.ToInt32(mapSplit[2]), Convert.ToInt32(mapSplit[1]) - 1, Convert.ToInt32(mapSplit[0]) - 1);
             mapSplit.RemoveRange(0,3);
+            mapSplit.Reverse();
 
             var name = string.Join("-", mapSplit);
             var nameWithTime = mapFile.Replace("-world_map", "");
