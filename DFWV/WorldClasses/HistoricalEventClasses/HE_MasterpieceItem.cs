@@ -25,7 +25,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? MatType { get; set; }
         private int? MatIndex  { get; set; }
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location { get { return Site != null ? Site.Location : Point.Empty; } }
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
             get { yield return HF; }

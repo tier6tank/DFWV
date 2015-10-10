@@ -513,7 +513,7 @@ namespace DFWV
                 f.EndUpdate();
             });
 
-            if (!MainTab.TabPages.Contains(tabPage))
+            if (!MainTab.TabPages.Contains(tabPage) && listBox.Items.Count > 0)
                 this.InvokeEx(f => f.MainTab.TabPages.Add(tabPage));
         }
 

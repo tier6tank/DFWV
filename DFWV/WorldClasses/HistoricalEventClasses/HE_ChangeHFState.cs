@@ -96,7 +96,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Process()
         {
             base.Process();
-            if (HF.isLeader && State.HasValue && States[State.Value] == "settled" && Site != null)
+            if (HF != null && HF.isLeader && State.HasValue && States[State.Value] == "settled" && Site != null)
             {
                 HF.Leader.Site = Site;
             }
