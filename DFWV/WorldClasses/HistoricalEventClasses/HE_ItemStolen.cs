@@ -17,7 +17,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? SiteID { get; set; }
         public Site Site { private get; set; }
         public Point Coords { private get; set; }
-        private int? Item { get; set; }
+        private int? ItemID { get; set; }
         private int? ItemType { get; set; }
         private int? ItemSubType { get; set; }
         private int? Mat { get; set; }
@@ -87,19 +87,19 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "item":
-                        Item = valI;
+                        ItemID = valI;
                         break;
                     case "item_type":
-                        if (!ItemTypes.Contains(val))
-                            ItemTypes.Add(val);
-                        ItemType = ItemTypes.IndexOf(val);
+                        if (!Item.ItemTypes.Contains(val))
+                            Item.ItemTypes.Add(val);
+                        ItemType = Item.ItemTypes.IndexOf(val);
                         break;
                     case "item_subtype":
                         if (valI != -1)
                         {
-                            if (!ItemSubTypes.Contains(val))
-                                ItemSubTypes.Add(val);
-                            ItemSubType = ItemSubTypes.IndexOf(val);
+                            if (!Item.ItemSubTypes.Contains(val))
+                                Item.ItemSubTypes.Add(val);
+                            ItemSubType = Item.ItemSubTypes.IndexOf(val);
                         }
                         break;
                     case "mattype":
@@ -109,9 +109,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         MatIndex = valI;
                         break;
                     case "mat":
-                        if (!Materials.Contains(val))
-                            Materials.Add(val);
-                        Mat = Materials.IndexOf(val);
+                        if (!Item.Materials.Contains(val))
+                            Item.Materials.Add(val);
+                        Mat = Item.Materials.IndexOf(val);
                         break;
                     case "entity":
                         EntityID = valI;
@@ -173,7 +173,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             EventLabel(frm, parent, ref location, "Theif:", AttackerCiv);
             EventLabel(frm, parent, ref location, "Theif:", HF);
             if (Mat != null || ItemType != null)
-                EventLabel(frm, parent, ref location, "Item:", string.Format("{0} {1}",Mat != null ? Materials[Mat.Value] : "UNKNOWN", ItemType != null ? ItemTypes[ItemType.Value] : "UNKNOWN"));
+                EventLabel(frm, parent, ref location, "Item:", string.Format("{0} {1}",Mat != null ? Item.Materials[Mat.Value] : "UNKNOWN", ItemType != null ? Item.ItemTypes[ItemType.Value] : "UNKNOWN"));
             
             EventLabel(frm, parent, ref location, "Item:", HF);
             EventLabel(frm, parent, ref location, "Site:", Site);
@@ -193,16 +193,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 return string.Format("{0} {1} {2} was stolen from {3} by the {4} {5}{6}.",
                     //TODO: Missing "and taken to blah blah"
                     timestring,
-                    Mat != null ? Materials[Mat.Value] : "UNKNOWN",
-                    ItemType != null ? ItemTypes[ItemType.Value] : "UNKNOWN",
+                    Mat != null ? Item.Materials[Mat.Value] : "UNKNOWN",
+                    ItemType != null ? Item.ItemTypes[ItemType.Value] : "UNKNOWN",
                     Site == null ? "UNKNOWN" : Site.AltName,
                     HF.Race.ToString().ToLower(),
                     HF,
                     ""); //TODO: Missing "and brought to [Site]"
             return string.Format("{0} {1} {2} was stolen from {3} by an unknown creature{4}.",
                 timestring,
-                Mat != null ? Materials[Mat.Value] : "UNKNOWN",
-                ItemType != null ? ItemTypes[ItemType.Value] : "UNKNOWN",
+                Mat != null ? Item.Materials[Mat.Value] : "UNKNOWN",
+                ItemType != null ? Item.ItemTypes[ItemType.Value] : "UNKNOWN",
                 Site == null ? "UNKNOWN" : Site.AltName,
                 ""); //TODO: Missing "and brought to [Site]"
         }
@@ -232,10 +232,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 DefenderCivID.DBExport(), 
                 SiteID.DBExport(),
                 Coords.DBExport(),
-                Item.DBExport(),
-                ItemType.DBExport(ItemTypes),
-                ItemSubType.DBExport(ItemSubTypes),
-                Mat.DBExport(Materials),
+                ItemID.DBExport(),
+                ItemType.DBExport(Item.ItemTypes),
+                ItemSubType.DBExport(Item.ItemSubTypes),
+                Mat.DBExport(Item.Materials),
                 EntityID.DBExport(),
                 HFID.DBExport(),
                 StructureID.DBExport()

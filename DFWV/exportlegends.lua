@@ -107,10 +107,19 @@ function export_more_legends_xml()
     io.write ("</geo_biomes>".."\n")
 	--]]
 	
-		io.write ("<armies>".."\n")
+	io.write ("<armies>".."\n")
     for armyK, armyV in ipairs(df.global.world.armies.all) do
 		io.write ("\t".."<army>".."\n")
 		io.write ("\t\t".."<id>"..armyV.id.."</id>".."\n")
+		io.write ("\t\t".."<coords>"..armyV.unk_pos1.x..","..armyV.unk_pos1.y.."</coords>".."\n")
+		io.write ("\t\t".."<item>"..getItemSubTypeName(armyV.item_type,armyV.item_subtype).."</item>".."\n")
+		
+		io.write ("\t\t".."<item_type>"..tostring(df.item_type[armyV.item_type]):lower().."</item_type>".."\n")
+		if (armyV.item_subtype ~= -1) then
+			io.write ("\t\t".."<item_subtype>"..armyV.item_subtype.."</item_subtype>".."\n")
+		end
+		
+		io.write ("\t\t".."<mat>"..dfhack.matinfo.toString(dfhack.matinfo.decode(armyV.mat_type, armyV.mat_index)).."</mat>".."\n")
 		io.write ("\t".."</army>".."\n")
     end
     io.write ("</armies>".."\n")
@@ -119,6 +128,44 @@ function export_more_legends_xml()
     for unitK, unitV in ipairs(df.global.world.units.all) do
 		io.write ("\t".."<unit>".."\n")
 		io.write ("\t\t".."<id>"..unitV.id.."</id>".."\n")
+		flagValues = ""
+		for k,v in pairs(unitV) do
+			if (k == "pos") then
+				io.write ("\t\t".."<coords>")
+					io.write (v.x..","..v.y..","..v.z)
+				io.write ("</coords>\n")
+			elseif (k == "name") then
+				io.write ("\t\t".."<name>"..dfhack.df2utf(dfhack.TranslateName(v,0)).."</name>".."\n")
+				io.write ("\t\t".."<name2>"..dfhack.df2utf(dfhack.TranslateName(v,1)).."</name2>".."\n")
+			elseif ( k == "sex" or k == "civ_id" or k == "population_id" 
+				 or k == "mood" or k == "hist_figure_id"  or k == "hist_figure_id2") then
+				io.write ("\t\t".."<"..k..">"..v.."</"..k..">".."\n")
+			elseif (k == "race") then
+				io.write ("\t\t".."<race>"..v.."</race>".."\n")
+				io.write ("\t\t".."<caste>"..unitV.caste.."</caste>".."\n")
+			elseif (k == "profession" or k == "profession2") then
+				io.write ("\t\t".."<"..k..">"..df.profession[v]:lower().."</"..k..">".."\n")			
+			elseif (k == "military" and v.squad_id ~= "-1") then
+				io.write ("\t\t".."<squad_id>"..v.squad_id.."</squad_id>".."\n")
+			elseif (k == "flags1" or k == "flags2" or k == "flags3") then
+				for flagK, flagV in pairs(v) do
+					if (flagV) then
+						flagValues = flagValues..flagK..","
+					end
+				end
+			elseif (k == "status") then
+				io.write ("\t\t".."<labors>")
+				for kLabor, vLabor in pairs(v.labors) do
+					if (vLabor) then
+						io.write (kLabor..",")
+					end
+				end
+				io.write ("</labors>\n")			
+			elseif (k == "opponent" and v.unit_id ~= "-1") then
+				io.write ("\t\t".."<opponent_id>"..v.unit_id.."</opponent_id>".."\n")
+			end
+		end
+		io.write("\t\t".."<flags>"..flagValues.."</flags>".."\n")
 		io.write ("\t".."</unit>".."\n")
     end
     io.write ("</units>".."\n")
@@ -127,6 +174,7 @@ function export_more_legends_xml()
     for vehicleK, vehicleV in ipairs(df.global.world.vehicles.all) do
 		io.write ("\t".."<vehicle>".."\n")
 		io.write ("\t\t".."<id>"..vehicleV.id.."</id>".."\n")
+		io.write ("\t\t".."<item_id>"..vehicleV.item_id.."</item_id>".."\n")
 		io.write ("\t".."</vehicle>".."\n")
     end
     io.write ("</vehicles>".."\n")
@@ -135,6 +183,38 @@ function export_more_legends_xml()
     for engravingK, engravingV in ipairs(df.global.world.engravings) do
 		io.write ("\t".."<engraving>".."\n")
 		io.write ("\t\t".."<id>"..engravingK.."</id>".."\n")
+		io.write ("\t\t".."<artist>"..engravingV.artist.."</artist>".."\n")
+		if (engravingV.masterpiece_event ~= -1) then
+			io.write ("\t\t".."<masterpiece_event>"..engravingV.masterpiece_event.."</masterpiece_event>".."\n")
+		end
+		io.write ("\t\t".."<skill_rating>"..engravingV.skill_rating.."</skill_rating>".."\n")
+		io.write ("\t\t".."<coords>"..engravingV.pos.x..","..engravingV.pos.y..","..engravingV.pos.z.."</coords>".."\n")
+		io.write ("\t\t".."<tile>"..engravingV.tile.."</tile>".."\n")
+		io.write ("\t\t".."<art_id>"..engravingV.art_id.."</art_id>".."\n")
+		io.write ("\t\t".."<art_subid>"..engravingV.art_subid.."</art_subid>".."\n")
+		io.write ("\t\t".."<quality>"..engravingV.tile.."</quality>".."\n")
+		engravinglocation = "floor"
+		if (engravingV.flags.west) then
+			engravinglocation = "west"
+		elseif (engravingV.flags.east) then
+			engravinglocation = "east"
+		elseif (engravingV.flags.north) then
+			engravinglocation = "north"
+		elseif (engravingV.flags.south) then
+			engravinglocation = "south"
+		elseif (engravingV.flags.northwest) then
+			engravinglocation = "northwest"
+		elseif (engravingV.flags.northeast) then
+			engravinglocation = "northeast"
+		elseif (engravingV.flags.southwest) then
+			engravinglocation = "southwest"
+		elseif (engravingV.flags.southeast) then
+			engravinglocation = "southeast"
+		end
+		io.write ("\t\t".."<location>"..engravinglocation.."</location>".."\n")
+		if (engravingV.flags.hidden == true) then
+			io.write ("\t\t".."<hidden/>".."\n")
+		end
 		io.write ("\t".."</engraving>".."\n")
     end
     io.write ("</engravings>".."\n")
@@ -183,6 +263,56 @@ function export_more_legends_xml()
     for buildingK, buildingV in ipairs(df.global.world.buildings.all) do
 		io.write ("\t".."<building>".."\n")
 		io.write ("\t\t".."<id>"..buildingV.id.."</id>".."\n")
+		io.write ("\t\t".."<name>"..buildingV.name.."</name>".."\n")
+		io.write ("\t\t".."<coords1>"..buildingV.x1..","..buildingV.y1..","..buildingV.z.."</coords1>".."\n")
+		io.write ("\t\t".."<coordscenter>"..buildingV.centerx..","..buildingV.centery..","..buildingV.z.."</coordscenter>".."\n")
+		io.write ("\t\t".."<coords2>"..buildingV.x2..","..buildingV.y2..","..buildingV.z.."</coords2>".."\n")
+		io.write ("\t\t".."<mat>"..dfhack.matinfo.toString(dfhack.matinfo.decode(buildingV.mat_type, buildingV.mat_index)).."</mat>".."\n")
+		io.write ("\t\t".."<race>"..buildingV.race.."</race>".."\n")
+		buildingType = df.building_type[buildingV:getType()]:lower()
+		io.write ("\t\t".."<type>"..buildingType.."</type>".."\n")
+		if (buildingType == "workshop") then
+			io.write ("\t\t".."<subtype>"..df.workshop_type[buildingV.type]:lower().."</subtype>".."\n")
+		elseif (buildingType == "bed") then
+			if (buildingV.owner ~= nil) then
+				io.write ("\t\t".."<owner_unit_id>"..buildingV.owner.id.."</owner_unit_id>".."\n")
+			end
+		elseif (buildingType == "construction") then
+			io.write ("\t\t".."<subtype>"..df.construction_type[buildingV.type]:lower().."</subtype>".."\n")
+		elseif (buildingType == "furnace") then
+			io.write ("\t\t".."<subtype>"..df.furnace_type[buildingV.type]:lower().."</subtype>".."\n")
+		elseif (buildingType == "civzone") then
+			io.write ("\t\t".."<subtype>"..df.civzone_type[buildingV.type]:lower().."</subtype>".."\n")
+			io.write ("\t\t".."<zone_flags>")
+			for kFlag, vFlag in pairs(buildingV.zone_flags) do
+				if (vFlag) then
+					io.write (kFlag..",")
+				end
+			end
+			io.write ("</zone_flags>\n")					
+		elseif (buildingType == "trap") then
+			io.write ("\t\t".."<subtype>"..df.trap_type[buildingV.trap_type]:lower().."</subtype>".."\n")
+		elseif (buildingType == "coffin") then
+			for kContainedItem, vContainedItem in pairs(buildingV.contained_items) do
+				if (vContainedItem.item:getType() == 23) then -- corpse
+					io.write ("\t\t".."<corpse_hf>"..vContainedItem.item.hist_figure_id.."</corpse_hf>".."\n")
+					io.write ("\t\t".."<corpse_unit>"..vContainedItem.item.unit_id.."</corpse_unit>".."\n")
+					break
+				end
+			end
+		elseif (buildingType == "bridge") then
+			io.write ("\t\t".."<direction>"..buildingV.direction.."</direction>".."\n")
+		elseif (buildingType == "nestbox") then
+			io.write ("\t\t".."<claimed_by>"..buildingV.claimed_by.."</claimed_by>".."\n")
+		elseif (buildingType == "armorstand" or buildingType == "weaponrack" or buildingType == "cabinet"
+			 or buildingType == "box") then
+			for kSquad, vSquad in pairs(buildingV.squads) do
+				io.write ("\t\t".."<squad>"..vSquad.squad_id.."</squad>".."\n")
+			end
+		elseif (buildingType == "") then
+		else -- stockpile, door, table, chair, statue, cage, farmplot, barsfloor, barsvertical, chain, support, tradedepot
+
+		end
 		io.write ("\t".."</building>".."\n")
     end
     io.write ("</buildings>".."\n")
@@ -191,6 +321,13 @@ function export_more_legends_xml()
     for constructionK, constructionV in ipairs(df.global.world.constructions) do
 		io.write ("\t".."<construction>".."\n")
 		io.write ("\t\t".."<id>"..constructionK.."</id>".."\n")
+		io.write ("\t\t".."<coords>"..constructionV.pos.x..","..constructionV.pos.y..","..constructionV.pos.z.."</coords>".."\n")
+		io.write ("\t\t".."<item_type>"..tostring(df.item_type[constructionV.item_type]):lower().."</item_type>".."\n")
+		if (constructionV.item_subtype ~= -1) then
+			io.write ("\t\t".."<item_subtype>"..constructionV.item_subtype.."</item_subtype>".."\n")
+		end
+		io.write ("\t\t".."<mat>"..dfhack.matinfo.toString(dfhack.matinfo.decode(constructionV.mat_type, constructionV.mat_index)).."</mat>".."\n")
+
 		io.write ("\t".."</construction>".."\n")
     end
     io.write ("</constructions>".."\n")
@@ -200,6 +337,35 @@ function export_more_legends_xml()
     for itemK, itemV in ipairs(df.global.world.items.all) do
 		io.write ("\t".."<item>".."\n")
 		io.write ("\t\t".."<id>"..itemV.id.."</id>".."\n")
+        if (itemV:getType() ~= -1) then
+            io.write ("\t\t".."<type>"..tostring(df.item_type[itemV:getType()]):lower().."</type>".."\n")
+            if (itemV:getSubtype() ~= -1) then
+				if (type(itemV.subtype) == "number") then
+					io.write ("\t\t".."<subtype>"..itemV.subtype.."</subtype>".."\n")
+				else
+					io.write ("\t\t".."<subtype>"..itemV.subtype.name.."</subtype>".."\n")
+				end
+            end
+        end
+        if (table.containskey(itemV,"description")) then
+            io.write ("\t\t".."<description>"..itemV.description:lower().."</description>".."\n")
+        end
+        if (itemV:getMaterial() ~= -1 and itemV:getMaterialIndex() ~= -1) then
+            io.write ("\t\t".."<mat>"..dfhack.matinfo.toString(dfhack.matinfo.decode(itemV:getMaterial(), itemV:getMaterialIndex())).."</mat>".."\n")
+        end
+		if (table.containskey(itemV, "quality") and itemV.quality ~= 0) then
+			io.write ("\t\t".."<quality>"..itemV.quality.."</quality>".."\n")
+		end
+		if (table.containskey(itemV, "skill_used") and itemV.skill_used ~= 0) then
+			io.write ("\t\t".."<skill_used>"..itemV.skill_used.."</skill_used>".."\n")
+		end
+		if (table.containskey(itemV, "maker") and itemV.maker ~= -1) then
+			io.write ("\t\t".."<maker_unit>"..itemV.maker.."</maker_unit>".."\n")
+		end
+		if (table.containskey(itemV, "masterpiece_event") and itemV.masterpiece_event ~= -1) then
+			io.write ("\t\t".."<masterpiece_event>"..itemV.masterpiece_event.."</masterpiece_event>".."\n")
+		end
+		
 		io.write ("\t".."</item>".."\n")
     end
     io.write ("</items>".."\n")
@@ -216,6 +382,8 @@ function export_more_legends_xml()
     for plantK, plantV in ipairs(df.global.world.plants.all) do
 		io.write ("\t".."<plant>".."\n")
 		io.write ("\t\t".."<id>"..plantK.."</id>".."\n")
+		io.write ("\t\t".."<material>"..df.global.world.raws.plants.all[plantV.material].name.."</material>".."\n")
+		io.write ("\t\t".."<coords>"..plantV.pos.x..","..plantV.pos.y..","..plantV.pos.z.."</coords>".."\n")
 		io.write ("\t".."</plant>".."\n")
     end
     io.write ("</plants>".."\n")
@@ -224,6 +392,14 @@ function export_more_legends_xml()
     for squadK, squadV in ipairs(df.global.world.squads.all) do
 		io.write ("\t".."<squad>".."\n")
 		io.write ("\t\t".."<id>"..squadV.id.."</id>".."\n")
+		io.write ("\t\t".."<name>"..dfhack.df2utf(dfhack.TranslateName(squadV.name)).."</name>".."\n")
+		io.write ("\t\t".."<altname>"..dfhack.df2utf(dfhack.TranslateName(squadV.name,1)).."</altname>".."\n")
+		io.write ("\t\t".."<entity_id>"..squadV.entity_id.."</entity_id>".."\n")
+		for positionK, positionV in pairs(squadV.positions) do
+			if (positionV.occupant ~= -1) then
+				io.write ("\t\t".."<member>"..positionV.occupant.."</member>".."\n")
+			end
+		end
 		io.write ("\t".."</squad>".."\n")
     end
     io.write ("</squads>".."\n")
@@ -382,6 +558,7 @@ function export_more_legends_xml()
     for artifactK, artifactV in ipairs(df.global.world.artifacts.all) do
         io.write ("\t".."<artifact>".."\n")
         io.write ("\t\t".."<id>"..artifactV.id.."</id>".."\n")
+		io.write ("\t\t".."<item_id>"..artifactV.id.."</item_id>".."\n")
         if (artifactV.item:getType() ~= -1) then
             io.write ("\t\t".."<item_type>"..tostring(df.item_type[artifactV.item:getType()]):lower().."</item_type>".."\n")
             if (artifactV.item:getSubtype() ~= -1) then
@@ -773,9 +950,9 @@ end
 
 -- selects detailed map and export it
 function wait_for_export_maps_vs()
-    local vs = dfhack.gui.getCurViewscreen()
+	local vs = dfhack.gui.getCurViewscreen()
     if dfhack.gui.getCurFocus() == "export_graphical_map" then
-        vs.sel_idx = i-1
+		vs.sel_idx = i-1
         print('    Exporting:  '..MAPS[i]..' map')
         gui.simulateInput(vs, 'SELECT')
         i = i + 1

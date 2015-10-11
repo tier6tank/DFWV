@@ -10,6 +10,8 @@ namespace DFWV.WorldClasses
     public class Vehicle : XMLObject
     {
         override public Point Location { get { return Point.Empty; } }
+        private int? ItemID { get; set; }
+        private Unit Item { get; set; }
 
         public Vehicle(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -17,9 +19,14 @@ namespace DFWV.WorldClasses
             foreach (var element in xdoc.Root.Elements())
             {
                 var val = element.Value.Trim();
+                int valI;
+                int.TryParse(val, out valI);
                 switch (element.Name.LocalName)
                 {
                     case "id":
+                        break;
+                    case "item_id":
+                        ItemID = valI;
                         break;
                     default:
                         DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
@@ -61,7 +68,8 @@ namespace DFWV.WorldClasses
 
         internal override void Link()
         {
-
+            //if (ItemID.HasValue)
+            //    Item = World.Units[ItemID.Value];
         }
 
         internal override void Process()

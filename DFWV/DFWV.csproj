@@ -155,6 +155,7 @@
     <Compile Include="MapForm.Designer.cs">
       <DependentUpon>MapForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Point3.cs" />
     <Compile Include="WorldClasses\AdamantineTube.cs" />
     <Compile Include="WorldClasses\Announcement.cs" />
     <Compile Include="WorldClasses\Squad.cs" />

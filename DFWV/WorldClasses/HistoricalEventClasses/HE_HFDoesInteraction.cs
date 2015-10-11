@@ -21,6 +21,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private Site Site { get; set; }
         private int? SubregionID { get; set; }
         private Region Subregion { get; set; }
+        private int? Source { get; set; }
 
         override public Point Location { get { return Point.Empty; } }
         public override IEnumerable<HistoricalFigure> HFsInvolved
@@ -114,6 +115,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "region":
                         if (valI != -1)
                             SubregionID = valI;
+                        break;
+                    case "source":
+                        Source = valI;
                         break;
                     default:
                         DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());

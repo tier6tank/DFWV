@@ -115,7 +115,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                     case "civ":
                         break;
-
+                    case "trickster":
+                        TricksterHFID = valI;
+                        break;
+                    case "target":
+                        TargetEnID = valI;
+                        break;
                     default:
                         DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;

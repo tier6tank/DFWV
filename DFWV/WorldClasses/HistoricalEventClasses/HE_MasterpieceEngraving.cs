@@ -105,9 +105,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         ArtSubID = valI;
                         break;
                     case "mat":
-                        if (!Materials.Contains(val))
-                            Materials.Add(val);
-                        Mat = Materials.IndexOf(val);
+                        if (!Item.Materials.Contains(val))
+                            Item.Materials.Add(val);
+                        Mat = Item.Materials.IndexOf(val);
                         break;
                     case "maker":
                     case "maker_entity":
@@ -174,7 +174,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 SkillAtTime,
                 ArtID.DBExport(),
                 ArtSubID.DBExport(),
-                Mat.DBExport(Materials)
+                Mat.DBExport(Item.Materials)
             };
 
             Database.ExportWorldItem(table, vals);

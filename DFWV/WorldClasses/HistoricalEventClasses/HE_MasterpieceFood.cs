@@ -18,7 +18,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private Site Site { get; set; }
         private int? SkillAtTime { get; set; }
 
-        private int? Item { get; set; }
+        private int? ItemID { get; set; }
         private int? ItemSubType { get; set; }
 
 
@@ -106,12 +106,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "item_id":
-                        Item = valI;
+                        ItemID = valI;
                         break;
                     case "item_subtype":
-                        if (!ItemSubTypes.Contains(val))
-                            ItemSubTypes.Add(val);
-                        ItemSubType = ItemSubTypes.IndexOf(val);
+                        if (!Item.ItemSubTypes.Contains(val))
+                            Item.ItemSubTypes.Add(val);
+                        ItemSubType = Item.ItemSubTypes.IndexOf(val);
                         break;
                     case "maker":
                     case "maker_entity":
@@ -139,7 +139,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             return string.Format("{0} {1} prepared a masterful {2} for {3} at {4}.",
-                    timestring, HF, ItemSubType.HasValue ? ItemSubTypes[ItemSubType.Value] : "UNKNOWN", Entity,
+                    timestring, HF, ItemSubType.HasValue ? Item.ItemSubTypes[ItemSubType.Value] : "UNKNOWN", Entity,
                                 Site.AltName);
         }
 
@@ -166,8 +166,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 EntityID.DBExport(), 
                 SiteID.DBExport(), 
                 SkillAtTime,
-                Item.DBExport(),
-                ItemSubType.DBExport(ItemSubTypes)
+                ItemID.DBExport(),
+                ItemSubType.DBExport(Item.ItemSubTypes)
             };
 
             Database.ExportWorldItem(table, vals);

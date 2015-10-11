@@ -18,7 +18,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private Site Site { get; set; }
         private int? SkillAtTime { get; set; }
 
-        private int? Item { get; set; }
+        private int? ItemID { get; set; }
         private int? ItemType { get; set; }
         private int? ItemSubType { get; set; }
         private int? Mat { get; set; }
@@ -100,19 +100,19 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "item_id":
-                        Item = valI;
+                        ItemID = valI;
                         break;
                     case "item_type":
-                        if (!ItemTypes.Contains(val))
-                            ItemTypes.Add(val);
-                        ItemType = ItemTypes.IndexOf(val);
+                        if (!Item.ItemTypes.Contains(val))
+                            Item.ItemTypes.Add(val);
+                        ItemType = Item.ItemTypes.IndexOf(val);
                         break;
                     case "item_subtype":
                         if (val != "-1")
                         {
-                            if (!ItemSubTypes.Contains(val))
-                                ItemSubTypes.Add(val);
-                            ItemSubType = ItemSubTypes.IndexOf(val);
+                            if (!Item.ItemSubTypes.Contains(val))
+                                Item.ItemSubTypes.Add(val);
+                            ItemSubType = Item.ItemSubTypes.IndexOf(val);
                         }
                         break;
                     case "mat_type":
@@ -122,9 +122,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         MatIndex = valI;
                         break;
                     case "mat":
-                        if (!Materials.Contains(val))
-                            Materials.Add(val);
-                        Mat = Materials.IndexOf(val);
+                        if (!Item.Materials.Contains(val))
+                            Item.Materials.Add(val);
+                        Mat = Item.Materials.IndexOf(val);
                         break;
                     case "maker":
                     case "maker_entity":
@@ -165,13 +165,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             if (ItemType.HasValue && Mat.HasValue)
             {
-                if (ItemSubType.HasValue && ItemSubTypes[ItemSubType.Value] != "-1")
+                if (ItemSubType.HasValue && Item.ItemSubTypes[ItemSubType.Value] != "-1")
                     return string.Format("{0} {1} created a masterful {2} {3} for {4} at {5}.",
-                        timestring, HF, Materials[Mat.Value], ItemSubTypes[ItemSubType.Value], Entity,
+                        timestring, HF, Item.Materials[Mat.Value], Item.ItemSubTypes[ItemSubType.Value], Entity,
                         Site.AltName);
 
                 return string.Format("{0} {1} created a masterful {2} {3} for {4} at {5}.",
-                    timestring, HF, Materials[Mat.Value], ItemTypes[ItemType.Value], Entity,
+                    timestring, HF, Item.Materials[Mat.Value], Item.ItemTypes[ItemType.Value], Entity,
                     Site.AltName);
             }
 
@@ -203,10 +203,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 EntityID.DBExport(), 
                 SiteID.DBExport(), 
                 SkillAtTime,
-                Item.DBExport(),
-                ItemType.DBExport(ItemTypes),
-                ItemSubType.DBExport(ItemSubTypes),
-                Mat.DBExport(Materials)
+                ItemID.DBExport(),
+                ItemType.DBExport(Item.ItemTypes),
+                ItemSubType.DBExport(Item.ItemSubTypes),
+                Mat.DBExport(Item.Materials)
             };
 
             Database.ExportWorldItem(table, vals);

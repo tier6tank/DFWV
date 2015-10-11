@@ -18,8 +18,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? FeatureLayerID { get; set; }
         public int? NewJobID { get; set; }
         public int? OldJobID { get; set; }
-        public string NewJob { get; set; }
-        public string OldJob { get; set; }
+        public int? NewJob { get; set; }
+        public int? OldJob { get; set; }
 
         override public Point Location { get { return Site != null ? Site.Location : (Subregion != null ? Subregion.Location : Point.Empty); } }
 
@@ -103,10 +103,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "site":
                         break;
                     case "new_job":
-                        NewJob = val.Replace("_", " ");
+                        if (!Unit.JobTypes.Contains(val))
+                            Unit.JobTypes.Add(val);
+                        NewJob = Unit.JobTypes.IndexOf(val);
                         break;
                     case "old_job":
-                        OldJob = val.Replace("_", " ");
+                        if (!Unit.JobTypes.Contains(val))
+                            Unit.JobTypes.Add(val);
+                        OldJob = Unit.JobTypes.IndexOf(val);
                         break;
                     default:
                         DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
@@ -129,15 +133,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         protected override string LegendsDescription() //Not Matched
         {
-            //TODO: Incorporate new data
             var timestring = base.LegendsDescription();
 
-            if (NewJob != "standard")
+            if (NewJob.HasValue && Unit.JobTypes[NewJob.Value] != "standard")
                 return string.Format("{0} {1} {2} became {3} in {4}.",
-                    timestring, HF.Race, HF, NewJob ?? "UNKNOWN",
+                    timestring, HF.Race, HF, Unit.JobTypes[NewJob.Value] ?? "UNKNOWN",
                     Site != null ? Site.AltName : Subregion.Name.ToTitleCase());
             return string.Format("{0} {1} {2} stopped being a {3} in {4}.",
-                timestring, HF.Race, HF, OldJob ?? "UNKNOWN",
+                timestring, HF.Race, HF, OldJob.HasValue ? Unit.JobTypes[OldJob.Value] : "UNKNOWN",
                             Site != null ? Site.AltName : Subregion.Name);
         }
 

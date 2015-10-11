@@ -88,7 +88,7 @@ namespace DFWVTests
 
             Assert.AreEqual(artifact.ID, 3);
             Assert.AreEqual(artifact.Name, "the fair orange");
-            Assert.AreEqual(artifact.Item, "bibeomthu");
+            Assert.AreEqual(artifact.ItemName, "bibeomthu");
         }
 
         [TestMethod]

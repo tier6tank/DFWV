@@ -111,19 +111,19 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "site":
                         break;
                     case "item_type":
-                        if (!ItemTypes.Contains(val))
-                            ItemTypes.Add(val);
-                        ItemType = ItemTypes.IndexOf(val);
+                        if (!Item.ItemTypes.Contains(val))
+                            Item.ItemTypes.Add(val);
+                        ItemType = Item.ItemTypes.IndexOf(val);
                         break;
                     case "item_subtype":
-                        if (!ItemSubTypes.Contains(val))
-                            ItemSubTypes.Add(val);
-                        ItemSubType = ItemSubTypes.IndexOf(val);
+                        if (!Item.ItemSubTypes.Contains(val))
+                            Item.ItemSubTypes.Add(val);
+                        ItemSubType = Item.ItemSubTypes.IndexOf(val);
                         break;
                     case "mat":
-                        if (!Materials.Contains(val))
-                            Materials.Add(val);
-                        Mat = Materials.IndexOf(val);
+                        if (!Item.Materials.Contains(val))
+                            Item.Materials.Add(val);
+                        Mat = Item.Materials.IndexOf(val);
                         break;
                     case "mattype":
                         MatType = valI;
@@ -140,9 +140,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         ImprovementSubType = valI;
                         break;
                     case "imp_mat":
-                        if (!Materials.Contains(val))
-                            Materials.Add(val);
-                        ImprovementMat = Materials.IndexOf(val);
+                        if (!Item.Materials.Contains(val))
+                            Item.Materials.Add(val);
+                        ImprovementMat = Item.Materials.IndexOf(val);
                         break;
                     case "art_id":
                         ArtID = valI;
@@ -186,28 +186,28 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 {
                     case "spikes":
                         return string.Format("{0} {1} added masterful {2} of {3} to a {4} {5} for {6} at {7}.",
-                            timestring, HF, ImprovementTypes[ImprovementType.Value], Materials[ImprovementMat.Value],
-                            Materials[Mat.Value], ItemTypes[ItemType.Value], Entity,
+                            timestring, HF, ImprovementTypes[ImprovementType.Value], Item.Materials[ImprovementMat.Value],
+                            Item.Materials[Mat.Value], Item.ItemTypes[ItemType.Value], Entity,
                             Site.AltName);
                     case "rings_hanging":
                         return string.Format("{0} {1} added masterful rings in {2} to a {3} {4} for {5} at {6}.",
-                            timestring, HF, Materials[ImprovementMat.Value],
-                            Materials[Mat.Value], ItemTypes[ItemType.Value], Entity,
+                            timestring, HF, Item.Materials[ImprovementMat.Value],
+                            Item.Materials[Mat.Value], Item.ItemTypes[ItemType.Value], Entity,
                             Site.AltName);
                     case "bands":
                         return string.Format("{0} {1} added masterful bands in {2} to a {3} {4} for {5} at {6}.",
-                            timestring, HF, Materials[ImprovementMat.Value],
-                            Materials[Mat.Value], ItemTypes[ItemType.Value], Entity,
+                            timestring, HF, Item.Materials[ImprovementMat.Value],
+                            Item.Materials[Mat.Value], Item.ItemTypes[ItemType.Value], Entity,
                             Site.AltName);
                     case "covered":
                         return string.Format("{0} {1} added masterful covering in {2} to a {3} {4} for {5} at {6}.",
-                            timestring, HF, Materials[ImprovementMat.Value],
-                            Materials[Mat.Value], ItemTypes[ItemType.Value], Entity,
+                            timestring, HF, Item.Materials[ImprovementMat.Value],
+                            Item.Materials[Mat.Value], Item.ItemTypes[ItemType.Value], Entity,
                             Site.AltName);
                     default:
                         return string.Format("{0} {1} added masterful {2} of {3} to a {4} {5} for {6} at {7}.",
-                            timestring, HF, ImprovementTypes[ImprovementType.Value], Materials[ImprovementMat.Value],
-                            Materials[Mat.Value], ItemTypes[ItemType.Value], Entity,
+                            timestring, HF, ImprovementTypes[ImprovementType.Value], Item.Materials[ImprovementMat.Value],
+                            Item.Materials[Mat.Value], Item.ItemTypes[ItemType.Value], Entity,
                             Site.AltName);
                 }
             }
@@ -240,12 +240,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 EntityID.DBExport(), 
                 SiteID.DBExport(), 
                 SkillAtTime,
-                ItemType.DBExport(ItemTypes),
-                ItemSubType.DBExport(ItemSubTypes),
-                Mat.DBExport(Materials),
+                ItemType.DBExport(Item.ItemTypes),
+                ItemSubType.DBExport(Item.ItemSubTypes),
+                Mat.DBExport(Item.Materials),
                 ImprovementType.DBExport(ImprovementTypes),
                 //ImprovementSubType.DBExport(), //TODO: Uncomment this
-                ImprovementMat.DBExport(Materials),
+                ImprovementMat.DBExport(Item.Materials),
                 ArtID.DBExport(),
                 ArtSubID.DBExport()
             };

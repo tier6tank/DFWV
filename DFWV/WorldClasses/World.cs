@@ -1311,9 +1311,9 @@ namespace DFWV.WorldClasses
 
             HistoricalEvent.Types = new List<string>();
             HistoricalEvent.Buildings = new List<string>();
-            HistoricalEvent.ItemSubTypes = new List<string>();
-            HistoricalEvent.ItemTypes = new List<string>();
-            HistoricalEvent.Materials = new List<string>();
+            Item.ItemSubTypes = new List<string>();
+            Item.ItemTypes = new List<string>();
+            Item.Materials = new List<string>();
             HistoricalEvent.MeetingResults = new List<string>();
             HistoricalEvent.MeetingTopics = new List<string>();
             HE_ChangeHFState.States = new List<string>();
