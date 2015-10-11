@@ -11,8 +11,9 @@ namespace DFWV.WorldClasses
     public class Army : XMLObject
     {
         private int? ItemID { get; set; }
-
+        public Item ArmyItem { get; set; }
         private int? ItemType { get; set; }
+        private int? ItemSubtype { get; set; }
         private int? Mat { get; set; }
         public Point Coords { get; set; }
         override public Point Location { get { return Coords; } }
@@ -31,12 +32,18 @@ namespace DFWV.WorldClasses
                     case "id":
                         break;
                     case "item":
-                        ItemID = valI;
+                        if (valI != -1)
+                            ItemID = valI;
                         break;
                     case "item_type":
                         if (!Item.ItemTypes.Contains(val))
                             Item.ItemTypes.Add(val);
                         ItemType = Item.ItemTypes.IndexOf(val);
+                        break;
+                    case "item_subtype":
+                        if (!Item.ItemTypes.Contains(val))
+                            Item.ItemTypes.Add(val);
+                        ItemSubtype = Item.ItemTypes.IndexOf(val);
                         break;
                     case "mat":
                         if (!Item.Materials.Contains(val))
@@ -59,11 +66,38 @@ namespace DFWV.WorldClasses
         {
             try
             {
-                //frm.grpArmy.Text = ToString();
-                //frm.grpArmy.Show();
+                frm.grpArmy.Text = ToString();
+                frm.grpArmy.Show();
 #if DEBUG
-                //frm.grpArmy.Text += string.Format(" - ID: {0}", ID);
+                frm.grpArmy.Text += string.Format(" - ID: {0}", ID);
 #endif
+                frm.lblArmyLocation.Text = Coords.ToString();
+                frm.lblArmyItem.Data = ArmyItem;
+
+                if (ItemType.HasValue)
+                {
+                    frm.lblArmyItemType.Visible = true;
+                    frm.lblArmyItemType.Text = Item.ItemTypes[ItemType.Value];
+                }
+                else
+                    frm.lblArmyItemType.Visible = false;
+
+                if (ItemSubtype.HasValue)
+                {
+                    frm.lblArmyItemSubtype.Visible = true;
+                    frm.lblArmyItemSubtype.Text = Item.ItemTypes[ItemSubtype.Value];
+                }
+                else
+                    frm.lblArmyItemSubtype.Visible = false;
+
+                if (Mat.HasValue)
+                {
+                    frm.lblArmyMaterial.Visible = true;
+                    frm.lblArmyMaterial.Text = Item.Materials[Mat.Value];
+                }
+                else
+                    frm.lblArmyMaterial.Visible = false;
+
 
             }
             finally
@@ -86,7 +120,8 @@ namespace DFWV.WorldClasses
 
         internal override void Link()
         {
-
+            if (ItemID.HasValue)
+                ArmyItem = World.Items[ItemID.Value];
         }
 
         internal override void Process()

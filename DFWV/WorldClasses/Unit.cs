@@ -126,12 +126,41 @@ namespace DFWV.WorldClasses
         {
             try
             {
-                //frm.grpUnit.Text = ToString();
-                //frm.grpUnit.Show();
+                frm.grpUnit.Text = ToString();
+                frm.grpUnit.Show();
 #if DEBUG
-                //frm.grpUnit.Text += string.Format(" - ID: {0}", ID);
+                frm.grpUnit.Text += string.Format(" - ID: {0}", ID);
 #endif
 
+                frm.lblUnitName.Text = Name;
+                frm.lblUnitAltName.Text = AltName;
+                frm.lblUnitCoords.Text = Coords.ToString();
+                frm.lblUnitSex.Text = Sex.ToString();
+                frm.lblUnitCiv.Data = Civ;
+                frm.lblUnitPop.Data = Population;
+                frm.lblUnitMood.Text = Mood.ToString();
+                frm.lblUnitHF.Data = HistFigure;
+                frm.lblUnitHF2.Data = HistFigure2;
+                frm.lblUnitRace.Data = Race;
+                frm.lblUnitCaste.Text = Caste.ToString();
+                if (Profession.HasValue)
+                {
+                    frm.lblUnitProfession.Text = JobTypes[Profession.Value];
+                    frm.lblUnitProfession.Visible = true;
+                }
+                else
+                    frm.lblUnitProfession.Visible = false;
+                if (Profession2.HasValue)
+                {
+                    frm.lblUnitProfession2.Text = JobTypes[Profession2.Value];
+                    frm.lblUnitProfession2.Visible = true;
+                }
+                else
+                    frm.lblUnitProfession2.Visible = false;
+                frm.lblUnitSquad.Data = Squad;
+                frm.lblUnitFlags.Text = string.Join(",",Flags);
+                frm.lblUnitLabors.Text = string.Join(",", Labors);
+                frm.lblUnitOpponent.Data = Opponent;
             }
             finally
             {
