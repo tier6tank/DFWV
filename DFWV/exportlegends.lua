@@ -65,6 +65,12 @@ function table.containskey(table, key)
     return false
 end
 
+function tablelength(T)
+  local count = 0
+  for _ in pairs(T) do count = count + 1 end
+  return count
+end
+
 --create an extra legends xml with extra data, by Mason11987 for World Viewer
 function export_more_legends_xml()
     local julian_day = math.floor(df.global.cur_year_tick / 1200) + 1
@@ -166,6 +172,63 @@ function export_more_legends_xml()
 			end
 		end
 		io.write("\t\t".."<flags>"..flagValues.."</flags>".."\n")
+			
+		for refK, refV in pairs(unitV.general_refs) do
+			if (df.general_ref_type[refV:getType()] == "IS_NEMESIS") then
+				io.write ("\t\t".."<nemesis_id>"..refV.nemesis_id.."</nemesis_id>".."\n")
+			elseif (df.general_ref_type[refV:getType()] == "BUILDING_CIVZONE_ASSIGNED") then
+				io.write ("\t\t".."<civzone_id>"..refV.building_id.."</civzone_id>".."\n")
+			elseif (df.general_ref_type[refV:getType()] == "BUILDING_NEST_BOX") then
+				io.write ("\t\t".."<nestbox_id>"..refV.building_id.."</nestbox_id>".."\n")
+			elseif (df.general_ref_type[refV:getType()] == "CONTAINED_IN_ITEM") then 
+				io.write ("\t\t".."<in_item_id>"..refV.item_id.."</in_item_id>".."\n")
+			else
+				io.write ("\t\t".."<general_ref>"..refV.getType()..":"..df.general_ref_type[refV:getType()].."</general_ref>".."\n")
+			end
+		end
+		-- No specific refs found yet
+		--[[
+			
+		for refK, refV in pairs(unitV.specific_refs) do
+			
+			if (df.specific_ref_type[refV:getType()] == "UNIT_INVENTORY") then --Test example
+				
+			else
+			
+			print (unitK, refV.getType(), df.specific_ref_type[refV:getType()])
+			printall(refV)
+				--io.write ("\t\t".."<specific_ref>"..refV.getType()..":"..df.specific_ref_type[refV:getType()].."</general_ref>".."\n")
+			--end
+		end
+		--]]
+		print (unitK)
+		for relationK, relationV in pairs(unitV.relations) do
+			if (relationK == "ghost_info" or relationK == "pregnancy_genes") then 
+				if (relationV ~= nil) then
+					--Todo: something with ghost info
+					--[[
+					type                     = 9
+					type2                    = 9
+					goal                     = 5
+					target                   = <unit_ghost_info.T_target: 0x35ddacd8> (unit, item, building)
+					misplace_pos             = <coord: 0x35ddacdc>
+					action_timer             = 403200
+					unk_18                   = 3
+					flags                    = <unit_ghost_info.T_flags: 0x35ddacec> (announced, was_at_rest)
+					death_x                  = 33425
+					death_y                  = 47169
+					death_z                  = 142
+					--]]
+				end
+			elseif (relationK == "following") then
+				if (relationV ~= nil) then
+					io.write ("\t\t".."<following_unit>"..relationV.id.."</following_unit>".."\n")
+				end
+			elseif (relationV ~= -1 and relationV ~= nil) then
+				io.write ("\t\t".."<"..relationK..">"..relationV.."</"..relationK..">".."\n")
+			end
+		end
+		
 		io.write ("\t".."</unit>".."\n")
     end
     io.write ("</units>".."\n")
@@ -982,8 +1045,8 @@ end
 if dfhack.gui.getCurFocus() == "legends" or dfhack.gui.getCurFocus() == "dfhack/lua/legends" then
     if args[1] == "all" then
         export_legends_info()
-        export_site_maps()
-        wait_for_legends_vs()
+        --export_site_maps()
+        --wait_for_legends_vs()
     elseif args[1] == "info" then
         export_legends_info()
     elseif args[1] == "maps" then

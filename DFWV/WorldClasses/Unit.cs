@@ -134,13 +134,12 @@ namespace DFWV.WorldClasses
 
                 frm.lblUnitName.Text = Name;
                 frm.lblUnitAltName.Text = AltName;
-                frm.lblUnitCoords.Text = Coords.ToString();
+                frm.lblUnitCoords.Text = string.Format("({0}, {1}, {2})", Coords.X, Coords.Y, Coords.Z);
                 frm.lblUnitSex.Text = Sex.ToString();
                 frm.lblUnitCiv.Data = Civ;
                 frm.lblUnitPop.Data = Population;
                 frm.lblUnitMood.Text = Mood.ToString();
                 frm.lblUnitHF.Data = HistFigure;
-                frm.lblUnitHF2.Data = HistFigure2;
                 frm.lblUnitRace.Data = Race;
                 frm.lblUnitCaste.Text = Caste.ToString();
                 if (Profession.HasValue)
@@ -150,17 +149,23 @@ namespace DFWV.WorldClasses
                 }
                 else
                     frm.lblUnitProfession.Visible = false;
-                if (Profession2.HasValue)
-                {
-                    frm.lblUnitProfession2.Text = JobTypes[Profession2.Value];
-                    frm.lblUnitProfession2.Visible = true;
-                }
-                else
-                    frm.lblUnitProfession2.Visible = false;
                 frm.lblUnitSquad.Data = Squad;
-                frm.lblUnitFlags.Text = string.Join(",",Flags);
-                frm.lblUnitLabors.Text = string.Join(",", Labors);
                 frm.lblUnitOpponent.Data = Opponent;
+
+                frm.grpUnitFlags.Visible = Flags.Any();
+                frm.lstUnitFlags.Items.Clear();
+                if (Flags.Any())
+                {
+                    frm.lstUnitFlags.Items.AddRange(Flags.Select(x=>x.ToLower().Replace("_"," ").ToTitleCase()).ToArray());
+                }
+
+                frm.grpUnitLabors.Visible = Labors.Any();
+                frm.lstUnitLabors.Items.Clear();
+                if (Labors.Any())
+                {
+                    frm.lstUnitLabors.Items.AddRange(Labors.Select(x => x.ToLower().Replace("_", " ").ToTitleCase()).ToArray());
+                }
+
             }
             finally
             {
@@ -213,6 +218,23 @@ namespace DFWV.WorldClasses
         internal override void Plus(XDocument xdoc)
         {
 
+        }
+
+        public override string ToString()
+        {
+            if (Name != "")
+            {
+                if (HistFigure != null)
+                    return HistFigure.ToString();
+                return Name;
+            }
+            else
+            {
+                if (Race != null)
+                    return Race.ToString() + " - " + ID;
+                else
+                    return base.ToString();
+            }
         }
     }
 
