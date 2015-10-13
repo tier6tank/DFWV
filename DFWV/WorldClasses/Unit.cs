@@ -30,19 +30,16 @@ namespace DFWV.WorldClasses
 
         public override void Select(MainForm frm)
         {
-            try
-            {
-                //frm.grpUnit.Text = ToString();
-                //frm.grpUnit.Show();
+            if (frm.grpUnit.Text == ToString() && frm.MainTab.SelectedTab == frm.tabUnit)
+                return;
+            Program.MakeSelected(frm.tabUnit, frm.lstUnit, this);
+
+            //frm.grpUnit.Text = ToString();
+            //frm.grpUnit.Show();
 #if DEBUG
-                //frm.grpUnit.Text += string.Format(" - ID: {0}", ID);
+            //frm.grpUnit.Text += string.Format(" - ID: {0}", ID);
 #endif
 
-            }
-            finally
-            {
-                Program.MakeSelected(frm.tabUnit, frm.lstUnit, this);
-            }
         }
 
         internal override void Export(string table)

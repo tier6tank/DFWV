@@ -165,6 +165,10 @@ namespace DFWV.WorldClasses.EntityClasses
 
         public override void Select(MainForm frm)
         {
+            if (frm.grpEntity.Text == ToString() && frm.MainTab.SelectedTab == frm.tabEntity)
+                return;
+            Program.MakeSelected(frm.tabEntity, frm.lstEntity, this);
+
             frm.grpEntity.Text = ToString();
             if (isPlayerControlled)
                 frm.grpEntity.Text += @" (PLAYER CONTROLLED)";
@@ -275,7 +279,6 @@ namespace DFWV.WorldClasses.EntityClasses
 
             frm.grpEntityEvents.FillListboxWith(frm.lstEntityEvents, Events);
 
-            Program.MakeSelected(frm.tabEntity, frm.lstEntity, this);
         }
 
         internal override void Link()

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Forms;
 using System.Xml.Linq;
 using DFWV.Annotations;
 
@@ -30,21 +31,20 @@ namespace DFWV.WorldClasses
 
         public override void Select(MainForm frm)
         {
-            try
-            {
-                //frm.grpAdamantineTube.Text = ToString();
-                //frm.grpAdamantineTube.Show();
+            if (frm.grpAdamantineTube.Text == ToString() && frm.MainTab.SelectedTab == frm.tabAdamantineTube)
+                return;
+            Program.MakeSelected(frm.tabAdamantineTube, frm.lstAdamantineTube, this);
+
+
+            //frm.grpAdamantineTube.Text = ToString();
+            //frm.grpAdamantineTube.Show();
 #if DEBUG
-                //frm.grpAdamantineTube.Text += string.Format(" - ID: {0}", ID);
+            //frm.grpAdamantineTube.Text += string.Format(" - ID: {0}", ID);
 #endif
 
 
-                //frm.lblAdamantineTubeName.Text = ToString();
-            }
-            finally
-            {
-                Program.MakeSelected(frm.tabAdamantineTube, frm.lstAdamantineTube, this);
-            }
+            //frm.lblAdamantineTubeName.Text = ToString();
+
         }
 
         internal override void Export(string table)

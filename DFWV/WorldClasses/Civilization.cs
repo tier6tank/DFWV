@@ -23,7 +23,7 @@ namespace DFWV.WorldClasses
         public Civilization(List<string> data, World world)
             : base(GetName(data[0]), world)
         {
-
+            ID = World.Civilizations.Count();
             isFull = data.Count > 1;
             SetRace(data[0]);
             Race.isCivilized = isFull;
@@ -126,6 +126,10 @@ namespace DFWV.WorldClasses
 
         public override void Select(MainForm frm)
         {
+            if (frm.grpCivilization.Text == ToString() && frm.MainTab.SelectedTab == frm.tabCivilization)
+                return;
+            Program.MakeSelected(frm.tabCivilization, frm.lstCivilization, this);
+
             frm.grpCivilization.Text = ToString();
             frm.grpCivilization.Show();
 
@@ -140,7 +144,6 @@ namespace DFWV.WorldClasses
             frm.grpCivilizationWars.FillListboxWith(frm.lstCivilizationWars, (Entity != null && Entity.WarEventCollections != null) ? Entity.WarEventCollections : null);
 
 
-            Program.MakeSelected(frm.tabCivilization, frm.lstCivilization, this);
         }
     }
 }

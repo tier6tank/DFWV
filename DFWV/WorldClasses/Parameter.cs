@@ -35,13 +35,15 @@ namespace DFWV.WorldClasses
 
         public override void Select(MainForm frm)
         {
+            if (frm.grpParameter.Text == ToString() && frm.MainTab.SelectedTab == frm.tabParameter)
+                return;
+            Program.MakeSelected(frm.tabParameter, frm.lstParameter, this);
+
             frm.grpParameter.Text = Name;
             frm.grpParameter.Show();
 
             frm.lblParameterName.Text = Name;
             frm.lblParameterData.Text = Value;
-
-            Program.MakeSelected(frm.tabParameter, frm.lstParameter, this);
         }
 
         internal override void Export(string table)

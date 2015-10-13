@@ -399,6 +399,10 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
 
         public override void Select(MainForm frm)
         {
+            if (frm.grpHistoricalFigure.Text == ToString() && frm.MainTab.SelectedTab == frm.tabHistoricalFigure)
+                return;
+            Program.MakeSelected(frm.tabHistoricalFigure, frm.lstHistoricalFigure, this);
+
             frm.grpHistoricalFigure.Text = ToString();
             if (PlayerControlled)
                 frm.grpHistoricalFigure.Text += @" (PLAYER CONTROLLED)";
@@ -749,8 +753,6 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                     DescendentCount, DescendentGenerations);
             }
             Descendents = null;
-
-            Program.MakeSelected(frm.tabHistoricalFigure, frm.lstHistoricalFigure, this);
         }
 
         private static string IPToTitle(int IP)

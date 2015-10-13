@@ -57,6 +57,10 @@ namespace DFWV.WorldClasses
 
         public override void Select(MainForm frm)
         {
+            if (frm.grpUndergroundRegion.Text == ToString() && frm.MainTab.SelectedTab == frm.tabUndergroundRegion)
+                return;
+            Program.MakeSelected(frm.tabUndergroundRegion, frm.lstUndergroundRegion, this);
+
             frm.grpUndergroundRegion.Text = ToString();
             frm.grpUndergroundRegion.Show();
 
@@ -79,7 +83,6 @@ namespace DFWV.WorldClasses
             }
 
 
-            Program.MakeSelected(frm.tabUndergroundRegion, frm.lstUndergroundRegion, this);
         }
 
         internal override void Link()

@@ -77,6 +77,10 @@ namespace DFWV.WorldClasses
 
         public override void Select(MainForm frm)
         {
+            if (frm.grpArtifact.Text == ToString() && frm.MainTab.SelectedTab == frm.tabArtifact)
+                return;
+            Program.MakeSelected(frm.tabArtifact, frm.lstArtifact, this);
+
             frm.grpArtifact.Text = ToString();
 #if DEBUG
             frm.grpArtifact.Text += string.Format(" - ID: {0}", ID);
@@ -116,7 +120,6 @@ namespace DFWV.WorldClasses
             frm.grpArtifactPossessed.FillListboxWith(frm.lstArtifactPossessed, PossessedEvents);
             frm.grpArtifactKills.FillListboxWith(frm.lstArtifactKills, Kills);
 
-            Program.MakeSelected(frm.tabArtifact, frm.lstArtifact, this);
         }
 
         internal override void Link()

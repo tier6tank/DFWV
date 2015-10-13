@@ -30,21 +30,19 @@ namespace DFWV.WorldClasses
 
         public override void Select(MainForm frm)
         {
-            try
-            {
-                //frm.grpEngraving.Text = ToString();
-                //frm.grpEngraving.Show();
+            if (frm.grpEngraving.Text == ToString() && frm.MainTab.SelectedTab == frm.tabEngraving)
+                return;
+            Program.MakeSelected(frm.tabEngraving, frm.lstEngraving, this);
+
+            //frm.grpEngraving.Text = ToString();
+            //frm.grpEngraving.Show();
 #if DEBUG
-                //frm.grpEngraving.Text += string.Format(" - ID: {0}", ID);
+            //frm.grpEngraving.Text += string.Format(" - ID: {0}", ID);
 #endif
 
 
-                //frm.lblEngravingName.Text = ToString();
-            }
-            finally
-            {
-                Program.MakeSelected(frm.tabEngraving, frm.lstEngraving, this);
-            }
+            //frm.lblEngravingName.Text = ToString();
+
         }
 
         internal override void Export(string table)

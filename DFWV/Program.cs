@@ -59,12 +59,12 @@ namespace DFWV
         /// </summary>
         public static void MakeSelected(TabPage tabPage, ListBox listBox, WorldObject item)
         {
+            mainForm.AddToNav(item);
             mainForm.MainTab.SelectedTab = tabPage;
             if (!listBox.Items.Contains(item))
                 listBox.Items.Add(item);
             if (listBox.SelectedItem != item)
                 listBox.SelectedItem = item;
-            mainForm.AddToNav(item);
         }
 
         /// <summary>

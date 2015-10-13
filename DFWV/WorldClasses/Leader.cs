@@ -290,6 +290,10 @@ namespace DFWV.WorldClasses
 
         public override void Select(MainForm frm)
         {
+            if (frm.grpLeader.Text == ToString() && frm.MainTab.SelectedTab == frm.tabLeader)
+                return;
+            Program.MakeSelected(frm.tabLeader, frm.lstLeader, this);
+
             frm.grpLeader.Text = ToString();
             frm.grpLeader.Show();
 
@@ -315,7 +319,6 @@ namespace DFWV.WorldClasses
             frm.lblLeaderMarried.Data = Spouse;
             frm.lblLeaderHF.Data = HF;
 
-            Program.MakeSelected(frm.tabLeader, frm.lstLeader, this);
         }
 
         internal override void Export(string table)

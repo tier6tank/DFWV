@@ -45,6 +45,10 @@ namespace DFWV.WorldClasses
 
         public override void Select(MainForm frm)
         {
+            if (frm.grpDynasty.Text == ToString() && frm.MainTab.SelectedTab == frm.tabDynasty)
+                return;
+            Program.MakeSelected(frm.tabDynasty, frm.lstDynasty, this);
+
             frm.grpDynasty.Text = ToString();
             frm.grpDynasty.Show();
 
@@ -57,7 +61,6 @@ namespace DFWV.WorldClasses
 
             frm.grpDynastyMembers.FillListboxWith(frm.lstDynastyMembers, Members);
 
-            Program.MakeSelected(frm.tabDynasty, frm.lstDynasty, this);
         }
 
         internal override void Export(string table)

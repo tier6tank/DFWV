@@ -48,6 +48,10 @@ namespace DFWV.WorldClasses
 
         public override void Select(MainForm frm)
         {
+            if (frm.grpStructure.Text == ToString() && frm.MainTab.SelectedTab == frm.tabStructure)
+                return;
+            Program.MakeSelected(frm.tabStructure, frm.lstStructure, this);
+
             frm.grpStructure.Text = ToString();
             frm.grpStructure.Show();
 
@@ -80,7 +84,6 @@ namespace DFWV.WorldClasses
 
 
 
-            Program.MakeSelected(frm.tabStructure, frm.lstStructure, this);
         }
 
         internal override void Link()

@@ -1870,6 +1870,9 @@ namespace DFWV
                 ForwardtoolStripMenuItem.Enabled = false;
             }
             navigatingBack = false;
+            if (NavBackObjects.Count > 0)
+                BacktoolStripMenuItem.ToolTipText = string.Format("{0} ({1})", NavBackObjects.Peek().ToString(),
+                    NavBackObjects.Peek().GetType().Name);
             NavBackObjects.Push(item);
             BacktoolStripMenuItem.Enabled = NavBackObjects.Count >= 2;
         }
@@ -1902,6 +1905,11 @@ namespace DFWV
 
             BacktoolStripMenuItem.Enabled = NavBackObjects.Count >= 2;
             ForwardtoolStripMenuItem.Enabled = NavForwardObjects.Count >= 1;
+            if (ForwardtoolStripMenuItem.Enabled)
+                ForwardtoolStripMenuItem.ToolTipText = string.Format("{0} ({1})", NavForwardObjects.Peek().ToString(),
+                    NavForwardObjects.Peek().GetType().Name);
+            ;
+
         }
 
         /// <summary>

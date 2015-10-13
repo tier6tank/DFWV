@@ -55,28 +55,25 @@ namespace DFWV.WorldClasses
 
         public override void Select(MainForm frm)
         {
-            try
-            {
-                frm.grpRiver.Text = ToString();
-                frm.grpRiver.Show();
+            if (frm.grpRiver.Text == ToString() && frm.MainTab.SelectedTab == frm.tabRiver)
+                return;
+            Program.MakeSelected(frm.tabRiver, frm.lstRiver, this);
+
+            frm.grpRiver.Text = ToString();
+            frm.grpRiver.Show();
 #if DEBUG
-                frm.grpRiver.Text += string.Format(" - ID: {0}", ID);
+            frm.grpRiver.Text += string.Format(" - ID: {0}", ID);
 #endif
 
 
-                frm.lblRiverName.Text = ToString();
-                frm.lblRiverAltName.Text = AltName;
-                frm.lblRiverEndsAt.Data = new Coordinate(Coords.Last());
-                frm.lblRiverElevation.Text = string.Join(",", Elevation);
-                frm.lblRiverParent.Data = Parent;
+            frm.lblRiverName.Text = ToString();
+            frm.lblRiverAltName.Text = AltName;
+            frm.lblRiverEndsAt.Data = new Coordinate(Coords.Last());
+            frm.lblRiverElevation.Text = string.Join(",", Elevation);
+            frm.lblRiverParent.Data = Parent;
 
 
-                frm.grpRiverTributaries.FillListboxWith(frm.lstRiverTributaries, Tributaries);
-            }
-            finally
-            {
-                Program.MakeSelected(frm.tabRiver, frm.lstRiver, this);
-            }
+            frm.grpRiverTributaries.FillListboxWith(frm.lstRiverTributaries, Tributaries);
         }
 
         internal override void Export(string table)

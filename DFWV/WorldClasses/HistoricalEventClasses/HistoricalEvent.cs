@@ -307,6 +307,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         public override void Select(MainForm frm)
         {
+            if (frm.grpHistoricalEvent.Text == ToString() && frm.MainTab.SelectedTab == frm.tabHistoricalEvent)
+                return;
+            Program.MakeSelected(frm.tabHistoricalEvent, frm.lstHistoricalEvent, this);
+
             frm.grpHistoricalEvent.Text = ToString();
 #if DEBUG
             frm.grpHistoricalEvent.Text += string.Format(string.Format(string.Format(" - ID: {0}", ID), ID), ID);
@@ -315,7 +319,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             WriteDetailsOnParent(frm, frm.grpHistoricalEvent, new Point(16, 26));
 
-            Program.MakeSelected(frm.tabHistoricalEvent, frm.lstHistoricalEvent, this);
 
             
         }

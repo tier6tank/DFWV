@@ -60,6 +60,10 @@ namespace DFWV.WorldClasses
 
         public override void Select(MainForm frm)
         {
+            if (frm.grpEntityPopulation.Text == ToString() && frm.MainTab.SelectedTab == frm.tabEntityPopulation)
+                return;
+            Program.MakeSelected(frm.tabEntityPopulation, frm.lstEntityPopulation, this);
+
             frm.grpEntityPopulation.Text = ToString();
             frm.grpEntityPopulation.Show();
 
@@ -74,7 +78,6 @@ namespace DFWV.WorldClasses
             frm.grpEntityPopulationMembers.Text = string.Format("Members ({0}{1})", 
                 frm.lstEntityPopulationMembers.Items.Count, 
                 (Members != null && Members.Count > 50000 ? "+" : ""));
-            Program.MakeSelected(frm.tabEntityPopulation, frm.lstEntityPopulation, this);
         }
 
         internal override void Link()

@@ -193,6 +193,10 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
         public override void Select(MainForm frm)
         {
+            if (frm.grpHistoricalEventCollection.Text == ToString() && frm.MainTab.SelectedTab == frm.tabHistoricalEventCollection)
+                return;
+            Program.MakeSelected(frm.tabHistoricalEventCollection, frm.lstHistoricalEventCollection, this);
+
             frm.ClearEventDetails();
 
             frm.grpHistoricalEventCollection.Text = ToString();

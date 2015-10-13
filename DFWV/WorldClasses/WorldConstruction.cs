@@ -50,6 +50,10 @@ namespace DFWV.WorldClasses
 
         public override void Select(MainForm frm)
         {
+            if (frm.grpWorldConstruction.Text == ToString() && frm.MainTab.SelectedTab == frm.tabWorldConstruction)
+                return;
+            Program.MakeSelected(frm.tabWorldConstruction, frm.lstWorldConstruction, this);
+
             frm.grpWorldConstruction.Text = ToString();
 #if DEBUG
             frm.grpWorldConstruction.Text += string.Format(string.Format(string.Format(" - ID: {0}", ID), ID), ID);
@@ -70,7 +74,6 @@ namespace DFWV.WorldClasses
                 frm.lblWorldConstructionCreatedTime.Data = CreatedEvent;
                 frm.lblWorldConstructionCreatedTime.Text = CreatedEvent.Time.ToString();
             }
-            Program.MakeSelected(frm.tabWorldConstruction, frm.lstWorldConstruction, this);
 
         }
 

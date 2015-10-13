@@ -72,41 +72,38 @@ namespace DFWV.WorldClasses
 
         public override void Select(MainForm frm)
         {
-            try
-            {
-                frm.grpRace.Text = ToString();
-                frm.grpRace.Show();
+            if (frm.grpRace.Text == ToString() && frm.MainTab.SelectedTab == frm.tabRace)
+                return;
+            Program.MakeSelected(frm.tabRace, frm.lstRace, this);
 
-                frm.lblRaceName.Text = ToString();
-                frm.lblRacePopulation.Text = Population == long.MaxValue ? "Unnumbered" :  Population.ToString();
+            frm.grpRace.Text = ToString();
+            frm.grpRace.Show();
 
-                frm.grpRaceLeaders.FillListboxWith(frm.lstRaceLeaders, World.Leaders.Where(x => x.Race == this));
-                frm.grpRaceCivilizations.FillListboxWith(frm.lstRaceCivilizations, World.Civilizations.Where(x => x.Race == this));
-                frm.grpRaceHistoricalFigures.FillListboxWith(frm.lstRaceHistoricalFigures, World.HistoricalFigures.Values.Where(x => x.Race == this).Take(50000));
-                if (frm.lstRaceHistoricalFigures.Items.Count == 50000)
-                    frm.grpRaceHistoricalFigures.Text = "Historical Figures (50000+)";
+            frm.lblRaceName.Text = ToString();
+            frm.lblRacePopulation.Text = Population == long.MaxValue ? "Unnumbered" :  Population.ToString();
 
-                frm.grpRaceCastes.FillListboxWith(frm.lstRaceCastes, Castes);
+            frm.grpRaceLeaders.FillListboxWith(frm.lstRaceLeaders, World.Leaders.Where(x => x.Race == this));
+            frm.grpRaceCivilizations.FillListboxWith(frm.lstRaceCivilizations, World.Civilizations.Where(x => x.Race == this));
+            frm.grpRaceHistoricalFigures.FillListboxWith(frm.lstRaceHistoricalFigures, World.HistoricalFigures.Values.Where(x => x.Race == this).Take(50000));
+            if (frm.lstRaceHistoricalFigures.Items.Count == 50000)
+                frm.grpRaceHistoricalFigures.Text = "Historical Figures (50000+)";
+
+            frm.grpRaceCastes.FillListboxWith(frm.lstRaceCastes, Castes);
 
 
-                frm.lstRacePopulation.BeginUpdate();
-                frm.lstRacePopulation.Items.Clear();
-                var pops = Populations;
-                if (pops.Count > 0)
-                    frm.lstRacePopulation.Items.AddRange(pops.Keys.ToArray());
-                var ugpops = UGPopulations;
-                if (ugpops.Count > 0)
-                    frm.lstRacePopulation.Items.AddRange(ugpops.Keys.ToArray());
+            frm.lstRacePopulation.BeginUpdate();
+            frm.lstRacePopulation.Items.Clear();
+            var pops = Populations;
+            if (pops.Count > 0)
+                frm.lstRacePopulation.Items.AddRange(pops.Keys.ToArray());
+            var ugpops = UGPopulations;
+            if (ugpops.Count > 0)
+                frm.lstRacePopulation.Items.AddRange(ugpops.Keys.ToArray());
 
-                frm.lstRacePopulation.EndUpdate();
-                if (frm.lstRacePopulation.Items.Count > 0)
-                    frm.grpRacePopulation.Text = string.Format("Population ({0})", pops.Values.Contains(10000001) || ugpops.Values.Contains(10000001) ? "Unnumbered" : (pops.Values.Sum() + ugpops.Values.Sum()).ToString());
-                frm.grpRacePopulation.Visible = frm.lstRacePopulation.Items.Count > 0;
-            }
-            finally
-            {
-                Program.MakeSelected(frm.tabRace, frm.lstRace, this);
-            }
+            frm.lstRacePopulation.EndUpdate();
+            if (frm.lstRacePopulation.Items.Count > 0)
+                frm.grpRacePopulation.Text = string.Format("Population ({0})", pops.Values.Contains(10000001) || ugpops.Values.Contains(10000001) ? "Unnumbered" : (pops.Values.Sum() + ugpops.Values.Sum()).ToString());
+            frm.grpRacePopulation.Visible = frm.lstRacePopulation.Items.Count > 0;
         }
 
         internal override void Export(string table)

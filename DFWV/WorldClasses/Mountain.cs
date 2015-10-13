@@ -50,21 +50,19 @@ namespace DFWV.WorldClasses
 
         public override void Select(MainForm frm)
         {
-            try
-            {
-                frm.grpMountain.Text = ToString();
-                frm.grpMountain.Show();
+            if (frm.grpMountain.Text == ToString() && frm.MainTab.SelectedTab == frm.tabMountain)
+                return;
+            Program.MakeSelected(frm.tabMountain, frm.lstMountain, this);
 
-                frm.lblMountainName.Text = ToString();
-                frm.lblMountainAltName.Text = AltName;
-                frm.lblMountainCoord.Data = new Coordinate(Coords);
-                frm.lblMountainHeight.Text = Height.ToString();
-            }
-            finally
-            {
-                Program.MakeSelected(frm.tabMountain, frm.lstMountain, this);
-            }
+            frm.grpMountain.Text = ToString();
+            frm.grpMountain.Show();
+
+            frm.lblMountainName.Text = ToString();
+            frm.lblMountainAltName.Text = AltName;
+            frm.lblMountainCoord.Data = new Coordinate(Coords);
+            frm.lblMountainHeight.Text = Height.ToString();
         }
+
 
         internal override void Export(string table)
         {

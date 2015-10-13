@@ -51,13 +51,16 @@ namespace DFWV.WorldClasses
 
         public override void Select(MainForm frm)
         {
+            if (frm.grpHistoricalEra.Text == ToString() && frm.MainTab.SelectedTab == frm.tabHistoricalEra)
+                return;
+            Program.MakeSelected(frm.tabHistoricalEra, frm.lstHistoricalEra, this);
+
             frm.grpHistoricalEra.Text = ToString();
             frm.grpHistoricalEra.Show();
 
             frm.lblHistoricalEraName.Text = ToString();
             if (Start != null && End != null)
                 frm.lblHistoricalEraStartYear.Text = string.Format("{0} - {1}", (Start.Year == -1 ? 0 : Start.Year ), (End == WorldTime.Present ? "" : End.ToString()));
-            Program.MakeSelected(frm.tabHistoricalEra, frm.lstHistoricalEra, this);
         }
 
         internal override void Link()

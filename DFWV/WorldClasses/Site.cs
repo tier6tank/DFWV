@@ -288,6 +288,10 @@ namespace DFWV.WorldClasses
 
         public override void Select(MainForm frm)
         {
+            if (frm.grpSite.Text == ToString() && frm.MainTab.SelectedTab == frm.tabSite)
+                return;
+            Program.MakeSelected(frm.tabSite, frm.lstSite, this);
+
             frm.grpSite.Text = ToString();
             if (isPlayerControlled)
                 frm.grpSite.Text += @" (PLAYER CONTROLLED)";
@@ -425,7 +429,7 @@ namespace DFWV.WorldClasses
 
             frm.grpSiteEventCollection.Visible = frm.trvSiteEventCollection.Nodes.Count > 0;
 
-            Program.MakeSelected(frm.tabSite, frm.lstSite, this);
+            
         }
 
         internal void MergeInSiteFile(Site sf)

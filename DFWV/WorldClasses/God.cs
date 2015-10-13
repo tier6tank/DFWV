@@ -65,6 +65,10 @@ namespace DFWV.WorldClasses
 
         public override void Select(MainForm frm)
         {
+            if (frm.grpGod.Text == ToString() && frm.MainTab.SelectedTab == frm.tabGod)
+                return;
+            Program.MakeSelected(frm.tabGod, frm.lstGod, this);
+
             frm.grpGod.Text = ToString();
             frm.grpGod.Show();
 
@@ -79,7 +83,6 @@ namespace DFWV.WorldClasses
             frm.grpGodCivilizations.FillListboxWith(frm.lstGodCivilizations, Civilizations);
 
 
-            Program.MakeSelected(frm.tabGod, frm.lstGod, this);
         }
 
         internal override void Export(string table)

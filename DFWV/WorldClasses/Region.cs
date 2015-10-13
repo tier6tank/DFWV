@@ -77,6 +77,11 @@ namespace DFWV.WorldClasses
 
         public override void Select(MainForm frm)
         {
+            if (frm.grpRegion.Text == ToString() && frm.MainTab.SelectedTab == frm.tabRegion)
+                return;
+            Program.MakeSelected(frm.tabRegion, frm.lstRegion, this);
+
+
             frm.grpRegion.Text = ToString();
 #if DEBUG
             frm.grpRegion.Text += string.Format(" - ID: {0}", ID);
@@ -103,7 +108,6 @@ namespace DFWV.WorldClasses
             }
 
 
-            Program.MakeSelected(frm.tabRegion, frm.lstRegion, this);
         }
 
         internal override void Link()

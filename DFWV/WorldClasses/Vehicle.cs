@@ -30,21 +30,20 @@ namespace DFWV.WorldClasses
 
         public override void Select(MainForm frm)
         {
-            try
-            {
-                //frm.grpVehicle.Text = ToString();
-                //frm.grpVehicle.Show();
+            if (frm.grpVehicle.Text == ToString() && frm.MainTab.SelectedTab == frm.tabVehicle)
+                return;
+            Program.MakeSelected(frm.tabVehicle, frm.lstVehicle, this);
+
+
+            //frm.grpVehicle.Text = ToString();
+            //frm.grpVehicle.Show();
 #if DEBUG
-                //frm.grpVehicle.Text += string.Format(" - ID: {0}", ID);
+            //frm.grpVehicle.Text += string.Format(" - ID: {0}", ID);
 #endif
 
 
-                //frm.lblVehicleName.Text = ToString();
-            }
-            finally
-            {
-                Program.MakeSelected(frm.tabVehicle, frm.lstVehicle, this);
-            }
+            //frm.lblVehicleName.Text = ToString();
+
         }
 
         internal override void Export(string table)
