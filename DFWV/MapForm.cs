@@ -171,14 +171,14 @@ namespace DFWV
         {
             var hf = cmbHFTravels.SelectedItem as HistoricalFigure;
 
-            Color myColor = Color.FromArgb(255, 100, 255);
+            var myColor = Color.FromArgb(255, 100, 255);
             using (var p = new Pen(myColor))
             {
                 var events = hf.Events.Where(x => !x.Location.IsEmpty).ConsecutiveDistict();
 
                 
                 var points = events.Select(evt => new Point(evt.Location.X*_siteSize.Width + _siteSize.Width/2, evt.Location.Y*_siteSize.Height + _siteSize.Height/2)).ToList();
-                if (points.Count > 0)
+                if (points.Count > 1)
                     g.DrawLines(p, points.ToArray());
 
             }
@@ -593,7 +593,7 @@ namespace DFWV
         {
             foreach (var river in _world.Rivers.Values)
             {
-                Color myColor = Color.FromArgb(100,100,255);
+                var myColor = Color.FromArgb(100,100,255);
 
                 if (river.Parent == null)
                     myColor = Color.Blue;
@@ -1057,7 +1057,7 @@ namespace DFWV
 
         private void cmbHFTravels_Validating(object sender, CancelEventArgs e)
         {
-            ComboBox cmbBox = sender as ComboBox;
+            var cmbBox = sender as ComboBox;
 
             var selectedItem = cmbBox.Items.Cast<object>().FirstOrDefault(item => item.ToString() == cmbBox.Text);
 

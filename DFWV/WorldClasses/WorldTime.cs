@@ -47,7 +47,7 @@ namespace DFWV.WorldClasses
 
         public override int GetHashCode()
         {
-            int hash = 13;
+            var hash = 13;
             hash = (hash*7) + Year.GetHashCode();
             hash = (hash*7) + TotalSeconds.GetHashCode();
             return hash;

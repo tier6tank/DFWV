@@ -32,7 +32,7 @@ namespace DFWV
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.MainTab = new System.Windows.Forms.TabControl();
             this.tabWorld = new System.Windows.Forms.TabPage();
             this.grpWorld = new System.Windows.Forms.GroupBox();

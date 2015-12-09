@@ -92,7 +92,7 @@ namespace DFWV.WorldClasses
 
             if (Coords != null)
             {
-                int coordId = 0;
+                var coordId = 0;
                 foreach (var coord in Coords)
                 {
                     Database.ExportWorldItem("River_Coords", new List<object> { Id, coordId, coord.X, coord.Y });
@@ -102,7 +102,7 @@ namespace DFWV.WorldClasses
 
             if (Elevation != null)
             {
-                int elevationId = 0;
+                var elevationId = 0;
                 foreach (var elevation in Elevation)
                 {
                     Database.ExportWorldItem("River_Elevation", new List<object> { Id, elevationId, elevation });
@@ -113,7 +113,7 @@ namespace DFWV.WorldClasses
 
         internal override void Link()
         {
-            Point endPt = Coords.Last();
+            var endPt = Coords.Last();
             foreach (var river in World.Rivers.Values)
             {
                 if (river == this || (Tributaries != null && Tributaries.Contains(river)))

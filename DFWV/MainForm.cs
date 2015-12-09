@@ -129,7 +129,7 @@ namespace DFWV
             mapSplit.Reverse();
             mapSplit.RemoveAt(0);
 
-            WorldTime worldGenTime = new WorldTime(Convert.ToInt32(mapSplit[2]), Convert.ToInt32(mapSplit[1]) - 1, Convert.ToInt32(mapSplit[0]) - 1);
+            var worldGenTime = new WorldTime(Convert.ToInt32(mapSplit[2]), Convert.ToInt32(mapSplit[1]) - 1, Convert.ToInt32(mapSplit[0]) - 1);
             mapSplit.RemoveRange(0,3);
             mapSplit.Reverse();
 
@@ -1206,8 +1206,8 @@ namespace DFWV
                     pops = thisUgRegion.Populations;
                 }
 
-                Race selectedRace = (Race) (sender as ListBox).Items[e.Index];
-                string drawString = string.Empty;
+                var selectedRace = (Race) (sender as ListBox).Items[e.Index];
+                var drawString = string.Empty;
                 if (selectedRace != null && pops.ContainsKey(selectedRace))
                 {
                     if (pops[selectedRace] == 1)
@@ -1433,11 +1433,11 @@ namespace DFWV
                     grpRace.Visible = false;
                     return;
                 }
-                string drawString = "";
+                var drawString = "";
 
                 if (lstRacePopulation.Items[e.Index] is Region)
                 {
-                    Region selectedRegion = (Region)lstRacePopulation.Items[e.Index];
+                    var selectedRegion = (Region)lstRacePopulation.Items[e.Index];
                     if (thisRace.Populations[selectedRegion] == 10000001)
                         drawString = "Unnumbered - " + selectedRegion.Name.ToTitleCase();
                     else
@@ -1446,7 +1446,7 @@ namespace DFWV
                 }
                 else if (lstRacePopulation.Items[e.Index] is UndergroundRegion)
                 {
-                    UndergroundRegion selectedUgRegion = (UndergroundRegion)lstRacePopulation.Items[e.Index];
+                    var selectedUgRegion = (UndergroundRegion)lstRacePopulation.Items[e.Index];
                     if (thisRace.UgPopulations[selectedUgRegion] == 10000001)
                         drawString = "Unnumbered - " + selectedUgRegion.ToString().ToTitleCase();
                     else

@@ -454,8 +454,8 @@ namespace DFWV
 
         static IEnumerable<T> ConsecutiveDistictImplementation<T>(this IEnumerable<T> input)
         {
-            bool isFirst = true;
-            T last = default(T);
+            var isFirst = true;
+            var last = default(T);
             foreach (var item in input)
             {
                 if (isFirst || !Equals(item, last))

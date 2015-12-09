@@ -145,7 +145,7 @@ namespace DFWV.WorldClasses
 
             if (Coords != null)
             {
-                int coordId = 0;
+                var coordId = 0;
                 foreach (var coord in Coords)
                 {
                     Database.ExportWorldItem("UGRegion_Coords", new List<object> { Id, coordId, coord.X, coord.Y });

@@ -268,7 +268,7 @@ namespace DFWV
 
         private static void SortRaces(World world)
         {
-            Dictionary<int, Race> newRaceList = world.Races.Values.ToDictionary(race => race.Id);
+            var newRaceList = world.Races.Values.ToDictionary(race => race.Id);
 
             world.Races.Clear();
 

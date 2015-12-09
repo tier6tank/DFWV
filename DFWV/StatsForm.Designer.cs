@@ -31,12 +31,12 @@ namespace DFWV
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title1 = new System.Windows.Forms.DataVisualization.Charting.Title();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title2 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            var chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            var series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            var title1 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            var chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            var series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            var title2 = new System.Windows.Forms.DataVisualization.Charting.Title();
             this.HFPopulationChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.SiteCountChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             ((System.ComponentModel.ISupportInitialize)(this.HFPopulationChart)).BeginInit();

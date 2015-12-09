@@ -45,7 +45,7 @@ namespace DFWV.Properties {
         internal static ResourceManager ResourceManager {
             get {
                 if (ReferenceEquals(resourceMan, null)) {
-                    ResourceManager temp = new ResourceManager("DFWV.Properties.Resources", typeof(Resources).Assembly);
+                    var temp = new ResourceManager("DFWV.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -68,21 +68,21 @@ namespace DFWV.Properties {
         
         internal static Bitmap LeftArrow {
             get {
-                object obj = ResourceManager.GetObject("LeftArrow", resourceCulture);
+                var obj = ResourceManager.GetObject("LeftArrow", resourceCulture);
                 return ((Bitmap)(obj));
             }
         }
         
         internal static Bitmap Marker {
             get {
-                object obj = ResourceManager.GetObject("Marker", resourceCulture);
+                var obj = ResourceManager.GetObject("Marker", resourceCulture);
                 return ((Bitmap)(obj));
             }
         }
         
         internal static Bitmap RightArrow {
             get {
-                object obj = ResourceManager.GetObject("RightArrow", resourceCulture);
+                var obj = ResourceManager.GetObject("RightArrow", resourceCulture);
                 return ((Bitmap)(obj));
             }
         }
