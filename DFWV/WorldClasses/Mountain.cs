@@ -15,7 +15,7 @@ namespace DFWV.WorldClasses
         public Point Coords { get; set; }
         public int Height { get; set; }
 
-        override public Point Location { get { return Coords; } }
+        override public Point Location => Coords;
 
         public Mountain(XDocument xdoc, World world)
             : base(xdoc, world)

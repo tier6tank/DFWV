@@ -18,12 +18,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private List<int> GroupHFID { get; set; }
         private List<HistoricalFigure> GroupHF { get; set; }
 
-        override public Point Location { get { return Coords != Point.Empty ? Coords : Subregion.Location; } }
+        override public Point Location => Coords != Point.Empty ? Coords : Subregion.Location;
 
-        public override IEnumerable<HistoricalFigure> HFsInvolved
-        {
-            get { return GroupHF ?? Enumerable.Empty<HistoricalFigure>(); }
-        }
+        public override IEnumerable<HistoricalFigure> HFsInvolved => GroupHF ?? Enumerable.Empty<HistoricalFigure>();
+
         public override IEnumerable<Region> RegionsInvolved
         {
             get { yield return Subregion; }
@@ -137,16 +135,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (Subregion != null)
             {
                 if (GroupHF.Count == 1)
-                    return string.Format("{0} {1} was the first to reach the summit of {2}, which rises above {3}.",
-                            timestring, GroupHF[0].Name, "UNKNOWN", Subregion.Name);
-                return string.Format("{0} {1} and {2} were the first to reach the summit of {3}, which rises above {4}.",
-                    timestring, GroupHF[0].Name, GroupHF[1].Name, "UNKNOWN", Subregion.Name);
+                    return
+                        $"{timestring} {GroupHF[0].Name} was the first to reach the summit of {"UNKNOWN"}, which rises above {Subregion.Name}.";
+                return
+                    $"{timestring} {GroupHF[0].Name} and {GroupHF[1].Name} were the first to reach the summit of {"UNKNOWN"}, which rises above {Subregion.Name}.";
             }
             if (GroupHF.Count == 1)
-                return string.Format("{0} {1} was the first to reach the summit of {2}, which rises above {3}.",
-                        timestring, GroupHF[0].Name, "UNKNOWN", "UNKNOWN");
-            return string.Format("{0} {1} and {2} were the first to reach the summit of {3}, which rises above {4}.",
-                timestring, GroupHF[0].Name, GroupHF[1].Name, "UNKNOWN", "UNKNOWN");
+                return
+                    $"{timestring} {GroupHF[0].Name} was the first to reach the summit of {"UNKNOWN"}, which rises above {"UNKNOWN"}.";
+            return
+                $"{timestring} {GroupHF[0].Name} and {GroupHF[1].Name} were the first to reach the summit of {"UNKNOWN"}, which rises above {"UNKNOWN"}.";
         }
 
         internal override string ToTimelineString()
@@ -158,16 +156,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (Subregion != null)
             {
                 if (GroupHF.Count == 1)
-                    return string.Format("{0} {1} was the first to reach a summit, which rises above {2}.",
-                            timelinestring, GroupHF[0].Name, Subregion.Name);
-                return string.Format("{0} {1} and {2} were the first to reach a summit, which rises above {3}.",
-                    timelinestring, GroupHF[0].Name, GroupHF[1].Name, Subregion.Name);
+                    return
+                        $"{timelinestring} {GroupHF[0].Name} was the first to reach a summit, which rises above {Subregion.Name}.";
+                return
+                    $"{timelinestring} {GroupHF[0].Name} and {GroupHF[1].Name} were the first to reach a summit, which rises above {Subregion.Name}.";
             }
             if (GroupHF.Count == 1)
-                return string.Format("{0} {1} was the first to reach a summit.",
-                        timelinestring, GroupHF[0].Name);
-            return string.Format("{0} {1} and {2} were the first to reach a summit.",
-                timelinestring, GroupHF[0].Name, GroupHF[1].Name);
+                return $"{timelinestring} {GroupHF[0].Name} was the first to reach a summit.";
+            return $"{timelinestring} {GroupHF[0].Name} and {GroupHF[1].Name} were the first to reach a summit.";
         }
 
         internal override void Export(string table)

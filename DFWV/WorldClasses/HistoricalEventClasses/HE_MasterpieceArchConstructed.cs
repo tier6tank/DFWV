@@ -21,7 +21,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public int? BuildingSubType { get; set; }
         public int? BuildingCustom { get; set; }
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location => Site.Location;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
@@ -149,7 +149,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} {1} constructed a masterful {2} for {3} at {4}.", timestring, HF, BuildingType.HasValue ? Buildings[BuildingType.Value] : "UNKNOWN", Entity, Site.AltName);
+            return
+                $"{timestring} {HF} constructed a masterful {(BuildingType.HasValue ? Buildings[BuildingType.Value] : "UNKNOWN")} for {Entity} at {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
@@ -157,9 +158,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             //TODO: Incorporate new data
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} {1} constructed a masterful arch for {2} at {3}.",
-                                timelinestring, HF, Entity,
-                                Site.AltName);
+            return $"{timelinestring} {HF} constructed a masterful arch for {Entity} at {Site.AltName}.";
         }
 
         internal override void Export(string table)

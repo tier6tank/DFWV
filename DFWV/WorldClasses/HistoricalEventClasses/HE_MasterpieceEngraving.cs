@@ -22,7 +22,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public int? ArtID { get; set; }
         public int? ArtSubID { get; set; }
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location => Site.Location;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
@@ -144,9 +144,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             //TODO: Incorporate new data
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} {1} created a masterful engraving \"{2}\" for {3} at {4}.",
-                                timestring, HF, "Art ID: " + ArtID, Entity,
-                                Site.AltName);
+            return
+                $"{timestring} {HF} created a masterful engraving \"{"Art ID: " + ArtID}\" for {Entity} at {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
@@ -154,9 +153,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             //TODO: Incorporate new data
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} {1} created a masterful engraving for {2} at {3}.",
-                                timelinestring, HF, Entity,
-                                Site.AltName);
+            return $"{timelinestring} {HF} created a masterful engraving for {Entity} at {Site.AltName}.";
         }
 
         internal override void Export(string table)

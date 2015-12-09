@@ -9,7 +9,7 @@ namespace DFWV.WorldClasses
 {
     public class Item : XMLObject
     {
-        override public Point Location { get { return Point.Empty; } }
+        override public Point Location => Point.Empty;
 
         public Item(XDocument xdoc, World world)
             : base(xdoc, world)

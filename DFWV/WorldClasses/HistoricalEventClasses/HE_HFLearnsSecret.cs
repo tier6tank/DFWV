@@ -18,7 +18,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int Interaction { get; set; }
         private string SecretText { get; set; }
 
-        override public Point Location { get { return Point.Empty; } }
+        override public Point Location => Point.Empty;
+
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
             get
@@ -119,67 +120,50 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (TeacherHF == null && Artifact != null)
             {
                 if (SecretText != null)
-                    return string.Format("{0} {1} learned {2} {3}.",
-                        timestring, StudentHF, SecretText, Artifact);
+                    return $"{timestring} {StudentHF} learned {SecretText} {Artifact}.";
                 switch (HistoricalFigure.Interactions[Interaction])
                 {
                     case "ANIMALS_SECRET":
-                        return string.Format("{0} {1} learned the secrets of the wilds from {2}.",
-                            timestring, StudentHF, Artifact);
+                        return $"{timestring} {StudentHF} learned the secrets of the wilds from {Artifact}.";
                     case "SECRET_30":
-                        return string.Format("{0} {1} learned the secrets of life and death from {2}.",
-                            timestring, StudentHF, Artifact);
+                        return $"{timestring} {StudentHF} learned the secrets of life and death from {Artifact}.";
                     case "DISCIPLINE_SECRET":
-                        return string.Format("{0} {1} learned the secrets of mental discipline from {2}.",
-                            timestring, StudentHF, Artifact);
+                        return $"{timestring} {StudentHF} learned the secrets of mental discipline from {Artifact}.";
                     case "WISDOM_SECRET":
-                        return string.Format("{0} {1} learned the secrets of wisdom from {2}.",
-                            timestring, StudentHF, Artifact);
+                        return $"{timestring} {StudentHF} learned the secrets of wisdom from {Artifact}.";
                     case "FOOD_SECRET":
-                        return string.Format("{0} {1} learned the secrets of conjuring food from {2}.",
-                            timestring, StudentHF, Artifact);
+                        return $"{timestring} {StudentHF} learned the secrets of conjuring food from {Artifact}.";
                     case "WAR_SECRET":
-                        return string.Format("{0} {1} learned the secret of berserking from {2}.",
-                            timestring, StudentHF, Artifact);
+                        return $"{timestring} {StudentHF} learned the secret of berserking from {Artifact}.";
                     default:
-                        return string.Format("{0} {1} learned {2} from {3}.",
-                            timestring, StudentHF, HistoricalFigure.Interactions[Interaction], Artifact);
+                        return
+                            $"{timestring} {StudentHF} learned {HistoricalFigure.Interactions[Interaction]} from {Artifact}.";
                 }
             }
             if (SecretText != null)
-                return string.Format("{0} {1} taught {2} {3}.",
-                    timestring, TeacherHF, StudentHF, SecretText);
+                return $"{timestring} {TeacherHF} taught {StudentHF} {SecretText}.";
             switch (HistoricalFigure.Interactions[Interaction])
             {
                 case "ANIMALS_SECRET":
-                    return string.Format("{0} {1} taught {2} the secrets of the wilds.",
-                        timestring, TeacherHF, StudentHF);
+                    return $"{timestring} {TeacherHF} taught {StudentHF} the secrets of the wilds.";
                 case "SECRET_5":
                 case "SECRET_6":
                 case "SECRET_12":
-                    return string.Format("{0} {1} taught {2} the secrets of life and death.",
-                        timestring, TeacherHF, StudentHF);
+                    return $"{timestring} {TeacherHF} taught {StudentHF} the secrets of life and death.";
                 case "DISCIPLINE_SECRET":
-                    return string.Format("{0} {1} taught {2} the secrets of mental discipline.",
-                        timestring, TeacherHF, StudentHF);
+                    return $"{timestring} {TeacherHF} taught {StudentHF} the secrets of mental discipline.";
                 case "WAR_SECRET":
-                    return string.Format("{0} {1} taught {2} the secrets of bezerking.",
-                        timestring, TeacherHF, StudentHF);
+                    return $"{timestring} {TeacherHF} taught {StudentHF} the secrets of bezerking.";
                 case "SUMMONER":
-                    return string.Format("{0} {1} taught {2} the secrets of summoning.",
-                        timestring, TeacherHF, StudentHF);
+                    return $"{timestring} {TeacherHF} taught {StudentHF} the secrets of summoning.";
                 case "SUICIDE_SECRET":
-                    return string.Format("{0} {1} taught {2} the secrets of living death.",
-                        timestring, TeacherHF, StudentHF);
+                    return $"{timestring} {TeacherHF} taught {StudentHF} the secrets of living death.";
                 case "MERCY_SECRET":
-                    return string.Format("{0} {1} taught {2} the secrets of mercy and prophecy.",
-                        timestring, TeacherHF, StudentHF);
+                    return $"{timestring} {TeacherHF} taught {StudentHF} the secrets of mercy and prophecy.";
                 case "NATURE_SECRET":
-                    return string.Format("{0} {1} taught {2} the secrets of nature.",
-                        timestring, TeacherHF, StudentHF);
+                    return $"{timestring} {TeacherHF} taught {StudentHF} the secrets of nature.";
                 default:
-                    return string.Format("{0} {1} taught {2} {3}.",
-                        timestring, TeacherHF, StudentHF, HistoricalFigure.Interactions[Interaction]);
+                    return $"{timestring} {TeacherHF} taught {StudentHF} {HistoricalFigure.Interactions[Interaction]}.";
             }
         }
 
@@ -188,10 +172,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             if (TeacherHF == null && Artifact != null)
-                return string.Format("{0} {1} learned secrets from {2}",
-                            timelinestring, StudentHF, Artifact);
-            return string.Format("{0} {1} taught secrets by {2}",
-                timelinestring, StudentHF, TeacherHF);
+                return $"{timelinestring} {StudentHF} learned secrets from {Artifact}";
+            return $"{timelinestring} {StudentHF} taught secrets by {TeacherHF}";
         }
 
         internal override void Export(string table)

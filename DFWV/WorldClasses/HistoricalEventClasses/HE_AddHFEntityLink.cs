@@ -20,7 +20,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         public HFEntityLink HFEntityLink { get; set; }
 
-        override public Point Location { get { return Civ.Location; } }
+        override public Point Location => Civ.Location;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
@@ -143,17 +143,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             if (!Position.HasValue || HFEntityLink.Positions[Position.Value] == "-1")
-                return string.Format("{0} {1} became a {2} of {3}.",
-                                timestring, HF == null ? "UNKNOWN" : HF.ToString(),
-                                LinkType.HasValue ? HFEntityLink.LinkTypes[LinkType.Value] : "UNKNOWN", Civ);
+                return
+                    $"{timestring} {(HF == null ? "UNKNOWN" : HF.ToString())} became a {(LinkType.HasValue ? HFEntityLink.LinkTypes[LinkType.Value] : "UNKNOWN")} of {Civ}.";
             if (HF == null)
-                return string.Format("{0} {1} became the {2} of {3}.",
-                    timestring, "UNKNOWN",
-                    HFEntityLink.Positions[Position.Value], Civ);
+                return $"{timestring} {"UNKNOWN"} became the {HFEntityLink.Positions[Position.Value]} of {Civ}.";
             
-            return string.Format("{0} the {1} {2} became the {3} of {4}.",
-                timestring, HF.Race.ToString().ToLower(), HF,
-                HFEntityLink.Positions[Position.Value], Civ);
+            return
+                $"{timestring} the {HF.Race.ToString().ToLower()} {HF} became the {HFEntityLink.Positions[Position.Value]} of {Civ}.";
         }
 
         internal override string ToTimelineString()
@@ -161,11 +157,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             if (HF != null && LinkType.HasValue)
-                return string.Format("{0} {1} became {2} of {3}.",
-                            timelinestring, HF,
-                                HFEntityLink.LinkTypes[LinkType.Value], Civ);
-            return string.Format("{0} Added HF Link to {1}.",
-                timelinestring, Civ);
+                return $"{timelinestring} {HF} became {HFEntityLink.LinkTypes[LinkType.Value]} of {Civ}.";
+            return $"{timelinestring} Added HF Link to {Civ}.";
         }
 
 

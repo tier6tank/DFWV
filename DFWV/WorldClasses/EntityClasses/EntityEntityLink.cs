@@ -13,15 +13,9 @@ namespace DFWV.WorldClasses.EntityClasses
         public Entity thisEntity { get; private set; }
         public int? TargetEntityID { get; private set; }
 
-        public Entity Target
-        {
-            get
-            {
-                return TargetEntityID.HasValue && thisEntity.World.Entities.ContainsKey(TargetEntityID.Value) 
-                    ? thisEntity.World.Entities[TargetEntityID.Value] 
-                    : null; 
-            }
-        }
+        public Entity Target => TargetEntityID.HasValue && thisEntity.World.Entities.ContainsKey(TargetEntityID.Value) 
+            ? thisEntity.World.Entities[TargetEntityID.Value] 
+            : null;
 
         public int? LinkStrength { get; private set; }
 

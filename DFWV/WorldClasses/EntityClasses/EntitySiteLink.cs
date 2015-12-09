@@ -16,15 +16,9 @@ namespace DFWV.WorldClasses.EntityClasses
 
         public int? LinkStrength { get; private set; }
 
-        public Site Site
-        {
-            get
-            {
-                return SiteID.HasValue && thisEntity.World.Sites.ContainsKey(SiteID.Value) 
-                    ? thisEntity.World.Sites[SiteID.Value] 
-                    : null;
-            }
-        }
+        public Site Site => SiteID.HasValue && thisEntity.World.Sites.ContainsKey(SiteID.Value) 
+            ? thisEntity.World.Sites[SiteID.Value] 
+            : null;
 
 
         public EntitySiteLink(XContainer data, Entity ent)

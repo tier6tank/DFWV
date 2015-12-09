@@ -15,14 +15,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
 
         public HistoricalFigure HF { get; private set; }
 
-        public Entity Entity
-        {
-            get
-            {
-                return HF.World.Entities[EntityID];
-            }
-        }
-
+        public Entity Entity => HF.World.Entities[EntityID];
 
 
         public EntityFormerSquadLink(XContainer data, HistoricalFigure hf)

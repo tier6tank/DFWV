@@ -14,13 +14,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         public int LinkStrength { get; private set; }
         public HistoricalFigure thisHF { get; private set; }
 
-        public HistoricalFigure HF
-        {
-            get
-            {
-                return thisHF.World.HistoricalFigures.ContainsKey(LinkedHFID) ? thisHF.World.HistoricalFigures[LinkedHFID] : null;
-            }
-        }
+        public HistoricalFigure HF => thisHF.World.HistoricalFigures.ContainsKey(LinkedHFID) ? thisHF.World.HistoricalFigures[LinkedHFID] : null;
 
         public HE_AddHFHFLink AddEvent { get; set; }
         //public HE_RemoveHFHFLink RemoveEvent { get; set; }

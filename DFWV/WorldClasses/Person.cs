@@ -4,7 +4,7 @@ namespace DFWV.WorldClasses
 {
     public class Person : WorldObject
     {
-        override public Point Location { get { return Point.Empty; } }
+        override public Point Location => Point.Empty;
 
         internal override void Export(string table)
         {

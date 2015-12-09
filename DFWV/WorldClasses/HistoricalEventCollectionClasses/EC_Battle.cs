@@ -63,7 +63,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         public bool battleTotaled;
         public BattleData BattleData;
 
-        override public Point Location { get { return Site != null ? Site.Coords : Coords; } }
+        override public Point Location => Site != null ? Site.Coords : Coords;
 
         public EC_Battle(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -259,7 +259,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             frm.lblBattleName.Text = ToString();
             if (StartTime != null || EndTime != null)
             {
-                frm.lblBattleTime.Text = string.Format("{0} - {1}", StartTime, EndTime);
+                frm.lblBattleTime.Text = $"{StartTime} - {EndTime}";
                 frm.lblBattleDuration.Text = WorldTime.Duration(EndTime, StartTime);
             }
             else
@@ -274,17 +274,17 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
             frm.lblBattleAttackerCombatants.Text = BattleData.AttackingNumber.ToString();
             if (BattleData.AttackingHFs > 0)
-                frm.lblBattleAttackerCombatants.Text += string.Format(" + {0} HFs", BattleData.AttackingHFs);
+                frm.lblBattleAttackerCombatants.Text += $" + {BattleData.AttackingHFs} HFs";
             frm.lblBattleAttackerLosses.Text = BattleData.AttackingDeaths.ToString();
             if (BattleData.AttackingHFDeaths > 0)
-                frm.lblBattleAttackerLosses.Text += string.Format(" + {0} HFs", BattleData.AttackingHFDeaths);
+                frm.lblBattleAttackerLosses.Text += $" + {BattleData.AttackingHFDeaths} HFs";
 
             frm.lblBattleDefenderCombatants.Text = BattleData.DefendingNumber.ToString();
             if (BattleData.DefendingHFs > 0)
-                frm.lblBattleDefenderCombatants.Text += string.Format(" + {0} HFs", BattleData.DefendingHFs);
+                frm.lblBattleDefenderCombatants.Text += $" + {BattleData.DefendingHFs} HFs";
             frm.lblBattleDefenderLosses.Text = BattleData.DefendingDeaths.ToString();
             if (BattleData.DefendingHFDeaths > 0)
-                frm.lblBattleDefenderLosses.Text += string.Format(" + {0} HFs", BattleData.DefendingHFDeaths);
+                frm.lblBattleDefenderLosses.Text += $" + {BattleData.DefendingHFDeaths} HFs";
 
 
 
@@ -302,13 +302,13 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             if (AttackingHF != null)
                 frm.lstBattleAttackingHF.Items.AddRange(AttackingHF.ToArray());
 
-            frm.grpBattleAttackingHF.Text = string.Format("Historical Figures ({0})", frm.lstBattleAttackingHF.Items.Count);
+            frm.grpBattleAttackingHF.Text = $"Historical Figures ({frm.lstBattleAttackingHF.Items.Count})";
 
             frm.lstBattleDefendingHF.Items.Clear();
             if (DefendingHF != null)
                 frm.lstBattleDefendingHF.Items.AddRange(DefendingHF.ToArray());
 
-            frm.grpBattleDefendingHF.Text = string.Format("Historical Figures ({0})", frm.lstBattleDefendingHF.Items.Count);
+            frm.grpBattleDefendingHF.Text = $"Historical Figures ({frm.lstBattleDefendingHF.Items.Count})";
 
             frm.lstBattleAttackingSquad.Items.Clear();
             if (AttackingSquad != null)
@@ -324,7 +324,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                 frm.lblBattleAttackingSquadRace.Data = null;
                 frm.lblBattleAttackingSquadSite.Data = null;
             }
-            frm.grpBattleAttackingSquad.Text = string.Format("Squads ({0})", frm.lstBattleAttackingSquad.Items.Count);
+            frm.grpBattleAttackingSquad.Text = $"Squads ({frm.lstBattleAttackingSquad.Items.Count})";
 
 
             frm.lstBattleDefendingSquad.Items.Clear();
@@ -341,7 +341,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                 frm.lblBattleDefendingSquadRace.Data = null;
                 frm.lblBattleDefendingSquadSite.Data = null;
             }
-            frm.grpBattleDefendingSquad.Text = string.Format("Squads ({0})", frm.lstBattleDefendingSquad.Items.Count);
+            frm.grpBattleDefendingSquad.Text = $"Squads ({frm.lstBattleDefendingSquad.Items.Count})";
 
             frm.lstBattleEventCols.Items.Clear();
             if (EventCol != null)

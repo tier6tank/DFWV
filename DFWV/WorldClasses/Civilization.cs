@@ -14,7 +14,8 @@ namespace DFWV.WorldClasses
         public readonly Dictionary<string, List<Leader>> Leaders = new Dictionary<string, List<Leader>>();
 
         [UsedImplicitly]
-        public new string DispNameLower { get { return ToString().ToLower(); } }
+        public new string DispNameLower => ToString().ToLower();
+
         public Entity Entity { get; set; }
         public Color Color { get; set; }
         public Site FirstSite { get; set; }

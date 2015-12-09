@@ -19,7 +19,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public Entity Source { get; set; }
         public Entity Destination { get; set; }
 
-        override public Point Location { get { return Site != null ? Site.Location : Point.Empty; } }
+        override public Point Location => Site != null ? Site.Location : Point.Empty;
 
         public override IEnumerable<Entity> EntitiesInvolved
         {
@@ -120,8 +120,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             if (EventCollection == null) return timestring;
             var war = (EC_War)EventCollection;
-            return string.Format("{0} {1} rejected an offer of peace from {2}.",
-                timestring, war.AggressorEnt, war.DefenderEnt);
+            return $"{timestring} {war.AggressorEnt} rejected an offer of peace from {war.DefenderEnt}.";
         }
 
         internal override string ToTimelineString()
@@ -131,9 +130,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             if (EventCollection == null) return timelinestring;
             var war = (EC_War)EventCollection;
-            return string.Format("{0} {1} rejected peace from {2}.",
-                timelinestring, war.AggressorEnt,
-                war.DefenderEnt);
+            return $"{timelinestring} {war.AggressorEnt} rejected peace from {war.DefenderEnt}.";
         }
 
         internal override void Export(string table)

@@ -26,6 +26,7 @@ namespace DFWV
         WorldConstruction selectedWC;
         River selectedRiver;
         Mountain selectedMountain;
+        Point selectedCoords;
         private readonly List<string> selectedSiteTypes = new List<string>();
  
         public MapForm()
@@ -53,15 +54,8 @@ namespace DFWV
             cmbHFTravels.Text = cmbHFTravels.SelectedItem.ToString();
         }
 
-        private Size MiniMapBoxSize 
-        { 
-            get  
-            {
-                return new Size((int)((float)pnlMap.ClientSize.Width / picMap.Width * picMiniMap.Width),
-                                    (int)((float)pnlMap.ClientSize.Height / picMap.Height * picMiniMap.Height));
-            }
-            
-        }
+        private Size MiniMapBoxSize => new Size((int)((float)pnlMap.ClientSize.Width / picMap.Width * picMiniMap.Width),
+            (int)((float)pnlMap.ClientSize.Height / picMap.Height * picMiniMap.Height));
 
         private void LoadMaps()
         {
@@ -119,7 +113,7 @@ namespace DFWV
                                 picMap.Image.Size.Height / mapSize.Height);
 
             updateLegend();
-            redrawOverlay();
+            RedrawOverlay();
             DrawMaps();
         }
 
@@ -131,7 +125,7 @@ namespace DFWV
 
         #region Overlay Drawing
         
-        private void redrawOverlay()
+        private void RedrawOverlay()
         {
             Cursor.Current = Cursors.WaitCursor;
             if (MapOverlay == null || MapOverlay.Size != new Size(picMap.Image.Width, picMap.Image.Height))
@@ -142,6 +136,14 @@ namespace DFWV
             }
             var g = Graphics.FromImage(MapOverlay);
             g.Clear(Color.Transparent);
+            if (chkHighlightCoordinates.Checked)
+            {
+                using (var p = new Pen(Color.White))
+                {
+                    g.DrawRectangle(p, selectedCoords.X*siteSize.Width, selectedCoords.Y*siteSize.Height,
+                        siteSize.Width - 1, siteSize.Height - 1);
+                }
+            }
             if (chkRivers.Checked)
                 DrawRiverOverlay(g);
             if (chkUGRegions.Checked)
@@ -724,7 +726,7 @@ namespace DFWV
             }
 
             updateLegend();
-            redrawOverlay();
+            RedrawOverlay();
 
         }
 
@@ -802,9 +804,12 @@ namespace DFWV
 
         private void picMap_MouseMove(object sender, MouseEventArgs e)
         {
-            var mouseCoord = new Point(e.X / siteSize.Width, e.Y / siteSize.Height);
-            lblMapCoords.Text = string.Format("({0}, {1})", mouseCoord.X, mouseCoord.Y);
-            var selectedObject = getSelectedObject(mouseCoord);
+            var oldCoords = selectedCoords;
+            selectedCoords = new Point(e.X / siteSize.Width, e.Y / siteSize.Height);
+            if (selectedCoords != oldCoords && chkHighlightCoordinates.Checked)
+                RedrawOverlay();
+            lblMapCoords.Text = $"({selectedCoords.X}, {selectedCoords.Y})";
+            var selectedObject = getSelectedObject(selectedCoords);
             var nameText = "";
             var altNameText = "";
             var ownerText = "";

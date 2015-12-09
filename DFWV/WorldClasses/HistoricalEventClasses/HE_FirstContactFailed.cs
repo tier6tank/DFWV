@@ -16,7 +16,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? RejectorEnID { get; set; }
         private Entity RejectorEn { get; set; }
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location => Site.Location;
 
         public override IEnumerable<Entity> EntitiesInvolved
         {
@@ -86,16 +86,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} {1} rejected contact with {2} at {3}.",
-                                    timestring, RejectorEn, ContactorEn, Site.AltName);
+            return $"{timestring} {RejectorEn} rejected contact with {ContactorEn} at {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} {1} rejected contact with {2} at {3}.",
-                                    timelinestring, RejectorEn, ContactorEn, Site.AltName);
+            return $"{timelinestring} {RejectorEn} rejected contact with {ContactorEn} at {Site.AltName}.";
         }
 
         internal override void Export(string table)

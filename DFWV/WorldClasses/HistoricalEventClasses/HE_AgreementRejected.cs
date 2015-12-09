@@ -18,7 +18,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public Entity Source { get; set; }
         public Entity Destination { get; set; }
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location => Site.Location;
+
         public override IEnumerable<Entity> EntitiesInvolved
         {
             get
@@ -112,16 +113,15 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} the {1} proposed by {2} was rejected by {3} at {4}.",
-                timestring, "UNKNOWN AGREEMENT", "UNKNOWN", "UNKNOWN", Site.AltName);
+            return
+                $"{timestring} the {"UNKNOWN AGREEMENT"} proposed by {"UNKNOWN"} was rejected by {"UNKNOWN"} at {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} Agreement rejected at {1}",
-                        timelinestring, Site.AltName);
+            return $"{timelinestring} Agreement rejected at {Site.AltName}";
         }
 
         internal override void Export(string table)

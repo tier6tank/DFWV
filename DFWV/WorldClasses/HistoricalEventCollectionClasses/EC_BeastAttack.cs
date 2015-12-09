@@ -27,7 +27,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         private Entity DefendingEn { get; set; }
         public HistoricalFigure BeastHF { private get; set; }
 
-        override public Point Location { get { return Site.Coords; } }
+        override public Point Location => Site.Coords;
 
         public EC_BeastAttack(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -125,7 +125,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
             if (StartTime != null || EndTime != null)
             {
-                frm.lblBeastAttackTime.Text = string.Format("{0} - {1}", StartTime, EndTime);
+                frm.lblBeastAttackTime.Text = $"{StartTime} - {EndTime}";
                 frm.lblBeastAttackDuration.Text = WorldTime.Duration(EndTime, StartTime);
             }
             else

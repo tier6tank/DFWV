@@ -91,12 +91,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
             if (HF != null && Site != null)
-                return string.Format("{0} {1} destroyed the masterful {2} created by {3} for {4} at {5} in {6} at {7}.",
-                                    timestring, HF, "UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN", Site.AltName);
+                return
+                    $"{timestring} {HF} destroyed the masterful {"UNKNOWN"} created by {"UNKNOWN"} for {"UNKNOWN"} at {"UNKNOWN"} in {"UNKNOWN"} at {Site.AltName}.";
 
 
-            return string.Format("{0} {1} destroyed the masterful {2} created by {3} for {4} at {5} in {6} at {7}.",
-                    timestring, "UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN");
+            return
+                $"{timestring} {"UNKNOWN"} destroyed the masterful {"UNKNOWN"} created by {"UNKNOWN"} for {"UNKNOWN"} at {"UNKNOWN"} in {"UNKNOWN"} at {"UNKNOWN"}.";
 
 
         }

@@ -17,7 +17,7 @@ namespace DFWV.WorldClasses.EntityClasses
 
         public Race Race { get; set; }
         [UsedImplicitly]
-        public string RaceName { get { return Race != null ? Race.Name : ""; } }
+        public string RaceName => Race != null ? Race.Name : "";
 
         public Civilization Civilization { get; set; }
         public Civilization ParentCiv { get; set; }
@@ -44,7 +44,7 @@ namespace DFWV.WorldClasses.EntityClasses
         public List<HE_EntityLaw> LawEvents { get; set; }
 
         [UsedImplicitly]
-        public string DispNameLower { get { return ToString().ToLower(); } }
+        public string DispNameLower => ToString().ToLower();
 
         public List<EC_BeastAttack> BeastAttackEventCollections { get; set; }
         public List<EC_War> WarEventCollections { get; set; }
@@ -52,6 +52,7 @@ namespace DFWV.WorldClasses.EntityClasses
         public List<EC_SiteConquered> SiteConqueredEventCollections { get; set; }
         public List<EC_Theft> TheftEventCollections { get; set; }
         public List<EC_Insurrection> InsurrectionEventCollections { get; set; }
+        public List<EC_Occasion> OccasionEventCollections { get; set; }
 
         public List<Point> Coords { get; set; }
 
@@ -88,7 +89,7 @@ namespace DFWV.WorldClasses.EntityClasses
         }
 
         [UsedImplicitly]
-        public int MemberCount { get { return Members == null ? 0 : Members.Count; } }
+        public int MemberCount => Members == null ? 0 : Members.Count;
 
 
         static public List<string> Types = new List<string>();
@@ -173,7 +174,7 @@ namespace DFWV.WorldClasses.EntityClasses
             if (isPlayerControlled)
                 frm.grpEntity.Text += @" (PLAYER CONTROLLED)";
 #if DEBUG
-            frm.grpEntity.Text += string.Format(" - ID: {0}", ID);
+            frm.grpEntity.Text += $" - ID: {ID}";
 #endif
             frm.grpEntity.Show();
 
@@ -438,7 +439,7 @@ namespace DFWV.WorldClasses.EntityClasses
                     siteLink.Export(ID);
             }
 
-            if (Children == null) return;
+            if (ChildrenIDs == null) return;
             foreach (var child in ChildrenIDs)
                 Database.ExportWorldItem("Entity_EntityChild", new List<object>{ID, child});
         }

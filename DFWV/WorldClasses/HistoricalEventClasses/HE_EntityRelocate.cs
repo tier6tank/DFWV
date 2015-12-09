@@ -16,7 +16,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? StructureID { get; set; }
         private Structure Structure { get; set; }
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location => Site.Location;
 
         public override IEnumerable<Entity> EntitiesInvolved
         {
@@ -102,17 +102,15 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} {1} moved to {2} in {3}.",
-                timestring, Entity, Structure == null ? "UNKNOWN" : Structure.Name,
-                            Site.AltName);
+            return
+                $"{timestring} {Entity} moved to {(Structure == null ? "UNKNOWN" : Structure.Name)} in {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} {1} moved to {2}.",
-                        timelinestring, Entity, Site.AltName);
+            return $"{timelinestring} {Entity} moved to {Site.AltName}.";
         }
 
         internal override void Export(string table)

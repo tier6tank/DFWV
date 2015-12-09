@@ -20,16 +20,16 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         public static List<string> Types = new List<string>();
         public int Type { get; private set; }
 
-        public WorldTime StartTime { get { return new WorldTime(StartYear, StartSeconds); } }
-        public WorldTime EndTime { get { return (EndYear == 0 && EndSeconds == 0) ? WorldTime.Present : new WorldTime(EndYear, EndSeconds); } }
+        public WorldTime StartTime => new WorldTime(StartYear, StartSeconds);
+        public WorldTime EndTime => (EndYear == 0 && EndSeconds == 0) ? WorldTime.Present : new WorldTime(EndYear, EndSeconds);
 
         [UsedImplicitly]
-        public string EventCollectionType { get { return Types[Type]; } }
+        public string EventCollectionType => Types[Type];
 
         [UsedImplicitly]
-        public string DispNameLower { get { return ToString().ToLower(); } }
+        public string DispNameLower => ToString().ToLower();
 
-        override public Point Location { get { return Point.Empty; } }
+        override public Point Location => Point.Empty;
 
         [UsedImplicitly]
         public int Combatants 
@@ -96,6 +96,17 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                     return new EC_War(xdoc, world);
                 case "insurrection":
                     return new EC_Insurrection(xdoc, world);
+                case "occasion":
+                    return new EC_Occasion(xdoc, world);
+                case "ceremony":
+                    return new EC_Ceremony(xdoc, world);
+                case "procession":
+                    return new EC_Procession(xdoc, world);
+                case "performance":
+                    return new EC_Performance(xdoc, world);
+                case "competition":
+                    return new EC_Competition(xdoc, world);
+
                 default:
                     var logtext = "Unassessed Event Collection Type: " + (xdoc.Root.Element("type").Value);// + raw.Replace("<", "//<") + "\n\t\t\tbreak;");
                     logtext = ("\t\t" + xdoc.Root.ToString().Replace("<", "//<")).Split('\n').Where(
@@ -108,7 +119,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                             !ln.Contains("<type>") && 
                             !ln.Contains("</historical_event_collection>")
                             ).Aggregate(logtext, (current, ln) => current + ln);
-                    logtext += "\t\t\treturn new HistoricalEvent(xdoc, world);";
+                    logtext += "\t\t\treturn new HistoricalEventCollection(xdoc, world);";
 
                     Program.Log(LogType.Warning, logtext);
                     return new EC_UnassessedEventCollection(xdoc, world);
@@ -202,7 +213,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             frm.grpHistoricalEventCollection.Text = ToString();
             frm.grpHistoricalEventCollection.Show();
 #if DEBUG
-            frm.grpHistoricalEventCollection.Text += string.Format(" - ID: {0}", ID);
+            frm.grpHistoricalEventCollection.Text += $" - ID: {ID}";
 #endif
         }
 

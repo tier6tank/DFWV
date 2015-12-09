@@ -20,7 +20,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private Region Subregion { get; set; }
         private int? FeatureLayerID { get; set; }
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location => Site.Location;
+
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
             get 
@@ -155,8 +156,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
 
 
-                return string.Format("{0} {1} was reunited with {2} in {3}.",
-                    timestring, Group1HF[0], reunitedText, Site.AltName);
+                return $"{timestring} {Group1HF[0]} was reunited with {reunitedText} in {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
@@ -164,12 +164,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             if (Group2HF.Count == Group2HFID.Count && Group1HF.Count == Group1HFID.Count)
-                return string.Format("{0} {1} was reunited with {2}{3} in {4}.",
-                               timelinestring, Group1HF[0], Group2HF.Count == 2 ? " and " + Group2HF[1] : "",
-                               Group2HF[0], Site.AltName);
-            return string.Format("{0} {1} was reunited with {2}{3} in {4}.",
-                timelinestring, Group1HFID[0], Group2HF.Count == 2 ? " and " + Group2HFID[1] : "",
-                Group2HFID[0], Site.AltName);
+                return
+                    $"{timelinestring} {Group1HF[0]} was reunited with {(Group2HF.Count == 2 ? " and " + Group2HF[1] : "")}{Group2HF[0]} in {Site.AltName}.";
+            return
+                $"{timelinestring} {Group1HFID[0]} was reunited with {(Group2HF.Count == 2 ? " and " + Group2HFID[1] : "")}{Group2HFID[0]} in {Site.AltName}.";
         }
 
         internal override void Export(string table)

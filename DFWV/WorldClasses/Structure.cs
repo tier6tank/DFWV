@@ -24,18 +24,19 @@ namespace DFWV.WorldClasses
         public HE_RazedStructure RazedEvent { get { return (HE_RazedStructure) Events.FirstOrDefault(e => HistoricalEvent.Types[e.Type] == "razed structure"); } }
         public HE_CreatedStructure CreatedEvent { get { return (HE_CreatedStructure) Events.FirstOrDefault(e => HistoricalEvent.Types[e.Type] == "created structure"); } }
         [UsedImplicitly]
-        public bool isRazed { get { return RazedEvent != null; } }
+        public bool isRazed => RazedEvent != null;
+
         [UsedImplicitly]
-        public string StructureType { get { return Type.HasValue ? Types[Type.Value] : "Unknown"; } }
+        public string StructureType => Type.HasValue ? Types[Type.Value] : "Unknown";
 
         public IEnumerable<HE_ChangeHFBodyState> ChangeHFBodyStateEvents { get { return Events != null ? Events.Where(e => HistoricalEvent.Types[e.Type] == "change hf body state").Cast<HE_ChangeHFBodyState>() : null; } }
         [UsedImplicitly]
         public bool Tomb { get { return ChangeHFBodyStateEvents != null && (ChangeHFBodyStateEvents.Count(f=>f.BodyState == "entombed at site") > 0); } }
         [UsedImplicitly]
-        public string DispNameLower { get { return ToString().ToLower(); } }
+        public string DispNameLower => ToString().ToLower();
 
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location => Site.Location;
 
         public Structure(Site site, int id, World world) : base(world)
         {

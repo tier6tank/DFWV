@@ -18,7 +18,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public int? InvolvedID { get; set; }
         public Entity Involved { get; set; }
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location => Site.Location;
+
         public override IEnumerable<Entity> EntitiesInvolved
         {
             get
@@ -113,11 +114,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             if (Entity != null && Involved != null)
-                return string.Format("{0} {1} lost a diplomat at {2}. They suspected the involvement of {3}.",
-                                        timestring, Entity, Site.AltName, Involved);
+                return
+                    $"{timestring} {Entity} lost a diplomat at {Site.AltName}. They suspected the involvement of {Involved}.";
 
-            return string.Format("{0} A Diplomat was lost at {1}.",
-                                    timestring, Site.AltName);
+            return $"{timestring} A Diplomat was lost at {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
@@ -125,8 +125,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             //TODO: Incorporate new data
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} Diplomat lost at {1}.",
-                        timelinestring, Site.AltName);
+            return $"{timelinestring} Diplomat lost at {Site.AltName}.";
         }
 
         internal override void Export(string table)

@@ -19,19 +19,16 @@ namespace DFWV.WorldClasses
         public Site To { get; set; }
 
         [UsedImplicitly]
-        public string DispNameLower { get { return ToString().ToLower(); } }
+        public string DispNameLower => ToString().ToLower();
 
-        override public Point Location { get { return From.Location; } }
+        override public Point Location => From.Location;
 
         public List<Point> Coords { get; set; }
 
         public int? Type { get; set; }
         public static List<string> Types = new List<string>();
 
-        public string ConstructionType
-        {
-            get { return Type.HasValue ? Types[Type.Value] : ""; }
-        }
+        public string ConstructionType => Type.HasValue ? Types[Type.Value] : "";
 
         public WorldConstruction(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -56,7 +53,7 @@ namespace DFWV.WorldClasses
 
             frm.grpWorldConstruction.Text = ToString();
 #if DEBUG
-            frm.grpWorldConstruction.Text += string.Format(string.Format(string.Format(" - ID: {0}", ID), ID), ID);
+            frm.grpWorldConstruction.Text += string.Format(string.Format($" - ID: {ID}", ID), ID);
 #endif
             frm.grpWorldConstruction.Show();
 

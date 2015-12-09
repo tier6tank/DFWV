@@ -20,7 +20,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? CivID { get; set; }
         public Entity Civ { get; set; }
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location => Site.Location;
+
         public override IEnumerable<Entity> EntitiesInvolved
         {
             get
@@ -164,22 +165,18 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             if (SiteCiv == null)
-                return string.Format("{0} {1} replaced {2} in {3} with {4}.",
-                    timestring, Civ, OldStructure != null ? OldStructure.Name : "UNKNOWN",
-                                Site.AltName, NewStructure != null ? NewStructure.Name : "UNKNOWN");
+                return
+                    $"{timestring} {Civ} replaced {(OldStructure != null ? OldStructure.Name : "UNKNOWN")} in {Site.AltName} with {(NewStructure != null ? NewStructure.Name : "UNKNOWN")}.";
 
-            return string.Format("{0} {1} of {2} replaced {3} in {4} with {5}.",
-                timestring, SiteCiv, Civ, OldStructure != null ? OldStructure.Name : "UNKNOWN",
-                Site.AltName, NewStructure != null ? NewStructure.Name : "UNKNOWN");
+            return
+                $"{timestring} {SiteCiv} of {Civ} replaced {(OldStructure != null ? OldStructure.Name : "UNKNOWN")} in {Site.AltName} with {(NewStructure != null ? NewStructure.Name : "UNKNOWN")}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} {1} replaced a structure in {2}.",
-                        timelinestring, Civ,
-                                Site.AltName);
+            return $"{timelinestring} {Civ} replaced a structure in {Site.AltName}.";
         }
 
         internal override void Export(string table)

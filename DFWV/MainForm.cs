@@ -39,7 +39,7 @@ namespace DFWV
         {
             InitializeComponent();
 
-            Text = string.Format("World Viewer v{0}", Application.ProductVersion);
+            Text = $"World Viewer v{Application.ProductVersion}";
             LinkEvents();
             ClearTabs();
         }
@@ -612,20 +612,29 @@ namespace DFWV
                     AddSummaryItem(@"Castes" , hfLabel);
                     foreach (var hfCaste in HistoricalFigure.Castes)
                     {
-                        AddSummaryItem(string.Format(@"{0}: {1}", hfCaste, World.HistoricalFigures.Values.Count(x => x.Caste.HasValue && HistoricalFigure.Castes[x.Caste.Value] == hfCaste)), "Castes",
+                        AddSummaryItem(
+                            $@"{hfCaste}: {
+                                World.HistoricalFigures.Values.Count(
+                                    x => x.Caste.HasValue && HistoricalFigure.Castes[x.Caste.Value] == hfCaste)}", "Castes",
                             new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "HFCaste == \"" + hfCaste + "\"" }, null, -1)));
                     }
                     
-                    AddSummaryItem(string.Format(@"{0}: {1}", "*NONE*", World.HistoricalFigures.Values.Count(x => !x.Caste.HasValue)), "Castes");
+                    AddSummaryItem($@"{"*NONE*"}: {World.HistoricalFigures.Values.Count(x => !x.Caste.HasValue)}", "Castes");
 
                     AddSummaryItem(@"      Associated Types" , hfLabel);
                     foreach (var hfAssociatedType in HistoricalFigure.AssociatedTypes)
                     {
-                        AddSummaryItem(string.Format(@"{0}: {1}", hfAssociatedType, World.HistoricalFigures.Values.Count(x => x.AssociatedType.HasValue && HistoricalFigure.AssociatedTypes[x.AssociatedType.Value] == hfAssociatedType)), "Associated Types",
+                        AddSummaryItem(
+                            $@"{hfAssociatedType}: {
+                                World.HistoricalFigures.Values.Count(
+                                    x =>
+                                        x.AssociatedType.HasValue &&
+                                        HistoricalFigure.AssociatedTypes[x.AssociatedType.Value] == hfAssociatedType)}", "Associated Types",
                             new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "Job == \"" + hfAssociatedType + "\"" }, null, -1)));
                     }
 
-                    AddSummaryItem(string.Format(@"{0}: {1}", "*NONE*", World.HistoricalFigures.Values.Count(x => !x.AssociatedType.HasValue)), "Associated Types");
+                    AddSummaryItem(
+                        $@"{"*NONE*"}: {World.HistoricalFigures.Values.Count(x => !x.AssociatedType.HasValue)}", "Associated Types");
 
 
                     AddSummaryItem(@"Adventurers: " + World.HistoricalFigures.Values.Count(x => x.Adventurer), hfLabel,
@@ -656,7 +665,8 @@ namespace DFWV
                             new NavigationFilter(typeof(HistoricalEvent), new Filter("Year", null, null, 50000)));
                     foreach (var evtType in HistoricalEvent.Types)
                     {
-                        AddSummaryItem(string.Format(@"      {0}: {1}", evtType, World.HistoricalEvents.Values.Count(x => x.EventType == evtType)), evtLabel,
+                        AddSummaryItem(
+                            $@"      {evtType}: {World.HistoricalEvents.Values.Count(x => x.EventType == evtType)}", evtLabel,
                             new NavigationFilter(typeof(HistoricalEvent), new Filter(new List<string> { "Year" }, new List<string> { "EventType == \"" + evtType + "\"" }, null, 50000)));
                     }
                     break;
@@ -667,7 +677,10 @@ namespace DFWV
                             new NavigationFilter(typeof(HistoricalEventCollection), new Filter(new List<string> {"StartYear"}, null, null, 50000)));
                     foreach (var evtColType in HistoricalEventCollection.Types)
                     {
-                        AddSummaryItem(string.Format(@"      {0}: {1}", evtColType, World.HistoricalEventCollections.Values.Count(x => x.EventCollectionType == evtColType)), evtColLabel,
+                        AddSummaryItem(
+                            $@"      {evtColType}: {
+                                World.HistoricalEventCollections.Values.Count(x => x.EventCollectionType == evtColType)
+                                }", evtColLabel,
                             new NavigationFilter(typeof(HistoricalEventCollection), new Filter(new List<string> { "StartYear" }, new List<string> { "EventCollectionType == \"" + evtColType + "\"" }, null, 50000)));
                     }
                     break;
@@ -840,7 +853,7 @@ namespace DFWV
                 var count = World.HistoricalFigures.Values.Count(x => Equals(x.Race, race));
                 if (count == 0)
                     continue;
-                AddSummaryItem(string.Format(@"{0}: {1}", race.Name, count), "Races",
+                AddSummaryItem($@"{race.Name}: {count}", "Races",
                             new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "RaceName == \"" + race.Name + "\"" }, null, -1)));
             }
 
@@ -848,7 +861,7 @@ namespace DFWV
                             new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "Dead == false" }, null, -1)));
             AddSummaryItem(@" Dead: " + World.HistoricalFigures.Values.Count(x => x.Dead), hfLabel,
                             new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "Dead == true" }, null, -1)));
-            AddSummaryItem(@"Is Leader: " + World.HistoricalFigures.Values.Count(x => x.Leader != null), hfLabel,
+            AddSummaryItem(@"Is Leader: " + World.HistoricalFigures.Values.Count(x => x.isLeader), hfLabel,
                             new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "isLeader == true" }, null, -1)));
 
         }
@@ -987,12 +1000,27 @@ namespace DFWV
         /// </summary>
         private void World_HistoricalFiguresPositioned()
         {
-            var HFsPositioned = World.HistoricalFigures.Values.Count(x => x.Site != null || x.Region != null || x.Coords != Point.Empty && !x.Dead);
-            var HFsAlive = World.HistoricalFigures.Values.Count(x => x.Dead);
+            var HFsPositioned = World.HistoricalFigures.Values.Count(x => x.isPositioned && !x.Dead);
+            var HFsAlive = World.HistoricalFigures.Values.Count(x => !x.Dead);
+
+            AddSummaryItemsLearnedFromPositioning();            
 
             Program.Log(LogType.Status, string.Format("Historical Figures Positioned (" + Math.Round(100.0f * HFsPositioned / HFsAlive, 0) + "% located)"));
 
         }
+
+        /// <summary>
+        /// After hf positioning is complete, certain additional bits of World Summary Data can be dropped into the summary.
+        /// </summary>
+        private void AddSummaryItemsLearnedFromPositioning()
+        {
+            var hfLabel = @"    Historical Figures: " + World.HistoricalFigures.Count;
+            AddSummaryItem(@" and Positioned: " + World.HistoricalFigures.Values.Count(x => x.isPositioned && !x.Dead), hfLabel,
+                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "isPositioned == true", "Dead == false" }, null, -1)));
+            AddSummaryItem(@" and Not Positioned: " + World.HistoricalFigures.Values.Count(x => !x.isPositioned && !x.Dead), hfLabel,
+                            new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "isPositioned == false", "Dead == false" }, null, -1)));
+        }
+
 
         private void World_StatsGathered()
         {
@@ -1368,8 +1396,8 @@ namespace DFWV
                     LineAlignment = StringAlignment.Near
                 };
 
-                var timeString = string.Format("({0} - {1})", thisWar.StartTime,
-                    thisWar.EndTime != WorldTime.Present ? thisWar.EndTime.ToString() : "");
+                var timeString =
+                    $"({thisWar.StartTime} - {(thisWar.EndTime != WorldTime.Present ? thisWar.EndTime.ToString() : "")})";
                 e.Graphics.DrawString(timeString,
                     e.Font, Brushes.Black, e.Bounds, rightAlignFormat);
 
@@ -1871,8 +1899,8 @@ namespace DFWV
             }
             navigatingBack = false;
             if (NavBackObjects.Count > 0)
-                BacktoolStripMenuItem.ToolTipText = string.Format("{0} ({1})", NavBackObjects.Peek().ToString(),
-                    NavBackObjects.Peek().GetType().Name);
+                BacktoolStripMenuItem.ToolTipText =
+                    $"{NavBackObjects.Peek().ToString()} ({NavBackObjects.Peek().GetType().Name})";
             NavBackObjects.Push(item);
             BacktoolStripMenuItem.Enabled = NavBackObjects.Count >= 2;
         }
@@ -1906,8 +1934,8 @@ namespace DFWV
             BacktoolStripMenuItem.Enabled = NavBackObjects.Count >= 2;
             ForwardtoolStripMenuItem.Enabled = NavForwardObjects.Count >= 1;
             if (ForwardtoolStripMenuItem.Enabled)
-                ForwardtoolStripMenuItem.ToolTipText = string.Format("{0} ({1})", NavForwardObjects.Peek().ToString(),
-                    NavForwardObjects.Peek().GetType().Name);
+                ForwardtoolStripMenuItem.ToolTipText =
+                    $"{NavForwardObjects.Peek().ToString()} ({NavForwardObjects.Peek().GetType().Name})";
             ;
 
         }

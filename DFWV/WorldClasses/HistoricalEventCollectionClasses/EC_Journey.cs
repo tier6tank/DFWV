@@ -77,7 +77,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
             if (StartTime != null || EndTime != null)
             {
-                frm.lblJourneyTime.Text = string.Format("{0} - {1}", StartTime, EndTime);
+                frm.lblJourneyTime.Text = $"{StartTime} - {EndTime}";
                 frm.lblJourneyDuration.Text = WorldTime.Duration(EndTime, StartTime);
             }
             else

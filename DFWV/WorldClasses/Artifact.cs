@@ -27,30 +27,25 @@ namespace DFWV.WorldClasses
         public List<HE_HFDied> Kills { get; set; }
 
         [UsedImplicitly]
-        public bool Lost { get { return LostEvent != null; } }
-        [UsedImplicitly]
-        public int Value { get { return ItemValue ?? 0; } }
-        [UsedImplicitly]
-        public string Type
-        {
-            get
-            {
-                return (ItemSubType.HasValue
-                    ? HistoricalEvent.ItemSubTypes[ItemSubType.Value]
-                    : (ItemType.HasValue
-                        ? HistoricalEvent.ItemTypes[ItemType.Value]
-                        : ""));
-            }
-        }
-        [UsedImplicitly]
-        public string Material
-        {
-            get { return (Mat.HasValue ? HistoricalEvent.Materials[Mat.Value] + " " : ""); }
-        }
-        [UsedImplicitly]
-        public string DispNameLower { get { return ToString().ToLower(); } }
+        public bool Lost => LostEvent != null;
 
-        override public Point Location { get { return Point.Empty; } }
+        [UsedImplicitly]
+        public int Value => ItemValue ?? 0;
+
+        [UsedImplicitly]
+        public string Type => (ItemSubType.HasValue
+            ? HistoricalEvent.ItemSubTypes[ItemSubType.Value]
+            : (ItemType.HasValue
+                ? HistoricalEvent.ItemTypes[ItemType.Value]
+                : ""));
+
+        [UsedImplicitly]
+        public string Material => (Mat.HasValue ? HistoricalEvent.Materials[Mat.Value] + " " : "");
+
+        [UsedImplicitly]
+        public string DispNameLower => ToString().ToLower();
+
+        override public Point Location => Point.Empty;
 
         public Artifact(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -83,7 +78,7 @@ namespace DFWV.WorldClasses
 
             frm.grpArtifact.Text = ToString();
 #if DEBUG
-            frm.grpArtifact.Text += string.Format(" - ID: {0}", ID);
+            frm.grpArtifact.Text += $" - ID: {ID}";
 #endif
             frm.grpArtifact.Show();
 

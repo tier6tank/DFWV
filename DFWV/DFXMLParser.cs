@@ -375,8 +375,9 @@ namespace DFWV
                 var fi = new FileInfo(_path);
                 Program.Log(LogType.Error, "XML file is" + Math.Round(fi.Length / 1024f / 1024f / 1024f, 2) + " GB");
 
-                Program.Log(LogType.Error, string.Format("Running {0} Bit World Viewer", (Environment.Is64BitProcess ? "64" : "32")));
-                Program.Log(LogType.Error, string.Format("Running {0} Bit Operating System", (Environment.Is64BitOperatingSystem ? "64" : "32")));
+                Program.Log(LogType.Error, $"Running {(Environment.Is64BitProcess ? "64" : "32")} Bit World Viewer");
+                Program.Log(LogType.Error,
+                    $"Running {(Environment.Is64BitOperatingSystem ? "64" : "32")} Bit Operating System");
 
                 if (!Environment.Is64BitOperatingSystem) //Running 32 bit OS
                 {
@@ -591,8 +592,9 @@ namespace DFWV
                 var fi = new FileInfo(_path);
                 Program.Log(LogType.Error, "XML file is" + Math.Round(fi.Length / 1024f / 1024f / 1024f, 2) + " GB");
 
-                Program.Log(LogType.Error, string.Format("Running {0} Bit World Viewer", (Environment.Is64BitProcess ? "64" : "32")));
-                Program.Log(LogType.Error, string.Format("Running {0} Bit Operating System", (Environment.Is64BitOperatingSystem ? "64" : "32")));
+                Program.Log(LogType.Error, $"Running {(Environment.Is64BitProcess ? "64" : "32")} Bit World Viewer");
+                Program.Log(LogType.Error,
+                    $"Running {(Environment.Is64BitOperatingSystem ? "64" : "32")} Bit Operating System");
 
                 if (!Environment.Is64BitOperatingSystem) //Running 32 bit OS
                 {

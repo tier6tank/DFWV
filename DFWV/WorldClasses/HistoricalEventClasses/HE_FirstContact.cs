@@ -16,7 +16,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? ContactedEnID { get; set; }
         private Entity ContactedEn { get; set; }
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location => Site.Location;
 
         public override IEnumerable<Entity> EntitiesInvolved
         {
@@ -86,16 +86,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} {1} made contact with {2} at {3}.",
-                                    timestring, ContactorEn, ContactedEn, Site.AltName);
+            return $"{timestring} {ContactorEn} made contact with {ContactedEn} at {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} {1} made contact with {2} at {3}.",
-                                    timelinestring, ContactorEn, ContactedEn, Site.AltName);
+            return $"{timelinestring} {ContactorEn} made contact with {ContactedEn} at {Site.AltName}.";
         }
 
         internal override void Export(string table)

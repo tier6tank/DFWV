@@ -20,7 +20,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? FeatureLayerID { get; set; }
         private Point Coords { get; set; }
 
-        override public Point Location { get { return Coords; } }
+        override public Point Location => Coords;
+
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
             get { yield return GroupHF; }
@@ -128,19 +129,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             if (Escape)
             {
-                return string.Format("{0} {1} escaped from the Underworld.",
-                    timestring, GroupHF);
+                return $"{timestring} {GroupHF} escaped from the Underworld.";
 
             }
             if (Return)
             {
-                return string.Format("{0} {1} returned to {2}.",
-                    timestring, GroupHF,
-                    Site == null ? "UNKNONW" : Site.AltName);
+                return $"{timestring} {GroupHF} returned to {(Site == null ? "UNKNONW" : Site.AltName)}.";
             }
-            return string.Format("{0} {1} made a journey to {2}.",
-                timestring, GroupHF,
-                Subregion == null ? "UNKNONW" : Subregion.ToString());
+            return $"{timestring} {GroupHF} made a journey to {(Subregion == null ? "UNKNONW" : Subregion.ToString())}.";
         }
 
         internal override string ToTimelineString()
@@ -148,15 +144,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             if (Escape)
-                return string.Format("{0} {1} escaped from the Underworld.",
-                    timelinestring, GroupHF);
+                return $"{timelinestring} {GroupHF} escaped from the Underworld.";
             if (Return)
-                return string.Format("{0} {1} returned to {2}.",
-                    timelinestring, GroupHF,
-                    Site == null ? "UNKNONW" : Site.AltName);
-            return string.Format("{0} {1} made a journey to {2}.",
-                timelinestring, GroupHF,
-                Subregion == null ? "UNKNONW" : Subregion.ToString());
+                return $"{timelinestring} {GroupHF} returned to {(Site == null ? "UNKNONW" : Site.AltName)}.";
+            return
+                $"{timelinestring} {GroupHF} made a journey to {(Subregion == null ? "UNKNONW" : Subregion.ToString())}.";
         }
 
         internal override void Export(string table)

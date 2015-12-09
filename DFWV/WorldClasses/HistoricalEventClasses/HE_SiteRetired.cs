@@ -17,7 +17,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private Site Site { get; set; }
         public bool First { get; set; }
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location => Site.Location;
 
 
         public override IEnumerable<Entity> EntitiesInvolved
@@ -101,9 +101,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} {1} retired {2}.",
-                            timelinestring, Civ,
-                            Site.AltName);
+            return $"{timelinestring} {Civ} retired {Site.AltName}.";
         }
 
         internal override void Export(string table)

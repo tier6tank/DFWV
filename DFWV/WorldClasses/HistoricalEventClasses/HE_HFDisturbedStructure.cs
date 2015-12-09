@@ -18,7 +18,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         private int? Action { get; set; }
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location => Site.Location;
+
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
             get { yield return HistFig; }
@@ -129,9 +130,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} {1} {2} profaned the {3} in {4}.",
-                            timestring, HistFig.Race, HistFig,
-                            Structure, Site.AltName);
+            return $"{timestring} {HistFig.Race} {HistFig} profaned the {Structure} in {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
@@ -140,11 +139,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             if (Site != null)
-                return string.Format("{0} {1} {2} disturbed structure in {3}.",
-                    timelinestring, HistFig.Race, HistFig,
-                    Site.AltName);
-            return string.Format("{0} {1} {2} disturbed structure.",
-                timelinestring, HistFig.Race, HistFig);
+                return $"{timelinestring} {HistFig.Race} {HistFig} disturbed structure in {Site.AltName}.";
+            return $"{timelinestring} {HistFig.Race} {HistFig} disturbed structure.";
         }
 
         internal override void Export(string table)

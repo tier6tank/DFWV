@@ -15,7 +15,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? HFIDTarget { get; set; }
         private HistoricalFigure HFTarget { get; set; }
 
-        override public Point Location { get { return Point.Empty; } }
+        override public Point Location => Point.Empty;
 
         public int? LinkType { get; set; }
 
@@ -153,20 +153,19 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 (LinkType.HasValue ? HFLink.LinkTypes[LinkType.Value] : string.Empty))
             {
                 case "spouse":
-                    return string.Format("{0} {1} {2} {3}.",
-                        timestring, HF, "married", HFTarget == null ? "an unknown creature" : HFTarget.ToString());
+                    return
+                        $"{timestring} {HF} {"married"} {(HFTarget == null ? "an unknown creature" : HFTarget.ToString())}.";
                 case "prisoner":
-                    return string.Format("{0} {1} {2} {3}.",
-                        timestring, HF, "imprisoned", HFTarget == null ? "an unknown creature" : HFTarget.ToString());
+                    return
+                        $"{timestring} {HF} {"imprisoned"} {(HFTarget == null ? "an unknown creature" : HFTarget.ToString())}.";
                 case "apprentice":
-                    return string.Format("{0} {1} {2} {3} {4}.",
-                        timestring, HF, "became master of the", HFTarget != null && HFTarget.Race != null ? HFTarget.Race.ToString().ToLower() : "", HFTarget == null ? "an unknown creature" : HFTarget.ToString());
+                    return
+                        $"{timestring} {HF} {"became master of the"} {(HFTarget != null && HFTarget.Race != null ? HFTarget.Race.ToString().ToLower() : "")} {(HFTarget == null ? "an unknown creature" : HFTarget.ToString())}.";
                 case "deity":
-                    return string.Format("{0} {1} {2} {3}.",
-                        timestring, HF, "began worshipping", HFTarget == null ? "an unknown creature" : HFTarget.ToString());
+                    return
+                        $"{timestring} {HF} {"began worshipping"} {(HFTarget == null ? "an unknown creature" : HFTarget.ToString())}.";
                 default:
-                    return string.Format("{0} {1} {2} {3}.",
-                                            timestring, HF, "UNKNOWN", HFTarget);
+                    return $"{timestring} {HF} {"UNKNOWN"} {HFTarget}.";
 
             }
         }
@@ -175,8 +174,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} {1} {2} {3}.",
-                timelinestring, HF != null ? HF.ToString() : HFID.ToString(), " linked to ", HFTarget != null ? HFTarget.ToString() : HFIDTarget.ToString());
+            return
+                $"{timelinestring} {(HF != null ? HF.ToString() : HFID.ToString())} {" linked to "} {(HFTarget != null ? HFTarget.ToString() : HFIDTarget.ToString())}.";
         }
 
         internal override void Export(string table)

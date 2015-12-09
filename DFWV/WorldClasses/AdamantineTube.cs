@@ -10,7 +10,7 @@ namespace DFWV.WorldClasses
 {
     public class AdamantineTube : XMLObject
     {
-        override public Point Location { get { return Point.Empty; } }
+        override public Point Location => Point.Empty;
 
         public AdamantineTube(XDocument xdoc, World world)
             : base(xdoc, world)

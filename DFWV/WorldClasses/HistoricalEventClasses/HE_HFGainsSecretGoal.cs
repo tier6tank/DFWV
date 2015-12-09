@@ -14,7 +14,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int SecretGoal { get; set; }
 
 
-        override public Point Location { get { return Point.Empty; } }
+        override public Point Location => Point.Empty;
+
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
             get { yield return HF; }
@@ -76,8 +77,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} {1} got immortality goal.",
-                        timelinestring, HF);
+            return $"{timelinestring} {HF} got immortality goal.";
         }
 
         internal override void Export(string table)

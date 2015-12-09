@@ -23,7 +23,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private Structure Structure { get; set; }
         public string BodyState { get; set; }
 
-        override public Point Location { get { return Coords; } }
+        override public Point Location => Coords;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
@@ -135,16 +135,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} {1} was entombed in {2} within {3}.",
-                                    timestring, HF, Site.AltName, Structure);
+            return $"{timestring} {HF} was entombed in {Site.AltName} within {Structure}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} {1} was entombed at {2}.",
-                        timelinestring, HF, Site.AltName);
+            return $"{timelinestring} {HF} was entombed at {Site.AltName}.";
         }
 
         internal override void Export(string table)

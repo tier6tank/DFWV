@@ -16,13 +16,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         public int? EntityID { get; private set; }
         public HistoricalFigure HF { get; private set; }
 
-        public Entity Entity
-        {
-            get
-            {
-                return EntityID.HasValue ? HF.World.Entities[EntityID.Value] : null; 
-            }
-        }
+        public Entity Entity => EntityID.HasValue ? HF.World.Entities[EntityID.Value] : null;
 
         public int? LinkStrength { get; private set; }
 

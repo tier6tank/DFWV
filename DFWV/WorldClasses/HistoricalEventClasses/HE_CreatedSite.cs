@@ -19,7 +19,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? BuilderHFID { get; set; }
         public HistoricalFigure BuilderHF { get; set; }
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location => Site.Location;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
@@ -131,10 +131,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             if (BuilderHF != null)
-                return string.Format("{0} {1} founded {2}.", timestring, BuilderHF, Site.AltName);
-            return SiteCiv != null ? 
-                string.Format("{0} {1} of {2} founded {3}.", timestring, SiteCiv, Civ, Site.AltName) : 
-                string.Format("{0} {1} founded {2}.", timestring, Civ, Site.AltName);
+                return $"{timestring} {BuilderHF} founded {Site.AltName}.";
+            return SiteCiv != null ?
+                $"{timestring} {SiteCiv} of {Civ} founded {Site.AltName}."
+                : $"{timestring} {Civ} founded {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
@@ -142,11 +142,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             if (BuilderHF != null)
-                return string.Format("{0} {1} founded {2}.",
-                    timelinestring, BuilderHF, Site.AltName);
+                return $"{timelinestring} {BuilderHF} founded {Site.AltName}.";
 
-            return string.Format("{0} {1} founded {2}.",
-                        timelinestring, Civ, Site.AltName);
+            return $"{timelinestring} {Civ} founded {Site.AltName}.";
         }
 
         internal override void Export(string table)

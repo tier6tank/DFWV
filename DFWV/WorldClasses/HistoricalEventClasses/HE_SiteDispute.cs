@@ -108,16 +108,15 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} {1} of {2} and {3} of {4} became embroiled in a dispute over {5}.",
-                        timestring, Entity1, Site1.AltName, Entity2, Site2.AltName, Dispute);
+            return
+                $"{timestring} {Entity1} of {Site1.AltName} and {Entity2} of {Site2.AltName} became embroiled in a dispute over {Dispute}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} {1} and {2} dispute {3}.",
-                        timelinestring, Entity1, Entity2, Dispute);
+            return $"{timelinestring} {Entity1} and {Entity2} dispute {Dispute}.";
         }
 
         internal override void Export(string table)

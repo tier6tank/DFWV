@@ -137,32 +137,26 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             switch (Reason)
             {
                 case 0:
-                    return string.Format("{0} {1} of {2} created {3} through force of argument.",
-                        timestring, HF, Civ, positionText);
+                    return $"{timestring} {HF} of {Civ} created {positionText} through force of argument.";
                 case 1:
-                    return string.Format("{0} {1} of {2} compelled the creation of {3} with threats of violence.",
-                        timestring, HF, Civ, positionText);
+                    return
+                        $"{timestring} {HF} of {Civ} compelled the creation of {positionText} with threats of violence.";
                 case 2:
                     if (HF == null)
                     {
-                        return string.Format("{0} members of {1} created {2}.",
-                        timestring, Civ, positionText);
+                        return $"{timestring} members of {Civ} created {positionText}.";
                     }
                     return "";
                 case 3:
-                    return string.Format("{0} {1} of {2} created {3}, pushed by a wave of popular support.",
-                        timestring, HF, Civ, positionText);
+                    return $"{timestring} {HF} of {Civ} created {positionText}, pushed by a wave of popular support.";
                 case 4:
-                    return string.Format("{0} {1} of {2} created {3} as a matter of course.",
-                        timestring, HF, Civ, positionText);
+                    return $"{timestring} {HF} of {Civ} created {positionText} as a matter of course.";
                 default:
                     if (HF == null)
                     {
-                        return string.Format("{0} members of {1} created {2} for UNKNOWN reason.",
-                        timestring, Civ, positionText);
+                        return $"{timestring} members of {Civ} created {positionText} for UNKNOWN reason.";
                     }
-                    return string.Format("{0} {1} of {2} created {3} for UNKNOWN reason.",
-                        timestring, HF, Civ, positionText);
+                    return $"{timestring} {HF} of {Civ} created {positionText} for UNKNOWN reason.";
 
             }
         }

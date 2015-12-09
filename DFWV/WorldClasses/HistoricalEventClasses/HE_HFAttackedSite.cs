@@ -19,7 +19,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? SiteCivID { get; set; }
         public Entity SiteCiv { get; private set; }
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location => Site.Location;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
@@ -99,17 +99,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} {1} attacked {2} at {3}.",
-                                    timestring, AttackerHF.FirstName.ToTitleCase(), SiteCiv,
-                                    Site.AltName);
+            return $"{timestring} {AttackerHF.FirstName.ToTitleCase()} attacked {SiteCiv} at {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} {1} attacked {2} at {3}.",
-                                    timelinestring, AttackerHF, DefenderCiv, Site.AltName);
+            return $"{timelinestring} {AttackerHF} attacked {DefenderCiv} at {Site.AltName}.";
         }
 
         internal override void Export(string table)

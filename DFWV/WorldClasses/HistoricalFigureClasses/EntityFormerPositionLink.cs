@@ -11,13 +11,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         public int EntityID { get; private set; }
         public HistoricalFigure HF { get; private set; }
 
-        public Entity Entity
-        {
-            get
-            {
-                return HF.World.Entities[EntityID];
-            }
-        }
+        public Entity Entity => HF.World.Entities[EntityID];
 
         public int StartYear { get; set; }
         public int EndYear { get; set; }

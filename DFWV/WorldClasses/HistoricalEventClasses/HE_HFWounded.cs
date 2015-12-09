@@ -22,7 +22,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public int? InjuryType { get; set; }
         public int? PartLost { get; set; }
 
-        override public Point Location { get { return Site != null ? Site.Location : (Subregion != null ? Subregion.Location : Point.Empty); } }
+        override public Point Location => Site != null ? Site.Location : (Subregion != null ? Subregion.Location : Point.Empty);
+
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
             get
@@ -145,9 +146,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             //TODO: Incorporate new data
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} {1} was wounded by {2}.",
-                timestring, WoundeeHF != null ? "the " + WoundeeHF.Race + " " + WoundeeHF: "an unknown creature",
-                            WounderHF != null ? "the " + WounderHF.Race + " " + WounderHF: "an unknown creature");
+            return
+                $"{timestring} {(WoundeeHF != null ? "the " + WoundeeHF.Race + " " + WoundeeHF : "an unknown creature")} was wounded by {(WounderHF != null ? "the " + WounderHF.Race + " " + WounderHF : "an unknown creature")}.";
 
            
         }
@@ -157,8 +157,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             //TODO: Incorporate new data
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} {1} was wounded by the {2}.",
-                timelinestring,  WoundeeHF != null ? WoundeeHF.ToString() : WoundeeHFID.ToString(), WounderHF != null ? WounderHF.ToString() : WounderHFID.ToString());
+            return
+                $"{timelinestring} {(WoundeeHF != null ? WoundeeHF.ToString() : WoundeeHFID.ToString())} was wounded by the {(WounderHF != null ? WounderHF.ToString() : WounderHFID.ToString())}.";
         }        
 
         internal override void Export(string table)

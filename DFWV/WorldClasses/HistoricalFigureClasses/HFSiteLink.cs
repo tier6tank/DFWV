@@ -13,24 +13,13 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         public int LinkType { get; private set; }
         public int SiteID { get; private set; }
         private int? SubID { get; set; }
+        private int? OccupationID { get; set; }
         public int? EntityID { get; private set; }
         public HistoricalFigure HF { get; private set; }
 
-        public Entity Entity
-        {
-            get
-            {
-                return EntityID.HasValue && HF.World.Entities.ContainsKey(EntityID.Value) ? HF.World.Entities[EntityID.Value] : null;
-            }
-        }
+        public Entity Entity => EntityID.HasValue && HF.World.Entities.ContainsKey(EntityID.Value) ? HF.World.Entities[EntityID.Value] : null;
 
-        public Site Site
-        {
-            get
-            {
-                return HF.World.Sites[SiteID];
-            }
-        }
+        public Site Site => HF.World.Sites[SiteID];
 
         public HE_AddHFSiteLink AddEvent { get; set; }
         public HE_RemoveHFSiteLink RemoveEvent { get; set; }
@@ -45,6 +34,8 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             SiteID = Convert.ToInt32(data.Element("site_id").Value);
             if (data.Elements("sub_id").Count() != 0)
                 SubID = Convert.ToInt32(data.Element("sub_id").Value);
+            if (data.Elements("occupation_id").Count() != 0)
+                OccupationID = Convert.ToInt32(data.Element("occupation_id").Value);
             if (data.Elements("entity_id").Count() != 0)
                 EntityID = Convert.ToInt32(data.Element("entity_id").Value);
 

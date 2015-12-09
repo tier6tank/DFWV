@@ -61,26 +61,22 @@ namespace DFWV.WorldClasses
         [UsedImplicitly]
         public int EventCount { get; set; }
 
-        override public Point Location { get { return Coords; } }
+        override public Point Location => Coords;
         public MapLegend MapLegend { get; set; }
 
         [UsedImplicitly]
-        public string DispNameLower { get { return ToString().ToLower(); } }
-        [UsedImplicitly]
-        public int CreatedArtifactCount { get { return CreatedArtifacts == null ? 0 : CreatedArtifacts.Count; } }
-        [UsedImplicitly]
-        public int HFInhabitantCount { get { return Inhabitants == null ? 0 : Inhabitants.Count; } }
-        [UsedImplicitly]
-        public int TotalPopulation 
-        { 
-            get 
-            { 
-                return (Population == null ? 0 : Population.Count) +
-                        (Prisoners == null ? 0 : Prisoners.Count) +
-                        (Outcasts == null ? 0 : Outcasts.Count); 
-            } 
-        }
+        public string DispNameLower => ToString().ToLower();
 
+        [UsedImplicitly]
+        public int CreatedArtifactCount => CreatedArtifacts == null ? 0 : CreatedArtifacts.Count;
+
+        [UsedImplicitly]
+        public int HFInhabitantCount => Inhabitants == null ? 0 : Inhabitants.Count;
+
+        [UsedImplicitly]
+        public int TotalPopulation => (Population == null ? 0 : Population.Count) +
+                                      (Prisoners == null ? 0 : Prisoners.Count) +
+                                      (Outcasts == null ? 0 : Outcasts.Count);
 
         #region Parse From Site File
         public Site(IEnumerable<string> curSite, World world) : base(world)
@@ -235,7 +231,7 @@ namespace DFWV.WorldClasses
         public List<Structure> Structures { get; set; }
 
         [UsedImplicitly]
-        public string SiteType { get { return Type.HasValue ? Types[Type.Value] : string.Empty; } }
+        public string SiteType => Type.HasValue ? Types[Type.Value] : string.Empty;
 
         public Site(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -266,7 +262,7 @@ namespace DFWV.WorldClasses
                     case "structures":
                         StructureList = val;
                         if (val != "")
-                            Program.Log(LogType.Warning, string.Format("Unexpected structures list for site: {0} - {1}", Name, val));
+                            Program.Log(LogType.Warning, $"Unexpected structures list for site: {Name} - {val}");
                         break;
                     
                     default:
@@ -296,7 +292,7 @@ namespace DFWV.WorldClasses
             if (isPlayerControlled)
                 frm.grpSite.Text += @" (PLAYER CONTROLLED)";
 #if DEBUG
-            frm.grpSite.Text += string.Format(" - ID: {0}", ID);
+            frm.grpSite.Text += $" - ID: {ID}";
 #endif
             frm.grpSite.Show();
 
@@ -324,7 +320,7 @@ namespace DFWV.WorldClasses
             if (Population != null)
             {
                 frm.grpSitePopulation.FillListboxWith(frm.lstSitePopulation, Population.Keys);
-                frm.grpSitePopulation.Text = string.Format("Population ({0})", Population.Sum(x => x.Value));
+                frm.grpSitePopulation.Text = $"Population ({Population.Sum(x => x.Value)})";
             }
             else
             {
@@ -335,7 +331,7 @@ namespace DFWV.WorldClasses
             if (Prisoners != null)
             {
                 frm.grpSitePrisoners.FillListboxWith(frm.lstSitePrisoners, Prisoners.Keys);
-                frm.grpSitePrisoners.Text = string.Format("Prisoners ({0})", Prisoners.Sum(x => x.Value));
+                frm.grpSitePrisoners.Text = $"Prisoners ({Prisoners.Sum(x => x.Value)})";
             }
             else
             {
@@ -344,7 +340,7 @@ namespace DFWV.WorldClasses
             if (Outcasts != null)
             {
                 frm.grpSiteOutcasts.FillListboxWith(frm.lstSiteOutcasts, Outcasts.Keys);
-                frm.grpSiteOutcasts.Text = string.Format("Outcasts ({0})", Outcasts.Sum(x => x.Value));
+                frm.grpSiteOutcasts.Text = $"Outcasts ({Outcasts.Sum(x => x.Value)})";
             }
             else
             {
@@ -362,7 +358,7 @@ namespace DFWV.WorldClasses
                 {
                     thisNode.Nodes.Add(newNode);
                 }
-                thisNode.Text += string.Format(" ({0})", thisNode.Nodes.Count);
+                thisNode.Text += $" ({thisNode.Nodes.Count})";
                 frm.trvSiteEventCollection.Nodes.Add(thisNode);
             }
             if (BattleEventCollections != null)
@@ -372,7 +368,7 @@ namespace DFWV.WorldClasses
                 {
                     thisNode.Nodes.Add(newNode);
                 }
-                thisNode.Text += string.Format(" ({0})", thisNode.Nodes.Count);
+                thisNode.Text += $" ({thisNode.Nodes.Count})";
                 frm.trvSiteEventCollection.Nodes.Add(thisNode);
             }
             if (BeastAttackEventCollections != null)
@@ -382,7 +378,7 @@ namespace DFWV.WorldClasses
                 {
                     thisNode.Nodes.Add(newNode);
                 }
-                thisNode.Text += string.Format(" ({0})", thisNode.Nodes.Count);
+                thisNode.Text += $" ({thisNode.Nodes.Count})";
                 frm.trvSiteEventCollection.Nodes.Add(thisNode);
             }
             if (DuelEventCollections != null)
@@ -392,7 +388,7 @@ namespace DFWV.WorldClasses
                 {
                     thisNode.Nodes.Add(newNode);
                 }
-                thisNode.Text += string.Format(" ({0})", thisNode.Nodes.Count);
+                thisNode.Text += $" ({thisNode.Nodes.Count})";
                 frm.trvSiteEventCollection.Nodes.Add(thisNode);
             }
             if (SiteConqueredEventCollections != null)
@@ -402,7 +398,7 @@ namespace DFWV.WorldClasses
                 {
                     thisNode.Nodes.Add(newNode);
                 }
-                thisNode.Text += string.Format(" ({0})", thisNode.Nodes.Count);
+                thisNode.Text += $" ({thisNode.Nodes.Count})";
                 frm.trvSiteEventCollection.Nodes.Add(thisNode);
             }
             if (TheftEventCollections != null)
@@ -412,7 +408,7 @@ namespace DFWV.WorldClasses
                 {
                     thisNode.Nodes.Add(newNode);
                 }
-                thisNode.Text += string.Format(" ({0})", thisNode.Nodes.Count);
+                thisNode.Text += $" ({thisNode.Nodes.Count})";
                 frm.trvSiteEventCollection.Nodes.Add(thisNode);
             }
             if (InsurrectionEventCollections != null)
@@ -422,7 +418,7 @@ namespace DFWV.WorldClasses
                 {
                     thisNode.Nodes.Add(newNode);
                 }
-                thisNode.Text += string.Format(" ({0})", thisNode.Nodes.Count);
+                thisNode.Text += $" ({thisNode.Nodes.Count})";
                 frm.trvSiteEventCollection.Nodes.Add(thisNode);
             }
 

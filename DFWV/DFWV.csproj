@@ -24,7 +24,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>2.1.3.0</ApplicationVersion>
+    <ApplicationVersion>2.1.4.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -157,6 +157,24 @@
     </Compile>
     <Compile Include="WorldClasses\AdamantineTube.cs" />
     <Compile Include="WorldClasses\Announcement.cs" />
+    <Compile Include="WorldClasses\HistoricalEventClasses\HE_ArtifactDestroyed.cs" />
+    <Compile Include="WorldClasses\HistoricalEventClasses\HE_RegionPopIncorporatedIntoEntity.cs" />
+    <Compile Include="WorldClasses\HistoricalEventClasses\HE_MusicalFormCreated.cs" />
+    <Compile Include="WorldClasses\HistoricalEventClasses\HE_KnowledgeDiscovered.cs" />
+    <Compile Include="WorldClasses\HistoricalEventClasses\HE_DanceFormCreated.cs" />
+    <Compile Include="WorldClasses\HistoricalEventClasses\HE_PoeticFormCreated.cs" />
+    <Compile Include="WorldClasses\HistoricalEventClasses\HistoricalEvent_CultureCreatedBase.cs" />
+    <Compile Include="WorldClasses\HistoricalEventClasses\HE_WrittenContentComposed.cs" />
+    <Compile Include="WorldClasses\HistoricalEventClasses\HE_HFRelationshipDenied.cs" />
+    <Compile Include="WorldClasses\HistoricalEventClasses\HE_Competition.cs" />
+    <Compile Include="WorldClasses\HistoricalEventClasses\HE_Performance.cs" />
+    <Compile Include="WorldClasses\HistoricalEventClasses\HE_Procession.cs" />
+    <Compile Include="WorldClasses\HistoricalEventClasses\HE_Ceremony.cs" />
+    <Compile Include="WorldClasses\HistoricalEventCollectionClasses\EC_Competition.cs" />
+    <Compile Include="WorldClasses\HistoricalEventCollectionClasses\EC_Performance.cs" />
+    <Compile Include="WorldClasses\HistoricalEventCollectionClasses\EC_Ceremony.cs" />
+    <Compile Include="WorldClasses\HistoricalEventCollectionClasses\EC_Procession.cs" />
+    <Compile Include="WorldClasses\HistoricalEventCollectionClasses\EC_Occasion.cs" />
     <Compile Include="WorldClasses\Squad.cs" />
     <Compile Include="WorldClasses\Plant.cs" />
     <Compile Include="WorldClasses\Item.cs" />

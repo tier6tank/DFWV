@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using DFWV.Annotations;
@@ -31,24 +31,22 @@ namespace DFWV.WorldClasses
         public bool isCurrent { get; set; }
 
         [UsedImplicitly]
-        public bool Inherited { get { return Inheritance == InheritanceTypes.IndexOf("Inherited"); } }
+        public bool Inherited => Inheritance == InheritanceTypes.IndexOf("Inherited");
+
         public InheritanceSource InheritedFromSource { get; private set; }
         public int? InheritanceID { get; private set; }
         public HistoricalFigure InheritedFrom { get; set; }
         [UsedImplicitly]
         public bool Married { get; set; }
-        public HistoricalFigure Spouse { get
-        {
-            return HF == null
-                ? null
-                : (HF.HFLinks == null 
-                    ? null 
-                    : (!HF.HFLinks.ContainsKey(HFLink.LinkTypes.IndexOf("spouse")) 
-                        ? null
-                        : HF.HFLinks[HFLink.LinkTypes.IndexOf("spouse")][0].HF
-                        )
-                  );
-        } }
+        public HistoricalFigure Spouse => HF == null
+            ? null
+            : (HF.HFLinks == null 
+                ? null 
+                : (!HF.HFLinks.ContainsKey(HFLink.LinkTypes.IndexOf("spouse")) 
+                    ? null
+                    : HF.HFLinks[HFLink.LinkTypes.IndexOf("spouse")][0].HF
+                    )
+                );
 
         public WorldTime MarriedDeath { get; set; }
         public List<Child> Children { get; set; }
@@ -61,7 +59,7 @@ namespace DFWV.WorldClasses
         public Site Site { get; set; }
         public Race Race { get; set; }
         [UsedImplicitly]
-        public string RaceName { get { return Race != null ? Race.Name : (HF != null && HF.Race != null ? HF.Race.Name : ""); } }
+        public string RaceName => Race != null ? Race.Name : (HF != null && HF.Race != null ? HF.Race.Name : "");
 
         [UsedImplicitly]
         public Civilization SiteParent { get; set; }
@@ -69,7 +67,7 @@ namespace DFWV.WorldClasses
         public HistoricalFigure HF { get; set; }
 
         [UsedImplicitly]
-        public string DispNameLower { get { return ToString().ToLower(); } }
+        public string DispNameLower => ToString().ToLower();
 
         #region Parse From History File
         public Leader(IList<string> data, string leadertype, Civilization civ)
@@ -308,14 +306,16 @@ namespace DFWV.WorldClasses
             frm.lblLeaderInheritance.Text = InheritanceTypes[Inheritance];
             frm.lblLeaderInheritedFrom.Data = InheritedFrom;
             if (InheritedFromSource == InheritanceSource.Other)
-                frm.lblLeaderInheritedFrom.Text = string.Format("{0} ({1})", InheritedFrom != null ? InheritedFrom.ToString() : "", "Relative");
+                frm.lblLeaderInheritedFrom.Text =
+                    $"{(InheritedFrom != null ? InheritedFrom.ToString() : "")} ({"Relative"})";
             else if (InheritedFromSource != InheritanceSource.None)
-                frm.lblLeaderInheritedFrom.Text = string.Format("{0} ({1})", InheritedFrom != null ? InheritedFrom.ToString() : "", InheritedFromSource);
+                frm.lblLeaderInheritedFrom.Text =
+                    $"{(InheritedFrom != null ? InheritedFrom.ToString() : "")} ({InheritedFromSource})";
             frm.lblLeaderCivilization.Data = Civilization;
             frm.lblLeaderSite.Data = Site;
             frm.lblLeaderGod.Data = Worship;
             if (Worship != null)
-                frm.lblLeaderGod.Text = string.Format("{0} ({1}%)", Worship, WorshipPercent);
+                frm.lblLeaderGod.Text = $"{Worship} ({WorshipPercent}%)";
             frm.lblLeaderMarried.Data = Spouse;
             frm.lblLeaderHF.Data = HF;
 

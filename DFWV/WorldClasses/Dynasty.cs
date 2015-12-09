@@ -12,23 +12,17 @@ namespace DFWV.WorldClasses
         private string Type { get; set; }
         private Civilization Civilization { get; set; }
 
-        override public Point Location { get { return Members.Last().Location; } }
+        override public Point Location => Members.Last().Location;
 
         [UsedImplicitly]
-        public string DispNameLower { get { return ToString().ToLower(); } }
+        public string DispNameLower => ToString().ToLower();
 
         [UsedImplicitly]
-        public int Duration
-        {
-            get
-            {
-                return (int)((Members.Last().Leader.Death != null ? Members.Last().Leader.Death.ToSeconds() : WorldTime.Present.ToSeconds()) - 
-                    Members[0].Leader.ReignBegan.ToSeconds());
-            }
-        }
+        public int Duration => (int)((Members.Last().Leader.Death != null ? Members.Last().Leader.Death.ToSeconds() : WorldTime.Present.ToSeconds()) - 
+                                     Members[0].Leader.ReignBegan.ToSeconds());
 
         [UsedImplicitly]
-        public int MemberCount { get { return Members.Count; } }
+        public int MemberCount => Members.Count;
 
 
         public Dynasty(World world, HistoricalFigure hf, string type, Civilization civ) : base(world)

@@ -17,7 +17,7 @@ namespace DFWV.WorldClasses
         public River Parent { get; set; }
         public List<River> Tributaries { get; set; }
 
-        override public Point Location { get { return Coords.Last(); } }
+        override public Point Location => Coords.Last();
 
         public River(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -62,7 +62,7 @@ namespace DFWV.WorldClasses
             frm.grpRiver.Text = ToString();
             frm.grpRiver.Show();
 #if DEBUG
-            frm.grpRiver.Text += string.Format(" - ID: {0}", ID);
+            frm.grpRiver.Text += $" - ID: {ID}";
 #endif
 
 

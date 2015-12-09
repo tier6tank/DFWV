@@ -25,7 +25,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         public int? VictimCaste { get; set; }
 
-        override public Point Location { get { return Site != null ? Site.Location : Subregion.Location; } }
+        override public Point Location => Site != null ? Site.Location : Subregion.Location;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
@@ -170,25 +170,21 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             //(time), (HF) devoured a (race) of (entity) in (site).
             var devourertext = "an unknown creature";
             if (Devourer != null)
-                devourertext = string.Format("the {0} {1}", Devourer.Race.ToString().ToLower(), Devourer);
+                devourertext = $"the {Devourer.Race.ToString().ToLower()} {Devourer}";
 
             if (Victim == null)
             {
-                return string.Format("{0} {1} devoured a {2} of {3} in {4}.",
-                    timestring, devourertext, VictimRace.ToString().ToLower(), Entity,
-                    location);
+                return
+                    $"{timestring} {devourertext} devoured a {VictimRace.ToString().ToLower()} of {Entity} in {location}.";
             }
             if (Entity == null)
             {
-                return string.Format("{0} {1} devoured the {2} {3} {4}.",
-                    timestring, devourertext, VictimRace.ToString().ToLower(), Victim,
-                    location);
+                return
+                    $"{timestring} {devourertext} devoured the {VictimRace.ToString().ToLower()} {Victim} {location}.";
             }
 
 
-            return string.Format("{0} the {1} {2} devoured the {3} {4} {5}.",
-                timestring, "UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN",
-                location);
+            return $"{timestring} the {"UNKNOWN"} {"UNKNOWN"} devoured the {"UNKNOWN"} {"UNKNOWN"} {location}.";
         }
 
         internal override string ToTimelineString()
@@ -203,10 +199,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 location += Site.AltName;
 
             if (Devourer != null)
-                return string.Format("{0} {1} devoured someone {2}.",
-                    timelinestring, Devourer, location);
-            return string.Format("{0} Creature devoured {1}.",
-                timelinestring, location);
+                return $"{timelinestring} {Devourer} devoured someone {location}.";
+            return $"{timelinestring} Creature devoured {location}.";
         }
 
         internal override void Export(string table)

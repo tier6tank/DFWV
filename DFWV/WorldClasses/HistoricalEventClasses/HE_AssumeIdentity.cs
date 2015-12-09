@@ -22,7 +22,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public int? IdentityCaste { get; set; }
         public string IdentityName { get; set; }
         
-        override public Point Location { get { return TargetEn.Location; } }
+        override public Point Location => TargetEn.Location;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
@@ -147,12 +147,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             if (IdentityHF != null)
-                return string.Format("{0} {1} {2} fooled {3} into believing it was {4}.",
-                    timestring, TricksterHF.Race, TricksterHF,
-                    TargetEn, IdentityHF == null ? "Identity ID: " + IdentityID : IdentityHF.ToString());
-            return string.Format("{0} {1} {2} fooled {3} into believing it was {4}.",
-                timestring, TricksterHF.Race, TricksterHF,
-                TargetEn, IdentityName);
+                return
+                    $"{timestring} {TricksterHF.Race} {TricksterHF} fooled {TargetEn} into believing it was {(IdentityHF == null ? "Identity ID: " + IdentityID : IdentityHF.ToString())}.";
+            return
+                $"{timestring} {TricksterHF.Race} {TricksterHF} fooled {TargetEn} into believing it was {IdentityName}.";
         }
 
         internal override string ToTimelineString()
@@ -160,9 +158,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             //TODO: Incorporate new data
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} {1} assumed an identity to {2}",
-                        timelinestring, TricksterHF,
-                            TargetEn);
+            return $"{timelinestring} {TricksterHF} assumed an identity to {TargetEn}";
         }
 
         internal override void Export(string table)

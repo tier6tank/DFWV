@@ -38,15 +38,18 @@ namespace DFWV.WorldClasses
         public int EventCount { get; set; }
 
         [UsedImplicitly]
-        public int Battles { get { return BattleEventCollections == null ? 0 : BattleEventCollections.Count; } }
-        [UsedImplicitly]
-        public int InhabitantCount { get { return Inhabitants == null ? 0 : Inhabitants.Count; } }
-        [UsedImplicitly]
-        public string DispNameLower { get { return ToString().ToLower(); } }
-        [UsedImplicitly]
-        public string RegionType { get { return Types[Type]; } }
+        public int Battles => BattleEventCollections == null ? 0 : BattleEventCollections.Count;
 
-        override public Point Location { get { return Coords != null  ? Coords[0] : Point.Empty; } }
+        [UsedImplicitly]
+        public int InhabitantCount => Inhabitants == null ? 0 : Inhabitants.Count;
+
+        [UsedImplicitly]
+        public string DispNameLower => ToString().ToLower();
+
+        [UsedImplicitly]
+        public string RegionType => Types[Type];
+
+        override public Point Location => Coords != null  ? Coords[0] : Point.Empty;
 
         public Region(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -84,7 +87,7 @@ namespace DFWV.WorldClasses
 
             frm.grpRegion.Text = ToString();
 #if DEBUG
-            frm.grpRegion.Text += string.Format(" - ID: {0}", ID);
+            frm.grpRegion.Text += $" - ID: {ID}";
 #endif
             frm.grpRegion.Show();
 
@@ -99,7 +102,8 @@ namespace DFWV.WorldClasses
             if (Populations != null)
             {
                 frm.grpRegionPopulation.FillListboxWith(frm.lstRegionPopulation, Populations.Keys);
-                frm.grpRegionPopulation.Text = string.Format("Population ({0})", Populations.Values.Contains(10000001) ? "Unnumbered" : Populations.Values.Sum().ToString());
+                frm.grpRegionPopulation.Text =
+                    $"Population ({(Populations.Values.Contains(10000001) ? "Unnumbered" : Populations.Values.Sum().ToString())})";
                 frm.grpRegionPopulation.Visible = true;
             }
             else

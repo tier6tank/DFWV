@@ -21,7 +21,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public string NewJob { get; set; }
         public string OldJob { get; set; }
 
-        override public Point Location { get { return Site != null ? Site.Location : (Subregion != null ? Subregion.Location : Point.Empty); } }
+        override public Point Location => Site != null ? Site.Location : (Subregion != null ? Subregion.Location : Point.Empty);
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
@@ -133,12 +133,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             if (NewJob != "standard")
-                return string.Format("{0} {1} {2} became {3} in {4}.",
-                    timestring, HF.Race, HF, NewJob ?? "UNKNOWN",
-                    Site != null ? Site.AltName : Subregion.Name.ToTitleCase());
-            return string.Format("{0} {1} {2} stopped being a {3} in {4}.",
-                timestring, HF.Race, HF, OldJob ?? "UNKNOWN",
-                            Site != null ? Site.AltName : Subregion.Name);
+                return
+                    $"{timestring} {HF.Race} {HF} became {NewJob ?? "UNKNOWN"} in {(Site != null ? Site.AltName : Subregion.Name.ToTitleCase())}.";
+            return
+                $"{timestring} {HF.Race} {HF} stopped being a {OldJob ?? "UNKNOWN"} in {(Site != null ? Site.AltName : Subregion.Name)}.";
         }
 
         internal override string ToTimelineString()
@@ -147,11 +145,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             if (Site != null)
-                return string.Format("{0} {1} changed jobs at {2}",
-                    timelinestring, HF != null ? HF.ToString() : HFID.ToString(), 
-                                Site.AltName);
-            return string.Format("{0} {1} changed jobs",
-                timelinestring, HF != null ? HF.ToString() : HFID.ToString());
+                return
+                    $"{timelinestring} {(HF != null ? HF.ToString() : HFID.ToString())} changed jobs at {Site.AltName}";
+            return $"{timelinestring} {(HF != null ? HF.ToString() : HFID.ToString())} changed jobs";
         }
 
         internal override void Export(string table)

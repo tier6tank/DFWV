@@ -20,7 +20,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         private int? TargetEntID { get; set; }
         public Entity TargetEnt { get; private set; }
 
-        override public Point Location { get { return Site != null ? Site.Coords : Point.Empty; } }
+        override public Point Location => Site != null ? Site.Coords : Point.Empty;
 
         public EC_Insurrection(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -95,7 +95,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
             if (StartTime != null || EndTime != null)
             {
-                frm.lblInsurrectionTime.Text = string.Format("{0} - {1}", StartTime, EndTime);
+                frm.lblInsurrectionTime.Text = $"{StartTime} - {EndTime}";
                 frm.lblInsurrectionDuration.Text = WorldTime.Duration(EndTime, StartTime);
             }
             else

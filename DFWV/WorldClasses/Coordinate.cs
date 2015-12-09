@@ -7,7 +7,7 @@ namespace DFWV.WorldClasses
         readonly int X;
         readonly int Y;
 
-        override public Point Location { get { return new Point(X,Y); } }
+        override public Point Location => new Point(X,Y);
 
         public Coordinate(Point coord)
         {

@@ -32,7 +32,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? ItemMatIndex { get; set; }
         public int? PileType { get; set; }
         
-        override public Point Location { get { return Coords != Point.Empty ? Coords : (Site != null ? Site.Location : Subregion.Location); } }
+        override public Point Location => Coords != Point.Empty ? Coords : (Site != null ? Site.Location : Subregion.Location);
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
@@ -215,50 +215,41 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var abusedHFtext = "UNKNOWN";
 
             if (BodyHFs != null && BodyHFs.Count == 1)
-                abusedHFtext = string.Format("the body of the {0} {1} was ", BodyHFs[0].Race.Name.ToLower(), BodyHFs[0]);
+                abusedHFtext = $"the body of the {BodyHFs[0].Race.Name.ToLower()} {BodyHFs[0]} was ";
             else if (BodyHFs != null && BodyHFs.Count == 2)
-                abusedHFtext = string.Format("the bodies of the {0} {1} and the {2} {3} were ", 
-                    BodyHFs[0].Race.Name.ToLower(), BodyHFs[0],
-                    BodyHFs[1].Race.Name.ToLower(), BodyHFs[0]);
+                abusedHFtext =
+                    $"the bodies of the {BodyHFs[0].Race.Name.ToLower()} {BodyHFs[0]} and the {BodyHFs[1].Race.Name.ToLower()} {BodyHFs[0]} were ";
             else if (BodyHFs == null)
                 abusedHFtext = "the body of an unknown creature was";
             else if (BodyHFs != null && BodyHFs.Count > 2)
             {
-                abusedHFtext = BodyHFs.TakeWhile(hf => hf != BodyHFs.Last()).Aggregate("the bodies of ", (current, hf) => current + string.Format("the {0} {1}, ", hf.Race.Name.ToLower(), hf));
+                abusedHFtext = BodyHFs.TakeWhile(hf => hf != BodyHFs.Last()).Aggregate("the bodies of ", (current, hf) => current +
+                                                                                                                          $"the {hf.Race.Name.ToLower()} {hf}, ");
 
-                abusedHFtext += string.Format("and the {0} {1} ", BodyHFs.Last().Race.Name.ToLower(), BodyHFs.Last());
+                abusedHFtext += $"and the {BodyHFs.Last().Race.Name.ToLower()} {BodyHFs.Last()} ";
             }
 
             if (AbuserEn != null && PileType == -1 && ItemMat.HasValue && ItemType.HasValue)
             {
                 if (ItemSubType.HasValue)
                 {
-                    return string.Format("{0} {1} impaled on a {2} by {3} in {4}.",
-                                    timestring, abusedHFtext, Materials[ItemMat.Value] + " " + ItemSubTypes[ItemSubType.Value], AbuserEn,
-                                    locationtext);
+                    return
+                        $"{timestring} {abusedHFtext} impaled on a {Materials[ItemMat.Value] + " " + ItemSubTypes[ItemSubType.Value]} by {AbuserEn} in {locationtext}.";
                 }
-                return string.Format("{0} {1} impaled on a {2} by {3} in {4}.",
-                                timestring, abusedHFtext, Materials[ItemMat.Value] + " " + ItemTypes[ItemType.Value], AbuserEn,
-                                locationtext);
+                return
+                    $"{timestring} {abusedHFtext} impaled on a {Materials[ItemMat.Value] + " " + ItemTypes[ItemType.Value]} by {AbuserEn} in {locationtext}.";
             }
             if (AbuserEn != null && PileType == -1 && ItemMat == null && ItemType != null && ItemTypes[ItemType.Value] == "none")
-                return string.Format("{0} {1} horribly mutilated by {2} in {3}.",
-                                timestring, abusedHFtext, AbuserEn,
-                                locationtext);
+                return $"{timestring} {abusedHFtext} horribly mutilated by {AbuserEn} in {locationtext}.";
             if (AbuserEn == null && HF != null && PileType == -1 && ItemMat == null)
-                return string.Format("{0} {1} animated by the {2} {3} in {4}.",
-                                timestring, abusedHFtext, HF.Race, HF,
-                                locationtext);
+                return $"{timestring} {abusedHFtext} animated by the {HF.Race} {HF} in {locationtext}.";
             if (AbuserEn == null && HF == null && PileType == -1 && ItemMat == null)
-                return string.Format("{0} {1} animated in {2}.",
-                                timestring, abusedHFtext, 
-                                locationtext);
+                return $"{timestring} {abusedHFtext} animated in {locationtext}.";
 
 
 
-            return string.Format("{0} {1} were added to a grisly mound by {2} in {3}.",
-                        timestring, abusedHFtext, AbuserEn == null ? "UNKNOWN" : AbuserEn.ToString(),
-                        Site == null ? "UNKNOWN" : Site.AltName);
+            return
+                $"{timestring} {abusedHFtext} were added to a grisly mound by {(AbuserEn == null ? "UNKNOWN" : AbuserEn.ToString())} in {(Site == null ? "UNKNOWN" : Site.AltName)}.";
 
         }
 
@@ -268,16 +259,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             if (Site == null && AbuserEn == null)
-                return string.Format("{0} Bodies abused.",
-                                timelinestring);
+                return $"{timelinestring} Bodies abused.";
             if (Site == null)
-                return string.Format("{0} Bodies abused by {1}.",
-                    timelinestring, AbuserEn);
+                return $"{timelinestring} Bodies abused by {AbuserEn}.";
             if (AbuserEn == null)
-                return string.Format("{0} Bodies abused at {1}.",
-                    timelinestring, Site.AltName);
-            return string.Format("{0} Bodies abused at {1} by {2}.",
-                timelinestring, Site.AltName, AbuserEn);
+                return $"{timelinestring} Bodies abused at {Site.AltName}.";
+            return $"{timelinestring} Bodies abused at {Site.AltName} by {AbuserEn}.";
         }
 
         internal override void Export(string table)

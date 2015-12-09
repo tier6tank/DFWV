@@ -23,7 +23,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? NewLeaderHFID { get; set; }
         private HistoricalFigure NewLeaderHF { get; set; }
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location => Site.Location;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
@@ -120,17 +120,15 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} {1} defeated {2} and placed the {3} {4} in charge of {5}. \nThe new government was called {6}.",
-                                    timestring, AttackerCiv, SiteCiv, NewLeaderHF.Race, NewLeaderHF,
-                                    Site.AltName, NewSiteCiv);
+            return
+                $"{timestring} {AttackerCiv} defeated {SiteCiv} and placed the {NewLeaderHF.Race} {NewLeaderHF} in charge of {Site.AltName}. \nThe new government was called {NewSiteCiv}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} {1} captured {2} from {3}.",
-                                    timelinestring, AttackerCiv, Site.AltName, DefenderCiv);
+            return $"{timelinestring} {AttackerCiv} captured {Site.AltName} from {DefenderCiv}.";
         }
 
         internal override void Export(string table)

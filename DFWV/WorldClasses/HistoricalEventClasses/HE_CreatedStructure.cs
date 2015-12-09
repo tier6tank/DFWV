@@ -21,7 +21,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? BuilderHFID { get; set; }
         public HistoricalFigure BuilderHF { get; set; }
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location => Site.Location;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
@@ -184,18 +184,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             if (BuilderHF != null)
-                return string.Format("{0} {1} thrust a spire of slade up from the underworld naming it {2}, and established a gateway between worlds in {3}.",
-                                timestring, BuilderHF, Structure,
-                                Site.AltName);
+                return
+                    $"{timestring} {BuilderHF} thrust a spire of slade up from the underworld naming it {Structure}, and established a gateway between worlds in {Site.AltName}.";
 
             if (SiteCiv == null)
-                return string.Format("{0} {1} constructed {2} in {3}.",
-                                timestring, Civ, Structure,
-                                Site.AltName);
+                return $"{timestring} {Civ} constructed {Structure} in {Site.AltName}.";
 
-            return string.Format("{0} {1} of {2} constructed {3} in {4}.",
-                timestring, SiteCiv, Civ, Structure,
-                Site.AltName);
+            return $"{timestring} {SiteCiv} of {Civ} constructed {Structure} in {Site.AltName}.";
 
         }
 
@@ -204,13 +199,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             if (BuilderHF != null)
-                return string.Format("{0} {1} established a gateway between worlds in {2}.",
-                                timelinestring, BuilderHF,
-                                Site.AltName);
+                return $"{timelinestring} {BuilderHF} established a gateway between worlds in {Site.AltName}.";
 
-            return string.Format("{0} {1} built a structure in {2}.",
-                        timelinestring, Civ,
-                                Site.AltName);
+            return $"{timelinestring} {Civ} built a structure in {Site.AltName}.";
         }
 
         internal override void Export(string table)

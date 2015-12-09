@@ -21,7 +21,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         private int? AttackingEnid { get; set; }
         public Entity AttackingEn { get; private set; }
 
-        override public Point Location { get { return Site.Coords; } }
+        override public Point Location => Site.Coords;
 
         public EC_SiteConquered(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -98,7 +98,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             frm.lblSiteConqueredWar.Data = WarEventCol;
             if (StartTime != null || EndTime != null)
             {
-                frm.lblSiteConqueredTime.Text = string.Format("{0} - {1}", StartTime, EndTime);
+                frm.lblSiteConqueredTime.Text = $"{StartTime} - {EndTime}";
                 frm.lblSiteConqueredDuration.Text = WorldTime.Duration(EndTime, StartTime);
             }
             else

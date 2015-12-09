@@ -29,7 +29,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         private List<int> EventCol_ { get; set; }
         private List<HistoricalEventCollection> EventCol { get; set; }
 
-        override public Point Location { get { return Site.Coords; } }
+        override public Point Location => Site.Coords;
 
         public EC_Theft(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -132,7 +132,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             frm.lblTheftWar.Data = WarEventCol;
             if (StartTime != null || EndTime != null)
             {
-                frm.lblTheftTime.Text = string.Format("{0} - {1}", StartTime, EndTime);
+                frm.lblTheftTime.Text = $"{StartTime} - {EndTime}";
                 frm.lblTheftDuration.Text = WorldTime.Duration(EndTime, StartTime);
             }
             else

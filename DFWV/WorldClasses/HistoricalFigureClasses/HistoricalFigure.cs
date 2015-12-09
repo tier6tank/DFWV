@@ -16,21 +16,22 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         private string Race_ { get; set; } 
         public Race Race { get; private set; }
         [UsedImplicitly]
-        public string RaceName { get { return Race != null ? Race.Name : Race_ ?? ""; } }
+        public string RaceName => Race != null ? Race.Name : Race_ ?? "";
 
         public int? Flags { get; set; }
         
         public int? Caste { get; private set; }
         public static List<string> Castes = new List<string>();
         private int? AppearedYear { get; set; }
-        public WorldTime Appeared { get { return AppearedYear.HasValue ? new WorldTime(AppearedYear.Value) : null;} }
+        public WorldTime Appeared => AppearedYear.HasValue ? new WorldTime(AppearedYear.Value) : null;
+
         [UsedImplicitly]
         public int? BirthYear { get; private set; }
         private int? BirthSeconds { get; set; }
-        public WorldTime Birth { get { return BirthYear.HasValue ? new WorldTime(BirthYear.Value, BirthSeconds) : WorldTime.Present; } }
+        public WorldTime Birth => BirthYear.HasValue ? new WorldTime(BirthYear.Value, BirthSeconds) : WorldTime.Present;
         public int? DeathYear { get; private set; }
         private int? DeathSeconds { get; set; }
-        public WorldTime Death { get { return DeathYear.HasValue ? new WorldTime(DeathYear.Value, DeathSeconds) : WorldTime.Present; } }
+        public WorldTime Death => DeathYear.HasValue ? new WorldTime(DeathYear.Value, DeathSeconds) : WorldTime.Present;
         public static List<string> AssociatedTypes = new List<string>();
         public int? AssociatedType { get; private set; }
         public Dictionary<int, List<HFEntityLink>> EntityLinks { get; set; }
@@ -89,13 +90,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         public int EventCount { get; set; }
 
         [UsedImplicitly]
-        public string FirstName
-        {
-            get
-            {
-                return ShortName == null ? null : Name.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
-            }
-        }
+        public string FirstName => ShortName == null ? null : Name.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
 
         [UsedImplicitly]
         public string LastName
@@ -152,6 +147,8 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         private List<HistoricalFigure> Parents { get; set; }
         private List<HistoricalFigure> Apprentices { get; set; }
         private List<HistoricalFigure> Masters { get; set; }
+        private List<HistoricalFigure> FormerApprentices { get; set; }
+        private List<HistoricalFigure> FormerMasters { get; set; }
         private List<HistoricalFigure> Prisoners { get; set; }
         private List<HistoricalFigure> Imprisoners { get; set; }
         private List<HistoricalFigure> Companions { get; set; }
@@ -169,31 +166,34 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         public List<EC_Battle> BattleEventCollections { get; set; }
         public List<EC_Duel> DuelEventCollections { get; set; }
 
-        override public Point Location { get { return Coords; } }
+        override public Point Location => Coords;
 
         [UsedImplicitly]
-        public bool Dead { get { return Death != WorldTime.Present; } }
-        [UsedImplicitly]
-        public bool inEntPop { get { return EntPop != null; } }
-        [UsedImplicitly]
-        public bool isLeader { get { return Leader != null; } }
-        [UsedImplicitly]
-        public bool isGod { get { return God != null; } }
+        public bool Dead => Death != WorldTime.Present;
 
         [UsedImplicitly]
-        public int CreatedArtifactCount { get { return CreatedArtifacts == null ? 0 : CreatedArtifacts.Count; } }
+        public bool inEntPop => EntPop != null;
+        [UsedImplicitly]
+        public bool isLeader => Leader != null;
+        [UsedImplicitly]
+        public bool isPositioned => Location != Point.Empty;
+        [UsedImplicitly]
+        public bool isGod => God != null;
+        [UsedImplicitly]
+        public int CreatedArtifactCount => CreatedArtifacts?.Count ?? 0;
         [UsedImplicitly]
         public int CreatedMasterpieceCount { get { return Events.Count(x => HistoricalEvent.Types[x.Type].Contains("masterpiece")); } }
         [UsedImplicitly]
-        public int ChildrenCount { get { return Children == null ? 0 : Children.Count; } }
+        public int ChildrenCount => Children?.Count ?? 0;
         [UsedImplicitly]
-        public int Kills { get { return SlayingEvents == null ? 0 : SlayingEvents.Count; } }
+        public int Kills => SlayingEvents?.Count ?? 0;
         [UsedImplicitly]
-        public int Battles { get { return BattleEventCollections == null ? 0 : BattleEventCollections.Count; } }
+        public int Battles => BattleEventCollections?.Count ?? 0;
         [UsedImplicitly]
-        public string DispNameLower { get { return ToString().ToLower(); } }
+        public string DispNameLower => ToString().ToLower();
         [UsedImplicitly]
-        public int EntPopID { get { return EntPop == null ? (EntPop_ ?? -1) : EntPop.ID; } }
+        public int EntPopID => EntPop?.ID ?? (EntPop_ ?? -1);
+
         [UsedImplicitly]
         public int DescendentCount { get; set; }
         [UsedImplicitly]
@@ -201,13 +201,16 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         [UsedImplicitly]
         public int DescendentGenerations { get; set; }
         [UsedImplicitly]
-        public bool PlayerControlled { get { return isPlayerControlled || Adventurer; } }
+        public bool PlayerControlled => isPlayerControlled || Adventurer;
+
         [UsedImplicitly]
-        public string Job { get { return AssociatedType.HasValue ? AssociatedTypes[AssociatedType.Value] : ""; } }
+        public string Job => AssociatedType.HasValue ? AssociatedTypes[AssociatedType.Value] : "";
+
         [UsedImplicitly]
-        public string HFCaste { get { return Caste.HasValue ? Castes[Caste.Value] : ""; } }
-        public bool isMale { get { return HFCaste.ToLower().Contains("male") && !isFemale; } }
-        public bool isFemale { get { return HFCaste.ToLower().Contains("female"); } }
+        public string HFCaste => Caste.HasValue ? Castes[Caste.Value] : "";
+
+        public bool isMale => HFCaste.ToLower().Contains("male") && !isFemale;
+        public bool isFemale => HFCaste.ToLower().Contains("female");
 
         public HistoricalFigure(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -407,7 +410,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             if (PlayerControlled)
                 frm.grpHistoricalFigure.Text += @" (PLAYER CONTROLLED)";
 #if DEBUG
-            frm.grpHistoricalFigure.Text += string.Format(" - ID: {0} - Notability: {1} - Flags: {2}", ID, Notability, Flags);
+            frm.grpHistoricalFigure.Text += $" - ID: {ID} - Notability: {Notability} - Flags: {Flags}";
 #endif
             frm.grpHistoricalFigure.Show();
             frm.lblHistoricalFigureName.Text = ToString();
@@ -494,6 +497,17 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             frm.trvHistoricalFigureHFLinks.Nodes.Clear();
             if (hasHFLinks)
             {
+                LoadHFLinkItems(frm, Spouses, "Spouses");
+                LoadHFLinkItems(frm, Lovers, "Lovers");
+                LoadHFLinkItems(frm, Followers, "Followers");
+                LoadHFLinkItems(frm, Masters, "Masters");
+                LoadHFLinkItems(frm, Apprentices, "Apprentices");
+                LoadHFLinkItems(frm, FormerMasters, "Former Masters");
+                LoadHFLinkItems(frm, FormerApprentices, "Former Apprentices");
+                LoadHFLinkItems(frm, Prisoners, "Prisoners");
+                LoadHFLinkItems(frm, Imprisoners, "Imprisoners");
+                LoadHFLinkItems(frm, Companions, "Companions");
+
                 if (RelationshipProfileHFs != null)
                 {
                     var thisNode = new TreeNode("Relationships");
@@ -508,53 +522,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                         thisNode.Nodes.Add(hfNode);
                     }
 
-                    thisNode.Text = string.Format("{0} ({1})", thisNode.Text, thisNode.Nodes.Count);
-                    frm.trvHistoricalFigureHFLinks.Nodes.Add(thisNode);
-                }
-                if (Spouses != null)
-                {
-                    var thisNode = new TreeNode("Spouses");
-                    foreach (var HF in Spouses)
-                    {
-                        var hfNode = new TreeNode(HF.ToString()) {Tag = HF};
-                        if (HF.Caste.HasValue && Castes[HF.Caste.Value].ToLower().StartsWith("male"))
-                            hfNode.ForeColor = Color.Blue;
-                        else if (HF.Caste.HasValue && Castes[HF.Caste.Value].ToLower().StartsWith("female"))
-                            hfNode.ForeColor = Color.Red;
-
-                        thisNode.Nodes.Add(hfNode);
-                    }
-                    thisNode.Text = string.Format("{0} ({1})", thisNode.Text, thisNode.Nodes.Count);
-                    frm.trvHistoricalFigureHFLinks.Nodes.Add(thisNode);
-                }
-                if (Lovers != null)
-                {
-                    var thisNode = new TreeNode("Lovers");
-                    foreach (var HF in Lovers)
-                    {
-                        var hfNode = new TreeNode(HF.ToString()) {Tag = HF};
-                        if (HF.Caste.HasValue && Castes[HF.Caste.Value].ToLower().StartsWith("male"))
-                            hfNode.ForeColor = Color.Blue;
-                        else if (HF.Caste.HasValue && Castes[HF.Caste.Value].ToLower().StartsWith("female"))
-                            hfNode.ForeColor = Color.Red;
-                        thisNode.Nodes.Add(hfNode);
-                    }
-                    thisNode.Text = string.Format("{0} ({1})", thisNode.Text, thisNode.Nodes.Count);
-                    frm.trvHistoricalFigureHFLinks.Nodes.Add(thisNode);
-                }
-                if (Followers != null)
-                {
-                    var thisNode = new TreeNode("Followers");
-                    foreach (var HF in Followers)
-                    {
-                        var hfNode = new TreeNode(HF.ToString()) {Tag = HF};
-                        if (HF.Caste.HasValue && Castes[HF.Caste.Value].ToLower().StartsWith("male"))
-                            hfNode.ForeColor = Color.Blue;
-                        else if (HF.Caste.HasValue && Castes[HF.Caste.Value].ToLower().StartsWith("female"))
-                            hfNode.ForeColor = Color.Red;
-                        thisNode.Nodes.Add(hfNode);
-                    }
-                    thisNode.Text = string.Format("{0} ({1})", thisNode.Text, thisNode.Nodes.Count);
+                    thisNode.Text = $"{thisNode.Text} ({thisNode.Nodes.Count})";
                     frm.trvHistoricalFigureHFLinks.Nodes.Add(thisNode);
                 }
                 if (Deities != null)
@@ -572,84 +540,10 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                         thisNode.Nodes.Add(hfNode);
 	                }
 
-                    thisNode.Text = string.Format("{0} ({1})", thisNode.Text, thisNode.Nodes.Count);
+                    thisNode.Text = $"{thisNode.Text} ({thisNode.Nodes.Count})";
                     frm.trvHistoricalFigureHFLinks.Nodes.Add(thisNode);
                 }
-                if (Masters != null)
-                {
-                    var thisNode = new TreeNode("Masters");
-                    foreach (var HF in Masters)
-                    {
-                        var hfNode = new TreeNode(HF.ToString()) {Tag = HF};
-                        if (HF.Caste.HasValue && Castes[HF.Caste.Value].ToLower().StartsWith("male"))
-                            hfNode.ForeColor = Color.Blue;
-                        else if (HF.Caste.HasValue && Castes[HF.Caste.Value].ToLower().StartsWith("female"))
-                            hfNode.ForeColor = Color.Red;
-                        thisNode.Nodes.Add(hfNode);
-                    }
-                    thisNode.Text = string.Format("{0} ({1})", thisNode.Text, thisNode.Nodes.Count);
-                    frm.trvHistoricalFigureHFLinks.Nodes.Add(thisNode);
-                }
-                if (Apprentices != null)
-                {
-                    var thisNode = new TreeNode("Apprentices");
-                    foreach (var HF in Apprentices)
-                    {
-                        var hfNode = new TreeNode(HF.ToString()) {Tag = HF};
-                        if (HF.Caste.HasValue && Castes[HF.Caste.Value].ToLower().StartsWith("male"))
-                            hfNode.ForeColor = Color.Blue;
-                        else if (HF.Caste.HasValue && Castes[HF.Caste.Value].ToLower().StartsWith("female"))
-                            hfNode.ForeColor = Color.Red;
-                        thisNode.Nodes.Add(hfNode);
-                    }
-                    thisNode.Text = string.Format("{0} ({1})", thisNode.Text, thisNode.Nodes.Count);
-                    frm.trvHistoricalFigureHFLinks.Nodes.Add(thisNode);
-                }
-                if (Prisoners != null)
-                {
-                    var thisNode = new TreeNode("Prisoners");
-                    foreach (var HF in Prisoners)
-                    {
-                        var hfNode = new TreeNode(HF.ToString()) { Tag = HF };
-                        if (HF.Caste.HasValue && Castes[HF.Caste.Value].ToLower().StartsWith("male"))
-                            hfNode.ForeColor = Color.Blue;
-                        else if (HF.Caste.HasValue && Castes[HF.Caste.Value].ToLower().StartsWith("female"))
-                            hfNode.ForeColor = Color.Red;
-                        thisNode.Nodes.Add(hfNode);
-                    }
-                    thisNode.Text = string.Format("{0} ({1})", thisNode.Text, thisNode.Nodes.Count);
-                    frm.trvHistoricalFigureHFLinks.Nodes.Add(thisNode);
-                }
-                if (Imprisoners != null)
-                {
-                    var thisNode = new TreeNode("Imprisoners");
-                    foreach (var HF in Imprisoners)
-                    {
-                        var hfNode = new TreeNode(HF.ToString()) { Tag = HF };
-                        if (HF.Caste.HasValue && Castes[HF.Caste.Value].ToLower().StartsWith("male"))
-                            hfNode.ForeColor = Color.Blue;
-                        else if (HF.Caste.HasValue && Castes[HF.Caste.Value].ToLower().StartsWith("female"))
-                            hfNode.ForeColor = Color.Red;
-                        thisNode.Nodes.Add(hfNode);
-                    }
-                    thisNode.Text = string.Format("{0} ({1})", thisNode.Text, thisNode.Nodes.Count);
-                    frm.trvHistoricalFigureHFLinks.Nodes.Add(thisNode);
-                }
-                if (Companions != null)
-                {
-                    var thisNode = new TreeNode("Companions");
-                    foreach (var HF in Companions)
-                    {
-                        var hfNode = new TreeNode(HF.ToString()) { Tag = HF };
-                        if (HF.Caste.HasValue && Castes[HF.Caste.Value].ToLower().StartsWith("male"))
-                            hfNode.ForeColor = Color.Blue;
-                        else if (HF.Caste.HasValue && Castes[HF.Caste.Value].ToLower().StartsWith("female"))
-                            hfNode.ForeColor = Color.Red;
-                        thisNode.Nodes.Add(hfNode);
-                    }
-                    thisNode.Text = string.Format("{0} ({1})", thisNode.Text, thisNode.Nodes.Count);
-                    frm.trvHistoricalFigureHFLinks.Nodes.Add(thisNode);
-                }
+
 
                 if (frm.trvHistoricalFigureHFLinks.GetNodeCount(true) <= 5000)
                     frm.trvHistoricalFigureHFLinks.ExpandAll();
@@ -673,7 +567,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                 }
                 if (thisNode.Nodes.Count > 0)
                 {
-                    thisNode.Text = string.Format("{0} ({1})", thisNode.Text, thisNode.Nodes.Count);
+                    thisNode.Text = $"{thisNode.Text} ({thisNode.Nodes.Count})";
                     frm.trvHistoricalFigureHFLinks.Nodes.Add(thisNode);
                     frm.trvHistoricalFigureHFLinks.ExpandAll();
                 }
@@ -721,7 +615,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                 hitMax = AddToAncestorsTree(fatherNode, 1, 10);
             }
             frm.trvHistoricalFigureAncestors.EndUpdate();
-            frm.grpHistoricalFigureAncestors.Text = string.Format("Ancestors ({0}{1})", Ancestors.Count, (hitMax ? "+" :""));
+            frm.grpHistoricalFigureAncestors.Text = $"Ancestors ({Ancestors.Count}{(hitMax ? "+" : "")})";
             Ancestors = null;
 
             frm.grpHistoricalFigureDescendents.Visible = (Children != null);
@@ -745,7 +639,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             }
             frm.trvHistoricalFigureDescendents.EndUpdate();
             if (DescendentCount == 0)
-                frm.grpHistoricalFigureDescendents.Text = string.Format("Descendents ({0}{1})", Descendents.Count, (hitMax ? "+" : ""));
+                frm.grpHistoricalFigureDescendents.Text = $"Descendents ({Descendents.Count}{(hitMax ? "+" : "")})";
             else
             {
                 frm.grpHistoricalFigureDescendents.Text = string.Format(
@@ -753,6 +647,24 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                     DescendentCount, DescendentGenerations);
             }
             Descendents = null;
+        }
+
+        private void LoadHFLinkItems(MainForm frm, List<HistoricalFigure> hflinklist, string treenodename)
+        {
+            if (hflinklist == null) return;
+
+            var thisNode = new TreeNode(treenodename);
+            foreach (var hf in hflinklist)
+            {
+                var hfNode = new TreeNode(hf.ToString()) {Tag = hf};
+                if (hf.Caste.HasValue && Castes[hf.Caste.Value].ToLower().StartsWith("male"))
+                    hfNode.ForeColor = Color.Blue;
+                else if (hf.Caste.HasValue && Castes[hf.Caste.Value].ToLower().StartsWith("female"))
+                    hfNode.ForeColor = Color.Red;
+                thisNode.Nodes.Add(hfNode);
+            }
+            thisNode.Text = $"{thisNode.Text} ({thisNode.Nodes.Count})";
+            frm.trvHistoricalFigureHFLinks.Nodes.Add(thisNode);
         }
 
         private static string IPToTitle(int IP)
@@ -904,6 +816,11 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                 {
                     foreach (var sl in linklist.Value)
                     {
+                        if (sl.Site.Inhabitants == null)
+                            sl.Site.Inhabitants = new List<HistoricalFigure>();
+                        if (!sl.Site.Inhabitants.Contains(this))
+                            sl.Site.Inhabitants.Add(this);
+                        Site = sl.Site;
                         switch (HFSiteLink.LinkTypes[linklist.Key])
                         {
                             case "lair":
@@ -912,15 +829,11 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                             case "home site building":
                             case "home site underground":
                             case "hangout":
-                                if (sl.Site.Inhabitants == null)
-                                    sl.Site.Inhabitants = new List<HistoricalFigure>();
-                                if (!sl.Site.Inhabitants.Contains(this))
-                                    sl.Site.Inhabitants.Add(this);
-                                Site = sl.Site;
-
+                                break;
+                            case "occupation":
                                 break;
                             default:
-                                Program.Log(LogType.Warning, "Unknown HF Site Link: " + linklist.Key);
+                                Program.Log(LogType.Warning, "Unknown HF Site Link: " + linklist.Key + " - " + HFSiteLink.LinkTypes[linklist.Key]);
                                 break;
                         }
                     }
@@ -1115,6 +1028,28 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                                     Apprentices.Add(hfl.HF);
                                 }
                                 break;
+                            case "former master":
+                                if (hfl.HF.FormerApprentices == null)
+                                    hfl.HF.FormerApprentices = new List<HistoricalFigure>();
+                                if (!hfl.HF.FormerApprentices.Contains(this))
+                                {
+                                    hfl.HF.FormerApprentices.Add(this);
+                                    if (FormerMasters == null)
+                                        FormerMasters = new List<HistoricalFigure>();
+                                    FormerMasters.Add(hfl.HF);
+                                }
+                                break;
+                            case "former apprentice":
+                                if (hfl.HF.FormerMasters == null)
+                                    hfl.HF.FormerMasters = new List<HistoricalFigure>();
+                                if (!hfl.HF.FormerMasters.Contains(this))
+                                {
+                                    hfl.HF.FormerMasters.Add(this);
+                                    if (FormerApprentices == null)
+                                        FormerApprentices = new List<HistoricalFigure>();
+                                    FormerApprentices.Add(hfl.HF);
+                                }
+                                break;
                             case "prisoner":
                                 if (hfl.HF.Prisoners == null)
                                     hfl.HF.Prisoners = new List<HistoricalFigure>();
@@ -1140,7 +1075,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                                 }
                                 break;
                             default:
-                                Program.Log(LogType.Warning, "Unknown HF HF Link: " + linklist.Key);
+                                Program.Log(LogType.Warning, "Unknown HF HF Link: " + linklist.Key + " - " + HFLink.LinkTypes[linklist.Key]);
                                 break;
                         }
                     }

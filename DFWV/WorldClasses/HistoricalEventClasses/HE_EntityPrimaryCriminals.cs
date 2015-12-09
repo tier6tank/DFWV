@@ -16,7 +16,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? StructureID { get; set; }
         private Structure Structure { get; set; }
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location => Site.Location;
+
         public override IEnumerable<Entity> EntitiesInvolved
         {
             get { yield return Entity; }
@@ -88,16 +89,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} {1} became the primary criminal organization in {2}.",
-                            timestring, Entity, Site.AltName);
+            return $"{timestring} {Entity} became the primary criminal organization in {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} {1} became the primary criminal organization in {2}.",
-                        timelinestring, Entity, Site.AltName);
+            return $"{timelinestring} {Entity} became the primary criminal organization in {Site.AltName}.";
         }
 
         internal override void Export(string table)

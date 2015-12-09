@@ -15,9 +15,9 @@ namespace DFWV.WorldClasses
 
 
         [UsedImplicitly]
-        public string DispNameLower { get { return ToString().ToLower(); } }
+        public string DispNameLower => ToString().ToLower();
 
-        override public Point Location { get { return Point.Empty; } }
+        override public Point Location => Point.Empty;
 
         public HistoricalEra(XDocument xdoc, World world) 
             : base(world)
@@ -60,7 +60,8 @@ namespace DFWV.WorldClasses
 
             frm.lblHistoricalEraName.Text = ToString();
             if (Start != null && End != null)
-                frm.lblHistoricalEraStartYear.Text = string.Format("{0} - {1}", (Start.Year == -1 ? 0 : Start.Year ), (End == WorldTime.Present ? "" : End.ToString()));
+                frm.lblHistoricalEraStartYear.Text =
+                    $"{(Start.Year == -1 ? 0 : Start.Year)} - {(End == WorldTime.Present ? "" : End.ToString())}";
         }
 
         internal override void Link()

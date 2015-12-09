@@ -18,7 +18,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public Entity Source { get; set; }
         public Entity Destination { get; set; }
 
-        override public Point Location { get { return Site != null ? Site.Location : Point.Empty; } }
+        override public Point Location => Site != null ? Site.Location : Point.Empty;
+
         public override IEnumerable<Entity> EntitiesInvolved
         {
             get
@@ -116,8 +117,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
 
-            return string.Format("{0} agreement concluded.",
-                        timestring);
+            return $"{timestring} agreement concluded.";
         }
 
         internal override string ToTimelineString()

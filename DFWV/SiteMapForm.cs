@@ -32,8 +32,7 @@ namespace DFWV
                     curLegend.DrawTo(picSiteMapLegend);
 
                 }
-                lblSiteName.Text = string.Format("{0} \"{1}\" ({2})", site.Name, site.AltName,
-                    Site.Types[site.Type.Value]);
+                lblSiteName.Text = $"{site.Name} \"{site.AltName}\" ({Site.Types[site.Type.Value]})";
             }
         }
 

@@ -30,7 +30,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private Structure Structure { get; set; }
         private int? StructureID { get; set; }
 
-        override public Point Location { get { return Site != null ? Site.Location : Coords; } }
+        override public Point Location => Site != null ? Site.Location : Coords;
+
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
             get { yield return HF; }
@@ -173,7 +174,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             EventLabel(frm, parent, ref location, "Theif:", AttackerCiv);
             EventLabel(frm, parent, ref location, "Theif:", HF);
             if (Mat != null || ItemType != null)
-                EventLabel(frm, parent, ref location, "Item:", string.Format("{0} {1}",Mat != null ? Materials[Mat.Value] : "UNKNOWN", ItemType != null ? ItemTypes[ItemType.Value] : "UNKNOWN"));
+                EventLabel(frm, parent, ref location, "Item:",
+                    $"{(Mat != null ? Materials[Mat.Value] : "UNKNOWN")} {(ItemType != null ? ItemTypes[ItemType.Value] : "UNKNOWN")}");
             
             EventLabel(frm, parent, ref location, "Item:", HF);
             EventLabel(frm, parent, ref location, "Site:", Site);
@@ -186,25 +188,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             if (ItemType == null && Mat == null)
-                return string.Format("{0} {1} was stolen from {2} in {3} by the {4} {5} and brought to {6}",
-                        timestring, "UNKNOWN", "UNKNOWN", 
-                        Site == null ? "UNKNOWN" : Site.ToString(), "UNKNOWN", "UNKNOWN", "UNKNOWN");
+                return
+                    $"{timestring} {"UNKNOWN"} was stolen from {"UNKNOWN"} in {(Site == null ? "UNKNOWN" : Site.ToString())} by the {"UNKNOWN"} {"UNKNOWN"} and brought to {"UNKNOWN"}";
             if (HF != null)
-                return string.Format("{0} {1} {2} was stolen from {3} by the {4} {5}{6}.",
-                    //TODO: Missing "and taken to blah blah"
-                    timestring,
-                    Mat != null ? Materials[Mat.Value] : "UNKNOWN",
-                    ItemType != null ? ItemTypes[ItemType.Value] : "UNKNOWN",
-                    Site == null ? "UNKNOWN" : Site.AltName,
-                    HF.Race.ToString().ToLower(),
-                    HF,
-                    ""); //TODO: Missing "and brought to [Site]"
-            return string.Format("{0} {1} {2} was stolen from {3} by an unknown creature{4}.",
-                timestring,
-                Mat != null ? Materials[Mat.Value] : "UNKNOWN",
-                ItemType != null ? ItemTypes[ItemType.Value] : "UNKNOWN",
-                Site == null ? "UNKNOWN" : Site.AltName,
-                ""); //TODO: Missing "and brought to [Site]"
+                return
+                    $"{timestring} {(Mat != null ? Materials[Mat.Value] : "UNKNOWN")} {(ItemType != null ? ItemTypes[ItemType.Value] : "UNKNOWN")} was stolen from {(Site == null ? "UNKNOWN" : Site.AltName)} by the {HF.Race.ToString().ToLower()} {HF}{""}."; //TODO: Missing "and brought to [Site]"
+            return
+                $"{timestring} {(Mat != null ? Materials[Mat.Value] : "UNKNOWN")} {(ItemType != null ? ItemTypes[ItemType.Value] : "UNKNOWN")} was stolen from {(Site == null ? "UNKNOWN" : Site.AltName)} by an unknown creature{""}."; //TODO: Missing "and brought to [Site]"
         }
 
         internal override string ToTimelineString()
@@ -213,10 +203,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
             
             if (Site == null)
-                return string.Format("{0} Item stolen.",
-                        timelinestring);
-            return string.Format("{0} Item stolen from {1}",
-                timelinestring, Site.AltName);
+                return $"{timelinestring} Item stolen.";
+            return $"{timelinestring} Item stolen from {Site.AltName}";
         }
 
         internal override void Export(string table)

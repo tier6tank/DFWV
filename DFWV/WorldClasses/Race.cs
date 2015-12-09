@@ -23,12 +23,12 @@ namespace DFWV.WorldClasses
         [UsedImplicitly]
         public int HFCount { get { return World.HistoricalFigures.Values.Count(x => x.Race == this); } }
         [UsedImplicitly]
-        public string DispNameLower { get { return ToString().ToLower(); } }
+        public string DispNameLower => ToString().ToLower();
 
 
         public List<Caste> Castes { get; set; }
 
-        override public Point Location { get { return Point.Empty; } }
+        override public Point Location => Point.Empty;
 
         public Dictionary<Region, int> Populations
         {
@@ -102,7 +102,8 @@ namespace DFWV.WorldClasses
 
             frm.lstRacePopulation.EndUpdate();
             if (frm.lstRacePopulation.Items.Count > 0)
-                frm.grpRacePopulation.Text = string.Format("Population ({0})", pops.Values.Contains(10000001) || ugpops.Values.Contains(10000001) ? "Unnumbered" : (pops.Values.Sum() + ugpops.Values.Sum()).ToString());
+                frm.grpRacePopulation.Text =
+                    $"Population ({(pops.Values.Contains(10000001) || ugpops.Values.Contains(10000001) ? "Unnumbered" : (pops.Values.Sum() + ugpops.Values.Sum()).ToString())})";
             frm.grpRacePopulation.Visible = frm.lstRacePopulation.Items.Count > 0;
         }
 
@@ -121,7 +122,8 @@ namespace DFWV.WorldClasses
 
             Database.ExportWorldItem(table, vals);
 
-            Castes.ForEach(x => x.Export("Race_Castes"));
+            if (Castes != null)
+                Castes.ForEach(x => x.Export("Race_Castes"));
 
         }
 

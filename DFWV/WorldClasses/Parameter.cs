@@ -9,9 +9,9 @@ namespace DFWV.WorldClasses
         public string Value { get; private set; }
 
         [UsedImplicitly]
-        public string DispNameLower { get { return ToString().ToLower(); } }
+        public string DispNameLower => ToString().ToLower();
 
-        override public Point Location { get { return Point.Empty; } }
+        override public Point Location => Point.Empty;
 
 
         internal Parameter(string data, World world) : base(world)

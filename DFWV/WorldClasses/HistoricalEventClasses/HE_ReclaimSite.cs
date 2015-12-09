@@ -17,7 +17,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public Entity Civ { get; private set; }
         public bool UnRetire { get; set; }
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location => Site.Location;
 
         public override IEnumerable<Entity> EntitiesInvolved
         {
@@ -94,10 +94,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             if (UnRetire)
-                return string.Format("{0} {1} of {2} were taken by a mood to act against their better judgement at  {3}.",
-                                    timestring, SiteCiv, Civ, Site.AltName);
-            return string.Format("{0} {1} launched an expedition to reclaim {2}.",
-                timestring, SiteCiv, Site.AltName);
+                return
+                    $"{timestring} {SiteCiv} of {Civ} were taken by a mood to act against their better judgement at  {Site.AltName}.";
+            return $"{timestring} {SiteCiv} launched an expedition to reclaim {Site.AltName}.";
         }
 
         internal override string ToTimelineString()

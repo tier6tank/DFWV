@@ -322,7 +322,7 @@ namespace DFWV.WorldClasses
             AltName = lines[1];
             Program.mainForm.InvokeEx(f =>
             {
-                f.Text = string.Format("World Viewer v{0} - {1} \"{2}\"", Application.ProductVersion, Name, AltName);
+                f.Text = $"World Viewer v{Application.ProductVersion} - {Name} \"{AltName}\"";
             });
             //Program.mainForm.Text = string.Format("World Viewer v{0} - {1} \"{2}\"", Application.ProductVersion, Name, AltName);
 
@@ -542,7 +542,9 @@ namespace DFWV.WorldClasses
             var entityName = data.Split(',')[0].Trim();
             var entityRaceName = data.Split(',')[1].Trim();
 
-            var entityRace = GetAddRace(entityRaceName);
+            Race entityRace = null;
+            if (entityRaceName != "")
+                entityRace = GetAddRace(entityRaceName);
 
             foreach (var civ in Civilizations.Where(civ => civ.Name == entityName && civ.Race == entityRace))
             {
@@ -894,13 +896,28 @@ namespace DFWV.WorldClasses
 
             foreach (var hf in HistoricalFigures.Values.Where(x => x.DiedEvent == null))
             {
+                //Position off Site Links
+                if (hf.SiteLinks?.Count > 0)
+                {
+                    if (hf.SiteLinks.Count > 1)
+                    {
+                        
+                    }
+                    else
+                    {
+                        hf.Site = hf.SiteLinks.First().Value.First().Site;
+                        hf.Coords = hf.Site.Coords;
+                    }
+                }
+
+                //Position off change hf state
                 if (hf.Events.All(x => HistoricalEvent.Types[x.Type] != "change hf state"))
                     continue;
                 var evt = (HE_ChangeHFState)hf.Events.Last(x => HistoricalEvent.Types[x.Type] == "change hf state");
 
-                hf.Site = evt.Site;
+                hf.Site = evt.Site ?? hf.Site;
                 hf.Region = evt.Subregion;
-                hf.Coords = evt.Coords;
+                hf.Coords = evt.Coords == Point.Empty ? hf.Coords : evt.Coords;
 
                 if (hf.Site != null)
                 {

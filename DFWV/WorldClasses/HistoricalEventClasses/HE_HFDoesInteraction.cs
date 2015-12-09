@@ -22,7 +22,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? SubregionID { get; set; }
         private Region Subregion { get; set; }
 
-        override public Point Location { get { return Point.Empty; } }
+        override public Point Location => Point.Empty;
+
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
             get
@@ -138,48 +139,38 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             if (InteractionAction != null && InteractionString != null)
-                return string.Format("{0} {1} {2} {3} {4} in {5}",
-                    timestring, DoerHF, InteractionAction, TargetHF, InteractionString, Site.AltName);
+                return $"{timestring} {DoerHF} {InteractionAction} {TargetHF} {InteractionString} in {Site.AltName}";
             if (HistoricalFigure.Interactions[Interaction].ToLower().Contains("curse_vampire") || HistoricalFigure.Interactions[Interaction].ToLower().Contains("master_vampire_curse"))
-                return string.Format("{0} {1} cursed {2} to prowl the night in search of blood in {3}.",
-                    timestring, DoerHF, TargetHF, "UNKNOWN");
+                return $"{timestring} {DoerHF} cursed {TargetHF} to prowl the night in search of blood in {"UNKNOWN"}.";
             if (HistoricalFigure.Interactions[Interaction].ToLower().Contains("curse_werebeast"))
-                return string.Format("{0} {1} cursed {2} to assume the form of a {3}-like monster every full moon in {4}.",
-                    timestring, DoerHF, TargetHF,
-                    "UNKNOWN", "UNKNOWN");
+                return
+                    $"{timestring} {DoerHF} cursed {TargetHF} to assume the form of a {"UNKNOWN"}-like monster every full moon in {"UNKNOWN"}.";
             if (HistoricalFigure.Interactions[Interaction].ToLower().Contains("werelizard_curse"))
-                return string.Format("{0} {1} cursed {2} to assume the form of a lizard-like monster every full moon in {3}.",
-                    timestring, DoerHF, TargetHF, "UNKNOWN");
+                return
+                    $"{timestring} {DoerHF} cursed {TargetHF} to assume the form of a lizard-like monster every full moon in {"UNKNOWN"}.";
             if (HistoricalFigure.Interactions[Interaction].ToLower().Contains("werewolf_curse"))
-                return string.Format("{0} {1} cursed {2} to assume the form of a wolf-like monster every full moon in {3}.",
-                    timestring, DoerHF, TargetHF, "UNKNOWN");
+                return
+                    $"{timestring} {DoerHF} cursed {TargetHF} to assume the form of a wolf-like monster every full moon in {"UNKNOWN"}.";
             if (HistoricalFigure.Interactions[Interaction].ToLower().Contains("werebear_curse"))
-                return string.Format("{0} {1} cursed {2} to assume the form of a bear-like monster every full moon in {3}.",
-                    timestring, DoerHF, TargetHF, "UNKNOWN");
+                return
+                    $"{timestring} {DoerHF} cursed {TargetHF} to assume the form of a bear-like monster every full moon in {"UNKNOWN"}.";
             if (HistoricalFigure.Interactions[Interaction].ToLower().Contains("lesser_vampire_curse"))
-                return string.Format("{0} {1} cursed {2} to slither through the shadows in search of blood in {3}.",
-                    timestring, DoerHF, TargetHF, "UNKNOWN");
+                return
+                    $"{timestring} {DoerHF} cursed {TargetHF} to slither through the shadows in search of blood in {"UNKNOWN"}.";
             if (HistoricalFigure.Interactions[Interaction].ToLower().Contains("minor_vampire_curse"))
-                return string.Format("{0} {1} cursed {2} to endlessly lust for blood in {3}.",
-                    timestring, DoerHF, TargetHF, "UNKNOWN");
+                return $"{timestring} {DoerHF} cursed {TargetHF} to endlessly lust for blood in {"UNKNOWN"}.";
             if (HistoricalFigure.Interactions[Interaction].ToLower().Contains("curse"))
-                return string.Format("{0} {1} cursed {2} to {3} in {4}.",
-                    timestring, DoerHF, TargetHF,
-                    Interaction, "UNKNOWN");
+                return $"{timestring} {DoerHF} cursed {TargetHF} to {Interaction} in {"UNKNOWN"}.";
             if (HistoricalFigure.Interactions[Interaction].ToLower().Contains("infected_bite"))
-                return string.Format("{0} {1} bit the infected {2}, infecting in {3}.",
-                    timestring, DoerHF, TargetHF, "UNKNOWN");
+                return $"{timestring} {DoerHF} bit the infected {TargetHF}, infecting in {"UNKNOWN"}.";
             if (HistoricalFigure.Interactions[Interaction].ToLower().Contains("murder_roar"))
-                return string.Format("{0} {1} cursed {2} to kill for enjoyment in {3}.",
-                    timestring, DoerHF, TargetHF,
-                    "UNKNOWN");
+                return $"{timestring} {DoerHF} cursed {TargetHF} to kill for enjoyment in {"UNKNOWN"}.";
             if (HistoricalFigure.Interactions[Interaction].ToLower().Contains("chosen_one"))
-                return string.Format("{0} {1} chose {2} to seek out and destroy the powers of evil in {3}.",
-                    timestring, DoerHF, TargetHF,
-                    "UNKNOWN");
+                return
+                    $"{timestring} {DoerHF} chose {TargetHF} to seek out and destroy the powers of evil in {"UNKNOWN"}.";
             if (HistoricalFigure.Interactions[Interaction].ToLower().Contains("dwarf_to_spawn"))
-                return string.Format("{0} {1} bit {2}, mutating them into a twisted mockery of dwarvenkind {3}.",
-                    timestring, DoerHF, TargetHF, "UNKNOWN");
+                return
+                    $"{timestring} {DoerHF} bit {TargetHF}, mutating them into a twisted mockery of dwarvenkind {"UNKNOWN"}.";
             return timestring;
         }
 
@@ -188,9 +179,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             //TODO: Incorporate new data
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} {1} cursed {2}",
-                        timelinestring, DoerHF != null ? DoerHF.ToString() : DoerHFID.ToString(), 
-                                TargetHF != null ? TargetHF.ToString() : TargetHFID.ToString());
+            return
+                $"{timelinestring} {(DoerHF != null ? DoerHF.ToString() : DoerHFID.ToString())} cursed {(TargetHF != null ? TargetHF.ToString() : TargetHFID.ToString())}";
         }
 
         internal override void Export(string table)

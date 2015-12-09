@@ -337,7 +337,7 @@ namespace DFWV
                 listbox.EndUpdate();
                 listbox.SelectedIndex = 0;
                 var title = groupbox.Text.Split('(')[0].Trim();
-                groupbox.Text = string.Format("{0} ({1})", title, listbox.Items.Count);
+                groupbox.Text = $"{title} ({listbox.Items.Count})";
             }
             catch (InvalidOperationException e)
             {

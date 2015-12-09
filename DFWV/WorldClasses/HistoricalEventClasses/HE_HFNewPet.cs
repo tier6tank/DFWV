@@ -21,11 +21,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private List<Race> Pets { get; set; }
         private List<HistoricalFigure> GroupHFs { get; set; }
 
-        override public Point Location { get { return Coords; } }
-        public override IEnumerable<HistoricalFigure> HFsInvolved
-        {
-            get { return GroupHFs ?? Enumerable.Empty<HistoricalFigure>(); }
-        }
+        override public Point Location => Coords;
+
+        public override IEnumerable<HistoricalFigure> HFsInvolved => GroupHFs ?? Enumerable.Empty<HistoricalFigure>();
+
         public override IEnumerable<Site> SitesInvolved
         {
             get { yield return Site; }
@@ -154,13 +153,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             if (Pets != null && Pets.Count == 1)
             {
-                return string.Format("{0} {1} tamed the {2} of {3}.",
-                    timestring, GroupHFs[0], Pets[0],
-                    Subregion == null ? "UNKNOWN" : Subregion.ToString());
+                return
+                    $"{timestring} {GroupHFs[0]} tamed the {Pets[0]} of {(Subregion == null ? "UNKNOWN" : Subregion.ToString())}.";
             }
-            return string.Format("{0} {1} tamed the {2} of {3}.",
-                timestring, GroupHFs[0], "UNKNOWN",
-                Subregion == null ? "UNKNOWN" : Subregion.ToString());
+            return
+                $"{timestring} {GroupHFs[0]} tamed the {"UNKNOWN"} of {(Subregion == null ? "UNKNOWN" : Subregion.ToString())}.";
         }
 
         internal override string ToTimelineString()
@@ -168,8 +165,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             //TODO: Incorporate new data (multiple GroupHFs)
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} {1} got a new pet.",
-                                timelinestring, GroupHFs[0]);
+            return $"{timelinestring} {GroupHFs[0]} got a new pet.";
         }
 
         internal override void Export(string table)

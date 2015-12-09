@@ -17,18 +17,19 @@ namespace DFWV.WorldClasses
         public List<HistoricalFigure> Members { get; set; }
         public Race Race { private get; set; }
         [UsedImplicitly]
-        public string RaceName { get { return Race != null ? Race.Name : ""; } }
+        public string RaceName => Race != null ? Race.Name : "";
 
         [UsedImplicitly]
-        public int MemberCount { get { return Members == null ? 0 : Members.Count; } }
-        [UsedImplicitly]
-        public int Battles { get { return BattleEventCollections == null ? 0 : BattleEventCollections.Count; } }
-
+        public int MemberCount => Members == null ? 0 : Members.Count;
 
         [UsedImplicitly]
-        public string DispNameLower { get { return ToString().ToLower(); } }
+        public int Battles => BattleEventCollections == null ? 0 : BattleEventCollections.Count;
 
-        override public Point Location { get { return Point.Empty; } }
+
+        [UsedImplicitly]
+        public string DispNameLower => ToString().ToLower();
+
+        override public Point Location => Point.Empty;
 
         public Dictionary<Race, int> RaceCounts { get; set; }
 
@@ -75,9 +76,8 @@ namespace DFWV.WorldClasses
             frm.grpEntityPopluationRaces.FillListboxWith(frm.lstEntityPopluationRaces, RaceCounts.Keys);
 
 
-            frm.grpEntityPopulationMembers.Text = string.Format("Members ({0}{1})", 
-                frm.lstEntityPopulationMembers.Items.Count, 
-                (Members != null && Members.Count > 50000 ? "+" : ""));
+            frm.grpEntityPopulationMembers.Text =
+                $"Members ({frm.lstEntityPopulationMembers.Items.Count}{(Members != null && Members.Count > 50000 ? "+" : "")})";
         }
 
         internal override void Link()

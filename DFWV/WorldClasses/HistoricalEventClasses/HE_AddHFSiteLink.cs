@@ -25,7 +25,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         public HFSiteLink HFSiteLink { get; set; }
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location => Site.Location;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
@@ -178,31 +178,26 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 {
                     case "hangout":
                     case "seat of power":
-                        return string.Format("{0} {1} ruled from {2} of {3} in {4}.",
-                            timestring, HF,
-                            Structure.Name != null ? Structure.ToString() : "UNKNOWN", Civ, Site.AltName);
+                        return
+                            $"{timestring} {HF} ruled from {(Structure.Name != null ? Structure.ToString() : "UNKNOWN")} of {Civ} in {Site.AltName}.";
                     case "home site realization building":
                     case "home structure":
-                        return string.Format("{0} {1} took up residance in {2} of {3} in {4}.",
-                            timestring, HF,
-                            Structure.Name != null ? Structure.ToString() : "UNKNOWN", Civ, Site.AltName);
+                        return
+                            $"{timestring} {HF} took up residance in {(Structure.Name != null ? Structure.ToString() : "UNKNOWN")} of {Civ} in {Site.AltName}.";
                     default:
-                        return string.Format("{0} {1} became {2} of {3}.",
-                            timestring, "UNKNOWN",
-                            HFSiteLink.LinkTypes[LinkType.Value], Site.AltName);
+                        return
+                            $"{timestring} {"UNKNOWN"} became {HFSiteLink.LinkTypes[LinkType.Value]} of {Site.AltName}.";
                 }
             }
 
 
 
             if (Structure != null && Civ != null && HF != null)
-                return string.Format("{0} {1} ruled from {2} of {3} in {4}.",
-                    timestring, HF,
-                    Structure.Name != null ? Structure.ToString() : "UNKNOWN", Civ, Site.AltName);
+                return
+                    $"{timestring} {HF} ruled from {(Structure.Name != null ? Structure.ToString() : "UNKNOWN")} of {Civ} in {Site.AltName}.";
             
-            return string.Format("{0} {1} became {2} of {3}.",
-                timestring, "UNKNOWN",
-                LinkType.HasValue ? HFSiteLink.LinkTypes[LinkType.Value] : "UNKNOWN", Site.AltName);
+            return
+                $"{timestring} {"UNKNOWN"} became {(LinkType.HasValue ? HFSiteLink.LinkTypes[LinkType.Value] : "UNKNOWN")} of {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
@@ -210,8 +205,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             //TODO: Incorporate new data
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} Added Site Link to {1}.",
-                timelinestring, Site.AltName);
+            return $"{timelinestring} Added Site Link to {Site.AltName}.";
         }
 
         internal override void Export(string table)

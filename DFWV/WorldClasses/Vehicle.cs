@@ -9,7 +9,7 @@ namespace DFWV.WorldClasses
 {
     public class Vehicle : XMLObject
     {
-        override public Point Location { get { return Point.Empty; } }
+        override public Point Location => Point.Empty;
 
         public Vehicle(XDocument xdoc, World world)
             : base(xdoc, world)

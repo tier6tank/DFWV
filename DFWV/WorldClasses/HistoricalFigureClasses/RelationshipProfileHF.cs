@@ -24,13 +24,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
 
         public HistoricalFigure thisHF { get; private set; }
 
-        public HistoricalFigure HF
-        {
-            get
-            {
-                return thisHF.World.HistoricalFigures.ContainsKey(RelationshipHFID) ? thisHF.World.HistoricalFigures[RelationshipHFID] : null;
-            }
-        }
+        public HistoricalFigure HF => thisHF.World.HistoricalFigures.ContainsKey(RelationshipHFID) ? thisHF.World.HistoricalFigures[RelationshipHFID] : null;
 
         public RelationshipProfileHF(XContainer data, HistoricalFigure hf)
         {

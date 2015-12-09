@@ -19,7 +19,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private Region Subregion { get; set; }
         private int? FeatureLayerID { get; set; }
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location => Site.Location;
+
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
             get
@@ -105,18 +106,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} {1} was abducted from {2} by {3}.",
-                                    timestring, TargetHF, Site.AltName,
-                                    SnatcherHF == null ? "an unknown creature" : SnatcherHF.ToString());
+            return
+                $"{timestring} {TargetHF} was abducted from {Site.AltName} by {(SnatcherHF == null ? "an unknown creature" : SnatcherHF.ToString())}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} {1} was abducted from {2} by {3}.",
-                                timelinestring, TargetHF != null ? TargetHF.ToString() : TargetHFID.ToString(), Site.AltName,
-                                    SnatcherHF != null ? SnatcherHF.ToString() : SnatcherHFID.ToString());
+            return
+                $"{timelinestring} {(TargetHF != null ? TargetHF.ToString() : TargetHFID.ToString())} was abducted from {Site.AltName} by {(SnatcherHF != null ? SnatcherHF.ToString() : SnatcherHFID.ToString())}.";
         }
 
         internal override void Export(string table)

@@ -13,7 +13,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? ArtifactID { get; set; }
         private Artifact Artifact { get; set; }
 
-        override public Point Location { get { return Site != null ? Site.Location : Point.Empty; } }
+        override public Point Location => Site != null ? Site.Location : Point.Empty;
+
         public override IEnumerable<Site> SitesInvolved
         {
             get { yield return Site; }
@@ -79,10 +80,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             if (Site == null)
-                return string.Format("{0} {1} was lost in an unknown site.",
-                        timestring, Artifact);
-            return string.Format("{0} {1} was lost in {2}.",
-                timestring, Artifact, Site.AltName);
+                return $"{timestring} {Artifact} was lost in an unknown site.";
+            return $"{timestring} {Artifact} was lost in {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
@@ -90,10 +89,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             if (Site == null)
-                return string.Format("{0} {1} was lost.",
-                        timelinestring, Artifact);
-            return string.Format("{0} {1} was lost in {2}.",
-                timelinestring, Artifact, Site.AltName);
+                return $"{timelinestring} {Artifact} was lost.";
+            return $"{timelinestring} {Artifact} was lost in {Site.AltName}.";
         }
 
         internal override void Export(string table)

@@ -9,7 +9,7 @@ namespace DFWV.WorldClasses
 {
     public class Announcement : XMLObject
     {
-        override public Point Location { get { return Point.Empty; } }
+        override public Point Location => Point.Empty;
 
         public Announcement(XDocument xdoc, World world)
             : base(xdoc, world)

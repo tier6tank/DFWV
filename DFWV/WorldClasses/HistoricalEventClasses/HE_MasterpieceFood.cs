@@ -22,7 +22,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? ItemSubType { get; set; }
 
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location => Site.Location;
+
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
             get { yield return HF; }
@@ -138,9 +139,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             //TODO: Incorporate new data
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} {1} prepared a masterful {2} for {3} at {4}.",
-                    timestring, HF, ItemSubType.HasValue ? ItemSubTypes[ItemSubType.Value] : "UNKNOWN", Entity,
-                                Site.AltName);
+            return
+                $"{timestring} {HF} prepared a masterful {(ItemSubType.HasValue ? ItemSubTypes[ItemSubType.Value] : "UNKNOWN")} for {Entity} at {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
@@ -148,9 +148,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             //TODO: Incorporate new data
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} {1} prepared a masterful meal for {2} at {3}.",
-                                timelinestring, HF, Entity,
-                                Site.AltName);
+            return $"{timelinestring} {HF} prepared a masterful meal for {Entity} at {Site.AltName}.";
         }
 
         internal override void Export(string table)

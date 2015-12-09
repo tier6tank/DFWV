@@ -16,7 +16,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? SiteID { get; set; }
         private Site Site { get; set; }
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location => Site.Location;
 
         public override IEnumerable<Entity> EntitiesInvolved
         {
@@ -87,18 +87,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} {1} of {2} abandoned the settlement of {3}.",
-                            timestring, SiteCiv, Civ,
-                            Site.AltName);
+            return $"{timestring} {SiteCiv} of {Civ} abandoned the settlement of {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} {1} abandoned {2}.",
-                            timelinestring, Civ,
-                            Site.AltName);
+            return $"{timelinestring} {Civ} abandoned {Site.AltName}.";
         }
 
         internal override void Export(string table)

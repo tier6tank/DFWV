@@ -31,7 +31,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         public static List<string> ImprovementTypes = new List<string>();
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location => Site.Location;
+
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
             get { yield return HF; }
@@ -185,36 +186,24 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 switch (ImprovementTypes[ImprovementType.Value])
                 {
                     case "spikes":
-                        return string.Format("{0} {1} added masterful {2} of {3} to a {4} {5} for {6} at {7}.",
-                            timestring, HF, ImprovementTypes[ImprovementType.Value], Materials[ImprovementMat.Value],
-                            Materials[Mat.Value], ItemTypes[ItemType.Value], Entity,
-                            Site.AltName);
+                        return
+                            $"{timestring} {HF} added masterful {ImprovementTypes[ImprovementType.Value]} of {Materials[ImprovementMat.Value]} to a {Materials[Mat.Value]} {ItemTypes[ItemType.Value]} for {Entity} at {Site.AltName}.";
                     case "rings_hanging":
-                        return string.Format("{0} {1} added masterful rings in {2} to a {3} {4} for {5} at {6}.",
-                            timestring, HF, Materials[ImprovementMat.Value],
-                            Materials[Mat.Value], ItemTypes[ItemType.Value], Entity,
-                            Site.AltName);
+                        return
+                            $"{timestring} {HF} added masterful rings in {Materials[ImprovementMat.Value]} to a {Materials[Mat.Value]} {ItemTypes[ItemType.Value]} for {Entity} at {Site.AltName}.";
                     case "bands":
-                        return string.Format("{0} {1} added masterful bands in {2} to a {3} {4} for {5} at {6}.",
-                            timestring, HF, Materials[ImprovementMat.Value],
-                            Materials[Mat.Value], ItemTypes[ItemType.Value], Entity,
-                            Site.AltName);
+                        return
+                            $"{timestring} {HF} added masterful bands in {Materials[ImprovementMat.Value]} to a {Materials[Mat.Value]} {ItemTypes[ItemType.Value]} for {Entity} at {Site.AltName}.";
                     case "covered":
-                        return string.Format("{0} {1} added masterful covering in {2} to a {3} {4} for {5} at {6}.",
-                            timestring, HF, Materials[ImprovementMat.Value],
-                            Materials[Mat.Value], ItemTypes[ItemType.Value], Entity,
-                            Site.AltName);
+                        return
+                            $"{timestring} {HF} added masterful covering in {Materials[ImprovementMat.Value]} to a {Materials[Mat.Value]} {ItemTypes[ItemType.Value]} for {Entity} at {Site.AltName}.";
                     default:
-                        return string.Format("{0} {1} added masterful {2} of {3} to a {4} {5} for {6} at {7}.",
-                            timestring, HF, ImprovementTypes[ImprovementType.Value], Materials[ImprovementMat.Value],
-                            Materials[Mat.Value], ItemTypes[ItemType.Value], Entity,
-                            Site.AltName);
+                        return
+                            $"{timestring} {HF} added masterful {ImprovementTypes[ImprovementType.Value]} of {Materials[ImprovementMat.Value]} to a {Materials[Mat.Value]} {ItemTypes[ItemType.Value]} for {Entity} at {Site.AltName}.";
                 }
             }
 
-            return string.Format("{0} {1} added a masterful {2} for {3} at {4}.",
-                                timestring, HF, "UNKNOWN", Entity,
-                                Site.AltName);
+            return $"{timestring} {HF} added a masterful {"UNKNOWN"} for {Entity} at {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
@@ -222,9 +211,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             //TODO: Incorporate new data
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} {1} masterfully improved an item for {2} at {3}.",
-                                timelinestring, HF, Entity,
-                                Site.AltName);
+            return $"{timelinestring} {HF} masterfully improved an item for {Entity} at {Site.AltName}.";
         }
 
         internal override void Export(string table)

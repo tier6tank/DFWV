@@ -19,7 +19,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         public HFEntityLink HFEntityLink { get; set; }
 
-        override public Point Location { get { return Civ.Location; } }
+        override public Point Location => Civ.Location;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
@@ -148,16 +148,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             if (!Position.HasValue || HFEntityLink.Positions[Position.Value] == "-1")
-                return string.Format("{0} {1} left the {2}.",
-                                timestring, HF == null ? "UNKNOWN" : HF.ToString(),
-                                Civ);
+                return $"{timestring} {(HF == null ? "UNKNOWN" : HF.ToString())} left the {Civ}.";
             if (HF == null)
-                return string.Format("{0} {1} became the {2} of {3}.",
-                    timestring, "UNKNOWN",
-                    HFEntityLink.Positions[Position.Value], Civ);
-            return string.Format("{0} the {1} {2} ceased to be the {3} of {4}.",
-                timestring, HF.Race.ToString().ToLower(), HF,
-                HFEntityLink.Positions[Position.Value], Civ);
+                return $"{timestring} {"UNKNOWN"} became the {HFEntityLink.Positions[Position.Value]} of {Civ}.";
+            return
+                $"{timestring} the {HF.Race.ToString().ToLower()} {HF} ceased to be the {HFEntityLink.Positions[Position.Value]} of {Civ}.";
         }
 
         internal override string ToTimelineString()
@@ -165,8 +160,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             //TODO: Incorporate new data
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} Remove HF Link from {1}",
-                        timelinestring, Civ);
+            return $"{timelinestring} Remove HF Link from {Civ}";
         }
 
         internal override void Export(string table)

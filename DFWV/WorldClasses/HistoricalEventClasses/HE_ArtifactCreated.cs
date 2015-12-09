@@ -19,7 +19,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public Artifact Artifact { get; set; }
         private bool NameOnly { get; set; }
 
-        override public Point Location { get { return Site != null ? Site.Location : Point.Empty; } }
+        override public Point Location => Site != null ? Site.Location : Point.Empty;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
@@ -148,12 +148,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             if (Site == null)
-                return string.Format("{0} {1} was created by {2}.",
-                    timestring, Artifact,
-                    HistFigure);
-            return string.Format("{0} {1} was created in {2} by {3}.",
-                timestring, Artifact, Site.AltName,
-                HistFigure);
+                return $"{timestring} {Artifact} was created by {HistFigure}.";
+            return $"{timestring} {Artifact} was created in {Site.AltName} by {HistFigure}.";
         }
 
         internal override string ToTimelineString()
@@ -162,12 +158,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             if (Site == null)
-                return string.Format("{0} {1} was created by {2}.",
-                    timelinestring, Artifact,
-                    HistFigure);
-            return string.Format("{0} {1} was created in {2} by {3}.",
-                timelinestring, Artifact, Site.AltName,
-                HistFigure);
+                return $"{timelinestring} {Artifact} was created by {HistFigure}.";
+            return $"{timelinestring} {Artifact} was created in {Site.AltName} by {HistFigure}.";
         }
 
         internal override void Export(string table)

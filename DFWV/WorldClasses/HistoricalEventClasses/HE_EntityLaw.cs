@@ -20,7 +20,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private string LawRemove { get; set; }
 
 
-        override public Point Location { get { return Entity.Location; } }
+        override public Point Location => Entity.Location;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
@@ -108,8 +108,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             if (LawAdd == "harsh")
-                return string.Format("{0} {1} created harsh laws for {2}.",
-                    timelinestring, HistFigure, Entity);
+                return $"{timelinestring} {HistFigure} created harsh laws for {Entity}.";
             return timelinestring;
         }
 

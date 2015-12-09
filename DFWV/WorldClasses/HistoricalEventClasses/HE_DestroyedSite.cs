@@ -18,7 +18,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? DefenderCivID { get; set; }
         private Entity DefenderCiv { get; set; }
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location => Site.Location;
+
         public override IEnumerable<Entity> EntitiesInvolved
         {
             get
@@ -94,16 +95,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} {1} defeated {2} of {3} and destroyed {4}.",
-                                    timestring, AttackerCiv, SiteCiv, DefenderCiv, Site.AltName);
+            return $"{timestring} {AttackerCiv} defeated {SiteCiv} of {DefenderCiv} and destroyed {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} {1} destroyed {2}.",
-                        timelinestring, AttackerCiv, Site.AltName);
+            return $"{timelinestring} {AttackerCiv} destroyed {Site.AltName}.";
         }
 
 

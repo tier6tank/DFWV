@@ -25,7 +25,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? DefenderGeneralHFID { get; set; }
         private HistoricalFigure DefenderGeneralHF { get; set; }
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location => Site.Location;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
@@ -123,24 +123,17 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             if (DefenderGeneralHF == null)
-                return string.Format("{0} {1} attacked {2} of {3} at {4}. \n" +
-                                "The {5} {6} led the attack.",
-                                timestring, AttackerCiv, SiteCiv, DefenderCiv,
-                                Site.AltName, AttackerGeneralHF.Race, AttackerGeneralHF);
-            return string.Format("{0} {1} attacked {2} of {3} at {4}. \n" +
-                                 "The {5} {6} led the attack, \nand the defenders were led by the {7} {8}.",
-                timestring, AttackerCiv, SiteCiv, DefenderCiv,
-                Site.AltName, AttackerGeneralHF.Race, AttackerGeneralHF,
-                DefenderGeneralHF.Race, DefenderGeneralHF);
+                return $"{timestring} {AttackerCiv} attacked {SiteCiv} of {DefenderCiv} at {Site.AltName}. \n" +
+                       $"The {AttackerGeneralHF.Race} {AttackerGeneralHF} led the attack.";
+            return $"{timestring} {AttackerCiv} attacked {SiteCiv} of {DefenderCiv} at {Site.AltName}. \n" +
+                   $"The {AttackerGeneralHF.Race} {AttackerGeneralHF} led the attack, \nand the defenders were led by the {DefenderGeneralHF.Race} {DefenderGeneralHF}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} {1} attacked {2} at {3}",
-                        timelinestring, AttackerCiv, DefenderCiv,
-                                Site.AltName);
+            return $"{timelinestring} {AttackerCiv} attacked {DefenderCiv} at {Site.AltName}";
         }
 
         internal override void Export(string table)

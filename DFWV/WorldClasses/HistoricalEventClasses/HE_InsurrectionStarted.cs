@@ -17,7 +17,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public string Outcome { get; set; }
 
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location => Site.Location;
+
         public override IEnumerable<Entity> EntitiesInvolved
         {
             get { yield return TargetCiv; }
@@ -87,22 +88,19 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             switch (Outcome)
             {
                 case "population gone":
-                    return string.Format("{0} the insurrection in {1} against {2} ended with the disappearance of hte rebelling population.",
-                        timestring, Site.AltName, TargetCiv);
+                    return
+                        $"{timestring} the insurrection in {Site.AltName} against {TargetCiv} ended with the disappearance of hte rebelling population.";
                 case "leadership overthrown":
-                    return string.Format("{0} the insurrection in {1} concluded with {2} overthrown.",
-                        timestring, Site.AltName, TargetCiv);
+                    return $"{timestring} the insurrection in {Site.AltName} concluded with {TargetCiv} overthrown.";
             }
-            return string.Format("{0} the insurrection in {1} against {2} - {3}.",
-                timestring, Site.AltName, TargetCiv, Outcome);
+            return $"{timestring} the insurrection in {Site.AltName} against {TargetCiv} - {Outcome}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} insurrection in {1} against {2} - {3}.",
-                                    timelinestring, Site.AltName, TargetCiv, Outcome);
+            return $"{timelinestring} insurrection in {Site.AltName} against {TargetCiv} - {Outcome}.";
         }
 
         internal override void Export(string table)

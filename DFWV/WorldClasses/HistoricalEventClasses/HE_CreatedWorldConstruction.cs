@@ -22,7 +22,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? SiteID2 { get; set; }
         public Site Site2 { get; private set; }
 
-        override public Point Location { get { return Site1.Location; } }
+        override public Point Location => Site1.Location;
+
         public override IEnumerable<Entity> EntitiesInvolved
         {
             get
@@ -164,18 +165,15 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} {1} of {2} finished contruction of {3} connecting {4} and {5}.",
-                timestring, SiteCiv, Civ, WC.Name == "" ? "CONSTRUCTION " + WC : WC.Name,
-                            Site1, Site2);
+            return
+                $"{timestring} {SiteCiv} of {Civ} finished contruction of {(WC.Name == "" ? "CONSTRUCTION " + WC : WC.Name)} connecting {Site1} and {Site2}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} {1} built road from {2} to {3}.",
-                        timelinestring, Civ,
-                            Site1, Site2);
+            return $"{timelinestring} {Civ} built road from {Site1} to {Site2}.";
         }
 
         internal override void Export(string table)

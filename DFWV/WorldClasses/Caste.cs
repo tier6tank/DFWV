@@ -41,10 +41,7 @@ namespace DFWV.WorldClasses
             throw new NotImplementedException();
         }
 
-        public override Point Location
-        {
-            get { return Point.Empty; }
-        }
+        public override Point Location => Point.Empty;
 
         internal override void Export(string table)
         {

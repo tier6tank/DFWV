@@ -22,7 +22,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int Subtype { get; set; }
         public static List<string> SubTypes = new List<string>();
 
-        override public Point Location { get { return Site != null ? Site.Location : (Subregion != null ? Subregion.Location : Point.Empty); } }
+        override public Point Location => Site != null ? Site.Location : (Subregion != null ? Subregion.Location : Point.Empty);
+
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
             get
@@ -141,29 +142,27 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 case "attacked":
                 case "ambushed":
                 case "surprised":
-                    return string.Format("{0} the {1} {2} {3} the {4} {5}.",
-                        timestring, Group1HF[0].Race, Group1HF[0],
-                        SubTypes[Subtype], Group2HF[0].Race, Group2HF[0]);
+                    return
+                        $"{timestring} the {Group1HF[0].Race} {Group1HF[0]} {SubTypes[Subtype]} the {Group2HF[0].Race} {Group2HF[0]}.";
                 case "corner":
                 case "confront":
-                    return string.Format("{0} the {1} {2} {3}ed the {4} {5}.",
-                        timestring, Group1HF[0].Race, Group1HF[0],
-                        SubTypes[Subtype], Group2HF[0].Race, Group2HF[0]);
+                    return
+                        $"{timestring} the {Group1HF[0].Race} {Group1HF[0]} {SubTypes[Subtype]}ed the {Group2HF[0].Race} {Group2HF[0]}.";
                 case "scuffle":
-                    return string.Format("{0} the {1} {2} fought with the {3} {4}.",
-                        timestring, Group1HF[0].Race, Group1HF[0], Group2HF[0].Race, Group2HF[0]);
+                    return
+                        $"{timestring} the {Group1HF[0].Race} {Group1HF[0]} fought with the {Group2HF[0].Race} {Group2HF[0]}.";
                 case "2 lost after receiving wounds":
-                    return string.Format("{0} the {1} {2} managed to escape from the {3} {4}'s onslaught.",
-                        timestring, Group2HF[0].Race, Group2HF[0], Group1HF[0].Race, Group1HF[0]);
+                    return
+                        $"{timestring} the {Group2HF[0].Race} {Group2HF[0]} managed to escape from the {Group1HF[0].Race} {Group1HF[0]}'s onslaught.";
                 case "2 lost after giving wounds":
-                    return string.Format("{0} the {1} {2} was forced to retreat from {3} {4} despite the latter's wounds.",
-                        timestring, Group2HF[0].Race, Group2HF[0], Group1HF[0].Race, Group1HF[0]);
+                    return
+                        $"{timestring} the {Group2HF[0].Race} {Group2HF[0]} was forced to retreat from {Group1HF[0].Race} {Group1HF[0]} despite the latter's wounds.";
                 case "happen upon":
-                    return string.Format("{0} the {1} {2} happened upon the {3} {4}.",
-                        timestring, Group1HF[0].Race, Group1HF[0], Group2HF[0].Race, Group2HF[0]);
+                    return
+                        $"{timestring} the {Group1HF[0].Race} {Group1HF[0]} happened upon the {Group2HF[0].Race} {Group2HF[0]}.";
                 case "2 lost after mutual wounds":
-                    return string.Format("{0} the {1} {2} eventually prevailled and the {3} {4} was forced to make a hasty escape.",
-                        timestring, Group2HF[0].Race, Group2HF[0], Group1HF[0].Race, Group1HF[0]);
+                    return
+                        $"{timestring} the {Group2HF[0].Race} {Group2HF[0]} eventually prevailled and the {Group1HF[0].Race} {Group1HF[0]} was forced to make a hasty escape.";
             }
 
             return timestring;
@@ -174,10 +173,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             if (Group1HF.Count == Group1HFID.Count && Group2HF.Count == Group2HFID.Count)
-                return string.Format("{0} {1} fought {2}.",
-                    timelinestring, Group1HF[0], Group2HF[0]);
-            return string.Format("{0} {1} fought {2}.",
-                timelinestring, Group1HFID[0], Group2HFID[0]);
+                return $"{timelinestring} {Group1HF[0]} fought {Group2HF[0]}.";
+            return $"{timelinestring} {Group1HFID[0]} fought {Group2HFID[0]}.";
         }
 
         internal override void Export(string table)

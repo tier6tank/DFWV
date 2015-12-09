@@ -96,9 +96,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             if (Destination != null && Source != null && Site != null)
-                return string.Format("{0} merchants from {1} visited {2} at {3}.",
-                    timestring, Source, Destination,
-                    Site.AltName);
+                return $"{timestring} merchants from {Source} visited {Destination} at {Site.AltName}.";
 
             return timestring;
         }

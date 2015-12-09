@@ -24,7 +24,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         private List<int> DefendingHFID { get; set; }
         private List<HistoricalFigure> DefendingHF;
 
-        override public Point Location { get { return Site != null ? Site.Coords : Coords; } }
+        override public Point Location => Site != null ? Site.Coords : Coords;
 
         public EC_Duel(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -123,7 +123,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             frm.lblDuelParent.Data = ParentEventCol;
             if (StartTime != null || EndTime != null)
             {
-                frm.lblDuelTime.Text = string.Format("{0} - {1}", StartTime, EndTime);
+                frm.lblDuelTime.Text = $"{StartTime} - {EndTime}";
                 frm.lblDuelDuration.Text = WorldTime.Duration(EndTime, StartTime);
             }
             else

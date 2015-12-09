@@ -86,18 +86,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             if (!ConcluderHFID.HasValue)
-                return string.Format("{0} {1} aided the {2} {3} in becoming a permanent part of the living world that great fortresses might be raised and tested in siege. " +
-                            "The ritual took place in {4} using {5}",
-                            timestring,
-                            God != null ? God.ToString() : "UNKNOWN",
-                            HF != null ? HF.Race.ToString() : "UNKNOWN",
-                            HF != null ? HF.ToString() : "UNKNOWN",
-                            Site != null ? Site.ToString() : "UNKNOWN",
-                            Artifact != null ? Artifact.ToString() : "UNKNOWN"
-                            );
-            return string.Format("{0} Agreement formed" ,
-                timestring
-                );
+                return
+                    $"{timestring} {(God != null ? God.ToString() : "UNKNOWN")} aided the {(HF != null ? HF.Race.ToString() : "UNKNOWN")} {(HF != null ? HF.ToString() : "UNKNOWN")} in becoming a permanent part of the living world that great fortresses might be raised and tested in siege. " +
+                    $"The ritual took place in {(Site != null ? Site.ToString() : "UNKNOWN")} using {(Artifact != null ? Artifact.ToString() : "UNKNOWN")}";
+            return $"{timestring} Agreement formed";
         }
 
         internal override string ToTimelineString()
@@ -105,14 +97,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             if (!ConcluderHFID.HasValue)
-                return string.Format("{0} {1} performed ritual at {2} with {3}.",
-                    timelinestring,
-                    HF != null ? HF.ToString() : "UNKNOWN",
-                    Site != null ? Site.ToString() : "UNKNOWN",
-                    Artifact != null ? Artifact.ToString() : "UNKNOWN");
-            return string.Format("{0} Agreement formed" ,
-                timelinestring
-                );
+                return
+                    $"{timelinestring} {(HF != null ? HF.ToString() : "UNKNOWN")} performed ritual at {(Site != null ? Site.ToString() : "UNKNOWN")} with {(Artifact != null ? Artifact.ToString() : "UNKNOWN")}.";
+            return $"{timelinestring} Agreement formed";
         }
 
         internal override void Export(string table)

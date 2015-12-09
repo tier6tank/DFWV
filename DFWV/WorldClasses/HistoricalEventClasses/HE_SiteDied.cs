@@ -17,7 +17,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public Entity Civ { get; private set; }
         public bool Abandoned { get; set; }
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location => Site.Location;
+
         public override IEnumerable<Entity> EntitiesInvolved
         {
             get
@@ -99,10 +100,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             if (Abandoned)
-                return string.Format("{0} {1} abandoned the settlement of {2}.",
-                            timestring, SiteCiv, Site.AltName);
-            return string.Format("{0} {1} and {2} settlement of {3} withered.",
-                timestring, SiteCiv, Civ,  Site.AltName);
+                return $"{timestring} {SiteCiv} abandoned the settlement of {Site.AltName}.";
+            return $"{timestring} {SiteCiv} and {Civ} settlement of {Site.AltName} withered.";
         }
 
         internal override string ToTimelineString()
@@ -110,10 +109,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             if (Abandoned)
-                return string.Format("{0} {1} abandoned the settlement of {2}.",
-                            timelinestring, SiteCiv, Site.AltName);
-            return string.Format("{0} {1} died.",
-                timelinestring, Site.AltName);
+                return $"{timelinestring} {SiteCiv} abandoned the settlement of {Site.AltName}.";
+            return $"{timelinestring} {Site.AltName} died.";
         }
 
         internal override void Export(string table)

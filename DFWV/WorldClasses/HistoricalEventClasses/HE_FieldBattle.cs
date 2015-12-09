@@ -23,7 +23,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? DefenderGeneralHFID { get; set; }
         private HistoricalFigure DefenderGeneralHF { get; set; }
 
-        override public Point Location { get { return Coords; } }
+        override public Point Location => Coords;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
@@ -123,11 +123,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} {1} attacked {2} in {3}. \n{4} led the attack, and the defenders were led by {5}.",
-                            timestring, AttackerCiv, DefenderCiv, Subregion, 
-                            AttackerGeneralHF == null ? "An unknown creature" : ("The " + AttackerGeneralHF.Race + " " + AttackerGeneralHF),
-                            DefenderGeneralHF == null ? "an unknown creature" : ("The " + DefenderGeneralHF.Race + " " + DefenderGeneralHF)
-                            );
+            return
+                $"{timestring} {AttackerCiv} attacked {DefenderCiv} in {Subregion}. \n{(AttackerGeneralHF == null ? "An unknown creature" : ("The " + AttackerGeneralHF.Race + " " + AttackerGeneralHF))} led the attack, and the defenders were led by {(DefenderGeneralHF == null ? "an unknown creature" : ("The " + DefenderGeneralHF.Race + " " + DefenderGeneralHF))}.";
 
         }
 
@@ -135,9 +132,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} {1} attacked {2} in {3}.",
-                        timelinestring, AttackerCiv, DefenderCiv,
-                            Subregion);
+            return $"{timelinestring} {AttackerCiv} attacked {DefenderCiv} in {Subregion}.";
         }
 
         internal override void Export(string table)

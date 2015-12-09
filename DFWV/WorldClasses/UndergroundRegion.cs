@@ -16,9 +16,9 @@ namespace DFWV.WorldClasses
 
 
         [UsedImplicitly]
-        public string DispNameLower { get { return ToString().ToLower(); } }
+        public string DispNameLower => ToString().ToLower();
 
-        override public Point Location { get { return Point.Empty; } }
+        override public Point Location => Point.Empty;
 
         public UndergroundRegion(XDocument xdoc, World world) 
             : base(xdoc, world)
@@ -73,8 +73,8 @@ namespace DFWV.WorldClasses
             if (Populations != null)
             {
                 frm.grpUndergroundRegionPopulation.FillListboxWith(frm.lstUndergroundRegionPopulation, Populations.Keys);
-                frm.grpUndergroundRegionPopulation.Text = string.Format("Population ({0})",
-                    Populations.Values.Contains(10000001) ? "Unnumbered" : Populations.Values.Sum().ToString());
+                frm.grpUndergroundRegionPopulation.Text =
+                    $"Population ({(Populations.Values.Contains(10000001) ? "Unnumbered" : Populations.Values.Sum().ToString())})";
                 frm.grpUndergroundRegionPopulation.Visible = true;
             }
             else

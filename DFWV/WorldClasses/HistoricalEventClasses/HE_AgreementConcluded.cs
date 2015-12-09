@@ -113,8 +113,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             
-            return string.Format("{0} agreement concluded.",
-                        timestring);
+            return $"{timestring} agreement concluded.";
         }
 
         internal override string ToTimelineString()
@@ -122,8 +121,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             //TODO: Incorporate new data
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} agreement concluded.",
-                timelinestring);
+            return $"{timelinestring} agreement concluded.";
         }
 
         internal override void Export(string table)

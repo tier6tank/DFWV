@@ -19,7 +19,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private Region Subregion { get; set; }
         private int? FeatureLayerID { get; set; }
 
-        override public Point Location { get { return Site != null ? Site.Location : Subregion.Location; } }
+        override public Point Location => Site != null ? Site.Location : Subregion.Location;
+
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
             get { yield return HF; }
@@ -101,8 +102,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} {1} came back from the dead as in {2}.",
-                                    timestring, HF, Site.AltName);
+            return $"{timestring} {HF} came back from the dead as in {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
@@ -110,10 +110,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             if (Site != null)
-                return string.Format("{0} {1} came back from the dead as a {2} in {3}*",
-                                        timelinestring, HF != null ? HF.ToString() : HFID.ToString(), Ghost, Site.AltName);
-            return string.Format("{0} {1} came back from the dead as a {2}",
-                timelinestring, HF != null ? HF.ToString() : HFID.ToString(), Ghost);
+                return
+                    $"{timelinestring} {(HF != null ? HF.ToString() : HFID.ToString())} came back from the dead as a {Ghost} in {Site.AltName}*";
+            return
+                $"{timelinestring} {(HF != null ? HF.ToString() : HFID.ToString())} came back from the dead as a {Ghost}";
         }
 
         internal override void Export(string table)

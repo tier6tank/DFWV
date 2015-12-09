@@ -18,7 +18,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? ArtifactID { get; set; }
         private Artifact Artifact { get; set; }
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location => Site.Location;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
@@ -104,18 +104,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} {1} was stored in {2} by the {3}.",
-                                timestring, Artifact, Site.AltName,
-                                HistFigure);
+            return $"{timestring} {Artifact} was stored in {Site.AltName} by the {HistFigure}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} {1} was stored in {2} by {3}.",
-                        timelinestring, Artifact, Site.AltName,
-                                HistFigure);
+            return $"{timelinestring} {Artifact} was stored in {Site.AltName} by {HistFigure}.";
         }
 
         internal override void Export(string table)

@@ -22,7 +22,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private static readonly List<string> Reasons = new List<string>();
         private int? Reason { get; set; }
 
-        override public Point Location { get { return Site.Location; } }
+        override public Point Location => Site.Location;
+
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
             get { yield return HF; }
@@ -119,13 +120,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (!Reason.HasValue || !Situation.HasValue)
                 return timestring;
             if (Reasons[Reason.Value] == "murder" && Situations[Situation.Value] == "general suspicion")
-                return string.Format("{0} {1} aroused general suspicion in {2} after a murder.",
-                    timestring, HF,
-                    Site.AltName);
+                return $"{timestring} {HF} aroused general suspicion in {Site.AltName} after a murder.";
             if (Reasons[Reason.Value] == "ageless" && Situations[Situation.Value] == "general suspicion")
-                return string.Format("{0} {1} aroused general suspicion in {2} after appearing not to age.",
-                    timestring, HF,
-                    Site.AltName);
+                return $"{timestring} {HF} aroused general suspicion in {Site.AltName} after appearing not to age.";
             return timestring;
         }
 
@@ -136,13 +133,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (!Reason.HasValue || !Situation.HasValue)
                 return timelinestring;
             if (Reasons[Reason.Value] == "murder" && Situations[Situation.Value] == "general suspicion")
-                return string.Format("{0} {1} aroused general suspicion in {2} after a murder.",
-                    timelinestring, HF,
-                    Site.AltName);
+                return $"{timelinestring} {HF} aroused general suspicion in {Site.AltName} after a murder.";
             if (Reasons[Reason.Value] == "ageless" && Situations[Situation.Value] == "general suspicion")
-                return string.Format("{0} {1} aroused general suspicion in {2} after appearing not to age.",
-                    timelinestring, HF,
-                    Site.AltName);
+                return $"{timelinestring} {HF} aroused general suspicion in {Site.AltName} after appearing not to age.";
             return timelinestring;
         }
 

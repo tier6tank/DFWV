@@ -38,7 +38,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         public Entity DefenderEnt { get; private set; }
         public WarData WarData;
 
-        override public Point Location { get { return AggressorEnt.Location; } }
+        override public Point Location => AggressorEnt.Location;
 
         public EC_War(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -111,7 +111,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             frm.lblWarName.Text = ToString();
             if (StartTime != null || EndTime != null)
             {
-                frm.lblWarTime.Text = string.Format("{0} - {1}", StartTime, (EndTime == WorldTime.Present ? "" : EndTime.ToString()));
+                frm.lblWarTime.Text = $"{StartTime} - {(EndTime == WorldTime.Present ? "" : EndTime.ToString())}";
                 frm.lblWarDuration.Text = WorldTime.Duration(EndTime, StartTime);
             }
             else
@@ -139,17 +139,17 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
             frm.lblWarAggressorCombatants.Text = WarData.AttackingNumber.ToString();
             if (WarData.AttackingHFs > 0)
-                frm.lblWarAggressorCombatants.Text += string.Format(" + {0} HFs", WarData.AttackingHFs);
+                frm.lblWarAggressorCombatants.Text += $" + {WarData.AttackingHFs} HFs";
             frm.lblWarAggressorLosses.Text = WarData.AttackingDeaths.ToString();
             if (WarData.AttackingHFDeaths > 0)
-                frm.lblWarAggressorLosses.Text += string.Format(" + {0} HFs", WarData.AttackingHFDeaths);
+                frm.lblWarAggressorLosses.Text += $" + {WarData.AttackingHFDeaths} HFs";
 
             frm.lblWarDefenderCombatants.Text = WarData.DefendingNumber.ToString();
             if (WarData.DefendingHFs > 0)
-                frm.lblWarDefenderCombatants.Text += string.Format(" + {0} HFs", WarData.DefendingHFs);
+                frm.lblWarDefenderCombatants.Text += $" + {WarData.DefendingHFs} HFs";
             frm.lblWarDefenderLosses.Text = WarData.DefendingDeaths.ToString();
             if (WarData.DefendingHFDeaths > 0)
-                frm.lblWarDefenderLosses.Text += string.Format(" + {0} HFs", WarData.DefendingHFDeaths);
+                frm.lblWarDefenderLosses.Text += $" + {WarData.DefendingHFDeaths} HFs";
 
 
 

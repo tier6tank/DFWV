@@ -20,7 +20,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private Race NewRace { get; set; }
         private int? NewCaste { get; set; }
 
-        override public Point Location { get { return Point.Empty ; } }
+        override public Point Location => Point.Empty;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
@@ -119,9 +119,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timelinestring = base.ToTimelineString();
 
-            return string.Format("{0} {1} transformed {2}.",
-                        timelinestring, ChangerHF,
-                                    ChangeeHF);
+            return $"{timelinestring} {ChangerHF} transformed {ChangeeHF}.";
         }
 
         internal override void Export(string table)

@@ -34,36 +34,27 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        public virtual IEnumerable<HistoricalFigure> HFsInvolved
-        {
-            get { return Enumerable.Empty<HistoricalFigure>(); }
-        }
-        public virtual IEnumerable<Entity> EntitiesInvolved
-        {
-            get { return Enumerable.Empty<Entity>(); }
-        }
-        
-        public virtual IEnumerable<Site> SitesInvolved
-        {
-            get { return Enumerable.Empty<Site>(); }
-        }
-        public virtual IEnumerable<Region> RegionsInvolved
-        {
-            get { return Enumerable.Empty<Region>(); }
-        }
+        public virtual IEnumerable<HistoricalFigure> HFsInvolved => Enumerable.Empty<HistoricalFigure>();
+
+        public virtual IEnumerable<Entity> EntitiesInvolved => Enumerable.Empty<Entity>();
+
+        public virtual IEnumerable<Site> SitesInvolved => Enumerable.Empty<Site>();
+
+        public virtual IEnumerable<Region> RegionsInvolved => Enumerable.Empty<Region>();
 
         public HistoricalEventCollection EventCollection { get; set; }
-        public WorldTime Time { get { return new WorldTime(Year, Seconds); } }
-        
-        [UsedImplicitly]
-        public bool InCollection { get { return EventCollection != null; } }
-        [UsedImplicitly]
-        public string EventType { get { return Types[Type]; } }
+        public WorldTime Time => new WorldTime(Year, Seconds);
 
         [UsedImplicitly]
-        public string DispNameLower { get { return ToString().ToLower(); } }
+        public bool InCollection => EventCollection != null;
 
-        override public Point Location { get { return Point.Empty; } }
+        [UsedImplicitly]
+        public string EventType => Types[Type];
+
+        [UsedImplicitly]
+        public string DispNameLower => ToString().ToLower();
+
+        override public Point Location => Point.Empty;
 
         public static List<string> ItemTypes = new List<string>();
         public static List<string> ItemSubTypes = new List<string>();
@@ -224,11 +215,32 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     return new HE_SiteTributeForced(xdoc, world);
                 case "site retired":
                     return new HE_SiteRetired(xdoc, world);
-                case "insurrection started":
-                    return new HE_InsurrectionStarted(xdoc, world);
+                case "ceremony":
+                    return new HE_Ceremony(xdoc, world);
+                case "procession":
+                    return new HE_Procession(xdoc, world);
+                case "performance":
+                    return new HE_Performance(xdoc, world);
+                case "competition":
+                    return new HE_Competition(xdoc, world);
+                case "written content composed":
+                    return new HE_WrittenContentComposed(xdoc, world);
+                case "hf relationship denied":
+                    return new HE_HFRelationshipDenied(xdoc, world);
+                case "knowledge discovered":
+                    return new HE_KnowledgeDiscovered(xdoc, world);
+                case "poetic form created":
+                    return new HE_PoeticFormCreated(xdoc, world);
+                case "dance form created":
+                    return new HE_DanceFormCreated(xdoc, world);
+                case "musical form created":
+                    return new HE_MusicalFormCreated(xdoc, world);
+                case "artifact destroyed":
+                    return new HE_ArtifactDestroyed(xdoc, world);
+                case "regionpop incorporated into entity":
+                    return new HE_RegionPopIncorporatedIntoEntity(xdoc, world);
 
-
-// ReSharper disable RedundantCaseLabel
+                // ReSharper disable RedundantCaseLabel
                 case "agreement void": //Unknown events
                 case "hf razed structure":
                 case "remove hf hf link":
@@ -313,7 +325,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             frm.grpHistoricalEvent.Text = ToString();
 #if DEBUG
-            frm.grpHistoricalEvent.Text += string.Format(string.Format(string.Format(" - ID: {0}", ID), ID), ID);
+            frm.grpHistoricalEvent.Text += string.Format(string.Format($" - ID: {ID}", ID), ID);
 #endif
             frm.grpHistoricalEvent.Show();
 

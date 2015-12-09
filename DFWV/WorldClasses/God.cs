@@ -12,7 +12,7 @@ namespace DFWV.WorldClasses
         public static List<string> Types = new List<string>();
         public int Type { get; set; }
         [UsedImplicitly]
-        public string GodType { get { return Types[Type]; } }
+        public string GodType => Types[Type];
 
         public readonly List<Civilization> Civilizations = new List<Civilization>();
         public readonly List<int> Spheres = new List<int>();
@@ -21,14 +21,16 @@ namespace DFWV.WorldClasses
         public HistoricalFigure HF { get; set; }
 
         [UsedImplicitly]
-        public string RaceName { get { return HF != null && HF.Race != null ? HF.Race.Name : ""; } }
+        public string RaceName => HF != null && HF.Race != null ? HF.Race.Name : "";
 
         [UsedImplicitly]
-        public int CivilizationCount { get { return Civilizations == null ? 0 : Civilizations.Count; } }
+        public int CivilizationCount => Civilizations == null ? 0 : Civilizations.Count;
+
         [UsedImplicitly]
-        public int SphereCount { get { return Spheres == null ? 0 : Spheres.Count; } }
+        public int SphereCount => Spheres == null ? 0 : Spheres.Count;
+
         [UsedImplicitly]
-        public int LeaderCount { get { return Leaders == null ? 0 : Leaders.Count; } }
+        public int LeaderCount => Leaders == null ? 0 : Leaders.Count;
 
         public God(string data)
         {

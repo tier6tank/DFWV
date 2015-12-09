@@ -20,7 +20,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public int? FeatureLayerID { get; set; }
         public Point Coords { get; private set; }
 
-        override public Point Location { get { return Coords; } }
+        override public Point Location => Coords;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
@@ -123,40 +123,33 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             {
                 case "settled":
                     if (Subregion != null)
-                        return string.Format("{0} {1} {2} {3} in {4}.",
-                            timestring, HF.Race, HF,
-                            States[State.Value], Subregion);
+                        return $"{timestring} {HF.Race} {HF} {States[State.Value]} in {Subregion}.";
                     if (Site != null)
-                        return string.Format("{0} {1} {2} {3} in {4}.",
-                            timestring, HF.Race, HF,
-                            States[State.Value], Site.AltName);
+                        return $"{timestring} {HF.Race} {HF} {States[State.Value]} in {Site.AltName}.";
                     break;
                 case "wandering":
                     return string.Format(FeatureLayerID == -1 ? "{0} {1} began wandering the wilds." : "{0} {1} began wandering the depths of the world.", timestring, HF);
                 case "scouting":
                     if (Site != null)
-                        return string.Format("{0} {1} {2} began scouting the area around {3}.",
-                            timestring, HF.Race, HF, Site.AltName);
+                        return $"{timestring} {HF.Race} {HF} began scouting the area around {Site.AltName}.";
                     break;
                 case "thief":
                     if (Site != null)
-                        return string.Format("{0} {1} {2} decided to become a thief, operating out of {3}.",
-                            timestring, HF.Race, HF, Site.AltName);
+                        return
+                            $"{timestring} {HF.Race} {HF} decided to become a thief, operating out of {Site.AltName}.";
                     break;
                 case "snatcher":
                     if (Site != null)
-                        return string.Format("{0} {1} {2} decided to become a baby-snatcher, operating out of {3}.",
-                            timestring, HF.Race, HF, Site.AltName);
+                        return
+                            $"{timestring} {HF.Race} {HF} decided to become a baby-snatcher, operating out of {Site.AltName}.";
                     break;
                 case "hunting":
                     if (Subregion != null)
-                        return string.Format("{0} {1} {2} began hunting great beasts in {3}.",
-                            timestring, HF.Race, HF, Subregion);
+                        return $"{timestring} {HF.Race} {HF} began hunting great beasts in {Subregion}.";
                     break;
                 case "refugee":
                     if (Subregion != null)
-                        return string.Format("{0} {1} {2} fled into the {3}.",
-                            timestring, HF.Race, HF, Subregion);
+                        return $"{timestring} {HF.Race} {HF} fled into the {Subregion}.";
                     break;
             }
 
@@ -168,52 +161,41 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             if (!State.HasValue)
-                return string.Format("{0} HF Changed state - {1}.",
-                            timelinestring, HFID);
+                return $"{timelinestring} HF Changed state - {HFID}.";
 
             if (HF == null )
-                return string.Format("{0} HF Changed state - {1} - {2}.",
-                            timelinestring, HFID,
-                            States[State.Value]);
+                return $"{timelinestring} HF Changed state - {HFID} - {States[State.Value]}.";
 
             switch (States[State.Value])
             {
                 case "settled":
                     if (Subregion != null)
-                        return string.Format("{0} {1} {2} in {3}.",
-                            timelinestring, HF,
-                            States[State.Value], Subregion);
+                        return $"{timelinestring} {HF} {States[State.Value]} in {Subregion}.";
                     if (Site != null)
-                        return string.Format("{0} {1} {2} in {3}.",
-                            timelinestring, HF,
-                            States[State.Value], Site.AltName);
+                        return $"{timelinestring} {HF} {States[State.Value]} in {Site.AltName}.";
                     break;
                 case "wandering":
                     return string.Format(FeatureLayerID == -1 ? "{0} {1} began wandering the wilds." : "{0} {1} began wandering the depths of the world.", timelinestring, HF);
                 case "scouting":
                     if (Site != null)
-                        return string.Format("{0} {1} began scouting the area around {2}.",
-                            timelinestring, HF, Site.AltName);
+                        return $"{timelinestring} {HF} began scouting the area around {Site.AltName}.";
                     break;
                 case "thief":
                     if (Site != null)
-                        return string.Format("{0} {1} decided to become a thief, operating out of {2}.",
-                            timelinestring, HF, Site.AltName);
+                        return $"{timelinestring} {HF} decided to become a thief, operating out of {Site.AltName}.";
                     break;
                 case "snatcher":
                     if (Site != null)
-                        return string.Format("{0} {1} decided to become a baby-snatcher, operating out of {2}.",
-                            timelinestring, HF, Site.AltName);
+                        return
+                            $"{timelinestring} {HF} decided to become a baby-snatcher, operating out of {Site.AltName}.";
                     break;
                 case "hunting":
                     if (Subregion != null)
-                        return string.Format("{0} {1} began hunting great beasts in {2}.",
-                            timelinestring, HF, Subregion);
+                        return $"{timelinestring} {HF} began hunting great beasts in {Subregion}.";
                     break;
                 case "refugee":
                     if (Subregion != null)
-                        return string.Format("{0} {1} fled into the {2}.",
-                            timelinestring, HF, Subregion);
+                        return $"{timelinestring} {HF} fled into the {Subregion}.";
                     break;
             }
 
