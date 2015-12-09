@@ -10,6 +10,8 @@ namespace DFWV.WorldClasses
 {
     public class MapLegend
     {
+        public readonly Dictionary<string, Color> LegendItem = new Dictionary<string, Color>();
+
         protected bool Equals(MapLegend other)
         {
             return Equals(LegendItem, other.LegendItem) && string.Equals(Name, other.Name);
@@ -26,11 +28,9 @@ namespace DFWV.WorldClasses
         {
             unchecked
             {
-                return ((LegendItem != null ? LegendItem.GetHashCode() : 0)*397) ^ (Name != null ? Name.GetHashCode() : 0);
+                return ((LegendItem?.GetHashCode() ?? 0)*397) ^ (Name?.GetHashCode() ?? 0);
             }
         }
-
-        public Dictionary<string, Color> LegendItem = new Dictionary<string, Color>();
 
         public MapLegend(string path)
             : this(Path.GetFileNameWithoutExtension(path), File.ReadAllLines(path))
@@ -103,7 +103,7 @@ namespace DFWV.WorldClasses
             }
         }
 
-        public string Name { get; set; }
+        public string Name { get; }
 
         internal void DrawTo(PictureBox picLegend)
         {
@@ -151,9 +151,9 @@ namespace DFWV.WorldClasses
             // check values are the same
         }
 
-        public static bool operator !=(MapLegend X, MapLegend Y)
+        public static bool operator !=(MapLegend x, MapLegend y)
         {
-            return !(X == Y);
+            return !(x == y);
         }
 
         public string NameForColor(Color color)

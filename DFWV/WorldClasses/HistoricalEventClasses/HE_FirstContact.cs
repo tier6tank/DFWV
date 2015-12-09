@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -7,13 +6,13 @@ using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_FirstContact : HistoricalEvent
+    class HeFirstContact : HistoricalEvent
     {
-        private int? SiteID { get; set; }
+        private int? SiteId { get; }
         private Site Site { get; set; }
-        private int? ContactorEnID { get; set; }
+        private int? ContactorEnId { get; }
         private Entity ContactorEn { get; set; }
-        private int? ContactedEnID { get; set; }
+        private int? ContactedEnId { get; }
         private Entity ContactedEn { get; set; }
 
         override public Point Location => Site.Location;
@@ -31,7 +30,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Site; }
         }
 
-        public HE_FirstContact(XDocument xdoc, World world)
+        public HeFirstContact(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -48,16 +47,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "contactor_enid":
-                        ContactorEnID = valI;
+                        ContactorEnId = valI;
                         break;
                     case "contacted_enid":
-                        ContactedEnID = valI;
+                        ContactedEnId = valI;
                         break;
                     case "site_id":
-                        SiteID = valI;
+                        SiteId = valI;
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -65,12 +64,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
-            if (ContactorEnID.HasValue && World.Entities.ContainsKey(ContactorEnID.Value))
-                ContactorEn = World.Entities[ContactorEnID.Value];
-            if (ContactedEnID.HasValue && World.Entities.ContainsKey(ContactedEnID.Value))
-                ContactedEn = World.Entities[ContactedEnID.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
+            if (ContactorEnId.HasValue && World.Entities.ContainsKey(ContactorEnId.Value))
+                ContactorEn = World.Entities[ContactorEnId.Value];
+            if (ContactedEnId.HasValue && World.Entities.ContainsKey(ContactedEnId.Value))
+                ContactedEn = World.Entities[ContactedEnId.Value];
         }
 
 
@@ -104,10 +103,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             
             var vals = new List<object>
             {
-                ID, 
-                SiteID.DBExport(), 
-                ContactorEnID.DBExport(), 
-                ContactedEnID.DBExport()
+                Id, 
+                SiteId.DBExport(), 
+                ContactorEnId.DBExport(), 
+                ContactedEnId.DBExport()
             };
 
             Database.ExportWorldItem(table, vals);

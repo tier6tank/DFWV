@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -9,33 +8,33 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    public class HE_AddHFSiteLink : HistoricalEvent
+    public class HeAddHfSiteLink : HistoricalEvent
     {
-        private int? SiteID { get; set; }
+        private int? SiteId { get; }
         private Site Site { get; set; }
 
-        private int? HFID { get; set; }
-        public HistoricalFigure HF { get; set; }
-        private int? StructureID { get; set; }
+        private int? Hfid { get; set; }
+        public HistoricalFigure Hf { get; set; }
+        private int? StructureId { get; set; }
         public Structure Structure { get; set; }
-        private int? CivID { get; set; }
+        private int? CivId { get; set; }
         public Entity Civ { get; set; }
 
         private int? LinkType { get; set; }
 
-        public HFSiteLink HFSiteLink { get; set; }
+        public HfSiteLink HfSiteLink { get; set; }
 
         override public Point Location => Site.Location;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
-            get { yield return HF; }
+            get { yield return Hf; }
         }
         public override IEnumerable<Entity> EntitiesInvolved
         {
             get { yield return Civ; }
         }
-        public HE_AddHFSiteLink(XDocument xdoc, World world)
+        public HeAddHfSiteLink(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -52,11 +51,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "site_id":
-                        SiteID = valI;
+                        SiteId = valI;
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -65,21 +64,21 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
             {
-                Site = World.Sites[SiteID.Value];
-                if (StructureID.HasValue)
+                Site = World.Sites[SiteId.Value];
+                if (StructureId.HasValue)
                 {
-                    if (Site.GetStructure(StructureID.Value) == null)
-                        Site.AddStructure(new Structure(Site, StructureID.Value,World));
-                    Structure = Site.GetStructure(StructureID.Value);
+                    if (Site.GetStructure(StructureId.Value) == null)
+                        Site.AddStructure(new Structure(Site, StructureId.Value,World));
+                    Structure = Site.GetStructure(StructureId.Value);
                 }
             }
 
-            if (HFID.HasValue && World.HistoricalFigures.ContainsKey(HFID.Value))
-                HF = World.HistoricalFigures[HFID.Value];
-            if (CivID.HasValue && World.Entities.ContainsKey(CivID.Value))
-                Civ = World.Entities[CivID.Value];
+            if (Hfid.HasValue && World.HistoricalFigures.ContainsKey(Hfid.Value))
+                Hf = World.HistoricalFigures[Hfid.Value];
+            if (CivId.HasValue && World.Entities.ContainsKey(CivId.Value))
+                Civ = World.Entities[CivId.Value];
         }
 
 
@@ -88,14 +87,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             base.Process();
 
             var matched = false;
-            if (HF != null && HF.SiteLinks != null)
+            if (Hf?.SiteLinks != null)
             {
-                foreach (var siteLinkList in HF.SiteLinks)
+                foreach (var siteLinkList in Hf.SiteLinks)
                 {
                     foreach (var siteLink in siteLinkList.Value.Where(siteLink => siteLink.Site == Site && LinkType == siteLink.LinkType))
                     {
                         siteLink.AddEvent = this;
-                        HFSiteLink = siteLink;
+                        HfSiteLink = siteLink;
                         matched = true;
                         break;
                     }
@@ -129,24 +128,24 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "site":
                         break;
                     case "structure":
-                        StructureID = valI;
+                        StructureId = valI;
                         break;
                     case "histfig":
-                        HFID = valI;
+                        Hfid = valI;
                         break;
                     case "civ":
-                        CivID = valI;
+                        CivId = valI;
                         break;
                     case "link_type":
                         val = val.Replace('_', ' ');
                         if (val == "home site abstract building")
                             val = "home structure";
-                        if (!HFSiteLink.LinkTypes.Contains(val))
-                            HFSiteLink.LinkTypes.Add(val);
-                        LinkType = HFSiteLink.LinkTypes.IndexOf(val);
+                        if (!HfSiteLink.LinkTypes.Contains(val))
+                            HfSiteLink.LinkTypes.Add(val);
+                        LinkType = HfSiteLink.LinkTypes.IndexOf(val);
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -156,15 +155,15 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
             EventLabel(frm, parent, ref location, "Site:", Site);
-            EventLabel(frm, parent, ref location, "HF:", HF);
+            EventLabel(frm, parent, ref location, "HF:", Hf);
             EventLabel(frm, parent, ref location, "Structure:", Structure);
             EventLabel(frm, parent, ref location, "Civ:", Civ);
-            if (HFSiteLink != null)
+            if (HfSiteLink != null)
                 EventLabel(frm, parent, ref location, "Type:",
-                    HFSiteLink.LinkTypes[HFSiteLink.LinkType]);
+                    HfSiteLink.LinkTypes[HfSiteLink.LinkType]);
             if (LinkType != null)
                 EventLabel(frm, parent, ref location, "Type:",
-                    HFSiteLink.LinkTypes[LinkType.Value]);
+                    HfSiteLink.LinkTypes[LinkType.Value]);
         }
 
         protected override string LegendsDescription() //Matched
@@ -174,30 +173,30 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             if (LinkType.HasValue)
             {
-                switch (HFSiteLink.LinkTypes[LinkType.Value])
+                switch (HfSiteLink.LinkTypes[LinkType.Value])
                 {
                     case "hangout":
                     case "seat of power":
                         return
-                            $"{timestring} {HF} ruled from {(Structure.Name != null ? Structure.ToString() : "UNKNOWN")} of {Civ} in {Site.AltName}.";
+                            $"{timestring} {Hf} ruled from {(Structure.Name != null ? Structure.ToString() : "UNKNOWN")} of {Civ} in {Site.AltName}.";
                     case "home site realization building":
                     case "home structure":
                         return
-                            $"{timestring} {HF} took up residance in {(Structure.Name != null ? Structure.ToString() : "UNKNOWN")} of {Civ} in {Site.AltName}.";
+                            $"{timestring} {Hf} took up residance in {(Structure.Name != null ? Structure.ToString() : "UNKNOWN")} of {Civ} in {Site.AltName}.";
                     default:
                         return
-                            $"{timestring} {"UNKNOWN"} became {HFSiteLink.LinkTypes[LinkType.Value]} of {Site.AltName}.";
+                            $"{timestring} {"UNKNOWN"} became {HfSiteLink.LinkTypes[LinkType.Value]} of {Site.AltName}.";
                 }
             }
 
 
 
-            if (Structure != null && Civ != null && HF != null)
+            if (Structure != null && Civ != null && Hf != null)
                 return
-                    $"{timestring} {HF} ruled from {(Structure.Name != null ? Structure.ToString() : "UNKNOWN")} of {Civ} in {Site.AltName}.";
+                    $"{timestring} {Hf} ruled from {(Structure.Name != null ? Structure.ToString() : "UNKNOWN")} of {Civ} in {Site.AltName}.";
             
             return
-                $"{timestring} {"UNKNOWN"} became {(LinkType.HasValue ? HFSiteLink.LinkTypes[LinkType.Value] : "UNKNOWN")} of {Site.AltName}.";
+                $"{timestring} {"UNKNOWN"} became {(LinkType.HasValue ? HfSiteLink.LinkTypes[LinkType.Value] : "UNKNOWN")} of {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
@@ -215,12 +214,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             table = GetType().Name;
             var vals = new List<object>
             {
-                ID, 
-                SiteID.DBExport(),
-                HFID.DBExport(),
-                CivID.DBExport(),
-                StructureID.DBExport(),
-                LinkType.DBExport(HFSiteLink.LinkTypes)
+                Id, 
+                SiteId.DBExport(),
+                Hfid.DBExport(),
+                CivId.DBExport(),
+                StructureId.DBExport(),
+                LinkType.DBExport(HfSiteLink.LinkTypes)
             };
 
             Database.ExportWorldItem(table, vals);

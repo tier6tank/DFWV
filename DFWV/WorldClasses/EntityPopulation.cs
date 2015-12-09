@@ -10,20 +10,20 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses
 {
-    public class EntityPopulation : XMLObject
+    public class EntityPopulation : XmlObject
     {
 
-        public List<EC_Battle> BattleEventCollections { get; set; }
+        public List<EcBattle> BattleEventCollections { get; set; }
         public List<HistoricalFigure> Members { get; set; }
         public Race Race { private get; set; }
         [UsedImplicitly]
         public string RaceName => Race != null ? Race.Name : "";
 
         [UsedImplicitly]
-        public int MemberCount => Members == null ? 0 : Members.Count;
+        public int MemberCount => Members?.Count ?? 0;
 
         [UsedImplicitly]
-        public int Battles => BattleEventCollections == null ? 0 : BattleEventCollections.Count;
+        public int Battles => BattleEventCollections?.Count ?? 0;
 
 
         [UsedImplicitly]
@@ -33,7 +33,7 @@ namespace DFWV.WorldClasses
 
         public Dictionary<Race, int> RaceCounts { get; set; }
 
-        public int? EntityID { get; set; }
+        public int? EntityId { get; set; }
         public Entity Entity { get; set; }
 
 
@@ -48,7 +48,7 @@ namespace DFWV.WorldClasses
                     case "id":
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -56,7 +56,7 @@ namespace DFWV.WorldClasses
 
         public override string ToString()
         {
-            return ID.ToString();
+            return Id.ToString();
         }
 
         public override void Select(MainForm frm)
@@ -82,8 +82,8 @@ namespace DFWV.WorldClasses
 
         internal override void Link()
         {
-            if (EntityID.HasValue && World.Entities.ContainsKey(EntityID.Value))
-                Entity = World.Entities[EntityID.Value];
+            if (EntityId.HasValue && World.Entities.ContainsKey(EntityId.Value))
+                Entity = World.Entities[EntityId.Value];
         }
 
         internal override void Process()
@@ -112,10 +112,10 @@ namespace DFWV.WorldClasses
                         RaceCounts.Add(race, Convert.ToInt32(val.Split(':')[1]));
                         break;
                     case "civ_id":
-                        EntityID = valI;
+                        EntityId = valI;
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t", element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t", element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -126,16 +126,16 @@ namespace DFWV.WorldClasses
 
             var vals = new List<object>
             {
-                ID,
+                Id,
                 Name.DBExport(),
-                EntityID.DBExport()
+                EntityId.DBExport()
             };
 
             Database.ExportWorldItem(table, vals);
 
             if (RaceCounts == null) return;
             foreach (var raceCount in RaceCounts)
-                Database.ExportWorldItem("EntityPop_RaceCounts", new List<object> { ID, raceCount.Key.ToString(), raceCount.Value });
+                Database.ExportWorldItem("EntityPop_RaceCounts", new List<object> { Id, raceCount.Key.ToString(), raceCount.Value });
         }
 
     }

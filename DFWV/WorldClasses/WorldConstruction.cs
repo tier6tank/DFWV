@@ -8,12 +8,12 @@ using DFWV.WorldClasses.HistoricalEventClasses;
 
 namespace DFWV.WorldClasses
 {
-    public class WorldConstruction: XMLObject
+    public class WorldConstruction: XmlObject
     {
 
         public List<WorldConstruction> Subconstructions { get; set; }
-        public WorldConstruction MasterWC { get; set; }
-        public HE_CreatedWorldConstruction CreatedEvent { get; set; }
+        public WorldConstruction MasterWc { get; set; }
+        public HeCreatedWorldConstruction CreatedEvent { get; set; }
 
         public Site From { get; set; }
         public Site To { get; set; }
@@ -40,7 +40,7 @@ namespace DFWV.WorldClasses
         public WorldConstruction(int id, World world) 
             : base(world) //Created from Historical Events if World Construction List is empty.
         {
-            ID = id;
+            Id = id;
             World = world;
             Name = id.ToString();
         }
@@ -53,11 +53,11 @@ namespace DFWV.WorldClasses
 
             frm.grpWorldConstruction.Text = ToString();
 #if DEBUG
-            frm.grpWorldConstruction.Text += string.Format(string.Format($" - ID: {ID}", ID), ID);
+            frm.grpWorldConstruction.Text += string.Format(string.Format($" - ID: {Id}", Id), Id);
 #endif
             frm.grpWorldConstruction.Show();
 
-            frm.lblWorldConstructionMaster.Data = MasterWC;
+            frm.lblWorldConstructionMaster.Data = MasterWc;
             frm.lblWorldConstructionFrom.Data = From;
             frm.lblWorldConstructionTo.Data = To;
             if (Type.HasValue)
@@ -84,7 +84,7 @@ namespace DFWV.WorldClasses
 
         }
 
-        internal override void Plus(XDocument xdoc)
+        internal override sealed void Plus(XDocument xdoc)
         {
             foreach (var element in xdoc.Root.Elements())
             {
@@ -113,7 +113,7 @@ namespace DFWV.WorldClasses
                         Type = Types.IndexOf(val);
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t", element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t", element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -124,7 +124,7 @@ namespace DFWV.WorldClasses
 
             var vals = new List<object>
             {
-                ID,
+                Id,
                 Name.DBExport(),
                 Type.DBExport(Types)
             };
@@ -133,11 +133,11 @@ namespace DFWV.WorldClasses
 
             if (Coords != null)
             {
-                int coordID = 0;
+                int coordId = 0;
                 foreach (var coord in Coords)
                 {
-                    Database.ExportWorldItem("WorldConstruction_Coords", new List<object> { ID, coordID, coord.X, coord.Y });
-                    coordID++;
+                    Database.ExportWorldItem("WorldConstruction_Coords", new List<object> { Id, coordId, coord.X, coord.Y });
+                    coordId++;
                 }
             }
         }

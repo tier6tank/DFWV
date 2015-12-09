@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using DFWV.Annotations;
@@ -8,7 +7,7 @@ namespace DFWV.WorldClasses
 {
     public class God : Person
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         public static List<string> Types = new List<string>();
         public int Type { get; set; }
         [UsedImplicitly]
@@ -18,19 +17,19 @@ namespace DFWV.WorldClasses
         public readonly List<int> Spheres = new List<int>();
         public readonly List<Leader> Leaders = new List<Leader>();
 
-        public HistoricalFigure HF { get; set; }
+        public HistoricalFigure Hf { get; set; }
 
         [UsedImplicitly]
-        public string RaceName => HF != null && HF.Race != null ? HF.Race.Name : "";
+        public string RaceName => Hf?.Race != null ? Hf.Race.Name : "";
 
         [UsedImplicitly]
-        public int CivilizationCount => Civilizations == null ? 0 : Civilizations.Count;
+        public int CivilizationCount => Civilizations?.Count ?? 0;
 
         [UsedImplicitly]
-        public int SphereCount => Spheres == null ? 0 : Spheres.Count;
+        public int SphereCount => Spheres?.Count ?? 0;
 
         [UsedImplicitly]
-        public int LeaderCount => Leaders == null ? 0 : Leaders.Count;
+        public int LeaderCount => Leaders?.Count ?? 0;
 
         public God(string data)
         {
@@ -76,7 +75,7 @@ namespace DFWV.WorldClasses
 
             frm.lblGodName.Text = ToString();
             frm.lblGodType.Text = Types[Type].ToTitleCase();
-            frm.lblGodHF.Data = HF;
+            frm.lblGodHF.Data = Hf;
 
             
             frm.lblGodSpheres.Text = string.Join(", ", Spheres.Select(sphere => HistoricalFigure.Spheres[sphere]).ToList()).ToTitleCase();
@@ -91,10 +90,10 @@ namespace DFWV.WorldClasses
         {
             var vals = new List<object>
             {
-                ID,
+                Id,
                 Name.DBExport(),
                 GodType.DBExport(),
-                HF.DBExport(),
+                Hf.DBExport(),
                 RaceName.DBExport()
             };
 
@@ -102,7 +101,7 @@ namespace DFWV.WorldClasses
 
             foreach (var sphere in Spheres)
             {
-                Database.ExportWorldItem("God_Sphere", new List<object> {ID, HistoricalFigure.Spheres[sphere]});
+                Database.ExportWorldItem("God_Sphere", new List<object> {Id, HistoricalFigure.Spheres[sphere]});
             }
         }
 

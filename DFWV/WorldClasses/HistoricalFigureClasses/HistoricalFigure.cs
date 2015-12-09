@@ -11,7 +11,7 @@ using DFWV.WorldClasses.HistoricalEventCollectionClasses;
 
 namespace DFWV.WorldClasses.HistoricalFigureClasses
 {
-    public class HistoricalFigure : XMLObject
+    public class HistoricalFigure : XmlObject
     {
         private string Race_ { get; set; } 
         public Race Race { get; private set; }
@@ -20,63 +20,63 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
 
         public int? Flags { get; set; }
         
-        public int? Caste { get; private set; }
+        public int? Caste { get; }
         public static List<string> Castes = new List<string>();
-        private int? AppearedYear { get; set; }
+        private int? AppearedYear { get; }
         public WorldTime Appeared => AppearedYear.HasValue ? new WorldTime(AppearedYear.Value) : null;
 
         [UsedImplicitly]
         public int? BirthYear { get; private set; }
-        private int? BirthSeconds { get; set; }
+        private int? BirthSeconds { get; }
         public WorldTime Birth => BirthYear.HasValue ? new WorldTime(BirthYear.Value, BirthSeconds) : WorldTime.Present;
-        public int? DeathYear { get; private set; }
-        private int? DeathSeconds { get; set; }
+        public int? DeathYear { get; }
+        private int? DeathSeconds { get; }
         public WorldTime Death => DeathYear.HasValue ? new WorldTime(DeathYear.Value, DeathSeconds) : WorldTime.Present;
         public static List<string> AssociatedTypes = new List<string>();
-        public int? AssociatedType { get; private set; }
-        public Dictionary<int, List<HFEntityLink>> EntityLinks { get; set; }
-        public Dictionary<int, List<HFSiteLink>> SiteLinks { get; set; }
-        public List<int> Sphere { get; private set; }
+        public int? AssociatedType { get; }
+        public Dictionary<int, List<HfEntityLink>> EntityLinks { get; set; }
+        public Dictionary<int, List<HfSiteLink>> SiteLinks { get; set; }
+        public List<int> Sphere { get; }
         public static List<string> Spheres = new List<string>();
-        public List<HFSkill> HFSkills { get; set; }
-        private List<RelationshipProfileHF> RelationshipProfileHFs { get; set; }
+        public List<HfSkill> HfSkills { get; set; }
+        private List<RelationshipProfileHf> RelationshipProfileHFs { get; }
         public static List<string> Interactions = new List<string>();
-        public List<int> InteractionKnowledge { get; private set; }
-        public List<int> JourneyPet { get; private set; }
+        public List<int> InteractionKnowledge { get; }
+        public List<int> JourneyPet { get; }
         public static List<string> JourneyPets = new List<string>();
-        public Dictionary<int, List<HFLink>> HFLinks { get; private set; }
+        public Dictionary<int, List<HfLink>> HfLinks { get; }
         [UsedImplicitly]
         public bool Deity { get; private set; }
 
         public List<EntityFormerPositionLink> EntityFormerPositionLinks { get; set; }
-        private List<EntityPositionLink> EntityPositionLinks { get; set; }
-        private List<EntitySquadLink> EntitySquadLinks { get; set; }
-        private List<EntityFormerSquadLink> EntityFormerSquadLinks { get; set; }
+        private List<EntityPositionLink> EntityPositionLinks { get; }
+        private List<EntitySquadLink> EntitySquadLinks { get; }
+        private List<EntityFormerSquadLink> EntityFormerSquadLinks { get; }
 
 
-        private int? EntPop_ { get; set; }
+        private int? EntPop_ { get; }
         private EntityPopulation EntPop { get; set; }
         public int? ActiveInteraction { get; private set; }
         public static List<string> Goals = new List<string>();
-        public int? Goal { get; private set; }
+        public int? Goal { get; }
         [UsedImplicitly]
         public bool Force { get; private set; }
-        private List<EntityReputation> EntityReputations { get; set; }
-        private int? CurrentIdentityID { get; set; }
-        private int? UsedIdentityID { get; set; }
+        private List<EntityReputation> EntityReputations { get; }
+        private int? CurrentIdentityId { get; set; }
+        private int? UsedIdentityId { get; }
         private string HoldsArtifact { get; set; }
         [UsedImplicitly]
         public bool Animated { get; private set; }
-        private string AnimatedString { get; set; }
+        private string AnimatedString { get; }
         [UsedImplicitly]
         public bool Ghost { get; private set; }
-        public bool Adventurer { get; private set; }
-        public int? BreedID { get; set; }
+        public bool Adventurer { get; }
+        public int? BreedId { get; set; }
         public Leader Leader { get; set; }
         public God God { private get; set; }
 
         [UsedImplicitly]
-        public bool isPlayerControlled { private get; set; }
+        public bool IsPlayerControlled { private get; set; }
 
         public IEnumerable<HistoricalEvent> Events
         {
@@ -155,16 +155,16 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
 
         private HistoricalFigure Mother { get; set; }
         private HistoricalFigure Father { get; set; }
-        private List<HistoricalFigure> Descendents;
-        private List<HistoricalFigure> Ancestors;
+        private List<HistoricalFigure> _descendents;
+        private List<HistoricalFigure> _ancestors;
 
-        public HE_HFDied DiedEvent { get; set; }
-        public List<HE_HFDied> SlayingEvents { get; set; }
-        public HE_ChangeHFBodyState EntombedEvent { get; set; }
+        public HeHfDied DiedEvent { get; set; }
+        public List<HeHfDied> SlayingEvents { get; set; }
+        public HeChangeHfBodyState EntombedEvent { get; set; }
 
 
-        public List<EC_Battle> BattleEventCollections { get; set; }
-        public List<EC_Duel> DuelEventCollections { get; set; }
+        public List<EcBattle> BattleEventCollections { get; set; }
+        public List<EcDuel> DuelEventCollections { get; set; }
 
         override public Point Location => Coords;
 
@@ -172,13 +172,13 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         public bool Dead => Death != WorldTime.Present;
 
         [UsedImplicitly]
-        public bool inEntPop => EntPop != null;
+        public bool InEntPop => EntPop != null;
         [UsedImplicitly]
-        public bool isLeader => Leader != null;
+        public bool IsLeader => Leader != null;
         [UsedImplicitly]
-        public bool isPositioned => Location != Point.Empty;
+        public bool IsPositioned => Location != Point.Empty;
         [UsedImplicitly]
-        public bool isGod => God != null;
+        public bool IsGod => God != null;
         [UsedImplicitly]
         public int CreatedArtifactCount => CreatedArtifacts?.Count ?? 0;
         [UsedImplicitly]
@@ -192,7 +192,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         [UsedImplicitly]
         public string DispNameLower => ToString().ToLower();
         [UsedImplicitly]
-        public int EntPopID => EntPop?.ID ?? (EntPop_ ?? -1);
+        public int EntPopId => EntPop?.Id ?? (EntPop_ ?? -1);
 
         [UsedImplicitly]
         public int DescendentCount { get; set; }
@@ -201,16 +201,16 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         [UsedImplicitly]
         public int DescendentGenerations { get; set; }
         [UsedImplicitly]
-        public bool PlayerControlled => isPlayerControlled || Adventurer;
+        public bool PlayerControlled => IsPlayerControlled || Adventurer;
 
         [UsedImplicitly]
         public string Job => AssociatedType.HasValue ? AssociatedTypes[AssociatedType.Value] : "";
 
         [UsedImplicitly]
-        public string HFCaste => Caste.HasValue ? Castes[Caste.Value] : "";
+        public string HfCaste => Caste.HasValue ? Castes[Caste.Value] : "";
 
-        public bool isMale => HFCaste.ToLower().Contains("male") && !isFemale;
-        public bool isFemale => HFCaste.ToLower().Contains("female");
+        public bool IsMale => HfCaste.ToLower().Contains("male") && !IsFemale;
+        public bool IsFemale => HfCaste.ToLower().Contains("female");
 
         public HistoricalFigure(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -228,7 +228,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                 switch (element.Name.LocalName)
                 {
                     case "id":
-                        if (ID < 0)
+                        if (Id < 0)
                             throw new Exception();
                         break;
                     case "name":
@@ -266,20 +266,20 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                         AssociatedType = AssociatedTypes.IndexOf(val);
                         break;
                     case "entity_link":
-                        var newEL = new HFEntityLink(element, this);
+                        var newEl = new HfEntityLink(element, this);
                         if (EntityLinks == null)
-                            EntityLinks = new Dictionary<int, List<HFEntityLink>>();
-                        if (!EntityLinks.ContainsKey(newEL.LinkType))
-                            EntityLinks.Add(newEL.LinkType, new List<HFEntityLink>());
-                        EntityLinks[newEL.LinkType].Add(newEL);
+                            EntityLinks = new Dictionary<int, List<HfEntityLink>>();
+                        if (!EntityLinks.ContainsKey(newEl.LinkType))
+                            EntityLinks.Add(newEl.LinkType, new List<HfEntityLink>());
+                        EntityLinks[newEl.LinkType].Add(newEl);
                         break;
                     case "site_link":
-                        var newSL = new HFSiteLink(element, this);
+                        var newSl = new HfSiteLink(element, this);
                         if (SiteLinks == null)
-                            SiteLinks = new Dictionary<int, List<HFSiteLink>>();
-                        if (!SiteLinks.ContainsKey(newSL.LinkType))
-                            SiteLinks.Add(newSL.LinkType, new List<HFSiteLink>());
-                        SiteLinks[newSL.LinkType].Add(newSL);
+                            SiteLinks = new Dictionary<int, List<HfSiteLink>>();
+                        if (!SiteLinks.ContainsKey(newSl.LinkType))
+                            SiteLinks.Add(newSl.LinkType, new List<HfSiteLink>());
+                        SiteLinks[newSl.LinkType].Add(newSl);
                         break;
                     case "sphere":
                         if (Sphere == null)
@@ -289,9 +289,9 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                         Sphere.Add(Spheres.IndexOf(val));
                         break;
                     case "hf_skill":
-                        if (HFSkills == null)
-                            HFSkills = new List<HFSkill>();
-                        HFSkills.Add(new HFSkill(element));
+                        if (HfSkills == null)
+                            HfSkills = new List<HfSkill>();
+                        HfSkills.Add(new HfSkill(element));
                         break;
                     case "interaction_knowledge":
                         if (InteractionKnowledge == null)
@@ -308,12 +308,12 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                         JourneyPet.Add(JourneyPets.IndexOf(val));
                         break;
                     case "hf_link":
-                        var newHFL = new HFLink(element, this);
-                        if (HFLinks == null)
-                            HFLinks = new Dictionary<int, List<HFLink>>();
-                        if (!HFLinks.ContainsKey(newHFL.LinkType))
-                            HFLinks.Add(newHFL.LinkType, new List<HFLink>());
-                        HFLinks[newHFL.LinkType].Add(newHFL);
+                        var newHfl = new HfLink(element, this);
+                        if (HfLinks == null)
+                            HfLinks = new Dictionary<int, List<HfLink>>();
+                        if (!HfLinks.ContainsKey(newHfl.LinkType))
+                            HfLinks.Add(newHfl.LinkType, new List<HfLink>());
+                        HfLinks[newHfl.LinkType].Add(newHfl);
                         break;
                     case "deity":
                         Deity = true;
@@ -340,8 +340,8 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                         break;
                     case "relationship_profile_hf":
                         if (RelationshipProfileHFs == null)
-                            RelationshipProfileHFs = new List<RelationshipProfileHF>();
-                        RelationshipProfileHFs.Add(new RelationshipProfileHF(element, this));
+                            RelationshipProfileHFs = new List<RelationshipProfileHf>();
+                        RelationshipProfileHFs.Add(new RelationshipProfileHf(element, this));
                         break;
 
                     case "ent_pop_id":
@@ -366,12 +366,12 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                         EntityReputations.Add(new EntityReputation(element));
                         break;
                     case "current_identity_id":
-                        CurrentIdentityID = valI;
+                        CurrentIdentityId = valI;
                         break;
                     case "used_identity_id":
-                        if (UsedIdentityID != null)
+                        if (UsedIdentityId != null)
                             break;
-                        UsedIdentityID = valI;
+                        UsedIdentityId = valI;
                         break;
                     case "holds_artifact":
                         HoldsArtifact = val;
@@ -391,10 +391,10 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                         Adventurer = true;
                         break;
                     case "breed_id":
-                        BreedID = valI;
+                        BreedId = valI;
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -410,13 +410,13 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             if (PlayerControlled)
                 frm.grpHistoricalFigure.Text += @" (PLAYER CONTROLLED)";
 #if DEBUG
-            frm.grpHistoricalFigure.Text += $" - ID: {ID} - Notability: {Notability} - Flags: {Flags}";
+            frm.grpHistoricalFigure.Text += $" - ID: {Id} - Notability: {Notability} - Flags: {Flags}";
 #endif
             frm.grpHistoricalFigure.Show();
             frm.lblHistoricalFigureName.Text = ToString();
             frm.lblHistoricalFigureRace.Data = Race;
             frm.lblHistoricalFigureCaste.Text = Caste.HasValue ? Castes[Caste.Value] : "";
-            frm.lblHistoricalFigureAppeared.Text = Appeared == null ? "" : Appeared.ToString();
+            frm.lblHistoricalFigureAppeared.Text = Appeared?.ToString() ?? "";
             frm.lblHistoricalFigureLife.Text = Birth == null ? "" : (Birth + " – " + (Death == WorldTime.Present ? "" : Death.ToString()));
             frm.lblHistoricalFigureAge.Text = Birth == null ? "" : WorldTime.Duration(Death, Birth);
             frm.lblHistoricalFigureAgeCaption.Text = Death == WorldTime.Present ? "Age:" : "Age at death:";
@@ -447,12 +447,11 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             frm.lblHistoricalFigureLeader.Text = Leader == null ? "" : Leader.LeaderTypes[Leader.LeaderType].ToTitleCase();
             frm.lblHistoricalFigureEntityPopulation.Data = EntPop;
 
-            frm.grpHistoricalFigureSpheres.FillListboxWith(frm.lstHistoricalFigureSpheres, Sphere == null ? null : Sphere.Select(x => Spheres[x].ToTitleCase()));
-            frm.grpHistoricalFigureKnowledge.FillListboxWith(frm.lstHistoricalFigureKnowledge, InteractionKnowledge == null ? null : InteractionKnowledge.Select(x => Interactions[x].Replace("_", " ").ToLower().ToTitleCase()));
-            frm.grpHistoricalFigurePets.FillListboxWith(frm.lstHistoricalFigurePets, JourneyPet == null ? null : JourneyPet.Select(x => JourneyPets[x].Replace("_", " ").ToLower().ToTitleCase()));
-            frm.grpHistoricalFigureSkills.FillListboxWith(frm.lstHistoricalFigureSkills, HFSkills == null ? null : 
-                HFSkills.OrderByDescending(x => x.TotalIP)
-                .Select(x => HFSkill.Skills[x.Skill].Replace("_", " ").ToLower().ToTitleCase() + " - " + IPToTitle(x.TotalIP)));
+            frm.grpHistoricalFigureSpheres.FillListboxWith(frm.lstHistoricalFigureSpheres, Sphere?.Select(x => Spheres[x].ToTitleCase()));
+            frm.grpHistoricalFigureKnowledge.FillListboxWith(frm.lstHistoricalFigureKnowledge, InteractionKnowledge?.Select(x => Interactions[x].Replace("_", " ").ToLower().ToTitleCase()));
+            frm.grpHistoricalFigurePets.FillListboxWith(frm.lstHistoricalFigurePets, JourneyPet?.Select(x => JourneyPets[x].Replace("_", " ").ToLower().ToTitleCase()));
+            frm.grpHistoricalFigureSkills.FillListboxWith(frm.lstHistoricalFigureSkills, HfSkills?.OrderByDescending(x => x.TotalIp)
+                .Select(x => HfSkill.Skills[x.Skill].Replace("_", " ").ToLower().ToTitleCase() + " - " + IpToTitle(x.TotalIp)));
 
 
             if (!frm.chkHistoricalFigureDetailedView.Checked)
@@ -473,11 +472,11 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             {
                 foreach (var elList in EntityLinks)
                 {
-                    var thisNode = new TreeNode(HFEntityLink.LinkTypes[elList.Key].ToTitleCase());
+                    var thisNode = new TreeNode(HfEntityLink.LinkTypes[elList.Key].ToTitleCase());
                     foreach (var el in elList.Value)
                     {
                         var linkStrength = el.LinkStrength.HasValue ? " (" + el.LinkStrength + "%)" : "";
-                        var eNode = el.Entity == null ? new TreeNode("Entity: " + el.EntityID + linkStrength) : new TreeNode(el.Entity + " - " + el.Entity.Type + linkStrength);
+                        var eNode = el.Entity == null ? new TreeNode("Entity: " + el.EntityId + linkStrength) : new TreeNode(el.Entity + " - " + el.Entity.Type + linkStrength);
                         eNode.Tag = el.Entity;
                         thisNode.Nodes.Add(eNode);
                     }
@@ -488,35 +487,35 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             }
             frm.trvHistoricalFigureEntityLinks.EndUpdate();
 
-            var hasHFLinks = Spouses != null || Lovers != null || Followers != null ||
+            var hasHfLinks = Spouses != null || Lovers != null || Followers != null ||
                 Deities != null || Masters != null || Apprentices != null ||
                 Prisoners != null || Imprisoners != null || Companions != null ||
                 RelationshipProfileHFs != null;
-            frm.grpHistoricalFigureHFLinks.Visible = hasHFLinks; 
+            frm.grpHistoricalFigureHFLinks.Visible = hasHfLinks; 
             frm.trvHistoricalFigureHFLinks.BeginUpdate();
             frm.trvHistoricalFigureHFLinks.Nodes.Clear();
-            if (hasHFLinks)
+            if (hasHfLinks)
             {
-                LoadHFLinkItems(frm, Spouses, "Spouses");
-                LoadHFLinkItems(frm, Lovers, "Lovers");
-                LoadHFLinkItems(frm, Followers, "Followers");
-                LoadHFLinkItems(frm, Masters, "Masters");
-                LoadHFLinkItems(frm, Apprentices, "Apprentices");
-                LoadHFLinkItems(frm, FormerMasters, "Former Masters");
-                LoadHFLinkItems(frm, FormerApprentices, "Former Apprentices");
-                LoadHFLinkItems(frm, Prisoners, "Prisoners");
-                LoadHFLinkItems(frm, Imprisoners, "Imprisoners");
-                LoadHFLinkItems(frm, Companions, "Companions");
+                LoadHfLinkItems(frm, Spouses, "Spouses");
+                LoadHfLinkItems(frm, Lovers, "Lovers");
+                LoadHfLinkItems(frm, Followers, "Followers");
+                LoadHfLinkItems(frm, Masters, "Masters");
+                LoadHfLinkItems(frm, Apprentices, "Apprentices");
+                LoadHfLinkItems(frm, FormerMasters, "Former Masters");
+                LoadHfLinkItems(frm, FormerApprentices, "Former Apprentices");
+                LoadHfLinkItems(frm, Prisoners, "Prisoners");
+                LoadHfLinkItems(frm, Imprisoners, "Imprisoners");
+                LoadHfLinkItems(frm, Companions, "Companions");
 
                 if (RelationshipProfileHFs != null)
                 {
                     var thisNode = new TreeNode("Relationships");
                     foreach (var profile in RelationshipProfileHFs)
                     {
-                        var hfNode = new TreeNode(profile.HF.ToString()) { Tag = profile.HF };
-                        if (profile.HF.Caste.HasValue && Castes[profile.HF.Caste.Value].ToLower().StartsWith("male"))
+                        var hfNode = new TreeNode(profile.Hf.ToString()) { Tag = profile.Hf };
+                        if (profile.Hf.Caste.HasValue && Castes[profile.Hf.Caste.Value].ToLower().StartsWith("male"))
                             hfNode.ForeColor = Color.Blue;
-                        else if (profile.HF.Caste.HasValue && Castes[profile.HF.Caste.Value].ToLower().StartsWith("female"))
+                        else if (profile.Hf.Caste.HasValue && Castes[profile.Hf.Caste.Value].ToLower().StartsWith("female"))
                             hfNode.ForeColor = Color.Red;
 
                         thisNode.Nodes.Add(hfNode);
@@ -529,13 +528,13 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                 {
                     var thisNode = new TreeNode("Deities");
 
-                    foreach (var hflink in HFLinks[HFLink.LinkTypes.IndexOf("deity")])
+                    foreach (var hflink in HfLinks[HfLink.LinkTypes.IndexOf("deity")])
 	                {
 
-                        var hfNode = new TreeNode(hflink.HF + " (" + hflink.LinkStrength + "%)") {Tag = hflink.HF};
-	                    if (hflink.HF.Caste.HasValue && Castes[hflink.HF.Caste.Value].ToLower().StartsWith("male"))
+                        var hfNode = new TreeNode(hflink.Hf + " (" + hflink.LinkStrength + "%)") {Tag = hflink.Hf};
+	                    if (hflink.Hf.Caste.HasValue && Castes[hflink.Hf.Caste.Value].ToLower().StartsWith("male"))
                             hfNode.ForeColor = Color.Blue;
-                        else if (hflink.HF.Caste.HasValue && Castes[hflink.HF.Caste.Value].ToLower().StartsWith("female"))
+                        else if (hflink.Hf.Caste.HasValue && Castes[hflink.Hf.Caste.Value].ToLower().StartsWith("female"))
                             hfNode.ForeColor = Color.Red;
                         thisNode.Nodes.Add(hfNode);
 	                }
@@ -556,11 +555,11 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                 var thisNode = new TreeNode("Kills");
                 foreach (var evt in SlayingEvents)
                 {
-                    if (evt.SlayerHF != this || evt.HF == null) continue;
-                    var hfNode = new TreeNode(evt.HF.ToString()) {Tag = evt.HF};
-                    if (evt.HF.Caste.HasValue && Castes[evt.HF.Caste.Value].ToLower().StartsWith("male"))
+                    if (evt.SlayerHf != this || evt.Hf == null) continue;
+                    var hfNode = new TreeNode(evt.Hf.ToString()) {Tag = evt.Hf};
+                    if (evt.Hf.Caste.HasValue && Castes[evt.Hf.Caste.Value].ToLower().StartsWith("male"))
                         hfNode.ForeColor = Color.Blue;
-                    else if (evt.HF.Caste.HasValue && Castes[evt.HF.Caste.Value].ToLower().StartsWith("female"))
+                    else if (evt.Hf.Caste.HasValue && Castes[evt.Hf.Caste.Value].ToLower().StartsWith("female"))
                         hfNode.ForeColor = Color.Red;
 
                     thisNode.Nodes.Add(hfNode);
@@ -578,9 +577,9 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             frm.grpHistoricalFigureDeath.Visible = DiedEvent != null;
             if (DiedEvent != null)
             {
-                frm.lblHistoricalFigureDeathSlayer.Data = DiedEvent.SlayerHF;
+                frm.lblHistoricalFigureDeathSlayer.Data = DiedEvent.SlayerHf;
                 frm.lblHistoricalFigureDeathLocation.Data = DiedEvent.Site == null ? DiedEvent.Subregion : (WorldObject)DiedEvent.Site;
-                frm.lblHistoricalFigureDeathCause.Text = HE_HFDied.Causes[DiedEvent.Cause];
+                frm.lblHistoricalFigureDeathCause.Text = HeHfDied.Causes[DiedEvent.Cause];
                 frm.lblHistoricalFigureDeathTime.Data = DiedEvent;
                 frm.lblHistoricalFigureDeathTime.Text = DiedEvent.Time.ToString();
             }
@@ -590,7 +589,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
 
 
             frm.grpHistoricalFigureAncestors.Visible = (Mother != null || Father != null);
-            Ancestors = new List<HistoricalFigure>();
+            _ancestors = new List<HistoricalFigure>();
             frm.trvHistoricalFigureAncestors.BeginUpdate();
             frm.trvHistoricalFigureAncestors.Nodes.Clear();
             var hitMax = false;
@@ -601,7 +600,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                 motherNode.ForeColor = Color.Red;
                 motherNode.Tag = Mother;
                 frm.trvHistoricalFigureAncestors.Nodes.Add(motherNode);
-                Ancestors.Add(Mother);
+                _ancestors.Add(Mother);
                 hitMax = AddToAncestorsTree(motherNode, 1, 10);
             }
             if (Father != null)
@@ -611,15 +610,15 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                 fatherNode.ForeColor = Color.Blue;
                 fatherNode.Tag = Father;
                 frm.trvHistoricalFigureAncestors.Nodes.Add(fatherNode);
-                Ancestors.Add(Father);
+                _ancestors.Add(Father);
                 hitMax = AddToAncestorsTree(fatherNode, 1, 10);
             }
             frm.trvHistoricalFigureAncestors.EndUpdate();
-            frm.grpHistoricalFigureAncestors.Text = $"Ancestors ({Ancestors.Count}{(hitMax ? "+" : "")})";
-            Ancestors = null;
+            frm.grpHistoricalFigureAncestors.Text = $"Ancestors ({_ancestors.Count}{(hitMax ? "+" : "")})";
+            _ancestors = null;
 
             frm.grpHistoricalFigureDescendents.Visible = (Children != null);
-            Descendents = new List<HistoricalFigure>();
+            _descendents = new List<HistoricalFigure>();
             hitMax = false;
             frm.trvHistoricalFigureDescendents.BeginUpdate();
             if (Children != null)
@@ -632,24 +631,24 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
 
                     childNode.Tag = child;
                     frm.trvHistoricalFigureDescendents.Nodes.Add(childNode);
-                    Descendents.Add(child);
+                    _descendents.Add(child);
                     if (AddToDescendentsTree(childNode, 1, 8))
                         hitMax = true;
                 }
             }
             frm.trvHistoricalFigureDescendents.EndUpdate();
             if (DescendentCount == 0)
-                frm.grpHistoricalFigureDescendents.Text = $"Descendents ({Descendents.Count}{(hitMax ? "+" : "")})";
+                frm.grpHistoricalFigureDescendents.Text = $"Descendents ({_descendents.Count}{(hitMax ? "+" : "")})";
             else
             {
                 frm.grpHistoricalFigureDescendents.Text = string.Format(
                     DescendentCount > 50000 ?  "Descendents ({0}+ - {1}+ Generations)" : "Descendents ({0} - {1} Generations)", 
                     DescendentCount, DescendentGenerations);
             }
-            Descendents = null;
+            _descendents = null;
         }
 
-        private void LoadHFLinkItems(MainForm frm, List<HistoricalFigure> hflinklist, string treenodename)
+        private void LoadHfLinkItems(MainForm frm, List<HistoricalFigure> hflinklist, string treenodename)
         {
             if (hflinklist == null) return;
 
@@ -667,67 +666,67 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             frm.trvHistoricalFigureHFLinks.Nodes.Add(thisNode);
         }
 
-        private static string IPToTitle(int IP)
+        private static string IpToTitle(int ip)
         {
-            if (IP < 500)
+            if (ip < 500)
                 return "Dabbling";
-            if (IP < 1100)
+            if (ip < 1100)
                 return "Novice";
-            if (IP < 1800)
+            if (ip < 1800)
                 return "Adequate";
-            if (IP < 2600)
+            if (ip < 2600)
                 return "Competent";
-            if (IP < 3500)
+            if (ip < 3500)
                 return "Skilled";
-            if (IP < 4500)
+            if (ip < 4500)
                 return "Proficient";
-            if (IP < 5600)
+            if (ip < 5600)
                 return "Talented";
-            if (IP < 6800)
+            if (ip < 6800)
                 return "Adept";
-            if (IP < 8100)
+            if (ip < 8100)
                 return "Expert";
-            if (IP < 9500)
+            if (ip < 9500)
                 return "Professional";
-            if (IP < 11000)
+            if (ip < 11000)
                 return "Accomplished";
-            if (IP < 12600)
+            if (ip < 12600)
                 return "Great";
-            if (IP < 14300)
+            if (ip < 14300)
                 return "Master";
-            if (IP < 16100)
+            if (ip < 16100)
                 return "High Master";
-            if (IP < 18000)
+            if (ip < 18000)
                 return "Grand Master";
-            if (IP < 20000)
+            if (ip < 20000)
                 return "Legendary";
-            if (IP < 22100)
+            if (ip < 22100)
                 return "Legendeary+1";
-            if (IP < 24300)
+            if (ip < 24300)
                 return "Legendary+2";
-            if (IP < 26600)
+            if (ip < 26600)
                 return "Legendary+3";
-            return IP < 2900 ? "Legendary+4" : "Legendary+5";
+            return ip < 2900 ? "Legendary+4" : "Legendary+5";
         }
 
         private bool AddToDescendentsTree(TreeNode parentNode, int depth, int maxDepth)
         {
-            var HF = (HistoricalFigure)parentNode.Tag;
+            var hf = (HistoricalFigure)parentNode.Tag;
             var hitMax = false;
-            if (HF.Children != null && depth <= maxDepth)
+            if (hf.Children != null && depth <= maxDepth)
             {
-                foreach (var child in HF.Children)
+                foreach (var child in hf.Children)
                 {
-                    if (child.Mother == HF)
+                    if (child.Mother == hf)
                         parentNode.ForeColor = Color.Red;
-                    else if (child.Father == HF)
+                    else if (child.Father == hf)
                         parentNode.ForeColor = Color.Blue;
                     var childNode = child.Dead ? new TreeNode(child + " (" + child.Birth + " - " + child.Death +")") : new TreeNode(child + " (" + child.Birth + " - )");
                     if (depth == maxDepth)
                         childNode.Text += @"...";
                     childNode.Tag = child;
-                    if (!Descendents.Contains(child))
-                        Descendents.Add(child);
+                    if (!_descendents.Contains(child))
+                        _descendents.Add(child);
                     parentNode.Nodes.Add(childNode);
                     if (AddToDescendentsTree(childNode, depth + 1, maxDepth))
                         hitMax = true;
@@ -735,9 +734,9 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             }
             else
             {
-                if (HF.Caste.HasValue && Castes[HF.Caste.Value].ToLower() == "male")
+                if (hf.Caste.HasValue && Castes[hf.Caste.Value].ToLower() == "male")
                     parentNode.ForeColor = Color.Blue;
-                else if (HF.Caste.HasValue && Castes[HF.Caste.Value].ToLower() == "female")
+                else if (hf.Caste.HasValue && Castes[hf.Caste.Value].ToLower() == "female")
                     parentNode.ForeColor = Color.Red;
             }
             return depth > maxDepth || hitMax;
@@ -745,32 +744,32 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
 
         private bool AddToAncestorsTree(TreeNode childNode, int depth, int maxDepth)
         {
-            var HF = (HistoricalFigure)childNode.Tag;
+            var hf = (HistoricalFigure)childNode.Tag;
             var hitMax = false;
-            if (HF.Mother != null && depth <= maxDepth)
+            if (hf.Mother != null && depth <= maxDepth)
             {
-                var motherNode = new TreeNode(HF.Mother.ToString());
+                var motherNode = new TreeNode(hf.Mother.ToString());
                 if (depth == maxDepth)
                     motherNode.Text += @"...";
 
                 motherNode.ForeColor = Color.Red;
-                motherNode.Tag = HF.Mother;
-                if (!Ancestors.Contains(HF.Mother))
-                    Ancestors.Add(HF.Mother);
+                motherNode.Tag = hf.Mother;
+                if (!_ancestors.Contains(hf.Mother))
+                    _ancestors.Add(hf.Mother);
                 childNode.Nodes.Add(motherNode);
                 hitMax = AddToAncestorsTree(motherNode, depth + 1, maxDepth);
             }
             else if (depth > maxDepth)
                 hitMax = true;
-            if (HF.Father != null && depth <= maxDepth)
+            if (hf.Father != null && depth <= maxDepth)
             {
-                var fatherNode = new TreeNode(HF.Father.ToString());
+                var fatherNode = new TreeNode(hf.Father.ToString());
                 if (depth == maxDepth)
                     fatherNode.Text += @"...";
                 fatherNode.ForeColor = Color.Blue;
-                fatherNode.Tag = HF.Father;
-                if (!Ancestors.Contains(HF.Father))
-                    Ancestors.Add(HF.Father);
+                fatherNode.Tag = hf.Father;
+                if (!_ancestors.Contains(hf.Father))
+                    _ancestors.Add(hf.Father);
                 childNode.Nodes.Add(fatherNode);
                 if (AddToAncestorsTree(fatherNode, depth + 1, maxDepth))
                     hitMax = true;
@@ -800,10 +799,9 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                     EntPop.Members = new List<HistoricalFigure>();
                 EntPop.Members.Add(this);
             }
-            if (Leader != null && Leader.InheritanceID != null &&
-                 World.HistoricalFigures.ContainsKey(Leader.InheritanceID.Value))
+            if (Leader?.InheritanceId != null && World.HistoricalFigures.ContainsKey(Leader.InheritanceId.Value))
             {
-                Leader.InheritedFrom = World.HistoricalFigures[Leader.InheritanceID.Value];
+                Leader.InheritedFrom = World.HistoricalFigures[Leader.InheritanceId.Value];
             }
 
         }
@@ -821,7 +819,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                         if (!sl.Site.Inhabitants.Contains(this))
                             sl.Site.Inhabitants.Add(this);
                         Site = sl.Site;
-                        switch (HFSiteLink.LinkTypes[linklist.Key])
+                        switch (HfSiteLink.LinkTypes[linklist.Key])
                         {
                             case "lair":
                             case "home structure":
@@ -833,7 +831,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                             case "occupation":
                                 break;
                             default:
-                                Program.Log(LogType.Warning, "Unknown HF Site Link: " + linklist.Key + " - " + HFSiteLink.LinkTypes[linklist.Key]);
+                                Program.Log(LogType.Warning, "Unknown HF Site Link: " + linklist.Key + " - " + HfSiteLink.LinkTypes[linklist.Key]);
                                 break;
                         }
                     }
@@ -846,7 +844,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                 {
                     foreach (var el in linklist.Value.Where(el => el.Entity != null))
                     {
-                        switch (HFEntityLink.LinkTypes[linklist.Key])
+                        switch (HfEntityLink.LinkTypes[linklist.Key])
                         {
                             case "enemy":
 
@@ -928,154 +926,154 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                     }
                 }
             }
-            if (HFLinks != null)
+            if (HfLinks != null)
             {
-                foreach (var linklist in HFLinks)
+                foreach (var linklist in HfLinks)
                 {
-                    foreach (var hfl in linklist.Value.Where(hfl => hfl.HF != null))
+                    foreach (var hfl in linklist.Value.Where(hfl => hfl.Hf != null))
                     {
-                        switch (HFLink.LinkTypes[linklist.Key])
+                        switch (HfLink.LinkTypes[linklist.Key])
                         {
 
                             case "child":
                                 if (Children == null)
                                     Children = new List<HistoricalFigure>();
-                                if (!Children.Contains(hfl.HF))
+                                if (!Children.Contains(hfl.Hf))
                                 {
-                                    Children.Add(hfl.HF);
-                                    if (hfl.HF.Parents == null)
-                                        hfl.HF.Parents = new List<HistoricalFigure>();
-                                    hfl.HF.Parents.Add(this);
+                                    Children.Add(hfl.Hf);
+                                    if (hfl.Hf.Parents == null)
+                                        hfl.Hf.Parents = new List<HistoricalFigure>();
+                                    hfl.Hf.Parents.Add(this);
                                 }
                                 break;
                             case "spouse":
-                                if (hfl.HF.Spouses == null)
-                                    hfl.HF.Spouses = new List<HistoricalFigure>();
-                                if (!hfl.HF.Spouses.Contains(this))
+                                if (hfl.Hf.Spouses == null)
+                                    hfl.Hf.Spouses = new List<HistoricalFigure>();
+                                if (!hfl.Hf.Spouses.Contains(this))
                                 {
-                                    hfl.HF.Spouses.Add(this);
+                                    hfl.Hf.Spouses.Add(this);
                                     if (Spouses == null)
                                         Spouses = new List<HistoricalFigure>();
-                                    Spouses.Add(hfl.HF);
+                                    Spouses.Add(hfl.Hf);
                                 }
                                 break;
                             case "lover":
-                                if (hfl.HF.Lovers == null)
-                                    hfl.HF.Lovers = new List<HistoricalFigure>();
-                                if (!hfl.HF.Lovers.Contains(this))
+                                if (hfl.Hf.Lovers == null)
+                                    hfl.Hf.Lovers = new List<HistoricalFigure>();
+                                if (!hfl.Hf.Lovers.Contains(this))
                                 {
-                                    hfl.HF.Lovers.Add(this);
+                                    hfl.Hf.Lovers.Add(this);
                                     if (Lovers == null)
                                         Lovers = new List<HistoricalFigure>();
-                                    Lovers.Add(hfl.HF);
+                                    Lovers.Add(hfl.Hf);
                                 }
                                 break;
                             case "deity":
-                                if (hfl.HF.Followers == null)
-                                    hfl.HF.Followers = new List<HistoricalFigure>();
-                                hfl.HF.Followers.Add(this);
+                                if (hfl.Hf.Followers == null)
+                                    hfl.Hf.Followers = new List<HistoricalFigure>();
+                                hfl.Hf.Followers.Add(this);
                                 if (Deities == null)
                                     Deities = new List<HistoricalFigure>();
-                                Deities.Add(hfl.HF);
+                                Deities.Add(hfl.Hf);
                                 break;
                             case "mother":
-                                Mother = hfl.HF;
-                                if (hfl.HF.Children == null)
-                                    hfl.HF.Children = new List<HistoricalFigure>();
-                                if (!hfl.HF.Children.Contains(this))
-                                    hfl.HF.Children.Add(this);
+                                Mother = hfl.Hf;
+                                if (hfl.Hf.Children == null)
+                                    hfl.Hf.Children = new List<HistoricalFigure>();
+                                if (!hfl.Hf.Children.Contains(this))
+                                    hfl.Hf.Children.Add(this);
                                 else
                                 {
                                     if (Parents == null)
                                         Parents = new List<HistoricalFigure>();
-                                    if (Parents.Contains(hfl.HF))
+                                    if (Parents.Contains(hfl.Hf))
                                         Parents.Remove(Mother);
                                 }
                                 break;
                             case "father":
-                                Father = hfl.HF;
-                                if (hfl.HF.Children == null)
-                                    hfl.HF.Children = new List<HistoricalFigure>();
-                                if (!hfl.HF.Children.Contains(this))
-                                    hfl.HF.Children.Add(this);
+                                Father = hfl.Hf;
+                                if (hfl.Hf.Children == null)
+                                    hfl.Hf.Children = new List<HistoricalFigure>();
+                                if (!hfl.Hf.Children.Contains(this))
+                                    hfl.Hf.Children.Add(this);
                                 else
                                 {
                                     if (Parents == null)
                                         Parents = new List<HistoricalFigure>();
-                                    if (Parents.Contains(hfl.HF))
+                                    if (Parents.Contains(hfl.Hf))
                                         Parents.Remove(Father);
                                 }
                                 break;
                             case "master":
-                                if (hfl.HF.Apprentices == null)
-                                    hfl.HF.Apprentices = new List<HistoricalFigure>();
-                                if (!hfl.HF.Apprentices.Contains(this))
+                                if (hfl.Hf.Apprentices == null)
+                                    hfl.Hf.Apprentices = new List<HistoricalFigure>();
+                                if (!hfl.Hf.Apprentices.Contains(this))
                                 {
-                                    hfl.HF.Apprentices.Add(this);
+                                    hfl.Hf.Apprentices.Add(this);
                                     if (Masters == null)
                                         Masters = new List<HistoricalFigure>();
-                                    Masters.Add(hfl.HF);
+                                    Masters.Add(hfl.Hf);
                                 }
                                 break;
                             case "apprentice":
-                                if (hfl.HF.Masters == null)
-                                    hfl.HF.Masters = new List<HistoricalFigure>();
-                                if (!hfl.HF.Masters.Contains(this))
+                                if (hfl.Hf.Masters == null)
+                                    hfl.Hf.Masters = new List<HistoricalFigure>();
+                                if (!hfl.Hf.Masters.Contains(this))
                                 {
-                                    hfl.HF.Masters.Add(this);
+                                    hfl.Hf.Masters.Add(this);
                                     if (Apprentices == null)
                                         Apprentices = new List<HistoricalFigure>();
-                                    Apprentices.Add(hfl.HF);
+                                    Apprentices.Add(hfl.Hf);
                                 }
                                 break;
                             case "former master":
-                                if (hfl.HF.FormerApprentices == null)
-                                    hfl.HF.FormerApprentices = new List<HistoricalFigure>();
-                                if (!hfl.HF.FormerApprentices.Contains(this))
+                                if (hfl.Hf.FormerApprentices == null)
+                                    hfl.Hf.FormerApprentices = new List<HistoricalFigure>();
+                                if (!hfl.Hf.FormerApprentices.Contains(this))
                                 {
-                                    hfl.HF.FormerApprentices.Add(this);
+                                    hfl.Hf.FormerApprentices.Add(this);
                                     if (FormerMasters == null)
                                         FormerMasters = new List<HistoricalFigure>();
-                                    FormerMasters.Add(hfl.HF);
+                                    FormerMasters.Add(hfl.Hf);
                                 }
                                 break;
                             case "former apprentice":
-                                if (hfl.HF.FormerMasters == null)
-                                    hfl.HF.FormerMasters = new List<HistoricalFigure>();
-                                if (!hfl.HF.FormerMasters.Contains(this))
+                                if (hfl.Hf.FormerMasters == null)
+                                    hfl.Hf.FormerMasters = new List<HistoricalFigure>();
+                                if (!hfl.Hf.FormerMasters.Contains(this))
                                 {
-                                    hfl.HF.FormerMasters.Add(this);
+                                    hfl.Hf.FormerMasters.Add(this);
                                     if (FormerApprentices == null)
                                         FormerApprentices = new List<HistoricalFigure>();
-                                    FormerApprentices.Add(hfl.HF);
+                                    FormerApprentices.Add(hfl.Hf);
                                 }
                                 break;
                             case "prisoner":
-                                if (hfl.HF.Prisoners == null)
-                                    hfl.HF.Prisoners = new List<HistoricalFigure>();
-                                if (!hfl.HF.Prisoners.Contains(this))
+                                if (hfl.Hf.Prisoners == null)
+                                    hfl.Hf.Prisoners = new List<HistoricalFigure>();
+                                if (!hfl.Hf.Prisoners.Contains(this))
                                 {
-                                    hfl.HF.Prisoners.Add(this);
+                                    hfl.Hf.Prisoners.Add(this);
                                 }
                                 break;
                             case "imprisoner":
-                                if (hfl.HF.Imprisoners == null)
-                                    hfl.HF.Imprisoners = new List<HistoricalFigure>();
-                                if (!hfl.HF.Imprisoners.Contains(this))
+                                if (hfl.Hf.Imprisoners == null)
+                                    hfl.Hf.Imprisoners = new List<HistoricalFigure>();
+                                if (!hfl.Hf.Imprisoners.Contains(this))
                                 {
-                                    hfl.HF.Imprisoners.Add(this);
+                                    hfl.Hf.Imprisoners.Add(this);
                                 }
                                 break;
                             case "companion":
-                                if (hfl.HF.Companions == null)
-                                    hfl.HF.Companions = new List<HistoricalFigure>();
-                                if (!hfl.HF.Companions.Contains(this))
+                                if (hfl.Hf.Companions == null)
+                                    hfl.Hf.Companions = new List<HistoricalFigure>();
+                                if (!hfl.Hf.Companions.Contains(this))
                                 {
-                                    hfl.HF.Companions.Add(this);
+                                    hfl.Hf.Companions.Add(this);
                                 }
                                 break;
                             default:
-                                Program.Log(LogType.Warning, "Unknown HF HF Link: " + linklist.Key + " - " + HFLink.LinkTypes[linklist.Key]);
+                                Program.Log(LogType.Warning, "Unknown HF HF Link: " + linklist.Key + " - " + HfLink.LinkTypes[linklist.Key]);
                                 break;
                         }
                     }
@@ -1088,7 +1086,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             //            Console.WriteLine(ToString() + " - " + esl.ToString());
             //}
 
-            if (!isLeader || Leader.InheritanceID != -1) return;
+            if (!IsLeader || Leader.InheritanceId != -1) return;
 
             switch (Leader.InheritedFromSource)
             {
@@ -1127,7 +1125,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                         Flags = Convert.ToInt32(val, 2);
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t", element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t", element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -1139,66 +1137,66 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         #region Count Families
         internal void CountDescendents()
         {
-            var CurrentDescendents = new List<HistoricalFigure>() ;
+            var currentDescendents = new List<HistoricalFigure>() ;
 
             var generationmax = 1;
 
             if (Children != null)
             {
-                foreach (var hf in Children.Where(hf => !CurrentDescendents.Contains(hf)))
+                foreach (var hf in Children.Where(hf => !currentDescendents.Contains(hf)))
                 {
-                    CurrentDescendents.Add(hf);
-                    hf.CountDescendents(CurrentDescendents, 1, ref generationmax);
+                    currentDescendents.Add(hf);
+                    hf.CountDescendents(currentDescendents, 1, ref generationmax);
                 }
             }
 
-            DescendentCount = CurrentDescendents.Count;
+            DescendentCount = currentDescendents.Count;
             DescendentGenerations = generationmax;
-            CurrentDescendents.Clear();
+            currentDescendents.Clear();
         }
 
-        private void CountDescendents(ICollection<HistoricalFigure> CurrentDescendents, int gen, ref int genmax)
+        private void CountDescendents(ICollection<HistoricalFigure> currentDescendents, int gen, ref int genmax)
         {
-            if (!(Children != null & CurrentDescendents.Count <= 50000)) return;
+            if (!(Children != null & currentDescendents.Count <= 50000)) return;
             gen++;
             if (gen > genmax)
                 genmax = gen;
-            foreach (var hf in Children.Where(hf => !CurrentDescendents.Contains(hf)))
+            foreach (var hf in Children.Where(hf => !currentDescendents.Contains(hf)))
             {
-                CurrentDescendents.Add(hf);
-                hf.CountDescendents(CurrentDescendents, gen, ref genmax);
+                currentDescendents.Add(hf);
+                hf.CountDescendents(currentDescendents, gen, ref genmax);
             }
         }
 
         internal void CountAncestors()
         {
-            var CurrentAncestors = new List<HistoricalFigure>();
+            var currentAncestors = new List<HistoricalFigure>();
 
-            if (Mother != null && !CurrentAncestors.Contains(Mother))
+            if (Mother != null && !currentAncestors.Contains(Mother))
             {
-                CurrentAncestors.Add(Mother);
-                Mother.CountAncestors(CurrentAncestors);
+                currentAncestors.Add(Mother);
+                Mother.CountAncestors(currentAncestors);
             }
-            if (Father != null && !CurrentAncestors.Contains(Father))
+            if (Father != null && !currentAncestors.Contains(Father))
             {
-                CurrentAncestors.Add(Father);
-                Father.CountAncestors(CurrentAncestors);
+                currentAncestors.Add(Father);
+                Father.CountAncestors(currentAncestors);
             }
             
-            AncestorCount = CurrentAncestors.Count;
-            CurrentAncestors.Clear();
+            AncestorCount = currentAncestors.Count;
+            currentAncestors.Clear();
         }
 
-        private void CountAncestors(ICollection<HistoricalFigure> CurrentAncestors)
+        private void CountAncestors(ICollection<HistoricalFigure> currentAncestors)
         {
-            if (Mother != null && !CurrentAncestors.Contains(Mother))
+            if (Mother != null && !currentAncestors.Contains(Mother))
             {
-                CurrentAncestors.Add(Mother);
-                Mother.CountAncestors(CurrentAncestors);
+                currentAncestors.Add(Mother);
+                Mother.CountAncestors(currentAncestors);
             }
-            if (Father == null || CurrentAncestors.Contains(Father)) return;
-            CurrentAncestors.Add(Father);
-            Father.CountAncestors(CurrentAncestors);
+            if (Father == null || currentAncestors.Contains(Father)) return;
+            currentAncestors.Add(Father);
+            Father.CountAncestors(currentAncestors);
         }
 
 
@@ -1210,7 +1208,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
 
             var vals = new List<object>
             {
-                ID,
+                Id,
                 Name.DBExport(),
                 Race.DBExport(),
                 Caste.DBExport(Castes),
@@ -1238,47 +1236,47 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             if (EntityFormerPositionLinks != null)
             {
                 foreach (var entityFormerPositionLink in EntityFormerPositionLinks)
-                    entityFormerPositionLink.Export(ID);
+                    entityFormerPositionLink.Export(Id);
             }
 
             if (EntityPositionLinks != null)
             {
                 foreach (var entityPositionLink in EntityPositionLinks)
-                    entityPositionLink.Export(ID);
+                    entityPositionLink.Export(Id);
             }
 
             if (EntityReputations != null)
             {
                 foreach (var entityReputation in EntityReputations)
-                    entityReputation.Export(ID);
+                    entityReputation.Export(Id);
             }
 
-            if (HFSkills != null)
+            if (HfSkills != null)
             {
-                foreach (var hfSkill in HFSkills)
-                    hfSkill.Export(ID);
+                foreach (var hfSkill in HfSkills)
+                    hfSkill.Export(Id);
             }
 
             if (EntityLinks != null)
             {
                 foreach (var entityLink in EntityLinks.Values.SelectMany(entityLinkList => entityLinkList))
                 {
-                    entityLink.Export(ID);
+                    entityLink.Export(Id);
                 }
             }
 
-            if (HFLinks != null)
+            if (HfLinks != null)
             {
-                foreach (var hfLink in HFLinks.Values.SelectMany(hfLinkList => hfLinkList))
+                foreach (var hfLink in HfLinks.Values.SelectMany(hfLinkList => hfLinkList))
                 {
-                    hfLink.Export(ID);
+                    hfLink.Export(Id);
                 }
             }
 
             if (SiteLinks == null) return;
             foreach (var siteLink in SiteLinks.Values.SelectMany(siteLinkList => siteLinkList))
             {
-                siteLink.Export(ID);
+                siteLink.Export(Id);
             }
         }
 

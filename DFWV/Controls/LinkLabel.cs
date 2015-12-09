@@ -12,17 +12,17 @@ namespace DFWV.Controls
     /// </summary>
     public class LinkLabel : Label
     {
-        private WorldObject data;
+        private WorldObject _data;
         
         public WorldObject Data
         {
             set 
             { 
-                data = value;
-                if (data != null)
+                _data = value;
+                if (_data != null)
                 {
                     ForeColor = Color.Blue;
-                    Text = data.ToString();
+                    Text = _data.ToString();
                 }
                 else
                 { 
@@ -30,22 +30,21 @@ namespace DFWV.Controls
                     Text = "";
                 }
             }
-            get { return data; }
+            get { return _data; }
         }
 
         protected override void OnClick(EventArgs e)
         {
             Cursor.Current = Cursors.Default;
             Font = new Font(Font.Name, Font.Size, FontStyle.Regular);
-            if (data != null)
-                data.Select((MainForm)FindForm());
+            _data?.Select((MainForm)FindForm());
 
             base.OnClick(e);
         }
 
         protected override void OnMouseEnter(EventArgs e)
         {
-            if (data != null)
+            if (_data != null)
             {
                 Cursor.Current = Cursors.Hand;
                 Font = new Font(Font.Name, Font.Size, FontStyle.Underline);
@@ -55,20 +54,20 @@ namespace DFWV.Controls
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            if (data != null)
+            if (_data != null)
                 Cursor.Current = Cursors.Hand;
             base.OnMouseMove(e);
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            if (data != null)
+            if (_data != null)
                 Cursor.Current = Cursors.Hand;
             base.OnMouseDown(e);
         }
         protected override void  OnMouseLeave(EventArgs e)
         {
-            if (data != null)
+            if (_data != null)
             {
                 Cursor.Current = Cursors.Default;
                 Font = new Font(Font.Name, Font.Size, FontStyle.Regular);

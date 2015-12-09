@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using DFWV.WorldClasses.EntityClasses;
-using DFWV.WorldClasses.HistoricalEventClasses;
-using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
-    public class EC_Performance : HistoricalEventCollection
+    public class EcPerformance : HistoricalEventCollection
     {
-        private int Ordinal { get; set; }
+        private int Ordinal { get; }
 
         override public Point Location => Point.Empty;
 
-        public EC_Performance(XDocument xdoc, World world)
+        public EcPerformance(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -41,7 +37,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -98,7 +94,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
             table = GetType().Name;
 
-            var vals = new List<object> { ID, Ordinal };
+            var vals = new List<object> { Id, Ordinal };
 
 
             Database.ExportWorldItem(table, vals);

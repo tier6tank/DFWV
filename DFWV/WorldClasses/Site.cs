@@ -13,7 +13,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses
 {
-    public class Site : XMLObject
+    public class Site : XmlObject
     {
         [UsedImplicitly]
         public string AltName { get; private set; }
@@ -33,22 +33,22 @@ namespace DFWV.WorldClasses
         public List<HistoricalFigure> Inhabitants { get; set; }
         public List<WorldConstruction> ConstructionLinks { get; set; }
 
-        public HE_CreatedSite CreatedEvent { get; set; }
-        public HE_SiteDied DiedEvent { get; set; }
+        public HeCreatedSite CreatedEvent { get; set; }
+        public HeSiteDied DiedEvent { get; set; }
 
-        public List<EC_BeastAttack> BeastAttackEventCollections { get; set; }
-        public List<EC_Battle> BattleEventCollections { get; set; }
-        public List<EC_Duel> DuelEventCollections { get; set; }
-        public List<EC_Abduction> AbductionEventCollections { get; set; }
-        public List<EC_SiteConquered> SiteConqueredEventCollections { get; set; }
-        public List<EC_Theft> TheftEventCollections { get; set; }
-        public List<EC_Insurrection> InsurrectionEventCollections { get; set; }
+        public List<EcBeastAttack> BeastAttackEventCollections { get; set; }
+        public List<EcBattle> BattleEventCollections { get; set; }
+        public List<EcDuel> DuelEventCollections { get; set; }
+        public List<EcAbduction> AbductionEventCollections { get; set; }
+        public List<EcSiteConquered> SiteConqueredEventCollections { get; set; }
+        public List<EcTheft> TheftEventCollections { get; set; }
+        public List<EcInsurrection> InsurrectionEventCollections { get; set; }
 
         public List<Artifact> CreatedArtifacts { get; set; }
 
 
         [UsedImplicitly]
-        public bool isPlayerControlled { private get; set; }
+        public bool IsPlayerControlled { private get; set; }
 
         public IEnumerable<HistoricalEvent> Events
         {
@@ -68,15 +68,15 @@ namespace DFWV.WorldClasses
         public string DispNameLower => ToString().ToLower();
 
         [UsedImplicitly]
-        public int CreatedArtifactCount => CreatedArtifacts == null ? 0 : CreatedArtifacts.Count;
+        public int CreatedArtifactCount => CreatedArtifacts?.Count ?? 0;
 
         [UsedImplicitly]
-        public int HFInhabitantCount => Inhabitants == null ? 0 : Inhabitants.Count;
+        public int HfInhabitantCount => Inhabitants?.Count ?? 0;
 
         [UsedImplicitly]
-        public int TotalPopulation => (Population == null ? 0 : Population.Count) +
-                                      (Prisoners == null ? 0 : Prisoners.Count) +
-                                      (Outcasts == null ? 0 : Outcasts.Count);
+        public int TotalPopulation => (Population?.Count ?? 0) +
+                                      (Prisoners?.Count ?? 0) +
+                                      (Outcasts?.Count ?? 0);
 
         #region Parse From Site File
         public Site(IEnumerable<string> curSite, World world) : base(world)
@@ -108,7 +108,7 @@ namespace DFWV.WorldClasses
         private void ParsePopulationLine(string data)
         {
             data = data.Trim();
-            var Pop = Convert.ToInt32(data.Substring(0, data.IndexOf(' ')));
+            var pop = Convert.ToInt32(data.Substring(0, data.IndexOf(' ')));
             var race = data.Substring(data.IndexOf(' ') + 1);
             var thisRace = World.GetAddRace(race);
             if (race.Contains(" prisoner"))
@@ -116,21 +116,21 @@ namespace DFWV.WorldClasses
                 if (Prisoners.ContainsKey(thisRace))
                     Prisoners[thisRace]++;
                 else
-                    Prisoners.Add(thisRace, Pop);
+                    Prisoners.Add(thisRace, pop);
             }
             else if (race.Contains(" outcast"))
             {
                 if (Outcasts.ContainsKey(thisRace))
                     Outcasts[thisRace]++;
                 else
-                    Outcasts.Add(thisRace, Pop);
+                    Outcasts.Add(thisRace, pop);
             }
             else
             {
                 if (Population.ContainsKey(thisRace))
-                    Population[thisRace] += Pop;
+                    Population[thisRace] += pop;
                 else
-                    Population.Add(thisRace, Pop);
+                    Population.Add(thisRace, pop);
             }
         }
 
@@ -143,7 +143,7 @@ namespace DFWV.WorldClasses
 
             var thisLeader = World.GetAddLeader(name);
             thisLeader.Site = this;
-            thisLeader.isCurrent = true;
+            thisLeader.IsCurrent = true;
             if (thisLeader.Civilization == null)
             {
                 if (Parent != null)
@@ -173,7 +173,7 @@ namespace DFWV.WorldClasses
         {
             data = data.Substring(data.IndexOf(':') + 1).Trim();
             var race = data.Substring(data.LastIndexOf(',') + 1).Trim();
-            if (race.isPlural())
+            if (race.IsPlural())
                 race = race.Singularize();
             data = data.Substring(0, data.LastIndexOf(',')).Trim();
             Parent = World.GetCiv(data);
@@ -204,8 +204,8 @@ namespace DFWV.WorldClasses
 
         private void ParseNameLine(string data)
         {
-            ID = Convert.ToInt32(data.Split(':')[0]);
-            data = data.Replace(ID.ToString() + ':', "").Trim();
+            Id = Convert.ToInt32(data.Split(':')[0]);
+            data = data.Replace(Id.ToString() + ':', "").Trim();
 
             var siteType = data.Split(',').Last().Trim();
 
@@ -226,7 +226,7 @@ namespace DFWV.WorldClasses
 
         public static List<string> Types = new List<string>();
         public int? Type { get; private set; }
-        public Point Coords { get; private set; }
+        public Point Coords { get; }
         private string StructureList { get; set; }
         public List<Structure> Structures { get; set; }
 
@@ -242,7 +242,7 @@ namespace DFWV.WorldClasses
                 switch (element.Name.LocalName)
                 {
                     case "id":
-                        SiteMapPath = World.mapPath.Replace("world_map", "site_map-" + ID);
+                        SiteMapPath = World.MapPath.Replace("world_map", "site_map-" + Id);
                         if (!File.Exists(SiteMapPath))
                             SiteMapPath = null;
                         break;
@@ -266,7 +266,7 @@ namespace DFWV.WorldClasses
                         break;
                     
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -289,10 +289,10 @@ namespace DFWV.WorldClasses
             Program.MakeSelected(frm.tabSite, frm.lstSite, this);
 
             frm.grpSite.Text = ToString();
-            if (isPlayerControlled)
+            if (IsPlayerControlled)
                 frm.grpSite.Text += @" (PLAYER CONTROLLED)";
 #if DEBUG
-            frm.grpSite.Text += $" - ID: {ID}";
+            frm.grpSite.Text += $" - ID: {Id}";
 #endif
             frm.grpSite.Show();
 
@@ -303,7 +303,7 @@ namespace DFWV.WorldClasses
             frm.lblSiteOwner.Data = Owner;
             frm.lblSiteParentCiv.Data = Parent;
 
-            var siteMapPath = World.mapPath.Replace("world_map", "site_map-" + ID);
+            var siteMapPath = World.MapPath.Replace("world_map", "site_map-" + Id);
             frm.SiteMapLabel.Visible = File.Exists(siteMapPath);
 
             
@@ -459,10 +459,10 @@ namespace DFWV.WorldClasses
                     case "type":
                         break;
                     case "structures":
-                        foreach (var structureXML in element.Elements())
+                        foreach (var structureXml in element.Elements())
                         {
                             Structure thisStructure = null;
-                            foreach (var strElement in structureXML.Elements())
+                            foreach (var strElement in structureXml.Elements())
                             {
                                 var strval = strElement.Value;
                                 int strvalI;
@@ -492,7 +492,7 @@ namespace DFWV.WorldClasses
                         }
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + SiteType, element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + SiteType, element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -503,7 +503,7 @@ namespace DFWV.WorldClasses
 
             var vals = new List<object>
             {
-                ID,
+                Id,
                 Name.DBExport(),
                 AltName.DBExport(),
                 SiteType
@@ -516,13 +516,13 @@ namespace DFWV.WorldClasses
         {
             if (Structures == null)
                 Structures = new List<Structure>();
-            World.Structures.Add(structure.ID, structure);
+            World.Structures.Add(structure.Id, structure);
             Structures.Add(structure);
         }
 
         internal Structure GetStructure(int structSiteId)
         {
-            return Structures == null ? null : Structures.FirstOrDefault(structure => structure.SiteID == structSiteId);
+            return Structures?.FirstOrDefault(structure => structure.SiteId == structSiteId);
         }
 
         internal override void Link()

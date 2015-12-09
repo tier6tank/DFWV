@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -8,21 +7,21 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_CreateEntityPosition : HistoricalEvent
+    class HeCreateEntityPosition : HistoricalEvent
     {
 
-        private int? HFID { get; set; }
-        private HistoricalFigure HF { get; set; }
-        public int? CivID { get; set; }
+        private int? Hfid { get; set; }
+        private HistoricalFigure Hf { get; set; }
+        public int? CivId { get; set; }
         public Entity Civ { get; set; }
-        public int? GroupID { get; set; }
+        public int? GroupId { get; set; }
         public Entity Group { get; set; }
         public int? Position { get; set; }
         public int? Reason { get; set; }
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
-            get { yield return HF; }
+            get { yield return Hf; }
         }
         public override IEnumerable<Entity> EntitiesInvolved
         {
@@ -33,7 +32,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        public HE_CreateEntityPosition(XDocument xdoc, World world)
+        public HeCreateEntityPosition(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -50,7 +49,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -70,28 +69,28 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "histfig":
-                        HFID = valI;
+                        Hfid = valI;
                         break;
                     case "civ":
-                        CivID = valI;
+                        CivId = valI;
                         break;
                     case "group":
                     case "site_civ":
-                        GroupID = valI;
+                        GroupId = valI;
                         break;
                     case "position":
                         if (valI != -1)
                         {
-                            if (!HFEntityLink.Positions.Contains(val))
-                                HFEntityLink.Positions.Add(val);
-                            Position = HFEntityLink.Positions.IndexOf(val);
+                            if (!HfEntityLink.Positions.Contains(val))
+                                HfEntityLink.Positions.Add(val);
+                            Position = HfEntityLink.Positions.IndexOf(val);
                         }
                         break;
                     case "reason":
                         Reason = valI;
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -101,12 +100,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             //TODO: Add Group Item
             base.Link();
-            if (CivID.HasValue && World.Entities.ContainsKey(CivID.Value))
-                Civ = World.Entities[CivID.Value];
-            if (GroupID.HasValue && World.Entities.ContainsKey(GroupID.Value) && CivID.HasValue && GroupID.Value != CivID.Value)
-                Group = World.Entities[GroupID.Value];
-            if (HFID.HasValue && World.HistoricalFigures.ContainsKey(HFID.Value))
-                HF = World.HistoricalFigures[HFID.Value];
+            if (CivId.HasValue && World.Entities.ContainsKey(CivId.Value))
+                Civ = World.Entities[CivId.Value];
+            if (GroupId.HasValue && World.Entities.ContainsKey(GroupId.Value) && CivId.HasValue && GroupId.Value != CivId.Value)
+                Group = World.Entities[GroupId.Value];
+            if (Hfid.HasValue && World.HistoricalFigures.ContainsKey(Hfid.Value))
+                Hf = World.HistoricalFigures[Hfid.Value];
        
         }
 
@@ -119,10 +118,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 EventLabel(frm, parent, ref location, "Entity:", Civ);
             if (Group != null)
                 EventLabel(frm, parent, ref location, "Group:",  Group);
-            if (HF != null)
-                EventLabel(frm, parent, ref location, "HF:", HF);
+            if (Hf != null)
+                EventLabel(frm, parent, ref location, "HF:", Hf);
             if (Position.HasValue)
-                EventLabel(frm, parent, ref location, "Position:", HFEntityLink.Positions[Position.Value]);
+                EventLabel(frm, parent, ref location, "Position:", HfEntityLink.Positions[Position.Value]);
         }
 
         protected override string LegendsDescription() //Matched
@@ -131,32 +130,32 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var positionText = "a position";
             if (Position.HasValue)
-                positionText = "the position of " + HFEntityLink.Positions[Position.Value];
+                positionText = "the position of " + HfEntityLink.Positions[Position.Value];
                 
 
             switch (Reason)
             {
                 case 0:
-                    return $"{timestring} {HF} of {Civ} created {positionText} through force of argument.";
+                    return $"{timestring} {Hf} of {Civ} created {positionText} through force of argument.";
                 case 1:
                     return
-                        $"{timestring} {HF} of {Civ} compelled the creation of {positionText} with threats of violence.";
+                        $"{timestring} {Hf} of {Civ} compelled the creation of {positionText} with threats of violence.";
                 case 2:
-                    if (HF == null)
+                    if (Hf == null)
                     {
                         return $"{timestring} members of {Civ} created {positionText}.";
                     }
                     return "";
                 case 3:
-                    return $"{timestring} {HF} of {Civ} created {positionText}, pushed by a wave of popular support.";
+                    return $"{timestring} {Hf} of {Civ} created {positionText}, pushed by a wave of popular support.";
                 case 4:
-                    return $"{timestring} {HF} of {Civ} created {positionText} as a matter of course.";
+                    return $"{timestring} {Hf} of {Civ} created {positionText} as a matter of course.";
                 default:
-                    if (HF == null)
+                    if (Hf == null)
                     {
                         return $"{timestring} members of {Civ} created {positionText} for UNKNOWN reason.";
                     }
-                    return $"{timestring} {HF} of {Civ} created {positionText} for UNKNOWN reason.";
+                    return $"{timestring} {Hf} of {Civ} created {positionText} for UNKNOWN reason.";
 
             }
         }
@@ -175,10 +174,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             
             var vals = new List<object>
             {
-                ID,
-                HFID.DBExport(),
-                CivID.DBExport(),
-                GroupID.DBExport(),
+                Id,
+                Hfid.DBExport(),
+                CivId.DBExport(),
+                GroupId.DBExport(),
                 Position.DBExport(),
                 Reason.DBExport()
             };

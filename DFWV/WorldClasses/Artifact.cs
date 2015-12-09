@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Xml.Linq;
@@ -7,7 +6,7 @@ using DFWV.WorldClasses.HistoricalEventClasses;
 
 namespace DFWV.WorldClasses
 {
-    public class Artifact : XMLObject
+    public class Artifact : XmlObject
     {
         public string Item { get; set; }
 
@@ -20,11 +19,11 @@ namespace DFWV.WorldClasses
 
         public string Description { get; set; }
 
-        public HE_ArtifactCreated CreatedEvent { get; set; }
-        public List<HE_ArtifactStored> StoredEvents { get; set; }
-        public List<HE_ArtifactPossessed> PossessedEvents { get; set; }
-        public HE_ArtifactLost LostEvent { get; set; }
-        public List<HE_HFDied> Kills { get; set; }
+        public HeArtifactCreated CreatedEvent { get; set; }
+        public List<HeArtifactStored> StoredEvents { get; set; }
+        public List<HeArtifactPossessed> PossessedEvents { get; set; }
+        public HeArtifactLost LostEvent { get; set; }
+        public List<HeHfDied> Kills { get; set; }
 
         [UsedImplicitly]
         public bool Lost => LostEvent != null;
@@ -64,7 +63,7 @@ namespace DFWV.WorldClasses
                         Item = val;
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -78,7 +77,7 @@ namespace DFWV.WorldClasses
 
             frm.grpArtifact.Text = ToString();
 #if DEBUG
-            frm.grpArtifact.Text += $" - ID: {ID}";
+            frm.grpArtifact.Text += $" - ID: {Id}";
 #endif
             frm.grpArtifact.Show();
 
@@ -92,7 +91,7 @@ namespace DFWV.WorldClasses
                                                       ? HistoricalEvent.ItemTypes[ItemType.Value]
                                                       : ""));
 
-            frm.lblArtifactValue.Text = ItemValue.HasValue ? ItemValue.Value.ToString() : "";
+            frm.lblArtifactValue.Text = ItemValue?.ToString() ?? "";
 
             frm.grpArtifactCreated.Visible = CreatedEvent != null;
             if (CreatedEvent != null)
@@ -172,7 +171,7 @@ namespace DFWV.WorldClasses
                         Description = val;
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" , element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" , element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -185,7 +184,7 @@ namespace DFWV.WorldClasses
 
             var vals = new List<object>
             {
-                ID,
+                Id,
                 Name.DBExport(),
                 Item.DBExport(),
                 Mat.DBExport(HistoricalEvent.Materials),

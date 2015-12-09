@@ -1,22 +1,21 @@
 using System;
-using System.Windows.Forms;
 using System.Xml.Linq;
 
 namespace DFWV.WorldClasses
 {
-    public abstract class XMLObject : WorldObject, IEquatable<XMLObject>
+    public abstract class XmlObject : WorldObject, IEquatable<XmlObject>
     {
-        public int ID { get; protected set; }
+        public int Id { get; set; }
         public int Notability { get; set; }
 
-        protected XMLObject(XDocument xdoc, World world) 
+        protected XmlObject(XDocument xdoc, World world) 
             : base(world)
         {
-            ID = Convert.ToInt32(xdoc.Root.Element("id").Value);
+            Id = Convert.ToInt32(xdoc.Root.Element("id").Value);
             World = world;
         }
 
-        protected XMLObject(World world) : base(world)
+        protected XmlObject(World world) : base(world)
         {
             
         }
@@ -29,15 +28,15 @@ namespace DFWV.WorldClasses
 
         public override string ToString()
         {
-            return base.ToString() != "" ? base.ToString() : ID.ToString();
+            return base.ToString() != "" ? base.ToString() : Id.ToString();
         }
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as XMLObject);
+            return Equals(obj as XmlObject);
         }
 
-        public bool Equals(XMLObject other)
+        public bool Equals(XmlObject other)
         {
             // Check for null
             if (ReferenceEquals(other, null))
@@ -47,12 +46,12 @@ namespace DFWV.WorldClasses
             if (ReferenceEquals(this, other))
                 return true;
 
-            return ID == other.ID && GetType() == other.GetType();
+            return Id == other.Id && GetType() == other.GetType();
         }
 
         public override int GetHashCode()
         {
-            return ID * 7 + GetType().GetHashCode();
+            return Id * 7 + GetType().GetHashCode();
         }
     }
 }

@@ -1,23 +1,23 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Xml.Linq;
-using System.Collections.Generic;
 
 namespace DFWV.WorldClasses
 {
-    public class Caste : XMLObject
+    public class Caste : XmlObject
     {
         public Race Race;
 
-        public int CasteID  { get; set; }
+        public int CasteId  { get; set; }
         public int Gender { get; set; }
         public string Description { get; set; }
 
 
         public Caste(XContainer data, Race race) : base(race.World)
         {
-            ID = -1;
-            CasteID = Convert.ToInt32(data.Element("id").Value);
+            Id = -1;
+            CasteId = Convert.ToInt32(data.Element("id").Value);
             Name = data.Element("name").Value;
             Gender = Convert.ToInt32(data.Element("gender").Value);
             Description = data.Element("description").Value;
@@ -47,8 +47,8 @@ namespace DFWV.WorldClasses
         {
             var vals = new List<object>
             {
-                CasteID,
-                Race.ID,
+                CasteId,
+                Race.Id,
                 Gender,
                 Description.DBExport(),
             };

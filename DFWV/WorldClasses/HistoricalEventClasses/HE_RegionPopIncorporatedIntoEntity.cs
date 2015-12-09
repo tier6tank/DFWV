@@ -1,28 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using DFWV.WorldClasses.EntityClasses;
-using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_RegionPopIncorporatedIntoEntity : HistoricalEvent
+    class HeRegionPopIncorporatedIntoEntity : HistoricalEvent
     {
-        private int? PopRaceID { get; set; }
+        private int? PopRaceId { get; }
         private Race PopRace { get; set; }
-        private int? SiteID { get; set; }
+        private int? SiteId { get; }
         private Site Site { get; set; }
-        private int? JoinEntityID { get; set; }
+        private int? JoinEntityId { get; }
         private Entity JoinEntity { get; set; }
 
         override public Point Location => Point.Empty;
 
         public int? PopNumberMoved { get; set; }
-        public int? PopSRID { get; set; }
-        public Region PopSR { get; set; }
-        public int? PopFLID { get; set; }
+        public int? PopSrid { get; set; }
+        public Region PopSr { get; set; }
+        public int? PopFlid { get; set; }
 
 
         public override IEnumerable<Entity> EntitiesInvolved
@@ -36,10 +34,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         public override IEnumerable<Region> RegionsInvolved
         {
-            get { yield return PopSR; }
+            get { yield return PopSr; }
         }
 
-        public HE_RegionPopIncorporatedIntoEntity(XDocument xdoc, World world)
+        public HeRegionPopIncorporatedIntoEntity(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -55,26 +53,26 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "seconds72":
                     case "type":
                     case "pop_race":
-                        PopRaceID = valI;
+                        PopRaceId = valI;
                         break;
                     case "join_entity_id":
-                        JoinEntityID = valI;
+                        JoinEntityId = valI;
                         break;
                     case "site_id":
                         if (valI != -1)
-                            SiteID = valI;
+                            SiteId = valI;
                         break;
                     case "pop_number_moved":
                         PopNumberMoved = valI;
                         break;
                     case "pop_srid":
-                        PopSRID = valI;
+                        PopSrid = valI;
                         break;
                     case "pop_flid":
-                        PopFLID = valI;
+                        PopFlid = valI;
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -83,18 +81,18 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
-            if (JoinEntityID.HasValue && World.Sites.ContainsKey(JoinEntityID.Value))
-                JoinEntity = World.Entities[JoinEntityID.Value];
-            if (PopSRID.HasValue && World.Sites.ContainsKey(PopSRID.Value))
-                PopSR = World.Regions[PopSRID.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
+            if (JoinEntityId.HasValue && World.Sites.ContainsKey(JoinEntityId.Value))
+                JoinEntity = World.Entities[JoinEntityId.Value];
+            if (PopSrid.HasValue && World.Sites.ContainsKey(PopSrid.Value))
+                PopSr = World.Regions[PopSrid.Value];
 
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "PopRace:", PopRaceID.Value.ToString());
+            EventLabel(frm, parent, ref location, "PopRace:", PopRaceId.Value.ToString());
             EventLabel(frm, parent, ref location, "Number:", PopNumberMoved.Value.ToString());
             EventLabel(frm, parent, ref location, "Join Entity:", JoinEntity);
             EventLabel(frm, parent, ref location, "Site:", Site);
@@ -109,16 +107,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 count = "dozens";
 
 
-            var racetext = PopRace?.ToString().ToLower() ?? PopRaceID?.ToString() ?? "";
+            var racetext = PopRace?.ToString().ToLower() ?? PopRaceId?.ToString() ?? "";
 
 
-            return $"{count} of {racetext} from {PopSR} joined with the {JoinEntity} at {Site.AltName}.";
+            return $"{timestring} {count} of {racetext} from {PopSr} joined with the {JoinEntity} at {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
-            var racetext = PopRace?.ToString().ToLower() ?? PopRaceID?.ToString() ?? "";
+            var racetext = PopRace?.ToString().ToLower() ?? PopRaceId?.ToString() ?? "";
 
             return $"{timelinestring} {PopNumberMoved.ToString()} {racetext} joined with {JoinEntity}.";
 
@@ -132,13 +130,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID,
-                JoinEntityID.DBExport(),
-                SiteID.DBExport(),
-                PopRaceID.DBExport(),
+                Id,
+                JoinEntityId.DBExport(),
+                SiteId.DBExport(),
+                PopRaceId.DBExport(),
                 PopNumberMoved.DBExport(),
-                PopSRID.DBExport(),
-                PopFLID.DBExport()
+                PopSrid.DBExport(),
+                PopFlid.DBExport()
             };
 
             Database.ExportWorldItem(table, vals);

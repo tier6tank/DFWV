@@ -8,18 +8,18 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    public class HE_ChangeHFBodyState : HistoricalEvent
+    public class HeChangeHfBodyState : HistoricalEvent
     {
         
-        private int? SiteID { get; set; }
+        private int? SiteId { get; }
         private Site Site { get; set; }
-        private int? SubregionID { get; set; }
+        private int? SubregionId { get; }
         private Region Subregion { get; set; }
-        private int? HFID { get; set; }
-        public HistoricalFigure HF { get; set; }
-        private int? FeatureLayerID { get; set; }
-        private Point Coords { get; set; }
-        private int? BuildingID { get; set; }
+        private int? Hfid { get; }
+        public HistoricalFigure Hf { get; set; }
+        private int? FeatureLayerId { get; }
+        private Point Coords { get; }
+        private int? BuildingId { get; }
         private Structure Structure { get; set; }
         public string BodyState { get; set; }
 
@@ -27,14 +27,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
-            get { yield return HF; }
+            get { yield return Hf; }
         }
         public override IEnumerable<Site> SitesInvolved
         {
             get { yield return Site; }
         }
 
-        public HE_ChangeHFBodyState(XDocument xdoc, World world)
+        public HeChangeHfBodyState(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -51,24 +51,24 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "hfid":
-                        HFID = valI;
+                        Hfid = valI;
                         break;
                     case "body_state":
                         BodyState = val;
                         break;
                     case "site_id":
-                        SiteID = valI;
+                        SiteId = valI;
                         break;
                     case "building_id":
-                        BuildingID = valI;
+                        BuildingId = valI;
                         break;
                     case "subregion_id":
                         if (valI != -1)
-                            SubregionID = valI;
+                            SubregionId = valI;
                         break;
                     case "feature_layer_id":
                         if (valI != -1)
-                            FeatureLayerID = valI;
+                            FeatureLayerId = valI;
                         break;
                     case "coords":
                         if (val != "-1,-1")
@@ -77,7 +77,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -86,15 +86,15 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (HFID.HasValue && World.HistoricalFigures.ContainsKey(HFID.Value))
-                HF = World.HistoricalFigures[HFID.Value];
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
-            if (SubregionID.HasValue && World.Regions.ContainsKey(SubregionID.Value))
-                Subregion = World.Regions[SubregionID.Value];
+            if (Hfid.HasValue && World.HistoricalFigures.ContainsKey(Hfid.Value))
+                Hf = World.HistoricalFigures[Hfid.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
+            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
+                Subregion = World.Regions[SubregionId.Value];
 
-            if (!BuildingID.HasValue || Site.Structures == null) return;
-            foreach (var structure in Site.Structures.Where(structure => structure.SiteID == BuildingID))
+            if (!BuildingId.HasValue || Site.Structures == null) return;
+            foreach (var structure in Site.Structures.Where(structure => structure.SiteId == BuildingId))
             {
                 Structure = structure;
                 if (Structure.Events == null)
@@ -112,22 +112,22 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             if (BodyState == "entombed at site")
             {
-                HF.EntombedEvent = this;
+                Hf.EntombedEvent = this;
             }
         }
 
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "HF:", HF);
+            EventLabel(frm, parent, ref location, "HF:", Hf);
             EventLabel(frm, parent, ref location, "State:", BodyState);
             EventLabel(frm, parent, ref location, "Site:", Site);
             if (Structure != null)
                 EventLabel(frm, parent, ref location, "Structure:", Structure);
             else
-                EventLabel(frm, parent, ref location, "Building ID:", BuildingID.ToString());
+                EventLabel(frm, parent, ref location, "Building ID:", BuildingId.ToString());
             EventLabel(frm, parent, ref location, "Region:", Subregion);
-            EventLabel(frm, parent, ref location, "Layer:", FeatureLayerID == -1 ? "" : FeatureLayerID.ToString());
+            EventLabel(frm, parent, ref location, "Layer:", FeatureLayerId == -1 ? "" : FeatureLayerId.ToString());
             EventLabel(frm, parent, ref location, "Coords:", new Coordinate(Coords));
         }
 
@@ -135,14 +135,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            return $"{timestring} {HF} was entombed in {Site.AltName} within {Structure}.";
+            return $"{timestring} {Hf} was entombed in {Site.AltName} within {Structure}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return $"{timelinestring} {HF} was entombed at {Site.AltName}.";
+            return $"{timelinestring} {Hf} was entombed at {Site.AltName}.";
         }
 
         internal override void Export(string table)
@@ -155,13 +155,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID, 
-                HFID.DBExport(), 
+                Id, 
+                Hfid.DBExport(), 
                 BodyState.DBExport(), 
-                BuildingID.DBExport(), 
-                SiteID.DBExport(),  
-                SubregionID.DBExport(), 
-                FeatureLayerID.DBExport(),
+                BuildingId.DBExport(), 
+                SiteId.DBExport(),  
+                SubregionId.DBExport(), 
+                FeatureLayerId.DBExport(),
                 Coords.DBExport()
             };
 

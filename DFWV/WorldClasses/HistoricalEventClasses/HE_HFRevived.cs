@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -7,23 +6,23 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_HFRevived : HistoricalEvent
+    class HeHfRevived : HistoricalEvent
     {
-        private int? HFID { get; set; }
-        private HistoricalFigure HF { get; set; }
-        private string Ghost { get; set; }
-        private bool RaisedBefore { get; set; }
-        private int? SiteID { get; set; }
+        private int? Hfid { get; }
+        private HistoricalFigure Hf { get; set; }
+        private string Ghost { get; }
+        private bool RaisedBefore { get; }
+        private int? SiteId { get; }
         private Site Site { get; set; }
-        private int? SubregionID { get; set; }
+        private int? SubregionId { get; }
         private Region Subregion { get; set; }
-        private int? FeatureLayerID { get; set; }
+        private int? FeatureLayerId { get; }
 
-        override public Point Location => Site != null ? Site.Location : Subregion.Location;
+        override public Point Location => Site?.Location ?? Subregion.Location;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
-            get { yield return HF; }
+            get { yield return Hf; }
         }
         public override IEnumerable<Site> SitesInvolved
         {
@@ -34,7 +33,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Subregion; }
         }
 
-        public HE_HFRevived(XDocument xdoc, World world)
+        public HeHfRevived(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -52,18 +51,18 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                     case "site_id":
                         if (valI != -1)
-                            SiteID = valI;
+                            SiteId = valI;
                         break;
                     case "subregion_id":
                         if (valI != -1)
-                            SubregionID = valI;
+                            SubregionId = valI;
                         break;
                     case "feature_layer_id":
                         if (valI != -1)
-                            FeatureLayerID = valI;
+                            FeatureLayerId = valI;
                         break;
                     case "hfid":
-                        HFID = valI;
+                        Hfid = valI;
                         break;
                     case "ghost":
                         Ghost = val;
@@ -73,7 +72,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -81,28 +80,28 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (HFID.HasValue && World.HistoricalFigures.ContainsKey(HFID.Value))
-                HF = World.HistoricalFigures[HFID.Value];
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
-            if (SubregionID.HasValue && World.Regions.ContainsKey(SubregionID.Value))
-                Subregion = World.Regions[SubregionID.Value];
+            if (Hfid.HasValue && World.HistoricalFigures.ContainsKey(Hfid.Value))
+                Hf = World.HistoricalFigures[Hfid.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
+            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
+                Subregion = World.Regions[SubregionId.Value];
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "HF:", HF);
+            EventLabel(frm, parent, ref location, "HF:", Hf);
             EventLabel(frm, parent, ref location, "Ghost:", Ghost);
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Region:", Subregion);
-            EventLabel(frm, parent, ref location, "Layer:", FeatureLayerID == -1 ? "" : FeatureLayerID.ToString());
+            EventLabel(frm, parent, ref location, "Layer:", FeatureLayerId == -1 ? "" : FeatureLayerId.ToString());
         }
 
         protected override string LegendsDescription() //Matched
         {
             var timestring = base.LegendsDescription();
 
-            return $"{timestring} {HF} came back from the dead as in {Site.AltName}.";
+            return $"{timestring} {Hf} came back from the dead as in {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
@@ -111,9 +110,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             if (Site != null)
                 return
-                    $"{timelinestring} {(HF != null ? HF.ToString() : HFID.ToString())} came back from the dead as a {Ghost} in {Site.AltName}*";
+                    $"{timelinestring} {Hf?.ToString() ?? Hfid.ToString()} came back from the dead as a {Ghost} in {Site.AltName}*";
             return
-                $"{timelinestring} {(HF != null ? HF.ToString() : HFID.ToString())} came back from the dead as a {Ghost}";
+                $"{timelinestring} {Hf?.ToString() ?? Hfid.ToString()} came back from the dead as a {Ghost}";
         }
 
         internal override void Export(string table)
@@ -124,13 +123,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID, 
-                HFID.DBExport(), 
+                Id, 
+                Hfid.DBExport(), 
                 Ghost, 
                 RaisedBefore, 
-                SiteID.DBExport(), 
-                SubregionID.DBExport(), 
-                FeatureLayerID.DBExport()
+                SiteId.DBExport(), 
+                SubregionId.DBExport(), 
+                FeatureLayerId.DBExport()
             };
 
             Database.ExportWorldItem(table, vals);

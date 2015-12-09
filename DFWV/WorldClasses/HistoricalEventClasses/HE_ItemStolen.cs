@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -8,13 +7,13 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_ItemStolen : HistoricalEvent
+    class HeItemStolen : HistoricalEvent
     {
-        private int? AttackerCivID { get; set; }
+        private int? AttackerCivId { get; set; }
         public Entity AttackerCiv { private get; set; }
-        private int? DefenderCivID { get; set; }
+        private int? DefenderCivId { get; set; }
         public Entity DefenderCiv { private get; set; }
-        private int? SiteID { get; set; }
+        private int? SiteId { get; set; }
         public Site Site { private get; set; }
         public Point Coords { private get; set; }
         private int? Item { get; set; }
@@ -23,18 +22,18 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? Mat { get; set; }
         private int? MatType { get; set; }
         private int? MatIndex  { get; set; }
-        private HistoricalFigure HF { get; set; }
-        private int? HFID { get; set; }
+        private HistoricalFigure Hf { get; set; }
+        private int? Hfid { get; set; }
         private Entity Entity { get; set; }
-        private int? EntityID { get; set; }
+        private int? EntityId { get; set; }
         private Structure Structure { get; set; }
-        private int? StructureID { get; set; }
+        private int? StructureId { get; set; }
 
-        override public Point Location => Site != null ? Site.Location : Coords;
+        override public Point Location => Site?.Location ?? Coords;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
-            get { yield return HF; }
+            get { yield return Hf; }
         }
         public override IEnumerable<Entity> EntitiesInvolved
         {
@@ -51,7 +50,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         }
 
 
-        public HE_ItemStolen(XDocument xdoc, World world)
+        public HeItemStolen(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -68,7 +67,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -115,20 +114,20 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         Mat = Materials.IndexOf(val);
                         break;
                     case "entity":
-                        EntityID = valI;
+                        EntityId = valI;
                         break;
                     case "histfig":
-                        HFID = valI;
+                        Hfid = valI;
                         break;
                     case "site":
-                        SiteID = valI;
+                        SiteId = valI;
                         break;
                     case "structure":
                         if (valI != -1)
-                            StructureID = valI;
+                            StructureId = valI;
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -137,20 +136,20 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (EntityID.HasValue && World.Entities.ContainsKey(EntityID.Value))
-                Entity = World.Entities[EntityID.Value];
-            if (HFID.HasValue && World.HistoricalFigures.ContainsKey(HFID.Value))
-                HF = World.HistoricalFigures[HFID.Value];
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
+            if (EntityId.HasValue && World.Entities.ContainsKey(EntityId.Value))
+                Entity = World.Entities[EntityId.Value];
+            if (Hfid.HasValue && World.HistoricalFigures.ContainsKey(Hfid.Value))
+                Hf = World.HistoricalFigures[Hfid.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
             {
-                Site = World.Sites[SiteID.Value];
-                if (StructureID.HasValue)
+                Site = World.Sites[SiteId.Value];
+                if (StructureId.HasValue)
                 {
-                    Structure = Site.GetStructure(StructureID.Value);
+                    Structure = Site.GetStructure(StructureId.Value);
 
                     if (Structure == null)
                     {
-                        Structure = new Structure(Site, StructureID.Value, World);
+                        Structure = new Structure(Site, StructureId.Value, World);
                         Site.AddStructure(Structure);
                     }
                 }
@@ -172,12 +171,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             EventLabel(frm, parent, ref location, "Victim:", DefenderCiv);
             EventLabel(frm, parent, ref location, "Theif:", AttackerCiv);
-            EventLabel(frm, parent, ref location, "Theif:", HF);
+            EventLabel(frm, parent, ref location, "Theif:", Hf);
             if (Mat != null || ItemType != null)
                 EventLabel(frm, parent, ref location, "Item:",
                     $"{(Mat != null ? Materials[Mat.Value] : "UNKNOWN")} {(ItemType != null ? ItemTypes[ItemType.Value] : "UNKNOWN")}");
             
-            EventLabel(frm, parent, ref location, "Item:", HF);
+            EventLabel(frm, parent, ref location, "Item:", Hf);
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Coords:", new Coordinate(Coords));
         }
@@ -189,10 +188,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             if (ItemType == null && Mat == null)
                 return
-                    $"{timestring} {"UNKNOWN"} was stolen from {"UNKNOWN"} in {(Site == null ? "UNKNOWN" : Site.ToString())} by the {"UNKNOWN"} {"UNKNOWN"} and brought to {"UNKNOWN"}";
-            if (HF != null)
+                    $"{timestring} {"UNKNOWN"} was stolen from {"UNKNOWN"} in {Site?.ToString() ?? "UNKNOWN"} by the {"UNKNOWN"} {"UNKNOWN"} and brought to {"UNKNOWN"}";
+            if (Hf != null)
                 return
-                    $"{timestring} {(Mat != null ? Materials[Mat.Value] : "UNKNOWN")} {(ItemType != null ? ItemTypes[ItemType.Value] : "UNKNOWN")} was stolen from {(Site == null ? "UNKNOWN" : Site.AltName)} by the {HF.Race.ToString().ToLower()} {HF}{""}."; //TODO: Missing "and brought to [Site]"
+                    $"{timestring} {(Mat != null ? Materials[Mat.Value] : "UNKNOWN")} {(ItemType != null ? ItemTypes[ItemType.Value] : "UNKNOWN")} was stolen from {(Site == null ? "UNKNOWN" : Site.AltName)} by the {Hf.Race.ToString().ToLower()} {Hf}{""}."; //TODO: Missing "and brought to [Site]"
             return
                 $"{timestring} {(Mat != null ? Materials[Mat.Value] : "UNKNOWN")} {(ItemType != null ? ItemTypes[ItemType.Value] : "UNKNOWN")} was stolen from {(Site == null ? "UNKNOWN" : Site.AltName)} by an unknown creature{""}."; //TODO: Missing "and brought to [Site]"
         }
@@ -215,18 +214,18 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID, 
-                AttackerCivID.DBExport(), 
-                DefenderCivID.DBExport(), 
-                SiteID.DBExport(),
+                Id, 
+                AttackerCivId.DBExport(), 
+                DefenderCivId.DBExport(), 
+                SiteId.DBExport(),
                 Coords.DBExport(),
                 Item.DBExport(),
                 ItemType.DBExport(ItemTypes),
                 ItemSubType.DBExport(ItemSubTypes),
                 Mat.DBExport(Materials),
-                EntityID.DBExport(),
-                HFID.DBExport(),
-                StructureID.DBExport()
+                EntityId.DBExport(),
+                Hfid.DBExport(),
+                StructureId.DBExport()
             };
 
             Database.ExportWorldItem(table, vals);

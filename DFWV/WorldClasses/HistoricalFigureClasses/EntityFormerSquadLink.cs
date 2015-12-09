@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
 using DFWV.WorldClasses.EntityClasses;
@@ -7,15 +6,15 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
 {
     struct EntityFormerSquadLink
     {
-        private int SquadID { get; set; }
-        private int SquadPosition { get; set; }
-        public int EntityID { get; private set; }
-        private int StartYear { get; set; }
-        private int EndYear { get; set; }
+        private int SquadId { get; }
+        private int SquadPosition { get; }
+        public int EntityId { get; }
+        private int StartYear { get; }
+        private int EndYear { get; }
 
-        public HistoricalFigure HF { get; private set; }
+        public HistoricalFigure Hf { get; }
 
-        public Entity Entity => HF.World.Entities[EntityID];
+        public Entity Entity => Hf.World.Entities[EntityId];
 
 
         public EntityFormerSquadLink(XContainer data, HistoricalFigure hf)
@@ -29,13 +28,13 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                 switch (element.Name.LocalName)
                 {
                     case "squad_id":
-                        SquadID = valI;
+                        SquadId = valI;
                         break;
                     case "squad_position":
                         SquadPosition = valI;
                         break;
                     case "entity_id":
-                        EntityID = valI;
+                        EntityId = valI;
                         break;
                     case "start_year":
                         StartYear = valI;
@@ -48,24 +47,24 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
 
             
 
-            HF = hf;
+            Hf = hf;
         }
 
         public override string ToString()
         {
             if (Entity == null)
-                return SquadID + ": " + SquadPosition + " - " + EntityID + " - " + (StartYear != 0 ? StartYear.ToString() : "?") + (EndYear != 0 ? StartYear.ToString() : "?");
-            return SquadID + ": " + SquadPosition + " - " + Entity.Name + " - " + (StartYear != 0 ? StartYear.ToString() : "?") + (EndYear != 0 ? StartYear.ToString() : "?");
+                return SquadId + ": " + SquadPosition + " - " + EntityId + " - " + (StartYear != 0 ? StartYear.ToString() : "?") + (EndYear != 0 ? StartYear.ToString() : "?");
+            return SquadId + ": " + SquadPosition + " - " + Entity.Name + " - " + (StartYear != 0 ? StartYear.ToString() : "?") + (EndYear != 0 ? StartYear.ToString() : "?");
         }
 
 
-        internal void Export(int HFID)
+        internal void Export(int hfid)
         {
             var table = "HF_" + GetType().Name;
 
 
 
-            var vals = new List<object> { HFID, SquadID, EntityID, StartYear, EndYear };
+            var vals = new List<object> { hfid, SquadId, EntityId, StartYear, EndYear };
 
 
             Database.ExportWorldItem(table, vals);

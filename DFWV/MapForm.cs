@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Globalization;
@@ -14,20 +15,20 @@ namespace DFWV
 {
     public partial class MapForm : Form
     {
-        readonly World World;
-        string selectedMap = "Main";
-        Bitmap MapOverlay;
-        Size mapSize;
-        Size siteSize;
-        Site selectedSite;
-        int SiteSelection;
-        Region selectedRegion;
-        UndergroundRegion selectedUndergroundRegion;
-        WorldConstruction selectedWC;
-        River selectedRiver;
-        Mountain selectedMountain;
-        Point selectedCoords;
-        private readonly List<string> selectedSiteTypes = new List<string>();
+        readonly World _world;
+        string _selectedMap = "Main";
+        Bitmap _mapOverlay;
+        Size _mapSize;
+        Size _siteSize;
+        Site _selectedSite;
+        int _siteSelection;
+        Region _selectedRegion;
+        UndergroundRegion _selectedUndergroundRegion;
+        WorldConstruction _selectedWc;
+        River _selectedRiver;
+        Mountain _selectedMountain;
+        Point _selectedCoords;
+        private readonly List<string> _selectedSiteTypes = new List<string>();
  
         public MapForm()
         {
@@ -37,11 +38,11 @@ namespace DFWV
         internal MapForm(World world)
         {
             InitializeComponent();
-            World = world;
+            _world = world;
             LoadMaps();
             LoadSiteTypes();
             LoadHFs();
-            LoadUGRegionDepth();
+            LoadUgRegionDepth();
             ChangeMap();
             DrawMaps();
         }
@@ -49,7 +50,7 @@ namespace DFWV
         private void LoadHFs()
         {
             if (cmbHFTravels.Items.Count == 0)
-                cmbHFTravels.Items.AddRange(World.HistoricalFigures.Values.ToArray());
+                cmbHFTravels.Items.AddRange(_world.HistoricalFigures.Values.ToArray());
             cmbHFTravels.SelectedItem = cmbHFTravels.Items[0];
             cmbHFTravels.Text = cmbHFTravels.SelectedItem.ToString();
         }
@@ -63,7 +64,7 @@ namespace DFWV
             var  newItem = new ToolStripMenuItem("Main") {CheckOnClick = true, Checked = true};
             newItem.Click += MapSelectionClicked;
             mapsToolStripMenuItem.DropDownItems.Add(newItem);
-            foreach (var thisItem in from mapitem in World.Maps where mapitem.Key != "Main" select new ToolStripMenuItem(mapitem.Key) {CheckOnClick = true})
+            foreach (var thisItem in from mapitem in _world.Maps where mapitem.Key != "Main" select new ToolStripMenuItem(mapitem.Key) {CheckOnClick = true})
             {
                 thisItem.Click += MapSelectionClicked;
                 mapsToolStripMenuItem.DropDownItems.Add(thisItem);
@@ -82,9 +83,9 @@ namespace DFWV
                 lstSiteTypes.Items.Add(siteType);
         }
 
-        private void LoadUGRegionDepth()
+        private void LoadUgRegionDepth()
         {
-            foreach (var ugregion in World.UndergroundRegions.Values)
+            foreach (var ugregion in _world.UndergroundRegions.Values)
             {
                 if (ugregion.Depth < ugRegionDepthPicker.Minimum)
                     ugRegionDepthPicker.Minimum = ugregion.Depth;
@@ -96,23 +97,21 @@ namespace DFWV
         private void ChangeMap()
         {
             Cursor.Current = Cursors.WaitCursor;
-            if (picMap.Image != null)
-                picMap.Image.Dispose();
-            picMap.Image = Image.FromFile(World.Maps[selectedMap]);
+            picMap.Image?.Dispose();
+            picMap.Image = Image.FromFile(_world.Maps[_selectedMap]);
             picMap.Size = picMap.Image.Size;
-            if (picMiniMap.Image != null)
-                picMiniMap.Image.Dispose();
-            
-            picMiniMap.Image = Image.FromFile(World.Maps[selectedMap]);
+            picMiniMap.Image?.Dispose();
 
-            var sizeString = World.Parameters.First(x => x.Name == "DIM").Value;
+            picMiniMap.Image = Image.FromFile(_world.Maps[_selectedMap]);
+
+            var sizeString = _world.Parameters.First(x => x.Name == "DIM").Value;
             var sizeX = Convert.ToInt32(sizeString.Split(':')[0]);
             var sizeY = Convert.ToInt32(sizeString.Split(':')[1]);
-            mapSize = new Size(sizeX, sizeY);
-            siteSize = new Size(picMap.Image.Size.Width / mapSize.Width,
-                                picMap.Image.Size.Height / mapSize.Height);
+            _mapSize = new Size(sizeX, sizeY);
+            _siteSize = new Size(picMap.Image.Size.Width / _mapSize.Width,
+                                picMap.Image.Size.Height / _mapSize.Height);
 
-            updateLegend();
+            UpdateLegend();
             RedrawOverlay();
             DrawMaps();
         }
@@ -128,20 +127,19 @@ namespace DFWV
         private void RedrawOverlay()
         {
             Cursor.Current = Cursors.WaitCursor;
-            if (MapOverlay == null || MapOverlay.Size != new Size(picMap.Image.Width, picMap.Image.Height))
+            if (_mapOverlay == null || _mapOverlay.Size != new Size(picMap.Image.Width, picMap.Image.Height))
             {
-                if (MapOverlay != null)
-                    MapOverlay.Dispose();
-                MapOverlay = new Bitmap(picMap.Image.Width, picMap.Image.Height);
+                _mapOverlay?.Dispose();
+                _mapOverlay = new Bitmap(picMap.Image.Width, picMap.Image.Height);
             }
-            var g = Graphics.FromImage(MapOverlay);
+            var g = Graphics.FromImage(_mapOverlay);
             g.Clear(Color.Transparent);
             if (chkHighlightCoordinates.Checked)
             {
                 using (var p = new Pen(Color.White))
                 {
-                    g.DrawRectangle(p, selectedCoords.X*siteSize.Width, selectedCoords.Y*siteSize.Height,
-                        siteSize.Width - 1, siteSize.Height - 1);
+                    g.DrawRectangle(p, _selectedCoords.X*_siteSize.Width, _selectedCoords.Y*_siteSize.Height,
+                        _siteSize.Width - 1, _siteSize.Height - 1);
                 }
             }
             if (chkRivers.Checked)
@@ -161,15 +159,15 @@ namespace DFWV
             if (chkBattles.Checked)
                 DrawBattleOverlay(g);
             if (chkHistoricalFigures.Checked)
-                DrawHFOverlay(g);
+                DrawHfOverlay(g);
             if (chkHFTravels.Checked)
-                DrawHFTravelsOverlay(g);
+                DrawHfTravelsOverlay(g);
 
             DrawMaps();
             Cursor.Current = Cursors.Default;
         }
 
-        private void DrawHFTravelsOverlay(Graphics g)
+        private void DrawHfTravelsOverlay(Graphics g)
         {
             var hf = cmbHFTravels.SelectedItem as HistoricalFigure;
 
@@ -179,12 +177,7 @@ namespace DFWV
                 var events = hf.Events.Where(x => !x.Location.IsEmpty).ConsecutiveDistict();
 
                 
-                var points = new List<Point>();
-                foreach (var evt in events)
-                {
-                    points.Add(new Point(evt.Location.X*siteSize.Width + siteSize.Width/2,
-                        evt.Location.Y*siteSize.Height + siteSize.Height/2));
-                }
+                var points = events.Select(evt => new Point(evt.Location.X*_siteSize.Width + _siteSize.Width/2, evt.Location.Y*_siteSize.Height + _siteSize.Height/2)).ToList();
                 if (points.Count > 0)
                     g.DrawLines(p, points.ToArray());
 
@@ -194,39 +187,39 @@ namespace DFWV
 
         private void DrawSiteOverlay(Graphics g)
         {
-            foreach (var site in World.Sites.Values)
+            foreach (var site in _world.Sites.Values)
             {
-                if (!selectedSiteTypes.Contains(site.SiteType)) 
+                if (!_selectedSiteTypes.Contains(site.SiteType)) 
                     continue;
                 if (site.Parent != null || !chkNeutralSites.Checked)
                     continue;
 
 
-                var myColor = site.Parent == null ? Color.White : site.Parent.Color;
+                var myColor = site.Parent?.Color ?? Color.White;
                 using (var p = new Pen(myColor))
                 {
                     using (Brush b = new SolidBrush(Color.FromArgb(150,myColor)))
                     {
-                        g.FillRectangle(b, site.Coords.X * siteSize.Width, site.Coords.Y * siteSize.Height, siteSize.Width - 1, siteSize.Height - 1);
-                        g.DrawRectangle(p, site.Coords.X * siteSize.Width, site.Coords.Y * siteSize.Height, siteSize.Width - 1, siteSize.Height - 1);
+                        g.FillRectangle(b, site.Coords.X * _siteSize.Width, site.Coords.Y * _siteSize.Height, _siteSize.Width - 1, _siteSize.Height - 1);
+                        g.DrawRectangle(p, site.Coords.X * _siteSize.Width, site.Coords.Y * _siteSize.Height, _siteSize.Width - 1, _siteSize.Height - 1);
                     }
                 }
             }
-            foreach (var site in World.Sites.Values)
+            foreach (var site in _world.Sites.Values)
             {
-                if (!selectedSiteTypes.Contains(site.SiteType))
+                if (!_selectedSiteTypes.Contains(site.SiteType))
                     continue;
                 if (site.Parent == null || !chkOwnedSites.Checked)
                     continue;
 
 
-                var myColor = site.Parent == null ? Color.White : site.Parent.Color;
+                var myColor = site.Parent.Color;
                 using (var p = new Pen(myColor))
                 {
                     using (Brush b = new SolidBrush(Color.FromArgb(150, myColor)))
                     {
-                        g.FillRectangle(b, site.Coords.X * siteSize.Width, site.Coords.Y * siteSize.Height, siteSize.Width - 1, siteSize.Height - 1);
-                        g.DrawRectangle(p, site.Coords.X * siteSize.Width, site.Coords.Y * siteSize.Height, siteSize.Width - 1, siteSize.Height - 1);
+                        g.FillRectangle(b, site.Coords.X * _siteSize.Width, site.Coords.Y * _siteSize.Height, _siteSize.Width - 1, _siteSize.Height - 1);
+                        g.DrawRectangle(p, site.Coords.X * _siteSize.Width, site.Coords.Y * _siteSize.Height, _siteSize.Width - 1, _siteSize.Height - 1);
                     }
                 }
             }
@@ -234,7 +227,7 @@ namespace DFWV
 
         private void DrawCivOverlay(Graphics g)
         {
-            foreach (var site in World.Sites.Values)
+            foreach (var site in _world.Sites.Values)
             {
                 if (site.Parent == null || site.Parent.FirstSite == site) continue;
                 var myColor = Color.FromArgb(100,site.Parent.Color);
@@ -245,57 +238,57 @@ namespace DFWV
                     else
                         p.DashStyle = DashStyle.Solid;
 
-                    var Gap = (int)((siteSize.Width + siteSize.Height) / 2.0);
-                    var FromPoint = new Point(site.Parent.FirstSite.Coords.X * siteSize.Width + siteSize.Width / 2,
-                        site.Parent.FirstSite.Coords.Y * siteSize.Height + siteSize.Height / 2);
-                    var ToPoint = new Point(site.Coords.X * siteSize.Width + siteSize.Width / 2,
-                        site.Coords.Y * siteSize.Height + siteSize.Height / 2);
-                    if (!(Math.Sqrt(Math.Pow(FromPoint.X - ToPoint.X, 2) + Math.Pow(FromPoint.Y - ToPoint.Y, 2)) > Gap))
+                    var gap = (int)((_siteSize.Width + _siteSize.Height) / 2.0);
+                    var fromPoint = new Point(site.Parent.FirstSite.Coords.X * _siteSize.Width + _siteSize.Width / 2,
+                        site.Parent.FirstSite.Coords.Y * _siteSize.Height + _siteSize.Height / 2);
+                    var toPoint = new Point(site.Coords.X * _siteSize.Width + _siteSize.Width / 2,
+                        site.Coords.Y * _siteSize.Height + _siteSize.Height / 2);
+                    if (!(Math.Sqrt(Math.Pow(fromPoint.X - toPoint.X, 2) + Math.Pow(fromPoint.Y - toPoint.Y, 2)) > gap))
                         continue;
-                    var ang = Math.Atan2(FromPoint.Y - ToPoint.Y, FromPoint.X - ToPoint.X);
-                    FromPoint.X = (int)(FromPoint.X - Math.Cos(ang) * Gap);
-                    FromPoint.Y = (int)(FromPoint.Y - Math.Sin(ang) * Gap);
-                    ToPoint.X = (int)(ToPoint.X + Math.Cos(ang) * Gap);
-                    ToPoint.Y = (int)(ToPoint.Y + Math.Sin(ang) * Gap);
+                    var ang = Math.Atan2(fromPoint.Y - toPoint.Y, fromPoint.X - toPoint.X);
+                    fromPoint.X = (int)(fromPoint.X - Math.Cos(ang) * gap);
+                    fromPoint.Y = (int)(fromPoint.Y - Math.Sin(ang) * gap);
+                    toPoint.X = (int)(toPoint.X + Math.Cos(ang) * gap);
+                    toPoint.Y = (int)(toPoint.Y + Math.Sin(ang) * gap);
 
-                    g.DrawLine(p, FromPoint, ToPoint);
+                    g.DrawLine(p, fromPoint, toPoint);
                 }
             }
 
-            foreach (var entity in World.Entities.Values.Where(entity => entity.Coords != null && entity.Civilization != null))
+            foreach (var entity in _world.Entities.Values.Where(entity => entity.Coords != null && entity.Civilization != null))
             {
                 using (var p = new Pen(entity.Civilization.Color))
                 {
-                    var TopLeft = new Point();
-                    var TopRight = new Point();
-                    var BottomLeft = new Point();
-                    var BottomRight = new Point();
+                    var topLeft = new Point();
+                    var topRight = new Point();
+                    var bottomLeft = new Point();
+                    var bottomRight = new Point();
                     using (Brush b = new SolidBrush(Color.FromArgb(50, entity.Civilization.Color)))
                     {
                         foreach (var coord in entity.Coords)
                         {
-                            const int AreaMultFactor = 16;
-                            TopLeft.X = coord.X * siteSize.Width * AreaMultFactor;
-                            TopLeft.Y = coord.Y * siteSize.Height * AreaMultFactor;
-                            BottomLeft.X = coord.X * siteSize.Width * AreaMultFactor;
-                            BottomLeft.Y = TopLeft.Y + (siteSize.Height * AreaMultFactor) - 1;
-                            TopRight.X = TopLeft.X + (siteSize.Width * AreaMultFactor) - 1;
-                            TopRight.Y = TopLeft.Y;
-                            BottomRight.X = TopRight.X;
-                            BottomRight.Y = BottomLeft.Y;
+                            const int areaMultFactor = 16;
+                            topLeft.X = coord.X * _siteSize.Width * areaMultFactor;
+                            topLeft.Y = coord.Y * _siteSize.Height * areaMultFactor;
+                            bottomLeft.X = coord.X * _siteSize.Width * areaMultFactor;
+                            bottomLeft.Y = topLeft.Y + (_siteSize.Height * areaMultFactor) - 1;
+                            topRight.X = topLeft.X + (_siteSize.Width * areaMultFactor) - 1;
+                            topRight.Y = topLeft.Y;
+                            bottomRight.X = topRight.X;
+                            bottomRight.Y = bottomLeft.Y;
 
-                            g.FillRectangle(b, TopLeft.X, TopLeft.Y, (siteSize.Width * AreaMultFactor) - 1, (siteSize.Height * AreaMultFactor) - 1);
+                            g.FillRectangle(b, topLeft.X, topLeft.Y, (_siteSize.Width * areaMultFactor) - 1, (_siteSize.Height * areaMultFactor) - 1);
 
 
                             //g.DrawRectangle(p, TopLeft.X , TopLeft.Y , siteSize.Width - 1, siteSize.Height - 1);
                             if (!entity.Coords.Contains(new Point(coord.X, coord.Y - 1)))
-                                g.DrawLine(p, TopLeft, TopRight);
+                                g.DrawLine(p, topLeft, topRight);
                             if (!entity.Coords.Contains(new Point(coord.X + 1, coord.Y)))
-                                g.DrawLine(p, TopRight, BottomRight);
+                                g.DrawLine(p, topRight, bottomRight);
                             if (!entity.Coords.Contains(new Point(coord.X, coord.Y + 1)))
-                                g.DrawLine(p, BottomRight, BottomLeft);
+                                g.DrawLine(p, bottomRight, bottomLeft);
                             if (!entity.Coords.Contains(new Point(coord.X - 1, coord.Y)))
-                                g.DrawLine(p, BottomLeft, TopLeft);
+                                g.DrawLine(p, bottomLeft, topLeft);
                         }
                     }
                         
@@ -305,26 +298,26 @@ namespace DFWV
 
         private void DrawBattleOverlay(Graphics g)
         {
-            foreach (var evtcol in World.HistoricalEventCollections.Values.Where(x => HistoricalEventCollection.Types[x.Type] == "battle"))
+            foreach (var evtcol in _world.HistoricalEventCollections.Values.Where(x => HistoricalEventCollection.Types[x.Type] == "battle"))
             {
-                var battleEventCol = (EC_Battle) evtcol;
-                if (!battleEventCol.battleTotaled) continue;
-                var BattlePoint = new Point(battleEventCol.Coords.X * siteSize.Width + siteSize.Width / 2,
-                    battleEventCol.Coords.Y * siteSize.Height + siteSize.Height / 2);
+                var battleEventCol = (EcBattle) evtcol;
+                if (!battleEventCol.BattleTotaled) continue;
+                var battlePoint = new Point(battleEventCol.Coords.X * _siteSize.Width + _siteSize.Width / 2,
+                    battleEventCol.Coords.Y * _siteSize.Height + _siteSize.Height / 2);
                 var radius = (int)Math.Sqrt(battleEventCol.BattleData.AttackingDeaths + battleEventCol.BattleData.DefendingDeaths);
                 if (battleEventCol.AttackingSquad != null)
                 {
                     foreach (var squad in battleEventCol.AttackingSquad)
                     {
                         if (squad.Site == null) continue;
-                        var SitePoint = new Point(squad.Site.Coords.X * siteSize.Width + siteSize.Width / 2,
-                            squad.Site.Coords.Y * siteSize.Height + siteSize.Height / 2);
+                        var sitePoint = new Point(squad.Site.Coords.X * _siteSize.Width + _siteSize.Width / 2,
+                            squad.Site.Coords.Y * _siteSize.Height + _siteSize.Height / 2);
                         var alpha = (int)(Math.Sqrt(squad.Number / 10f) < 255 ? Math.Sqrt(squad.Number) : 255);
                         if (alpha == 0)
                             alpha = 1;
                         using (var p = new Pen(Color.FromArgb(alpha, Color.Blue)))
                         {
-                            g.DrawLine(p, SitePoint, BattlePoint);
+                            g.DrawLine(p, sitePoint, battlePoint);
                         }
                     }
                 }
@@ -333,27 +326,27 @@ namespace DFWV
                     foreach (var squad in battleEventCol.DefendingSquad)
                     {
                         if (squad.Site == null) continue;
-                        var SitePoint = new Point(squad.Site.Coords.X * siteSize.Width + siteSize.Width / 2,
-                            squad.Site.Coords.Y * siteSize.Height + siteSize.Height / 2);
+                        var sitePoint = new Point(squad.Site.Coords.X * _siteSize.Width + _siteSize.Width / 2,
+                            squad.Site.Coords.Y * _siteSize.Height + _siteSize.Height / 2);
 
                         var alpha = (int)(Math.Sqrt(squad.Number / 10f) < 255 ? Math.Sqrt(squad.Number) : 255); 
                         if (alpha == 0)
                             alpha = 1;
                         using (var p = new Pen(Color.FromArgb(alpha, Color.Green)))
                         {
-                            g.DrawLine(p, SitePoint, BattlePoint);
+                            g.DrawLine(p, sitePoint, battlePoint);
                         }
                     }
                 }
-                g.DrawEllipse(Pens.Red, BattlePoint.X - radius, BattlePoint.Y - radius, radius * 2, radius * 2);
-                g.DrawLine(Pens.Red, new Point(BattlePoint.X - radius, BattlePoint.Y), BattlePoint);
-                g.DrawLine(Pens.Red, new Point(BattlePoint.X , BattlePoint.Y - radius), BattlePoint);
+                g.DrawEllipse(Pens.Red, battlePoint.X - radius, battlePoint.Y - radius, radius * 2, radius * 2);
+                g.DrawLine(Pens.Red, new Point(battlePoint.X - radius, battlePoint.Y), battlePoint);
+                g.DrawLine(Pens.Red, new Point(battlePoint.X , battlePoint.Y - radius), battlePoint);
             }
         }
 
         private void DrawRegionOverlay(Graphics g)
         {
-            var ColorNames = new List<string>
+            var colorNames = new List<string>
             {"#00FF00", "#0000FF", "#FF0000", "#01FFFE", "#FFA6FE", "#FFDB66", "#006401", "#010067", 
                 "#95003A", "#007DB5", "#FF00F6", "#FFEEE8", "#774D00", "#90FB92", "#0076FF", "#D5FF00", 
                 "#FF937E", "#6A826C", "#FF029D", "#FE8900", "#7A4782", "#7E2DD2", "#85A900", "#FF0056", 
@@ -365,13 +358,13 @@ namespace DFWV
             var rnd = new Random();
             
             var curDistinctColor = 0; 
-            foreach (var region in World.Regions.Values.Where(region => region.Coords != null))
+            foreach (var region in _world.Regions.Values.Where(region => region.Coords != null))
             {
                 curDistinctColor++;
                 Color thisColor;
-                if (curDistinctColor < ColorNames.Count)
+                if (curDistinctColor < colorNames.Count)
                 {
-                    var rgb = int.Parse(ColorNames[curDistinctColor].Replace("#", ""), NumberStyles.HexNumber);
+                    var rgb = int.Parse(colorNames[curDistinctColor].Replace("#", ""), NumberStyles.HexNumber);
                     thisColor = Color.FromArgb(255,Color.FromArgb(rgb));
                 }
                 else
@@ -380,35 +373,35 @@ namespace DFWV
                 }
                 using (var p = new Pen(thisColor))
                 {
-                    var TopLeft = new Point();
-                    var TopRight = new Point();
-                    var BottomLeft = new Point();
-                    var BottomRight = new Point();
+                    var topLeft = new Point();
+                    var topRight = new Point();
+                    var bottomLeft = new Point();
+                    var bottomRight = new Point();
                     using (Brush b = new SolidBrush(Color.FromArgb(50, thisColor)))
                     {
                         foreach (var coord in region.Coords.Distinct())
                         {
-                            TopLeft.X = coord.X * siteSize.Width;
-                            TopLeft.Y = coord.Y * siteSize.Height;
-                            BottomLeft.X = coord.X * siteSize.Width;
-                            BottomLeft.Y = TopLeft.Y + siteSize.Height - 1;
-                            TopRight.X = TopLeft.X + siteSize.Width - 1;
-                            TopRight.Y = coord.Y * siteSize.Height;
-                            BottomRight.X = TopRight.X;
-                            BottomRight.Y = BottomLeft.Y;
+                            topLeft.X = coord.X * _siteSize.Width;
+                            topLeft.Y = coord.Y * _siteSize.Height;
+                            bottomLeft.X = coord.X * _siteSize.Width;
+                            bottomLeft.Y = topLeft.Y + _siteSize.Height - 1;
+                            topRight.X = topLeft.X + _siteSize.Width - 1;
+                            topRight.Y = coord.Y * _siteSize.Height;
+                            bottomRight.X = topRight.X;
+                            bottomRight.Y = bottomLeft.Y;
 
-                            g.FillRectangle(b, TopLeft.X, TopLeft.Y, siteSize.Width - 1, siteSize.Height - 1);
+                            g.FillRectangle(b, topLeft.X, topLeft.Y, _siteSize.Width - 1, _siteSize.Height - 1);
                             
 
                             //g.DrawRectangle(p, TopLeft.X , TopLeft.Y , siteSize.Width - 1, siteSize.Height - 1);
                             if (!region.Coords.Contains(new Point(coord.X, coord.Y-1)))
-                                g.DrawLine(p, TopLeft, TopRight);
+                                g.DrawLine(p, topLeft, topRight);
                             if (!region.Coords.Contains(new Point(coord.X+1, coord.Y)))
-                                g.DrawLine(p, TopRight, BottomRight);
+                                g.DrawLine(p, topRight, bottomRight);
                             if (!region.Coords.Contains(new Point(coord.X, coord.Y+1)))
-                                g.DrawLine(p, BottomRight, BottomLeft);
+                                g.DrawLine(p, bottomRight, bottomLeft);
                             if (!region.Coords.Contains(new Point(coord.X - 1, coord.Y)))
-                                g.DrawLine(p, BottomLeft, TopLeft);
+                                g.DrawLine(p, bottomLeft, topLeft);
                         }
                     }
                 }
@@ -417,7 +410,7 @@ namespace DFWV
 
         private void DrawUndergroundRegionOverlay(Graphics g)
         {
-            var ColorNames = new List<string>
+            var colorNames = new List<string>
             {"#00FF00", "#0000FF", "#FF0000", "#01FFFE", "#FFA6FE", "#FFDB66", "#006401", "#010067", 
                 "#95003A", "#007DB5", "#FF00F6", "#FFEEE8", "#774D00", "#90FB92", "#0076FF", "#D5FF00", 
                 "#FF937E", "#6A826C", "#FF029D", "#FE8900", "#7A4782", "#7E2DD2", "#85A900", "#FF0056", 
@@ -429,13 +422,13 @@ namespace DFWV
             var rnd = new Random();
 
             var curDistinctColor = 0;
-            foreach (var ugregion in World.UndergroundRegions.Values.Where(ugregion => ugregion.Depth == ugRegionDepthPicker.Value).Where(ugregion => ugregion.Coords != null))
+            foreach (var ugregion in _world.UndergroundRegions.Values.Where(ugregion => ugregion.Depth == ugRegionDepthPicker.Value).Where(ugregion => ugregion.Coords != null))
             {
                 curDistinctColor++;
                 Color thisColor;
-                if (curDistinctColor < ColorNames.Count)
+                if (curDistinctColor < colorNames.Count)
                 {
-                    var rgb = int.Parse(ColorNames[curDistinctColor].Replace("#", ""), NumberStyles.HexNumber);
+                    var rgb = int.Parse(colorNames[curDistinctColor].Replace("#", ""), NumberStyles.HexNumber);
                     thisColor = Color.FromArgb(255, Color.FromArgb(rgb));
                 }
                 else
@@ -444,35 +437,35 @@ namespace DFWV
                 }
                 using (var p = new Pen(thisColor))
                 {
-                    var TopLeft = new Point();
-                    var TopRight = new Point();
-                    var BottomLeft = new Point();
-                    var BottomRight = new Point();
+                    var topLeft = new Point();
+                    var topRight = new Point();
+                    var bottomLeft = new Point();
+                    var bottomRight = new Point();
                     using (Brush b = new SolidBrush(Color.FromArgb(50, thisColor)))
                     {
                         foreach (var coord in ugregion.Coords)
                         {
-                            TopLeft.X = coord.X * siteSize.Width;
-                            TopLeft.Y = coord.Y * siteSize.Height;
-                            BottomLeft.X = coord.X * siteSize.Width;
-                            BottomLeft.Y = TopLeft.Y + siteSize.Height - 1;
-                            TopRight.X = TopLeft.X + siteSize.Width - 1;
-                            TopRight.Y = coord.Y * siteSize.Height;
-                            BottomRight.X = TopRight.X;
-                            BottomRight.Y = BottomLeft.Y;
+                            topLeft.X = coord.X * _siteSize.Width;
+                            topLeft.Y = coord.Y * _siteSize.Height;
+                            bottomLeft.X = coord.X * _siteSize.Width;
+                            bottomLeft.Y = topLeft.Y + _siteSize.Height - 1;
+                            topRight.X = topLeft.X + _siteSize.Width - 1;
+                            topRight.Y = coord.Y * _siteSize.Height;
+                            bottomRight.X = topRight.X;
+                            bottomRight.Y = bottomLeft.Y;
 
-                            g.FillRectangle(b, TopLeft.X, TopLeft.Y, siteSize.Width - 1, siteSize.Height - 1);
+                            g.FillRectangle(b, topLeft.X, topLeft.Y, _siteSize.Width - 1, _siteSize.Height - 1);
 
 
                             //g.DrawRectangle(p, TopLeft.X , TopLeft.Y , siteSize.Width - 1, siteSize.Height - 1);
                             if (!ugregion.Coords.Contains(new Point(coord.X, coord.Y - 1)))
-                                g.DrawLine(p, TopLeft, TopRight);
+                                g.DrawLine(p, topLeft, topRight);
                             if (!ugregion.Coords.Contains(new Point(coord.X + 1, coord.Y)))
-                                g.DrawLine(p, TopRight, BottomRight);
+                                g.DrawLine(p, topRight, bottomRight);
                             if (!ugregion.Coords.Contains(new Point(coord.X, coord.Y + 1)))
-                                g.DrawLine(p, BottomRight, BottomLeft);
+                                g.DrawLine(p, bottomRight, bottomLeft);
                             if (!ugregion.Coords.Contains(new Point(coord.X - 1, coord.Y)))
-                                g.DrawLine(p, BottomLeft, TopLeft);
+                                g.DrawLine(p, bottomLeft, topLeft);
                         }
                     }
                 }
@@ -480,12 +473,12 @@ namespace DFWV
         }
 
 
-        private void DrawHFOverlay(Graphics g)
+        private void DrawHfOverlay(Graphics g)
         {
-            var CoordPop = new Dictionary<Point, int>();
+            var coordPop = new Dictionary<Point, int>();
 
 
-            foreach (var hf in World.HistoricalFigures.Values.Where(x => x.DiedEvent == null))
+            foreach (var hf in _world.HistoricalFigures.Values.Where(x => x.DiedEvent == null))
             {
                 var hfCoord = Point.Empty;
                 if (hf.Site != null)
@@ -496,21 +489,21 @@ namespace DFWV
                     continue;
 
                 if (hfCoord == Point.Empty) continue;
-                if (!CoordPop.ContainsKey(hfCoord))
-                    CoordPop.Add(hfCoord, 1);
+                if (!coordPop.ContainsKey(hfCoord))
+                    coordPop.Add(hfCoord, 1);
                 else
-                    CoordPop[hfCoord]++;
+                    coordPop[hfCoord]++;
             }
 
-            var maxPop = Math.Sqrt(CoordPop.Values.Max());
+            var maxPop = Math.Sqrt(coordPop.Values.Max());
 
-            foreach (var coord in CoordPop.Keys)
+            foreach (var coord in coordPop.Keys)
             {
-                var red = (int)(255.0f * (Math.Sqrt(CoordPop[coord]) / maxPop));
+                var red = (int)(255.0f * (Math.Sqrt(coordPop[coord]) / maxPop));
 
                 using (Brush b = new SolidBrush(Color.FromArgb(225, red, 0, 0)))
                 {
-                    g.FillRectangle(b, coord.X * siteSize.Width + 1, coord.Y * siteSize.Height + 1, siteSize.Width - 2, siteSize.Height - 2);
+                    g.FillRectangle(b, coord.X * _siteSize.Width + 1, coord.Y * _siteSize.Height + 1, _siteSize.Width - 2, _siteSize.Height - 2);
                 }
 
             }
@@ -519,13 +512,9 @@ namespace DFWV
 
         private void DrawWorldConstructionOverlay(Graphics g)
         {
-            foreach (var wc in World.WorldConstructions.Values)
+            foreach (var wc in _world.WorldConstructions.Values)
             {
-                Color myColor;
-                if (wc.CreatedEvent != null && wc.CreatedEvent.Civ != null && wc.CreatedEvent.Civ.Civilization != null)
-                    myColor = wc.CreatedEvent.Civ.Civilization.Color;
-                else
-                    myColor = Color.White;
+                var myColor = wc.CreatedEvent?.Civ?.Civilization?.Color ?? Color.White;
                 using (var p = new Pen(myColor))
                 {
                     
@@ -534,11 +523,11 @@ namespace DFWV
 
                     if (wc.Coords == null)
                     {
-                        var gap = (int) ((siteSize.Width + siteSize.Height)/4.0);
-                        var fromPoint = new Point(wc.From.Coords.X*siteSize.Width + siteSize.Width/2,
-                            wc.From.Coords.Y*siteSize.Height + siteSize.Height/2);
-                        var toPoint = new Point(wc.To.Coords.X*siteSize.Width + siteSize.Width/2,
-                            wc.To.Coords.Y*siteSize.Height + siteSize.Height/2);
+                        var gap = (int) ((_siteSize.Width + _siteSize.Height)/4.0);
+                        var fromPoint = new Point(wc.From.Coords.X*_siteSize.Width + _siteSize.Width/2,
+                            wc.From.Coords.Y*_siteSize.Height + _siteSize.Height/2);
+                        var toPoint = new Point(wc.To.Coords.X*_siteSize.Width + _siteSize.Width/2,
+                            wc.To.Coords.Y*_siteSize.Height + _siteSize.Height/2);
                         if (
                             !(Math.Sqrt(Math.Pow(fromPoint.X - toPoint.X, 2) + Math.Pow(fromPoint.Y - toPoint.Y, 2)) >
                               gap))
@@ -556,10 +545,10 @@ namespace DFWV
                         {
                             for (var i = 0; i < wc.Coords.Count - 1; i++)
                             {
-                                var fromPoint = new Point(wc.Coords[i].X * siteSize.Width + siteSize.Width / 2,
-                                    wc.Coords[i].Y * siteSize.Height + siteSize.Height / 2);
-                                var toPoint = new Point(wc.Coords[i+1].X * siteSize.Width + siteSize.Width / 2,
-                                    wc.Coords[i+1].Y * siteSize.Height + siteSize.Height / 2);
+                                var fromPoint = new Point(wc.Coords[i].X * _siteSize.Width + _siteSize.Width / 2,
+                                    wc.Coords[i].Y * _siteSize.Height + _siteSize.Height / 2);
+                                var toPoint = new Point(wc.Coords[i+1].X * _siteSize.Width + _siteSize.Width / 2,
+                                    wc.Coords[i+1].Y * _siteSize.Height + _siteSize.Height / 2);
                                 p.DashStyle = wc.ConstructionType == "tunnel" 
                                     ? DashStyle.Dot 
                                     : DashStyle.Solid;
@@ -569,9 +558,9 @@ namespace DFWV
                         else
                         {
                             //var min = Math.Min(siteSize.Width, siteSize.Height);
-                            var pt = new[] { new Point(wc.Coords[0].X * siteSize.Width,  wc.Coords[0].Y * siteSize.Height + siteSize.Height / 2),
-                                                   new Point(wc.Coords[0].X * siteSize.Width + siteSize.Width / 2,  wc.Coords[0].Y * siteSize.Height), 
-                                                   new Point(wc.Coords[0].X * siteSize.Width + siteSize.Width,  wc.Coords[0].Y * siteSize.Height + siteSize.Height / 2) };
+                            var pt = new[] { new Point(wc.Coords[0].X * _siteSize.Width,  wc.Coords[0].Y * _siteSize.Height + _siteSize.Height / 2),
+                                                   new Point(wc.Coords[0].X * _siteSize.Width + _siteSize.Width / 2,  wc.Coords[0].Y * _siteSize.Height), 
+                                                   new Point(wc.Coords[0].X * _siteSize.Width + _siteSize.Width,  wc.Coords[0].Y * _siteSize.Height + _siteSize.Height / 2) };
 
                             //g.DrawEllipse(p, new Rectangle(wc.Coords[0].X * siteSize.Width, wc.Coords[0].Y * siteSize.Height, min, min));
                             g.DrawCurve(p, pt);
@@ -580,12 +569,11 @@ namespace DFWV
                     
                 }
             }
-
         }
 
         private void DrawMountainOverlay(Graphics g)
         {
-            foreach (var mnt in World.Mountains.Values)
+            foreach (var mnt in _world.Mountains.Values)
             {
                 using (var p = new Pen(Color.White))
                 {
@@ -594,16 +582,16 @@ namespace DFWV
                     p.Width = 2;
 
 
-                    g.DrawPolygon(p, new []{new Point(mnt.Coords.X * siteSize.Width + 1, mnt.Coords.Y * siteSize.Height + siteSize.Height - 1),
-                                     new Point(mnt.Coords.X * siteSize.Width + siteSize.Width / 2, mnt.Coords.Y * siteSize.Height + 1),
-                                     new Point(mnt.Coords.X * siteSize.Width + siteSize.Width - 1, mnt.Coords.Y * siteSize.Height + siteSize.Height - 1)});
+                    g.DrawPolygon(p, new []{new Point(mnt.Coords.X * _siteSize.Width + 1, mnt.Coords.Y * _siteSize.Height + _siteSize.Height - 1),
+                                     new Point(mnt.Coords.X * _siteSize.Width + _siteSize.Width / 2, mnt.Coords.Y * _siteSize.Height + 1),
+                                     new Point(mnt.Coords.X * _siteSize.Width + _siteSize.Width - 1, mnt.Coords.Y * _siteSize.Height + _siteSize.Height - 1)});
                 }
             }
         }
 
         private void DrawRiverOverlay(Graphics g)
         {
-            foreach (var river in World.Rivers.Values)
+            foreach (var river in _world.Rivers.Values)
             {
                 Color myColor = Color.FromArgb(100,100,255);
 
@@ -616,7 +604,7 @@ namespace DFWV
                     p.Width = 2;
 
 
-                    var points = river.Coords.Select(coord => new Point(coord.X*siteSize.Width + siteSize.Width/2, coord.Y*siteSize.Height + siteSize.Height/2)).ToList();
+                    var points = river.Coords.Select(coord => new Point(coord.X*_siteSize.Width + _siteSize.Width/2, coord.Y*_siteSize.Height + _siteSize.Height/2)).ToList();
 
 
                     g.DrawLines(p, points.ToArray());
@@ -638,7 +626,7 @@ namespace DFWV
         private void MapSelectionClicked(object sender, EventArgs e)
         {
             UncheckOtherToolStripMenuItems((ToolStripMenuItem)sender);
-            selectedMap = ((ToolStripMenuItem)sender).Text;
+            _selectedMap = ((ToolStripMenuItem)sender).Text;
 
 
             ChangeMap();
@@ -662,7 +650,7 @@ namespace DFWV
         {
 
 
-            e.Graphics.DrawImage(MapOverlay, new Point(0, 0));
+            e.Graphics.DrawImage(_mapOverlay, new Point(0, 0));
         }
 
         private void picMiniMap_Paint(object sender, PaintEventArgs e)
@@ -701,52 +689,52 @@ namespace DFWV
         }
 
 
-        private static bool isEnablingSections;
+        private static bool _isEnablingSections;
 
         private void ViewOptionChanged(object sender, EventArgs e)
         {
-            if (isEnablingSections)
+            if (_isEnablingSections)
                 return;
             if (sender is CheckBox && sender == chkSites)
             {
-                var chkbox = sender as CheckBox;
+                var chkbox = (CheckBox) sender;
                 grpSites.Visible = chkbox.Checked;
-                isEnablingSections = true;
+                _isEnablingSections = true;
                 chkOwnedSites.Checked = chkbox.Checked;
                 chkNeutralSites.Checked = chkbox.Checked;
                 foreach (ListViewItem item in lstSiteTypes.Items)
                     item.Checked = chkSites.Checked;
-                isEnablingSections = false;
+                _isEnablingSections = false;
             }
-            selectedSiteTypes.Clear();
+            _selectedSiteTypes.Clear();
             foreach (ListViewItem item in lstSiteTypes.Items)
             {
                 if (item.Checked)
-                    selectedSiteTypes.Add(item.Text);
+                    _selectedSiteTypes.Add(item.Text);
             }
 
-            updateLegend();
+            UpdateLegend();
             RedrawOverlay();
 
         }
 
-        private void updateLegend()
+        private void UpdateLegend()
         {
 
             if (chkShowLegend.Checked)
             {
                 picLegend.Visible = true;
-                switch (selectedMap)
+                switch (_selectedMap)
                 {
                     case "Biome":
-                        if (World.MapLegends.ContainsKey("biome_color_key"))
-                            World.MapLegends["biome_color_key"].DrawTo(picLegend);
+                        if (_world.MapLegends.ContainsKey("biome_color_key"))
+                            _world.MapLegends["biome_color_key"].DrawTo(picLegend);
                         else
                             picLegend.Visible = false;
                         break;
                     case "Hydrosphere":
-                        if (World.MapLegends.ContainsKey("hydro_color_key"))
-                            World.MapLegends["hydro_color_key"].DrawTo(picLegend);
+                        if (_world.MapLegends.ContainsKey("hydro_color_key"))
+                            _world.MapLegends["hydro_color_key"].DrawTo(picLegend);
                         else
                             picLegend.Visible = false;
                         break;
@@ -754,8 +742,8 @@ namespace DFWV
                     case "Nobility":
                     case "Structures":
                     case "Trade":
-                        if (World.MapLegends.ContainsKey("structure_color_key"))
-                            World.MapLegends["structure_color_key"].DrawTo(picLegend);
+                        if (_world.MapLegends.ContainsKey("structure_color_key"))
+                            _world.MapLegends["structure_color_key"].DrawTo(picLegend);
                         else
                             picLegend.Visible = false;
                         break;
@@ -804,12 +792,12 @@ namespace DFWV
 
         private void picMap_MouseMove(object sender, MouseEventArgs e)
         {
-            var oldCoords = selectedCoords;
-            selectedCoords = new Point(e.X / siteSize.Width, e.Y / siteSize.Height);
-            if (selectedCoords != oldCoords && chkHighlightCoordinates.Checked)
+            var oldCoords = _selectedCoords;
+            _selectedCoords = new Point(e.X / _siteSize.Width, e.Y / _siteSize.Height);
+            if (_selectedCoords != oldCoords && chkHighlightCoordinates.Checked)
                 RedrawOverlay();
-            lblMapCoords.Text = $"({selectedCoords.X}, {selectedCoords.Y})";
-            var selectedObject = getSelectedObject(selectedCoords);
+            lblMapCoords.Text = $"({_selectedCoords.X}, {_selectedCoords.Y})";
+            var selectedObject = GetSelectedObject(_selectedCoords);
             var nameText = "";
             var altNameText = "";
             var ownerText = "";
@@ -818,49 +806,48 @@ namespace DFWV
             var objectTypeText = "";
             if (selectedObject is Site)
             {
-                nameText = selectedSite.ToString();
-                altNameText = selectedSite.AltName;
-                ownerText = selectedSite.Owner != null ? selectedSite.Owner.ToString() : "";
-                parentText = selectedSite.Parent != null ? selectedSite.Parent.ToString() : "";
-                typeText = selectedSite.SiteType;
+                nameText = _selectedSite.ToString();
+                altNameText = _selectedSite.AltName;
+                ownerText = _selectedSite.Owner?.ToString() ?? "";
+                parentText = _selectedSite.Parent?.ToString() ?? "";
+                typeText = _selectedSite.SiteType;
                 objectTypeText = "Site";
             }
             if (selectedObject is Mountain)
             {
-                nameText = selectedMountain.ToString();
-                altNameText = selectedMountain.AltName;
+                nameText = _selectedMountain.ToString();
+                altNameText = _selectedMountain.AltName;
 
                 objectTypeText = "Mountain";
 
             }
             if (selectedObject is WorldConstruction)
             {
-                nameText = selectedWC.ToString();
-                typeText = selectedWC.ConstructionType;
-                if (selectedWC.CreatedEvent != null && selectedWC.CreatedEvent.Civ != null &&
-                    selectedWC.CreatedEvent.Civ.Civilization != null)
-                    ownerText = selectedWC.CreatedEvent.Civ.Civilization.ToString();
+                nameText = _selectedWc.ToString();
+                typeText = _selectedWc.ConstructionType;
+                if (_selectedWc.CreatedEvent?.Civ?.Civilization != null)
+                    ownerText = _selectedWc.CreatedEvent.Civ.Civilization.ToString();
 
                 lblMapAltNameCaption.Visible = false;
-                if (selectedWC.MasterWC != null)
-                    parentText = selectedWC.MasterWC.ToString();
+                if (_selectedWc.MasterWc != null)
+                    parentText = _selectedWc.MasterWc.ToString();
                 objectTypeText = "World Construction";
             }
             if (selectedObject is Region)
             {
-                nameText = selectedRegion.ToString();
-                typeText = WorldClasses.Region.Types[selectedRegion.Type];
+                nameText = _selectedRegion.ToString();
+                typeText = WorldClasses.Region.Types[_selectedRegion.Type];
                 objectTypeText = "Region";
             }
             if (selectedObject is UndergroundRegion)
             {
-                nameText = selectedUndergroundRegion.ToString();
+                nameText = _selectedUndergroundRegion.ToString();
                 objectTypeText = "Underground Region";
             }
             if (selectedObject is River)
             {
-                nameText = selectedRiver.ToString();
-                altNameText = selectedRiver.AltName;
+                nameText = _selectedRiver.ToString();
+                altNameText = _selectedRiver.AltName;
                 objectTypeText = "River";
             }
             lblMapName.Text = nameText;
@@ -885,100 +872,98 @@ namespace DFWV
             }
         }
 
-        private WorldObject getSelectedObject(Point mouseCoord)
+        private WorldObject GetSelectedObject(Point mouseCoord)
         {
             if (chkSites.Checked)
             {
-                selectedSite = GetSiteAt(mouseCoord);
-                if (selectedSite != null)
-                    return selectedSite;
+                _selectedSite = GetSiteAt(mouseCoord);
+                if (_selectedSite != null)
+                    return _selectedSite;
             }
             if (chkConstructions.Checked)
             {
-                selectedWC = GetWorldConstructionAt(mouseCoord);
-                if (selectedWC != null)
-                    return selectedWC;
+                _selectedWc = GetWorldConstructionAt(mouseCoord);
+                if (_selectedWc != null)
+                    return _selectedWc;
             }
             if (chkMountains.Checked)
             {
-                selectedMountain = GetMountainAt(mouseCoord);
-                if (selectedMountain != null)
-                    return selectedMountain;
+                _selectedMountain = GetMountainAt(mouseCoord);
+                if (_selectedMountain != null)
+                    return _selectedMountain;
             }
             if (chkRivers.Checked)
             {
-                selectedRiver = GetRiverAt(mouseCoord);
-                if (selectedRiver != null)
-                    return selectedRiver;
+                _selectedRiver = GetRiverAt(mouseCoord);
+                if (_selectedRiver != null)
+                    return _selectedRiver;
             }
             if (chkRegions.Checked)
             {
-                selectedRegion = GetRegionAt(mouseCoord);
-                if (selectedRegion != null)
-                    return selectedRegion;
+                _selectedRegion = GetRegionAt(mouseCoord);
+                if (_selectedRegion != null)
+                    return _selectedRegion;
             }
             if (chkUGRegions.Checked)
             {
-                selectedUndergroundRegion = GetUndergroundRegionAt(mouseCoord);
-                if (selectedUndergroundRegion != null)
-                    return selectedUndergroundRegion;
+                _selectedUndergroundRegion = GetUndergroundRegionAt(mouseCoord);
+                return _selectedUndergroundRegion;
             }
             return null;
         }
 
         private River GetRiverAt(Point mouseCoord)
         {
-            if (!World.hasPlusXML)
+            if (!_world.HasPlusXml)
                 return null;
-            var rivermatches = World.Rivers.Values.Where(x => x.Coords.Contains(mouseCoord));
-            if (!rivermatches.Any())
+            var rivermatches = _world.Rivers.Values.Where(x => x.Coords.Contains(mouseCoord));
+            var riverArray = rivermatches as River[] ?? rivermatches.ToArray();
+            if (!riverArray.Any())
                 return null;
-            var nonparentMatch = rivermatches.Where(x => x.Parent == null);
-            if (nonparentMatch.Count() == 1)
-                return nonparentMatch.First();
-            if (nonparentMatch.Count() > 1)
-                return nonparentMatch.OrderByDescending(x => x.Coords.Count).FirstOrDefault();
-            return rivermatches.OrderByDescending(x => x.Coords.Count).FirstOrDefault();
+            var nonParentMatchArray = riverArray.Where(x => x.Parent == null).ToArray();
+            return nonParentMatchArray.Any() ? 
+                nonParentMatchArray.OrderByDescending(x => x.Coords.Count).FirstOrDefault() : 
+                riverArray.OrderByDescending(x => x.Coords.Count).FirstOrDefault();
         }
 
         private Mountain GetMountainAt(Point mouseCoord)
         {
-            if (!World.hasPlusXML)
+            if (!_world.HasPlusXml)
                 return null;
 
 
-            return World.Mountains.Values.FirstOrDefault(x => x.Coords == mouseCoord);
+            return _world.Mountains.Values.FirstOrDefault(x => x.Coords == mouseCoord);
 
         }
 
         private WorldConstruction GetWorldConstructionAt(Point coord)
         {
-            if (!World.hasPlusXML)
+            if (!_world.HasPlusXml)
                 return
-                    World.WorldConstructions.Values.Where(wc => wc.From != null && wc.To != null)
+                    _world.WorldConstructions.Values.Where(wc => wc.From != null && wc.To != null)
                         .FirstOrDefault(wc => wc.From.Coords == coord || wc.To.Coords == coord);
-            var returnWC = World.WorldConstructions.Values.Where(wc => wc.Coords != null && wc.ConstructionType != "road")
+            var returnWc = _world.WorldConstructions.Values.Where(wc => wc.Coords != null && wc.ConstructionType != "road")
                 .FirstOrDefault(wc => wc.Coords.Contains(coord));
-            if (returnWC != null)
-                return returnWC;
+            if (returnWc != null)
+                return returnWc;
 
-            return World.WorldConstructions.Values.Where(wc => wc.Coords != null && wc.ConstructionType == "road")
+            return _world.WorldConstructions.Values.Where(wc => wc.Coords != null && wc.ConstructionType == "road")
                 .FirstOrDefault(wc => wc.Coords.Contains(coord));
         }
 
         private Region GetRegionAt(Point coord)
         {
-            return World.Regions.Values.Where(region => region.Coords != null).FirstOrDefault(region => region.Coords.Contains(coord));
+            return _world.Regions.Values.Where(region => region.Coords != null).FirstOrDefault(region => region.Coords.Contains(coord));
         }
         private UndergroundRegion GetUndergroundRegionAt(Point coord)
         {
-            return World.UndergroundRegions.Values.Where(ugregion => ugregion.Coords != null).FirstOrDefault(ugregion => ugregion.Coords.Contains(coord) && ugregion.Depth == ugRegionDepthPicker.Value);
+            return _world.UndergroundRegions.Values.Where(ugregion => ugregion.Coords != null).FirstOrDefault(ugregion => ugregion.Coords.Contains(coord) && ugregion.Depth == ugRegionDepthPicker.Value);
         }
 
         private Site GetSiteAt(Point coord)
         {
-            return World.Sites.Values.FirstOrDefault(
-                site => selectedSiteTypes.Contains(site.SiteType) 
+            return _world.Sites.Values.FirstOrDefault(
+                site => _selectedSiteTypes.Contains(site.SiteType) 
                     && site.Coords == coord 
                     && ((site.Parent == null && chkNeutralSites.Checked) 
                        || (site.Parent != null && chkOwnedSites.Checked)) 
@@ -997,39 +982,39 @@ namespace DFWV
             switch (e.Button)
             {
                 case MouseButtons.Left:
-                    if (chkSites.Checked && selectedSite != null)
+                    if (chkSites.Checked && _selectedSite != null)
                     {
-                        selectedSite.Select(Program.mainForm);
-                        Program.mainForm.BringToFront();
+                        _selectedSite.Select(Program.MainForm);
+                        Program.MainForm.BringToFront();
                     }
-                    else if (chkMountains.Checked && selectedMountain != null)
+                    else if (chkMountains.Checked && _selectedMountain != null)
                     {
-                        selectedMountain.Select(Program.mainForm);
-                        Program.mainForm.BringToFront();
+                        _selectedMountain.Select(Program.MainForm);
+                        Program.MainForm.BringToFront();
                     }
-                    else if (chkConstructions.Checked && selectedWC != null)
+                    else if (chkConstructions.Checked && _selectedWc != null)
                     {
-                        selectedWC.Select(Program.mainForm);
-                        Program.mainForm.BringToFront();
+                        _selectedWc.Select(Program.MainForm);
+                        Program.MainForm.BringToFront();
                     }
-                    else if (chkRivers.Checked && selectedRiver != null)
+                    else if (chkRivers.Checked && _selectedRiver != null)
                     {
-                        selectedRiver.Select(Program.mainForm);
-                        Program.mainForm.BringToFront();
+                        _selectedRiver.Select(Program.MainForm);
+                        Program.MainForm.BringToFront();
                     }
-                    else if (chkRegions.Checked && selectedRegion != null)
+                    else if (chkRegions.Checked && _selectedRegion != null)
                     {
-                        selectedRegion.Select(Program.mainForm);
-                        Program.mainForm.BringToFront();
+                        _selectedRegion.Select(Program.MainForm);
+                        Program.MainForm.BringToFront();
                     }
-                    else if (chkUGRegions.Checked && selectedUndergroundRegion != null)
+                    else if (chkUGRegions.Checked && _selectedUndergroundRegion != null)
                     {
-                        selectedUndergroundRegion.Select(Program.mainForm);
-                        Program.mainForm.BringToFront();
+                        _selectedUndergroundRegion.Select(Program.MainForm);
+                        Program.MainForm.BringToFront();
                     }
                     break;
                 case MouseButtons.Right:
-                    SiteSelection++;
+                    _siteSelection++;
                     break;
             }
         }
@@ -1041,11 +1026,11 @@ namespace DFWV
         {
             BringToFront();
 
-            MiniMapCenterOn(new Point((int)(picMiniMap.Width * (float)loc.X / mapSize.Width), (int)(picMiniMap.Height * (float)loc.Y / mapSize.Height)));
+            MiniMapCenterOn(new Point((int)(picMiniMap.Width * (float)loc.X / _mapSize.Width), (int)(picMiniMap.Height * (float)loc.Y / _mapSize.Height)));
 
             var locationOnForm = picMap.PointToScreen(Point.Empty);
                 
-            Cursor.Position = new Point(loc.X * siteSize.Width + locationOnForm.X + siteSize.Width / 2, loc.Y * siteSize.Height + locationOnForm.Y + siteSize.Height / 2);
+            Cursor.Position = new Point(loc.X * _siteSize.Width + locationOnForm.X + _siteSize.Width / 2, loc.Y * _siteSize.Height + locationOnForm.Y + _siteSize.Height / 2);
 
         }
 
@@ -1070,7 +1055,7 @@ namespace DFWV
             picLegend.Top += e.Y + 10;
         }
 
-        private void cmbHFTravels_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        private void cmbHFTravels_Validating(object sender, CancelEventArgs e)
         {
             ComboBox cmbBox = sender as ComboBox;
 

@@ -10,26 +10,26 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
-    public class EC_BeastAttack : HistoricalEventCollection
+    public class EcBeastAttack : HistoricalEventCollection
     {
-        private int? SubregionID { get; set; }
+        private int? SubregionId { get; }
         private Region Subregion { get; set; }
-        private int? FeatureLayerID { get; set; }
-        private int? SiteID { get; set; }
+        private int? FeatureLayerId { get; }
+        private int? SiteId { get; }
         private Site Site { get; set; }
-        private Point Coords { get; set; }
-        private int? ParentEventCol_ { get; set; }
+        private Point Coords { get; }
+        private int? ParentEventCol_ { get; }
         private HistoricalEventCollection ParentEventCol { get; set; }
-        private int Ordinal { get; set; }
-        private List<int> EventCol_ { get; set; }
+        private int Ordinal { get; }
+        private List<int> EventCol_ { get; }
         private List<HistoricalEventCollection> EventCol { get; set; }
-        private int? DefendingEnid { get; set; }
+        private int? DefendingEnid { get; }
         private Entity DefendingEn { get; set; }
-        public HistoricalFigure BeastHF { private get; set; }
+        public HistoricalFigure BeastHf { private get; set; }
 
         override public Point Location => Site.Coords;
 
-        public EC_BeastAttack(XDocument xdoc, World world)
+        public EcBeastAttack(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -56,15 +56,15 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         break;
                     case "subregion_id":
                         if (valI != -1)
-                            SubregionID = valI;
+                            SubregionId = valI;
                         break;
                     case "feature_layer_id":
                         if (valI != -1)
-                            FeatureLayerID = valI;
+                            FeatureLayerId = valI;
                         break;
                     case "site_id":
                         if (valI != -1)
-                            SiteID = valI;
+                            SiteId = valI;
                         break;
                     case "coords":
                         Coords = new Point(Convert.ToInt32(val.Split(',')[0]), Convert.ToInt32(val.Split(',')[1]));
@@ -79,7 +79,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -91,10 +91,10 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             base.Link();
             if (ParentEventCol_.HasValue && World.HistoricalEventCollections.ContainsKey(ParentEventCol_.Value))
                 ParentEventCol = World.HistoricalEventCollections[ParentEventCol_.Value];
-            if (SubregionID.HasValue && World.Regions.ContainsKey(SubregionID.Value))
-                Subregion = World.Regions[SubregionID.Value];
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
+            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
+                Subregion = World.Regions[SubregionId.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
             if (DefendingEnid.HasValue && World.Entities.ContainsKey(DefendingEnid.Value))
                 DefendingEn = World.Entities[DefendingEnid.Value];
 
@@ -121,7 +121,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             frm.lblBeastAttackCoords.Data = new Coordinate(Coords);
             frm.lblBeastAttackDefender.Data = DefendingEn;
             frm.lblBeastAttackParent.Data = ParentEventCol;
-            frm.lblBeastAttackBeast.Data = BeastHF;
+            frm.lblBeastAttackBeast.Data = BeastHf;
 
             if (StartTime != null || EndTime != null)
             {
@@ -151,10 +151,10 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         {
             base.Process();
             if (Site.BeastAttackEventCollections == null)
-                Site.BeastAttackEventCollections = new List<EC_BeastAttack>();
+                Site.BeastAttackEventCollections = new List<EcBeastAttack>();
             Site.BeastAttackEventCollections.Add(this);
             if (DefendingEn.BeastAttackEventCollections == null)
-                DefendingEn.BeastAttackEventCollections = new List<EC_BeastAttack>();
+                DefendingEn.BeastAttackEventCollections = new List<EcBeastAttack>();
             DefendingEn.BeastAttackEventCollections.Add(this);
         }
 
@@ -162,18 +162,18 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         {
             base.Evaluate();
 
-            var checkBeastHF = Event.Where(x => HistoricalEvent.Types[x.Type] == "hf simple battle event")
-                .Cast<HE_HFSimpleBattleEvent>()
-                .TakeWhile(ev => ev.Group1HF.Count != 0)
-                .Select(ev => ev.Group1HF[0])
+            var checkBeastHf = Event.Where(x => HistoricalEvent.Types[x.Type] == "hf simple battle event")
+                .Cast<HeHfSimpleBattleEvent>()
+                .TakeWhile(ev => ev.Group1Hf.Count != 0)
+                .Select(ev => ev.Group1Hf[0])
                 .FirstOrDefault();
 
-            if (checkBeastHF != null)
+            if (checkBeastHf != null)
             {
-                BeastHF = checkBeastHF;
-                foreach (var ev in Event.Where(x => HistoricalEvent.Types[x.Type] == "creature devoured").Cast<HE_CreatureDevoured>())
+                BeastHf = checkBeastHf;
+                foreach (var ev in Event.Where(x => HistoricalEvent.Types[x.Type] == "creature devoured").Cast<HeCreatureDevoured>())
                 {
-                    ev.Devourer = BeastHF;
+                    ev.Devourer = BeastHf;
                 }
             }
         }
@@ -185,7 +185,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
             table = GetType().Name;
 
-            var vals = new List<object> { ID, ParentEventCol, Ordinal, BeastHF == null ? (object)DBNull.Value : BeastHF.ID, DefendingEnid, SiteID, SubregionID, FeatureLayerID };
+            var vals = new List<object> { Id, ParentEventCol, Ordinal, BeastHf?.Id ?? (object)DBNull.Value, DefendingEnid, SiteId, SubregionId, FeatureLayerId };
 
             if (Coords.IsEmpty)
                 vals.Add(DBNull.Value);
@@ -199,7 +199,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             table = "EC_EventCols";
             foreach (var evtcol in EventCol)
             {
-                vals = new List<object> { ID, evtcol.ID };
+                vals = new List<object> { Id, evtcol.Id };
                 Database.ExportWorldItem(table, vals);
 
             }

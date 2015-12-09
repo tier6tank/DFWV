@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic;
 using System.Windows.Forms;
 using DFWV.WorldClasses;
 using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalEventClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
-using System.Linq.Dynamic;
+using Squad = DFWV.WorldClasses.Squad;
 
 namespace DFWV
 {
@@ -17,7 +18,7 @@ namespace DFWV
     /// </summary>
     public class FilterSettings
     {
-        private readonly Dictionary<Type, Filter> Filters = new Dictionary<Type, Filter>();
+        private readonly Dictionary<Type, Filter> _filters = new Dictionary<Type, Filter>();
 
         public readonly Dictionary<Type, Dictionary<string, Type>> Fields =
             new Dictionary<Type, Dictionary<string, Type>>();
@@ -25,11 +26,11 @@ namespace DFWV
         public readonly Dictionary<Type, Dictionary<string, IEnumerable<string>>> Options =
             new Dictionary<Type, Dictionary<string, IEnumerable<string>>>();
 
-        private readonly World World;
+        private readonly World _world;
 
         public FilterSettings(World world)
         {
-            World = world;
+            _world = world;
             LoadFields();
             LoadOptions();
             SetDefaultFilters();
@@ -171,7 +172,7 @@ namespace DFWV
             Fields[typeof(Construction)] = new Dictionary<string, Type>();
             Fields[typeof(Item)] = new Dictionary<string, Type>();
             Fields[typeof(Plant)] = new Dictionary<string, Type>();
-            Fields[typeof(WorldClasses.Squad)] = new Dictionary<string, Type>();
+            Fields[typeof(Squad)] = new Dictionary<string, Type>();
 
             foreach (var type in new List<Type>
             {
@@ -179,11 +180,11 @@ namespace DFWV
                 typeof(HistoricalEventCollection), typeof(HistoricalFigure), typeof(Leader), typeof(Parameter), typeof(Race), typeof(Region), typeof(Site),
                 typeof(Structure), typeof(UndergroundRegion), typeof(WorldConstruction), typeof(Dynasty), typeof(River), typeof(Mountain),
                 typeof(Army), typeof(Unit), typeof(Vehicle), typeof(Engraving), typeof(Incident), typeof(Crime), typeof(AdamantineTube),
-                typeof(Report), typeof(Announcement), typeof(Building), typeof(Construction), typeof(Item), typeof(Plant), typeof(WorldClasses.Squad)
+                typeof(Report), typeof(Announcement), typeof(Building), typeof(Construction), typeof(Item), typeof(Plant), typeof(Squad)
             })
             {
                 Fields[type].Add("Name", typeof (string));
-                if (!type.IsSubclassOf(typeof (XMLObject))) continue;
+                if (!type.IsSubclassOf(typeof (XmlObject))) continue;
                 Fields[type].Add("ID", typeof(int));
                 Fields[type].Add("Notability", typeof(int));
             }
@@ -199,16 +200,16 @@ namespace DFWV
         {
             Options[typeof (Civilization)] = new Dictionary<string, IEnumerable<string>>
             {
-                {"RaceName", World.Races.Values.Select(x=>x.Key)}
+                {"RaceName", _world.Races.Values.Select(x=>x.Key)}
             };
             Options[typeof (Entity)] = new Dictionary<string, IEnumerable<string>>
             {
-                {"RaceName", World.Races.Values.Select(x=>x.Key)},
+                {"RaceName", _world.Races.Values.Select(x=>x.Key)},
                 {"Type", new List<string> {"Civilization", "Religion", "Group", "Site Government", "Migrating Group", "Nomadic Group", "Outcast", "Other" }}
             };
             Options[typeof (EntityPopulation)] = new Dictionary<string, IEnumerable<string>>
             {
-                {"RaceName", World.Races.Values.Select(x=>x.Key)}
+                {"RaceName", _world.Races.Values.Select(x=>x.Key)}
             };
             Options[typeof(WorldConstruction)] = new Dictionary<string, IEnumerable<string>>
             {
@@ -216,7 +217,7 @@ namespace DFWV
             };
             Options[typeof(God)] = new Dictionary<string, IEnumerable<string>>
             {
-                {"RaceName", World.Races.Values.Select(x=>x.Key)},
+                {"RaceName", _world.Races.Values.Select(x=>x.Key)},
                 {"GodType", new List<string> {"deity", "force"}}
             };
             Options[typeof (HistoricalEvent)] = new Dictionary<string, IEnumerable<string>>
@@ -232,9 +233,9 @@ namespace DFWV
             {
                 {"Job", HistoricalFigure.AssociatedTypes},
                 {"HFCaste", HistoricalFigure.Castes},
-                {"RaceName", World.Races.Values.Select(x=>x.Key)}
+                {"RaceName", _world.Races.Values.Select(x=>x.Key)}
             };
-            Options[typeof(Leader)] = new Dictionary<string, IEnumerable<string>> { { "RaceName", World.Races.Values.Select(x => x.Key) } };
+            Options[typeof(Leader)] = new Dictionary<string, IEnumerable<string>> { { "RaceName", _world.Races.Values.Select(x => x.Key) } };
             Options[typeof (Region)] = new Dictionary<string, IEnumerable<string>> {{"RegionType", Region.Types}};
             Options[typeof(Site)] = new Dictionary<string, IEnumerable<string>> { { "SiteType", Site.Types } };
             Options[typeof(Structure)] = new Dictionary<string, IEnumerable<string>> { { "StructureType", Structure.Types } };
@@ -294,7 +295,7 @@ namespace DFWV
             this[typeof(Construction)] = new Filter("Name", null, null, -1);
             this[typeof(Item)] = new Filter("Name", null, null, -1);
             this[typeof(Plant)] = new Filter("Name", null, null, -1);
-            this[typeof(WorldClasses.Squad)] = new Filter("Name", null, null, -1);
+            this[typeof(Squad)] = new Filter("Name", null, null, -1);
         }
 
 
@@ -303,13 +304,13 @@ namespace DFWV
         /// </summary>
         public Filter this[Type T]
         {
-            get { return Filters[T]; }
+            get { return _filters[T]; }
             set
             {
-                if (!Filters.ContainsKey(T))
-                    Filters.Add(T, value);
+                if (!_filters.ContainsKey(T))
+                    _filters.Add(T, value);
                 else
-                    Filters[T] = value;
+                    _filters[T] = value;
 
             }
         }
@@ -328,7 +329,7 @@ namespace DFWV
         public readonly List<string> OrderBy = new List<string>();
         public readonly List<string> GroupBy = new List<string>();
 
-        public int Take { get; private set; }
+        public int Take { get; }
 
 
         /// <summary>
@@ -432,21 +433,21 @@ namespace DFWV
             }
             catch (Exception e)
             {
-                var ErrorMessage = string.Format("Filter error, returning defaults{0}{1}{0}", Environment.NewLine,
+                var errorMessage = string.Format("Filter error, returning defaults{0}{1}{0}", Environment.NewLine,
                     typeof (T));
 
-                ErrorMessage = Where.Aggregate(ErrorMessage,
+                errorMessage = Where.Aggregate(errorMessage,
                     (current, @where) => current + ("Where: " + @where + Environment.NewLine));
-                ErrorMessage = OrderBy.Aggregate(ErrorMessage,
+                errorMessage = OrderBy.Aggregate(errorMessage,
                     (current, @orderby) => current + ("OrderBy: " + @orderby + Environment.NewLine));
-                ErrorMessage = GroupBy.Aggregate(ErrorMessage,
+                errorMessage = GroupBy.Aggregate(errorMessage,
                     (current, @groupby) => current + ("GroupBy: " + @groupby + Environment.NewLine));
 
 
-                ErrorMessage += "Take: " + Take + Environment.NewLine;
-                ErrorMessage += e.Message;
+                errorMessage += "Take: " + Take + Environment.NewLine;
+                errorMessage += e.Message;
 
-                MessageBox.Show(ErrorMessage, @"DF World Viewer", MessageBoxButtons.OK);
+                MessageBox.Show(errorMessage, @"DF World Viewer", MessageBoxButtons.OK);
 
                 Where.Clear();
                 OrderBy.Clear();

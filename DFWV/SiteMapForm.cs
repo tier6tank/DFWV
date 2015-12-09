@@ -8,19 +8,19 @@ namespace DFWV
 {
     public partial class SiteMapForm : Form
     {
-        readonly World World;
-        private Site site;
+        readonly World _world;
+        private Site _site;
 
-        public MapLegend curLegend { get; set; }
+        public MapLegend CurLegend { get; set; }
 
 
         internal new Site Site
         {
-            get { return site; }
+            get { return _site; }
             set
             {
-                site = value;
-                var siteMapPath = site.SiteMapPath;
+                _site = value;
+                var siteMapPath = _site.SiteMapPath;
                 if (siteMapPath != null && File.Exists(siteMapPath))
                 {
                     picSiteMap.ImageLocation = siteMapPath;
@@ -28,11 +28,11 @@ namespace DFWV
                     picSiteMap.SizeMode = PictureBoxSizeMode.AutoSize;
                     Width = picSiteMap.Right + 27;
                     Height = Math.Max(picSiteMap.Bottom, picSiteMapLegend.Bottom) + 51;
-                    curLegend = Site.Types[site.Type.Value].Contains("dark") ? World.MapLegends["site_color_key_dark"] : World.MapLegends["site_color_key"];
-                    curLegend.DrawTo(picSiteMapLegend);
+                    CurLegend = Site.Types[_site.Type.Value].Contains("dark") ? _world.MapLegends["site_color_key_dark"] : _world.MapLegends["site_color_key"];
+                    CurLegend.DrawTo(picSiteMapLegend);
 
                 }
-                lblSiteName.Text = $"{site.Name} \"{site.AltName}\" ({Site.Types[site.Type.Value]})";
+                lblSiteName.Text = $"{_site.Name} \"{_site.AltName}\" ({Site.Types[_site.Type.Value]})";
             }
         }
 
@@ -45,7 +45,7 @@ namespace DFWV
         internal SiteMapForm(World world)
         {
             InitializeComponent();
-            World = world;
+            _world = world;
         }
 
         private void SiteMapForm_Load(object sender, EventArgs e)
@@ -58,18 +58,18 @@ namespace DFWV
 
         }
 
-        private int lastX;
-        private int lastY;
+        private int _lastX;
+        private int _lastY;
 
         private void picSiteMap_MouseMove(object sender, MouseEventArgs e)
         {
             var pixel = (picSiteMap.Image as Bitmap).GetPixel(e.X, e.Y);
 
-            if (e.X == lastX && e.Y == lastY)
+            if (e.X == _lastX && e.Y == _lastY)
                 return;
-            lastX = e.X;
-            lastY = e.Y;
-            var pixeltext = curLegend.NameForColor(pixel);
+            _lastX = e.X;
+            _lastY = e.Y;
+            var pixeltext = CurLegend.NameForColor(pixel);
 
             if (pixeltext != string.Empty)
             {

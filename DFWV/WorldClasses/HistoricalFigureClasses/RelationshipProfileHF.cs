@@ -5,7 +5,7 @@ using System.Xml.Linq;
 
 namespace DFWV.WorldClasses.HistoricalFigureClasses
 {
-    class RelationshipProfileHF
+    class RelationshipProfileHf
     {
 
         //Historical Figures.relationship_profile_hf has unknown sub items!
@@ -16,20 +16,20 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         //    <rep_friendly>1</rep_friendly>
 
 
-        public int RelationshipHFID { get; set; }
+        public int RelationshipHfid { get; set; }
         public int MeetCount { get; set; }
         public int LastMeetYear { get; set; }
         public int LastMeetSeconds { get; set; }
         public int RepFriendly { get; set; }
 
-        public HistoricalFigure thisHF { get; private set; }
+        public HistoricalFigure ThisHf { get; }
 
-        public HistoricalFigure HF => thisHF.World.HistoricalFigures.ContainsKey(RelationshipHFID) ? thisHF.World.HistoricalFigures[RelationshipHFID] : null;
+        public HistoricalFigure Hf => ThisHf.World.HistoricalFigures.ContainsKey(RelationshipHfid) ? ThisHf.World.HistoricalFigures[RelationshipHfid] : null;
 
-        public RelationshipProfileHF(XContainer data, HistoricalFigure hf)
+        public RelationshipProfileHf(XContainer data, HistoricalFigure hf)
         {
 
-            RelationshipHFID = Convert.ToInt32(data.Element("hf_id").Value);
+            RelationshipHfid = Convert.ToInt32(data.Element("hf_id").Value);
             MeetCount = Convert.ToInt32(data.Element("meet_count").Value);
             LastMeetYear = Convert.ToInt32(data.Element("last_meet_year").Value);
             LastMeetSeconds = Convert.ToInt32(data.Element("last_meet_seconds72").Value);
@@ -38,22 +38,22 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             else
                 RepFriendly = -1;
 
-            thisHF = hf;
+            ThisHf = hf;
         }
 
         public override string ToString()
         {
-            if (HF == null)
-                return RelationshipHFID + " - " + MeetCount + " - " + LastMeetYear + " - " + LastMeetSeconds + " - " + RepFriendly;
-            return HF + " - " + MeetCount + " - " + LastMeetYear + " - " + LastMeetSeconds + " - " + RepFriendly;
+            if (Hf == null)
+                return RelationshipHfid + " - " + MeetCount + " - " + LastMeetYear + " - " + LastMeetSeconds + " - " + RepFriendly;
+            return Hf + " - " + MeetCount + " - " + LastMeetYear + " - " + LastMeetSeconds + " - " + RepFriendly;
         }
 
-        internal void Export(int HFID)
+        internal void Export(int hfid)
         {
             var table = "HF_" + GetType().Name;
 
 
-            var vals = new List<object> { HFID, RelationshipHFID, MeetCount, LastMeetYear, LastMeetSeconds, RepFriendly };
+            var vals = new List<object> { hfid, RelationshipHfid, MeetCount, LastMeetYear, LastMeetSeconds, RepFriendly };
 
 
             Database.ExportWorldItem(table, vals);

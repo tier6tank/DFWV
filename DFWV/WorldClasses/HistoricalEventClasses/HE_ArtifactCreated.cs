@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -8,18 +7,18 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     //TODO: Missing Details:  UnitID does not associate with anything, "NameOnly" events aren't shown in legends
-    public class HE_ArtifactCreated : HistoricalEvent
+    public class HeArtifactCreated : HistoricalEvent
     {
-        private int? SiteID { get; set; }
+        private int? SiteId { get; }
         public Site Site { get; set; }
-        private int? HistFigureID { get; set; }
+        private int? HistFigureId { get; }
         public HistoricalFigure HistFigure { get; private set; }
-        private int? UnitID { get; set; }
-        private int? ArtifactID { get; set; }
+        private int? UnitId { get; }
+        private int? ArtifactId { get; }
         public Artifact Artifact { get; set; }
-        private bool NameOnly { get; set; }
+        private bool NameOnly { get; }
 
-        override public Point Location => Site != null ? Site.Location : Point.Empty;
+        override public Point Location => Site?.Location ?? Point.Empty;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
@@ -30,7 +29,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Site; }
         }
 
-        public HE_ArtifactCreated(XDocument xdoc, World world)
+        public HeArtifactCreated(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -47,25 +46,25 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "artifact_id":
-                        ArtifactID = valI;
+                        ArtifactId = valI;
                         break;
                     case "unit_id":
                         if (valI != -1)
-                        UnitID = valI;
+                        UnitId = valI;
                         break;
                     case "hist_figure_id":
-                        HistFigureID = valI;
+                        HistFigureId = valI;
                         break;
                     case "site_id":
                         if (valI != -1)
-                        SiteID = valI;
+                        SiteId = valI;
                         break;
                     case "name_only":
                         NameOnly = true;
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -74,12 +73,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
-            if (HistFigureID.HasValue && World.HistoricalFigures.ContainsKey(HistFigureID.Value))
-                HistFigure = World.HistoricalFigures[HistFigureID.Value];
-            if (ArtifactID.HasValue && World.Artifacts.ContainsKey(ArtifactID.Value))
-                Artifact = World.Artifacts[ArtifactID.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
+            if (HistFigureId.HasValue && World.HistoricalFigures.ContainsKey(HistFigureId.Value))
+                HistFigure = World.HistoricalFigures[HistFigureId.Value];
+            if (ArtifactId.HasValue && World.Artifacts.ContainsKey(ArtifactId.Value))
+                Artifact = World.Artifacts[ArtifactId.Value];
             //if (UnitID.HasValue && World.HistoricalFigures.ContainsKey(UnitID.Value))
             //    Unit = World.HistoricalFigures[UnitID.Value];
         }
@@ -104,7 +103,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "site":
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -137,8 +136,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             EventLabel(frm, parent, ref location, "Artifact:", Artifact);
             if (Artifact.Type != "" && Artifact.Material != "")
                 EventLabel(frm, parent, ref location, "Item:", Artifact.Material + " " + Artifact.Type);
-            if (UnitID != null)
-                EventLabel(frm, parent, ref location, "Unit ID:", UnitID.Value.ToString());
+            if (UnitId != null)
+                EventLabel(frm, parent, ref location, "Unit ID:", UnitId.Value.ToString());
             EventLabel(frm, parent, ref location, "Made by:", HistFigure);
             EventLabel(frm, parent, ref location, "Site:", Site);
         }
@@ -170,11 +169,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID, 
-                ArtifactID.DBExport(), 
-                UnitID.DBExport(), 
-                SiteID.DBExport(), 
-                HistFigureID.DBExport(), 
+                Id, 
+                ArtifactId.DBExport(), 
+                UnitId.DBExport(), 
+                SiteId.DBExport(), 
+                HistFigureId.DBExport(), 
                 NameOnly
             };
 

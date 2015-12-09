@@ -12,20 +12,20 @@ namespace DFWV
 {
     public partial class TimelineForm : Form
     {
-        readonly World World;
-        int lastEvent;
-        readonly List<XMLObject> WorldEvents = new List<XMLObject>();
+        readonly World _world;
+        int _lastEvent;
+        readonly List<XmlObject> _worldEvents = new List<XmlObject>();
 
-        private readonly List<string> CriticalEventTypes = new List<string>
+        private readonly List<string> _criticalEventTypes = new List<string>
         { "created site", "entity created", "peace accepted", "created world construction", 
             "artifact created", "reclaim site", "destroyed site", "new site leader", "site taken over", "site abandoned"};
 
-        private readonly List<string> MajorEventTypes = new List<string>
+        private readonly List<string> _majorEventTypes = new List<string>
         {"hf died", "hf simple battle event", "created structure", "field battle", "attacked site", 
             "entity relocate", "plundered site", "peace rejected", "razed structure", "artifact lost", "diplomat lost", "hf revived", "agreement rejected", "first contact", 
             "agreement made", "first contact failed"};
 
-        private readonly List<string> MinorEventTypes = new List<string>
+        private readonly List<string> _minorEventTypes = new List<string>
         { "create entity position", "merchant", "item stolen", "masterpiece lost", "change hf state", 
             "add hf entity link", "add hf hf link", "add hf site link",  "change hf job", "hf travel", "hf new pet", 
             "hf wounded", "creature devoured", "hf profaned structure", "hf does interaction", "hf abducted", "changed creature type", 
@@ -53,36 +53,36 @@ namespace DFWV
             "hf reach summit", "remove hf hf link", "agreement concluded", "artifact hidden", "artifact found", "artifact recovered", "artifact dropped", "entity incorporated", "impersonate hf"};
 */
 
-        private readonly List<string> CriticalEventCollectionTypes = new List<string> { "battle", "war", "site conquered" };
+        private readonly List<string> _criticalEventCollectionTypes = new List<string> { "battle", "war", "site conquered" };
 
-        private readonly List<string> MinorEventCollectionTypes = new List<string> { "abduction", "beast attack", "duel", "journey", "theft" };
+        private readonly List<string> _minorEventCollectionTypes = new List<string> { "abduction", "beast attack", "duel", "journey", "theft" };
 
-        private Image stretchedMap;
-        private Point PingLocation;
-        private readonly Image marker;
-        private SizeF siteSize;
+        private Image _stretchedMap;
+        private Point _pingLocation;
+        private readonly Image _marker;
+        private SizeF _siteSize;
 
         internal TimelineForm(World world)
         {
             InitializeComponent();
-            World = world;
+            _world = world;
             var resources = new ResourceManager("DFWV.Properties.Resources", typeof(TimelineForm).Assembly);
-            marker = resources.GetObject("Marker") as Bitmap;
+            _marker = resources.GetObject("Marker") as Bitmap;
 
-            var sizeString = World.Parameters.First(x => x.Name == "DIM").Value;
+            var sizeString = _world.Parameters.First(x => x.Name == "DIM").Value;
             var sizeX = Convert.ToInt32(sizeString.Split(':')[0]);
             var sizeY = Convert.ToInt32(sizeString.Split(':')[1]);
             var mapSize = new Size(sizeX, sizeY);
 
 
-            stretchedMap = new Bitmap(picMap.Width, picMap.Height);
-            var g = Graphics.FromImage(stretchedMap);
-            g.DrawImage(Image.FromFile(World.Maps["Main"]), picMap.DisplayRectangle);
+            _stretchedMap = new Bitmap(picMap.Width, picMap.Height);
+            var g = Graphics.FromImage(_stretchedMap);
+            g.DrawImage(Image.FromFile(_world.Maps["Main"]), picMap.DisplayRectangle);
             g.Dispose();
 
-            picMap.Image = stretchedMap;
+            picMap.Image = _stretchedMap;
             
-            siteSize = new SizeF(picMap.Width / (float)mapSize.Width,
+            _siteSize = new SizeF(picMap.Width / (float)mapSize.Width,
                                 picMap.Height / (float)mapSize.Height);
         }
 
@@ -106,20 +106,20 @@ namespace DFWV
 
         private void SortEvents()
         {
-            WorldEvents.Clear();
+            _worldEvents.Clear();
 
-            foreach (var he in World.HistoricalEvents.Values)
+            foreach (var he in _world.HistoricalEvents.Values)
             {
                 if (he.EventCollection != null)
                 { 
                     if (he == he.EventCollection.Event.First())
-                        WorldEvents.Add(he.EventCollection);
-                    WorldEvents.Add(he);
+                        _worldEvents.Add(he.EventCollection);
+                    _worldEvents.Add(he);
                     if (he == he.EventCollection.Event.Last())
-                        WorldEvents.Add(he.EventCollection);
+                        _worldEvents.Add(he.EventCollection);
                 }
                 else
-                    WorldEvents.Add(he);
+                    _worldEvents.Add(he);
             }
 
         }
@@ -142,43 +142,41 @@ namespace DFWV
             }
         }
 
-        private void ModifyMap(XMLObject nextItem)
+        private void ModifyMap(XmlObject nextItem)
         {
-            if (nextItem is HE_CreatedSite || nextItem is HE_ReclaimSite || 
-                nextItem is HE_NewSiteLeader || nextItem is HE_SiteTakenOver || 
-                nextItem is HE_SiteAbandoned || nextItem is HE_DestroyedSite)
+            if (nextItem is HeCreatedSite || nextItem is HeReclaimSite || 
+                nextItem is HeNewSiteLeader || nextItem is HeSiteTakenOver || 
+                nextItem is HeSiteAbandoned || nextItem is HeDestroyedSite)
             {
                 var evt = (HistoricalEvent)nextItem;
                 
                 Color penCol;
-                if (nextItem is HE_CreatedSite)
-                    penCol = (nextItem as HE_CreatedSite).Civ != null && (nextItem as HE_CreatedSite).Civ.Civilization != null ?
-                        (nextItem as HE_CreatedSite).Civ.Civilization.Color :
-                        Color.White;
-                else if (nextItem is HE_ReclaimSite)
-                    penCol = (nextItem as HE_ReclaimSite).Civ.Civilization.Color;
-                else if (nextItem is HE_NewSiteLeader)
+                if (nextItem is HeCreatedSite)
+                    penCol = (nextItem as HeCreatedSite).Civ?.Civilization?.Color ?? Color.White;
+                else if (nextItem is HeReclaimSite)
+                    penCol = (nextItem as HeReclaimSite).Civ.Civilization.Color;
+                else if (nextItem is HeNewSiteLeader)
                 {
-                    penCol = (nextItem as HE_NewSiteLeader).AttackerCiv.Civilization != null ? (nextItem as HE_NewSiteLeader).AttackerCiv.Civilization.Color : Color.White;
+                    penCol = (nextItem as HeNewSiteLeader).AttackerCiv.Civilization?.Color ?? Color.White;
                 }
-                else if (nextItem is HE_SiteTakenOver)
-                    penCol = (nextItem as HE_SiteTakenOver).AttackerCiv.Civilization.Color;
-                else if (nextItem is HE_SiteAbandoned)
+                else if (nextItem is HeSiteTakenOver)
+                    penCol = (nextItem as HeSiteTakenOver).AttackerCiv.Civilization.Color;
+                else if (nextItem is HeSiteAbandoned)
                     penCol = Color.White;
                 else // if (nextItem is HE_DestroyedSite)
                     penCol = Color.White;
 
                 
-                var g = Graphics.FromImage(stretchedMap);
+                var g = Graphics.FromImage(_stretchedMap);
                 var loc = new Point();
                 var markerSize = new SizeF(7.0f,7.0f);
-                if (siteSize.Width > 7)
-                    markerSize.Width = (int)siteSize.Width;
-                if (siteSize.Height > 7)
-                    markerSize.Height = (int)siteSize.Height;
+                if (_siteSize.Width > 7)
+                    markerSize.Width = (int)_siteSize.Width;
+                if (_siteSize.Height > 7)
+                    markerSize.Height = (int)_siteSize.Height;
 
-                loc.X = (int)(evt.Location.X * siteSize.Width + siteSize.Width / 2 - markerSize.Width / 2);
-                loc.Y = (int)(evt.Location.Y * siteSize.Height + siteSize.Height / 2 - markerSize.Height / 2);
+                loc.X = (int)(evt.Location.X * _siteSize.Width + _siteSize.Width / 2 - markerSize.Width / 2);
+                loc.Y = (int)(evt.Location.Y * _siteSize.Height + _siteSize.Height / 2 - markerSize.Height / 2);
 
                 using (var p = new Pen(penCol))
                 {
@@ -189,24 +187,24 @@ namespace DFWV
             }
             else
             {
-                var worldConstruction = nextItem as HE_CreatedWorldConstruction;
+                var worldConstruction = nextItem as HeCreatedWorldConstruction;
                 if (worldConstruction == null) 
                     return;
                 var evt = worldConstruction;
-                var g = Graphics.FromImage(stretchedMap);
+                var g = Graphics.FromImage(_stretchedMap);
 
 
                 var from = new Point();
                 var to = new Point();
 
-                @from.X = (int)(evt.Site1.Location.X * siteSize.Width + siteSize.Width / 2);
-                @from.Y = (int)(evt.Site1.Location.Y * siteSize.Height + siteSize.Height / 2);
+                @from.X = (int)(evt.Site1.Location.X * _siteSize.Width + _siteSize.Width / 2);
+                @from.Y = (int)(evt.Site1.Location.Y * _siteSize.Height + _siteSize.Height / 2);
 
-                to.X = (int)(evt.Site2.Location.X * siteSize.Width + siteSize.Width / 2);
-                to.Y = (int)(evt.Site2.Location.Y * siteSize.Height + siteSize.Height / 2);
+                to.X = (int)(evt.Site2.Location.X * _siteSize.Width + _siteSize.Width / 2);
+                to.Y = (int)(evt.Site2.Location.Y * _siteSize.Height + _siteSize.Height / 2);
 
                 var lineColor = Color.White;
-                if (evt.Civ != null && evt.Civ.Civilization != null)
+                if (evt.Civ?.Civilization != null)
                     lineColor = evt.Civ.Civilization.Color;
 
                 using (var p = new Pen(lineColor))
@@ -220,56 +218,56 @@ namespace DFWV
             }
         }
 
-        private XMLObject GetNextItem()
+        private XmlObject GetNextItem()
         {
 
 
             do
-                lastEvent++;
+                _lastEvent++;
             while (SkipEvent());
 
 
-            return lastEvent == WorldEvents.Count ? null : WorldEvents[lastEvent];
+            return _lastEvent == _worldEvents.Count ? null : _worldEvents[_lastEvent];
         }
 
         private bool SkipEvent()
         {
-            if (lastEvent >= WorldEvents.Count || !(WorldEvents[lastEvent] is HE_CreatedWorldConstruction))
-                return lastEvent < WorldEvents.Count &&
+            if (_lastEvent >= _worldEvents.Count || !(_worldEvents[_lastEvent] is HeCreatedWorldConstruction))
+                return _lastEvent < _worldEvents.Count &&
                        !(
-                           WorldEvents[lastEvent] is HistoricalEventCollection &&
+                           _worldEvents[_lastEvent] is HistoricalEventCollection &&
                            (
                                chkEventCollectionCritical.Checked &&
-                               CriticalEventCollectionTypes.Contains(
+                               _criticalEventCollectionTypes.Contains(
                                    HistoricalEventCollection.Types[
-                                       ((HistoricalEventCollection) WorldEvents[lastEvent]).Type])
+                                       ((HistoricalEventCollection) _worldEvents[_lastEvent]).Type])
                                ||
                                chkEventCollectionMinor.Checked &&
-                               MinorEventCollectionTypes.Contains(
+                               _minorEventCollectionTypes.Contains(
                                    HistoricalEventCollection.Types[
-                                       ((HistoricalEventCollection) WorldEvents[lastEvent]).Type])
+                                       ((HistoricalEventCollection) _worldEvents[_lastEvent]).Type])
                                )
                            ||
-                           WorldEvents[lastEvent] is HistoricalEvent &&
+                           _worldEvents[_lastEvent] is HistoricalEvent &&
                            (
                                chkEventCritical.Checked &&
-                               CriticalEventTypes.Contains(
-                                   HistoricalEvent.Types[((HistoricalEvent) WorldEvents[lastEvent]).Type])
+                               _criticalEventTypes.Contains(
+                                   HistoricalEvent.Types[((HistoricalEvent) _worldEvents[_lastEvent]).Type])
                                ||
                                chkEventMajor.Checked &&
-                               MajorEventTypes.Contains(
-                                   HistoricalEvent.Types[((HistoricalEvent) WorldEvents[lastEvent]).Type])
+                               _majorEventTypes.Contains(
+                                   HistoricalEvent.Types[((HistoricalEvent) _worldEvents[_lastEvent]).Type])
                                ||
                                chkEventMinor.Checked &&
-                               MinorEventTypes.Contains(
-                                   HistoricalEvent.Types[((HistoricalEvent) WorldEvents[lastEvent]).Type])
+                               _minorEventTypes.Contains(
+                                   HistoricalEvent.Types[((HistoricalEvent) _worldEvents[_lastEvent]).Type])
                                )
                            );
 
-            var evt = (HE_CreatedWorldConstruction)WorldEvents[lastEvent];
+            var evt = (HeCreatedWorldConstruction)_worldEvents[_lastEvent];
 
-            return !((chkEventCritical.Checked && evt.MasterWC == null) ||
-                     (chkEventMajor.Checked && evt.MasterWC != null));
+            return !((chkEventCritical.Checked && evt.MasterWc == null) ||
+                     (chkEventMajor.Checked && evt.MasterWc != null));
         }
 
         private void lstEvents_DrawItem(object sender, DrawItemEventArgs e)
@@ -295,13 +293,13 @@ namespace DFWV
                 {
                     var hec = (HistoricalEventCollection)lstEvents.Items[e.Index];
 
-                    var isHECending = lstEvents.Items.IndexOf(hec) != e.Index;
+                    var isHeCending = lstEvents.Items.IndexOf(hec) != e.Index;
 
                     var loc = hec.Location;
                     if (loc == Point.Empty)
-                        drawstring = hec.ToTimelineString() + (isHECending ? " Ended " : "");
+                        drawstring = hec.ToTimelineString() + (isHeCending ? " Ended " : "");
                     else
-                        drawstring = hec.ToTimelineString() + (isHECending ? " Ended " : "") + " - (" + loc.X + "," + loc.Y + ")";
+                        drawstring = hec.ToTimelineString() + (isHeCending ? " Ended " : "") + " - (" + loc.X + "," + loc.Y + ")";
 
 
                     mColor = Color.Red;
@@ -317,11 +315,11 @@ namespace DFWV
         {
             lstEvents.Items.Clear();
             SortEvents();
-            lastEvent = -1;
+            _lastEvent = -1;
 
-            stretchedMap = new Bitmap(picMap.Width, picMap.Height);
-            var g = Graphics.FromImage(stretchedMap);
-            g.DrawImage(Image.FromFile(World.Maps["Main"]), picMap.DisplayRectangle);
+            _stretchedMap = new Bitmap(picMap.Width, picMap.Height);
+            var g = Graphics.FromImage(_stretchedMap);
+            g.DrawImage(Image.FromFile(_world.Maps["Main"]), picMap.DisplayRectangle);
             g.Dispose(); 
 
             EventTimer.Enabled = true;
@@ -332,8 +330,7 @@ namespace DFWV
         {
             var listBox = (ListBox)sender;
             var selectedItem = (WorldObject)listBox.SelectedItem;
-            if (selectedItem != null)
-                selectedItem.Select(Program.mainForm);
+            selectedItem?.Select(Program.MainForm);
         }
 
         private void Clear_Click(object sender, EventArgs e)
@@ -358,7 +355,7 @@ namespace DFWV
         private void DisplayMap()
         {
             ShowMap.Text = @"Hide Map";
-            picMap.Image = stretchedMap;
+            picMap.Image = _stretchedMap;
             Height = picMap.Bottom + 50;
         }
 
@@ -374,29 +371,29 @@ namespace DFWV
 
         private void Ping(WorldObject evt)
         {
-            PingLocation = evt.Location == Point.Empty ? Point.Empty : evt.Location;
+            _pingLocation = evt.Location == Point.Empty ? Point.Empty : evt.Location;
             picMap.Refresh();
         }
 
         private void picMap_Paint(object sender, PaintEventArgs e)
         {
 
-            e.Graphics.DrawImage(stretchedMap, new Point(0,0));
-            if (PingLocation == Point.Empty)
+            e.Graphics.DrawImage(_stretchedMap, new Point(0,0));
+            if (_pingLocation == Point.Empty)
                 return;
             var loc = new Point
             {
-                X = (int) (PingLocation.X*siteSize.Width + siteSize.Width/2 - marker.Width / 2f),
-                Y = (int) (PingLocation.Y*siteSize.Height + siteSize.Height/2 - marker.Height / 2f)
+                X = (int) (_pingLocation.X*_siteSize.Width + _siteSize.Width/2 - _marker.Width / 2f),
+                Y = (int) (_pingLocation.Y*_siteSize.Height + _siteSize.Height/2 - _marker.Height / 2f)
             };
 
-            e.Graphics.DrawImage(marker, loc);
+            e.Graphics.DrawImage(_marker, loc);
         }
 
         private void trackSpeed_Scroll(object sender, EventArgs e)
         {
-            var Values = new List<int> {10, 50, 100, 200, 500, 1000, 1500, 2000, 3000, 4000};
-            EventTimer.Interval = Values[10 - trackSpeed.Value];
+            var values = new List<int> {10, 50, 100, 200, 500, 1000, 1500, 2000, 3000, 4000};
+            EventTimer.Interval = values[10 - trackSpeed.Value];
         }
 
 

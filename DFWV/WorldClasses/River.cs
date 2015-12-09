@@ -7,7 +7,7 @@ using DFWV.Annotations;
 
 namespace DFWV.WorldClasses
 {
-    public class River : XMLObject
+    public class River : XmlObject
     {
 
         [UsedImplicitly]
@@ -47,7 +47,7 @@ namespace DFWV.WorldClasses
                         Elevation = val.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries).Select(x => Convert.ToInt32(x)).ToList();
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -62,7 +62,7 @@ namespace DFWV.WorldClasses
             frm.grpRiver.Text = ToString();
             frm.grpRiver.Show();
 #if DEBUG
-            frm.grpRiver.Text += $" - ID: {ID}";
+            frm.grpRiver.Text += $" - ID: {Id}";
 #endif
 
 
@@ -81,7 +81,7 @@ namespace DFWV.WorldClasses
 
             var vals = new List<object>
             {
-                ID, 
+                Id, 
                 Name.DBExport(), 
                 AltName.DBExport(),
                 Parent.DBExport()
@@ -92,21 +92,21 @@ namespace DFWV.WorldClasses
 
             if (Coords != null)
             {
-                int coordID = 0;
+                int coordId = 0;
                 foreach (var coord in Coords)
                 {
-                    Database.ExportWorldItem("River_Coords", new List<object> { ID, coordID, coord.X, coord.Y });
-                    coordID++;
+                    Database.ExportWorldItem("River_Coords", new List<object> { Id, coordId, coord.X, coord.Y });
+                    coordId++;
                 }
             }
 
             if (Elevation != null)
             {
-                int elevationID = 0;
+                int elevationId = 0;
                 foreach (var elevation in Elevation)
                 {
-                    Database.ExportWorldItem("River_Elevation", new List<object> { ID, elevationID, elevation });
-                    elevationID++;
+                    Database.ExportWorldItem("River_Elevation", new List<object> { Id, elevationId, elevation });
+                    elevationId++;
                 }
             }
         }
@@ -122,7 +122,7 @@ namespace DFWV.WorldClasses
                 {
                     if (river.Coords.Last() == endPt)
                         continue;
-                    this.Parent = river;
+                    Parent = river;
                     if (river.Tributaries == null)
                         river.Tributaries = new List<River>();
                     river.Tributaries.Add(this);

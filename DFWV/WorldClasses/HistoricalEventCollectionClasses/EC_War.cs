@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -15,32 +14,32 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         public int AttackingNumber;
         public int AttackingDeaths;
         public int AttackingWins;
-        public int AttackingHFDeaths;
+        public int AttackingHfDeaths;
 
         public int DefendingHFs;
         public int DefendingSquads;
         public int DefendingNumber;
         public int DefendingDeaths;
         public int DefendingWins;
-        public int DefendingHFDeaths;
+        public int DefendingHfDeaths;
 
         public int NonCombatHFs;
     }
 
 
-    public class EC_War : HistoricalEventCollection
+    public class EcWar : HistoricalEventCollection
     {
         public List<int> EventColIDs { get; set; }
         public List<HistoricalEventCollection> EventCol { get; private set; }
-        public int? AggressorEntID { get; set; }
+        public int? AggressorEntId { get; set; }
         public Entity AggressorEnt { get; private set; }
-        public int? DefenderEntID { get; set; }
+        public int? DefenderEntId { get; set; }
         public Entity DefenderEnt { get; private set; }
         public WarData WarData;
 
         override public Point Location => AggressorEnt.Location;
 
-        public EC_War(XDocument xdoc, World world)
+        public EcWar(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -68,14 +67,14 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         Name = val.ToTitleCase();
                         break;
                     case "aggressor_ent_id":
-                        AggressorEntID = valI;
+                        AggressorEntId = valI;
                         break;
                     case "defender_ent_id":
-                        DefenderEntID = valI;
+                        DefenderEntId = valI;
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -85,10 +84,10 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         internal override void Link()
         {
             base.Link();
-            if (AggressorEntID.HasValue && World.Entities.ContainsKey(AggressorEntID.Value))
-                AggressorEnt = World.Entities[AggressorEntID.Value];
-            if (DefenderEntID.HasValue && World.Entities.ContainsKey(DefenderEntID.Value))
-                DefenderEnt = World.Entities[DefenderEntID.Value];
+            if (AggressorEntId.HasValue && World.Entities.ContainsKey(AggressorEntId.Value))
+                AggressorEnt = World.Entities[AggressorEntId.Value];
+            if (DefenderEntId.HasValue && World.Entities.ContainsKey(DefenderEntId.Value))
+                DefenderEnt = World.Entities[DefenderEntId.Value];
 
             if (EventColIDs != null)
                 EventCol = new List<HistoricalEventCollection>();
@@ -141,15 +140,15 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             if (WarData.AttackingHFs > 0)
                 frm.lblWarAggressorCombatants.Text += $" + {WarData.AttackingHFs} HFs";
             frm.lblWarAggressorLosses.Text = WarData.AttackingDeaths.ToString();
-            if (WarData.AttackingHFDeaths > 0)
-                frm.lblWarAggressorLosses.Text += $" + {WarData.AttackingHFDeaths} HFs";
+            if (WarData.AttackingHfDeaths > 0)
+                frm.lblWarAggressorLosses.Text += $" + {WarData.AttackingHfDeaths} HFs";
 
             frm.lblWarDefenderCombatants.Text = WarData.DefendingNumber.ToString();
             if (WarData.DefendingHFs > 0)
                 frm.lblWarDefenderCombatants.Text += $" + {WarData.DefendingHFs} HFs";
             frm.lblWarDefenderLosses.Text = WarData.DefendingDeaths.ToString();
-            if (WarData.DefendingHFDeaths > 0)
-                frm.lblWarDefenderLosses.Text += $" + {WarData.DefendingHFDeaths} HFs";
+            if (WarData.DefendingHfDeaths > 0)
+                frm.lblWarDefenderLosses.Text += $" + {WarData.DefendingHfDeaths} HFs";
 
 
 
@@ -166,10 +165,10 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         {
             base.Process();
             if (AggressorEnt.WarEventCollections == null)
-                AggressorEnt.WarEventCollections = new List<EC_War>();
+                AggressorEnt.WarEventCollections = new List<EcWar>();
             AggressorEnt.WarEventCollections.Add(this);
             if (DefenderEnt.WarEventCollections == null)
-                DefenderEnt.WarEventCollections = new List<EC_War>();
+                DefenderEnt.WarEventCollections = new List<EcWar>();
             DefenderEnt.WarEventCollections.Add(this);
             if (EventCol != null)
                 TotalWar();
@@ -181,30 +180,30 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             base.Evaluate();
 
             // Total up deaths/fighters in a war from the battle
-            foreach (var battle in EventCol.Where(x => x is EC_Battle).Cast<EC_Battle>())
-                battle.battleTotaled = false;
+            foreach (var battle in EventCol.Where(x => x is EcBattle).Cast<EcBattle>())
+                battle.BattleTotaled = false;
             TotalWar();
 
         }
 
         public void TotalWar()
         {
-            foreach (var battle in EventCol.Where(x => Types[x.Type] == "battle").Cast<EC_Battle>())
+            foreach (var battle in EventCol.Where(x => Types[x.Type] == "battle").Cast<EcBattle>())
             {
-                if (!battle.battleTotaled)
+                if (!battle.BattleTotaled)
                     battle.TotalBattle();
 
                 WarData.AttackingDeaths += battle.BattleData.AttackingDeaths;
                 WarData.AttackingNumber += battle.BattleData.AttackingNumber;
                 WarData.AttackingSquads += battle.BattleData.AttackingSquads;
                 WarData.AttackingHFs += battle.BattleData.AttackingHFs;
-                WarData.AttackingHFDeaths += battle.BattleData.AttackingHFDeaths;
+                WarData.AttackingHfDeaths += battle.BattleData.AttackingHfDeaths;
 
                 WarData.DefendingDeaths += battle.BattleData.DefendingDeaths;
                 WarData.DefendingNumber += battle.BattleData.DefendingNumber;
                 WarData.DefendingSquads += battle.BattleData.DefendingSquads;
                 WarData.DefendingHFs += battle.BattleData.DefendingHFs;
-                WarData.DefendingHFDeaths += battle.BattleData.DefendingHFDeaths;
+                WarData.DefendingHfDeaths += battle.BattleData.DefendingHfDeaths;
 
                 WarData.NonCombatHFs += battle.BattleData.NonCombatHFs;
 
@@ -225,7 +224,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
             table = GetType().Name;
 
-            var vals = new List<object> { ID, AggressorEntID, DefenderEntID };
+            var vals = new List<object> { Id, AggressorEntId, DefenderEntId };
 
             Database.ExportWorldItem(table, vals);
 
@@ -234,7 +233,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             table = "EC_EventCols";
             foreach (var evtcol in EventCol)
             {
-                vals = new List<object> { ID, evtcol.ID };
+                vals = new List<object> { Id, evtcol.Id };
                 Database.ExportWorldItem(table, vals);
 
             }

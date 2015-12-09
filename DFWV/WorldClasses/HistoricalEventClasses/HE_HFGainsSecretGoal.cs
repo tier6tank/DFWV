@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -7,20 +6,20 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_HFGainsSecretGoal : HistoricalEvent
+    class HeHfGainsSecretGoal : HistoricalEvent
     {
-        private int? HFID { get; set; }
-        private HistoricalFigure HF { get; set; }
-        private int SecretGoal { get; set; }
+        private int? Hfid { get; }
+        private HistoricalFigure Hf { get; set; }
+        private int SecretGoal { get; }
 
 
         override public Point Location => Point.Empty;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
-            get { yield return HF; }
+            get { yield return Hf; }
         }
-        public HE_HFGainsSecretGoal(XDocument xdoc, World world)
+        public HeHfGainsSecretGoal(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -37,7 +36,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "hfid":
-                        HFID = valI;
+                        Hfid = valI;
                         break;
                     case "secret_goal":
                         if (!HistoricalFigure.Goals.Contains(val))
@@ -46,7 +45,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -54,13 +53,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (HFID.HasValue && World.HistoricalFigures.ContainsKey(HFID.Value))
-                HF = World.HistoricalFigures[HFID.Value];
+            if (Hfid.HasValue && World.HistoricalFigures.ContainsKey(Hfid.Value))
+                Hf = World.HistoricalFigures[Hfid.Value];
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "HF:", HF);
+            EventLabel(frm, parent, ref location, "HF:", Hf);
             EventLabel(frm, parent, ref location, "Goal:", HistoricalFigure.Goals[SecretGoal]);
         }
 
@@ -69,15 +68,15 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             return string.Format("{0} {1} became obsessed with {2} own mortality and sought to extend {2} life by any means.",
-                                    timestring, HF,
-                                    HF.Caste.HasValue ? (HistoricalFigure.Castes[HF.Caste.Value].ToLower() == "female" ? "her" : "his") : "his");
+                                    timestring, Hf,
+                                    Hf.Caste.HasValue ? (HistoricalFigure.Castes[Hf.Caste.Value].ToLower() == "female" ? "her" : "his") : "his");
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return $"{timelinestring} {HF} got immortality goal.";
+            return $"{timelinestring} {Hf} got immortality goal.";
         }
 
         internal override void Export(string table)
@@ -88,8 +87,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID, 
-                HFID.DBExport(),
+                Id, 
+                Hfid.DBExport(),
                 SecretGoal.DBExport(HistoricalFigure.Goals)
             };
 

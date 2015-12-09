@@ -6,7 +6,7 @@ namespace DFWV.WorldClasses
 {
     public class Parameter : WorldObject
     {
-        public string Value { get; private set; }
+        public string Value { get; }
 
         [UsedImplicitly]
         public string DispNameLower => ToString().ToLower();

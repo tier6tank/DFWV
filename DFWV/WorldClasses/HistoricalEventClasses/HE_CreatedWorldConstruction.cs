@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -7,19 +6,19 @@ using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    public class HE_CreatedWorldConstruction : HistoricalEvent
+    public class HeCreatedWorldConstruction : HistoricalEvent
     {
-        private int? WCID { get; set; }
-        private WorldConstruction WC { get; set; }
-        private int? SiteCivID { get; set; }
+        private int? Wcid { get; }
+        private WorldConstruction Wc { get; set; }
+        private int? SiteCivId { get; }
         public Entity SiteCiv { get; private set; }
-        private int? CivID { get; set; }
+        private int? CivId { get; }
         public Entity Civ { get; private set; }
-        private int? MasterWCID { get; set; }
-        public WorldConstruction MasterWC { get; private set; }
-        private int? SiteID1 { get; set; }
+        private int? MasterWcid { get; }
+        public WorldConstruction MasterWc { get; private set; }
+        private int? SiteId1 { get; }
         public Site Site1 { get; private set; }
-        private int? SiteID2 { get; set; }
+        private int? SiteId2 { get; }
         public Site Site2 { get; private set; }
 
         override public Point Location => Site1.Location;
@@ -41,7 +40,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        public HE_CreatedWorldConstruction(XDocument xdoc, World world)
+        public HeCreatedWorldConstruction(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -58,27 +57,27 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "civ_id":
-                        CivID = valI;
+                        CivId = valI;
                         break;
                     case "site_civ_id":
-                        SiteCivID = valI;
+                        SiteCivId = valI;
                         break;
                     case "site_id1":
-                        SiteID1 = valI;
+                        SiteId1 = valI;
                         break;
                     case "site_id2":
-                        SiteID2 = valI;
+                        SiteId2 = valI;
                         break;
                     case "wcid":
-                        WCID = valI;
+                        Wcid = valI;
                         break;
                     case "master_wcid":
                         if (valI != -1)
-                            MasterWCID = valI;
+                            MasterWcid = valI;
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -87,76 +86,76 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (CivID.HasValue && World.Entities.ContainsKey(CivID.Value))
-                Civ = World.Entities[CivID.Value];
-            if (SiteCivID.HasValue && World.Entities.ContainsKey(SiteCivID.Value))
-                SiteCiv = World.Entities[SiteCivID.Value];
-            if (WCID.HasValue)
+            if (CivId.HasValue && World.Entities.ContainsKey(CivId.Value))
+                Civ = World.Entities[CivId.Value];
+            if (SiteCivId.HasValue && World.Entities.ContainsKey(SiteCivId.Value))
+                SiteCiv = World.Entities[SiteCivId.Value];
+            if (Wcid.HasValue)
             {
-                if (World.WorldConstructions.ContainsKey(WCID.Value))
-                    WC = World.WorldConstructions[WCID.Value];
+                if (World.WorldConstructions.ContainsKey(Wcid.Value))
+                    Wc = World.WorldConstructions[Wcid.Value];
                 else
                 {
-                    WC = new WorldConstruction(WCID.Value, World);
-                    World.WorldConstructions.Add(WCID.Value, WC);
+                    Wc = new WorldConstruction(Wcid.Value, World);
+                    World.WorldConstructions.Add(Wcid.Value, Wc);
                 }
-                if (MasterWCID.HasValue && MasterWCID != -1)
+                if (MasterWcid.HasValue && MasterWcid != -1)
                 {
-                    if (World.WorldConstructions.ContainsKey(MasterWCID.Value))
-                        MasterWC = World.WorldConstructions[MasterWCID.Value];
+                    if (World.WorldConstructions.ContainsKey(MasterWcid.Value))
+                        MasterWc = World.WorldConstructions[MasterWcid.Value];
                     else
                     {
-                        MasterWC = new WorldConstruction(MasterWCID.Value, World);
-                        World.WorldConstructions.Add(MasterWCID.Value, MasterWC);
+                        MasterWc = new WorldConstruction(MasterWcid.Value, World);
+                        World.WorldConstructions.Add(MasterWcid.Value, MasterWc);
                     }
                 }
             }
-            if (SiteID1.HasValue && World.Sites.ContainsKey(SiteID1.Value))
-                Site1 = World.Sites[SiteID1.Value];
-            if (SiteID2.HasValue && World.Sites.ContainsKey(SiteID2.Value))
-                Site2 = World.Sites[SiteID2.Value];
+            if (SiteId1.HasValue && World.Sites.ContainsKey(SiteId1.Value))
+                Site1 = World.Sites[SiteId1.Value];
+            if (SiteId2.HasValue && World.Sites.ContainsKey(SiteId2.Value))
+                Site2 = World.Sites[SiteId2.Value];
         }
 
         internal override void Process()
         {
             base.Process();
-            if (MasterWC != null)
+            if (MasterWc != null)
             {
-                if (MasterWC.Subconstructions == null)
-                    MasterWC.Subconstructions = new List<WorldConstruction>();
-                MasterWC.Subconstructions.Add(WC);
+                if (MasterWc.Subconstructions == null)
+                    MasterWc.Subconstructions = new List<WorldConstruction>();
+                MasterWc.Subconstructions.Add(Wc);
 
-                WC.MasterWC = MasterWC;
+                Wc.MasterWc = MasterWc;
             }
-            WC.CreatedEvent = this;
+            Wc.CreatedEvent = this;
 
             if (Site1 != null)
-                WC.From = Site1;
+                Wc.From = Site1;
             if (Site2 != null)
-                WC.To = Site2;
+                Wc.To = Site2;
 
 
             if (Site1 != null && Site1.ConstructionLinks == null)
                 Site1.ConstructionLinks = new List<WorldConstruction>();
-            Site1.ConstructionLinks.Add(WC);
+            Site1.ConstructionLinks.Add(Wc);
             if (Site2 != null && Site2.ConstructionLinks == null)
                 Site2.ConstructionLinks = new List<WorldConstruction>();
-            Site2.ConstructionLinks.Add(WC);
+            Site2.ConstructionLinks.Add(Wc);
 
             if (Civ != null && Civ.ConstructionsBuilt == null)
                 Civ.ConstructionsBuilt = new List<WorldConstruction>();
-            Civ.ConstructionsBuilt.Add(WC);
+            Civ.ConstructionsBuilt.Add(Wc);
             if (SiteCiv != null && SiteCiv.ConstructionsBuilt == null)
                 SiteCiv.ConstructionsBuilt = new List<WorldConstruction>();
-            SiteCiv.ConstructionsBuilt.Add(WC);
+            SiteCiv.ConstructionsBuilt.Add(Wc);
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
             EventLabel(frm, parent, ref location, "Civ:", Civ);
             EventLabel(frm, parent, ref location, "Owner:", SiteCiv);
-            EventLabel(frm, parent, ref location, "Construction:", WC);
-            EventLabel(frm, parent, ref location, "Master:", MasterWC);
+            EventLabel(frm, parent, ref location, "Construction:", Wc);
+            EventLabel(frm, parent, ref location, "Master:", MasterWc);
             EventLabel(frm, parent, ref location, "From:", Site1);
             EventLabel(frm, parent, ref location, "To:", Site2);
         }
@@ -166,7 +165,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             return
-                $"{timestring} {SiteCiv} of {Civ} finished contruction of {(WC.Name == "" ? "CONSTRUCTION " + WC : WC.Name)} connecting {Site1} and {Site2}.";
+                $"{timestring} {SiteCiv} of {Civ} finished contruction of {(Wc.Name == "" ? "CONSTRUCTION " + Wc : Wc.Name)} connecting {Site1} and {Site2}.";
         }
 
         internal override string ToTimelineString()
@@ -184,13 +183,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             
             var vals = new List<object>
             {
-                ID, 
-                WCID.DBExport(), 
-                MasterWCID.DBExport(),
-                SiteCivID.DBExport(), 
-                CivID.DBExport(), 
-                SiteID1.DBExport(),
-                SiteID2.DBExport()
+                Id, 
+                Wcid.DBExport(), 
+                MasterWcid.DBExport(),
+                SiteCivId.DBExport(), 
+                CivId.DBExport(), 
+                SiteId1.DBExport(),
+                SiteId2.DBExport()
             };
 
 

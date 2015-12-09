@@ -7,31 +7,31 @@ using DFWV.WorldClasses.HistoricalEventClasses;
 
 namespace DFWV.WorldClasses
 {
-    public class Structure : XMLObject
+    public class Structure : XmlObject
     {
-        private Site Site { get; set; }
-        public int SiteID { get; set; }
+        private Site Site { get; }
+        public int SiteId { get; set; }
 
         [UsedImplicitly]
         public new string Name { get; set; }
 
         public static List<string> Types = new List<string>();
         public int? Type { get; set; }
-        public static int numStructures;
+        public static int NumStructures;
 
         public List<HistoricalEvent> Events { get; set; }
 
-        public HE_RazedStructure RazedEvent { get { return (HE_RazedStructure) Events.FirstOrDefault(e => HistoricalEvent.Types[e.Type] == "razed structure"); } }
-        public HE_CreatedStructure CreatedEvent { get { return (HE_CreatedStructure) Events.FirstOrDefault(e => HistoricalEvent.Types[e.Type] == "created structure"); } }
+        public HeRazedStructure RazedEvent { get { return (HeRazedStructure) Events.FirstOrDefault(e => HistoricalEvent.Types[e.Type] == "razed structure"); } }
+        public HeCreatedStructure CreatedEvent { get { return (HeCreatedStructure) Events.FirstOrDefault(e => HistoricalEvent.Types[e.Type] == "created structure"); } }
         [UsedImplicitly]
-        public bool isRazed => RazedEvent != null;
+        public bool IsRazed => RazedEvent != null;
 
         [UsedImplicitly]
         public string StructureType => Type.HasValue ? Types[Type.Value] : "Unknown";
 
-        public IEnumerable<HE_ChangeHFBodyState> ChangeHFBodyStateEvents { get { return Events != null ? Events.Where(e => HistoricalEvent.Types[e.Type] == "change hf body state").Cast<HE_ChangeHFBodyState>() : null; } }
+        public IEnumerable<HeChangeHfBodyState> ChangeHfBodyStateEvents { get { return Events?.Where(e => HistoricalEvent.Types[e.Type] == "change hf body state").Cast<HeChangeHfBodyState>(); } }
         [UsedImplicitly]
-        public bool Tomb { get { return ChangeHFBodyStateEvents != null && (ChangeHFBodyStateEvents.Count(f=>f.BodyState == "entombed at site") > 0); } }
+        public bool Tomb { get { return ChangeHfBodyStateEvents != null && (ChangeHfBodyStateEvents.Count(f=>f.BodyState == "entombed at site") > 0); } }
         [UsedImplicitly]
         public string DispNameLower => ToString().ToLower();
 
@@ -41,9 +41,9 @@ namespace DFWV.WorldClasses
         public Structure(Site site, int id, World world) : base(world)
         {
             Site = site;
-            SiteID = id;
-            ID = numStructures;
-            numStructures++;
+            SiteId = id;
+            Id = NumStructures;
+            NumStructures++;
             World = world;
         }
 
@@ -56,7 +56,7 @@ namespace DFWV.WorldClasses
             frm.grpStructure.Text = ToString();
             frm.grpStructure.Show();
 
-            frm.lblStructureID.Text = SiteID.ToString();
+            frm.lblStructureID.Text = SiteId.ToString();
             frm.lblStructureSite.Data = Site;
             frm.lblStructureType.Text = StructureType;
 
@@ -81,7 +81,7 @@ namespace DFWV.WorldClasses
 
             frm.grpStructureEvents.FillListboxWith(frm.lstStructureEvents, Events);
             frm.grpStructureEntombedHF.FillListboxWith(frm.lstStructureEntombedHF, 
-                ChangeHFBodyStateEvents.Where(changeHfBodyStateEvent => changeHfBodyStateEvent.BodyState == "entombed at site").Select(x=>x.HF));
+                ChangeHfBodyStateEvents.Where(changeHfBodyStateEvent => changeHfBodyStateEvent.BodyState == "entombed at site").Select(x=>x.Hf));
 
 
 
@@ -105,9 +105,9 @@ namespace DFWV.WorldClasses
         {
             var vals = new List<object>
             {
-                ID, 
-                Site.ID, 
-                SiteID,
+                Id, 
+                Site.Id, 
+                SiteId,
                 Type.DBExport(Types),
                 Name.DBExport()
             };
@@ -120,12 +120,12 @@ namespace DFWV.WorldClasses
             if (!string.IsNullOrEmpty(Name))
                 return Name;
             if (Site.Structures == null || Site.Structures.Count < 10)
-                return Site + " - " + SiteID;
+                return Site + " - " + SiteId;
             
             if (Site.Structures.Count < 100)
-                return Site + " - " + SiteID.ToString().PadLeft(2,'0');
+                return Site + " - " + SiteId.ToString().PadLeft(2,'0');
 
-            return Site + " - " + SiteID.ToString().PadLeft(3, '0');
+            return Site + " - " + SiteId.ToString().PadLeft(3, '0');
         }
 
         

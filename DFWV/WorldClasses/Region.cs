@@ -10,10 +10,10 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses
 {
-    public class Region : XMLObject
+    public class Region : XmlObject
     {
         public static List<string> Types = new List<string>();
-        public int Type { get; private set; }
+        public int Type { get; }
 
         public List<Point> Coords { get; set; }
         public Dictionary<Race, int> Populations { get; set; }
@@ -21,10 +21,10 @@ namespace DFWV.WorldClasses
         public List<HistoricalFigure> Inhabitants { get; set; }
 
 
-        public List<EC_Battle> BattleEventCollections { get; set; }
-        public List<EC_Duel> DuelEventCollections { get; set; }
-        public List<EC_Abduction> AbductionEventCollections { get; set; }
-        public List<EC_Theft> TheftEventCollections { get; set; }
+        public List<EcBattle> BattleEventCollections { get; set; }
+        public List<EcDuel> DuelEventCollections { get; set; }
+        public List<EcAbduction> AbductionEventCollections { get; set; }
+        public List<EcTheft> TheftEventCollections { get; set; }
 
         public IEnumerable<HistoricalEvent> Events
         {
@@ -38,10 +38,10 @@ namespace DFWV.WorldClasses
         public int EventCount { get; set; }
 
         [UsedImplicitly]
-        public int Battles => BattleEventCollections == null ? 0 : BattleEventCollections.Count;
+        public int Battles => BattleEventCollections?.Count ?? 0;
 
         [UsedImplicitly]
-        public int InhabitantCount => Inhabitants == null ? 0 : Inhabitants.Count;
+        public int InhabitantCount => Inhabitants?.Count ?? 0;
 
         [UsedImplicitly]
         public string DispNameLower => ToString().ToLower();
@@ -49,7 +49,7 @@ namespace DFWV.WorldClasses
         [UsedImplicitly]
         public string RegionType => Types[Type];
 
-        override public Point Location => Coords != null  ? Coords[0] : Point.Empty;
+        override public Point Location => Coords?[0] ?? Point.Empty;
 
         public Region(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -71,7 +71,7 @@ namespace DFWV.WorldClasses
                         Type = Types.IndexOf(val);
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -87,7 +87,7 @@ namespace DFWV.WorldClasses
 
             frm.grpRegion.Text = ToString();
 #if DEBUG
-            frm.grpRegion.Text += $" - ID: {ID}";
+            frm.grpRegion.Text += $" - ID: {Id}";
 #endif
             frm.grpRegion.Show();
 
@@ -156,7 +156,7 @@ namespace DFWV.WorldClasses
                         }
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + "Region", element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + "Region", element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -168,7 +168,7 @@ namespace DFWV.WorldClasses
 
             var vals = new List<object>
             {
-                ID,
+                Id,
                 Name.DBExport(),
                 Type
             };
@@ -177,11 +177,11 @@ namespace DFWV.WorldClasses
 
             if (Coords != null)
             {
-                int coordID = 0;
+                int coordId = 0;
                 foreach (var coord in Coords)
                 {
-                    Database.ExportWorldItem("Region_Coords", new List<object> { ID, coordID, coord.X, coord.Y });
-                    coordID++;
+                    Database.ExportWorldItem("Region_Coords", new List<object> { Id, coordId, coord.X, coord.Y });
+                    coordId++;
                 }
             }
 
@@ -189,7 +189,7 @@ namespace DFWV.WorldClasses
             {
                 foreach (var pop in Populations)
                 {
-                    Database.ExportWorldItem("Region_Population", new List<object> { ID, pop.Key.ID, pop.Value });
+                    Database.ExportWorldItem("Region_Population", new List<object> { Id, pop.Key.Id, pop.Value });
                 }
             }
 

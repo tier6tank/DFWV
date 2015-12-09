@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -7,15 +6,15 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_HFLearnsSecret : HistoricalEvent
+    class HeHfLearnsSecret : HistoricalEvent
     {
-        private int? StudentHFID { get; set; }
-        private HistoricalFigure StudentHF { get; set; }
-        private int? TeacherHFID { get; set; }
-        private HistoricalFigure TeacherHF { get; set; }
-        private int? ArtifactID { get; set; }
+        private int? StudentHfid { get; }
+        private HistoricalFigure StudentHf { get; set; }
+        private int? TeacherHfid { get; }
+        private HistoricalFigure TeacherHf { get; set; }
+        private int? ArtifactId { get; }
         private Artifact Artifact { get; set; }
-        private int Interaction { get; set; }
+        private int Interaction { get; }
         private string SecretText { get; set; }
 
         override public Point Location => Point.Empty;
@@ -24,11 +23,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get
             {
-                yield return StudentHF;
-                yield return TeacherHF;
+                yield return StudentHf;
+                yield return TeacherHf;
             }
         }
-        public HE_HFLearnsSecret(XDocument xdoc, World world)
+        public HeHfLearnsSecret(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -45,15 +44,15 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "student_hfid":
-                        StudentHFID = valI;
+                        StudentHfid = valI;
                         break;
                     case "teacher_hfid":
                         if (valI != -1)
-                            TeacherHFID = valI;
+                            TeacherHfid = valI;
                         break;
                     case "artifact_id":
                         if (valI != -1)
-                            ArtifactID = valI;
+                            ArtifactId = valI;
                         break;
                     case "interaction":
                         if (!HistoricalFigure.Interactions.Contains(val))
@@ -62,7 +61,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -88,7 +87,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         SecretText = val.Replace("[IS_NAME:", "").TrimEnd(']').Trim();
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -97,18 +96,18 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (StudentHFID.HasValue && World.HistoricalFigures.ContainsKey(StudentHFID.Value))
-                StudentHF = World.HistoricalFigures[StudentHFID.Value];
-            if (TeacherHFID.HasValue && World.HistoricalFigures.ContainsKey(TeacherHFID.Value))
-                TeacherHF = World.HistoricalFigures[TeacherHFID.Value];
-            if (ArtifactID.HasValue && World.Artifacts.ContainsKey(ArtifactID.Value))
-                Artifact = World.Artifacts[ArtifactID.Value];
+            if (StudentHfid.HasValue && World.HistoricalFigures.ContainsKey(StudentHfid.Value))
+                StudentHf = World.HistoricalFigures[StudentHfid.Value];
+            if (TeacherHfid.HasValue && World.HistoricalFigures.ContainsKey(TeacherHfid.Value))
+                TeacherHf = World.HistoricalFigures[TeacherHfid.Value];
+            if (ArtifactId.HasValue && World.Artifacts.ContainsKey(ArtifactId.Value))
+                Artifact = World.Artifacts[ArtifactId.Value];
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "Student:", StudentHF);
-            EventLabel(frm, parent, ref location, "Teacher:", TeacherHF);
+            EventLabel(frm, parent, ref location, "Student:", StudentHf);
+            EventLabel(frm, parent, ref location, "Teacher:", TeacherHf);
             EventLabel(frm, parent, ref location, "Artifact:", Artifact);
             EventLabel(frm, parent, ref location, "Interaction:", HistoricalFigure.Interactions[Interaction]);
         }
@@ -117,53 +116,53 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            if (TeacherHF == null && Artifact != null)
+            if (TeacherHf == null && Artifact != null)
             {
                 if (SecretText != null)
-                    return $"{timestring} {StudentHF} learned {SecretText} {Artifact}.";
+                    return $"{timestring} {StudentHf} learned {SecretText} {Artifact}.";
                 switch (HistoricalFigure.Interactions[Interaction])
                 {
                     case "ANIMALS_SECRET":
-                        return $"{timestring} {StudentHF} learned the secrets of the wilds from {Artifact}.";
+                        return $"{timestring} {StudentHf} learned the secrets of the wilds from {Artifact}.";
                     case "SECRET_30":
-                        return $"{timestring} {StudentHF} learned the secrets of life and death from {Artifact}.";
+                        return $"{timestring} {StudentHf} learned the secrets of life and death from {Artifact}.";
                     case "DISCIPLINE_SECRET":
-                        return $"{timestring} {StudentHF} learned the secrets of mental discipline from {Artifact}.";
+                        return $"{timestring} {StudentHf} learned the secrets of mental discipline from {Artifact}.";
                     case "WISDOM_SECRET":
-                        return $"{timestring} {StudentHF} learned the secrets of wisdom from {Artifact}.";
+                        return $"{timestring} {StudentHf} learned the secrets of wisdom from {Artifact}.";
                     case "FOOD_SECRET":
-                        return $"{timestring} {StudentHF} learned the secrets of conjuring food from {Artifact}.";
+                        return $"{timestring} {StudentHf} learned the secrets of conjuring food from {Artifact}.";
                     case "WAR_SECRET":
-                        return $"{timestring} {StudentHF} learned the secret of berserking from {Artifact}.";
+                        return $"{timestring} {StudentHf} learned the secret of berserking from {Artifact}.";
                     default:
                         return
-                            $"{timestring} {StudentHF} learned {HistoricalFigure.Interactions[Interaction]} from {Artifact}.";
+                            $"{timestring} {StudentHf} learned {HistoricalFigure.Interactions[Interaction]} from {Artifact}.";
                 }
             }
             if (SecretText != null)
-                return $"{timestring} {TeacherHF} taught {StudentHF} {SecretText}.";
+                return $"{timestring} {TeacherHf} taught {StudentHf} {SecretText}.";
             switch (HistoricalFigure.Interactions[Interaction])
             {
                 case "ANIMALS_SECRET":
-                    return $"{timestring} {TeacherHF} taught {StudentHF} the secrets of the wilds.";
+                    return $"{timestring} {TeacherHf} taught {StudentHf} the secrets of the wilds.";
                 case "SECRET_5":
                 case "SECRET_6":
                 case "SECRET_12":
-                    return $"{timestring} {TeacherHF} taught {StudentHF} the secrets of life and death.";
+                    return $"{timestring} {TeacherHf} taught {StudentHf} the secrets of life and death.";
                 case "DISCIPLINE_SECRET":
-                    return $"{timestring} {TeacherHF} taught {StudentHF} the secrets of mental discipline.";
+                    return $"{timestring} {TeacherHf} taught {StudentHf} the secrets of mental discipline.";
                 case "WAR_SECRET":
-                    return $"{timestring} {TeacherHF} taught {StudentHF} the secrets of bezerking.";
+                    return $"{timestring} {TeacherHf} taught {StudentHf} the secrets of bezerking.";
                 case "SUMMONER":
-                    return $"{timestring} {TeacherHF} taught {StudentHF} the secrets of summoning.";
+                    return $"{timestring} {TeacherHf} taught {StudentHf} the secrets of summoning.";
                 case "SUICIDE_SECRET":
-                    return $"{timestring} {TeacherHF} taught {StudentHF} the secrets of living death.";
+                    return $"{timestring} {TeacherHf} taught {StudentHf} the secrets of living death.";
                 case "MERCY_SECRET":
-                    return $"{timestring} {TeacherHF} taught {StudentHF} the secrets of mercy and prophecy.";
+                    return $"{timestring} {TeacherHf} taught {StudentHf} the secrets of mercy and prophecy.";
                 case "NATURE_SECRET":
-                    return $"{timestring} {TeacherHF} taught {StudentHF} the secrets of nature.";
+                    return $"{timestring} {TeacherHf} taught {StudentHf} the secrets of nature.";
                 default:
-                    return $"{timestring} {TeacherHF} taught {StudentHF} {HistoricalFigure.Interactions[Interaction]}.";
+                    return $"{timestring} {TeacherHf} taught {StudentHf} {HistoricalFigure.Interactions[Interaction]}.";
             }
         }
 
@@ -171,9 +170,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timelinestring = base.ToTimelineString();
 
-            if (TeacherHF == null && Artifact != null)
-                return $"{timelinestring} {StudentHF} learned secrets from {Artifact}";
-            return $"{timelinestring} {StudentHF} taught secrets by {TeacherHF}";
+            if (TeacherHf == null && Artifact != null)
+                return $"{timelinestring} {StudentHf} learned secrets from {Artifact}";
+            return $"{timelinestring} {StudentHf} taught secrets by {TeacherHf}";
         }
 
         internal override void Export(string table)
@@ -184,10 +183,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             
             var vals = new List<object>
             {
-                ID, 
-                StudentHFID.DBExport(), 
-                TeacherHFID.DBExport(), 
-                ArtifactID.DBExport(),
+                Id, 
+                StudentHfid.DBExport(), 
+                TeacherHfid.DBExport(), 
+                ArtifactId.DBExport(),
                 Interaction.DBExport(HistoricalFigure.Interactions)
             };
 

@@ -1,11 +1,11 @@
 ﻿using System.Drawing;
 using System.Xml.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DFWV.WorldClasses;
 using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalEventClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Region = DFWV.WorldClasses.Region;
 
 namespace DFWVTests
@@ -14,7 +14,7 @@ namespace DFWVTests
     /// Summary description for ParsingXML
     /// </summary>
     [TestClass]
-    public class ParsingXML
+    public class ParsingXml
     {
         [TestMethod]
         public void RegionXML_Parses()
@@ -47,7 +47,7 @@ namespace DFWVTests
             var ugregion = new UndergroundRegion(xdoc, world);
 
 
-            Assert.AreEqual(ugregion.ID, 0);
+            Assert.AreEqual(ugregion.Id, 0);
             Assert.AreEqual(ugregion.Depth, 1);
             Assert.AreEqual(ugregion.Type , "Cavern");
         }
@@ -67,7 +67,7 @@ namespace DFWVTests
             var site = new Site(xdoc, world);
 
 
-            Assert.AreEqual(site.ID, 0);
+            Assert.AreEqual(site.Id, 0);
             Assert.AreEqual(Site.Types[site.Type.Value], "cave");
             Assert.AreEqual(site.Name, "callgutter");
             Assert.AreEqual(site.Coords, new Point(6, 14));
@@ -86,7 +86,7 @@ namespace DFWVTests
 
             var artifact = new Artifact(xdoc, world);
 
-            Assert.AreEqual(artifact.ID, 3);
+            Assert.AreEqual(artifact.Id, 3);
             Assert.AreEqual(artifact.Name, "the fair orange");
             Assert.AreEqual(artifact.Item, "bibeomthu");
         }
@@ -112,7 +112,7 @@ namespace DFWVTests
                 );
 
             var historicalFigure = new HistoricalFigure(xdoc, world);
-            Assert.AreEqual(historicalFigure.ID, 303);
+            Assert.AreEqual(historicalFigure.Id, 303);
             Assert.AreEqual(historicalFigure.Name, "arist");
             Assert.AreEqual(historicalFigure.RaceName, "DWARF");
             Assert.AreEqual(HistoricalFigure.Castes[historicalFigure.Caste.Value], "FEMALE");
@@ -175,33 +175,33 @@ namespace DFWVTests
                 );
 
             var historicalFigure = new HistoricalFigure(xdoc, world);
-            Assert.AreEqual(historicalFigure.ID, 308);
+            Assert.AreEqual(historicalFigure.Id, 308);
             Assert.AreEqual(historicalFigure.Name, "logem dancelabored");
             Assert.AreEqual(historicalFigure.RaceName, "NIGHT_CREATURE_8");
             Assert.AreEqual(HistoricalFigure.Castes[historicalFigure.Caste.Value], "FEMALE");
             Assert.AreEqual(historicalFigure.Appeared.Year, 1);
             Assert.AreEqual(historicalFigure.Birth.Year, -55);
             Assert.AreEqual(historicalFigure.Death.Year, 126);
-            Assert.AreEqual(historicalFigure.HFLinks.Count, 2);
-            Assert.AreEqual(historicalFigure.HFLinks[HFLink.LinkTypes.IndexOf("deity")].Count, 1);
-            Assert.AreEqual(historicalFigure.HFLinks[HFLink.LinkTypes.IndexOf("deity")][0].LinkedHFID, 304);
-            Assert.AreEqual(historicalFigure.HFLinks[HFLink.LinkTypes.IndexOf("deity")][0].LinkStrength, 61);
-            Assert.AreEqual(historicalFigure.HFLinks[HFLink.LinkTypes.IndexOf("child")].Count, 1);
-            Assert.AreEqual(historicalFigure.HFLinks[HFLink.LinkTypes.IndexOf("child")][0].LinkedHFID, 501);
-            Assert.AreEqual(historicalFigure.EntityLinks[HFEntityLink.LinkTypes.IndexOf("former member")].Count, 1);
-            Assert.AreEqual(historicalFigure.EntityLinks[HFEntityLink.LinkTypes.IndexOf("former member")][0].EntityID, 80);
-            Assert.AreEqual(historicalFigure.EntityLinks[HFEntityLink.LinkTypes.IndexOf("former member")][0].LinkStrength, 60);
-            Assert.AreEqual(historicalFigure.EntityLinks[HFEntityLink.LinkTypes.IndexOf("enemy")].Count, 1);
-            Assert.AreEqual(historicalFigure.EntityLinks[HFEntityLink.LinkTypes.IndexOf("enemy")][0].EntityID, 123);
+            Assert.AreEqual(historicalFigure.HfLinks.Count, 2);
+            Assert.AreEqual(historicalFigure.HfLinks[HfLink.LinkTypes.IndexOf("deity")].Count, 1);
+            Assert.AreEqual(historicalFigure.HfLinks[HfLink.LinkTypes.IndexOf("deity")][0].LinkedHfid, 304);
+            Assert.AreEqual(historicalFigure.HfLinks[HfLink.LinkTypes.IndexOf("deity")][0].LinkStrength, 61);
+            Assert.AreEqual(historicalFigure.HfLinks[HfLink.LinkTypes.IndexOf("child")].Count, 1);
+            Assert.AreEqual(historicalFigure.HfLinks[HfLink.LinkTypes.IndexOf("child")][0].LinkedHfid, 501);
+            Assert.AreEqual(historicalFigure.EntityLinks[HfEntityLink.LinkTypes.IndexOf("former member")].Count, 1);
+            Assert.AreEqual(historicalFigure.EntityLinks[HfEntityLink.LinkTypes.IndexOf("former member")][0].EntityId, 80);
+            Assert.AreEqual(historicalFigure.EntityLinks[HfEntityLink.LinkTypes.IndexOf("former member")][0].LinkStrength, 60);
+            Assert.AreEqual(historicalFigure.EntityLinks[HfEntityLink.LinkTypes.IndexOf("enemy")].Count, 1);
+            Assert.AreEqual(historicalFigure.EntityLinks[HfEntityLink.LinkTypes.IndexOf("enemy")][0].EntityId, 123);
             Assert.AreEqual(historicalFigure.EntityFormerPositionLinks.Count, 1);
-            Assert.AreEqual(historicalFigure.EntityFormerPositionLinks[0].PositionProfileID, 2);
-            Assert.AreEqual(historicalFigure.EntityFormerPositionLinks[0].EntityID, 80);
+            Assert.AreEqual(historicalFigure.EntityFormerPositionLinks[0].PositionProfileId, 2);
+            Assert.AreEqual(historicalFigure.EntityFormerPositionLinks[0].EntityId, 80);
             Assert.AreEqual(historicalFigure.EntityFormerPositionLinks[0].StartYear, 1);
             Assert.AreEqual(historicalFigure.EntityFormerPositionLinks[0].EndYear, 23);
-            Assert.AreEqual(historicalFigure.HFSkills.Count, 1);
-            Assert.AreEqual(HFSkill.Skills[historicalFigure.HFSkills[0].Skill], "INTIMIDATION");
-            Assert.AreEqual(historicalFigure.HFSkills[0].TotalIP, 5600);
-            Assert.AreEqual(historicalFigure.EntPopID, 25);
+            Assert.AreEqual(historicalFigure.HfSkills.Count, 1);
+            Assert.AreEqual(HfSkill.Skills[historicalFigure.HfSkills[0].Skill], "INTIMIDATION");
+            Assert.AreEqual(historicalFigure.HfSkills[0].TotalIp, 5600);
+            Assert.AreEqual(historicalFigure.EntPopId, 25);
         }
 
         [TestMethod]
@@ -215,7 +215,7 @@ namespace DFWVTests
 
             var entitypopulation = new EntityPopulation(xdoc, world);
 
-            Assert.AreEqual(entitypopulation.ID, 1);
+            Assert.AreEqual(entitypopulation.Id, 1);
         }
 
         [TestMethod]
@@ -230,7 +230,7 @@ namespace DFWVTests
             var entity = new Entity(xdoc, world);
 
 
-            Assert.AreEqual(entity.ID, 5);
+            Assert.AreEqual(entity.Id, 5);
         }
 
         [TestMethod]
@@ -253,16 +253,16 @@ namespace DFWVTests
 
 
             var historicalevent = HistoricalEvent.Create(xdoc, world);
-            Assert.AreEqual(historicalevent.ID, 0);
+            Assert.AreEqual(historicalevent.Id, 0);
             Assert.AreEqual(historicalevent.Year, 1);
             Assert.AreEqual(HistoricalEvent.Types[historicalevent.Type], "change hf state");
-            Assert.IsInstanceOfType(historicalevent, typeof (HE_ChangeHFState));
-            var changehfstateEvent = historicalevent as HE_ChangeHFState;
-            Assert.AreEqual(changehfstateEvent.HFID, 264);
-            Assert.AreEqual(HE_ChangeHFState.States[changehfstateEvent.State.Value], "settled");
-            Assert.IsNull(changehfstateEvent.SiteID);
-            Assert.AreEqual(changehfstateEvent.SubregionID.Value, 4);
-            Assert.IsNull(changehfstateEvent.FeatureLayerID);
+            Assert.IsInstanceOfType(historicalevent, typeof (HeChangeHfState));
+            var changehfstateEvent = historicalevent as HeChangeHfState;
+            Assert.AreEqual(changehfstateEvent.Hfid, 264);
+            Assert.AreEqual(HeChangeHfState.States[changehfstateEvent.State.Value], "settled");
+            Assert.IsNull(changehfstateEvent.SiteId);
+            Assert.AreEqual(changehfstateEvent.SubregionId.Value, 4);
+            Assert.IsNull(changehfstateEvent.FeatureLayerId);
             Assert.AreEqual(changehfstateEvent.Coords, new Point(20,16));
         }
 
@@ -279,9 +279,9 @@ namespace DFWVTests
                 );
 
             var historicalevent = HistoricalEvent.Create(xdoc, world);
-            Assert.AreEqual(historicalevent.ID, 0);
+            Assert.AreEqual(historicalevent.Id, 0);
             Assert.AreEqual(historicalevent.Year, 1);
-            Assert.IsInstanceOfType(historicalevent, typeof(HE_UnassessedEvent));
+            Assert.IsInstanceOfType(historicalevent, typeof(HeUnassessedEvent));
         }
 
         //TODO: Add other Historical Event tests.
@@ -308,18 +308,18 @@ namespace DFWVTests
                 );
 
             var historicalEventCollection = HistoricalEventCollection.Create(xdoc, world);
-            Assert.AreEqual(historicalEventCollection.ID, 86);
+            Assert.AreEqual(historicalEventCollection.Id, 86);
             Assert.AreEqual(historicalEventCollection.StartTime, new WorldTime(1, 92400));
             Assert.AreEqual(historicalEventCollection.EndTime, new WorldTime(2, 100800));
             Assert.AreEqual(historicalEventCollection.EventIDs.Count, 1);
             Assert.AreEqual(historicalEventCollection.EventIDs[0], 1212);
             Assert.AreEqual(HistoricalEventCollection.Types[historicalEventCollection.Type], "war");
-            var warEventCollection = historicalEventCollection as EC_War;
+            var warEventCollection = historicalEventCollection as EcWar;
             Assert.AreEqual(warEventCollection.EventColIDs.Count, 2);
             Assert.AreEqual(warEventCollection.EventColIDs[0], 87);
             Assert.AreEqual(warEventCollection.EventColIDs[1], 97);
-            Assert.AreEqual(warEventCollection.AggressorEntID, 84);
-            Assert.AreEqual(warEventCollection.DefenderEntID, 88);
+            Assert.AreEqual(warEventCollection.AggressorEntId, 84);
+            Assert.AreEqual(warEventCollection.DefenderEntId, 88);
         }
 
         [TestMethod]
@@ -365,30 +365,30 @@ namespace DFWVTests
 
             var historicalEventCollection = HistoricalEventCollection.Create(xdoc, world);
 
-            Assert.AreEqual(historicalEventCollection.ID, 21796);
+            Assert.AreEqual(historicalEventCollection.Id, 21796);
             Assert.AreEqual(historicalEventCollection.StartTime, new WorldTime(660, 285600));
             Assert.AreEqual(historicalEventCollection.EndTime, new WorldTime(660, 285600));
             Assert.AreEqual(historicalEventCollection.EventIDs.Count, 2);
             Assert.AreEqual(historicalEventCollection.EventIDs[0], 180182);
             Assert.AreEqual(historicalEventCollection.EventIDs[1], 180183);
             Assert.AreEqual(HistoricalEventCollection.Types[historicalEventCollection.Type], "battle");
-            var battleEventCollection = historicalEventCollection as EC_Battle;
+            var battleEventCollection = historicalEventCollection as EcBattle;
             Assert.AreEqual(battleEventCollection.EventColIDs.Count, 2);
             Assert.AreEqual(battleEventCollection.EventColIDs[0], 21797);
             Assert.AreEqual(battleEventCollection.EventColIDs[1], 21798);
-            Assert.AreEqual(battleEventCollection.WarEventColID, 21795);
-            Assert.IsNull(battleEventCollection.SubregionID);
-            Assert.IsNull(battleEventCollection.FeatureLayerID);
-            Assert.AreEqual(battleEventCollection.SiteID, 88);
+            Assert.AreEqual(battleEventCollection.WarEventColId, 21795);
+            Assert.IsNull(battleEventCollection.SubregionId);
+            Assert.IsNull(battleEventCollection.FeatureLayerId);
+            Assert.AreEqual(battleEventCollection.SiteId, 88);
             Assert.AreEqual(battleEventCollection.Coords, new Point(27,16));
-            Assert.AreEqual(battleEventCollection.AttackingHFID.Count, 2);
-            Assert.AreEqual(battleEventCollection.AttackingHFID[0], 27436);
-            Assert.AreEqual(battleEventCollection.AttackingHFID[1], 27437);
-            Assert.AreEqual(battleEventCollection.DefendingHFID.Count, 2);
-            Assert.AreEqual(battleEventCollection.DefendingHFID[0], 27278);
-            Assert.AreEqual(battleEventCollection.DefendingHFID[1], 27284);
-            Assert.AreEqual(battleEventCollection.NonComHFID.Count, 1);
-            Assert.AreEqual(battleEventCollection.NonComHFID[0], 27299);
+            Assert.AreEqual(battleEventCollection.AttackingHfid.Count, 2);
+            Assert.AreEqual(battleEventCollection.AttackingHfid[0], 27436);
+            Assert.AreEqual(battleEventCollection.AttackingHfid[1], 27437);
+            Assert.AreEqual(battleEventCollection.DefendingHfid.Count, 2);
+            Assert.AreEqual(battleEventCollection.DefendingHfid[0], 27278);
+            Assert.AreEqual(battleEventCollection.DefendingHfid[1], 27284);
+            Assert.AreEqual(battleEventCollection.NonComHfid.Count, 1);
+            Assert.AreEqual(battleEventCollection.NonComHfid[0], 27299);
             Assert.AreEqual(battleEventCollection.AttackingSquadRace[0], "GIANT_RATTLESNAKE");
             Assert.AreEqual(battleEventCollection.AttackingSquadEntityPop[0], -1);
             Assert.AreEqual(battleEventCollection.AttackingSquadNumber[0], 5);
@@ -419,10 +419,10 @@ namespace DFWVTests
 
             var historicalEventCollection = HistoricalEventCollection.Create(xdoc, world);
 
-            Assert.AreEqual(historicalEventCollection.ID, 30);
+            Assert.AreEqual(historicalEventCollection.Id, 30);
             Assert.AreEqual(historicalEventCollection.StartTime, new WorldTime(45, 285600));
             Assert.AreEqual(historicalEventCollection.EndTime, new WorldTime(50, 285600));
-            Assert.IsInstanceOfType(historicalEventCollection, typeof(EC_UnassessedEventCollection));
+            Assert.IsInstanceOfType(historicalEventCollection, typeof(EcUnassessedEventCollection));
         }
 
 

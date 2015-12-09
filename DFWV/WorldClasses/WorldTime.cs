@@ -1,5 +1,3 @@
-using System;
-
 namespace DFWV.WorldClasses
 {
 
@@ -8,8 +6,8 @@ namespace DFWV.WorldClasses
     /// </summary>
     public class WorldTime 
     {
-        public int Year { get; private set; }
-        public int TotalSeconds { get; private set; }
+        public int Year { get; }
+        public int TotalSeconds { get; }
 
         // The last year in the World
         public static WorldTime Present;
@@ -22,10 +20,10 @@ namespace DFWV.WorldClasses
 
         public WorldTime(int year, int month, int days)
         {
-            const int SecPerDay = 1200;
-            const int DayPerMonth = 28;
+            const int secPerDay = 1200;
+            const int dayPerMonth = 28;
             Year = year;
-            TotalSeconds = (month * DayPerMonth + days) * SecPerDay;
+            TotalSeconds = (month * dayPerMonth + days) * secPerDay;
         }
 
         public WorldTime(int year, int? seconds)
@@ -40,10 +38,7 @@ namespace DFWV.WorldClasses
 
         public override bool Equals(object obj)
         {
-            if (obj == null)
-                return false;
-
-            WorldTime t = obj as WorldTime;
+            var t = obj as WorldTime;
             if (t == null)
                 return false;
 
@@ -63,10 +58,10 @@ namespace DFWV.WorldClasses
         /// </summary>
         public override string ToString()
         {
-            const int SecPerDay = 1200;
-            const int DayPerMonth = 28;
-            var month = TotalSeconds / SecPerDay / DayPerMonth;
-            var day = (TotalSeconds - (month * SecPerDay * DayPerMonth)) / SecPerDay;
+            const int secPerDay = 1200;
+            const int dayPerMonth = 28;
+            var month = TotalSeconds / secPerDay / dayPerMonth;
+            var day = (TotalSeconds - (month * secPerDay * dayPerMonth)) / secPerDay;
             if (Year == -1)
                 return "Before Time";
             return (day + 1) + "." + (month + 1) + "." + Year;
@@ -78,10 +73,10 @@ namespace DFWV.WorldClasses
         /// </summary>
         public string ToStringRev()
         {
-            const int SecPerDay = 1200;
-            const int DayPerMonth = 28;
-            var month = TotalSeconds / SecPerDay / DayPerMonth;
-            var day = (TotalSeconds - (month * SecPerDay * DayPerMonth)) / SecPerDay;
+            const int secPerDay = 1200;
+            const int dayPerMonth = 28;
+            var month = TotalSeconds / secPerDay / dayPerMonth;
+            var day = (TotalSeconds - (month * secPerDay * dayPerMonth)) / secPerDay;
             if (Year == -1)
                 return "Before Time";
             return Year + "." + (month + 1) + "." + (day + 1);
@@ -93,14 +88,14 @@ namespace DFWV.WorldClasses
         /// </summary>
         private static WorldTime FromSeconds(long seconds)
         {
-            const int SecPerDay = 1200;
-            const int DayPerMonth = 28;
-            const int MonthPerYear = 12;
-            const int SecPerYear = SecPerDay * DayPerMonth * MonthPerYear;
+            const int secPerDay = 1200;
+            const int dayPerMonth = 28;
+            const int monthPerYear = 12;
+            const int secPerYear = secPerDay * dayPerMonth * monthPerYear;
 
 
-            var years = (int)(seconds / SecPerYear);
-            var secs = (int)(seconds - (years * SecPerYear));
+            var years = (int)(seconds / secPerYear);
+            var secs = (int)(seconds - (years * secPerYear));
             return new WorldTime(years, secs);
         }
 
@@ -109,12 +104,12 @@ namespace DFWV.WorldClasses
         /// </summary>
         public long ToSeconds()
         {
-            const long SecPerDay = 1200;
-            const long DayPerMonth = 28;
-            const long MonthPerYear = 12;
-            const long SecPerYear = SecPerDay * DayPerMonth * MonthPerYear;
+            const long secPerDay = 1200;
+            const long dayPerMonth = 28;
+            const long monthPerYear = 12;
+            const long secPerYear = secPerDay * dayPerMonth * monthPerYear;
 
-            return Year * SecPerYear + TotalSeconds;
+            return Year * secPerYear + TotalSeconds;
 
         }
 
@@ -168,35 +163,35 @@ namespace DFWV.WorldClasses
         /// <summary>
         /// Get duration between two times as a string (for displaying length of battles/wars)
         /// </summary>
-        internal static string Duration(WorldTime EndTime, WorldTime StartTime)
+        internal static string Duration(WorldTime endTime, WorldTime startTime)
         {
-            const int SecPerDay = 1200;
-            const int DayPerMonth = 28;
-            const int MonthPerYear = 12;
-            long Endtotalseconds = EndTime.Year * MonthPerYear * DayPerMonth * SecPerDay + EndTime.TotalSeconds;
-            long Starttotalseconds = StartTime.Year * MonthPerYear * DayPerMonth * SecPerDay + StartTime.TotalSeconds;
-            var secondsdiff = Endtotalseconds - Starttotalseconds;
-            var years = secondsdiff / SecPerDay / DayPerMonth / MonthPerYear;
-            secondsdiff -= (years * SecPerDay * DayPerMonth * MonthPerYear);
-            var months = secondsdiff / SecPerDay / DayPerMonth;
-            secondsdiff -= (months * SecPerDay * DayPerMonth);
-            var days = secondsdiff / SecPerDay;
+            const int secPerDay = 1200;
+            const int dayPerMonth = 28;
+            const int monthPerYear = 12;
+            long endtotalseconds = endTime.Year * monthPerYear * dayPerMonth * secPerDay + endTime.TotalSeconds;
+            long starttotalseconds = startTime.Year * monthPerYear * dayPerMonth * secPerDay + startTime.TotalSeconds;
+            var secondsdiff = endtotalseconds - starttotalseconds;
+            var years = secondsdiff / secPerDay / dayPerMonth / monthPerYear;
+            secondsdiff -= (years * secPerDay * dayPerMonth * monthPerYear);
+            var months = secondsdiff / secPerDay / dayPerMonth;
+            secondsdiff -= (months * secPerDay * dayPerMonth);
+            var days = secondsdiff / secPerDay;
 
-            var ticksleft = (int)(secondsdiff - (days * SecPerDay));
+            var ticksleft = (int)(secondsdiff - (days * secPerDay));
             var timeDuration = "";
             if (ticksleft != 0) // Double val != 0 causes issues with double conversion, as ticksleft might be very close to but not equal to zero.
             {
-                const int HoursPerDay = 24;
-                const int MinutesPerHour = 60;
-                const int RealSecsPerMinute = 60;
+                const int hoursPerDay = 24;
+                const int minutesPerHour = 60;
+                const int realSecsPerMinute = 60;
 
-                var hours = (int)((double)ticksleft / (SecPerDay / HoursPerDay));
-                ticksleft -= (hours * (SecPerDay / HoursPerDay));
+                var hours = (int)((double)ticksleft / (secPerDay / hoursPerDay));
+                ticksleft -= (hours * (secPerDay / hoursPerDay));
 
-                var minutes = (int)(ticksleft / ((float)SecPerDay / HoursPerDay / MinutesPerHour));
-                ticksleft -= (int)(minutes * ((float)SecPerDay / HoursPerDay / MinutesPerHour));
+                var minutes = (int)(ticksleft / ((float)secPerDay / hoursPerDay / minutesPerHour));
+                ticksleft -= (int)(minutes * ((float)secPerDay / hoursPerDay / minutesPerHour));
 
-                var secs = (int)(ticksleft / ((float)SecPerDay / HoursPerDay / MinutesPerHour / RealSecsPerMinute));
+                var secs = (int)(ticksleft / ((float)secPerDay / hoursPerDay / minutesPerHour / realSecsPerMinute));
                 if (hours > 0 && minutes > 0 && secs > 0)
                 {
                     timeDuration = hours + " h, " + minutes + " m, " + secs + " s";
@@ -267,9 +262,9 @@ namespace DFWV.WorldClasses
         /// </summary>
         internal string LegendsTime()
         {
-            const int SecPerDay = 1200;
-            const int DayPerMonth = 28;
-            long months = (TotalSeconds-1) / SecPerDay / DayPerMonth;
+            const int secPerDay = 1200;
+            const int dayPerMonth = 28;
+            long months = (TotalSeconds-1) / secPerDay / dayPerMonth;
 
             if (Year == -1)
                 return "a time before time";

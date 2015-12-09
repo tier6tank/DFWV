@@ -1,5 +1,4 @@
 ﻿
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -8,11 +7,11 @@ using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_InsurrectionStarted : HistoricalEvent
+    class HeInsurrectionStarted : HistoricalEvent
     {
-        private int? SiteID { get; set; }
+        private int? SiteId { get; }
         public Site Site { get; private set; }
-        private int? TargetCivID { get; set; }
+        private int? TargetCivId { get; }
         public Entity TargetCiv { get; private set; }
         public string Outcome { get; set; }
 
@@ -29,7 +28,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Site; }
         }
 
-        public HE_InsurrectionStarted(XDocument xdoc, World world)
+        public HeInsurrectionStarted(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -46,10 +45,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "target_civ_id":
-                        TargetCivID = valI;
+                        TargetCivId = valI;
                         break;
                     case "site_id":
-                        SiteID = valI;
+                        SiteId = valI;
                         break;
                     case "outcome":
                         Outcome = val;
@@ -58,7 +57,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -67,10 +66,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
-            if (TargetCivID.HasValue && World.Entities.ContainsKey(TargetCivID.Value))
-                TargetCiv = World.Entities[TargetCivID.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
+            if (TargetCivId.HasValue && World.Entities.ContainsKey(TargetCivId.Value))
+                TargetCiv = World.Entities[TargetCivId.Value];
         }
 
 
@@ -111,9 +110,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID, 
-                SiteID.DBExport(), 
-                TargetCivID.DBExport(), 
+                Id, 
+                SiteId.DBExport(), 
+                TargetCivId.DBExport(), 
                 Outcome.DBExport()
             };
 

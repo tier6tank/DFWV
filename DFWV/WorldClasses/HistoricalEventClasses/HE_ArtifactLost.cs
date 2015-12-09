@@ -1,26 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    public class HE_ArtifactLost : HistoricalEvent
+    public class HeArtifactLost : HistoricalEvent
     {
-        private int? SiteID { get; set; }
+        private int? SiteId { get; }
         public Site Site { get; private set; }
-        private int? ArtifactID { get; set; }
+        private int? ArtifactId { get; }
         private Artifact Artifact { get; set; }
 
-        override public Point Location => Site != null ? Site.Location : Point.Empty;
+        override public Point Location => Site?.Location ?? Point.Empty;
 
         public override IEnumerable<Site> SitesInvolved
         {
             get { yield return Site; }
         }
 
-        public HE_ArtifactLost(XDocument xdoc, World world)
+        public HeArtifactLost(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -37,14 +36,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "artifact_id":
-                        ArtifactID = valI;
+                        ArtifactId = valI;
                         break;
                     case "site_id":
-                        SiteID = valI;
+                        SiteId = valI;
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -53,10 +52,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
-            if (ArtifactID.HasValue && World.Artifacts.ContainsKey(ArtifactID.Value))
-                Artifact = World.Artifacts[ArtifactID.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
+            if (ArtifactId.HasValue && World.Artifacts.ContainsKey(ArtifactId.Value))
+                Artifact = World.Artifacts[ArtifactId.Value];
         }
 
         internal override void Process()
@@ -103,9 +102,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID, 
-                ArtifactID.DBExport(), 
-                SiteID.DBExport()
+                Id, 
+                ArtifactId.DBExport(), 
+                SiteId.DBExport()
             };
 
 

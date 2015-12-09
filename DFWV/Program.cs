@@ -30,11 +30,11 @@ namespace DFWV
         /// The main entry point for the application.
         /// </summary>
         /// 
-        static public MainForm mainForm;
-        static public MapForm mapForm;
-        static public SiteMapForm siteMapForm;
-        static public TimelineForm timelineForm;
-        static public StatsForm statsForm;
+        static public MainForm MainForm;
+        static public MapForm MapForm;
+        static public SiteMapForm SiteMapForm;
+        static public TimelineForm TimelineForm;
+        static public StatsForm StatsForm;
         //static public VisualizationForm visualizationForm;
 
         [STAThread]
@@ -43,9 +43,9 @@ namespace DFWV
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             InitiailzePluralService();
-            mainForm = new MainForm();
+            MainForm = new MainForm();
             
-            Application.Run(mainForm);
+            Application.Run(MainForm);
 
         }
 
@@ -59,8 +59,8 @@ namespace DFWV
         /// </summary>
         public static void MakeSelected(TabPage tabPage, ListBox listBox, WorldObject item)
         {
-            mainForm.AddToNav(item);
-            mainForm.MainTab.SelectedTab = tabPage;
+            MainForm.AddToNav(item);
+            MainForm.MainTab.SelectedTab = tabPage;
             if (!listBox.Items.Contains(item))
                 listBox.Items.Add(item);
             if (listBox.SelectedItem != item)
@@ -76,7 +76,7 @@ namespace DFWV
         /// </summary>
         public static void MakeSelected(TabPage tabPage, ListBox listBox)
         {
-            mainForm.MainTab.SelectedTab = tabPage;
+            MainForm.MainTab.SelectedTab = tabPage;
             if (listBox.SelectedIndex == -1 && listBox.Items.Count > 0)
                 listBox.SelectedIndex = 0;
         }
@@ -87,7 +87,7 @@ namespace DFWV
         /// one another for use in assigning colors to civilizations for mapping purposes
         /// </summary>
         #region DistinctColors
-        private static int curDistinctColor;
+        private static int _curDistinctColor;
         public static List<string> ColorNames = new List<string>
         {"#00FF00", "#0000FF", "#FF0000", "#01FFFE", "#FFA6FE", "#FFDB66", "#006401", "#010067", 
                     "#95003A", "#007DB5", "#FF00F6", "#FFEEE8", "#774D00", "#90FB92", "#0076FF", "#D5FF00", 
@@ -99,9 +99,9 @@ namespace DFWV
                     "#6B6882", "#5FAD4E", "#A75740", "#A5FFD2", "#FFB167", "#009BFF", "#E85EBE"};
         public static Color NextDistinctColor()
         {
-            var rgb = int.Parse(ColorNames[curDistinctColor % ColorNames.Count].Replace("#", ""), NumberStyles.HexNumber);
+            var rgb = int.Parse(ColorNames[_curDistinctColor % ColorNames.Count].Replace("#", ""), NumberStyles.HexNumber);
             var thisColor = Color.FromArgb(255,Color.FromArgb(rgb));
-            curDistinctColor++;
+            _curDistinctColor++;
 
             return thisColor;
         }
@@ -172,21 +172,21 @@ namespace DFWV
         /// <summary>
         /// Handles all logging from world generation
         /// </summary>
-        private static readonly object thisLock = new object();
+        private static readonly object ThisLock = new object();
 
         public static void Log(LogType type, string txt)
         {
-            if (mainForm == null)
+            if (MainForm == null)
                 return;
-            lock (thisLock)
+            lock (ThisLock)
             {
-                var curText = (string) mainForm.StatusBox.Invoke(new Func<string>(() => mainForm.StatusBox.Text));
+                var curText = (string) MainForm.StatusBox.Invoke(new Func<string>(() => MainForm.StatusBox.Text));
 
                 switch (type)
                 {
                     case LogType.Status:
                         if (txt.EndsWith("..."))
-                            mainForm.InvokeEx(x => x.StatusBox.AppendText(txt));
+                            MainForm.InvokeEx(x => x.StatusBox.AppendText(txt));
                         else if (txt == " Done") //ensure that sections that are finished are put in the right place
                         {
 
@@ -196,28 +196,28 @@ namespace DFWV
 
                                 var elipsisPos =
                                     (int)
-                                        mainForm.StatusBox.Invoke(
-                                            new Func<int>(() => mainForm.StatusBox.Text.LastIndexOf("...",
+                                        MainForm.StatusBox.Invoke(
+                                            new Func<int>(() => MainForm.StatusBox.Text.LastIndexOf("...",
                                                 StringComparison.Ordinal)));
 
-                                mainForm.InvokeEx(x => x.StatusBox.Text = x.StatusBox.Text.Insert(elipsisPos + 3, txt));
+                                MainForm.InvokeEx(x => x.StatusBox.Text = x.StatusBox.Text.Insert(elipsisPos + 3, txt));
                             }
                             else
-                                mainForm.InvokeEx(x => x.StatusBox.AppendText(txt + Environment.NewLine));
+                                MainForm.InvokeEx(x => x.StatusBox.AppendText(txt + Environment.NewLine));
                         }
                         else
                         {
                             if (curText.EndsWith("\n") ||
                                 curText == string.Empty)
-                                mainForm.InvokeEx(x => x.StatusBox.AppendText(txt + Environment.NewLine));
+                                MainForm.InvokeEx(x => x.StatusBox.AppendText(txt + Environment.NewLine));
                             else //Section finished while another section is in progress
-                                mainForm.InvokeEx(
+                                MainForm.InvokeEx(
                                     x => x.StatusBox.AppendText(Environment.NewLine + txt + Environment.NewLine));
                         }
                         Console.WriteLine(@"Status: {0}", txt);
                         break;
                     case LogType.Warning:
-                        mainForm.InvokeEx(x =>
+                        MainForm.InvokeEx(x =>
                         {
                             x.IssuesBox.Select(x.IssuesBox.TextLength, 0);
                             x.IssuesBox.SelectionColor = Color.Orange;
@@ -227,7 +227,7 @@ namespace DFWV
                         Console.WriteLine(@"Warning: {0}", txt);
                         break;
                     case LogType.Error:
-                        mainForm.InvokeEx(x =>
+                        MainForm.InvokeEx(x =>
                         {
                             x.IssuesBox.Select(x.IssuesBox.TextLength, 0);
                             x.IssuesBox.SelectionColor = Color.Red;
@@ -325,7 +325,8 @@ namespace DFWV
         {
             try
             {
-                if (objects == null || !objects.Any())
+                var objectsAsArray = objects as object[] ?? objects.ToArray();
+                if (objects == null || !objectsAsArray.Any())
                 {
                     groupbox.Visible = false;
                     return;
@@ -333,7 +334,7 @@ namespace DFWV
                 groupbox.Visible = true;
                 listbox.BeginUpdate();
                 listbox.Items.Clear();
-                listbox.Items.AddRange(objects.ToArray());
+                listbox.Items.AddRange(objectsAsArray.ToArray());
                 listbox.EndUpdate();
                 listbox.SelectedIndex = 0;
                 var title = groupbox.Text.Split('(')[0].Trim();
@@ -358,38 +359,38 @@ namespace DFWV
 
 
         #region Pluralization/Capitalization Services
-        static PluralizationService pluralService;
+        static PluralizationService _pluralService;
         private static void InitiailzePluralService()
         {
-            pluralService = PluralizationService.CreateService(CultureInfo.GetCultureInfo("en-us"));
+            _pluralService = PluralizationService.CreateService(CultureInfo.GetCultureInfo("en-us"));
         }
 
         static public string Pluralize(this string str)
         {
-            if (pluralService == null)
+            if (_pluralService == null)
                 InitiailzePluralService();
-            return pluralService.Pluralize(str);
+            return _pluralService.Pluralize(str);
         }
 
         static public string Singularize(this string str)
         {
-            if (pluralService == null)
+            if (_pluralService == null)
                 InitiailzePluralService();
-            return pluralService.Singularize(str);
+            return _pluralService.Singularize(str);
         }
 
-        static public bool isPlural(this string str)
+        static public bool IsPlural(this string str)
         {
-            if (pluralService == null)
+            if (_pluralService == null)
                 InitiailzePluralService();
-            return pluralService.IsPlural(str);
+            return _pluralService.IsPlural(str);
         }
 
-        static public bool isSingular(this string str)
+        static public bool IsSingular(this string str)
         {
-            if (pluralService == null)
+            if (_pluralService == null)
                 InitiailzePluralService();
-            return pluralService.IsSingular(str);
+            return _pluralService.IsSingular(str);
         }
 
         static public string ToTitleCase(this string str)
@@ -406,7 +407,7 @@ namespace DFWV
     /// This code calls an invoke against an object if it's needed to complete some action, otherwise it just calls that action.
     ///    This is used to update the UI from other threads.
     /// </summary>
-    public static class ISynchronizeInvokeExtensions
+    public static class SynchronizeInvokeExtensions
     {
       public static void InvokeEx<T>(this T @this, Action<T> action) where T : ISynchronizeInvoke
       {
@@ -425,7 +426,7 @@ namespace DFWV
     /// These methods are used with the World Summary TreeView (on the World tab on the main form) to allow it to properly sort and insert data as required.
     /// </summary>
     #region WorldSummaryTree Helper Functions
-    public static class SOExtension
+    public static class SoExtension
     {
         public static IEnumerable<TreeNode> FlattenTree(this TreeView tv)
         {
@@ -441,7 +442,7 @@ namespace DFWV
 
         public static IEnumerable<T> ConsecutiveDistict<T>(this IEnumerable<T> input)
         {
-            if (input == null) throw new ArgumentNullException("input");
+            if (input == null) throw new ArgumentNullException(nameof(input));
             return ConsecutiveDistictImplementation(input);
         }
 
@@ -451,7 +452,7 @@ namespace DFWV
             T last = default(T);
             foreach (var item in input)
             {
-                if (isFirst || !object.Equals(item, last))
+                if (isFirst || !Equals(item, last))
                 {
                     yield return item;
                     last = item;

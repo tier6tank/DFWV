@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -8,18 +7,18 @@ using DFWV.WorldClasses.HistoricalEventCollectionClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_PeaceRejected : HistoricalEvent
+    class HePeaceRejected : HistoricalEvent
     {
-        private int? SiteID { get; set; }
+        private int? SiteId { get; }
         private Site Site { get; set; }
 
         public int? Topic { get; set; }
-        public int? SourceEntID { get; set; }
-        public int? DestinationEntID { get; set; }
+        public int? SourceEntId { get; set; }
+        public int? DestinationEntId { get; set; }
         public Entity Source { get; set; }
         public Entity Destination { get; set; }
 
-        override public Point Location => Site != null ? Site.Location : Point.Empty;
+        override public Point Location => Site?.Location ?? Point.Empty;
 
         public override IEnumerable<Entity> EntitiesInvolved
         {
@@ -35,7 +34,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         }
 
 
-        public HE_PeaceRejected(XDocument xdoc, World world)
+        public HePeaceRejected(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -53,10 +52,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                     case "site_id":
                         if (valI != -1)
-                            SiteID = valI;
+                            SiteId = valI;
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -65,12 +64,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
-            if (DestinationEntID.HasValue && World.Entities.ContainsKey(DestinationEntID.Value))
-                Destination = World.Entities[DestinationEntID.Value];
-            if (SourceEntID.HasValue && World.Entities.ContainsKey(SourceEntID.Value))
-                Source = World.Entities[SourceEntID.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
+            if (DestinationEntId.HasValue && World.Entities.ContainsKey(DestinationEntId.Value))
+                Destination = World.Entities[DestinationEntId.Value];
+            if (SourceEntId.HasValue && World.Entities.ContainsKey(SourceEntId.Value))
+                Source = World.Entities[SourceEntId.Value];
         }
 
 
@@ -93,15 +92,15 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         Topic = MeetingTopics.IndexOf(val);
                         break;
                     case "source":
-                        SourceEntID = valI;
+                        SourceEntId = valI;
                         break;
                     case "destination":
-                        DestinationEntID = valI;
+                        DestinationEntId = valI;
                         break;
                     case "site":
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -119,7 +118,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             if (EventCollection == null) return timestring;
-            var war = (EC_War)EventCollection;
+            var war = (EcWar)EventCollection;
             return $"{timestring} {war.AggressorEnt} rejected an offer of peace from {war.DefenderEnt}.";
         }
 
@@ -129,7 +128,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             if (EventCollection == null) return timelinestring;
-            var war = (EC_War)EventCollection;
+            var war = (EcWar)EventCollection;
             return $"{timelinestring} {war.AggressorEnt} rejected peace from {war.DefenderEnt}.";
         }
 
@@ -141,11 +140,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID, 
-                SiteID.DBExport(),
+                Id, 
+                SiteId.DBExport(),
                 Topic.DBExport(MeetingTopics),
-                SourceEntID.DBExport(),
-                DestinationEntID.DBExport()
+                SourceEntId.DBExport(),
+                DestinationEntId.DBExport()
             };
 
             Database.ExportWorldItem(table, vals);

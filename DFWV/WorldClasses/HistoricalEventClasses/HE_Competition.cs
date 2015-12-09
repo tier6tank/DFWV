@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -9,24 +8,24 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_Competition : HistoricalEvent
+    class HeCompetition : HistoricalEvent
     {
-        private int? SiteID { get; set; }
+        private int? SiteId { get; }
         private Site Site { get; set; }
-        private int? SubregionID { get; set; }
+        private int? SubregionId { get; }
         private Region Subregion { get; set; }
-        private int? FeatureLayerID { get; set; }
-        private int? CivID { get; set; }
+        private int? FeatureLayerId { get; }
+        private int? CivId { get; }
         public Entity Civ { get; private set; }
-        private int? WinnerHFID { get; set; }
-        private HistoricalFigure WinnerHF { get; set; }
-        public List<int> CompetitorHFIDs;
+        private int? WinnerHfid { get; }
+        private HistoricalFigure WinnerHf { get; set; }
+        public List<int> CompetitorHfiDs;
         public List<HistoricalFigure> CompetitorHFs;
 
         override public Point Location => Site.Location;
 
-        public int? OccasionID { get; set; }
-        public int? ScheduleID { get; set; }
+        public int? OccasionId { get; set; }
+        public int? ScheduleId { get; set; }
 
         public override IEnumerable<Entity> EntitiesInvolved
         {
@@ -41,7 +40,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get { yield return Subregion; }
         }
-        public HE_Competition(XDocument xdoc, World world)
+        public HeCompetition(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -58,39 +57,39 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                     case "site_id":
                         if (valI != -1)
-                            SiteID = valI;
+                            SiteId = valI;
                         break;
                     case "subregion_id":
                         if (valI != -1)
-                            SubregionID = valI;
+                            SubregionId = valI;
                         break;
                     case "feature_layer_id":
                         if (valI != -1)
-                            FeatureLayerID = valI;
+                            FeatureLayerId = valI;
                         break;
                     case "occasion_id":
                         if (valI != -1)
-                            OccasionID = valI;
+                            OccasionId = valI;
                         break;
                     case "schedule_id":
                         if (valI != -1)
-                            ScheduleID = valI;
+                            ScheduleId = valI;
                         break;
                     case "civ_id":
-                        CivID = valI;
+                        CivId = valI;
                         break;
 
                     case "competitor_hfid":
-                        if (CompetitorHFIDs == null)
-                            CompetitorHFIDs = new List<int>();
-                        CompetitorHFIDs.Add(valI);
+                        if (CompetitorHfiDs == null)
+                            CompetitorHfiDs = new List<int>();
+                        CompetitorHfiDs.Add(valI);
                         break;
                     case "winner_hfid":
-                        WinnerHFID = valI;
+                        WinnerHfid = valI;
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -99,23 +98,23 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
-            if (SubregionID.HasValue && World.Regions.ContainsKey(SubregionID.Value))
-                Subregion = World.Regions[SubregionID.Value];
-            if (CivID.HasValue && World.Entities.ContainsKey(CivID.Value))
-                Civ = World.Entities[CivID.Value];
-            if (CompetitorHFIDs != null)
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
+            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
+                Subregion = World.Regions[SubregionId.Value];
+            if (CivId.HasValue && World.Entities.ContainsKey(CivId.Value))
+                Civ = World.Entities[CivId.Value];
+            if (CompetitorHfiDs != null)
             {
                 CompetitorHFs = new List<HistoricalFigure>();
-                foreach (var competitorhfid in CompetitorHFIDs.Where(group1hfid => World.HistoricalFigures.ContainsKey(group1hfid)))
+                foreach (var competitorhfid in CompetitorHfiDs.Where(group1Hfid => World.HistoricalFigures.ContainsKey(group1Hfid)))
                 {
                     CompetitorHFs.Add(World.HistoricalFigures[competitorhfid]);
 
                 }
             }
-            if (WinnerHFID.HasValue && World.HistoricalFigures.ContainsKey(WinnerHFID.Value))
-                WinnerHF = World.HistoricalFigures[WinnerHFID.Value];
+            if (WinnerHfid.HasValue && World.HistoricalFigures.ContainsKey(WinnerHfid.Value))
+                WinnerHf = World.HistoricalFigures[WinnerHfid.Value];
 
         }
 
@@ -124,7 +123,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Civ:", Civ);
             EventLabel(frm, parent, ref location, "Region:", Subregion);
-            EventLabel(frm, parent, ref location, "Winner:", WinnerHF);
+            EventLabel(frm, parent, ref location, "Winner:", WinnerHf);
             if (CompetitorHFs != null)
             {
                 foreach (var hf in CompetitorHFs)
@@ -137,15 +136,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            var competitorsString = "";
-            foreach (var hf in CompetitorHFs)
-            {
-                competitorsString += $"the {hf.Race.ToString().ToLower()} {hf}, ";
-            }
-            competitorsString.Trim().TrimEnd(',');
+            var competitorsString = CompetitorHFs.Aggregate("", (current, hf) => current + $"the {hf.Race.ToString().ToLower()} {hf}, ");
+            competitorsString = competitorsString.Trim().TrimEnd(',');
 
             return
-                $"{timestring} {Civ} held a UNKNOWN competition in {Site.AltName} as part of {EventCollection.Name ?? "UNKNOWN"}. \nCompeting were {competitorsString}.  \nThe {WinnerHF.Race.ToString().ToLower()} {WinnerHF} was the victor.";
+                $"{timestring} {Civ} held a UNKNOWN competition in {Site.AltName} as part of {EventCollection.Name ?? "UNKNOWN"}. \nCompeting were {competitorsString}.  \nThe {WinnerHf.Race.ToString().ToLower()} {WinnerHf} was the victor.";
 
 
         }
@@ -166,13 +161,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID,
-                CivID.DBExport(),
-                WinnerHFID.DBExport(),
-                CompetitorHFIDs.DBExport(),
-                SiteID.DBExport(),
-                SubregionID.DBExport(),
-                FeatureLayerID.DBExport()
+                Id,
+                CivId.DBExport(),
+                WinnerHfid.DBExport(),
+                CompetitorHfiDs.DBExport(),
+                SiteId.DBExport(),
+                SubregionId.DBExport(),
+                FeatureLayerId.DBExport()
             };
 
             Database.ExportWorldItem(table, vals);

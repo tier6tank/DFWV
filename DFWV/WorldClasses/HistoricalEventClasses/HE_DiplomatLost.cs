@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -7,15 +6,15 @@ using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_DiplomatLost : HistoricalEvent
+    class HeDiplomatLost : HistoricalEvent
     {
-        private int? SiteID { get; set; }
+        private int? SiteId { get; }
         private Site Site { get; set; }
 
-        public int? EntityID { get; set; }
+        public int? EntityId { get; set; }
         public Entity Entity { get; set; }
 
-        public int? InvolvedID { get; set; }
+        public int? InvolvedId { get; set; }
         public Entity Involved { get; set; }
 
         override public Point Location => Site.Location;
@@ -33,7 +32,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Site; }
         }
 
-        public HE_DiplomatLost(XDocument xdoc, World world)
+        public HeDiplomatLost(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -50,10 +49,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "site_id":
-                        SiteID = valI;
+                        SiteId = valI;
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -62,12 +61,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
-            if (EntityID.HasValue && World.Entities.ContainsKey(EntityID.Value))
-                Entity = World.Entities[EntityID.Value];
-            if (InvolvedID.HasValue && World.Entities.ContainsKey(InvolvedID.Value))
-                Involved = World.Entities[InvolvedID.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
+            if (EntityId.HasValue && World.Entities.ContainsKey(EntityId.Value))
+                Entity = World.Entities[EntityId.Value];
+            if (InvolvedId.HasValue && World.Entities.ContainsKey(InvolvedId.Value))
+                Involved = World.Entities[InvolvedId.Value];
 
         }
 
@@ -86,16 +85,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                     case "entity":
                         if (valI != -1)
-                            EntityID = valI;
+                            EntityId = valI;
                         break;
                     case "involved":
                         if (valI != -1)
-                            InvolvedID = valI;
+                            InvolvedId = valI;
                         break;
                     case "site":
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -136,9 +135,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object> 
             { 
-                ID, 
-                SiteID.DBExport(),
-                EntityID.DBExport(),
+                Id, 
+                SiteId.DBExport(),
+                EntityId.DBExport(),
                 Involved.DBExport()
             };
 

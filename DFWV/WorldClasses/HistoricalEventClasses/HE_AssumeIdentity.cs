@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -8,16 +7,16 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_AssumeIdentity : HistoricalEvent
+    class HeAssumeIdentity : HistoricalEvent
     {
-        private int? TricksterHFID { get; set; }
-        private HistoricalFigure TricksterHF { get; set; }
-        private int? TargetEnID { get; set; }
+        private int? TricksterHfid { get; }
+        private HistoricalFigure TricksterHf { get; set; }
+        private int? TargetEnId { get; }
         private Entity TargetEn { get; set; }
-        private int? IdentityID { get; set; }
+        private int? IdentityId { get; }
 
-        public int? IdentityHFID { get; set; }
-        public HistoricalFigure IdentityHF { get; set; }
+        public int? IdentityHfid { get; set; }
+        public HistoricalFigure IdentityHf { get; set; }
         public Race IdentityRace { get; set; }
         public int? IdentityCaste { get; set; }
         public string IdentityName { get; set; }
@@ -28,15 +27,15 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get
             {
-                yield return TricksterHF;
-                yield return IdentityHF;
+                yield return TricksterHf;
+                yield return IdentityHf;
             }
         }
         public override IEnumerable<Entity> EntitiesInvolved
         {
             get { yield return TargetEn; }
         }
-        public HE_AssumeIdentity(XDocument xdoc, World world)
+        public HeAssumeIdentity(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -53,16 +52,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "trickster_hfid":
-                        TricksterHFID = valI;
+                        TricksterHfid = valI;
                         break;
                     case "identity_id":
-                        IdentityID = valI;
+                        IdentityId = valI;
                         break;
                     case "target_enid":
-                        TargetEnID = valI;
+                        TargetEnId = valI;
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -71,12 +70,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (TricksterHFID.HasValue && World.HistoricalFigures.ContainsKey(TricksterHFID.Value))
-                TricksterHF = World.HistoricalFigures[TricksterHFID.Value];
-            if (TargetEnID.HasValue && World.Entities.ContainsKey(TargetEnID.Value))
-                TargetEn = World.Entities[TargetEnID.Value];
-            if (IdentityHFID.HasValue && World.HistoricalFigures.ContainsKey(IdentityHFID.Value))
-                IdentityHF = World.HistoricalFigures[IdentityHFID.Value];
+            if (TricksterHfid.HasValue && World.HistoricalFigures.ContainsKey(TricksterHfid.Value))
+                TricksterHf = World.HistoricalFigures[TricksterHfid.Value];
+            if (TargetEnId.HasValue && World.Entities.ContainsKey(TargetEnId.Value))
+                TargetEn = World.Entities[TargetEnId.Value];
+            if (IdentityHfid.HasValue && World.HistoricalFigures.ContainsKey(IdentityHfid.Value))
+                IdentityHf = World.HistoricalFigures[IdentityHfid.Value];
         }
 
 
@@ -96,7 +95,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "histfig":
                         break;
                     case "identity_hf":
-                        IdentityHFID = valI;
+                        IdentityHfid = valI;
                         break;
                     case "identity_name":
                         IdentityName = val;
@@ -117,7 +116,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
 
@@ -129,16 +128,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "Trickster:", TricksterHF);
-            if (IdentityHF != null)
-                EventLabel(frm, parent, ref location, "Identity:", IdentityHF);
+            EventLabel(frm, parent, ref location, "Trickster:", TricksterHf);
+            if (IdentityHf != null)
+                EventLabel(frm, parent, ref location, "Identity:", IdentityHf);
             else if (IdentityRace != null && IdentityCaste != null)
             {
                 EventLabel(frm, parent, ref location, "Identity Race:", IdentityRace);
                 EventLabel(frm, parent, ref location, "Identity Race:", HistoricalFigure.Castes[IdentityCaste.Value]);
             }
             else
-                EventLabel(frm, parent, ref location, "Identity ID:", IdentityID.ToString());
+                EventLabel(frm, parent, ref location, "Identity ID:", IdentityId.ToString());
             EventLabel(frm, parent, ref location, "Target Ent:", TargetEn);
         }
 
@@ -146,11 +145,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            if (IdentityHF != null)
-                return
-                    $"{timestring} {TricksterHF.Race} {TricksterHF} fooled {TargetEn} into believing it was {(IdentityHF == null ? "Identity ID: " + IdentityID : IdentityHF.ToString())}.";
-            return
-                $"{timestring} {TricksterHF.Race} {TricksterHF} fooled {TargetEn} into believing it was {IdentityName}.";
+            return IdentityHf != null ? 
+                $"{timestring} {TricksterHf.Race} {TricksterHf} fooled {TargetEn} into believing it was {IdentityHf}." : 
+                $"{timestring} {TricksterHf.Race} {TricksterHf} fooled {TargetEn} into believing it was {IdentityName}.";
         }
 
         internal override string ToTimelineString()
@@ -158,7 +155,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             //TODO: Incorporate new data
             var timelinestring = base.ToTimelineString();
 
-            return $"{timelinestring} {TricksterHF} assumed an identity to {TargetEn}";
+            return $"{timelinestring} {TricksterHf} assumed an identity to {TargetEn}";
         }
 
         internal override void Export(string table)
@@ -170,11 +167,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID, 
-                TricksterHFID.DBExport(), 
-                TargetEnID.DBExport(), 
-                IdentityID.DBExport(),
-                IdentityHFID.DBExport(),
+                Id, 
+                TricksterHfid.DBExport(), 
+                TargetEnId.DBExport(), 
+                IdentityId.DBExport(),
+                IdentityHfid.DBExport(),
                 IdentityName.DBExport(),
                 IdentityRace.DBExport(),
                 IdentityCaste.DBExport(HistoricalFigure.Castes)

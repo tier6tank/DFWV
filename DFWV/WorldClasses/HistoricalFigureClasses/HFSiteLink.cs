@@ -7,55 +7,55 @@ using DFWV.WorldClasses.HistoricalEventClasses;
 
 namespace DFWV.WorldClasses.HistoricalFigureClasses
 {
-    public class HFSiteLink
+    public class HfSiteLink
     {
         public static List<string> LinkTypes = new List<string>();
-        public int LinkType { get; private set; }
-        public int SiteID { get; private set; }
-        private int? SubID { get; set; }
-        private int? OccupationID { get; set; }
-        public int? EntityID { get; private set; }
-        public HistoricalFigure HF { get; private set; }
+        public int LinkType { get; }
+        public int SiteId { get; }
+        private int? SubId { get; }
+        private int? OccupationId { get; set; }
+        public int? EntityId { get; }
+        public HistoricalFigure Hf { get; }
 
-        public Entity Entity => EntityID.HasValue && HF.World.Entities.ContainsKey(EntityID.Value) ? HF.World.Entities[EntityID.Value] : null;
+        public Entity Entity => EntityId.HasValue && Hf.World.Entities.ContainsKey(EntityId.Value) ? Hf.World.Entities[EntityId.Value] : null;
 
-        public Site Site => HF.World.Sites[SiteID];
+        public Site Site => Hf.World.Sites[SiteId];
 
-        public HE_AddHFSiteLink AddEvent { get; set; }
-        public HE_RemoveHFSiteLink RemoveEvent { get; set; }
+        public HeAddHfSiteLink AddEvent { get; set; }
+        public HeRemoveHfSiteLink RemoveEvent { get; set; }
 
-        public HFSiteLink(XContainer data, HistoricalFigure hf)
+        public HfSiteLink(XContainer data, HistoricalFigure hf)
         {
             var linktypename = data.Element("link_type").Value;
             if (!LinkTypes.Contains(linktypename))
                 LinkTypes.Add(linktypename);
             LinkType = LinkTypes.IndexOf(linktypename);
 
-            SiteID = Convert.ToInt32(data.Element("site_id").Value);
+            SiteId = Convert.ToInt32(data.Element("site_id").Value);
             if (data.Elements("sub_id").Count() != 0)
-                SubID = Convert.ToInt32(data.Element("sub_id").Value);
+                SubId = Convert.ToInt32(data.Element("sub_id").Value);
             if (data.Elements("occupation_id").Count() != 0)
-                OccupationID = Convert.ToInt32(data.Element("occupation_id").Value);
+                OccupationId = Convert.ToInt32(data.Element("occupation_id").Value);
             if (data.Elements("entity_id").Count() != 0)
-                EntityID = Convert.ToInt32(data.Element("entity_id").Value);
+                EntityId = Convert.ToInt32(data.Element("entity_id").Value);
 
-            HF = hf;
+            Hf = hf;
         }
 
         public override string ToString()
         {
             if (Site == null)
-                return LinkType + ": " + SiteID;
+                return LinkType + ": " + SiteId;
             return LinkType + ": " + Site.Name;
         }
 
-        internal void Export(int HFID)
+        internal void Export(int hfid)
         {
             var table = "HF_" + GetType().Name;
 
 
 
-            var vals = new List<object> { HFID, LinkTypes[LinkType], SiteID, SubID, EntityID };
+            var vals = new List<object> { hfid, LinkTypes[LinkType], SiteId, SubId, EntityId };
 
 
             Database.ExportWorldItem(table, vals);

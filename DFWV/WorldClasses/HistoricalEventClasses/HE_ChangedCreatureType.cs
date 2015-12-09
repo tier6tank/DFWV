@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -7,18 +6,18 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_ChangedCreatureType : HistoricalEvent
+    class HeChangedCreatureType : HistoricalEvent
     {
-        private int? ChangeeHFID { get; set; }
-        private HistoricalFigure ChangeeHF { get; set; }
-        private int? ChangerHFID { get; set; }
-        private HistoricalFigure ChangerHF { get; set; }
+        private int? ChangeeHfid { get; }
+        private HistoricalFigure ChangeeHf { get; set; }
+        private int? ChangerHfid { get; }
+        private HistoricalFigure ChangerHf { get; set; }
         private string OldRace_ { get; set; }
         private Race OldRace { get; set; }
-        private int? OldCaste { get; set; }
+        private int? OldCaste { get; }
         private string NewRace_ { get; set; }
         private Race NewRace { get; set; }
-        private int? NewCaste { get; set; }
+        private int? NewCaste { get; }
 
         override public Point Location => Point.Empty;
 
@@ -26,11 +25,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get
             {
-                yield return ChangeeHF;
-                yield return ChangerHF;
+                yield return ChangeeHf;
+                yield return ChangerHf;
             }
         }
-        public HE_ChangedCreatureType(XDocument xdoc, World world)
+        public HeChangedCreatureType(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -47,10 +46,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "changee_hfid":
-                        ChangeeHFID = valI;
+                        ChangeeHfid = valI;
                         break;
                     case "changer_hfid":
-                        ChangerHFID = valI;
+                        ChangerHfid = valI;
                         break;
                     case "old_race":
                         OldRace_ = val;
@@ -69,7 +68,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         NewCaste = HistoricalFigure.Castes.IndexOf(val);
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -78,10 +77,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (ChangeeHFID.HasValue && World.HistoricalFigures.ContainsKey(ChangeeHFID.Value))
-                ChangeeHF = World.HistoricalFigures[ChangeeHFID.Value];
-            if (ChangerHFID.HasValue && World.HistoricalFigures.ContainsKey(ChangerHFID.Value))
-                ChangerHF = World.HistoricalFigures[ChangerHFID.Value];
+            if (ChangeeHfid.HasValue && World.HistoricalFigures.ContainsKey(ChangeeHfid.Value))
+                ChangeeHf = World.HistoricalFigures[ChangeeHfid.Value];
+            if (ChangerHfid.HasValue && World.HistoricalFigures.ContainsKey(ChangerHfid.Value))
+                ChangerHf = World.HistoricalFigures[ChangerHfid.Value];
             if (OldRace_ != null)
             {
                 OldRace = World.GetAddRace(OldRace_);
@@ -94,8 +93,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "Changer:", ChangerHF);
-            EventLabel(frm, parent, ref location, "Changee:", ChangeeHF);
+            EventLabel(frm, parent, ref location, "Changer:", ChangerHf);
+            EventLabel(frm, parent, ref location, "Changee:", ChangeeHf);
             EventLabel(frm, parent, ref location, "Old Race:", OldRace);
             if (OldCaste.HasValue)
                 EventLabel(frm, parent, ref location, "Old Caste:", HistoricalFigure.Castes[OldCaste.Value]);
@@ -109,17 +108,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            return string.Format("{0} {2} changed {4} from a {5} into a {6}.",
-                                    timestring, ChangerHF.Race, ChangerHF,
-                                    ChangeeHF.Race, ChangeeHF, OldRace,
-                                    NewRace);
+            return $"{timestring} {ChangerHf} changed {ChangeeHf} from a {OldRace} into a {NewRace}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return $"{timelinestring} {ChangerHF} transformed {ChangeeHF}.";
+            return $"{timelinestring} {ChangerHf} transformed {ChangeeHf}.";
         }
 
         internal override void Export(string table)
@@ -131,9 +127,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID, 
-                ChangeeHFID.DBExport(), 
-                ChangerHFID.DBExport(), 
+                Id, 
+                ChangeeHfid.DBExport(), 
+                ChangerHfid.DBExport(), 
                 OldRace.DBExport(), 
                 OldCaste.DBExport(HistoricalFigure.Castes),
                 NewRace.DBExport(),

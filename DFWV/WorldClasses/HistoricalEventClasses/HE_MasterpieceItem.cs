@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -8,15 +7,15 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_MasterpieceItem : HistoricalEvent
+    class HeMasterpieceItem : HistoricalEvent
     {
-        private int? HFID { get; set; }
-        private HistoricalFigure HF { get; set; }
-        private int? EntityID { get; set; }
+        private int? Hfid { get; }
+        private HistoricalFigure Hf { get; set; }
+        private int? EntityId { get; }
         private Entity Entity { get; set; }
-        private int? SiteID { get; set; }
+        private int? SiteId { get; }
         private Site Site { get; set; }
-        private int? SkillAtTime { get; set; }
+        private int? SkillAtTime { get; }
 
         private int? Item { get; set; }
         private int? ItemType { get; set; }
@@ -25,11 +24,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? MatType { get; set; }
         private int? MatIndex  { get; set; }
 
-        override public Point Location => Site != null ? Site.Location : Point.Empty;
+        override public Point Location => Site?.Location ?? Point.Empty;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
-            get { yield return HF; }
+            get { yield return Hf; }
         }
         public override IEnumerable<Entity> EntitiesInvolved
         {
@@ -41,7 +40,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         }
 
 
-        public HE_MasterpieceItem(XDocument xdoc, World world)
+        public HeMasterpieceItem(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -58,19 +57,19 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "hfid":
-                        HFID = valI;
+                        Hfid = valI;
                         break;
                     case "entity_id":
-                        EntityID = valI;
+                        EntityId = valI;
                         break;
                     case "site_id":
-                        SiteID = valI;
+                        SiteId = valI;
                         break;
                     case "skill_at_time":
                         SkillAtTime = valI;
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -79,12 +78,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (HFID.HasValue && World.HistoricalFigures.ContainsKey(HFID.Value))
-                HF = World.HistoricalFigures[HFID.Value];
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
-            if (EntityID.HasValue && World.Entities.ContainsKey(EntityID.Value))
-                Entity = World.Entities[EntityID.Value];
+            if (Hfid.HasValue && World.HistoricalFigures.ContainsKey(Hfid.Value))
+                Hf = World.HistoricalFigures[Hfid.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
+            if (EntityId.HasValue && World.Entities.ContainsKey(EntityId.Value))
+                Entity = World.Entities[EntityId.Value];
         }
 
         internal override void Plus(XDocument xdoc)
@@ -133,7 +132,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "skill_used":
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
          
@@ -144,16 +143,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             base.Process();
             if (Site != null)
-                Site.isPlayerControlled = true;
-            if (Entity != null)
-                Entity.MakePlayer();
-
+                Site.IsPlayerControlled = true;
+            Entity?.MakePlayer();
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
             //TODO: Incorporate new data
-            EventLabel(frm, parent, ref location, "HF:", HF);
+            EventLabel(frm, parent, ref location, "HF:", Hf);
             EventLabel(frm, parent, ref location, "Entity:", Entity);
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Skill:", SkillAtTime.ToString());
@@ -168,13 +165,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             {
                 if (ItemSubType.HasValue && ItemSubTypes[ItemSubType.Value] != "-1")
                     return
-                        $"{timestring} {HF} created a masterful {Materials[Mat.Value]} {ItemSubTypes[ItemSubType.Value]} for {Entity} at {Site.AltName}.";
+                        $"{timestring} {Hf} created a masterful {Materials[Mat.Value]} {ItemSubTypes[ItemSubType.Value]} for {Entity} at {Site.AltName}.";
 
                 return
-                    $"{timestring} {HF} created a masterful {Materials[Mat.Value]} {ItemTypes[ItemType.Value]} for {Entity} at {Site.AltName}.";
+                    $"{timestring} {Hf} created a masterful {Materials[Mat.Value]} {ItemTypes[ItemType.Value]} for {Entity} at {Site.AltName}.";
             }
 
-            return $"{timestring} {HF} created a masterful {"UNKNOWN"} for {Entity} at {Site.AltName}.";
+            return $"{timestring} {Hf} created a masterful {"UNKNOWN"} for {Entity} at {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
@@ -182,7 +179,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             //TODO: Incorporate new data
             var timelinestring = base.ToTimelineString();
 
-            return $"{timelinestring} {HF} created a masterful item for {Entity} at {Site.AltName}.";
+            return $"{timelinestring} {Hf} created a masterful item for {Entity} at {Site.AltName}.";
         }
 
         internal override void Export(string table)
@@ -193,10 +190,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID, 
-                HFID.DBExport(), 
-                EntityID.DBExport(), 
-                SiteID.DBExport(), 
+                Id, 
+                Hfid.DBExport(), 
+                EntityId.DBExport(), 
+                SiteId.DBExport(), 
                 SkillAtTime,
                 Item.DBExport(),
                 ItemType.DBExport(ItemTypes),

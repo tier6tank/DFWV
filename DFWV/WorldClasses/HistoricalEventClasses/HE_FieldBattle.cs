@@ -8,20 +8,20 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    public class HE_FieldBattle : HistoricalEvent
+    public class HeFieldBattle : HistoricalEvent
     {
-        private int? SubregionID { get; set; }
+        private int? SubregionId { get; }
         private Region Subregion { get; set; }
-        private int? FeatureLayerID { get; set; }
-        private Point Coords { get; set; }
-        private int? DefenderCivID { get; set; }
+        private int? FeatureLayerId { get; }
+        private Point Coords { get; }
+        private int? DefenderCivId { get; }
         private Entity DefenderCiv { get; set; }
-        private int? AttackerCivID { get; set; }
+        private int? AttackerCivId { get; }
         private Entity AttackerCiv { get; set; }
-        private int? AttackerGeneralHFID { get; set; }
-        private HistoricalFigure AttackerGeneralHF { get; set; }
-        private int? DefenderGeneralHFID { get; set; }
-        private HistoricalFigure DefenderGeneralHF { get; set; }
+        private int? AttackerGeneralHfid { get; }
+        private HistoricalFigure AttackerGeneralHf { get; set; }
+        private int? DefenderGeneralHfid { get; }
+        private HistoricalFigure DefenderGeneralHf { get; set; }
 
         override public Point Location => Coords;
 
@@ -29,8 +29,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get
             {
-                yield return AttackerGeneralHF;
-                yield return DefenderGeneralHF;
+                yield return AttackerGeneralHf;
+                yield return DefenderGeneralHf;
             }
         }
         public override IEnumerable<Entity> EntitiesInvolved
@@ -46,7 +46,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Subregion; }
         }
 
-        public HE_FieldBattle(XDocument xdoc, World world)
+        public HeFieldBattle(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -64,31 +64,31 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                     case "subregion_id":
                         if (valI != -1)
-                            SubregionID = valI;
+                            SubregionId = valI;
                         break;
                     case "feature_layer_id":
                         if (valI != -1)
-                            FeatureLayerID = valI;
+                            FeatureLayerId = valI;
                         break;
                     case "coords":
                         if (val != "-1,-1")
                             Coords = new Point(Convert.ToInt32(val.Split(',')[0]), Convert.ToInt32(val.Split(',')[1]));
                         break;
                     case "attacker_civ_id":
-                        AttackerCivID = valI;
+                        AttackerCivId = valI;
                         break;
                     case "defender_civ_id":
-                        DefenderCivID = valI;
+                        DefenderCivId = valI;
                         break;
                     case "attacker_general_hfid":
-                        AttackerGeneralHFID = valI;
+                        AttackerGeneralHfid = valI;
                         break;
                     case "defender_general_hfid":
-                        DefenderGeneralHFID = valI;
+                        DefenderGeneralHfid = valI;
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -97,24 +97,24 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (SubregionID.HasValue && World.Regions.ContainsKey(SubregionID.Value))
-                Subregion = World.Regions[SubregionID.Value];
-            if (AttackerCivID.HasValue && World.Entities.ContainsKey(AttackerCivID.Value))
-                AttackerCiv = World.Entities[AttackerCivID.Value];
-            if (DefenderCivID.HasValue && World.Entities.ContainsKey(DefenderCivID.Value))
-                DefenderCiv = World.Entities[DefenderCivID.Value];
-            if (AttackerGeneralHFID.HasValue && World.HistoricalFigures.ContainsKey(AttackerGeneralHFID.Value))
-                AttackerGeneralHF = World.HistoricalFigures[AttackerGeneralHFID.Value];
-            if (DefenderGeneralHFID.HasValue && World.HistoricalFigures.ContainsKey(DefenderGeneralHFID.Value))
-                DefenderGeneralHF = World.HistoricalFigures[DefenderGeneralHFID.Value];
+            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
+                Subregion = World.Regions[SubregionId.Value];
+            if (AttackerCivId.HasValue && World.Entities.ContainsKey(AttackerCivId.Value))
+                AttackerCiv = World.Entities[AttackerCivId.Value];
+            if (DefenderCivId.HasValue && World.Entities.ContainsKey(DefenderCivId.Value))
+                DefenderCiv = World.Entities[DefenderCivId.Value];
+            if (AttackerGeneralHfid.HasValue && World.HistoricalFigures.ContainsKey(AttackerGeneralHfid.Value))
+                AttackerGeneralHf = World.HistoricalFigures[AttackerGeneralHfid.Value];
+            if (DefenderGeneralHfid.HasValue && World.HistoricalFigures.ContainsKey(DefenderGeneralHfid.Value))
+                DefenderGeneralHf = World.HistoricalFigures[DefenderGeneralHfid.Value];
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
             EventLabel(frm, parent, ref location, "Attacker:", AttackerCiv);
-            EventLabel(frm, parent, ref location, "--General:", AttackerGeneralHF);
+            EventLabel(frm, parent, ref location, "--General:", AttackerGeneralHf);
             EventLabel(frm, parent, ref location, "Defender:", DefenderCiv);
-            EventLabel(frm, parent, ref location, "--General:", DefenderGeneralHF);
+            EventLabel(frm, parent, ref location, "--General:", DefenderGeneralHf);
             EventLabel(frm, parent, ref location, "Region:", Subregion);
             EventLabel(frm, parent, ref location, "Coords:", new Coordinate(Coords));
         }
@@ -124,7 +124,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             return
-                $"{timestring} {AttackerCiv} attacked {DefenderCiv} in {Subregion}. \n{(AttackerGeneralHF == null ? "An unknown creature" : ("The " + AttackerGeneralHF.Race + " " + AttackerGeneralHF))} led the attack, and the defenders were led by {(DefenderGeneralHF == null ? "an unknown creature" : ("The " + DefenderGeneralHF.Race + " " + DefenderGeneralHF))}.";
+                $"{timestring} {AttackerCiv} attacked {DefenderCiv} in {Subregion}. \n{(AttackerGeneralHf == null ? "An unknown creature" : ("The " + AttackerGeneralHf.Race + " " + AttackerGeneralHf))} led the attack, and the defenders were led by {(DefenderGeneralHf == null ? "an unknown creature" : ("The " + DefenderGeneralHf.Race + " " + DefenderGeneralHf))}.";
 
         }
 
@@ -143,13 +143,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID, 
-                SubregionID.DBExport(), 
-                FeatureLayerID.DBExport(), 
-                AttackerCivID.DBExport(), 
-                AttackerGeneralHFID.DBExport(), 
-                DefenderCivID.DBExport(), 
-                DefenderGeneralHFID.DBExport(),
+                Id, 
+                SubregionId.DBExport(), 
+                FeatureLayerId.DBExport(), 
+                AttackerCivId.DBExport(), 
+                AttackerGeneralHfid.DBExport(), 
+                DefenderCivId.DBExport(), 
+                DefenderGeneralHfid.DBExport(),
                 Coords.DBExport()
             };
 

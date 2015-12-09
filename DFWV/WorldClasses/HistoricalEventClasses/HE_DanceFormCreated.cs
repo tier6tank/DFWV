@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Xml.Linq;
-using DFWV.WorldClasses.EntityClasses;
-using DFWV.WorldClasses.HistoricalFigureClasses;
+﻿using System.Xml.Linq;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_DanceFormCreated : HistoricalEvent_CultureCreatedBase
+    class HeDanceFormCreated : HistoricalEventCultureCreatedBase
     {
 
-        public HE_DanceFormCreated(XDocument xdoc, World world)
+        public HeDanceFormCreated(XDocument xdoc, World world)
             : base(xdoc, world)
         {
 
@@ -21,7 +15,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            var reasoncircumstancestring = base.GetReasonCircumstanceString();
+            var reasoncircumstancestring = GetReasonCircumstanceString();
 
             return $"{timestring} UNKNOWN was created by the {HistFigure.Race.ToString().ToLower()} {HistFigure} in {Site.AltName}{reasoncircumstancestring}.";
         }

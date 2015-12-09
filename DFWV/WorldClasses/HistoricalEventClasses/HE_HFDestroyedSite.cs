@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -8,22 +7,22 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_HFDestroyedSite : HistoricalEvent
+    class HeHfDestroyedSite : HistoricalEvent
     {
-        private int? SiteID { get; set; }
+        private int? SiteId { get; }
         public Site Site { get; private set; }
-        private int? AttackerHFID { get; set; }
-        public HistoricalFigure AttackerHF { get; private set; }
-        private int? DefenderCivID { get; set; }
+        private int? AttackerHfid { get; }
+        public HistoricalFigure AttackerHf { get; private set; }
+        private int? DefenderCivId { get; }
         public Entity DefenderCiv { get; private set; }
-        private int? SiteCivID { get; set; }
+        private int? SiteCivId { get; }
         public Entity SiteCiv { get; private set; }
 
         override public Point Location => Site.Location;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
-            get { yield return AttackerHF; }
+            get { yield return AttackerHf; }
         }
         public override IEnumerable<Entity> EntitiesInvolved
         {
@@ -38,7 +37,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Site; }
         }
 
-        public HE_HFDestroyedSite(XDocument xdoc, World world)
+        public HeHfDestroyedSite(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -55,20 +54,20 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "attacker_hfid":
-                        AttackerHFID = valI;
+                        AttackerHfid = valI;
                         break;
                     case "defender_civ_id":
-                        DefenderCivID = valI;
+                        DefenderCivId = valI;
                         break;
                     case "site_civ_id":
-                        SiteCivID = valI;
+                        SiteCivId = valI;
                         break;
                     case "site_id":
-                        SiteID = valI;
+                        SiteId = valI;
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -77,20 +76,20 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (AttackerHFID.HasValue && World.HistoricalFigures.ContainsKey(AttackerHFID.Value))
-                AttackerHF = World.HistoricalFigures[AttackerHFID.Value];
-            if (DefenderCivID.HasValue && World.Entities.ContainsKey(DefenderCivID.Value))
-                DefenderCiv = World.Entities[DefenderCivID.Value];
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
-            if (SiteCivID.HasValue && World.Entities.ContainsKey(SiteCivID.Value))
-                SiteCiv = World.Entities[SiteCivID.Value];
+            if (AttackerHfid.HasValue && World.HistoricalFigures.ContainsKey(AttackerHfid.Value))
+                AttackerHf = World.HistoricalFigures[AttackerHfid.Value];
+            if (DefenderCivId.HasValue && World.Entities.ContainsKey(DefenderCivId.Value))
+                DefenderCiv = World.Entities[DefenderCivId.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
+            if (SiteCivId.HasValue && World.Entities.ContainsKey(SiteCivId.Value))
+                SiteCiv = World.Entities[SiteCivId.Value];
         }
 
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "Attacker:", AttackerHF);
+            EventLabel(frm, parent, ref location, "Attacker:", AttackerHf);
             EventLabel(frm, parent, ref location, "Defender:", DefenderCiv);
             EventLabel(frm, parent, ref location, "Old Owner:", SiteCiv);
             EventLabel(frm, parent, ref location, "Site:", Site);
@@ -102,14 +101,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
 
             return
-                $"{timestring} {AttackerHF.FirstName.ToTitleCase()} routed {SiteCiv} of {DefenderCiv} and destroyed {Site.AltName}.";
+                $"{timestring} {AttackerHf.FirstName.ToTitleCase()} routed {SiteCiv} of {DefenderCiv} and destroyed {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return $"{timelinestring} {AttackerHF} destroyed {Site.AltName}.";
+            return $"{timelinestring} {AttackerHf} destroyed {Site.AltName}.";
         }
 
         internal override void Export(string table)
@@ -120,11 +119,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID, 
-                SiteID.DBExport(), 
-                SiteCivID.DBExport(), 
-                DefenderCivID.DBExport(), 
-                AttackerHFID.DBExport()
+                Id, 
+                SiteId.DBExport(), 
+                SiteCivId.DBExport(), 
+                DefenderCivId.DBExport(), 
+                AttackerHfid.DBExport()
             };
 
             Database.ExportWorldItem(table, vals);

@@ -7,7 +7,7 @@ using DFWV.Annotations;
 
 namespace DFWV.WorldClasses
 {
-    public class UndergroundRegion : XMLObject
+    public class UndergroundRegion : XmlObject
     {
         public string Type { get; set; }
         public int Depth { get; set; }
@@ -37,7 +37,7 @@ namespace DFWV.WorldClasses
                         Depth = Convert.ToInt32(val);
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -125,7 +125,7 @@ namespace DFWV.WorldClasses
                         }
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + "", element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + "", element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -136,7 +136,7 @@ namespace DFWV.WorldClasses
 
             var vals = new List<object>
             {
-                ID, 
+                Id, 
                 Type, 
                 Depth
             };
@@ -145,11 +145,11 @@ namespace DFWV.WorldClasses
 
             if (Coords != null)
             {
-                int coordID = 0;
+                int coordId = 0;
                 foreach (var coord in Coords)
                 {
-                    Database.ExportWorldItem("UGRegion_Coords", new List<object> { ID, coordID, coord.X, coord.Y });
-                    coordID++;
+                    Database.ExportWorldItem("UGRegion_Coords", new List<object> { Id, coordId, coord.X, coord.Y });
+                    coordId++;
                 }
             }
 
@@ -157,7 +157,7 @@ namespace DFWV.WorldClasses
             {
                 foreach (var pop in Populations)
                 {
-                    Database.ExportWorldItem("UGRegion_Population", new List<object> { ID, pop.Key.ID, pop.Value });
+                    Database.ExportWorldItem("UGRegion_Population", new List<object> { Id, pop.Key.Id, pop.Value });
                 }
             }
 

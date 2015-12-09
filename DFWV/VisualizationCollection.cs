@@ -4,11 +4,11 @@ namespace DFWV
 {
     class VisualizationCollection
     {
-        World World;
+        World _world;
 
         public VisualizationCollection(World world)
         {
-            World = world;
+            _world = world;
         }
 
         internal static void Create()

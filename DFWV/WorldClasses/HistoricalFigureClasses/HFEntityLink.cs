@@ -7,23 +7,23 @@ using DFWV.WorldClasses.HistoricalEventClasses;
 
 namespace DFWV.WorldClasses.HistoricalFigureClasses
 {
-    public class HFEntityLink
+    public class HfEntityLink
     {
         public static List<string> LinkTypes = new List<string>();
 
         public static List<string> Positions = new List<string>();
-        public int LinkType { get; private set; }
-        public int? EntityID { get; private set; }
-        public HistoricalFigure HF { get; private set; }
+        public int LinkType { get; }
+        public int? EntityId { get; }
+        public HistoricalFigure Hf { get; }
 
-        public Entity Entity => EntityID.HasValue ? HF.World.Entities[EntityID.Value] : null;
+        public Entity Entity => EntityId.HasValue ? Hf.World.Entities[EntityId.Value] : null;
 
-        public int? LinkStrength { get; private set; }
+        public int? LinkStrength { get; }
 
-        public HE_AddHFEntityLink AddEvent { get; set; }
-        public HE_RemoveHFEntityLink RemoveEvent { get; set; }
+        public HeAddHfEntityLink AddEvent { get; set; }
+        public HeRemoveHfEntityLink RemoveEvent { get; set; }
 
-        public HFEntityLink(XContainer data, HistoricalFigure hf)
+        public HfEntityLink(XContainer data, HistoricalFigure hf)
         {
             var linktypename = data.Element("link_type").Value;
             if (!LinkTypes.Contains(linktypename))
@@ -31,27 +31,27 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             LinkType = LinkTypes.IndexOf(linktypename);
 
             if (data.Element("entity_id") != null)
-                EntityID = Convert.ToInt32(data.Element("entity_id").Value);
+                EntityId = Convert.ToInt32(data.Element("entity_id").Value);
 
             if (data.Elements("link_strength").Any())
                 LinkStrength = Convert.ToInt32(data.Element("link_strength").Value);
 
-            HF = hf;
+            Hf = hf;
         }
 
 
         public override string ToString()
         {
             if (Entity == null)
-                return LinkType + " of " + EntityID;
+                return LinkType + " of " + EntityId;
             return LinkType + " of " + Entity.Name;
         }
 
-        internal void Export(int HFID)
+        internal void Export(int hfid)
         {
             var table = "HF_" + GetType().Name;
 
-            var vals = new List<object> { HFID, LinkTypes[LinkType], EntityID};
+            var vals = new List<object> { hfid, LinkTypes[LinkType], EntityId};
 
             if (LinkStrength.HasValue)
                 vals.Add(LinkStrength.Value);

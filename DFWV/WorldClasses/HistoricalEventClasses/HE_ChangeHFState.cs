@@ -7,24 +7,24 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    public class HE_ChangeHFState : HistoricalEvent
+    public class HeChangeHfState : HistoricalEvent
     {
-        public int? SiteID { get; set; }
+        public int? SiteId { get; set; }
         public Site Site { get; private set; }
-        public int? SubregionID { get; set; }
+        public int? SubregionId { get; set; }
         public Region Subregion { get; private set; }
         public int? State { get; set; }
         public static List<string> States = new List<string>();
-        public int? HFID { get; set; }
-        public HistoricalFigure HF { get; set; }
-        public int? FeatureLayerID { get; set; }
-        public Point Coords { get; private set; }
+        public int? Hfid { get; set; }
+        public HistoricalFigure Hf { get; set; }
+        public int? FeatureLayerId { get; set; }
+        public Point Coords { get; }
 
         override public Point Location => Coords;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
-            get { yield return HF; }
+            get { yield return Hf; }
         }
         public override IEnumerable<Site> SitesInvolved
         {
@@ -35,7 +35,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Subregion; }
         }
 
-        public HE_ChangeHFState(XDocument xdoc, World world)
+        public HeChangeHfState(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -52,7 +52,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "hfid":
-                        HFID = valI;
+                        Hfid = valI;
                         break;
                     case "state":
                         if (!States.Contains(val))
@@ -61,22 +61,22 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                     case "site_id":
                         if (valI != -1)
-                            SiteID = valI;
+                            SiteId = valI;
                         break;
                     case "subregion_id":
                         if (valI != -1)
-                            SubregionID = valI;
+                            SubregionId = valI;
                         break;
                     case "feature_layer_id":
                         if (valI != -1)
-                            FeatureLayerID = valI;
+                            FeatureLayerId = valI;
                         break;
                     case "coords":
                         if (val != "-1,-1")
                             Coords = new Point(Convert.ToInt32(val.Split(',')[0]), Convert.ToInt32(val.Split(',')[1]));
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -84,27 +84,27 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (HFID.HasValue && World.HistoricalFigures.ContainsKey(HFID.Value))
-                HF = World.HistoricalFigures[HFID.Value];
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
-            if (SubregionID.HasValue && World.Regions.ContainsKey(SubregionID.Value))
-                Subregion = World.Regions[SubregionID.Value];
+            if (Hfid.HasValue && World.HistoricalFigures.ContainsKey(Hfid.Value))
+                Hf = World.HistoricalFigures[Hfid.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
+            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
+                Subregion = World.Regions[SubregionId.Value];
         }
 
 
         internal override void Process()
         {
             base.Process();
-            if (HF != null && HF.isLeader && State.HasValue && States[State.Value] == "settled" && Site != null)
+            if (Hf != null && Hf.IsLeader && State.HasValue && States[State.Value] == "settled" && Site != null)
             {
-                HF.Leader.Site = Site;
+                Hf.Leader.Site = Site;
             }
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "HF:", HF);
+            EventLabel(frm, parent, ref location, "HF:", Hf);
             if (State.HasValue)
             EventLabel(frm, parent, ref location, "State:", States[State.Value]);
             EventLabel(frm, parent, ref location, "Site:", Site);
@@ -123,33 +123,33 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             {
                 case "settled":
                     if (Subregion != null)
-                        return $"{timestring} {HF.Race} {HF} {States[State.Value]} in {Subregion}.";
+                        return $"{timestring} {Hf.Race} {Hf} {States[State.Value]} in {Subregion}.";
                     if (Site != null)
-                        return $"{timestring} {HF.Race} {HF} {States[State.Value]} in {Site.AltName}.";
+                        return $"{timestring} {Hf.Race} {Hf} {States[State.Value]} in {Site.AltName}.";
                     break;
                 case "wandering":
-                    return string.Format(FeatureLayerID == -1 ? "{0} {1} began wandering the wilds." : "{0} {1} began wandering the depths of the world.", timestring, HF);
+                    return string.Format(FeatureLayerId == -1 ? "{0} {1} began wandering the wilds." : "{0} {1} began wandering the depths of the world.", timestring, Hf);
                 case "scouting":
                     if (Site != null)
-                        return $"{timestring} {HF.Race} {HF} began scouting the area around {Site.AltName}.";
+                        return $"{timestring} {Hf.Race} {Hf} began scouting the area around {Site.AltName}.";
                     break;
                 case "thief":
                     if (Site != null)
                         return
-                            $"{timestring} {HF.Race} {HF} decided to become a thief, operating out of {Site.AltName}.";
+                            $"{timestring} {Hf.Race} {Hf} decided to become a thief, operating out of {Site.AltName}.";
                     break;
                 case "snatcher":
                     if (Site != null)
                         return
-                            $"{timestring} {HF.Race} {HF} decided to become a baby-snatcher, operating out of {Site.AltName}.";
+                            $"{timestring} {Hf.Race} {Hf} decided to become a baby-snatcher, operating out of {Site.AltName}.";
                     break;
                 case "hunting":
                     if (Subregion != null)
-                        return $"{timestring} {HF.Race} {HF} began hunting great beasts in {Subregion}.";
+                        return $"{timestring} {Hf.Race} {Hf} began hunting great beasts in {Subregion}.";
                     break;
                 case "refugee":
                     if (Subregion != null)
-                        return $"{timestring} {HF.Race} {HF} fled into the {Subregion}.";
+                        return $"{timestring} {Hf.Race} {Hf} fled into the {Subregion}.";
                     break;
             }
 
@@ -161,41 +161,41 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             if (!State.HasValue)
-                return $"{timelinestring} HF Changed state - {HFID}.";
+                return $"{timelinestring} HF Changed state - {Hfid}.";
 
-            if (HF == null )
-                return $"{timelinestring} HF Changed state - {HFID} - {States[State.Value]}.";
+            if (Hf == null )
+                return $"{timelinestring} HF Changed state - {Hfid} - {States[State.Value]}.";
 
             switch (States[State.Value])
             {
                 case "settled":
                     if (Subregion != null)
-                        return $"{timelinestring} {HF} {States[State.Value]} in {Subregion}.";
+                        return $"{timelinestring} {Hf} {States[State.Value]} in {Subregion}.";
                     if (Site != null)
-                        return $"{timelinestring} {HF} {States[State.Value]} in {Site.AltName}.";
+                        return $"{timelinestring} {Hf} {States[State.Value]} in {Site.AltName}.";
                     break;
                 case "wandering":
-                    return string.Format(FeatureLayerID == -1 ? "{0} {1} began wandering the wilds." : "{0} {1} began wandering the depths of the world.", timelinestring, HF);
+                    return string.Format(FeatureLayerId == -1 ? "{0} {1} began wandering the wilds." : "{0} {1} began wandering the depths of the world.", timelinestring, Hf);
                 case "scouting":
                     if (Site != null)
-                        return $"{timelinestring} {HF} began scouting the area around {Site.AltName}.";
+                        return $"{timelinestring} {Hf} began scouting the area around {Site.AltName}.";
                     break;
                 case "thief":
                     if (Site != null)
-                        return $"{timelinestring} {HF} decided to become a thief, operating out of {Site.AltName}.";
+                        return $"{timelinestring} {Hf} decided to become a thief, operating out of {Site.AltName}.";
                     break;
                 case "snatcher":
                     if (Site != null)
                         return
-                            $"{timelinestring} {HF} decided to become a baby-snatcher, operating out of {Site.AltName}.";
+                            $"{timelinestring} {Hf} decided to become a baby-snatcher, operating out of {Site.AltName}.";
                     break;
                 case "hunting":
                     if (Subregion != null)
-                        return $"{timelinestring} {HF} began hunting great beasts in {Subregion}.";
+                        return $"{timelinestring} {Hf} began hunting great beasts in {Subregion}.";
                     break;
                 case "refugee":
                     if (Subregion != null)
-                        return $"{timelinestring} {HF} fled into the {Subregion}.";
+                        return $"{timelinestring} {Hf} fled into the {Subregion}.";
                     break;
             }
 
@@ -211,12 +211,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID, 
-                HFID.DBExport(), 
+                Id, 
+                Hfid.DBExport(), 
                 State.DBExport(States), 
-                SiteID.DBExport(), 
-                SubregionID.DBExport(), 
-                FeatureLayerID.DBExport(),
+                SiteId.DBExport(), 
+                SubregionId.DBExport(), 
+                FeatureLayerId.DBExport(),
                 Coords.DBExport()
             };
 

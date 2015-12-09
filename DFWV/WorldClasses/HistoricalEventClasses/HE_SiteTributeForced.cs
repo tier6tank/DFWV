@@ -1,5 +1,4 @@
 ﻿
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -8,15 +7,15 @@ using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_SiteTributeForced : HistoricalEvent
+    class HeSiteTributeForced : HistoricalEvent
     {
-        private int? SiteID { get; set; }
+        private int? SiteId { get; }
         public Site Site { get; private set; }
-        private int? SiteCivID { get; set; }
+        private int? SiteCivId { get; }
         public Entity SiteCiv { get; private set; }
-        private int? AttackerCivID { get; set; }
+        private int? AttackerCivId { get; }
         public Entity AttackerCiv { get; private set; }
-        private int? DefenderCivID { get; set; }
+        private int? DefenderCivId { get; }
         public Entity DefenderCiv { get; private set; }
 
         override public Point Location => Site.Location;
@@ -36,7 +35,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         }
 
 
-        public HE_SiteTributeForced(XDocument xdoc, World world)
+        public HeSiteTributeForced(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -53,20 +52,20 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "attacker_civ_id":
-                        AttackerCivID = valI;
+                        AttackerCivId = valI;
                         break;
                     case "defender_civ_id":
-                        DefenderCivID = valI;
+                        DefenderCivId = valI;
                         break;
                     case "site_civ_id":
-                        SiteCivID = valI;
+                        SiteCivId = valI;
                         break;
                     case "site_id":
-                        SiteID = valI;
+                        SiteId = valI;
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -75,14 +74,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
-            if (SiteCivID.HasValue && World.Entities.ContainsKey(SiteCivID.Value))
-                SiteCiv = World.Entities[SiteCivID.Value];
-            if (AttackerCivID.HasValue && World.Entities.ContainsKey(AttackerCivID.Value))
-                AttackerCiv = World.Entities[AttackerCivID.Value];
-            if (DefenderCivID.HasValue && World.Entities.ContainsKey(DefenderCivID.Value))
-                DefenderCiv = World.Entities[DefenderCivID.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
+            if (SiteCivId.HasValue && World.Entities.ContainsKey(SiteCivId.Value))
+                SiteCiv = World.Entities[SiteCivId.Value];
+            if (AttackerCivId.HasValue && World.Entities.ContainsKey(AttackerCivId.Value))
+                AttackerCiv = World.Entities[AttackerCivId.Value];
+            if (DefenderCivId.HasValue && World.Entities.ContainsKey(DefenderCivId.Value))
+                DefenderCiv = World.Entities[DefenderCivId.Value];
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
@@ -117,11 +116,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID, 
-                SiteID.DBExport(), 
-                SiteCivID.DBExport(), 
-                DefenderCivID.DBExport(), 
-                AttackerCivID.DBExport()
+                Id, 
+                SiteId.DBExport(), 
+                SiteCivId.DBExport(), 
+                DefenderCivId.DBExport(), 
+                AttackerCivId.DBExport()
             };
 
             Database.ExportWorldItem(table, vals);

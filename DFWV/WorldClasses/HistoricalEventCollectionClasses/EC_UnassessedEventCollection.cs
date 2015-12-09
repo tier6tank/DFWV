@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
-    public class EC_UnassessedEventCollection : HistoricalEventCollection
+    public class EcUnassessedEventCollection : HistoricalEventCollection
     {
-        public EC_UnassessedEventCollection(XDocument xdoc, World world)
+        public EcUnassessedEventCollection(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -27,7 +26,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -41,7 +40,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
             table = GetType().Name;
 
-            var vals = new List<object> { ID };
+            var vals = new List<object> { Id };
 
 
             Database.ExportWorldItem(table, vals);

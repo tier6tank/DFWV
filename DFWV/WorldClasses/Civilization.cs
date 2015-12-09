@@ -8,7 +8,7 @@ namespace DFWV.WorldClasses
 {
     public class Civilization : Entity 
     {
-        public bool isFull { get; private set; }
+        public bool IsFull { get; }
 
         public readonly List<God> Gods = new List<God>();
         public readonly Dictionary<string, List<Leader>> Leaders = new Dictionary<string, List<Leader>>();
@@ -24,12 +24,12 @@ namespace DFWV.WorldClasses
         public Civilization(List<string> data, World world)
             : base(GetName(data[0]), world)
         {
-            ID = World.Civilizations.Count();
-            isFull = data.Count > 1;
+            Id = World.Civilizations.Count();
+            IsFull = data.Count > 1;
             SetRace(data[0]);
-            Race.isCivilized = isFull;
+            Race.IsCivilized = IsFull;
 
-            if (!isFull)
+            if (!IsFull)
                 return;
 
             data.RemoveRange(0, 1);
@@ -52,7 +52,7 @@ namespace DFWV.WorldClasses
                 AddList(curList);
 
             if (Leaders.Count == 0 && Gods.Count == 0)
-                isFull = false;
+                IsFull = false;
         }
 
         private void AddList(IList<string> list)
@@ -96,7 +96,7 @@ namespace DFWV.WorldClasses
                 World.Leaders.Add(newLeader);
             }
 
-            newLeaderList.Last().isCurrent = true;
+            newLeaderList.Last().IsCurrent = true;
             Leaders.Add(listname, newLeaderList);
 
         }
@@ -121,7 +121,7 @@ namespace DFWV.WorldClasses
         {
             var split = data.Split(',');
             Race = World.GetAddRace(split.Last().Trim());
-            Race.isCivilized = true;
+            Race.IsCivilized = true;
         }
         #endregion
 
@@ -135,14 +135,14 @@ namespace DFWV.WorldClasses
             frm.grpCivilization.Show();
 
             frm.lblCivilizationName.Text = ToString();
-            frm.lblCivilizationFull.Text = isFull ? "Yes" : "No";
+            frm.lblCivilizationFull.Text = IsFull ? "Yes" : "No";
             frm.lblCivilizationEntity.Data = Entity;
             frm.lblCivilizationRace.Data = Race;
 
             frm.grpCivilizationLeaders.FillListboxWith(frm.lstCivilizationLeaders, Leaders.Values.SelectMany(leaderlist => leaderlist));
             frm.grpCivilizationGods.FillListboxWith(frm.lstCivilizationGods, Gods);
             frm.grpCivilizationSites.FillListboxWith(frm.lstCivilizationSites, World.Sites.Values.Where(x => x.Parent != null && x.Parent == this));
-            frm.grpCivilizationWars.FillListboxWith(frm.lstCivilizationWars, (Entity != null && Entity.WarEventCollections != null) ? Entity.WarEventCollections : null);
+            frm.grpCivilizationWars.FillListboxWith(frm.lstCivilizationWars, Entity?.WarEventCollections);
 
 
         }

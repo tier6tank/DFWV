@@ -12,27 +12,15 @@ using LinkLabel = DFWV.Controls.LinkLabel;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    public class HistoricalEvent : XMLObject
+    public class HistoricalEvent : XmlObject
     {
         [UsedImplicitly]
         public int Year { get; set; }
-        private int Seconds { get; set; }
-        public int Type { get; private set; }
+        private int Seconds { get; }
+        public int Type { get; }
         public static List<string> Types = new List<string>();
 
-        public IEnumerable<XMLObject> Relationships
-        {
-            get
-            {
-                foreach (var propertyInfo in GetType().GetProperties())
-                {
-                    if (propertyInfo.GetValue(this, null) is XMLObject)
-                    {
-                        yield return propertyInfo.GetValue(this, null) as XMLObject;
-                    }
-                }
-            }
-        }
+        public IEnumerable<XmlObject> Relationships => from propertyInfo in GetType().GetProperties() where propertyInfo.GetValue(this, null) is XmlObject select propertyInfo.GetValue(this, null) as XmlObject;
 
         public virtual IEnumerable<HistoricalFigure> HFsInvolved => Enumerable.Empty<HistoricalFigure>();
 
@@ -68,177 +56,177 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             switch (xdoc.Root.Element("type").Value)
             {
                 case "create entity position":
-                    return new HE_CreateEntityPosition(xdoc, world);
+                    return new HeCreateEntityPosition(xdoc, world);
                 case "merchant":
-                    return new HE_Merchant(xdoc, world);
+                    return new HeMerchant(xdoc, world);
                 case "item stolen":
-                    return new HE_ItemStolen(xdoc, world);
+                    return new HeItemStolen(xdoc, world);
                 case "masterpiece lost":
-                    return new HE_MasterpieceLost(xdoc, world);
+                    return new HeMasterpieceLost(xdoc, world);
                 case "hf simple battle event":
-                    return new HE_HFSimpleBattleEvent(xdoc, world);
+                    return new HeHfSimpleBattleEvent(xdoc, world);
                 case "change hf state":
-                    return new HE_ChangeHFState(xdoc, world);
+                    return new HeChangeHfState(xdoc, world);
                 case "add hf entity link":
-                    return new HE_AddHFEntityLink(xdoc, world);
+                    return new HeAddHfEntityLink(xdoc, world);
                 case "created site":
-                    return new HE_CreatedSite(xdoc, world);
+                    return new HeCreatedSite(xdoc, world);
                 case "add hf hf link":
-                    return new HE_AddHFHFLink(xdoc, world);
+                    return new HeAddHfhfLink(xdoc, world);
                 case "entity created":
-                    return new HE_EntityCreated(xdoc, world);
+                    return new HeEntityCreated(xdoc, world);
                 case "add hf site link":
-                    return new HE_AddHFSiteLink(xdoc, world);
+                    return new HeAddHfSiteLink(xdoc, world);
                 case "created structure":
-                    return new HE_CreatedStructure(xdoc, world);
+                    return new HeCreatedStructure(xdoc, world);
                 case "change hf job":
-                    return new HE_ChangeHFJob(xdoc, world);
+                    return new HeChangeHfJob(xdoc, world);
                 case "hf travel":
-                    return new HE_HFTravel(xdoc, world);
+                    return new HeHfTravel(xdoc, world);
                 case "hf new pet":
-                    return new HE_HFNewPet(xdoc, world);
+                    return new HeHfNewPet(xdoc, world);
                 case "field battle":
-                    return new HE_FieldBattle(xdoc, world);
+                    return new HeFieldBattle(xdoc, world);
                 case "peace accepted":
-                    return new HE_PeaceAccepted(xdoc, world);
+                    return new HePeaceAccepted(xdoc, world);
                 case "hf died":
-                    return new HE_HFDied(xdoc, world);
+                    return new HeHfDied(xdoc, world);
                 case "hf wounded":
-                    return new HE_HFWounded(xdoc, world);
+                    return new HeHfWounded(xdoc, world);
                 case "creature devoured":
-                    return new HE_CreatureDevoured(xdoc, world);
+                    return new HeCreatureDevoured(xdoc, world);
                 case "attacked site":
-                    return new HE_AttackedSite(xdoc, world);
+                    return new HeAttackedSite(xdoc, world);
                 case "hf profaned structure":
-                    return new HE_HFProfanedStructure(xdoc, world);
+                    return new HeHfProfanedStructure(xdoc, world);
                 case "hf does interaction":
-                    return new HE_HFDoesInteraction(xdoc, world);
+                    return new HeHfDoesInteraction(xdoc, world);
                 case "hf abducted":
-                    return new HE_HFAbducted(xdoc, world);
+                    return new HeHfAbducted(xdoc, world);
                 case "changed creature type":
-                    return new HE_ChangedCreatureType(xdoc, world);
+                    return new HeChangedCreatureType(xdoc, world);
                 case "entity relocate":
-                    return new HE_EntityRelocate(xdoc, world);
+                    return new HeEntityRelocate(xdoc, world);
                 case "assume identity":
-                    return new HE_AssumeIdentity(xdoc, world);
+                    return new HeAssumeIdentity(xdoc, world);
                 case "remove hf entity link":
-                    return new HE_RemoveHFEntityLink(xdoc, world);
+                    return new HeRemoveHfEntityLink(xdoc, world);
                 case "entity primary criminals":
-                    return new HE_EntityPrimaryCriminals(xdoc, world);
+                    return new HeEntityPrimaryCriminals(xdoc, world);
                 case "hf reunion":
-                    return new HE_HFReunion(xdoc, world);
+                    return new HeHfReunion(xdoc, world);
                 case "plundered site":
-                    return new HE_PlunderedSite(xdoc, world);
+                    return new HePlunderedSite(xdoc, world);
                 case "body abused":
-                    return new HE_BodyAbused(xdoc, world);
+                    return new HeBodyAbused(xdoc, world);
                 case "hf gains secret goal":
-                    return new HE_HFGainsSecretGoal(xdoc, world);
+                    return new HeHfGainsSecretGoal(xdoc, world);
                 case "hf learns secret":
-                    return new HE_HFLearnsSecret(xdoc, world);
+                    return new HeHfLearnsSecret(xdoc, world);
                 case "created world construction":
-                    return new HE_CreatedWorldConstruction(xdoc, world);
+                    return new HeCreatedWorldConstruction(xdoc, world);
                 case "remove hf site link":
-                    return new HE_RemoveHFSiteLink(xdoc, world);
+                    return new HeRemoveHfSiteLink(xdoc, world);
                 case "artifact created":
-                    return new HE_ArtifactCreated(xdoc, world);
+                    return new HeArtifactCreated(xdoc, world);
                 case "artifact possessed":
-                    return new HE_ArtifactPossessed(xdoc, world);
+                    return new HeArtifactPossessed(xdoc, world);
                 case "hf confronted":
-                    return new HE_HFConfronted(xdoc, world);
+                    return new HeHfConfronted(xdoc, world);
                 case "peace rejected":
-                    return new HE_PeaceRejected(xdoc, world);
+                    return new HePeaceRejected(xdoc, world);
                 case "reclaim site":
-                    return new HE_ReclaimSite(xdoc, world);
+                    return new HeReclaimSite(xdoc, world);
                 case "razed structure":
-                    return new HE_RazedStructure(xdoc, world);
+                    return new HeRazedStructure(xdoc, world);
                 case "artifact stored":
-                    return new HE_ArtifactStored(xdoc, world);
+                    return new HeArtifactStored(xdoc, world);
                 case "entity law":
-                    return new HE_EntityLaw(xdoc, world);
+                    return new HeEntityLaw(xdoc, world);
                 case "masterpiece item":
-                    return new HE_MasterpieceItem(xdoc, world);
+                    return new HeMasterpieceItem(xdoc, world);
                 case "artifact lost":
-                    return new HE_ArtifactLost(xdoc, world);
+                    return new HeArtifactLost(xdoc, world);
                 case "diplomat lost":
-                    return new HE_DiplomatLost(xdoc, world);
+                    return new HeDiplomatLost(xdoc, world);
                 case "hf revived":
-                    return new HE_HFRevived(xdoc, world);
+                    return new HeHfRevived(xdoc, world);
                 case "agreement rejected":
-                    return new HE_AgreementRejected(xdoc, world);
+                    return new HeAgreementRejected(xdoc, world);
                 case "first contact":
-                    return new HE_FirstContact(xdoc, world);
+                    return new HeFirstContact(xdoc, world);
                 case "destroyed site":
-                    return new HE_DestroyedSite(xdoc, world);
+                    return new HeDestroyedSite(xdoc, world);
                 case "change hf body state":
-                    return new HE_ChangeHFBodyState(xdoc, world);
+                    return new HeChangeHfBodyState(xdoc, world);
                 case "new site leader":
-                    return new HE_NewSiteLeader(xdoc, world);
+                    return new HeNewSiteLeader(xdoc, world);
                 case "site taken over":
-                    return new HE_SiteTakenOver(xdoc, world);
+                    return new HeSiteTakenOver(xdoc, world);
                 case "site abandoned":
-                    return new HE_SiteAbandoned(xdoc, world);
+                    return new HeSiteAbandoned(xdoc, world);
                 case "masterpiece arch constructed":
-                    return new HE_MasterpieceArchConstructed(xdoc, world);
+                    return new HeMasterpieceArchConstructed(xdoc, world);
                 case "masterpiece food":
-                    return new HE_MasterpieceFood(xdoc, world);
+                    return new HeMasterpieceFood(xdoc, world);
                 case "masterpiece engraving":
-                    return new HE_MasterpieceEngraving(xdoc, world);
+                    return new HeMasterpieceEngraving(xdoc, world);
                 case "masterpiece item improvement":
-                    return new HE_MasterpieceItemImprovement(xdoc, world);
+                    return new HeMasterpieceItemImprovement(xdoc, world);
                 case "agreement made":
-                    return new HE_AgreementMade(xdoc, world);
+                    return new HeAgreementMade(xdoc, world);
                 case "masterpiece dye":
-                    return new HE_MasterpieceDye(xdoc, world);
+                    return new HeMasterpieceDye(xdoc, world);
                 case "first contact failed":
-                    return new HE_FirstContactFailed(xdoc, world);
+                    return new HeFirstContactFailed(xdoc, world);
                 case "masterpiece arch design":
-                    return new HE_MasterpieceArchDesign(xdoc, world);
+                    return new HeMasterpieceArchDesign(xdoc, world);
                 case "agreement concluded":
-                    return new HE_AgreementConcluded(xdoc, world);
+                    return new HeAgreementConcluded(xdoc, world);
                 case "hf reach summit":
-                    return new HE_HFReachSummit(xdoc, world);
+                    return new HeHfReachSummit(xdoc, world);
                 case "site died":
-                    return new HE_SiteDied(xdoc, world);
+                    return new HeSiteDied(xdoc, world);
                 case "hf disturbed structure":
-                    return new HE_HFDisturbedStructure(xdoc, world);
+                    return new HeHfDisturbedStructure(xdoc, world);
                 case "site dispute":
-                    return new HE_SiteDispute(xdoc, world);
+                    return new HeSiteDispute(xdoc, world);
                 case "agreement formed":
-                    return new HE_AgreementFormed(xdoc, world);
+                    return new HeAgreementFormed(xdoc, world);
                 case "replaced structure":
-                    return new HE_ReplacedStructure(xdoc, world);
+                    return new HeReplacedStructure(xdoc, world);
                 case "hf attacked site":
-                    return new HE_HFAttackedSite(xdoc, world);
+                    return new HeHfAttackedSite(xdoc, world);
                 case "hf destroyed site":
-                    return new HE_HFDestroyedSite(xdoc, world);
+                    return new HeHfDestroyedSite(xdoc, world);
                 case "site tribute forced":
-                    return new HE_SiteTributeForced(xdoc, world);
+                    return new HeSiteTributeForced(xdoc, world);
                 case "site retired":
-                    return new HE_SiteRetired(xdoc, world);
+                    return new HeSiteRetired(xdoc, world);
                 case "ceremony":
-                    return new HE_Ceremony(xdoc, world);
+                    return new HeCeremony(xdoc, world);
                 case "procession":
-                    return new HE_Procession(xdoc, world);
+                    return new HeProcession(xdoc, world);
                 case "performance":
-                    return new HE_Performance(xdoc, world);
+                    return new HePerformance(xdoc, world);
                 case "competition":
-                    return new HE_Competition(xdoc, world);
+                    return new HeCompetition(xdoc, world);
                 case "written content composed":
-                    return new HE_WrittenContentComposed(xdoc, world);
+                    return new HeWrittenContentComposed(xdoc, world);
                 case "hf relationship denied":
-                    return new HE_HFRelationshipDenied(xdoc, world);
+                    return new HeHfRelationshipDenied(xdoc, world);
                 case "knowledge discovered":
-                    return new HE_KnowledgeDiscovered(xdoc, world);
+                    return new HeKnowledgeDiscovered(xdoc, world);
                 case "poetic form created":
-                    return new HE_PoeticFormCreated(xdoc, world);
+                    return new HePoeticFormCreated(xdoc, world);
                 case "dance form created":
-                    return new HE_DanceFormCreated(xdoc, world);
+                    return new HeDanceFormCreated(xdoc, world);
                 case "musical form created":
-                    return new HE_MusicalFormCreated(xdoc, world);
+                    return new HeMusicalFormCreated(xdoc, world);
                 case "artifact destroyed":
-                    return new HE_ArtifactDestroyed(xdoc, world);
+                    return new HeArtifactDestroyed(xdoc, world);
                 case "regionpop incorporated into entity":
-                    return new HE_RegionPopIncorporatedIntoEntity(xdoc, world);
+                    return new HeRegionPopIncorporatedIntoEntity(xdoc, world);
 
                 // ReSharper disable RedundantCaseLabel
                 case "agreement void": //Unknown events
@@ -280,7 +268,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     }
 #endif
                     Program.Log(LogType.Warning, logtext);
-                    return new HE_UnassessedEvent(xdoc, world);
+                    return new HeUnassessedEvent(xdoc, world);
                     //Clipboard.SetText("\t\t\t\tcase \"" + Type + "\":\n" + raw.Replace("\t\t", "\t\t//") + "\n");
             }
         }
@@ -325,7 +313,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             frm.grpHistoricalEvent.Text = ToString();
 #if DEBUG
-            frm.grpHistoricalEvent.Text += string.Format(string.Format($" - ID: {ID}", ID), ID);
+            frm.grpHistoricalEvent.Text += string.Format(string.Format($" - ID: {Id}", Id), Id);
 #endif
             frm.grpHistoricalEvent.Show();
 
@@ -360,22 +348,22 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         public HistoricalEvent LastEvent()
         {
-            var checkID = ID - 1;
-            while (!World.HistoricalEvents.ContainsKey(checkID) && checkID >= 0)
-                checkID--;
-            return checkID >= 0 ? World.HistoricalEvents[checkID] : null;
+            var checkId = Id - 1;
+            while (!World.HistoricalEvents.ContainsKey(checkId) && checkId >= 0)
+                checkId--;
+            return checkId >= 0 ? World.HistoricalEvents[checkId] : null;
         }
 
         public HistoricalEvent NextEvent()
         {
-            var checkID = ID + 1;
-            while (!World.HistoricalEvents.ContainsKey(checkID))
+            var checkId = Id + 1;
+            while (!World.HistoricalEvents.ContainsKey(checkId))
             {
-                checkID++;
-                if (WorldTime.Present.Year == Time.Year && WorldTime.Present.TotalSeconds == Time.TotalSeconds && checkID > ID * 2)
+                checkId++;
+                if (WorldTime.Present.Year == Time.Year && WorldTime.Present.TotalSeconds == Time.TotalSeconds && checkId > Id * 2)
                     break;
             }
-            return checkID <= ID * 2 ? World.HistoricalEvents[checkID] : null;
+            return checkId <= Id * 2 ? World.HistoricalEvents[checkId] : null;
         }
 
         public void WriteDetailsOnParent(MainForm frm, Control parent, Point location)
@@ -489,7 +477,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var vals = new List<object>
             {
-                ID, 
+                Id, 
                 Type.DBExport(Types), 
                 Year, 
                 Seconds

@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml.Linq;
 using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_AgreementConcluded : HistoricalEvent
+    class HeAgreementConcluded : HistoricalEvent
     {
-        private int? SiteID { get; set; }
+        private int? SiteId { get; set; }
         private Site Site { get; set; }
 
         public int? Topic { get; set; }
         public int? Result { get; set; }
-        public int? SourceEntID { get; set; }
-        public int? DestinationEntID { get; set; }
+        public int? SourceEntId { get; set; }
+        public int? DestinationEntId { get; set; }
         public Entity Source { get; set; }
         public Entity Destination { get; set; }
 
@@ -30,7 +29,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get { yield return Site; }
         }
-        public HE_AgreementConcluded(XDocument xdoc, World world)
+        public HeAgreementConcluded(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -49,7 +48,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -60,12 +59,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             //TODO: Incorporate new data
             
             base.Link();
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
-            if (DestinationEntID.HasValue && World.Entities.ContainsKey(DestinationEntID.Value))
-                Destination = World.Entities[DestinationEntID.Value];
-            if (SourceEntID.HasValue && World.Entities.ContainsKey(SourceEntID.Value))
-                Source = World.Entities[SourceEntID.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
+            if (DestinationEntId.HasValue && World.Entities.ContainsKey(DestinationEntId.Value))
+                Destination = World.Entities[DestinationEntId.Value];
+            if (SourceEntId.HasValue && World.Entities.ContainsKey(SourceEntId.Value))
+                Source = World.Entities[SourceEntId.Value];
         }
 
         internal override void Plus(XDocument xdoc)
@@ -87,13 +86,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         Topic = MeetingTopics.IndexOf(val);
                         break;
                     case "source":
-                        SourceEntID = valI;
+                        SourceEntId = valI;
                         break;
                     case "destination":
-                        DestinationEntID = valI;
+                        DestinationEntId = valI;
                         break;
                     case "site":
-                        SiteID = valI;
+                        SiteId = valI;
                         break;
                     case "result":
                         if (!MeetingResults.Contains(val))
@@ -101,7 +100,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         Result = MeetingResults.IndexOf(val);
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -132,11 +131,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID,
+                Id,
                 Topic.DBExport(MeetingTopics),
-                SourceEntID.DBExport(),
-                DestinationEntID.DBExport(),
-                SiteID.DBExport(),
+                SourceEntId.DBExport(),
+                DestinationEntId.DBExport(),
+                SiteId.DBExport(),
                 Result.DBExport(MeetingResults)
             };
 

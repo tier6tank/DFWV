@@ -1,27 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HistoricalEvent_CultureCreatedBase : HistoricalEvent
+    class HistoricalEventCultureCreatedBase : HistoricalEvent
     {
-        internal int? HistFigureID { get; set; }
+        internal int? HistFigureId { get; set; }
         internal HistoricalFigure HistFigure { get; set; }
-        internal int? SiteID { get; set; }
+        internal int? SiteId { get; set; }
         internal Site Site { get; set; }
 
         override public Point Location => Point.Empty;
 
-        public int? FormID { get; set; }
-        public int? ReasonID { get; set; }
+        public int? FormId { get; set; }
+        public int? ReasonId { get; set; }
         public int? Reason { get; internal set; }
         public static List<string> Reasons = new List<string>();
-        public int? CircumstanceID { get; set; }
+        public int? CircumstanceId { get; set; }
         public int? Circumstance { get; internal set; }
         public static List<string> Circumstances = new List<string>();
 
@@ -34,7 +32,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Site; }
         }
 
-        public HistoricalEvent_CultureCreatedBase(XDocument xdoc, World world)
+        public HistoricalEventCultureCreatedBase(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -51,7 +49,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "hist_figure_id":
-                        HistFigureID = valI;
+                        HistFigureId = valI;
                         break;
                     case "reason":
                         if (!Reasons.Contains(val))
@@ -60,7 +58,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                     case "reason_id":
                         if (valI != -1)
-                            ReasonID = valI;
+                            ReasonId = valI;
                         break;
                     case "circumstance":
                         if (!Circumstances.Contains(val))
@@ -69,20 +67,20 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                     case "circumstance_id":
                         if (valI != -1)
-                            CircumstanceID = valI;
+                            CircumstanceId = valI;
                         break;
                     case "site_id":
                         if (valI != -1)
-                            SiteID = valI;
+                            SiteId = valI;
                         break;
                     case "form_id":
                         if (valI != -1)
-                            FormID = valI;
+                            FormId = valI;
                         break;
                     case "wc_id": //handled in HE_WrittenContentComposed
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -91,10 +89,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (HistFigureID.HasValue && World.HistoricalFigures.ContainsKey(HistFigureID.Value))
-                HistFigure = World.HistoricalFigures[HistFigureID.Value];
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
+            if (HistFigureId.HasValue && World.HistoricalFigures.ContainsKey(HistFigureId.Value))
+                HistFigure = World.HistoricalFigures[HistFigureId.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
 
         }
 
@@ -104,12 +102,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             EventLabel(frm, parent, ref location, "Site:", Site);
             if (Reason.HasValue)
                 EventLabel(frm, parent, ref location, "Reason:", Reasons[Reason.Value]);
-            if (ReasonID.HasValue)
-                EventLabel(frm, parent, ref location, "Reason ID:", ReasonID.Value.ToString());
+            if (ReasonId.HasValue)
+                EventLabel(frm, parent, ref location, "Reason ID:", ReasonId.Value.ToString());
             if (Circumstance.HasValue)
                 EventLabel(frm, parent, ref location, "Circumstance:", Circumstances[Circumstance.Value]);
-            if (ReasonID.HasValue)
-                EventLabel(frm, parent, ref location, "Circumstance ID:", CircumstanceID.Value.ToString());
+            if (ReasonId.HasValue)
+                EventLabel(frm, parent, ref location, "Circumstance ID:", CircumstanceId.Value.ToString());
         }
 
         internal string GetReasonCircumstanceString()
@@ -146,8 +144,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "dream about hf":
                         circumstanceString = " after dreaming of UNKNOWN";
                         break;
-                    default:
-                        break;
                 }
             }
 
@@ -170,14 +166,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             return new List<object>
             {
-                ID,
-                SiteID.DBExport(),
-                HistFigureID.DBExport(),
+                Id,
+                SiteId.DBExport(),
+                HistFigureId.DBExport(),
                 Reason.DBExport(Reasons),
-                ReasonID.DBExport(),
+                ReasonId.DBExport(),
                 Circumstance.DBExport(Circumstances),
-                CircumstanceID.DBExport(),
-                FormID.DBExport()
+                CircumstanceId.DBExport(),
+                FormId.DBExport()
             };
         }
 

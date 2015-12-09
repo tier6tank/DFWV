@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Xml.Linq;
@@ -8,17 +7,17 @@ using DFWV.WorldClasses.HistoricalEventClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
-    public class HistoricalEventCollection : XMLObject
+    public class HistoricalEventCollection : XmlObject
     {
         [UsedImplicitly]
         public int StartYear { get; set; }
-        private int StartSeconds { get; set; }
-        private int EndYear { get; set; }
-        private int EndSeconds { get; set; }
+        private int StartSeconds { get; }
+        private int EndYear { get; }
+        private int EndSeconds { get; }
         public List<int> EventIDs { get; set; }
         public List<HistoricalEvent> Event { get; private set; }
         public static List<string> Types = new List<string>();
-        public int Type { get; private set; }
+        public int Type { get; }
 
         public WorldTime StartTime => new WorldTime(StartYear, StartSeconds);
         public WorldTime EndTime => (EndYear == 0 && EndSeconds == 0) ? WorldTime.Present : new WorldTime(EndYear, EndSeconds);
@@ -38,11 +37,11 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             {
                 if (Types[Type] == "war")
                 {
-                    var war = (EC_War)this;
+                    var war = (EcWar)this;
                     return war.WarData.AttackingHFs + war.WarData.AttackingNumber + war.WarData.DefendingHFs + war.WarData.DefendingSquads;
                 }
                 if (Types[Type] != "battle") return 0;
-                var battle = (EC_Battle)this;
+                var battle = (EcBattle)this;
                 return battle.BattleData.AttackingHFs + battle.BattleData.AttackingNumber + battle.BattleData.DefendingHFs + battle.BattleData.DefendingSquads;
             }
         }
@@ -54,11 +53,11 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             {
                 if (Types[Type] == "war")
                 {
-                    var war = (EC_War)this;
+                    var war = (EcWar)this;
                     return war.WarData.AttackingDeaths + war.WarData.DefendingDeaths;
                 }
                 if (Types[Type] != "battle") return 0;
-                var battle = (EC_Battle)this;
+                var battle = (EcBattle)this;
                 return battle.BattleData.AttackingDeaths + battle.BattleData.DefendingDeaths;
             }
         }
@@ -69,8 +68,8 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             get
             {
                 if (Types[Type] != "war") return 0;
-                var war = (EC_War)this;
-                return war.EventCol == null ? 0 : war.EventCol.Count(x => Types[x.Type] == "battle");
+                var war = (EcWar)this;
+                return war.EventCol?.Count(x => Types[x.Type] == "battle") ?? 0;
             }
         }
 
@@ -79,33 +78,33 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             switch (xdoc.Root.Element("type").Value)
             {
                 case "abduction":
-                    return new EC_Abduction(xdoc, world);
+                    return new EcAbduction(xdoc, world);
                 case "battle":
-                    return new EC_Battle(xdoc, world);
+                    return new EcBattle(xdoc, world);
                 case "beast attack":
-                    return new EC_BeastAttack(xdoc, world);
+                    return new EcBeastAttack(xdoc, world);
                 case "duel":
-                    return new EC_Duel(xdoc, world);
+                    return new EcDuel(xdoc, world);
                 case "journey":
-                    return new EC_Journey(xdoc, world);
+                    return new EcJourney(xdoc, world);
                 case "site conquered":
-                    return new EC_SiteConquered(xdoc, world);
+                    return new EcSiteConquered(xdoc, world);
                 case "theft":
-                    return new EC_Theft(xdoc, world);
+                    return new EcTheft(xdoc, world);
                 case "war":
-                    return new EC_War(xdoc, world);
+                    return new EcWar(xdoc, world);
                 case "insurrection":
-                    return new EC_Insurrection(xdoc, world);
+                    return new EcInsurrection(xdoc, world);
                 case "occasion":
-                    return new EC_Occasion(xdoc, world);
+                    return new EcOccasion(xdoc, world);
                 case "ceremony":
-                    return new EC_Ceremony(xdoc, world);
+                    return new EcCeremony(xdoc, world);
                 case "procession":
-                    return new EC_Procession(xdoc, world);
+                    return new EcProcession(xdoc, world);
                 case "performance":
-                    return new EC_Performance(xdoc, world);
+                    return new EcPerformance(xdoc, world);
                 case "competition":
-                    return new EC_Competition(xdoc, world);
+                    return new EcCompetition(xdoc, world);
 
                 default:
                     var logtext = "Unassessed Event Collection Type: " + (xdoc.Root.Element("type").Value);// + raw.Replace("<", "//<") + "\n\t\t\tbreak;");
@@ -122,7 +121,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                     logtext += "\t\t\treturn new HistoricalEventCollection(xdoc, world);";
 
                     Program.Log(LogType.Warning, logtext);
-                    return new EC_UnassessedEventCollection(xdoc, world);
+                    return new EcUnassessedEventCollection(xdoc, world);
             }
         }
 
@@ -213,7 +212,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             frm.grpHistoricalEventCollection.Text = ToString();
             frm.grpHistoricalEventCollection.Show();
 #if DEBUG
-            frm.grpHistoricalEventCollection.Text += $" - ID: {ID}";
+            frm.grpHistoricalEventCollection.Text += $" - ID: {Id}";
 #endif
         }
 
@@ -225,12 +224,12 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
         }
 
-        internal static void LinkFieldList<T>(IEnumerable<int> IDs, List<T> list, 
+        internal static void LinkFieldList<T>(IEnumerable<int> ds, List<T> list, 
                                       Dictionary<int, T> fromList)
         {
-            if (IDs == null)
+            if (ds == null)
                 return;
-            list.AddRange(from t in IDs where fromList.ContainsKey(t) select fromList[t]);
+            list.AddRange(from t in ds where fromList.ContainsKey(t) select fromList[t]);
         }
 
         internal override void Link()
@@ -264,7 +263,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
         internal override void Export(string table)
         {
-            var vals = new List<object> { ID, StartYear, StartSeconds, EndYear, EndSeconds, Types[Type] };
+            var vals = new List<object> { Id, StartYear, StartSeconds, EndYear, EndSeconds, Types[Type] };
 
 
             Database.ExportWorldItem(table, vals);
@@ -275,7 +274,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             table = "EC_Events";
             foreach (var evt in Event)
 	        {
-                vals = new List<object> {ID,evt.ID };
+                vals = new List<object> {Id,evt.Id };
                 Database.ExportWorldItem(table, vals);
 
 	        }

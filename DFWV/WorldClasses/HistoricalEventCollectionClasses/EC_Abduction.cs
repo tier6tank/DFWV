@@ -10,27 +10,27 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
-    public class EC_Abduction : HistoricalEventCollection
+    public class EcAbduction : HistoricalEventCollection
     {
-        private int? SubregionID { get; set; }
+        private int? SubregionId { get; }
         private Region Subregion { get; set; }
-        private int? FeatureLayerID { get; set; }
-        private int? SiteID { get; set; }
+        private int? FeatureLayerId { get; }
+        private int? SiteId { get; }
         private Site Site { get; set; }
-        private Point Coords { get; set; }
-        private int? ParentEventCol_ { get; set; }
+        private Point Coords { get; }
+        private int? ParentEventCol_ { get; }
         private HistoricalEventCollection ParentEventCol { get; set; }
-        private int Ordinal { get; set; }
-        private int? DefendingEnid { get; set; }
+        private int Ordinal { get; }
+        private int? DefendingEnid { get; }
         private Entity DefendingEn { get; set; }
-        private int? AttackingEnid { get; set; }
+        private int? AttackingEnid { get; }
         private Entity AttackingEn { get; set; }
-        private List<int> EventCol_ { get; set; }
+        private List<int> EventCol_ { get; }
         private List<HistoricalEventCollection> EventCol { get; set; }
 
         override public Point Location => Site.Coords;
 
-        public EC_Abduction(XDocument xdoc, World world)
+        public EcAbduction(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -58,11 +58,11 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         break;
                     case "subregion_id":
                         if (valI != -1)
-                            SubregionID = valI;
+                            SubregionId = valI;
                         break;
                     case "feature_layer_id":
                         if (valI != -1)
-                            FeatureLayerID = valI;
+                            FeatureLayerId = valI;
                         break;
                     case "eventcol":
                         if (EventCol_ == null)
@@ -71,7 +71,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         break;
                     case "site_id":
                         if (valI != -1)
-                            SiteID = valI;
+                            SiteId = valI;
                         break;
                     case "coords":
                         Coords = new Point(Convert.ToInt32(val.Split(',')[0]), Convert.ToInt32(val.Split(',')[1]));
@@ -84,7 +84,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -101,10 +101,10 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             LinkFieldList(EventCol_,
                 EventCol, World.HistoricalEventCollections);
 
-            if (SubregionID.HasValue && World.Regions.ContainsKey(SubregionID.Value))
-                Subregion = World.Regions[SubregionID.Value];
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
+            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
+                Subregion = World.Regions[SubregionId.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
             if (DefendingEnid.HasValue && World.Entities.ContainsKey(DefendingEnid.Value))
                 DefendingEn = World.Entities[DefendingEnid.Value];
             if (AttackingEnid.HasValue && World.Entities.ContainsKey(AttackingEnid.Value))
@@ -166,20 +166,20 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             if (Subregion != null)
             {
                 if (Subregion.AbductionEventCollections == null)
-                    Subregion.AbductionEventCollections = new List<EC_Abduction>();
+                    Subregion.AbductionEventCollections = new List<EcAbduction>();
                 Subregion.AbductionEventCollections.Add(this);
             }
             if (Site != null)
             {
                 if (Site.AbductionEventCollections == null)
-                    Site.AbductionEventCollections = new List<EC_Abduction>();
+                    Site.AbductionEventCollections = new List<EcAbduction>();
                 Site.AbductionEventCollections.Add(this);
             }
             if (AttackingEn.AbductionEventCollections == null)
-                AttackingEn.AbductionEventCollections = new List<EC_Abduction>();
+                AttackingEn.AbductionEventCollections = new List<EcAbduction>();
             AttackingEn.AbductionEventCollections.Add(this);
             if (DefendingEn.AbductionEventCollections == null)
-                DefendingEn.AbductionEventCollections = new List<EC_Abduction>();
+                DefendingEn.AbductionEventCollections = new List<EcAbduction>();
             DefendingEn.AbductionEventCollections.Add(this);
 
         }
@@ -196,32 +196,32 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                 if (HistoricalEvent.Types[Event[i].Type] != "add hf entity link" ||
                     HistoricalEvent.Types[Event[i - 1].Type] != "hf abducted")
                     continue;
-                var abductedHF = ((HE_HFAbducted)Event[i - 1]).TargetHF;
-                var AddLinkEvent = ((HE_AddHFEntityLink)Event[i]);
-                AddLinkEvent.HF = abductedHF;
+                var abductedHf = ((HeHfAbducted)Event[i - 1]).TargetHf;
+                var addLinkEvent = ((HeAddHfEntityLink)Event[i]);
+                addLinkEvent.Hf = abductedHf;
 
-                if (abductedHF != null)
+                if (abductedHf != null)
                 {
-                    if (abductedHF.EntityLinks.ContainsKey(HFEntityLink.LinkTypes.IndexOf("prisoner")))
+                    if (abductedHf.EntityLinks.ContainsKey(HfEntityLink.LinkTypes.IndexOf("prisoner")))
                     {
                         foreach (
                             var entityLink in
-                                abductedHF.EntityLinks[HFEntityLink.LinkTypes.IndexOf("prisoner")].Where(
-                                    entityLink => entityLink.Entity == AddLinkEvent.Civ))
+                                abductedHf.EntityLinks[HfEntityLink.LinkTypes.IndexOf("prisoner")].Where(
+                                    entityLink => entityLink.Entity == addLinkEvent.Civ))
                         {
-                            AddLinkEvent.HFEntityLink = entityLink;
+                            addLinkEvent.HfEntityLink = entityLink;
                             break;
                         }
                     }
-                    if ((AddLinkEvent.HFEntityLink == null || AddLinkEvent.HFEntityLink.HF == null) &&
-                        abductedHF.EntityLinks.ContainsKey(HFEntityLink.LinkTypes.IndexOf("former prisoner")))
+                    if ((addLinkEvent.HfEntityLink?.Hf == null) &&
+                        abductedHf.EntityLinks.ContainsKey(HfEntityLink.LinkTypes.IndexOf("former prisoner")))
                     {
                         foreach (
                             var entityLink in
-                                abductedHF.EntityLinks[HFEntityLink.LinkTypes.IndexOf("former prisoner")].Where(
-                                    entityLink => entityLink.Entity == AddLinkEvent.Civ))
+                                abductedHf.EntityLinks[HfEntityLink.LinkTypes.IndexOf("former prisoner")].Where(
+                                    entityLink => entityLink.Entity == addLinkEvent.Civ))
                         {
-                            AddLinkEvent.HFEntityLink = entityLink;
+                            addLinkEvent.HfEntityLink = entityLink;
                             break;
                         }
                     }
@@ -237,7 +237,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
             table = GetType().Name;
 
-            var vals = new List<object> { ID, ParentEventCol, Ordinal, AttackingEnid, DefendingEnid, SiteID, SubregionID, FeatureLayerID };
+            var vals = new List<object> { Id, ParentEventCol, Ordinal, AttackingEnid, DefendingEnid, SiteId, SubregionId, FeatureLayerId };
 
             if (Coords.IsEmpty)
                 vals.Add(DBNull.Value);

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -7,16 +6,16 @@ using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    public class HE_EntityCreated : HistoricalEvent
+    public class HeEntityCreated : HistoricalEvent
     {
-        private int? EntityID { get; set; }
+        private int? EntityId { get; }
         private Entity Entity { get; set; }
-        private int? SiteID { get; set; }
+        private int? SiteId { get; }
         public Site Site { get; private set; }
-        private int? StructureID { get; set; }
+        private int? StructureId { get; }
         private Structure Structure { get; set; }
 
-        override public Point Location => Site != null ? Site.Location : Point.Empty;
+        override public Point Location => Site?.Location ?? Point.Empty;
 
         public override IEnumerable<Entity> EntitiesInvolved
         {
@@ -27,7 +26,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Site; }
         }
 
-        public HE_EntityCreated(XDocument xdoc, World world)
+        public HeEntityCreated(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -44,18 +43,18 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "entity_id":
-                        EntityID = valI;
+                        EntityId = valI;
                         break;
                     case "site_id":
-                        SiteID = valI;
+                        SiteId = valI;
                         break;
                     case "structure_id":
                         if (valI != -1)
-                        StructureID = valI;
+                        StructureId = valI;
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -63,19 +62,19 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
 
-            if (EntityID.HasValue && World.Entities.ContainsKey(EntityID.Value))
-                Entity = World.Entities[EntityID.Value];
+            if (EntityId.HasValue && World.Entities.ContainsKey(EntityId.Value))
+                Entity = World.Entities[EntityId.Value];
 
-            if (!StructureID.HasValue || StructureID.Value == -1 || Site == null) return;
+            if (!StructureId.HasValue || StructureId.Value == -1 || Site == null) return;
 
-            if (World.Structures.ContainsKey(StructureID.Value))
-                Structure = World.Structures[StructureID.Value];
+            if (World.Structures.ContainsKey(StructureId.Value))
+                Structure = World.Structures[StructureId.Value];
             else
             {
-                Structure = new Structure(Site, StructureID.Value, World);
+                Structure = new Structure(Site, StructureId.Value, World);
                 Site.AddStructure(Structure);
             }
         }
@@ -99,7 +98,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             return
-                $"{timestring} {Entity} formed in {(Structure != null ? Structure.ToString() : StructureID.ToString())} in {Site.AltName}.";
+                $"{timestring} {Entity} formed in {Structure?.ToString() ?? StructureId.ToString()} in {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
@@ -117,10 +116,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             
             var vals = new List<object>
             {
-                ID, 
-                EntityID.DBExport(), 
-                SiteID.DBExport(), 
-                StructureID.DBExport()
+                Id, 
+                EntityId.DBExport(), 
+                SiteId.DBExport(), 
+                StructureId.DBExport()
             };
 
             Database.ExportWorldItem(table, vals);

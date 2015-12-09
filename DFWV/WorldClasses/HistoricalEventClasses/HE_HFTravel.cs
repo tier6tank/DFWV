@@ -7,24 +7,24 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_HFTravel : HistoricalEvent
+    class HeHfTravel : HistoricalEvent
     {
-        private int? GroupHFID { get; set; }
-        private HistoricalFigure GroupHF { get; set; }
-        private bool Escape { get; set; }
-        public bool Return { get; private set; }
-        private int? SiteID { get; set; }
+        private int? GroupHfid { get; }
+        private HistoricalFigure GroupHf { get; set; }
+        private bool Escape { get; }
+        public bool Return { get; }
+        private int? SiteId { get; }
         public Site Site { get; private set; }
-        private int? SubregionID { get; set; }
+        private int? SubregionId { get; }
         private Region Subregion { get; set; }
-        private int? FeatureLayerID { get; set; }
-        private Point Coords { get; set; }
+        private int? FeatureLayerId { get; }
+        private Point Coords { get; }
 
         override public Point Location => Coords;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
-            get { yield return GroupHF; }
+            get { yield return GroupHf; }
         }
         public override IEnumerable<Site> SitesInvolved
         {
@@ -35,7 +35,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Subregion; }
         }
 
-        public HE_HFTravel(XDocument xdoc, World world)
+        public HeHfTravel(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -53,15 +53,15 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                     case "site_id":
                         if (valI != -1)
-                            SiteID = valI;
+                            SiteId = valI;
                         break;
                     case "subregion_id":
                         if (valI != -1)
-                            SubregionID = valI;
+                            SubregionId = valI;
                         break;
                     case "feature_layer_id":
                         if (valI != -1)
-                            FeatureLayerID = valI;
+                            FeatureLayerId = valI;
                         break;
                     case "coords":
                         if (val != "-1,-1")
@@ -69,7 +69,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
 
                     case "group_hfid":
-                        GroupHFID = valI;
+                        GroupHfid = valI;
                         break;
                     case "return":
                         Return = true;
@@ -79,7 +79,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -87,21 +87,21 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
-            if (SubregionID.HasValue && World.Regions.ContainsKey(SubregionID.Value))
-                Subregion = World.Regions[SubregionID.Value];
-            if (GroupHFID.HasValue && World.HistoricalFigures.ContainsKey(GroupHFID.Value))
-                GroupHF = World.HistoricalFigures[GroupHFID.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
+            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
+                Subregion = World.Regions[SubregionId.Value];
+            if (GroupHfid.HasValue && World.HistoricalFigures.ContainsKey(GroupHfid.Value))
+                GroupHf = World.HistoricalFigures[GroupHfid.Value];
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "HF:", GroupHF);
+            EventLabel(frm, parent, ref location, "HF:", GroupHf);
             if (Escape)
             {
                 EventLabel(frm, parent, ref location, "Escaped from", "");
-                EventLabel(frm, parent, ref location, "Layer:", FeatureLayerID == -1 ? "" : FeatureLayerID.ToString());
+                EventLabel(frm, parent, ref location, "Layer:", FeatureLayerId == -1 ? "" : FeatureLayerId.ToString());
             }
             else if (Return)
             {
@@ -113,10 +113,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             {
                 EventLabel(frm, parent, ref location, "Region:", Subregion);
             }
-            else if (FeatureLayerID != -1)
+            else if (FeatureLayerId != -1)
             {
-                if (FeatureLayerID != null)
-                    EventLabel(frm, parent, ref location, "Feature Layer:", FeatureLayerID.Value.ToString());
+                if (FeatureLayerId != null)
+                    EventLabel(frm, parent, ref location, "Feature Layer:", FeatureLayerId.Value.ToString());
             }
 
 
@@ -129,14 +129,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             if (Escape)
             {
-                return $"{timestring} {GroupHF} escaped from the Underworld.";
+                return $"{timestring} {GroupHf} escaped from the Underworld.";
 
             }
             if (Return)
             {
-                return $"{timestring} {GroupHF} returned to {(Site == null ? "UNKNONW" : Site.AltName)}.";
+                return $"{timestring} {GroupHf} returned to {(Site == null ? "UNKNONW" : Site.AltName)}.";
             }
-            return $"{timestring} {GroupHF} made a journey to {(Subregion == null ? "UNKNONW" : Subregion.ToString())}.";
+            return $"{timestring} {GroupHf} made a journey to {Subregion?.ToString() ?? "UNKNONW"}.";
         }
 
         internal override string ToTimelineString()
@@ -144,11 +144,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             if (Escape)
-                return $"{timelinestring} {GroupHF} escaped from the Underworld.";
+                return $"{timelinestring} {GroupHf} escaped from the Underworld.";
             if (Return)
-                return $"{timelinestring} {GroupHF} returned to {(Site == null ? "UNKNONW" : Site.AltName)}.";
+                return $"{timelinestring} {GroupHf} returned to {(Site == null ? "UNKNONW" : Site.AltName)}.";
             return
-                $"{timelinestring} {GroupHF} made a journey to {(Subregion == null ? "UNKNONW" : Subregion.ToString())}.";
+                $"{timelinestring} {GroupHf} made a journey to {Subregion?.ToString() ?? "UNKNONW"}.";
         }
 
         internal override void Export(string table)
@@ -159,13 +159,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             
             var vals = new List<object>
             {
-                ID, 
-                GroupHFID.DBExport(), 
+                Id, 
+                GroupHfid.DBExport(), 
                 Escape, 
                 Return, 
-                SiteID.DBExport(), 
-                SubregionID.DBExport(), 
-                FeatureLayerID.DBExport(),
+                SiteId.DBExport(), 
+                SubregionId.DBExport(), 
+                FeatureLayerId.DBExport(),
                 Coords.DBExport()
             };
 

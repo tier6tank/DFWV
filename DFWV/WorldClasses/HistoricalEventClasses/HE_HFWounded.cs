@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -7,29 +6,29 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_HFWounded : HistoricalEvent
+    class HeHfWounded : HistoricalEvent
     {
-        private int? WoundeeHFID { get; set; }
-        private HistoricalFigure WoundeeHF { get; set; }
-        private int? WounderHFID { get; set; }
-        private HistoricalFigure WounderHF { get; set; }
-        private int? SiteID { get; set; }
+        private int? WoundeeHfid { get; }
+        private HistoricalFigure WoundeeHf { get; set; }
+        private int? WounderHfid { get; }
+        private HistoricalFigure WounderHf { get; set; }
+        private int? SiteId { get; }
         private Site Site { get; set; }
-        private int? SubregionID { get; set; }
+        private int? SubregionId { get; }
         private Region Subregion { get; set; }
-        private int? FeatureLayerID { get; set; }
+        private int? FeatureLayerId { get; }
         public int? BodyPart { get; set; }
         public int? InjuryType { get; set; }
         public int? PartLost { get; set; }
 
-        override public Point Location => Site != null ? Site.Location : (Subregion != null ? Subregion.Location : Point.Empty);
+        override public Point Location => Site?.Location ?? (Subregion?.Location ?? Point.Empty);
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
             get
             {
-                yield return WoundeeHF;
-                yield return WounderHF;
+                yield return WoundeeHf;
+                yield return WounderHf;
             }
         }
         public override IEnumerable<Site> SitesInvolved
@@ -41,7 +40,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Subregion; }
         }
 
-        public HE_HFWounded(XDocument xdoc, World world)
+        public HeHfWounded(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -59,24 +58,24 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                     case "site_id":
                         if (valI != -1)
-                            SiteID = valI;
+                            SiteId = valI;
                         break;
                     case "subregion_id":
                         if (valI != -1)
-                            SubregionID = valI;
+                            SubregionId = valI;
                         break;
                     case "feature_layer_id":
                         if (valI != -1)
-                            FeatureLayerID = valI;
+                            FeatureLayerId = valI;
                         break;
                     case "woundee_hfid":
-                        WoundeeHFID = valI;
+                        WoundeeHfid = valI;
                         break;
                     case "wounder_hfid":
-                        WounderHFID = valI;
+                        WounderHfid = valI;
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -84,14 +83,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
-            if (SubregionID.HasValue && World.Regions.ContainsKey(SubregionID.Value))
-                Subregion = World.Regions[SubregionID.Value];
-            if (WoundeeHFID.HasValue && World.HistoricalFigures.ContainsKey(WoundeeHFID.Value))
-                WoundeeHF = World.HistoricalFigures[WoundeeHFID.Value];
-            if (WounderHFID.HasValue && World.HistoricalFigures.ContainsKey(WounderHFID.Value))
-                WounderHF = World.HistoricalFigures[WounderHFID.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
+            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
+                Subregion = World.Regions[SubregionId.Value];
+            if (WoundeeHfid.HasValue && World.HistoricalFigures.ContainsKey(WoundeeHfid.Value))
+                WoundeeHf = World.HistoricalFigures[WoundeeHfid.Value];
+            if (WounderHfid.HasValue && World.HistoricalFigures.ContainsKey(WounderHfid.Value))
+                WounderHf = World.HistoricalFigures[WounderHfid.Value];
         }
 
         internal override void Plus(XDocument xdoc)
@@ -127,7 +126,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         PartLost = valI;
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -135,8 +134,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "HF:", WoundeeHF);
-            EventLabel(frm, parent, ref location, "By:", WounderHF);
+            EventLabel(frm, parent, ref location, "HF:", WoundeeHf);
+            EventLabel(frm, parent, ref location, "By:", WounderHf);
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Region:", Subregion);
         }
@@ -147,7 +146,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             return
-                $"{timestring} {(WoundeeHF != null ? "the " + WoundeeHF.Race + " " + WoundeeHF : "an unknown creature")} was wounded by {(WounderHF != null ? "the " + WounderHF.Race + " " + WounderHF : "an unknown creature")}.";
+                $"{timestring} {(WoundeeHf != null ? "the " + WoundeeHf.Race + " " + WoundeeHf : "an unknown creature")} was wounded by {(WounderHf != null ? "the " + WounderHf.Race + " " + WounderHf : "an unknown creature")}.";
 
            
         }
@@ -158,7 +157,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             return
-                $"{timelinestring} {(WoundeeHF != null ? WoundeeHF.ToString() : WoundeeHFID.ToString())} was wounded by the {(WounderHF != null ? WounderHF.ToString() : WounderHFID.ToString())}.";
+                $"{timelinestring} {WoundeeHf?.ToString() ?? WoundeeHfid.ToString()} was wounded by the {WounderHf?.ToString() ?? WounderHfid.ToString()}.";
         }        
 
         internal override void Export(string table)
@@ -169,12 +168,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID, 
-                WoundeeHFID.DBExport(), 
-                WounderHFID.DBExport(), 
-                SiteID.DBExport(), 
-                SubregionID.DBExport(), 
-                FeatureLayerID.DBExport(),
+                Id, 
+                WoundeeHfid.DBExport(), 
+                WounderHfid.DBExport(), 
+                SiteId.DBExport(), 
+                SubregionId.DBExport(), 
+                FeatureLayerId.DBExport(),
                 BodyPart.DBExport(),
                 InjuryType.DBExport(),
                 PartLost.DBExport()

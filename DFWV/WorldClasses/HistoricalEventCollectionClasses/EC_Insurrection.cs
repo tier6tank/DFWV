@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -9,20 +8,20 @@ using DFWV.WorldClasses.HistoricalEventClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
-    public class EC_Insurrection : HistoricalEventCollection
+    public class EcInsurrection : HistoricalEventCollection
     {
-        private int? SiteID { get; set; }
+        private int? SiteId { get; }
         private Site Site { get; set; }
-        private int? ParentEventCol_ { get; set; }
+        private int? ParentEventCol_ { get; }
         private HistoricalEventCollection ParentEventCol { get; set; }
         public string Outcome { get; set; }
-        private int Ordinal { get; set; }
-        private int? TargetEntID { get; set; }
+        private int Ordinal { get; }
+        private int? TargetEntId { get; }
         public Entity TargetEnt { get; private set; }
 
-        override public Point Location => Site != null ? Site.Coords : Point.Empty;
+        override public Point Location => Site?.Coords ?? Point.Empty;
 
-        public EC_Insurrection(XDocument xdoc, World world)
+        public EcInsurrection(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -50,14 +49,14 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         ParentEventCol_ = valI;
                         break;
                     case "site_id":
-                        SiteID = valI;
+                        SiteId = valI;
                         break;
                     case "target_enid":
-                        TargetEntID = valI;
+                        TargetEntId = valI;
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -69,10 +68,10 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             base.Link();
             if (ParentEventCol_.HasValue && World.HistoricalEventCollections.ContainsKey(ParentEventCol_.Value))
                 ParentEventCol = World.HistoricalEventCollections[ParentEventCol_.Value];
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
-            if (TargetEntID.HasValue && World.Entities.ContainsKey(TargetEntID.Value))
-                TargetEnt = World.Entities[TargetEntID.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
+            if (TargetEntId.HasValue && World.Entities.ContainsKey(TargetEntId.Value))
+                TargetEnt = World.Entities[TargetEntId.Value];
 
         }
 
@@ -91,7 +90,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             frm.lblInsurrectionSite.Data = Site;
             frm.lblInsurrectionParent.Data = ParentEventCol;
 
-            frm.lblInsurrectionCoords.Data = new Coordinate(Site != null ? Site.Location : Point.Empty);
+            frm.lblInsurrectionCoords.Data = new Coordinate(Site?.Location ?? Point.Empty);
 
             if (StartTime != null || EndTime != null)
             {
@@ -127,19 +126,19 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             if (Site != null)
             {
                 if (Site.InsurrectionEventCollections == null)
-                    Site.InsurrectionEventCollections = new List<EC_Insurrection>();
+                    Site.InsurrectionEventCollections = new List<EcInsurrection>();
                 Site.InsurrectionEventCollections.Add(this);
             }
             if (TargetEnt != null)
             {
                 if (TargetEnt.InsurrectionEventCollections == null)
-                    TargetEnt.InsurrectionEventCollections = new List<EC_Insurrection>();
+                    TargetEnt.InsurrectionEventCollections = new List<EcInsurrection>();
                 TargetEnt.InsurrectionEventCollections.Add(this);
             }
 
-            if (Event.Last() is HE_InsurrectionStarted)
+            if (Event.Last() is HeInsurrectionStarted)
             {
-                Outcome = (Event.Last() as HE_InsurrectionStarted).Outcome;
+                Outcome = (Event.Last() as HeInsurrectionStarted).Outcome;
             }
             else
                 Outcome = "ongoing";
@@ -151,7 +150,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
             table = GetType().Name;
 
-            var vals = new List<object> { ID, ParentEventCol_ ?? -1, Ordinal, SiteID, TargetEntID, Outcome };
+            var vals = new List<object> { Id, ParentEventCol_ ?? -1, Ordinal, SiteId, TargetEntId, Outcome };
 
             Database.ExportWorldItem(table, vals);
 

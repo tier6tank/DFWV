@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -8,24 +7,24 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_CreatureDevoured : HistoricalEvent
+    class HeCreatureDevoured : HistoricalEvent
     {
-        private int? SiteID { get; set; }
+        private int? SiteId { get; set; }
         private Site Site { get; set; }
-        private int? SubregionID { get; set; }
+        private int? SubregionId { get; }
         private Region Subregion { get; set; }
-        private int? FeatureLayerID { get; set; }
-        private int? DevourerID { get; set; }
+        private int? FeatureLayerId { get; }
+        private int? DevourerId { get; set; }
         public HistoricalFigure Devourer { private get; set; }
-        private int? VictimID { get; set; }
+        private int? VictimId { get; set; }
         private HistoricalFigure Victim { get; set; }
-        private int? EntityID { get; set; }
+        private int? EntityId { get; set; }
         private Entity Entity { get; set; }
         private Race VictimRace { get; set; }
 
         public int? VictimCaste { get; set; }
 
-        override public Point Location => Site != null ? Site.Location : Subregion.Location;
+        override public Point Location => Site?.Location ?? Subregion.Location;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
@@ -48,7 +47,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Subregion; }
         }
 
-        public HE_CreatureDevoured(XDocument xdoc, World world)
+        public HeCreatureDevoured(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -66,18 +65,18 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                     case "site_id":
                         if (valI != -1)
-                            SiteID = valI;
+                            SiteId = valI;
                         break;
                     case "subregion_id":
                         if (valI != -1)
-                            SubregionID = valI;
+                            SubregionId = valI;
                         break;
                     case "feature_layer_id":
                         if (valI != -1)
-                            FeatureLayerID = valI;
+                            FeatureLayerId = valI;
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -87,18 +86,18 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             //TODO: Incorporate new data
             base.Link();
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
-            if (SubregionID.HasValue && World.Regions.ContainsKey(SubregionID.Value))
-                Subregion = World.Regions[SubregionID.Value];
-            if (EntityID.HasValue && World.Entities.ContainsKey(EntityID.Value))
-                Entity = World.Entities[EntityID.Value];
-            if (DevourerID.HasValue && World.HistoricalFigures.ContainsKey(DevourerID.Value))
-                Devourer = World.HistoricalFigures[DevourerID.Value];
-            if (VictimID.HasValue && World.HistoricalFigures.ContainsKey(VictimID.Value))
-                Victim = World.HistoricalFigures[VictimID.Value];
-            if (DevourerID.HasValue && World.HistoricalFigures.ContainsKey(DevourerID.Value))
-                Devourer = World.HistoricalFigures[DevourerID.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
+            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
+                Subregion = World.Regions[SubregionId.Value];
+            if (EntityId.HasValue && World.Entities.ContainsKey(EntityId.Value))
+                Entity = World.Entities[EntityId.Value];
+            if (DevourerId.HasValue && World.HistoricalFigures.ContainsKey(DevourerId.Value))
+                Devourer = World.HistoricalFigures[DevourerId.Value];
+            if (VictimId.HasValue && World.HistoricalFigures.ContainsKey(VictimId.Value))
+                Victim = World.HistoricalFigures[VictimId.Value];
+            if (DevourerId.HasValue && World.HistoricalFigures.ContainsKey(DevourerId.Value))
+                Devourer = World.HistoricalFigures[DevourerId.Value];
 
             
         }
@@ -118,7 +117,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                     case "victim":
                         if (valI != -1)
-                            VictimID = valI;
+                            VictimId = valI;
                         break;
                     case "race":
                         VictimRace = World.GetAddRace(val);
@@ -129,16 +128,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         VictimCaste = HistoricalFigure.Castes.IndexOf(val);
                         break;
                     case "eater":
-                        DevourerID = valI;
+                        DevourerId = valI;
                         break;
                     case "entity":
-                        EntityID = valI;
+                        EntityId = valI;
                         break;
                     case "site":
-                        SiteID = valI;
+                        SiteId = valI;
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -153,8 +152,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 EventLabel(frm, parent, ref location, "Victim:", HistoricalFigure.Castes[VictimCaste.Value] + " " + VictimRace);
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Region:", Subregion);
-            if (FeatureLayerID != null && FeatureLayerID != -1)
-                EventLabel(frm, parent, ref location, "Layer:",FeatureLayerID.ToString());
+            if (FeatureLayerId != null && FeatureLayerId != -1)
+                EventLabel(frm, parent, ref location, "Layer:",FeatureLayerId.ToString());
 
         }
 
@@ -211,15 +210,15 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID, 
-                SiteID.DBExport(),
-                SubregionID.DBExport(), 
-                FeatureLayerID.DBExport(),
-                DevourerID.DBExport(),
-                VictimID.DBExport(),
+                Id, 
+                SiteId.DBExport(),
+                SubregionId.DBExport(), 
+                FeatureLayerId.DBExport(),
+                DevourerId.DBExport(),
+                VictimId.DBExport(),
                 VictimRace.DBExport(),
                 VictimCaste.DBExport(HistoricalFigure.Castes),
-                EntityID.DBExport()
+                EntityId.DBExport()
             };
 
             Database.ExportWorldItem(table, vals);

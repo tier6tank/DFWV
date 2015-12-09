@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -9,21 +8,21 @@ using DFWV.WorldClasses.HistoricalEventClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
-    public class EC_SiteConquered : HistoricalEventCollection
+    public class EcSiteConquered : HistoricalEventCollection
     {
-        private int? WarEventCol_ { get; set; }
-        private EC_War WarEventCol { get; set; }
-        private int? SiteID { get; set; }
+        private int? WarEventCol_ { get; }
+        private EcWar WarEventCol { get; set; }
+        private int? SiteId { get; }
         private Site Site { get; set; }
-        private int Ordinal { get; set; }
-        private int? DefendingEnid { get; set; }
+        private int Ordinal { get; }
+        private int? DefendingEnid { get; }
         private Entity DefendingEn { get; set; }
-        private int? AttackingEnid { get; set; }
+        private int? AttackingEnid { get; }
         public Entity AttackingEn { get; private set; }
 
         override public Point Location => Site.Coords;
 
-        public EC_SiteConquered(XDocument xdoc, World world)
+        public EcSiteConquered(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -46,7 +45,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         Ordinal = valI;
                         break;
                     case "site_id":
-                        SiteID = valI;
+                        SiteId = valI;
                         break;
                     case "defending_enid":
                         DefendingEnid = valI;
@@ -59,7 +58,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -69,14 +68,14 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         internal override void Link()
         {
             base.Link();
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
             if (DefendingEnid.HasValue && World.Entities.ContainsKey(DefendingEnid.Value))
                 DefendingEn = World.Entities[DefendingEnid.Value];
             if (AttackingEnid.HasValue && World.Entities.ContainsKey(AttackingEnid.Value))
                 AttackingEn = World.Entities[AttackingEnid.Value];
             if (WarEventCol_.HasValue && World.HistoricalEventCollections.ContainsKey(WarEventCol_.Value))
-                WarEventCol = (EC_War)World.HistoricalEventCollections[WarEventCol_.Value];
+                WarEventCol = (EcWar)World.HistoricalEventCollections[WarEventCol_.Value];
 
         }
 
@@ -124,15 +123,15 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         {
             base.Process();
             if (Site.SiteConqueredEventCollections == null)
-                Site.SiteConqueredEventCollections = new List<EC_SiteConquered>();
+                Site.SiteConqueredEventCollections = new List<EcSiteConquered>();
             Site.SiteConqueredEventCollections.Add(this);
             if (AttackingEn.SiteConqueredEventCollections == null)
-                AttackingEn.SiteConqueredEventCollections = new List<EC_SiteConquered>();
+                AttackingEn.SiteConqueredEventCollections = new List<EcSiteConquered>();
             AttackingEn.SiteConqueredEventCollections.Add(this);
             if (DefendingEn != null)
             {
                 if (DefendingEn.SiteConqueredEventCollections == null)
-                    DefendingEn.SiteConqueredEventCollections = new List<EC_SiteConquered>();
+                    DefendingEn.SiteConqueredEventCollections = new List<EcSiteConquered>();
                 DefendingEn.SiteConqueredEventCollections.Add(this);
             }
         }
@@ -142,7 +141,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             base.Evaluate();
 
             // For site conquered event collections, if there are body abused events, we can link the attacking entity as the abuser witin those events.
-            foreach (var ev in Event.Where(x => HistoricalEvent.Types[x.Type] == "body abused").Cast<HE_BodyAbused>())
+            foreach (var ev in Event.Where(x => HistoricalEvent.Types[x.Type] == "body abused").Cast<HeBodyAbused>())
             {
                 ev.AbuserEn = AttackingEn;
             }
@@ -160,7 +159,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
             table = GetType().Name;
 
-            var vals = new List<object> { ID, WarEventCol_ ?? -1, Ordinal, AttackingEnid, DefendingEnid, SiteID};
+            var vals = new List<object> { Id, WarEventCol_ ?? -1, Ordinal, AttackingEnid, DefendingEnid, SiteId};
 
 
 

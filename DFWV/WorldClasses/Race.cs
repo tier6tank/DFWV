@@ -7,11 +7,11 @@ using DFWV.Annotations;
 
 namespace DFWV.WorldClasses
 {
-    public class Race : XMLObject
+    public class Race : XmlObject
     {
         [UsedImplicitly]
         public long Population { private get; set; }
-        public bool isCivilized { get; set; }
+        public bool IsCivilized { get; set; }
         public int AddedOrder { get; set; }
         public string Key { get; set; }
         [UsedImplicitly]
@@ -21,7 +21,7 @@ namespace DFWV.WorldClasses
         [UsedImplicitly]
         public int LeaderCount { get { return World.Leaders.Count(x => x.Race == this); } }
         [UsedImplicitly]
-        public int HFCount { get { return World.HistoricalFigures.Values.Count(x => x.Race == this); } }
+        public int HfCount { get { return World.HistoricalFigures.Values.Count(x => x.Race == this); } }
         [UsedImplicitly]
         public string DispNameLower => ToString().ToLower();
 
@@ -38,7 +38,7 @@ namespace DFWV.WorldClasses
             }
         }
 
-        public Dictionary<UndergroundRegion, int> UGPopulations
+        public Dictionary<UndergroundRegion, int> UgPopulations
         {
             get
             {
@@ -49,7 +49,7 @@ namespace DFWV.WorldClasses
         public Race(string name, int addedorder, World world) 
             : base(world)
         {
-            if (name.isPlural())
+            if (name.IsPlural())
             {
                 Name = name.Singularize();
                 PluralName = name;
@@ -61,7 +61,7 @@ namespace DFWV.WorldClasses
             }
             Key = Name;
             AddedOrder = addedorder;
-            ID = addedorder;
+            Id = addedorder;
         }
 
         public Race(XDocument xdoc, World world) 
@@ -86,7 +86,7 @@ namespace DFWV.WorldClasses
             frm.grpRaceCivilizations.FillListboxWith(frm.lstRaceCivilizations, World.Civilizations.Where(x => x.Race == this));
             frm.grpRaceHistoricalFigures.FillListboxWith(frm.lstRaceHistoricalFigures, World.HistoricalFigures.Values.Where(x => x.Race == this).Take(50000));
             if (frm.lstRaceHistoricalFigures.Items.Count == 50000)
-                frm.grpRaceHistoricalFigures.Text = "Historical Figures (50000+)";
+                frm.grpRaceHistoricalFigures.Text = @"Historical Figures (50000+)";
 
             frm.grpRaceCastes.FillListboxWith(frm.lstRaceCastes, Castes);
 
@@ -96,7 +96,7 @@ namespace DFWV.WorldClasses
             var pops = Populations;
             if (pops.Count > 0)
                 frm.lstRacePopulation.Items.AddRange(pops.Keys.ToArray());
-            var ugpops = UGPopulations;
+            var ugpops = UgPopulations;
             if (ugpops.Count > 0)
                 frm.lstRacePopulation.Items.AddRange(ugpops.Keys.ToArray());
 
@@ -112,19 +112,17 @@ namespace DFWV.WorldClasses
 
             var vals = new List<object>
             {
-                ID,
+                Id,
                 Key.DBExport(),
                 Name.DBExport(),
                 PluralName.DBExport(),
-                isCivilized,
+                IsCivilized,
                 Population == long.MaxValue ? -1 : Population
             };
 
             Database.ExportWorldItem(table, vals);
 
-            if (Castes != null)
-                Castes.ForEach(x => x.Export("Race_Castes"));
-
+            Castes?.ForEach(x => x.Export("Race_Castes"));
         }
 
 
@@ -138,7 +136,7 @@ namespace DFWV.WorldClasses
             throw new NotImplementedException();
         }
 
-        internal override void Plus(XDocument xdoc)
+        internal override sealed void Plus(XDocument xdoc)
         {
             foreach (var element in xdoc.Root.Elements())
             {
@@ -149,7 +147,7 @@ namespace DFWV.WorldClasses
                 switch (element.Name.LocalName)
                 {
                     case "id":
-                        ID = valI;
+                        Id = valI;
                         break;
                     case "key":
                         Key = val.ToLower();
@@ -167,7 +165,7 @@ namespace DFWV.WorldClasses
                         Castes.Add(newCaste);
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t Race", element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t Race", element, xdoc.Root.ToString());
                         break;
                 }
             }

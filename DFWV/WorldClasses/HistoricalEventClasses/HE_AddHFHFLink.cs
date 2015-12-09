@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -8,29 +7,29 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    public class HE_AddHFHFLink : HistoricalEvent
+    public class HeAddHfhfLink : HistoricalEvent
     {
-        private int? HFID { get; set; }
-        private HistoricalFigure HF { get; set; }
-        private int? HFIDTarget { get; set; }
-        private HistoricalFigure HFTarget { get; set; }
+        private int? Hfid { get; }
+        private HistoricalFigure Hf { get; set; }
+        private int? HfidTarget { get; }
+        private HistoricalFigure HfTarget { get; set; }
 
         override public Point Location => Point.Empty;
 
         public int? LinkType { get; set; }
 
-        public HFLink HFLink { get; set; }
-        public HFLink HFLink2 { get; set; }
+        public HfLink HfLink { get; set; }
+        public HfLink HfLink2 { get; set; }
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
             get
             {
-                yield return HF;
-                yield return HFTarget;
+                yield return Hf;
+                yield return HfTarget;
             }
         }
-        public HE_AddHFHFLink(XDocument xdoc, World world)
+        public HeAddHfhfLink(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -47,14 +46,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "hfid":
-                        HFID = valI;
+                        Hfid = valI;
                         break;
                     case "hfid_target":
-                        HFIDTarget = valI;
+                        HfidTarget = valI;
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -63,10 +62,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (HFID.HasValue && World.HistoricalFigures.ContainsKey(HFID.Value))
-                HF = World.HistoricalFigures[HFID.Value];
-            if (HFIDTarget.HasValue && World.HistoricalFigures.ContainsKey(HFIDTarget.Value))
-                HFTarget = World.HistoricalFigures[HFIDTarget.Value];
+            if (Hfid.HasValue && World.HistoricalFigures.ContainsKey(Hfid.Value))
+                Hf = World.HistoricalFigures[Hfid.Value];
+            if (HfidTarget.HasValue && World.HistoricalFigures.ContainsKey(HfidTarget.Value))
+                HfTarget = World.HistoricalFigures[HfidTarget.Value];
         }
 
         internal override void Process()
@@ -74,14 +73,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             base.Process();
             var matched = false;
 
-            if (HF != null && HF.HFLinks != null)
+            if (Hf?.HfLinks != null)
             {
-                foreach (var hfLinkList in HF.HFLinks)
+                foreach (var hfLinkList in Hf.HfLinks)
                 {
-                    foreach (var hflink in hfLinkList.Value.Where(hflink => hflink.LinkedHFID == HFIDTarget))
+                    foreach (var hflink in hfLinkList.Value.Where(hflink => hflink.LinkedHfid == HfidTarget))
                     {
                         hflink.AddEvent = this;
-                        HFLink = hflink;
+                        HfLink = hflink;
                         matched = true;
                         break;
                     }
@@ -90,13 +89,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 }
             }
             matched = false;
-            if (HFTarget == null || HFTarget.HFLinks == null) return;
-            foreach (var hfLinkList in HFTarget.HFLinks)
+            if (HfTarget?.HfLinks == null) return;
+            foreach (var hfLinkList in HfTarget.HfLinks)
             {
-                foreach (var hflink in hfLinkList.Value.Where(hflink => hflink.LinkedHFID == HFID))
+                foreach (var hflink in hfLinkList.Value.Where(hflink => hflink.LinkedHfid == Hfid))
                 {
                     hflink.AddEvent = this;
-                    HFLink2 = hflink;
+                    HfLink2 = hflink;
                     matched = true;
                     break;
                 }
@@ -124,48 +123,48 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "hf_target":
                         break;
                     case "link_type":
-                        if (!HFLink.LinkTypes.Contains(val))
-                            HFLink.LinkTypes.Add(val);
-                        LinkType = HFLink.LinkTypes.IndexOf(val);
+                        if (!HfLink.LinkTypes.Contains(val))
+                            HfLink.LinkTypes.Add(val);
+                        LinkType = HfLink.LinkTypes.IndexOf(val);
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
         }
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "HF:", HF);
-            EventLabel(frm, parent, ref location, "Target:", HFTarget);
-            if (HFLink != null)
-                EventLabel(frm, parent, ref location, "Type:", HFLink.LinkTypes[HFLink.LinkType]);
+            EventLabel(frm, parent, ref location, "HF:", Hf);
+            EventLabel(frm, parent, ref location, "Target:", HfTarget);
+            if (HfLink != null)
+                EventLabel(frm, parent, ref location, "Type:", HfLink.LinkTypes[HfLink.LinkType]);
             else if (LinkType.HasValue)
-                EventLabel(frm, parent, ref location, "Type:", HFLink.LinkTypes[LinkType.Value]);
+                EventLabel(frm, parent, ref location, "Type:", HfLink.LinkTypes[LinkType.Value]);
         }
 
         protected override string LegendsDescription() //Matched
         {
             var timestring = base.LegendsDescription();
 
-            switch (HFLink != null ? 
-                HFLink.LinkTypes[HFLink.LinkType] :
-                (LinkType.HasValue ? HFLink.LinkTypes[LinkType.Value] : string.Empty))
+            switch (HfLink != null ? 
+                HfLink.LinkTypes[HfLink.LinkType] :
+                (LinkType.HasValue ? HfLink.LinkTypes[LinkType.Value] : string.Empty))
             {
                 case "spouse":
                     return
-                        $"{timestring} {HF} {"married"} {(HFTarget == null ? "an unknown creature" : HFTarget.ToString())}.";
+                        $"{timestring} {Hf} {"married"} {HfTarget?.ToString() ?? "an unknown creature"}.";
                 case "prisoner":
                     return
-                        $"{timestring} {HF} {"imprisoned"} {(HFTarget == null ? "an unknown creature" : HFTarget.ToString())}.";
+                        $"{timestring} {Hf} {"imprisoned"} {HfTarget?.ToString() ?? "an unknown creature"}.";
                 case "apprentice":
                     return
-                        $"{timestring} {HF} {"became master of the"} {(HFTarget != null && HFTarget.Race != null ? HFTarget.Race.ToString().ToLower() : "")} {(HFTarget == null ? "an unknown creature" : HFTarget.ToString())}.";
+                        $"{timestring} {Hf} {"became master of the"} {HfTarget?.Race?.ToString().ToLower() ?? ""} {HfTarget?.ToString() ?? "an unknown creature"}.";
                 case "deity":
                     return
-                        $"{timestring} {HF} {"began worshipping"} {(HFTarget == null ? "an unknown creature" : HFTarget.ToString())}.";
+                        $"{timestring} {Hf} {"began worshipping"} {HfTarget?.ToString() ?? "an unknown creature"}.";
                 default:
-                    return $"{timestring} {HF} {"UNKNOWN"} {HFTarget}.";
+                    return $"{timestring} {Hf} {"UNKNOWN"} {HfTarget}.";
 
             }
         }
@@ -175,7 +174,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             return
-                $"{timelinestring} {(HF != null ? HF.ToString() : HFID.ToString())} {" linked to "} {(HFTarget != null ? HFTarget.ToString() : HFIDTarget.ToString())}.";
+                $"{timelinestring} {Hf?.ToString() ?? Hfid.ToString()} {" linked to "} {HfTarget?.ToString() ?? HfidTarget.ToString()}.";
         }
 
         internal override void Export(string table)
@@ -187,10 +186,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID, 
-                HFID, 
-                HFIDTarget,
-                LinkType.DBExport(HFLink.LinkTypes)
+                Id, 
+                Hfid, 
+                HfidTarget,
+                LinkType.DBExport(HfLink.LinkTypes)
             };
 
             Database.ExportWorldItem(table, vals);

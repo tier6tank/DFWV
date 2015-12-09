@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -7,13 +6,13 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_HFDisturbedStructure : HistoricalEvent
+    class HeHfDisturbedStructure : HistoricalEvent
     {
-        private int? HistFigID { get; set; }
+        private int? HistFigId { get; }
         private HistoricalFigure HistFig { get; set; }
-        private int? SiteID { get; set; }
+        private int? SiteId { get; }
         private Site Site { get; set; }
-        private int? StructureID { get; set; }
+        private int? StructureId { get; }
         private Structure Structure { get; set; }
 
         private int? Action { get; set; }
@@ -29,7 +28,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Site; }
         }
 
-        public HE_HFDisturbedStructure(XDocument xdoc, World world)
+        public HeHfDisturbedStructure(XDocument xdoc, World world)
             : base(xdoc, world)
         {
 
@@ -48,18 +47,18 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
 
                     case "hist_fig_id":
-                        HistFigID = valI;
+                        HistFigId = valI;
                         break;
                     case "site_id":
-                        SiteID = valI;
+                        SiteId = valI;
                         break;
                     case "structure_id":
                         if (valI != -1)
-                            StructureID = valI;
+                            StructureId = valI;
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -69,16 +68,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             //TODO: Incorporate new data
             base.Link();
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
-            if (HistFigID.HasValue && World.HistoricalFigures.ContainsKey(HistFigID.Value))
-                HistFig = World.HistoricalFigures[HistFigID.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
+            if (HistFigId.HasValue && World.HistoricalFigures.ContainsKey(HistFigId.Value))
+                HistFig = World.HistoricalFigures[HistFigId.Value];
 
-            if (!StructureID.HasValue || StructureID.Value == -1 || Site == null) return;
+            if (!StructureId.HasValue || StructureId.Value == -1 || Site == null) return;
 
-            Structure = Site.GetStructure(StructureID.Value);
+            Structure = Site.GetStructure(StructureId.Value);
             if (Structure != null) return;
-            Structure = new Structure(Site, StructureID.Value, World);
+            Structure = new Structure(Site, StructureId.Value, World);
             Site.AddStructure(Structure);
         }
 
@@ -103,7 +102,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         Action = valI;
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -151,10 +150,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID, 
-                HistFigID.DBExport(), 
-                SiteID.DBExport(), 
-                StructureID.DBExport(),
+                Id, 
+                HistFigId.DBExport(), 
+                SiteId.DBExport(), 
+                StructureId.DBExport(),
                 Action.DBExport()
             };
 

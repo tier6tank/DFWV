@@ -9,46 +9,46 @@ namespace DFWV
 {
     public class Stats
     {
-        readonly World World;
+        readonly World _world;
 
         //Graph Data
-        public readonly Dictionary<int, int> HFAliveInYear = new Dictionary<int, int>();
+        public readonly Dictionary<int, int> HfAliveInYear = new Dictionary<int, int>();
         public readonly Dictionary<int, int> SitesInYear = new Dictionary<int, int>();
 
         //Other Data
-        private readonly Dictionary<string, List<HistoricalFigure>> SphereAllegiance = new Dictionary<string, List<HistoricalFigure>>();
-        private readonly Dictionary<Race, WorldTime> AverageLifeSpan = new Dictionary<Race, WorldTime>();
-        private readonly Dictionary<Race, int> DeadHFs = new Dictionary<Race, int>();
-        private readonly Dictionary<Race, int> KilledHFs = new Dictionary<Race, int>();
-        private readonly Dictionary<Race, int> LivingHFs = new Dictionary<Race, int>();
-        private readonly Dictionary<Race, int> SitesPerRace = new Dictionary<Race, int>();
-        private readonly Dictionary<Race, int> CivsPerRace = new Dictionary<Race, int>();
-        private readonly Dictionary<string, int> EntitiesByType = new Dictionary<string, int>();
-        private readonly Dictionary<Race, int> EntGroupsPerRace = new Dictionary<Race, int>();
-        private readonly Dictionary<Race, int> EntReligionPerRace = new Dictionary<Race, int>();
-        private readonly Dictionary<Race, int> EntOtherPerRace = new Dictionary<Race, int>();
-        private readonly Dictionary<string, int> AssociatedTypesCount = new Dictionary<string, int>();
-        private readonly Dictionary<string, int> CastesCount = new Dictionary<string, int>();
-        private readonly Dictionary<string, int> InteractionCount = new Dictionary<string, int>();
-        private readonly Dictionary<string, int> PetCount = new Dictionary<string, int>();
-        private readonly Dictionary<string, int> GoalCount = new Dictionary<string, int>();
+        private readonly Dictionary<string, List<HistoricalFigure>> _sphereAllegiance = new Dictionary<string, List<HistoricalFigure>>();
+        private readonly Dictionary<Race, WorldTime> _averageLifeSpan = new Dictionary<Race, WorldTime>();
+        private readonly Dictionary<Race, int> _deadHFs = new Dictionary<Race, int>();
+        private readonly Dictionary<Race, int> _killedHFs = new Dictionary<Race, int>();
+        private readonly Dictionary<Race, int> _livingHFs = new Dictionary<Race, int>();
+        private readonly Dictionary<Race, int> _sitesPerRace = new Dictionary<Race, int>();
+        private readonly Dictionary<Race, int> _civsPerRace = new Dictionary<Race, int>();
+        private readonly Dictionary<string, int> _entitiesByType = new Dictionary<string, int>();
+        private readonly Dictionary<Race, int> _entGroupsPerRace = new Dictionary<Race, int>();
+        private readonly Dictionary<Race, int> _entReligionPerRace = new Dictionary<Race, int>();
+        private readonly Dictionary<Race, int> _entOtherPerRace = new Dictionary<Race, int>();
+        private readonly Dictionary<string, int> _associatedTypesCount = new Dictionary<string, int>();
+        private readonly Dictionary<string, int> _castesCount = new Dictionary<string, int>();
+        private readonly Dictionary<string, int> _interactionCount = new Dictionary<string, int>();
+        private readonly Dictionary<string, int> _petCount = new Dictionary<string, int>();
+        private readonly Dictionary<string, int> _goalCount = new Dictionary<string, int>();
 
 
-        private int DeityHFs;
-        private int AnimatedHFs;
-        private int GhostHFs;
-        private int AdventurerHFs;
-        private int ForceHFs;
-        private int GodHFs;
-        private int LeaderHFs;
-        private int MaleHFs;
-        private int FemaleHFs;
-        private int NonGenderHFs;
+        private int _deityHFs;
+        private int _animatedHFs;
+        private int _ghostHFs;
+        private int _adventurerHFs;
+        private int _forceHFs;
+        private int _godHFs;
+        private int _leaderHFs;
+        private int _maleHFs;
+        private int _femaleHFs;
+        private int _nonGenderHFs;
 
-        private int OverallDeadHFs;
-        private int OverallKilledHFs;
-        private int OverallLivingHFs;
-        private WorldTime OverallAverageLifeSpan = new WorldTime(0);
+        private int _overallDeadHFs;
+        private int _overallKilledHFs;
+        private int _overallLivingHFs;
+        private WorldTime _overallAverageLifeSpan = new WorldTime(0);
 
         #region Remove later
 
@@ -76,174 +76,174 @@ namespace DFWV
 
         public Stats(World world)
         {
-            World = world;
+            _world = world;
         }
 
         internal void Gather()
         {
-            var TotalLifeSpan = new Dictionary<Race, WorldTime>();
-            var OverallTotalLifeSpan = new WorldTime(0);
+            var totalLifeSpan = new Dictionary<Race, WorldTime>();
+            var overallTotalLifeSpan = new WorldTime(0);
 
             foreach (var sphere in HistoricalFigure.Spheres)
-                SphereAllegiance.Add(sphere, new List<HistoricalFigure>());
+                _sphereAllegiance.Add(sphere, new List<HistoricalFigure>());
 
-            foreach (var race in World.Races.Values)
+            foreach (var race in _world.Races.Values)
             {
-                TotalLifeSpan.Add(race, new WorldTime(0));
-                AverageLifeSpan.Add(race, new WorldTime(0));
-                DeadHFs.Add(race,0);
-                KilledHFs.Add(race, 0);
-                LivingHFs.Add(race, 0);
-                SitesPerRace.Add(race,0);
-                CivsPerRace.Add(race, 0);
-                EntGroupsPerRace.Add(race, 0);
-                EntReligionPerRace.Add(race, 0);
-                EntOtherPerRace.Add(race, 0);
+                totalLifeSpan.Add(race, new WorldTime(0));
+                _averageLifeSpan.Add(race, new WorldTime(0));
+                _deadHFs.Add(race,0);
+                _killedHFs.Add(race, 0);
+                _livingHFs.Add(race, 0);
+                _sitesPerRace.Add(race,0);
+                _civsPerRace.Add(race, 0);
+                _entGroupsPerRace.Add(race, 0);
+                _entReligionPerRace.Add(race, 0);
+                _entOtherPerRace.Add(race, 0);
             }
 
             foreach (var caste in HistoricalFigure.Castes)
-                CastesCount.Add(caste, 0);
+                _castesCount.Add(caste, 0);
 
             foreach (var job in HistoricalFigure.AssociatedTypes)
-                AssociatedTypesCount.Add(job, 0);
+                _associatedTypesCount.Add(job, 0);
 
             foreach (var job in HistoricalFigure.Interactions)
-                InteractionCount.Add(job, 0);
+                _interactionCount.Add(job, 0);
 
             foreach (var job in HistoricalFigure.JourneyPets)
-                PetCount.Add(job, 0);
+                _petCount.Add(job, 0);
 
             foreach (var job in HistoricalFigure.Goals)
-                GoalCount.Add(job, 0);
+                _goalCount.Add(job, 0);
 
 
-            foreach (var HF in World.HistoricalFigures.Values)
+            foreach (var hf in _world.HistoricalFigures.Values)
             {
 
-                if (HF.Deity)
-                    DeityHFs++;
-                if (HF.Animated)
-                    AnimatedHFs++;
-                if (HF.Ghost)
-                    GhostHFs++;
-                if (HF.Adventurer)
-                    AdventurerHFs++;
-                if (HF.Force)
-                    ForceHFs++;
-                if (HF.isGod)
-                    GodHFs++;
-                if (HF.isLeader)
-                    LeaderHFs++;
+                if (hf.Deity)
+                    _deityHFs++;
+                if (hf.Animated)
+                    _animatedHFs++;
+                if (hf.Ghost)
+                    _ghostHFs++;
+                if (hf.Adventurer)
+                    _adventurerHFs++;
+                if (hf.Force)
+                    _forceHFs++;
+                if (hf.IsGod)
+                    _godHFs++;
+                if (hf.IsLeader)
+                    _leaderHFs++;
 
-                if (HF.isFemale)
-                    FemaleHFs++;
-                else if (HF.isMale)
-                    MaleHFs++;
+                if (hf.IsFemale)
+                    _femaleHFs++;
+                else if (hf.IsMale)
+                    _maleHFs++;
                 else
-                    NonGenderHFs++;
+                    _nonGenderHFs++;
 
                
-                if (HF.Caste.HasValue)
-                    CastesCount[HistoricalFigure.Castes[HF.Caste.Value]]++;
-                if (HF.AssociatedType.HasValue)
-                    AssociatedTypesCount[HistoricalFigure.AssociatedTypes[HF.AssociatedType.Value]]++;
-                if (HF.JourneyPet != null)
+                if (hf.Caste.HasValue)
+                    _castesCount[HistoricalFigure.Castes[hf.Caste.Value]]++;
+                if (hf.AssociatedType.HasValue)
+                    _associatedTypesCount[HistoricalFigure.AssociatedTypes[hf.AssociatedType.Value]]++;
+                if (hf.JourneyPet != null)
                 {
-                    foreach (var pet in HF.JourneyPet)
-                        PetCount[HistoricalFigure.JourneyPets[pet]]++;
+                    foreach (var pet in hf.JourneyPet)
+                        _petCount[HistoricalFigure.JourneyPets[pet]]++;
                 }
-                if (HF.InteractionKnowledge != null)
+                if (hf.InteractionKnowledge != null)
                 {
-                    foreach (var knowledge in HF.InteractionKnowledge)
-                        InteractionCount[HistoricalFigure.Interactions[knowledge]]++;
+                    foreach (var knowledge in hf.InteractionKnowledge)
+                        _interactionCount[HistoricalFigure.Interactions[knowledge]]++;
                 }
-                if (HF.ActiveInteraction.HasValue)
+                if (hf.ActiveInteraction.HasValue)
                 {
-                    if (HF.InteractionKnowledge == null || !HF.InteractionKnowledge.Contains(HF.ActiveInteraction.Value))
-                        InteractionCount[HistoricalFigure.Interactions[HF.ActiveInteraction.Value]]++;
+                    if (hf.InteractionKnowledge == null || !hf.InteractionKnowledge.Contains(hf.ActiveInteraction.Value))
+                        _interactionCount[HistoricalFigure.Interactions[hf.ActiveInteraction.Value]]++;
                 }
-                if (HF.Goal.HasValue)
-                    GoalCount[HistoricalFigure.Goals[HF.Goal.Value]]++;
+                if (hf.Goal.HasValue)
+                    _goalCount[HistoricalFigure.Goals[hf.Goal.Value]]++;
 
-                if (HF.Sphere != null)
+                if (hf.Sphere != null)
                 {
-                    foreach (var sphere in HF.Sphere)
-                        SphereAllegiance[HistoricalFigure.Spheres[sphere]].Add(HF);
+                    foreach (var sphere in hf.Sphere)
+                        _sphereAllegiance[HistoricalFigure.Spheres[sphere]].Add(hf);
                 }
-                if (HF.Dead)
+                if (hf.Dead)
                 {
-                    OverallDeadHFs++;
-                    if (HF.Race != null)
-                        DeadHFs[HF.Race]++;
+                    _overallDeadHFs++;
+                    if (hf.Race != null)
+                        _deadHFs[hf.Race]++;
 
-                    if (HF.DiedEvent != null && HF.DiedEvent.SlayerHF != null)
+                    if (hf.DiedEvent?.SlayerHf != null)
                     { 
-                        OverallKilledHFs++;
-                        if (HF.Race != null)
-                            KilledHFs[HF.Race]++;
+                        _overallKilledHFs++;
+                        if (hf.Race != null)
+                            _killedHFs[hf.Race]++;
                     }
-                    if (HF.DiedEvent == null) continue;
-                    var lifeSpan = (HF.DiedEvent.Time - HF.Birth);
-                    if (HF.Race != null)
-                        TotalLifeSpan[HF.Race] += lifeSpan;
-                    OverallTotalLifeSpan += lifeSpan;
+                    if (hf.DiedEvent == null) continue;
+                    var lifeSpan = (hf.DiedEvent.Time - hf.Birth);
+                    if (hf.Race != null)
+                        totalLifeSpan[hf.Race] += lifeSpan;
+                    overallTotalLifeSpan += lifeSpan;
                 }
                 else
                 {
-                    if (HF.Race != null)
-                        LivingHFs[HF.Race]++;
-                    OverallLivingHFs++;
+                    if (hf.Race != null)
+                        _livingHFs[hf.Race]++;
+                    _overallLivingHFs++;
                 }
             }
 
-            foreach (var site in World.Sites.Values)
+            foreach (var site in _world.Sites.Values)
             {
-                if (site.Owner != null && site.Owner.Race != null)
-                    SitesPerRace[site.Owner.Race]++;
-                else if (site.Parent != null && site.Parent.Race != null)
-                    SitesPerRace[site.Owner.Race]++;
+                if (site.Owner?.Race != null)
+                    _sitesPerRace[site.Owner.Race]++;
+                else if (site.Parent?.Race != null)
+                    _sitesPerRace[site.Owner.Race]++;
             }
 
-            foreach (var civ in World.Civilizations.Where(civ => civ.Race != null))
+            foreach (var civ in _world.Civilizations.Where(civ => civ.Race != null))
             {
-                CivsPerRace[civ.Race]++;
+                _civsPerRace[civ.Race]++;
             }
 
-            foreach (var ent in World.Entities.Values)
+            foreach (var ent in _world.Entities.Values)
             {
-                if (!EntitiesByType.ContainsKey(ent.Type))
-                    EntitiesByType.Add(ent.Type, 0);
-                EntitiesByType[ent.Type]++;
+                if (!_entitiesByType.ContainsKey(ent.Type))
+                    _entitiesByType.Add(ent.Type, 0);
+                _entitiesByType[ent.Type]++;
                 if (ent.Race == null) continue;
                 switch (ent.Type)
                 {
                     case "Group":
-                        EntGroupsPerRace[ent.Race]++;
+                        _entGroupsPerRace[ent.Race]++;
                         break;
                     case "Religion":
-                        EntReligionPerRace[ent.Race]++;
+                        _entReligionPerRace[ent.Race]++;
                         break;
                     case "Other":
-                        EntOtherPerRace[ent.Race]++;
+                        _entOtherPerRace[ent.Race]++;
                         break;
                 }
             }
 
-            foreach (var race in World.Races.Values)
+            foreach (var race in _world.Races.Values)
             {
-                if (DeadHFs[race] > 0)
-                    AverageLifeSpan[race] = TotalLifeSpan[race] / DeadHFs[race];
+                if (_deadHFs[race] > 0)
+                    _averageLifeSpan[race] = totalLifeSpan[race] / _deadHFs[race];
                 else
                 {
-                    AverageLifeSpan.Remove(race);
-                    DeadHFs.Remove(race);
-                    KilledHFs.Remove(race);
-                    LivingHFs.Remove(race);
+                    _averageLifeSpan.Remove(race);
+                    _deadHFs.Remove(race);
+                    _killedHFs.Remove(race);
+                    _livingHFs.Remove(race);
                 }
             }
                 
 
-            OverallAverageLifeSpan = OverallTotalLifeSpan / OverallDeadHFs;
+            _overallAverageLifeSpan = overallTotalLifeSpan / _overallDeadHFs;
 
             CreateGraphData();
 
@@ -251,28 +251,28 @@ namespace DFWV
 
         private void CreateGraphData()
         {
-            CreateHFPopulationGraph();
+            CreateHfPopulationGraph();
             CreateSiteGraph();
         }
 
         private void CreateSiteGraph()
         {
-            var SitesBuiltInYear = new Dictionary<int, int>();
-            var SitesDestroyedInYear = new Dictionary<int, int>();
+            var sitesBuiltInYear = new Dictionary<int, int>();
+            var sitesDestroyedInYear = new Dictionary<int, int>();
 
             var earliestSiteBuilt = 0;
             var earliestSiteDestroyed = 0;
             var latestSiteBuilt = 0;
             var latestSiteDestroyed = 0;
 
-            foreach (var site in World.Sites.Values)
+            foreach (var site in _world.Sites.Values)
             {
-                var createdYear = site.CreatedEvent != null ? site.CreatedEvent.Time.Year : 0;
+                var createdYear = site.CreatedEvent?.Time.Year ?? 0;
 
-                if (!SitesBuiltInYear.ContainsKey(createdYear))
-                    SitesBuiltInYear.Add(createdYear, 1);
+                if (!sitesBuiltInYear.ContainsKey(createdYear))
+                    sitesBuiltInYear.Add(createdYear, 1);
                 else
-                    SitesBuiltInYear[createdYear]++;
+                    sitesBuiltInYear[createdYear]++;
 
                 if (createdYear < earliestSiteBuilt)
                     earliestSiteBuilt = createdYear;
@@ -280,12 +280,12 @@ namespace DFWV
                     latestSiteBuilt = createdYear;
 
 
-                foreach (var evt in site.Events.OfType<HE_ReclaimSite>())
+                foreach (var evt in site.Events.OfType<HeReclaimSite>())
                 {
-                    if (!SitesBuiltInYear.ContainsKey(evt.Time.Year))
-                        SitesBuiltInYear.Add(evt.Time.Year, 1);
+                    if (!sitesBuiltInYear.ContainsKey(evt.Time.Year))
+                        sitesBuiltInYear.Add(evt.Time.Year, 1);
                     else
-                        SitesBuiltInYear[evt.Time.Year]++;
+                        sitesBuiltInYear[evt.Time.Year]++;
 
                     if (evt.Time.Year < earliestSiteBuilt)
                         earliestSiteBuilt = evt.Time.Year;
@@ -293,12 +293,12 @@ namespace DFWV
                         latestSiteBuilt = evt.Time.Year;
                 }
 
-                foreach (var evt in site.Events.OfType<HE_DestroyedSite>())
+                foreach (var evt in site.Events.OfType<HeDestroyedSite>())
                 {
-                    if (!SitesDestroyedInYear.ContainsKey(evt.Time.Year))
-                        SitesDestroyedInYear.Add(evt.Time.Year, 1);
+                    if (!sitesDestroyedInYear.ContainsKey(evt.Time.Year))
+                        sitesDestroyedInYear.Add(evt.Time.Year, 1);
                     else
-                        SitesDestroyedInYear[evt.Time.Year]++;
+                        sitesDestroyedInYear[evt.Time.Year]++;
 
                     if (evt.Time.Year < earliestSiteDestroyed)
                         earliestSiteDestroyed = evt.Time.Year;
@@ -313,32 +313,32 @@ namespace DFWV
             for (var y = earliestSiteBuilt; y <= Math.Max(latestSiteBuilt, latestSiteDestroyed); y++)
             {
                 SitesInYear.Add(y, SitesInYear[y - 1]);
-                if (!SitesBuiltInYear.ContainsKey(y))
-                    SitesBuiltInYear.Add(y, 0);
-                if (!SitesDestroyedInYear.ContainsKey(y))
-                    SitesDestroyedInYear.Add(y, 0);
+                if (!sitesBuiltInYear.ContainsKey(y))
+                    sitesBuiltInYear.Add(y, 0);
+                if (!sitesDestroyedInYear.ContainsKey(y))
+                    sitesDestroyedInYear.Add(y, 0);
 
-                SitesInYear[y] += SitesBuiltInYear[y] - SitesDestroyedInYear[y];
+                SitesInYear[y] += sitesBuiltInYear[y] - sitesDestroyedInYear[y];
             }
 
         }
 
-        private void CreateHFPopulationGraph()
+        private void CreateHfPopulationGraph()
         {
-            var HFBirthsInYear = new Dictionary<int, int>();
-            var HFDeathsInYear = new Dictionary<int, int>();
+            var hfBirthsInYear = new Dictionary<int, int>();
+            var hfDeathsInYear = new Dictionary<int, int>();
 
             var earliestBirth = int.MaxValue;
             var earliestDeath = int.MaxValue;
             var latestBirth = int.MinValue;
             var latestDeath = int.MinValue;
 
-            foreach (var hf in World.HistoricalFigures.Values)
+            foreach (var hf in _world.HistoricalFigures.Values)
             {
-                if (!HFBirthsInYear.ContainsKey(hf.Birth.Year))
-                    HFBirthsInYear.Add(hf.Birth.Year, 1);
+                if (!hfBirthsInYear.ContainsKey(hf.Birth.Year))
+                    hfBirthsInYear.Add(hf.Birth.Year, 1);
                 else
-                    HFBirthsInYear[hf.Birth.Year]++;
+                    hfBirthsInYear[hf.Birth.Year]++;
 
                 if (hf.Birth.Year < earliestBirth)
                     earliestBirth = hf.Birth.Year;
@@ -346,10 +346,10 @@ namespace DFWV
                     latestBirth = hf.Birth.Year;
 
                 if (!hf.Dead) continue;
-                if (!HFDeathsInYear.ContainsKey(hf.Death.Year))
-                    HFDeathsInYear.Add(hf.Death.Year, 1);
+                if (!hfDeathsInYear.ContainsKey(hf.Death.Year))
+                    hfDeathsInYear.Add(hf.Death.Year, 1);
                 else
-                    HFDeathsInYear[hf.Death.Year]++;
+                    hfDeathsInYear[hf.Death.Year]++;
 
                 if (hf.Death.Year < earliestDeath)
                     earliestDeath = hf.Death.Year;
@@ -357,17 +357,17 @@ namespace DFWV
                     latestDeath = hf.Death.Year;
             }
 
-            HFAliveInYear.Add(earliestBirth - 1, 0);
+            HfAliveInYear.Add(earliestBirth - 1, 0);
 
             for (var y = earliestBirth; y <= Math.Max(latestDeath, latestBirth); y++)
             {
-                HFAliveInYear.Add(y, HFAliveInYear[y - 1]);
-                if (!HFBirthsInYear.ContainsKey(y))
-                    HFBirthsInYear.Add(y, 0);
-                if (!HFDeathsInYear.ContainsKey(y))
-                    HFDeathsInYear.Add(y, 0);
+                HfAliveInYear.Add(y, HfAliveInYear[y - 1]);
+                if (!hfBirthsInYear.ContainsKey(y))
+                    hfBirthsInYear.Add(y, 0);
+                if (!hfDeathsInYear.ContainsKey(y))
+                    hfDeathsInYear.Add(y, 0);
 
-                HFAliveInYear[y] += HFBirthsInYear[y] - HFDeathsInYear[y];
+                HfAliveInYear[y] += hfBirthsInYear[y] - hfDeathsInYear[y];
             }
         }
 

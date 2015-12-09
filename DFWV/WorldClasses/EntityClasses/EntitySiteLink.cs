@@ -9,15 +9,15 @@ namespace DFWV.WorldClasses.EntityClasses
     {
         public static List<string> LinkTypes = new List<string>();
 
-        public int LinkType { get; private set; }
-        public Entity thisEntity { get; private set; }
+        public int LinkType { get; }
+        public Entity ThisEntity { get; }
 
-        public int? SiteID { get; private set; }
+        public int? SiteId { get; }
 
-        public int? LinkStrength { get; private set; }
+        public int? LinkStrength { get; }
 
-        public Site Site => SiteID.HasValue && thisEntity.World.Sites.ContainsKey(SiteID.Value) 
-            ? thisEntity.World.Sites[SiteID.Value] 
+        public Site Site => SiteId.HasValue && ThisEntity.World.Sites.ContainsKey(SiteId.Value) 
+            ? ThisEntity.World.Sites[SiteId.Value] 
             : null;
 
 
@@ -29,12 +29,12 @@ namespace DFWV.WorldClasses.EntityClasses
             LinkType = LinkTypes.IndexOf(linktypename);
 
             if (data.Elements("site").Count() != 0)
-                SiteID = Convert.ToInt32(data.Element("site").Value);
+                SiteId = Convert.ToInt32(data.Element("site").Value);
 
             if (data.Elements("strength").Count() != 0)
                 LinkStrength = Convert.ToInt32(data.Element("strength").Value);
 
-            thisEntity = ent;
+            ThisEntity = ent;
 
         }
 
@@ -42,19 +42,19 @@ namespace DFWV.WorldClasses.EntityClasses
         {
             //TODO Update this
             if (Site == null)
-                return LinkType + ": " + SiteID;
+                return LinkType + ": " + SiteId;
             return LinkType + ": " + Site.Name;
         }
 
-        internal void Export(int HFID)
+        internal void Export(int hfid)
         {
             var table = "Entity_" + GetType().Name;
 
             var vals = new List<object>
             {
-                thisEntity.ID, 
+                ThisEntity.Id, 
                 LinkType.DBExport(LinkTypes), 
-                SiteID.DBExport(),
+                SiteId.DBExport(),
                 LinkStrength.DBExport()
             };
 

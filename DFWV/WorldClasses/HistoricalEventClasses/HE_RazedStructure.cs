@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -7,13 +6,13 @@ using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    public class HE_RazedStructure : HistoricalEvent
+    public class HeRazedStructure : HistoricalEvent
     {
-        private int? CivID { get; set; }
+        private int? CivId { get; }
         public Entity Civ { get; set; }
-        private int? SiteID { get; set; }
+        private int? SiteId { get; }
         public Site Site { get; set; }
-        private int? StructureID { get; set; }
+        private int? StructureId { get; }
         private Structure Structure { get; set; }
 
         override public Point Location => Site.Location;
@@ -28,7 +27,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         }
 
 
-        public HE_RazedStructure(XDocument xdoc, World world)
+        public HeRazedStructure(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -45,18 +44,18 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "civ_id":
-                        CivID = valI;
+                        CivId = valI;
                         break;
                     case "site_id":
-                        SiteID = valI;
+                        SiteId = valI;
                         break;
                     case "structure_id":
                         if (valI != -1)
-                            StructureID = valI;
+                            StructureId = valI;
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -65,17 +64,17 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
-            if (CivID.HasValue && World.Entities.ContainsKey(CivID.Value))
-                Civ = World.Entities[CivID.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
+            if (CivId.HasValue && World.Entities.ContainsKey(CivId.Value))
+                Civ = World.Entities[CivId.Value];
 
-            if (!StructureID.HasValue || StructureID.Value == -1 || Site == null) return;
+            if (!StructureId.HasValue || StructureId.Value == -1 || Site == null) return;
 
-            Structure = Site.GetStructure(StructureID.Value);
+            Structure = Site.GetStructure(StructureId.Value);
             if (Structure == null)
             {
-                Structure = new Structure(Site, StructureID.Value, World);
+                Structure = new Structure(Site, StructureId.Value, World);
                 Site.AddStructure(Structure);
             }
             
@@ -121,10 +120,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID, 
-                CivID.DBExport(), 
-                SiteID.DBExport(), 
-                StructureID.DBExport()
+                Id, 
+                CivId.DBExport(), 
+                SiteId.DBExport(), 
+                StructureId.DBExport()
             };
 
             Database.ExportWorldItem(table, vals);

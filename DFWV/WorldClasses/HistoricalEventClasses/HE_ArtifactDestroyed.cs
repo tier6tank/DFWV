@@ -1,24 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using DFWV.WorldClasses.EntityClasses;
-using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     //TODO: Missing Details:  UnitID does not associate with anything, "NameOnly" events aren't shown in legends
-    public class HE_ArtifactDestroyed : HistoricalEvent
+    public class HeArtifactDestroyed : HistoricalEvent
     {
-        private int? SiteID { get; set; }
+        private int? SiteId { get; }
         public Site Site { get; set; }
-        private int? DestroyerEnID { get; set; }
+        private int? DestroyerEnId { get; }
         private Entity DestroyerEn { get; set; }
-        private int? ArtifactID { get; set; }
+        private int? ArtifactId { get; }
         public Artifact Artifact { get; set; }
 
-        override public Point Location => Site != null ? Site.Location : Point.Empty;
+        override public Point Location => Site?.Location ?? Point.Empty;
 
         public override IEnumerable<Entity> EntitiesInvolved
         {
@@ -29,7 +27,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Site; }
         }
 
-        public HE_ArtifactDestroyed(XDocument xdoc, World world)
+        public HeArtifactDestroyed(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -46,18 +44,18 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "artifact_id":
-                        ArtifactID = valI;
+                        ArtifactId = valI;
                         break;
                     case "destroyer_enid":
-                        DestroyerEnID = valI;
+                        DestroyerEnId = valI;
                         break;
                     case "site_id":
                         if (valI != -1)
-                        SiteID = valI;
+                        SiteId = valI;
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -66,12 +64,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
-            if (DestroyerEnID.HasValue && World.Entities.ContainsKey(DestroyerEnID.Value))
-                DestroyerEn = World.Entities[DestroyerEnID.Value];
-            if (ArtifactID.HasValue && World.Artifacts.ContainsKey(ArtifactID.Value))
-                Artifact = World.Artifacts[ArtifactID.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
+            if (DestroyerEnId.HasValue && World.Entities.ContainsKey(DestroyerEnId.Value))
+                DestroyerEn = World.Entities[DestroyerEnId.Value];
+            if (ArtifactId.HasValue && World.Artifacts.ContainsKey(ArtifactId.Value))
+                Artifact = World.Artifacts[ArtifactId.Value];
             //if (UnitID.HasValue && World.HistoricalFigures.ContainsKey(UnitID.Value))
             //    Unit = World.HistoricalFigures[UnitID.Value];
         }
@@ -107,10 +105,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID, 
-                ArtifactID.DBExport(), 
-                SiteID.DBExport(), 
-                DestroyerEnID.DBExport(), 
+                Id, 
+                ArtifactId.DBExport(), 
+                SiteId.DBExport(), 
+                DestroyerEnId.DBExport(), 
             };
 
             Database.ExportWorldItem(table, vals);

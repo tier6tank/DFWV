@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -10,14 +9,14 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    public class HE_EntityLaw : HistoricalEvent
+    public class HeEntityLaw : HistoricalEvent
     {
-        private int? HistFigureID { get; set; }
+        private int? HistFigureId { get; }
         private HistoricalFigure HistFigure { get; set; }
-        private int? EntityID { get; set; }
+        private int? EntityId { get; }
         private Entity Entity { get; set; }
-        private string LawAdd { get; set; }
-        private string LawRemove { get; set; }
+        private string LawAdd { get; }
+        private string LawRemove { get; }
 
 
         override public Point Location => Entity.Location;
@@ -31,7 +30,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Entity; }
         }
 
-        public HE_EntityLaw(XDocument xdoc, World world)
+        public HeEntityLaw(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -48,10 +47,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "entity_id":
-                        EntityID = valI;
+                        EntityId = valI;
                         break;
                     case "hist_figure_id":
-                        HistFigureID = valI;
+                        HistFigureId = valI;
                         break;
                     case "law_add":
                         LawAdd = val;
@@ -61,7 +60,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -69,10 +68,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (EntityID.HasValue && World.Entities.ContainsKey(EntityID.Value))
-                Entity = World.Entities[EntityID.Value];
-            if (HistFigureID.HasValue && World.HistoricalFigures.ContainsKey(HistFigureID.Value))
-                HistFigure = World.HistoricalFigures[HistFigureID.Value];
+            if (EntityId.HasValue && World.Entities.ContainsKey(EntityId.Value))
+                Entity = World.Entities[EntityId.Value];
+            if (HistFigureId.HasValue && World.HistoricalFigures.ContainsKey(HistFigureId.Value))
+                HistFigure = World.HistoricalFigures[HistFigureId.Value];
         }
 
 
@@ -91,25 +90,19 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             if (LawAdd == "harsh")
-                return string.Format("{0} {1} laid a series of oppressive edicts upon {2}.",
-                    timestring, HistFigure.Race, HistFigure,
-                    Entity);
-            if (LawRemove == "harsh")
-            {
-                return string.Format("{0} {1} lifted numerous  oppressive laws from {2}.", 
-                    timestring, HistFigure.Race, HistFigure,
-                    Entity);
-            }
-            return timestring;
+                return $"{timestring} {HistFigure.Race} {HistFigure} laid a series of oppressive edicts upon {Entity}.";
+            return LawRemove == "harsh" ? 
+                $"{timestring} {HistFigure.Race} {HistFigure} lifted numerous  oppressive laws from {Entity}." : 
+                timestring;
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            if (LawAdd == "harsh")
-                return $"{timelinestring} {HistFigure} created harsh laws for {Entity}.";
-            return timelinestring;
+            return LawAdd == "harsh" ? 
+                $"{timelinestring} {HistFigure} created harsh laws for {Entity}." : 
+                timelinestring;
         }
 
         internal override void Export(string table)
@@ -120,9 +113,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID, 
-                HistFigureID.DBExport(), 
-                EntityID.DBExport(), 
+                Id, 
+                HistFigureId.DBExport(), 
+                EntityId.DBExport(), 
                 LawAdd.DBExport(), 
                 LawRemove.DBExport()
             };

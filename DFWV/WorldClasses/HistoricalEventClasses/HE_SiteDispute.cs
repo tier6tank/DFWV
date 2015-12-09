@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -8,16 +7,16 @@ using DFWV.WorldClasses.EntityClasses;
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     //TODO: Verify new event
-    class HE_SiteDispute : HistoricalEvent
+    class HeSiteDispute : HistoricalEvent
     {
         public string Dispute { get; set; }
-        public int? EntityID1 { get; set; }
+        public int? EntityId1 { get; set; }
         public Entity Entity1 { get; set; }
-        public int? EntityID2 { get; set; }
+        public int? EntityId2 { get; set; }
         public Entity Entity2 { get; set; }
-        public int? SiteID1 { get; set; }
+        public int? SiteId1 { get; set; }
         public Site Site1 { get; set; }
-        public int? SiteID2 { get; set; }
+        public int? SiteId2 { get; set; }
         public Site Site2 { get; set; }
         public override IEnumerable<Entity> EntitiesInvolved
         {
@@ -37,7 +36,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         }
 
 
-        public HE_SiteDispute(XDocument xdoc, World world)
+        public HeSiteDispute(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -58,21 +57,21 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         Dispute = val;
                         break;
                     case "entity_id_1":
-                        EntityID1 = valI;
+                        EntityId1 = valI;
                         break;
                     case "entity_id_2":
-                        EntityID2 = valI;
+                        EntityId2 = valI;
                         break;
                     case "site_id_1":
-                        SiteID1 = valI;
+                        SiteId1 = valI;
                         break;
                     case "site_id_2":
-                        SiteID2 = valI;
+                        SiteId2 = valI;
                         break;
 
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -83,15 +82,15 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             base.Link();
 
-            if (SiteID1.HasValue && World.Sites.ContainsKey(SiteID1.Value))
-                Site1 = World.Sites[SiteID1.Value];
-            if (SiteID2.HasValue && World.Sites.ContainsKey(SiteID2.Value))
-                Site2 = World.Sites[SiteID2.Value];
+            if (SiteId1.HasValue && World.Sites.ContainsKey(SiteId1.Value))
+                Site1 = World.Sites[SiteId1.Value];
+            if (SiteId2.HasValue && World.Sites.ContainsKey(SiteId2.Value))
+                Site2 = World.Sites[SiteId2.Value];
 
-            if (EntityID1.HasValue && World.Entities.ContainsKey(EntityID1.Value))
-                Entity1 = World.Entities[EntityID1.Value];
-            if (EntityID2.HasValue && World.Entities.ContainsKey(EntityID2.Value))
-                Entity2 = World.Entities[EntityID2.Value];
+            if (EntityId1.HasValue && World.Entities.ContainsKey(EntityId1.Value))
+                Entity1 = World.Entities[EntityId1.Value];
+            if (EntityId2.HasValue && World.Entities.ContainsKey(EntityId2.Value))
+                Entity2 = World.Entities[EntityId2.Value];
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
@@ -127,11 +126,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID, 
-                EntityID1.DBExport(), 
-                EntityID2.DBExport(), 
-                SiteID1.DBExport(), 
-                SiteID2.DBExport(), 
+                Id, 
+                EntityId1.DBExport(), 
+                EntityId2.DBExport(), 
+                SiteId1.DBExport(), 
+                SiteId2.DBExport(), 
                 Dispute.DBExport()
             };
 

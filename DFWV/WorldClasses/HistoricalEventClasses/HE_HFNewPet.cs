@@ -9,15 +9,15 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
 
-    class HE_HFNewPet : HistoricalEvent
+    class HeHfNewPet : HistoricalEvent
     {
-        private int? SiteID { get; set; }
+        private int? SiteId { get; }
         private Site Site { get; set; }
-        private int? SubregionID { get; set; }
+        private int? SubregionId { get; }
         private Region Subregion { get; set; }
-        private int? FeatureLayerID { get; set; }
-        private Point Coords { get; set; }
-        private List<int> GroupHFIDs { get; set; }
+        private int? FeatureLayerId { get; }
+        private Point Coords { get; }
+        private List<int> GroupHfiDs { get; set; }
         private List<Race> Pets { get; set; }
         private List<HistoricalFigure> GroupHFs { get; set; }
 
@@ -34,7 +34,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Subregion; }
         }
 
-        public HE_HFNewPet(XDocument xdoc, World world)
+        public HeHfNewPet(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -52,28 +52,28 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                     case "site_id":
                         if (valI != -1)
-                            SiteID = valI;
+                            SiteId = valI;
                         break;
                     case "subregion_id":
                         if (valI != -1)
-                            SubregionID = valI;
+                            SubregionId = valI;
                         break;
                     case "feature_layer_id":
                         if (valI != -1)
-                            FeatureLayerID = valI;
+                            FeatureLayerId = valI;
                         break;
                     case "coords":
                         if (val != "-1,-1")
                             Coords = new Point(Convert.ToInt32(val.Split(',')[0]), Convert.ToInt32(val.Split(',')[1]));
                         break;
                     case "group_hfid":
-                        if (GroupHFIDs == null)
-                            GroupHFIDs = new List<int>();
-                        GroupHFIDs.Add(valI);
+                        if (GroupHfiDs == null)
+                            GroupHfiDs = new List<int>();
+                        GroupHfiDs.Add(valI);
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -82,13 +82,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             //TODO: Incorporate new data
             base.Link();
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
-            if (SubregionID.HasValue && World.Regions.ContainsKey(SubregionID.Value))
-                Subregion = World.Regions[SubregionID.Value];
-            if (GroupHFIDs == null) return;
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
+            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
+                Subregion = World.Regions[SubregionId.Value];
+            if (GroupHfiDs == null) return;
             GroupHFs = new List<HistoricalFigure>();
-            foreach (var grouphfid in GroupHFIDs.Where(grouphfid => World.HistoricalFigures.ContainsKey(grouphfid)))
+            foreach (var grouphfid in GroupHfiDs.Where(grouphfid => World.HistoricalFigures.ContainsKey(grouphfid)))
             {
                 GroupHFs.Add(World.HistoricalFigures[grouphfid]);
             }
@@ -108,10 +108,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "group":
-                        if (GroupHFIDs == null)
-                            GroupHFIDs = new List<int>();
-                        if (!GroupHFIDs.Contains(valI))
-                            GroupHFIDs.Add(valI);
+                        if (GroupHfiDs == null)
+                            GroupHfiDs = new List<int>();
+                        if (!GroupHfiDs.Contains(valI))
+                            GroupHfiDs.Add(valI);
                         break;
                     case "pets":
                         var race = World.GetAddRace(val);
@@ -122,7 +122,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "site":
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -139,8 +139,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 EventLabel(frm, parent, ref location, "Site:", Site);
             if (Subregion != null)
                 EventLabel(frm, parent, ref location, "Region:", Subregion);
-            if (FeatureLayerID != null && FeatureLayerID.Value != -1)
-                EventLabel(frm, parent, ref location, "Feature Layer:", FeatureLayerID == -1 ? "" : FeatureLayerID.ToString());
+            if (FeatureLayerId != null && FeatureLayerId.Value != -1)
+                EventLabel(frm, parent, ref location, "Feature Layer:", FeatureLayerId == -1 ? "" : FeatureLayerId.ToString());
             if (Coords != Point.Empty) 
                 EventLabel(frm, parent, ref location, "Coords:", new Coordinate(Coords));
 
@@ -154,10 +154,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (Pets != null && Pets.Count == 1)
             {
                 return
-                    $"{timestring} {GroupHFs[0]} tamed the {Pets[0]} of {(Subregion == null ? "UNKNOWN" : Subregion.ToString())}.";
+                    $"{timestring} {GroupHFs[0]} tamed the {Pets[0]} of {Subregion?.ToString() ?? "UNKNOWN"}.";
             }
             return
-                $"{timestring} {GroupHFs[0]} tamed the {"UNKNOWN"} of {(Subregion == null ? "UNKNOWN" : Subregion.ToString())}.";
+                $"{timestring} {GroupHFs[0]} tamed the {"UNKNOWN"} of {Subregion?.ToString() ?? "UNKNOWN"}.";
         }
 
         internal override string ToTimelineString()
@@ -176,11 +176,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             
             var vals = new List<object>
             {
-                ID, 
-                GroupHFIDs.DBExport(), 
-                SiteID.DBExport(), 
-                SubregionID.DBExport(), 
-                FeatureLayerID.DBExport(),
+                Id, 
+                GroupHfiDs.DBExport(), 
+                SiteId.DBExport(), 
+                SubregionId.DBExport(), 
+                FeatureLayerId.DBExport(),
                 Coords.DBExport()
             };
 

@@ -1,13 +1,10 @@
-using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Xml.Linq;
-using DFWV.Annotations;
 
 namespace DFWV.WorldClasses
 {
-    public class Report : XMLObject
+    public class Report : XmlObject
     {
         override public Point Location => Point.Empty;
 
@@ -22,7 +19,7 @@ namespace DFWV.WorldClasses
                     case "id":
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -49,7 +46,7 @@ namespace DFWV.WorldClasses
 
             var vals = new List<object>
             {
-                ID, 
+                Id, 
                 Name.DBExport()
             };
 

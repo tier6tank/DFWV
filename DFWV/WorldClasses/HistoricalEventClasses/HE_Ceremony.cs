@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -7,20 +6,20 @@ using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_Ceremony : HistoricalEvent
+    class HeCeremony : HistoricalEvent
     {
-        private int? SiteID { get; set; }
+        private int? SiteId { get; }
         private Site Site { get; set; }
-        private int? SubregionID { get; set; }
+        private int? SubregionId { get; }
         private Region Subregion { get; set; }
-        private int? FeatureLayerID { get; set; }
-        private int? CivID { get; set; }
+        private int? FeatureLayerId { get; }
+        private int? CivId { get; }
         public Entity Civ { get; private set; }
 
         override public Point Location => Site.Location;
 
-        public int? OccasionID { get; set; }
-        public int? ScheduleID { get; set; }
+        public int? OccasionId { get; set; }
+        public int? ScheduleId { get; set; }
 
         public override IEnumerable<Entity> EntitiesInvolved
         {
@@ -36,7 +35,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Subregion; }
         }
 
-        public HE_Ceremony(XDocument xdoc, World world)
+        public HeCeremony(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -53,29 +52,29 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                     case "site_id":
                         if (valI != -1)
-                            SiteID = valI;
+                            SiteId = valI;
                         break;
                     case "subregion_id":
                         if (valI != -1)
-                            SubregionID = valI;
+                            SubregionId = valI;
                         break;
                     case "feature_layer_id":
                         if (valI != -1)
-                            FeatureLayerID = valI;
+                            FeatureLayerId = valI;
                         break;
                     case "occasion_id":
                         if (valI != -1)
-                            OccasionID = valI;
+                            OccasionId = valI;
                         break;
                     case "schedule_id":
                         if (valI != -1)
-                            ScheduleID = valI;
+                            ScheduleId = valI;
                         break;
                     case "civ_id":
-                        CivID = valI;
+                        CivId = valI;
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -84,12 +83,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
-            if (SubregionID.HasValue && World.Regions.ContainsKey(SubregionID.Value))
-                Subregion = World.Regions[SubregionID.Value];
-            if (CivID.HasValue && World.Entities.ContainsKey(CivID.Value))
-                Civ = World.Entities[CivID.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
+            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
+                Subregion = World.Regions[SubregionId.Value];
+            if (CivId.HasValue && World.Entities.ContainsKey(CivId.Value))
+                Civ = World.Entities[CivId.Value];
 
         }
 
@@ -124,11 +123,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object> 
             { 
-                ID, 
-                CivID.DBExport(),
-                SiteID.DBExport(),
-                SubregionID.DBExport(),
-                FeatureLayerID.DBExport()
+                Id, 
+                CivId.DBExport(),
+                SiteId.DBExport(),
+                SubregionId.DBExport(),
+                FeatureLayerId.DBExport()
             };
 
             Database.ExportWorldItem(table, vals);

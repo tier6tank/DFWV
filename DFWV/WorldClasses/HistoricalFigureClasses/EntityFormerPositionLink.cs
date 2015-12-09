@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml.Linq;
 using DFWV.WorldClasses.EntityClasses;
 
@@ -7,11 +6,11 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
 {
     public struct EntityFormerPositionLink
     {
-        public int PositionProfileID { get; set; }
-        public int EntityID { get; private set; }
-        public HistoricalFigure HF { get; private set; }
+        public int PositionProfileId { get; set; }
+        public int EntityId { get; }
+        public HistoricalFigure Hf { get; }
 
-        public Entity Entity => HF.World.Entities[EntityID];
+        public Entity Entity => Hf.World.Entities[EntityId];
 
         public int StartYear { get; set; }
         public int EndYear { get; set; }
@@ -26,10 +25,10 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                 switch (element.Name.LocalName)
                 {
                     case "position_profile_id":
-                        PositionProfileID = valI;
+                        PositionProfileId = valI;
                         break;
                     case "entity_id":
-                        EntityID = valI;
+                        EntityId = valI;
                         break;
                     case "start_year":
                         StartYear = valI;
@@ -39,21 +38,21 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                         break;
                 }
             }
-            HF = hf;
+            Hf = hf;
         }
 
         public override string ToString()
         {
             if (Entity == null)
-                return PositionProfileID + ": " + EntityID + " - " + (StartYear != 0 ? StartYear.ToString() : "?") + " - " + EndYear;
-            return PositionProfileID + ": " + Entity.Name + " - " + (StartYear != 0 ? StartYear.ToString() : "?") + " - " + EndYear;
+                return PositionProfileId + ": " + EntityId + " - " + (StartYear != 0 ? StartYear.ToString() : "?") + " - " + EndYear;
+            return PositionProfileId + ": " + Entity.Name + " - " + (StartYear != 0 ? StartYear.ToString() : "?") + " - " + EndYear;
         }
 
-        internal void Export(int HFID)
+        internal void Export(int hfid)
         {
             var table = "HF_" + GetType().Name;
 
-            var vals = new List<object> {HFID, PositionProfileID, EntityID, StartYear, EndYear };
+            var vals = new List<object> {hfid, PositionProfileId, EntityId, StartYear, EndYear };
 
             Database.ExportWorldItem(table, vals);
         }

@@ -8,46 +8,45 @@ using System.Xml.Linq;
 using DFWV.WorldClasses;
 using DFWV.WorldClasses.HistoricalEventClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
+using Squad = DFWV.WorldClasses.Squad;
 
 namespace DFWV
 {
-    public delegate void XMLFinishedSectionEventHandler(string section);
-    public delegate void XMLFinishedEventHandler();
+    public delegate void XmlFinishedSectionEventHandler(string section);
+    public delegate void XmlFinishedEventHandler();
 
-    public delegate void XMLStartedSectionEventHandler(string section);
+    public delegate void XmlStartedSectionEventHandler(string section);
 
-    public static class DFXMLParser
+    public static class DfxmlParser
     {
 
         private static string _path;
         public static bool MemoryFailureQuitParsing;
 
-        static readonly Dictionary<string, string> MissingXMLElements = new Dictionary<string, string>();
+        static readonly Dictionary<string, string> MissingXmlElements = new Dictionary<string, string>();
 
 
-        public static event XMLFinishedSectionEventHandler FinishedSection;
-        public static event XMLFinishedEventHandler Finished;
+        public static event XmlFinishedSectionEventHandler FinishedSection;
+        public static event XmlFinishedEventHandler Finished;
 
-        public static event XMLStartedSectionEventHandler StartedSection;
+        public static event XmlStartedSectionEventHandler StartedSection;
 
-        private static bool workflowDetected;
-        private static bool autochopDetected;
+        private static bool _workflowDetected;
+        private static bool _autochopDetected;
 
         private static void OnFinishedSection(string section)
         {
-            if (FinishedSection != null)
-                FinishedSection(section);
+            FinishedSection?.Invoke(section);
         }
 
         private static void OnStartedSection(string section)
         {
-            if (StartedSection != null)
-                StartedSection(section);
+            StartedSection?.Invoke(section);
         }
+
         private static void OnFinished()
         {
-            if (Finished != null)
-                Finished();
+            Finished?.Invoke();
         }
 
         /// <summary>
@@ -121,11 +120,11 @@ namespace DFWV
                     break;
                 }
             }
-            if (world.hasPlusXML)
+            if (world.HasPlusXml)
             {
                 Program.Log(LogType.Status, "XML Loading Done");
                 Program.Log(LogType.Status, "Plus XML Loading");
-                PlusParse(world, world.xmlPlusPath);
+                PlusParse(world, world.XmlPlusPath);
             }
             else
                 OnFinished();
@@ -139,7 +138,7 @@ namespace DFWV
         public static void PlusParse(World world, string path)
         {
             _path = path;
-            world.isPlusParsing = true;
+            world.IsPlusParsing = true;
 
             using (var streamReader = new StreamReader(path, Encoding.GetEncoding("ISO-8859-9")))
             using (var xReader = XmlReader.Create(streamReader))
@@ -269,20 +268,20 @@ namespace DFWV
 
         private static void SortRaces(World world)
         {
-            Dictionary<int, Race> newRaceList = world.Races.Values.ToDictionary(race => race.ID);
+            Dictionary<int, Race> newRaceList = world.Races.Values.ToDictionary(race => race.Id);
 
             world.Races.Clear();
 
-            foreach (var race in newRaceList.Values.OrderBy(X=>X.ID))
+            foreach (var race in newRaceList.Values.OrderBy(x=>x.Id))
             {
-                world.Races.Add(race.ID, race);
+                world.Races.Add(race.Id, race);
             }
         }
 
         /// <summary>
         /// Given a specific section of type T if we encounter an open tag at one level below we want to load a new object of type T, starting at that XML.
         /// </summary>
-        private static void LoadSection<T>(IDictionary<int, T> WorldList, World world, XmlReader xReader) where T : XMLObject
+        private static void LoadSection<T>(IDictionary<int, T> worldList, World world, XmlReader xReader) where T : XmlObject
         {
             OnStartedSection(xReader.Name);
             while (xReader.Read())
@@ -293,7 +292,7 @@ namespace DFWV
                 if (xReader.NodeType != XmlNodeType.EndElement && xReader.Depth == 2)
                 {
                     if (!MemoryFailureQuitParsing)
-                        LoadItem(WorldList, world, xReader);
+                        LoadItem(worldList, world, xReader);
                     else
                         xReader.ReadSubtree();
                 }
@@ -311,7 +310,7 @@ namespace DFWV
         /// <summary>
         /// Given a specific section of type T if we encounter an open tag at one level below we want to load a new object of type T, starting at that XML.
         /// </summary>
-        private static void PlusLoadSection<T>(IDictionary<int, T> WorldList, World world, XmlReader xReader) where T : XMLObject
+        private static void PlusLoadSection<T>(IDictionary<int, T> worldList, World world, XmlReader xReader) where T : XmlObject
         {
             OnStartedSection(xReader.Name);
             while (xReader.Read())
@@ -322,7 +321,7 @@ namespace DFWV
                 if (xReader.NodeType != XmlNodeType.EndElement && xReader.Depth == 2)
                 {
                     if (!MemoryFailureQuitParsing)
-                        PlusLoadItem(WorldList, world, xReader);
+                        PlusLoadItem(worldList, world, xReader);
                     else
                         xReader.ReadSubtree();
                 }
@@ -344,7 +343,7 @@ namespace DFWV
         ///   In any case we add the object after making it to the appropriate dictionary.
         /// Individual object reads are separated out to allow us to work past failing to load any specific XML item for some weird reason.
         /// </summary>
-        private static void LoadItem<T>(IDictionary<int, T> WorldList, World world, XmlReader xReader) where T : XMLObject
+        private static void LoadItem<T>(IDictionary<int, T> worldList, World world, XmlReader xReader) where T : XmlObject
         {
             XDocument xdoc = null;
             try
@@ -354,17 +353,17 @@ namespace DFWV
                 if (typeof(T) == typeof(HistoricalEvent))
                 {
                     var evt = HistoricalEvent.Create(xdoc, world);
-                    world.HistoricalEvents.Add(evt.ID, evt);
+                    world.HistoricalEvents.Add(evt.Id, evt);
                 }
                 else if (typeof(T) == typeof(HistoricalEventCollection))
                 {
                     var evtcol = HistoricalEventCollection.Create(xdoc, world);
-                    world.HistoricalEventCollections.Add(evtcol.ID, evtcol);
+                    world.HistoricalEventCollections.Add(evtcol.Id, evtcol);
                 }
                 else
                 {
-                    var WorldObject = (T)Activator.CreateInstance(typeof(T), xdoc, world);
-                    WorldList.Add(WorldObject.ID, WorldObject);
+                    var worldObject = (T)Activator.CreateInstance(typeof(T), xdoc, world);
+                    worldList.Add(worldObject.Id, worldObject);
                 }
             }
             catch (OutOfMemoryException e)
@@ -408,19 +407,19 @@ namespace DFWV
                             switch (xdoc.Root.Name.LocalName)
                             {
                                 case "historical_event":
-                                    if (!workflowDetected)
+                                    if (!_workflowDetected)
                                     {
                                         Program.Log(LogType.Error,
                                             "Negative ID historical event.  Likely due to dfHack Workflow, ignoring\n" + xdoc);
-                                        workflowDetected = true;
+                                        _workflowDetected = true;
                                     }
                                     break;
                                 case "historical_figure":
-                                    if (!autochopDetected)
+                                    if (!_autochopDetected)
                                     {
                                         Program.Log(LogType.Error,
                                             "Negative ID historical figure detected. Likely due to autochop, ignoring\n" + xdoc);
-                                        autochopDetected = true;
+                                        _autochopDetected = true;
                                     }
                                     break;
                                 default:
@@ -451,7 +450,7 @@ namespace DFWV
         ///   in other cases, it already exists and details need to be added to the existing items.
         /// Individual object reads are separated out to allow us to work past failing to load any specific XML item for any reason.
         /// </summary>
-        private static void PlusLoadItem<T>(IDictionary<int, T> WorldList, World world, XmlReader xReader) where T : XMLObject
+        private static void PlusLoadItem<T>(IDictionary<int, T> worldList, World world, XmlReader xReader) where T : XmlObject
         {
             XDocument xdoc = null;
             try
@@ -459,108 +458,108 @@ namespace DFWV
                 xdoc = XDocument.Load(xReader.ReadSubtree());
 
                 var id = Convert.ToInt32(xdoc.Root.Element("id").Value);
-                if (!WorldList.ContainsKey(id))
+                if (!worldList.ContainsKey(id))
                 {
                     if (typeof(T) == typeof(WorldConstruction))
                     {
-                        var newWC = new WorldConstruction(xdoc, world);
-                        world.WorldConstructions.Add(newWC.ID, newWC);
+                        var newWc = new WorldConstruction(xdoc, world);
+                        world.WorldConstructions.Add(newWc.Id, newWc);
                         return;
                     }
                     if (typeof(T) == typeof(Mountain))
                     {
                         var newMountain = new Mountain(xdoc, world);
-                        world.Mountains.Add(newMountain.ID, newMountain);
+                        world.Mountains.Add(newMountain.Id, newMountain);
                         return;
                     }
                     if (typeof(T) == typeof(River))
                     {
                         var newRiver = new River(xdoc, world);
-                        world.Rivers.Add(newRiver.ID, newRiver);
+                        world.Rivers.Add(newRiver.Id, newRiver);
                         return;
                     }
                     if (typeof(T) == typeof(Army))
                     {
                         var newArmy = new Army(xdoc, world);
-                        world.Armies.Add(newArmy.ID, newArmy);
+                        world.Armies.Add(newArmy.Id, newArmy);
                         return;
                     }
                     if (typeof(T) == typeof(Unit))
                     {
                         var newUnit = new Unit(xdoc, world);
-                        world.Units.Add(newUnit.ID, newUnit);
+                        world.Units.Add(newUnit.Id, newUnit);
                         return;
                     }
                     if (typeof(T) == typeof(Vehicle))
                     {
                         var newVehicle = new Vehicle(xdoc, world);
-                        world.Vehicles.Add(newVehicle.ID, newVehicle);
+                        world.Vehicles.Add(newVehicle.Id, newVehicle);
                         return;
                     }
                     if (typeof(T) == typeof(Engraving))
                     {
                         var newEngraving = new Engraving(xdoc, world);
-                        world.Engravings.Add(newEngraving.ID, newEngraving);
+                        world.Engravings.Add(newEngraving.Id, newEngraving);
                         return;
                     }
                     if (typeof(T) == typeof(Incident))
                     {
                         var newIncident = new Incident(xdoc, world);
-                        world.Incidents.Add(newIncident.ID, newIncident);
+                        world.Incidents.Add(newIncident.Id, newIncident);
                         return;
                     }
                     if (typeof(T) == typeof(Crime))
                     {
                         var newCrime = new Crime(xdoc, world);
-                        world.Crimes.Add(newCrime.ID, newCrime);
+                        world.Crimes.Add(newCrime.Id, newCrime);
                         return;
                     }
                     if (typeof(T) == typeof(AdamantineTube))
                     {
                         var newAdamantineTube = new AdamantineTube(xdoc, world);
-                        world.AdamantineTubes.Add(newAdamantineTube.ID, newAdamantineTube);
+                        world.AdamantineTubes.Add(newAdamantineTube.Id, newAdamantineTube);
                         return;
                     }
                     if (typeof(T) == typeof(Report))
                     {
                         var newReport = new Report(xdoc, world);
-                        world.Reports.Add(newReport.ID, newReport);
+                        world.Reports.Add(newReport.Id, newReport);
                         return;
                     }
                     if (typeof(T) == typeof(Announcement))
                     {
                         var newAnnouncement = new Announcement(xdoc, world);
-                        world.Announcements.Add(newAnnouncement.ID, newAnnouncement);
+                        world.Announcements.Add(newAnnouncement.Id, newAnnouncement);
                         return;
                     }
                     if (typeof(T) == typeof(Building))
                     {
                         var newBuilding = new Building(xdoc, world);
-                        world.Buildings.Add(newBuilding.ID, newBuilding);
+                        world.Buildings.Add(newBuilding.Id, newBuilding);
                         return;
                     }
                     if (typeof(T) == typeof(Construction))
                     {
                         var newConstruction = new Construction(xdoc, world);
-                        world.Constructions.Add(newConstruction.ID, newConstruction);
+                        world.Constructions.Add(newConstruction.Id, newConstruction);
                         return;
                     }
                     if (typeof(T) == typeof(Item))
                     {
                         var newItem = new Item(xdoc, world);
-                        world.Items.Add(newItem.ID, newItem);
+                        world.Items.Add(newItem.Id, newItem);
                         return;
                     }
                     if (typeof(T) == typeof(Plant))
                     {
                         var newPlant = new Plant(xdoc, world);
-                        world.Plants.Add(newPlant.ID, newPlant);
+                        world.Plants.Add(newPlant.Id, newPlant);
                         return;
                     }
-                    if (typeof(T) == typeof(WorldClasses.Squad))
+                    if (typeof(T) == typeof(Squad))
                     {
-                        var newSquad = new WorldClasses.Squad(xdoc, world);
-                        world.Squads.Add(newSquad.ID, newSquad);
+                        var newSquad = new Squad(xdoc, world);
+                        world.Squads.Add(newSquad.Id, newSquad);
                         return;
                     }
                 }
@@ -571,7 +570,7 @@ namespace DFWV
                                          world.FindRace(xdoc.Root.Element("nameS").Value.ToLower()) ?? 
                                          world.FindRace(xdoc.Root.Element("nameP").Value.ToLower());
                     
-                    if (associatedRace == null || associatedRace.ID > 0)
+                    if (associatedRace == null || associatedRace.Id > 0)
                     {
                         var newRace = new Race(xdoc, world)
                         {
@@ -582,7 +581,7 @@ namespace DFWV
                     }
                     id = associatedRace.AddedOrder;
                 }
-                WorldList[id].Plus(xdoc);
+                worldList[id].Plus(xdoc);
             }
             catch (OutOfMemoryException e)
             {
@@ -625,19 +624,19 @@ namespace DFWV
                             switch (xdoc.Root.Name.LocalName)
                             {
                                 case "historical_event":
-                                    if (!workflowDetected)
+                                    if (!_workflowDetected)
                                     {
                                         Program.Log(LogType.Error,
                                             "Negative ID historical event.  Likely due to dfHack Workflow, ignoring\n" + xdoc);
-                                        workflowDetected = true;
+                                        _workflowDetected = true;
                                     }
                                     break;
                                 case "historical_figure":
-                                    if (!autochopDetected)
+                                    if (!_autochopDetected)
                                     {
                                         Program.Log(LogType.Error,
                                             "Negative ID historical figure detected. Likely due to autochop, ignoring\n" + xdoc);
-                                        autochopDetected = true;
+                                        _autochopDetected = true;
                                     }
                                     break;
                                 default:
@@ -665,16 +664,16 @@ namespace DFWV
         /// <summary>
         /// While parsing individual objects XML if an original element is discovered it will be reported in the log, but only one time per new element.
         /// </summary>
-        internal static void UnexpectedXMLElement(string ElementType, XElement ProblemElement, string XML)
+        internal static void UnexpectedXmlElement(string elementType, XElement problemElement, string xml)
         {
-            if (MissingXMLElements.ContainsKey(ElementType + "-" + ProblemElement.Name.LocalName)) return;
+            if (MissingXmlElements.ContainsKey(elementType + "-" + problemElement.Name.LocalName)) return;
 
-            var result = ProblemElement.Nodes().Aggregate("", (current, node) => current + node.ToString());
-            Program.Log(LogType.Warning, "New XML!" + ElementType + "\t" + ProblemElement.Name.LocalName + "\t" + result.Trim());
+            var result = problemElement.Nodes().Aggregate("", (current, node) => current + node.ToString());
+            Program.Log(LogType.Warning, "New XML!" + elementType + "\t" + problemElement.Name.LocalName + "\t" + result.Trim());
 #if DEBUG
-            Console.WriteLine(XML);
+            Console.WriteLine(xml);
 #endif
-            MissingXMLElements.Add(ElementType + "-" + ProblemElement.Name.LocalName, ProblemElement.Value);
+            MissingXmlElements.Add(elementType + "-" + problemElement.Name.LocalName, problemElement.Value);
         }
 
         ///// <summary>

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -7,17 +6,17 @@ using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_ReplacedStructure : HistoricalEvent
+    class HeReplacedStructure : HistoricalEvent
     {
-        private int? SiteID { get; set; }
+        private int? SiteId { get; }
         public Site Site { get; set; }
-        private int? OldStructureID { get; set; }
+        private int? OldStructureId { get; }
         private Structure OldStructure { get; set; }
-        private int? NewStructureID { get; set; }
+        private int? NewStructureId { get; }
         private Structure NewStructure { get; set; }
-        private int? SiteCivID { get; set; }
+        private int? SiteCivId { get; }
         public Entity SiteCiv { get; set; }
-        private int? CivID { get; set; }
+        private int? CivId { get; }
         public Entity Civ { get; set; }
 
         override public Point Location => Site.Location;
@@ -36,7 +35,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         }
 
 
-        public HE_ReplacedStructure(XDocument xdoc, World world)
+        public HeReplacedStructure(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -53,23 +52,23 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "civ_id":
-                        CivID = valI;
+                        CivId = valI;
                         break;
                     case "site_civ_id":
-                        SiteCivID = valI;
+                        SiteCivId = valI;
                         break;
                     case "site_id":
-                        SiteID = valI;
+                        SiteId = valI;
                         break;
                     case "old_ab_id":
-                        OldStructureID = valI;
+                        OldStructureId = valI;
                         break;
                     case "new_ab_id":
-                        NewStructureID = valI;
+                        NewStructureId = valI;
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -77,29 +76,29 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
-            if (CivID.HasValue && World.Entities.ContainsKey(CivID.Value))
-                Civ = World.Entities[CivID.Value];
-            if (SiteCivID.HasValue && World.Entities.ContainsKey(SiteCivID.Value))
-                SiteCiv = World.Entities[SiteCivID.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
+            if (CivId.HasValue && World.Entities.ContainsKey(CivId.Value))
+                Civ = World.Entities[CivId.Value];
+            if (SiteCivId.HasValue && World.Entities.ContainsKey(SiteCivId.Value))
+                SiteCiv = World.Entities[SiteCivId.Value];
 
-            if (OldStructureID.HasValue && OldStructureID.Value != -1 && Site != null)
+            if (OldStructureId.HasValue && OldStructureId.Value != -1 && Site != null)
             {
-                OldStructure = Site.GetStructure(OldStructureID.Value);
+                OldStructure = Site.GetStructure(OldStructureId.Value);
                 if (OldStructure == null)
                 {
-                    OldStructure = new Structure(Site, OldStructureID.Value, World);
+                    OldStructure = new Structure(Site, OldStructureId.Value, World);
                     Site.AddStructure(OldStructure);
                 }
             }
 
-            if (NewStructureID.HasValue && NewStructureID.Value != -1 && Site != null)
+            if (NewStructureId.HasValue && NewStructureId.Value != -1 && Site != null)
             {
-                NewStructure = Site.GetStructure(NewStructureID.Value);
+                NewStructure = Site.GetStructure(NewStructureId.Value);
                 if (NewStructure == null)
                 {
-                    NewStructure = new Structure(Site, NewStructureID.Value, World);
+                    NewStructure = new Structure(Site, NewStructureId.Value, World);
                     Site.AddStructure(NewStructure);
                 }
             }
@@ -124,7 +123,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "new_structure":
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -187,12 +186,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID, 
-                SiteID.DBExport(), 
-                SiteCivID.DBExport(), 
-                CivID.DBExport(), 
-                OldStructureID.DBExport(),
-                NewStructureID.DBExport()
+                Id, 
+                SiteId.DBExport(), 
+                SiteCivId.DBExport(), 
+                CivId.DBExport(), 
+                OldStructureId.DBExport(),
+                NewStructureId.DBExport()
             };
 
             Database.ExportWorldItem(table, vals);

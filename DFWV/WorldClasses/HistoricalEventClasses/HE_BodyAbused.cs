@@ -9,22 +9,22 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_BodyAbused : HistoricalEvent
+    class HeBodyAbused : HistoricalEvent
     {
-        private int? SiteID { get; set; }
+        private int? SiteId { get; }
         private Site Site { get; set; }
-        private int? SubregionID { get; set; }
+        private int? SubregionId { get; }
         private Region Subregion { get; set; }
-        private int? FeatureLayerID { get; set; }
-        private Point Coords { get; set; }
+        private int? FeatureLayerId { get; }
+        private Point Coords { get; }
         public Entity AbuserEn { private get; set; }
 
-        public List<int> BodyHFIDs;
+        public List<int> BodyHfiDs;
         public List<HistoricalFigure> BodyHFs;
-        public int? AbuserEnID { get; set; }
+        public int? AbuserEnId { get; set; }
         public int? AbuseType { get; set; }
-        public int? HFID { get; set; }
-        public HistoricalFigure HF { get; set; }
+        public int? Hfid { get; set; }
+        public HistoricalFigure Hf { get; set; }
         public int? ItemType { get; set; }
         public int? ItemSubType { get; set; }
         public int? ItemMat { get; set; }
@@ -32,13 +32,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? ItemMatIndex { get; set; }
         public int? PileType { get; set; }
         
-        override public Point Location => Coords != Point.Empty ? Coords : (Site != null ? Site.Location : Subregion.Location);
+        override public Point Location => Coords != Point.Empty ? Coords : (Site?.Location ?? Subregion.Location);
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
             get
             {
-                yield return HF;
+                yield return Hf;
                 if (BodyHFs != null)
                 {
                     foreach (var historicalFigure in BodyHFs)
@@ -59,7 +59,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get { yield return AbuserEn; }
         }
-        public HE_BodyAbused(XDocument xdoc, World world)
+        public HeBodyAbused(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -77,22 +77,22 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                     case "site_id":
                         if (valI != -1)
-                            SiteID = valI;
+                            SiteId = valI;
                         break;
                     case "subregion_id":
                         if (valI != -1)
-                            SubregionID = valI;
+                            SubregionId = valI;
                         break;
                     case "feature_layer_id":
                         if (valI != -1)
-                            FeatureLayerID = valI;
+                            FeatureLayerId = valI;
                         break;
                     case "coords":
                         if (val != "-1,-1")
                             Coords = new Point(Convert.ToInt32(val.Split(',')[0]), Convert.ToInt32(val.Split(',')[1]));
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -101,23 +101,23 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
-            if (SubregionID.HasValue && World.Regions.ContainsKey(SubregionID.Value))
-                Subregion = World.Regions[SubregionID.Value];
-            if (BodyHFIDs != null)
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
+            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
+                Subregion = World.Regions[SubregionId.Value];
+            if (BodyHfiDs != null)
             {
-                foreach (var hfid in BodyHFIDs.Where(hfid => World.HistoricalFigures.ContainsKey(hfid)))
+                foreach (var hfid in BodyHfiDs.Where(hfid => World.HistoricalFigures.ContainsKey(hfid)))
                 {
                     if (BodyHFs == null)
                         BodyHFs = new List<HistoricalFigure>();
                     BodyHFs.Add(World.HistoricalFigures[hfid]);
                 }
             }
-            if (AbuserEnID.HasValue && World.Entities.ContainsKey(AbuserEnID.Value))
-                AbuserEn = World.Entities[AbuserEnID.Value];
-            if (HFID.HasValue && World.HistoricalFigures.ContainsKey(HFID.Value))
-                HF = World.HistoricalFigures[HFID.Value];
+            if (AbuserEnId.HasValue && World.Entities.ContainsKey(AbuserEnId.Value))
+                AbuserEn = World.Entities[AbuserEnId.Value];
+            if (Hfid.HasValue && World.HistoricalFigures.ContainsKey(Hfid.Value))
+                Hf = World.HistoricalFigures[Hfid.Value];
         }
 
         internal override void Plus(XDocument xdoc)
@@ -134,13 +134,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "bodies":
-                        if (BodyHFIDs == null)
-                            BodyHFIDs = new List<int>();
-                        BodyHFIDs.Add(valI);
+                        if (BodyHfiDs == null)
+                            BodyHfiDs = new List<int>();
+                        BodyHfiDs.Add(valI);
                         break;
                     case "civ":
                         if (valI != -1)
-                            AbuserEnID = valI;
+                            AbuserEnId = valI;
                         break;
                     case "site":
                         break;
@@ -171,13 +171,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         PileType = -1;
                         break;
                     case "histfig":
-                        HFID = valI;
+                        Hfid = valI;
                         break;
                     case "abuse_type":
                         AbuseType = valI;
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -186,7 +186,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
             EventLabel(frm, parent, ref location, "Abuser:", AbuserEn);
-            EventLabel(frm, parent, ref location, "Abuser:", HF);
+            EventLabel(frm, parent, ref location, "Abuser:", Hf);
             if (BodyHFs != null)
             {
                 foreach (var hf in BodyHFs)
@@ -195,8 +195,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Region:", Subregion);
-            if (FeatureLayerID != null && FeatureLayerID > -1)
-                EventLabel(frm, parent, ref location, "Layer:", FeatureLayerID == -1 ? "" : FeatureLayerID.ToString());
+            if (FeatureLayerId != null && FeatureLayerId > -1)
+                EventLabel(frm, parent, ref location, "Layer:", FeatureLayerId == -1 ? "" : FeatureLayerId.ToString());
             EventLabel(frm, parent, ref location, "Coords:", new Coordinate(Coords));
         }
 
@@ -241,15 +241,15 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
             if (AbuserEn != null && PileType == -1 && ItemMat == null && ItemType != null && ItemTypes[ItemType.Value] == "none")
                 return $"{timestring} {abusedHFtext} horribly mutilated by {AbuserEn} in {locationtext}.";
-            if (AbuserEn == null && HF != null && PileType == -1 && ItemMat == null)
-                return $"{timestring} {abusedHFtext} animated by the {HF.Race} {HF} in {locationtext}.";
-            if (AbuserEn == null && HF == null && PileType == -1 && ItemMat == null)
+            if (AbuserEn == null && Hf != null && PileType == -1 && ItemMat == null)
+                return $"{timestring} {abusedHFtext} animated by the {Hf.Race} {Hf} in {locationtext}.";
+            if (AbuserEn == null && Hf == null && PileType == -1 && ItemMat == null)
                 return $"{timestring} {abusedHFtext} animated in {locationtext}.";
 
 
 
             return
-                $"{timestring} {abusedHFtext} were added to a grisly mound by {(AbuserEn == null ? "UNKNOWN" : AbuserEn.ToString())} in {(Site == null ? "UNKNOWN" : Site.AltName)}.";
+                $"{timestring} {abusedHFtext} were added to a grisly mound by {AbuserEn?.ToString() ?? "UNKNOWN"} in {(Site == null ? "UNKNOWN" : Site.AltName)}.";
 
         }
 
@@ -277,17 +277,17 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID, 
-                SiteID.DBExport(), 
-                SubregionID.DBExport(), 
-                FeatureLayerID.DBExport(),
+                Id, 
+                SiteId.DBExport(), 
+                SubregionId.DBExport(), 
+                FeatureLayerId.DBExport(),
                 Coords.DBExport(),
-                AbuserEnID.DBExport(),
-                BodyHFIDs.DBExport(),
+                AbuserEnId.DBExport(),
+                BodyHfiDs.DBExport(),
                 ItemType.DBExport(ItemTypes),
                 ItemSubType.DBExport(ItemSubTypes),
                 ItemMat.DBExport(Materials),
-                HFID.DBExport(),
+                Hfid.DBExport(),
                 AbuseType.DBExport()
             };
 

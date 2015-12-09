@@ -7,15 +7,15 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
 {
      class EntityReputation
     {
-        public int EntityID { get; private set; }
+        public int EntityId { get; }
         public Entity Entity { private get; set; }
-        private int? FirstAgelessYear { get; set; }
-        private int? FirstAgelessSeasonCount { get; set; }
-        private int? UnsolvedMurders { get; set; }
+        private int? FirstAgelessYear { get; }
+        private int? FirstAgelessSeasonCount { get; }
+        private int? UnsolvedMurders { get; }
 
         public EntityReputation(XContainer data)
         {
-            EntityID = Convert.ToInt32(data.Element("entity_id").Value);
+            EntityId = Convert.ToInt32(data.Element("entity_id").Value);
 
             if (data.Element("first_ageless_year") != null)
             {
@@ -37,17 +37,17 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                 data = "FirstAgelessYear - " + FirstAgelessYear.Value + " - " + FirstAgelessSeasonCount;
 
             if (Entity == null)
-                return EntityID + " - " + data;
+                return EntityId + " - " + data;
             return Entity.Name + " - " + data;
         }
 
-        internal void Export(int HFID)
+        internal void Export(int hfid)
         {
             var table = "HF_" + GetType().Name;
 
 
 
-            var vals = new List<object> { HFID, EntityID, FirstAgelessYear, FirstAgelessSeasonCount, UnsolvedMurders};
+            var vals = new List<object> { hfid, EntityId, FirstAgelessYear, FirstAgelessSeasonCount, UnsolvedMurders};
 
 
             Database.ExportWorldItem(table, vals);

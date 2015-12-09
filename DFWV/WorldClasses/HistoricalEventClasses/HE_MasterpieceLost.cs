@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml.Linq;
 using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_MasterpieceLost : HistoricalEvent
+    class HeMasterpieceLost : HistoricalEvent
     {
-        public int? HFID { get; set; }
-        public HistoricalFigure HF { get; set; }
-        public int? SiteID { get; set; }
+        public int? Hfid { get; set; }
+        public HistoricalFigure Hf { get; set; }
+        public int? SiteId { get; set; }
         public Site Site { get; set; }
         public int? Method { get; set; }
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
-            get { yield return HF; }
+            get { yield return Hf; }
         }
         public override IEnumerable<Site> SitesInvolved
         {
@@ -22,7 +21,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         }
 
 
-        public HE_MasterpieceLost(XDocument xdoc, World world)
+        public HeMasterpieceLost(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -39,7 +38,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -59,16 +58,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "histfig":
-                        HFID = valI;
+                        Hfid = valI;
                         break;
                     case "site":
-                        SiteID = valI;
+                        SiteId = valI;
                         break;
                     case "method":
                         Method = valI;
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -78,10 +77,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             //TODO: Incorporate new data
             base.Link();
-            if (HFID.HasValue && World.HistoricalFigures.ContainsKey(HFID.Value))
-                HF = World.HistoricalFigures[HFID.Value];
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
+            if (Hfid.HasValue && World.HistoricalFigures.ContainsKey(Hfid.Value))
+                Hf = World.HistoricalFigures[Hfid.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
 
 
         }
@@ -90,9 +89,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         protected override string LegendsDescription() //Matched (add method to write hf and site alt name)
         {
             var timestring = base.LegendsDescription();
-            if (HF != null && Site != null)
+            if (Hf != null && Site != null)
                 return
-                    $"{timestring} {HF} destroyed the masterful {"UNKNOWN"} created by {"UNKNOWN"} for {"UNKNOWN"} at {"UNKNOWN"} in {"UNKNOWN"} at {Site.AltName}.";
+                    $"{timestring} {Hf} destroyed the masterful {"UNKNOWN"} created by {"UNKNOWN"} for {"UNKNOWN"} at {"UNKNOWN"} in {"UNKNOWN"} at {Site.AltName}.";
 
 
             return
@@ -115,9 +114,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID,
-                HFID.DBExport(),
-                SiteID.DBExport(),
+                Id,
+                Hfid.DBExport(),
+                SiteId.DBExport(),
                 Method.DBExport()
             };
 

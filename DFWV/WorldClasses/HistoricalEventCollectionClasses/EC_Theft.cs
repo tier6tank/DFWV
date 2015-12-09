@@ -9,29 +9,29 @@ using DFWV.WorldClasses.HistoricalEventClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
-    public class EC_Theft : HistoricalEventCollection
+    public class EcTheft : HistoricalEventCollection
     {
         private int? WarEventCol_ { get; set; }
-        private EC_War WarEventCol { get; set; }
-        private int? SubregionID { get; set; }
+        private EcWar WarEventCol { get; set; }
+        private int? SubregionId { get; }
         private Region Subregion { get; set; }
-        private int? FeatureLayerID { get; set; }
-        private int? SiteID { get; set; }
+        private int? FeatureLayerId { get; }
+        private int? SiteId { get; }
         public Site Site { get; private set; }
-        public Point Coords { get; private set; }
-        private int? ParentEventCol_ { get; set; }
+        public Point Coords { get; }
+        private int? ParentEventCol_ { get; }
         private HistoricalEventCollection ParentEventCol { get; set; }
-        private int Ordinal { get; set; }
-        private int? DefendingEnid { get; set; }
+        private int Ordinal { get; }
+        private int? DefendingEnid { get; }
         public Entity DefendingEn { get; private set; }
-        private int? AttackingEnid { get; set; }
+        private int? AttackingEnid { get; }
         public Entity AttackingEn { get; private set; }
-        private List<int> EventCol_ { get; set; }
+        private List<int> EventCol_ { get; }
         private List<HistoricalEventCollection> EventCol { get; set; }
 
         override public Point Location => Site.Coords;
 
-        public EC_Theft(XDocument xdoc, World world)
+        public EcTheft(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -60,11 +60,11 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         break;
                     case "subregion_id":
                         if (valI != -1)
-                            SubregionID = valI;
+                            SubregionId = valI;
                         break;
                     case "feature_layer_id":
                         if (valI != -1)
-                            FeatureLayerID = valI;
+                            FeatureLayerId = valI;
                         break;
                     case "eventcol":
                         if (EventCol_ == null)
@@ -73,7 +73,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         break;
                     case "site_id":
                         if (valI != -1)
-                            SiteID = valI;
+                            SiteId = valI;
                         break;
                     case "coords":
                         Coords = new Point(Convert.ToInt32(val.Split(',')[0]), Convert.ToInt32(val.Split(',')[1]));
@@ -86,7 +86,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -103,10 +103,10 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             LinkFieldList(EventCol_,
                 EventCol, World.HistoricalEventCollections);
 
-            if (SubregionID.HasValue && World.Regions.ContainsKey(SubregionID.Value))
-                Subregion = World.Regions[SubregionID.Value];
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
+            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
+                Subregion = World.Regions[SubregionId.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
             if (DefendingEnid.HasValue && World.Entities.ContainsKey(DefendingEnid.Value))
                 DefendingEn = World.Entities[DefendingEnid.Value];
             if (AttackingEnid.HasValue && World.Entities.ContainsKey(AttackingEnid.Value))
@@ -166,20 +166,20 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             if (Subregion != null)
             {
                 if (Subregion.TheftEventCollections == null)
-                    Subregion.TheftEventCollections = new List<EC_Theft>();
+                    Subregion.TheftEventCollections = new List<EcTheft>();
                 Subregion.TheftEventCollections.Add(this);
             }
             if (Site != null)
             {
                 if (Site.TheftEventCollections == null)
-                    Site.TheftEventCollections = new List<EC_Theft>();
+                    Site.TheftEventCollections = new List<EcTheft>();
                 Site.TheftEventCollections.Add(this);
             }
             if (AttackingEn.TheftEventCollections == null)
-                AttackingEn.TheftEventCollections = new List<EC_Theft>();
+                AttackingEn.TheftEventCollections = new List<EcTheft>();
             AttackingEn.TheftEventCollections.Add(this);
             if (DefendingEn.TheftEventCollections == null)
-                DefendingEn.TheftEventCollections = new List<EC_Theft>();
+                DefendingEn.TheftEventCollections = new List<EcTheft>();
             DefendingEn.TheftEventCollections.Add(this);
 
         }
@@ -190,7 +190,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
             // For theft event collections, if we have item stolen events within that collection, we can note information about who stole, 
             //      and who was stolen from and where based on data from the event collection.
-            foreach (var ev in Event.Where(x => HistoricalEvent.Types[x.Type] == "item stolen").Cast<HE_ItemStolen>())
+            foreach (var ev in Event.Where(x => HistoricalEvent.Types[x.Type] == "item stolen").Cast<HeItemStolen>())
             {
                 ev.AttackerCiv = AttackingEn;
                 ev.DefenderCiv = DefendingEn;
@@ -206,7 +206,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
             table = GetType().Name;
 
-            var vals = new List<object> { ID, WarEventCol_, ParentEventCol_, Ordinal, AttackingEnid, DefendingEnid, SiteID, SubregionID, FeatureLayerID };
+            var vals = new List<object> { Id, WarEventCol_, ParentEventCol_, Ordinal, AttackingEnid, DefendingEnid, SiteId, SubregionId, FeatureLayerId };
 
             if (Coords.IsEmpty)
                 vals.Add(DBNull.Value);

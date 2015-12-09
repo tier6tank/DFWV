@@ -14,7 +14,7 @@ namespace DFWV
     {
         private static SQLiteConnection _connection;
         private static SQLiteCommand _command;
-        private static SQLiteDataReader Reader;
+        private static SQLiteDataReader _reader;
 
         public static void SetConnection(string dbPath)
         {
@@ -30,7 +30,7 @@ namespace DFWV
             _connection.Dispose();
             _connection = null;
             _command = null;
-            Reader = null;
+            _reader = null;
         }
 
         private static void ExecuteNonQuery(string txtQuery)
@@ -44,7 +44,7 @@ namespace DFWV
         {
             _command = _connection.CreateCommand();
             _command.CommandText = txtQuery;
-            Reader = _command.ExecuteReader();
+            _reader = _command.ExecuteReader();
         }
 
         public static void BeginTransaction()
@@ -61,7 +61,7 @@ namespace DFWV
         {
             ExecuteQuery("Select tbl_name from sqlite_master");
             var dt = new DataTable();
-            dt.Load(Reader);
+            dt.Load(_reader);
 
             BeginTransaction();
             foreach (DataRow row in dt.Rows)
@@ -72,7 +72,7 @@ namespace DFWV
             
             }
             CommitTransaction();
-            Reader.Dispose();
+            _reader.Dispose();
         }
 
 /*
@@ -131,17 +131,17 @@ namespace DFWV
             return DBNull.Value;
         }
 
-        internal static object DBExport(this int? field, List<string> LookupTable)
+        internal static object DBExport(this int? field, List<string> lookupTable)
         {
-            if (field.HasValue && LookupTable != null && LookupTable.Count > field.Value)
-                return LookupTable[field.Value];
+            if (field.HasValue && lookupTable != null && lookupTable.Count > field.Value)
+                return lookupTable[field.Value];
             return DBNull.Value;
         }
 
-        internal static object DBExport(this int field, List<string> LookupTable)
+        internal static object DBExport(this int field, List<string> lookupTable)
         {
-            if (LookupTable != null && LookupTable.Count > field)
-                return LookupTable[field];
+            if (lookupTable != null && lookupTable.Count > field)
+                return lookupTable[field];
             return DBNull.Value;
         }
 
@@ -152,10 +152,10 @@ namespace DFWV
             return DBNull.Value;
         }
 
-        internal static object DBExport(this XMLObject xmlobject)
+        internal static object DBExport(this XmlObject xmlobject)
         {
             if (xmlobject != null)
-                return xmlobject.ID;
+                return xmlobject.Id;
             return DBNull.Value;
         }
 
@@ -165,10 +165,10 @@ namespace DFWV
             return year ? time.Year : time.TotalSeconds;
         }
 
-        internal static object DBExport(this List<int> field, List<string> LookupTable)
+        internal static object DBExport(this List<int> field, List<string> lookupTable)
         {
             if (field == null) return DBNull.Value;
-            var exportText = field.Aggregate("", (current, curItem) => current + (LookupTable[curItem] + ","));
+            var exportText = field.Aggregate("", (current, curItem) => current + (lookupTable[curItem] + ","));
             exportText = exportText.TrimEnd(',');
             return exportText;
         }

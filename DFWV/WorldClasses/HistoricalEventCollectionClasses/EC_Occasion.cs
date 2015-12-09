@@ -1,27 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using DFWV.WorldClasses.EntityClasses;
-using DFWV.WorldClasses.HistoricalEventClasses;
-using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
-    public class EC_Occasion : HistoricalEventCollection
+    public class EcOccasion : HistoricalEventCollection
     {
-        private int Ordinal { get; set; }
-        private int? CivID { get; set; }
+        private int Ordinal { get; }
+        private int? CivId { get; }
         private Entity Civ { get; set; }
-        private int? OccasionID { get; set; }
-        private List<int> EventCol_ { get; set; }
+        private int? OccasionId { get; set; }
+        private List<int> EventCol_ { get; }
         private List<HistoricalEventCollection> EventCol { get; set; }
 
         override public Point Location => Civ.Location;
 
-        public EC_Occasion(XDocument xdoc, World world)
+        public EcOccasion(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -50,14 +47,14 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         EventCol_.Add(valI);
                         break;
                     case "civ_id":
-                        CivID = valI;
+                        CivId = valI;
                         break;
                     case "occasion_id":
-                        OccasionID = valI;
+                        OccasionId = valI;
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -72,8 +69,8 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             LinkFieldList(EventCol_,
                 EventCol, World.HistoricalEventCollections);
 
-            if (CivID.HasValue && World.Entities.ContainsKey(CivID.Value))
-                Civ = World.Entities[CivID.Value];
+            if (CivId.HasValue && World.Entities.ContainsKey(CivId.Value))
+                Civ = World.Entities[CivId.Value];
 
         }
 
@@ -124,7 +121,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         {
             base.Process();
             if (Civ.OccasionEventCollections == null)
-                Civ.OccasionEventCollections = new List<EC_Occasion>();
+                Civ.OccasionEventCollections = new List<EcOccasion>();
 
 
         }
@@ -136,7 +133,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
             table = GetType().Name;
 
-            var vals = new List<object> { ID, Ordinal, CivID.DBExport() };
+            var vals = new List<object> { Id, Ordinal, CivId.DBExport() };
 
 
             Database.ExportWorldItem(table, vals);

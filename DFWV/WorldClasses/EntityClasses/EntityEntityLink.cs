@@ -9,15 +9,15 @@ namespace DFWV.WorldClasses.EntityClasses
     {
         public static List<string> LinkTypes = new List<string>();
 
-        public int LinkType { get; private set; }
-        public Entity thisEntity { get; private set; }
-        public int? TargetEntityID { get; private set; }
+        public int LinkType { get; }
+        public Entity ThisEntity { get; }
+        public int? TargetEntityId { get; }
 
-        public Entity Target => TargetEntityID.HasValue && thisEntity.World.Entities.ContainsKey(TargetEntityID.Value) 
-            ? thisEntity.World.Entities[TargetEntityID.Value] 
+        public Entity Target => TargetEntityId.HasValue && ThisEntity.World.Entities.ContainsKey(TargetEntityId.Value) 
+            ? ThisEntity.World.Entities[TargetEntityId.Value] 
             : null;
 
-        public int? LinkStrength { get; private set; }
+        public int? LinkStrength { get; }
 
         public EntityEntityLink(XContainer data, Entity ent)
         {
@@ -27,12 +27,12 @@ namespace DFWV.WorldClasses.EntityClasses
             LinkType = LinkTypes.IndexOf(linktypename);
 
             if (data.Element("target") != null)
-                TargetEntityID = Convert.ToInt32(data.Element("target").Value);
+                TargetEntityId = Convert.ToInt32(data.Element("target").Value);
 
             if (data.Elements("strength").Any())
                 LinkStrength = Convert.ToInt32(data.Element("strength").Value);
 
-            thisEntity = ent;
+            ThisEntity = ent;
         }
 
 
@@ -40,19 +40,19 @@ namespace DFWV.WorldClasses.EntityClasses
         {
             //TODO Update this
             if (Target == null)
-                return LinkTypes[LinkType] + " of " + TargetEntityID;
+                return LinkTypes[LinkType] + " of " + TargetEntityId;
             return LinkTypes[LinkType] + " of " + Target.Name;
         }
 
-        internal void Export(int HFID)
+        internal void Export(int hfid)
         {
             var table = "Entity_" + GetType().Name;
 
             var vals = new List<object>
             {
-                thisEntity.ID, 
+                ThisEntity.Id, 
                 LinkType.DBExport(LinkTypes), 
-                TargetEntityID.DBExport(),
+                TargetEntityId.DBExport(),
                 LinkStrength.DBExport()
             };
 

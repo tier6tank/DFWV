@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -8,25 +7,25 @@ using DFWV.WorldClasses.HistoricalEventClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
-    class EC_Journey : HistoricalEventCollection
+    class EcJourney : HistoricalEventCollection
     {
-        private int Ordinal { get; set; }
+        private int Ordinal { get; }
 
         override public Point Location 
         { 
             get
             {
-                HE_HFTravel evt;
-                var hfTravel = Event[0] as HE_HFTravel;
+                HeHfTravel evt;
+                var hfTravel = Event[0] as HeHfTravel;
                 if (hfTravel != null)
                 {
                     evt = hfTravel;
                     if (evt.Site != null)
                         return evt.Site.Location;
                 }
-                if (!(Event.Last() is HE_HFTravel)) return 
+                if (!(Event.Last() is HeHfTravel)) return 
                     Point.Empty;
-                evt = (HE_HFTravel) Event.Last();
+                evt = (HeHfTravel) Event.Last();
                 if (evt.Return && evt.Site != null)
                     return evt.Site.Location;
                 return Point.Empty;
@@ -34,7 +33,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         }
 
 
-        public EC_Journey(XDocument xdoc, World world)
+        public EcJourney(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -57,7 +56,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         Ordinal = valI;
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -106,7 +105,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
             table = GetType().Name;
 
-            var vals = new List<object> { ID, Ordinal };
+            var vals = new List<object> { Id, Ordinal };
 
 
             Database.ExportWorldItem(table, vals);

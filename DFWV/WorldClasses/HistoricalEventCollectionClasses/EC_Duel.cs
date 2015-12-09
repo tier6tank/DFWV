@@ -8,25 +8,25 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
-    public class EC_Duel : HistoricalEventCollection
+    public class EcDuel : HistoricalEventCollection
     {
-        private int? SubregionID { get; set; }
+        private int? SubregionId { get; }
         private Region Subregion { get; set; }
-        private int? FeatureLayerID { get; set; }
-        private int? SiteID { get; set; }
+        private int? FeatureLayerId { get; set; }
+        private int? SiteId { get; }
         private Site Site { get; set; }
-        private Point Coords { get; set; }
-        private int? ParentEventCol_ { get; set; }
+        private Point Coords { get; }
+        private int? ParentEventCol_ { get; }
         private HistoricalEventCollection ParentEventCol { get; set; }
-        private int Ordinal { get; set; }
-        private List<int> AttackingHFID { get; set; }
-        private List<HistoricalFigure> AttackingHF;
-        private List<int> DefendingHFID { get; set; }
-        private List<HistoricalFigure> DefendingHF;
+        private int Ordinal { get; }
+        private List<int> AttackingHfid { get; }
+        private List<HistoricalFigure> _attackingHf;
+        private List<int> DefendingHfid { get; }
+        private List<HistoricalFigure> _defendingHf;
 
-        override public Point Location => Site != null ? Site.Coords : Coords;
+        override public Point Location => Site?.Coords ?? Coords;
 
-        public EC_Duel(XDocument xdoc, World world)
+        public EcDuel(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -54,30 +54,30 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         ParentEventCol_ = valI;
                         break;
                     case "subregion_id":
-                        SubregionID = valI;
+                        SubregionId = valI;
                         break;
                     case "feature_layer_id":
-                        FeatureLayerID = valI;
+                        FeatureLayerId = valI;
                         break;
                     case "site_id":
-                        SiteID = valI;
+                        SiteId = valI;
                         break;
                     case "coords":
                         Coords = new Point(Convert.ToInt32(val.Split(',')[0]), Convert.ToInt32(val.Split(',')[1]));
                         break;
                     case "attacking_hfid":
-                        if (AttackingHFID == null)
-                            AttackingHFID = new List<int>();
-                        AttackingHFID.Add(valI);
+                        if (AttackingHfid == null)
+                            AttackingHfid = new List<int>();
+                        AttackingHfid.Add(valI);
                         break;
                     case "defending_hfid":
-                        if (DefendingHFID == null)
-                            DefendingHFID = new List<int>();
-                        DefendingHFID.Add(valI);
+                        if (DefendingHfid == null)
+                            DefendingHfid = new List<int>();
+                        DefendingHfid.Add(valI);
                         break;
 
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -89,18 +89,18 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             base.Link();
             if (ParentEventCol_.HasValue && World.HistoricalEventCollections.ContainsKey(ParentEventCol_.Value))
                 ParentEventCol = World.HistoricalEventCollections[ParentEventCol_.Value];
-            if (SubregionID.HasValue && World.Regions.ContainsKey(SubregionID.Value))
-                Subregion = World.Regions[SubregionID.Value];
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
-            if (AttackingHFID != null)
-                AttackingHF = new List<HistoricalFigure>();
-            LinkFieldList(AttackingHFID,
-                AttackingHF, World.HistoricalFigures);
-            if (DefendingHFID != null)
-                DefendingHF = new List<HistoricalFigure>();
-            LinkFieldList(DefendingHFID,
-                DefendingHF, World.HistoricalFigures);
+            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
+                Subregion = World.Regions[SubregionId.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
+            if (AttackingHfid != null)
+                _attackingHf = new List<HistoricalFigure>();
+            LinkFieldList(AttackingHfid,
+                _attackingHf, World.HistoricalFigures);
+            if (DefendingHfid != null)
+                _defendingHf = new List<HistoricalFigure>();
+            LinkFieldList(DefendingHfid,
+                _defendingHf, World.HistoricalFigures);
 
         }
 
@@ -118,8 +118,8 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             frm.lblDuelRegion.Data = Subregion;
             frm.lblDuelSite.Data = Site;
             frm.lblDuelCoords.Data = new Coordinate(Coords);
-            frm.lblDuelAttacker.Data = AttackingHF != null ? AttackingHF[0] : null;
-            frm.lblDuelDefender.Data = DefendingHF != null ? DefendingHF[0] : null;
+            frm.lblDuelAttacker.Data = _attackingHf?[0];
+            frm.lblDuelDefender.Data = _defendingHf?[0];
             frm.lblDuelParent.Data = ParentEventCol;
             if (StartTime != null || EndTime != null)
             {
@@ -151,25 +151,25 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             if (Subregion != null)
             {
                 if (Subregion.DuelEventCollections == null)
-                    Subregion.DuelEventCollections = new List<EC_Duel>();
+                    Subregion.DuelEventCollections = new List<EcDuel>();
                 Subregion.DuelEventCollections.Add(this);
             }
             if (Site != null)
             {
                 if (Site.DuelEventCollections == null)
-                    Site.DuelEventCollections = new List<EC_Duel>();
+                    Site.DuelEventCollections = new List<EcDuel>();
                 Site.DuelEventCollections.Add(this);
             }
-            if (AttackingHF != null && AttackingHF.Count != 0)
+            if (_attackingHf != null && _attackingHf.Count != 0)
             {
-                if (AttackingHF[0].DuelEventCollections == null)
-                    AttackingHF[0].DuelEventCollections = new List<EC_Duel>();
-                AttackingHF[0].DuelEventCollections.Add(this);
+                if (_attackingHf[0].DuelEventCollections == null)
+                    _attackingHf[0].DuelEventCollections = new List<EcDuel>();
+                _attackingHf[0].DuelEventCollections.Add(this);
             }
-            if (DefendingHF == null || DefendingHF.Count == 0) return;
-            if (DefendingHF[0].DuelEventCollections == null)
-                DefendingHF[0].DuelEventCollections = new List<EC_Duel>();
-            DefendingHF[0].DuelEventCollections.Add(this);
+            if (_defendingHf == null || _defendingHf.Count == 0) return;
+            if (_defendingHf[0].DuelEventCollections == null)
+                _defendingHf[0].DuelEventCollections = new List<EcDuel>();
+            _defendingHf[0].DuelEventCollections.Add(this);
         }
 
         internal override void Export(string table)
@@ -179,23 +179,23 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
             table = GetType().Name;
 
-            var vals = new List<object> { ID };
+            var vals = new List<object> { Id };
 
 
             Database.ExportWorldItem(table, vals);
 
-            if (AttackingHF != null)
+            if (_attackingHf != null)
             {
-                foreach (var hf in AttackingHF)
+                foreach (var hf in _attackingHf)
                 {
-                    vals = new List<object> { ID, hf.ID };
+                    vals = new List<object> { Id, hf.Id };
                     Database.ExportWorldItem("EC_Duel_Attacking_HF", vals);
                 }
             }
-            if (DefendingHF == null) return;
-            foreach (var hf in DefendingHF)
+            if (_defendingHf == null) return;
+            foreach (var hf in _defendingHf)
             {
-                vals = new List<object> { ID, hf.ID };
+                vals = new List<object> { Id, hf.Id };
                 Database.ExportWorldItem("EC_Duel_Defending_HF", vals);
             }
         }

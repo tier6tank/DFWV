@@ -8,26 +8,26 @@ namespace DFWV
 {
     public partial class StatsForm : Form
     {
-        private readonly World World;
+        private readonly World _world;
 
         internal StatsForm(World world)
         {
             InitializeComponent();
-            World = world;
+            _world = world;
 
             DisplayStats();
         }
 
         private void DisplayStats()
         {
-            DisplayHFPopulationChart();
+            DisplayHfPopulationChart();
             DisplaySiteCountChart();
         }
 
         private void DisplaySiteCountChart()
         {
-            var yValues = World.Stats.SitesInYear.Values.ToArray();
-            var xValues = World.Stats.SitesInYear.Keys.ToArray();
+            var yValues = _world.Stats.SitesInYear.Values.ToArray();
+            var xValues = _world.Stats.SitesInYear.Keys.ToArray();
 
             var yAxis = new Axis(SiteCountChart.ChartAreas[0], AxisName.Y)
             {
@@ -47,10 +47,10 @@ namespace DFWV
                 SiteCountChart.ChartAreas[0].AxisX.Interval + 1;
         }
 
-        private void DisplayHFPopulationChart()
+        private void DisplayHfPopulationChart()
         {
-            var yValues = World.Stats.HFAliveInYear.Values.ToArray();
-            var xValues = World.Stats.HFAliveInYear.Keys.ToArray();
+            var yValues = _world.Stats.HfAliveInYear.Values.ToArray();
+            var xValues = _world.Stats.HfAliveInYear.Keys.ToArray();
 
             var yAxis = new Axis(HFPopulationChart.ChartAreas[0], AxisName.Y)
             {

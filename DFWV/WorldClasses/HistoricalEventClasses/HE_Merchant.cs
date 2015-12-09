@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml.Linq;
 using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_Merchant : HistoricalEvent
+    class HeMerchant : HistoricalEvent
     {
-        public int? SourceID { get; set; }
+        public int? SourceId { get; set; }
         public Entity Source { get; set; }
-        public int? DestinationID { get; set; }
+        public int? DestinationId { get; set; }
         public Entity Destination { get; set; }
-        public int? SiteID { get; set; }
+        public int? SiteId { get; set; }
         public Site Site { get; set; }
 
         public override IEnumerable<Entity> EntitiesInvolved
@@ -28,7 +27,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         }
 
 
-        public HE_Merchant(XDocument xdoc, World world)
+        public HeMerchant(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -45,7 +44,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -65,16 +64,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "source":
-                        SourceID = valI;
+                        SourceId = valI;
                         break;
                     case "destination":
-                        DestinationID = valI;
+                        DestinationId = valI;
                         break;
                     case "site":
-                        SiteID = valI;
+                        SiteId = valI;
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -83,12 +82,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
-            if (DestinationID.HasValue && World.Entities.ContainsKey(DestinationID.Value))
-                Destination = World.Entities[DestinationID.Value];
-            if (SourceID.HasValue && World.Entities.ContainsKey(SourceID.Value))
-                Source = World.Entities[SourceID.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
+            if (DestinationId.HasValue && World.Entities.ContainsKey(DestinationId.Value))
+                Destination = World.Entities[DestinationId.Value];
+            if (SourceId.HasValue && World.Entities.ContainsKey(SourceId.Value))
+                Source = World.Entities[SourceId.Value];
         }
 
         protected override string LegendsDescription() //Matched
@@ -115,10 +114,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID,
-                SourceID.DBExport(),
-                DestinationID.DBExport(),
-                SiteID.DBExport()
+                Id,
+                SourceId.DBExport(),
+                DestinationId.DBExport(),
+                SiteId.DBExport()
             };
 
             Database.ExportWorldItem(table, vals);

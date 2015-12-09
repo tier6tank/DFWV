@@ -8,9 +8,9 @@ namespace DFWV.WorldClasses
 {
     public class Dynasty : WorldObject
     {
-        public List<HistoricalFigure> Members { get; private set; }
-        private string Type { get; set; }
-        private Civilization Civilization { get; set; }
+        public List<HistoricalFigure> Members { get; }
+        private string Type { get; }
+        private Civilization Civilization { get; }
 
         override public Point Location => Members.Last().Location;
 

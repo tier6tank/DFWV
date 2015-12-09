@@ -14,12 +14,12 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 namespace DFWV.WorldClasses 
 {
     #region Delegates
-    public delegate void XMLLinkedSectionStartEventHandler(string section);
-    public delegate void XMLLinkedSectionEventHandler(string section);
-    public delegate void XMLLinkedEventHandler();
-    public delegate void XMLProcessedSectionStartEventHandler(string section);
-    public delegate void XMLProcessedSectionEventHandler(string section);
-    public delegate void XMLProcessedEventHandler();
+    public delegate void XmlLinkedSectionStartEventHandler(string section);
+    public delegate void XmlLinkedSectionEventHandler(string section);
+    public delegate void XmlLinkedEventHandler();
+    public delegate void XmlProcessedSectionStartEventHandler(string section);
+    public delegate void XmlProcessedSectionEventHandler(string section);
+    public delegate void XmlProcessedEventHandler();
 
     public delegate void FamiliesCountedEventHandler();
     public delegate void DynastiesCreatedEventHandler();
@@ -33,21 +33,21 @@ namespace DFWV.WorldClasses
     public class World : IDisposable
     {
         #region Fields and Properties
-        public readonly string historyPath;
-        public readonly string sitesPath;
-        public readonly string paramPath;
-        public readonly string mapPath;
-        public readonly string xmlPath;
-        public readonly string xmlPlusPath;
-        public bool hasPlusXML;
-        public bool isPlusParsing = false;
+        public readonly string HistoryPath;
+        public readonly string SitesPath;
+        public readonly string ParamPath;
+        public readonly string MapPath;
+        public readonly string XmlPath;
+        public readonly string XmlPlusPath;
+        public bool HasPlusXml;
+        public bool IsPlusParsing = false;
 
         public static List<Thread> Threads = new List<Thread>();
 
         public string Name { get; private set; }
         public string AltName { get; private set; }
         private string Version { get; set; }
-        public int LastYear { get; private set; }
+        public int LastYear { get; }
 
         public readonly List<Civilization> Civilizations = new List<Civilization>();
         public readonly List<Leader> Leaders = new List<Leader>();
@@ -93,7 +93,7 @@ namespace DFWV.WorldClasses
         public readonly FilterSettings Filters;
 
         public Stats Stats;
-        private VisualizationCollection Visualizations;
+        private VisualizationCollection _visualizations;
         #endregion
 
         public World(string historyPath, string sitesPath, string paramPath, string xmlPath, string xmlPlusPath, string mapPath, WorldTime worldGenTime)
@@ -101,24 +101,24 @@ namespace DFWV.WorldClasses
             LastYear = worldGenTime.Year;
             WorldTime.Present = worldGenTime;
 
-            this.historyPath = historyPath;
-            this.sitesPath = sitesPath;
-            this.paramPath = paramPath;
-            this.mapPath = mapPath;
-            this.xmlPath = xmlPath;
-            this.xmlPlusPath = xmlPlusPath;
+            HistoryPath = historyPath;
+            SitesPath = sitesPath;
+            ParamPath = paramPath;
+            MapPath = mapPath;
+            XmlPath = xmlPath;
+            XmlPlusPath = xmlPlusPath;
             
-            hasPlusXML = File.Exists(xmlPlusPath);
-            if (!hasPlusXML) //Check if used open-legends for extraxml
+            HasPlusXml = File.Exists(xmlPlusPath);
+            if (!HasPlusXml) //Check if used open-legends for extraxml
             {
-                var directory = Path.GetDirectoryName(this.xmlPath);
+                var directory = Path.GetDirectoryName(XmlPath);
                 var saveName = xmlPlusPath.Replace(directory, "").Trim('\\').Split('-')[0];
                 var xmlpluspaths = Directory.GetFiles(directory, "*legends_plus.xml");
                 var xmlpluspath = xmlpluspaths.FirstOrDefault(x => x.StartsWith(Path.Combine(directory, saveName)));
                 if (xmlpluspath != null)
                 {
-                    hasPlusXML = true;
-                    this.xmlPlusPath = xmlpluspath;
+                    HasPlusXml = true;
+                    XmlPlusPath = xmlpluspath;
                 }
             }
 
@@ -133,8 +133,8 @@ namespace DFWV.WorldClasses
             LoadSites();
             LoadMaps();
             LoadParam();
-            Program.mainForm.FillNonXMLLists();
-            LoadXML();
+            Program.MainForm.FillNonXmlLists();
+            LoadXml();
 
         }
 
@@ -144,29 +144,29 @@ namespace DFWV.WorldClasses
         private void LoadMaps()
         {
             Program.Log(LogType.Status, "Loading Maps");
-            Maps = new Dictionary<string, string> {{"Main", mapPath}};
-            var MapSymbols = new List<string>
+            Maps = new Dictionary<string, string> {{"Main", MapPath}};
+            var mapSymbols = new List<string>
             {"bm", "detailed", "dip", "drn", "el", "elw", "evil", "hyd", "nob", "rain",
                     "sal", "sav", "str", "tmp", "trd", "veg", "vol"};
-            var MapNames = new List<string>
+            var mapNames = new List<string>
             {"Biome", "Standard+Biome", "Diplomacy", "Drainage", "Elevations", "Elevations w/Water", "Evil", 
                     "Hydrosphere", "Nobility", "Rainfall", "Sailinity", "Savagry", "Structures", 
                     "Temperature", "Trade", "Vegetation", "Volcanism"};
 
-            for (var i = 0; i < MapSymbols.Count; i++)
+            for (var i = 0; i < mapSymbols.Count; i++)
             {
-                var thisMap = mapPath.Replace("world_map", MapSymbols[i]);
+                var thisMap = MapPath.Replace("world_map", mapSymbols[i]);
                 if (File.Exists(thisMap))
-                    Maps.Add(MapNames[i], thisMap);
+                    Maps.Add(mapNames[i], thisMap);
             }
 
-            var MapLegendsName = new List<string>
+            var mapLegendsName = new List<string>
                 { "structure_color_key", "hydro_color_key", "biome_color_key"};
 
             MapLegends = new Dictionary<string, MapLegend>();
-            foreach (var maplegendname in MapLegendsName)
+            foreach (var maplegendname in mapLegendsName)
             {
-                var thisLegend = Path.Combine(Path.GetDirectoryName(mapPath), maplegendname) + ".txt";
+                var thisLegend = Path.Combine(Path.GetDirectoryName(MapPath), maplegendname) + ".txt";
                 if (File.Exists(thisLegend))
                     MapLegends.Add(maplegendname, new MapLegend(thisLegend));
             }
@@ -245,7 +245,7 @@ namespace DFWV.WorldClasses
         private void LoadParam()
         {
             Program.Log(LogType.Status, "Loading Params");
-            var lines = File.ReadAllLines(paramPath, Encoding.GetEncoding(437)).ToList();
+            var lines = File.ReadAllLines(ParamPath, Encoding.GetEncoding(437)).ToList();
 
             Version = lines[0].Substring(15);
             Version = Version.Substring(0, Version.Length - 1);
@@ -266,7 +266,7 @@ namespace DFWV.WorldClasses
         private void LoadSites()
         {
             Program.Log(LogType.Status, "Loading Sites File");
-            var lines = File.ReadAllLines(sitesPath, Encoding.GetEncoding(437)).ToList();
+            var lines = File.ReadAllLines(SitesPath, Encoding.GetEncoding(437)).ToList();
 
             lines.RemoveRange(0, 2);
 
@@ -278,7 +278,7 @@ namespace DFWV.WorldClasses
                     if (curSite.Count > 0)
                     {
                         var newSite = new Site(curSite, this);
-                        SitesFile.Add(newSite.ID, newSite);
+                        SitesFile.Add(newSite.Id, newSite);
                         curSite.Clear();
                     }
                     continue;
@@ -295,7 +295,7 @@ namespace DFWV.WorldClasses
                     if (curSite.Count > 0)
                     {
                         var newSite = new Site(curSite, this);
-                        SitesFile.Add(newSite.ID, newSite);
+                        SitesFile.Add(newSite.Id, newSite);
                         curSite.Clear();
                     }
                     curSite.Add(line);
@@ -316,11 +316,11 @@ namespace DFWV.WorldClasses
         private void LoadHistory()
         {
             Program.Log(LogType.Status, "Loading History File");
-            var lines = File.ReadAllLines(historyPath, Encoding.GetEncoding(437)).ToList();
+            var lines = File.ReadAllLines(HistoryPath, Encoding.GetEncoding(437)).ToList();
 
             Name = lines[0];
             AltName = lines[1];
-            Program.mainForm.InvokeEx(f =>
+            Program.MainForm.InvokeEx(f =>
             {
                 f.Text = $"World Viewer v{Application.ProductVersion} - {Name} \"{AltName}\"";
             });
@@ -351,10 +351,10 @@ namespace DFWV.WorldClasses
         /// Due to it being exceptionally complext having a separate thread and object made sense.
         /// See DFXMLParser.Parse() for details.
         /// </summary>
-        private void LoadXML()
+        private void LoadXml()
         {
             Program.Log(LogType.Status, "Loading XML");
-            StartThread(() => DFXMLParser.Parse(this, xmlPath), "XML Parsing");
+            StartThread(() => DfxmlParser.Parse(this, XmlPath), "XML Parsing");
         }
 
         #endregion
@@ -509,7 +509,7 @@ namespace DFWV.WorldClasses
             {
                 return god;
             }
-            tempGod.ID = Gods.Count == 0 ? 0 : Gods.Max(x => x.ID) + 1;
+            tempGod.Id = Gods.Count == 0 ? 0 : Gods.Max(x => x.Id) + 1;
             Gods.Add(tempGod);
             return tempGod;
         }
@@ -520,7 +520,7 @@ namespace DFWV.WorldClasses
             {
                 return god;
             }
-            var newGod = new God(godName) { ID = Gods.Count == 0 ? 0 : Gods.Max(x => x.ID) + 1 };
+            var newGod = new God(godName) { Id = Gods.Count == 0 ? 0 : Gods.Max(x => x.Id) + 1 };
             Gods.Add(newGod);
             return newGod;
 
@@ -577,20 +577,20 @@ namespace DFWV.WorldClasses
         /// </summary>
         #region Data Linking
         
-        public static event XMLLinkedSectionStartEventHandler LinkedSectionStart;
-        public static event XMLLinkedSectionEventHandler LinkedSection;
-        public static event XMLLinkedEventHandler Linked;
+        public static event XmlLinkedSectionStartEventHandler LinkedSectionStart;
+        public static event XmlLinkedSectionEventHandler LinkedSection;
+        public static event XmlLinkedEventHandler Linked;
 
-        internal void LinkXMLData()
+        internal void LinkXmlData()
         {
             StartThread(Link, "XML Linking");
         }
 
-        private static void LinkSection<T>(IEnumerable<T> List, string sectionName) where T : XMLObject
+        private static void LinkSection<T>(IEnumerable<T> list, string sectionName) where T : XmlObject
         {
 
             OnLinkedSectionStart(sectionName);
-            foreach (var item in List)
+            foreach (var item in list)
                 item.Link();
             OnLinkedSection(sectionName);
 
@@ -632,21 +632,19 @@ namespace DFWV.WorldClasses
 
         private static void OnLinkedSectionStart(string section)
         {
-            if (LinkedSectionStart != null)
-                LinkedSectionStart(section);
+            LinkedSectionStart?.Invoke(section);
         }
 
         private static void OnLinkedSection(string section)
         {
-            if (LinkedSection != null)
-                LinkedSection(section);
+            LinkedSection?.Invoke(section);
         }
 
         private static void OnLinked()
         {
-            if (Linked != null)
-                Linked();
+            Linked?.Invoke();
         }
+
         #endregion
 
         /// <summary>
@@ -654,9 +652,9 @@ namespace DFWV.WorldClasses
         ///     They raise events up to the MainForm to notify when things are finished.
         /// </summary>
         #region Data Processing
-        public static event XMLProcessedSectionStartEventHandler ProcessedSectionStart;
-        public static event XMLProcessedSectionEventHandler ProcessedSection;
-        public static event XMLProcessedEventHandler Processed;
+        public static event XmlProcessedSectionStartEventHandler ProcessedSectionStart;
+        public static event XmlProcessedSectionEventHandler ProcessedSection;
+        public static event XmlProcessedEventHandler Processed;
         public static event FamiliesCountedEventHandler FamiliesCounted;
         public static event DynastiesCreatedEventHandler DynastiesCreated;
         public static event EventsCountedEventHandler EventsCounted;
@@ -665,7 +663,7 @@ namespace DFWV.WorldClasses
         public static event StatsGatheredEventHandler StatsGathered;
         public static event VisualizationsCreatedEventHandler VisualizationsCreated;
 
-        internal void ProcessXMLData()
+        internal void ProcessXmlData()
         {
             StartThread(Process, "XML Processing");
         }
@@ -689,10 +687,10 @@ namespace DFWV.WorldClasses
             OnProcessed();
         }
 
-        private static void ProcessSection<T>(IEnumerable<T> List, string sectionName) where T : XMLObject
+        private static void ProcessSection<T>(IEnumerable<T> list, string sectionName) where T : XmlObject
         {
             OnProcessedSectionStart(sectionName);
-            foreach (var item in List)
+            foreach (var item in list)
                 item.Process();
             OnProcessedSection(sectionName);
 
@@ -700,24 +698,20 @@ namespace DFWV.WorldClasses
 
         private static void OnProcessedSectionStart(string section)
         {
-            if (ProcessedSectionStart != null)
-                ProcessedSectionStart(section);
-
+            ProcessedSectionStart?.Invoke(section);
         }
 
 
         private static void OnProcessedSection(string section)
         {
-            if (ProcessedSection != null)
-                ProcessedSection(section);
-
+            ProcessedSection?.Invoke(section);
         }
 
         private static void OnProcessed()
         {
-            if (Processed != null)
-                Processed();
+            Processed?.Invoke();
         }
+
         #endregion
 
         /// <summary>
@@ -733,18 +727,17 @@ namespace DFWV.WorldClasses
 
         private void CountFamilies()
         {
-            foreach (var HF in HistoricalFigures.Values)
-                HF.CountAncestors();
-            foreach (var HF in HistoricalFigures.Values)
-                HF.CountDescendents();
+            foreach (var hf in HistoricalFigures.Values)
+                hf.CountAncestors();
+            foreach (var hf in HistoricalFigures.Values)
+                hf.CountDescendents();
 
             OnFamiliesCounted();
         }
 
         private static void OnFamiliesCounted()
         {
-            if (FamiliesCounted != null)
-                FamiliesCounted();
+            FamiliesCounted?.Invoke();
         }
 
         /// <summary>
@@ -763,20 +756,20 @@ namespace DFWV.WorldClasses
                     
                     for (var i = 0; i < leaderList.Count - 1; i++)
                     {
-                        if (leaderList[i].HF  != null &&
+                        if (leaderList[i].Hf  != null &&
                             leaderList[i].InheritedFrom != null &&
-                            leaderList[i + 1].HF != null &&
-                            leaderList[i].InheritedFrom == leaderList[i + 1].HF)
+                            leaderList[i + 1].Hf != null &&
+                            leaderList[i].InheritedFrom == leaderList[i + 1].Hf)
                         {
                             //i and i+1 are in the same dynasty
                             if (thisDynasty == null)
                             {
-                                thisDynasty = new Dynasty(this, leaderList[i].HF, Leader.LeaderTypes[leaderList[i].LeaderType], civ);
-                                thisDynasty.Members.Add(leaderList[i + 1].HF);
+                                thisDynasty = new Dynasty(this, leaderList[i].Hf, Leader.LeaderTypes[leaderList[i].LeaderType], civ);
+                                thisDynasty.Members.Add(leaderList[i + 1].Hf);
                             }
                             else
                             {
-                                thisDynasty.Members.Add(leaderList[i + 1].HF);
+                                thisDynasty.Members.Add(leaderList[i + 1].Hf);
                             }
                         }
                         else if (Leader.InheritanceTypes[leaderList[i].Inheritance] != "New Line" &&
@@ -806,8 +799,7 @@ namespace DFWV.WorldClasses
 
         private static void OnDynastiesCreated()
         {
-            if (DynastiesCreated != null)
-                DynastiesCreated();
+            DynastiesCreated?.Invoke();
         }
 
         #endregion
@@ -839,9 +831,9 @@ namespace DFWV.WorldClasses
 
         private static void OnEventsCounted()
         {
-            if (EventsCounted != null)
-                EventsCounted();
+            EventsCounted?.Invoke();
         }
+
         #endregion
 
         /// <summary>
@@ -872,8 +864,7 @@ namespace DFWV.WorldClasses
 
         private static void OnEventCollectionsEvaluated()
         {
-            if (EventCollectionsEvaluated != null)
-                EventCollectionsEvaluated();
+            EventCollectionsEvaluated?.Invoke();
         }
 
         #endregion
@@ -913,7 +904,7 @@ namespace DFWV.WorldClasses
                 //Position off change hf state
                 if (hf.Events.All(x => HistoricalEvent.Types[x.Type] != "change hf state"))
                     continue;
-                var evt = (HE_ChangeHFState)hf.Events.Last(x => HistoricalEvent.Types[x.Type] == "change hf state");
+                var evt = (HeChangeHfState)hf.Events.Last(x => HistoricalEvent.Types[x.Type] == "change hf state");
 
                 hf.Site = evt.Site ?? hf.Site;
                 hf.Region = evt.Subregion;
@@ -940,8 +931,7 @@ namespace DFWV.WorldClasses
 
         private static void OnHistoricalFiguresPositioned()
         {
-            if (HistoricalFiguresPositioned != null)
-                HistoricalFiguresPositioned();
+            HistoricalFiguresPositioned?.Invoke();
         }
 
         #endregion
@@ -965,9 +955,9 @@ namespace DFWV.WorldClasses
 
         private static void OnStatsGathered()
         {
-            if (StatsGathered != null)
-                StatsGathered();
+            StatsGathered?.Invoke();
         }
+
         #endregion
 
 
@@ -983,16 +973,16 @@ namespace DFWV.WorldClasses
 
         private void CreateVisualizations()
         {
-            Visualizations = new VisualizationCollection(this);
+            _visualizations = new VisualizationCollection(this);
             VisualizationCollection.Create();
             OnVisualizationsCreated();
         }
 
         private static void OnVisualizationsCreated()
         {
-            if (VisualizationsCreated != null)
-                VisualizationsCreated();
+            VisualizationsCreated?.Invoke();
         }
+
         #endregion
 
         /// <summary>
@@ -1005,12 +995,12 @@ namespace DFWV.WorldClasses
             Program.Log(LogType.Status, "Site Merging...");
             foreach (var sf in SitesFile.Values)
             {
-                if (Sites[sf.ID].Name == sf.AltName.ToLower())
-                    Sites[sf.ID].MergeInSiteFile(sf);
-                else if (Sites[sf.ID].Name == Program.CleanString(sf.AltName.ToLower()))
-                    Sites[sf.ID].MergeInSiteFile(sf);
-                else if (PartialNameMatch(Sites[sf.ID].Name, sf.AltName.ToLower()) > .5)
-                    Sites[sf.ID].MergeInSiteFile(sf);
+                if (Sites[sf.Id].Name == sf.AltName.ToLower())
+                    Sites[sf.Id].MergeInSiteFile(sf);
+                else if (Sites[sf.Id].Name == Program.CleanString(sf.AltName.ToLower()))
+                    Sites[sf.Id].MergeInSiteFile(sf);
+                else if (PartialNameMatch(Sites[sf.Id].Name, sf.AltName.ToLower()) > .5)
+                    Sites[sf.Id].MergeInSiteFile(sf);
                 else
                     Program.Log(LogType.Warning, "Site from site file doesn't exist in XML");
                     
@@ -1049,7 +1039,7 @@ namespace DFWV.WorldClasses
         internal void MergeCivs()
         {
             Program.Log(LogType.Status, "Civilization Merging...");
-            foreach (var civ in Civilizations.Where(x => x.isFull))
+            foreach (var civ in Civilizations.Where(x => x.IsFull))
             {
                 var civname = civ.Name.ToLower();
                 if (civ.Color == Color.Empty)
@@ -1091,19 +1081,19 @@ namespace DFWV.WorldClasses
                 var leadername = leader.Name.ToLower();
                 foreach (var hf in HistoricalFigures.Values.Where(hf => hf.Name != null && hf.Name.ToLower() == leadername))
                 {
-                    leader.HF = hf;
+                    leader.Hf = hf;
                     if (leader.InheritedFromSource != Leader.InheritanceSource.None)
                         leader.LinkInheritance();
 
                     hf.Leader = leader;
                     break;
                 }
-                if (leader.HF == null)
+                if (leader.Hf == null)
                 {
                     leadername = Program.CleanString(leadername);
                     foreach (var hf in HistoricalFigures.Values.Where(hf => hf.Name != null && hf.Name.ToLower() == leadername))
                     {
-                        leader.HF = hf;
+                        leader.Hf = hf;
                         if (leader.InheritedFromSource != Leader.InheritanceSource.None)
                             leader.LinkInheritance();
 
@@ -1111,7 +1101,7 @@ namespace DFWV.WorldClasses
                         break;
                     }
                 }
-                if (leader.HF == null)
+                if (leader.Hf == null)
                 {
                     foreach (var hf in HistoricalFigures.Values.Where(x =>
                         ((x.BirthYear < 0 && leader.Birth == null) || 
@@ -1120,14 +1110,14 @@ namespace DFWV.WorldClasses
                          (leader.Death != null && (x.DeathYear == leader.Death.Year)))
                         ).Where(hf => isPartialMatch(hf, leader)))
                     {
-                        leader.HF = hf;
+                        leader.Hf = hf;
                         if (leader.InheritedFromSource != Leader.InheritanceSource.None)
                             leader.LinkInheritance();
                         hf.Leader = leader;
                         break;
                     }
                 }
-                if (leader.HF == null)
+                if (leader.Hf == null)
                     Program.Log(LogType.Warning, "Leaderfrom File not in XML: " + leader.Name);
             }
             foreach (var god in Gods)
@@ -1135,31 +1125,31 @@ namespace DFWV.WorldClasses
                 var godname = god.Name.ToLower();
                 foreach (var hf in HistoricalFigures.Values.Where(hf => hf.Name != null && hf.Name.ToLower() == godname))
                 {
-                    god.HF = hf;
+                    god.Hf = hf;
                     hf.God = god;
                     break;
                 }
-                if (god.HF == null)
+                if (god.Hf == null)
                 {
                     godname = Program.CleanString(godname);
                     foreach (var hf in HistoricalFigures.Values.Where(hf => hf.Name != null && hf.Name.ToLower() == godname))
                     {
-                        god.HF = hf;
+                        god.Hf = hf;
                         hf.God = god;
                         break;
                     }
                 }
-                if (god.HF == null)
+                if (god.Hf == null)
                 {
                     //var q = HistoricalFigures.Values.Where(x => x.Name.Length == 3 && x.Name.Contains("le")).ToList();
                     foreach (var hf in HistoricalFigures.Values.Where(x => x.Deity || x.Force).Where(hf => isPartialMatch(hf, god)))
                     {
-                        god.HF = hf;
+                        god.Hf = hf;
                         hf.God = god;
                         break;
                     }
                 }
-                if (god.HF == null)
+                if (god.Hf == null)
                     Program.Log(LogType.Warning, "God from File not in XML: " + god.Name);
             }
 
@@ -1179,13 +1169,13 @@ namespace DFWV.WorldClasses
             return PartialNameMatch(hfname, leader.Name.ToLower()) > .5;
         }
 
-        private static float PartialNameMatch(string A, string B)
+        private static float PartialNameMatch(string a, string b)
         {
             var i = 0;
-            if (A == null || B == null)
+            if (a == null || b == null)
                 return 0;
-            var matches = A.Count(t => t == B[i++]);
-            return matches / (float)A.Length;
+            var matches = a.Count(t => t == b[i++]);
+            return matches / (float)a.Length;
         }
 
         private static bool isPartialMatch(HistoricalFigure hf, God god)
@@ -1232,7 +1222,7 @@ namespace DFWV.WorldClasses
             ExportWorldData();
             Database.CloseConnection();
 
-            Program.mainForm.InvokeEx(f => f.exportWorldToolStripMenuItem.Visible = true);
+            Program.MainForm.InvokeEx(f => f.exportWorldToolStripMenuItem.Visible = true);
         }
 
         private void ExportWorldData()
@@ -1321,7 +1311,7 @@ namespace DFWV.WorldClasses
             Region.Types = new List<string>();
             Site.Types = new List<string>();
             WorldConstruction.Types = new List<string>();
-            Structure.numStructures = 0;
+            Structure.NumStructures = 0;
 
             EntityEntityLink.LinkTypes = new List<string>();
             EntitySiteLink.LinkTypes = new List<string>();
@@ -1333,10 +1323,10 @@ namespace DFWV.WorldClasses
             HistoricalEvent.Materials = new List<string>();
             HistoricalEvent.MeetingResults = new List<string>();
             HistoricalEvent.MeetingTopics = new List<string>();
-            HE_ChangeHFState.States = new List<string>();
-            HE_HFDied.Causes = new List<string>();
-            HE_HFSimpleBattleEvent.SubTypes = new List<string>();
-            HE_MasterpieceItemImprovement.ImprovementTypes = new List<string>();
+            HeChangeHfState.States = new List<string>();
+            HeHfDied.Causes = new List<string>();
+            HeHfSimpleBattleEvent.SubTypes = new List<string>();
+            HeMasterpieceItemImprovement.ImprovementTypes = new List<string>();
 
             HistoricalEventCollection.Types = new List<string>();
 
@@ -1346,11 +1336,11 @@ namespace DFWV.WorldClasses
             HistoricalFigure.Interactions = new List<string>();
             HistoricalFigure.JourneyPets = new List<string>();
             HistoricalFigure.Spheres = new List<string>();
-            HFEntityLink.LinkTypes = new List<string>();
-            HFEntityLink.Positions = new List<string>();
-            HFLink.LinkTypes = new List<string>();
-            HFSkill.Skills = new List<string>();
-            HFSiteLink.LinkTypes = new List<string>();
+            HfEntityLink.LinkTypes = new List<string>();
+            HfEntityLink.Positions = new List<string>();
+            HfLink.LinkTypes = new List<string>();
+            HfSkill.Skills = new List<string>();
+            HfSiteLink.LinkTypes = new List<string>();
 
 
         }

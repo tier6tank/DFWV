@@ -14,17 +14,17 @@ namespace DFWV
 {
     internal partial class FilterForm : Form
     {
-        readonly Dictionary<string, Type> Fields = new Dictionary<string, Type>();
-        readonly Dictionary<string, IEnumerable<string>> Options = new Dictionary<string, IEnumerable<string>>();
+        readonly Dictionary<string, Type> _fields;
+        readonly Dictionary<string, IEnumerable<string>> _options;
 
-        readonly string[] Ops = { "=", "!=", ">", "<", ">=", "<=", "Contains", "Doesn't Contain", "true", "false" };
+        readonly string[] _ops = { "=", "!=", ">", "<", ">=", "<=", "Contains", "Doesn't Contain", "true", "false" };
 
-        readonly string[] intOps = { "=", "!=", ">", "<", ">=", "<="};
-        readonly string[] stringOps = { "=", "!=", ">", "<", ">=", "<=", "Contains", "Doesn't Contain"};
-        readonly string[] boolOps = { "true", "false" };
+        readonly string[] _intOps = { "=", "!=", ">", "<", ">=", "<="};
+        readonly string[] _stringOps = { "=", "!=", ">", "<", ">=", "<=", "Contains", "Doesn't Contain"};
+        readonly string[] _boolOps = { "true", "false" };
         // string[] listOps = { "=", "!=" };
 
-        public Filter outFilter;
+        public Filter OutFilter;
 
 
         public FilterForm(World world, Type filterType)
@@ -37,18 +37,18 @@ namespace DFWV
             InitializeComponent();
 
 
-            cmbWhereOperation.Items.AddRange(Ops.ToArray<object>());
-            cmbOrderOperation.Items.AddRange(Ops.ToArray<object>());
+            cmbWhereOperation.Items.AddRange(_ops.ToArray<object>());
+            cmbOrderOperation.Items.AddRange(_ops.ToArray<object>());
 
-            Fields = world.Filters.Fields[filterType];
-            cmbWhereField.Items.AddRange(Fields.Keys.ToArray<object>());
-            cmbOrderField.Items.AddRange(Fields.Keys.ToArray<object>());
+            _fields = world.Filters.Fields[filterType];
+            cmbWhereField.Items.AddRange(_fields.Keys.ToArray<object>());
+            cmbOrderField.Items.AddRange(_fields.Keys.ToArray<object>());
 
             if (world.Filters.Options.ContainsKey(filterType))
             {
-                Options = world.Filters.Options[filterType];
+                _options = world.Filters.Options[filterType];
 
-                foreach (var option in Options.Where(option => option.Value.Any()))
+                foreach (var option in _options.Where(option => option.Value.Any()))
                 {
                     cmbWhereField.Items.Add(option.Key);
                     cmbOrderField.Items.Add(option.Key);
@@ -58,7 +58,7 @@ namespace DFWV
             }
             else
             {
-                Options = null;
+                _options = null;
             }
 
             lstWhere.Items.AddRange(world.Filters[filterType].Where.ToArray<object>());
@@ -144,22 +144,22 @@ namespace DFWV
         {
             var selected = ((ComboBox)sender).SelectedItem.ToString();
             cmbWhereOperation.Items.Clear();
-            if (Fields.ContainsKey(selected))
+            if (_fields.ContainsKey(selected))
             {
-                if (Fields[selected] == typeof(bool))
+                if (_fields[selected] == typeof(bool))
                 {
-                    cmbWhereOperation.Items.AddRange(boolOps.ToArray<object>());
+                    cmbWhereOperation.Items.AddRange(_boolOps.ToArray<object>());
                     cmbWhereOperation.SelectedIndex = 0;
                     txtWhereData.Visible = false;
                 }
-                else if (Fields[selected] == typeof(int))
+                else if (_fields[selected] == typeof(int))
                 {
-                    cmbWhereOperation.Items.AddRange(intOps.ToArray<object>());
+                    cmbWhereOperation.Items.AddRange(_intOps.ToArray<object>());
                     txtWhereData.Visible = true;
                 }
-                else if (Fields[selected] == typeof(string))
+                else if (_fields[selected] == typeof(string))
                 {
-                    cmbWhereOperation.Items.AddRange(stringOps.ToArray<object>());
+                    cmbWhereOperation.Items.AddRange(_stringOps.ToArray<object>());
                     txtWhereData.Visible = true;
                 }
                 optionIsNotRadioButton.Visible = false;
@@ -167,7 +167,7 @@ namespace DFWV
             }
             else
             {
-                var addRange = Options[selected].ToList();
+                var addRange = _options[selected].ToList();
                 addRange.Sort();          
                 cmbWhereOperation.Items.AddRange(addRange.ToArray<object>());
                 txtWhereData.Visible = false;
@@ -188,54 +188,54 @@ namespace DFWV
             
             var selected = cmbWhereField.SelectedItem.ToString();
             var thisOp = cmbWhereOperation.SelectedItem.ToString();
-            var DataInt = 0;
-            var Data = "";
+            var dataInt = 0;
+            var data = "";
 
-            if (Fields.ContainsKey(selected))
+            if (_fields.ContainsKey(selected))
             {
-                if (Fields[selected] == typeof(int))
+                if (_fields[selected] == typeof(int))
                 {
                     if (txtWhereData.Text == "")
                     {
                         WhereAdd.BackColor = Color.Red;
                         return;
                     }
-                    if (!int.TryParse(txtWhereData.Text, out DataInt))
+                    if (!int.TryParse(txtWhereData.Text, out dataInt))
                     {
                         WhereAdd.BackColor = Color.Red;
                         return;
                     }
                 }
-                else if (Fields[selected] == typeof(string))
+                else if (_fields[selected] == typeof(string))
                 {
                     if (thisOp.Contains("Contain") && txtWhereData.Text == "")
                     {
                         WhereAdd.BackColor = Color.Red;
                         return;
                     }
-                    Data = txtWhereData.Text;
+                    data = txtWhereData.Text;
                 }
             }
-            var AddWhere = "";
+            var addWhere = "";
 
-            if (Fields.ContainsKey(selected))
+            if (_fields.ContainsKey(selected))
             {
-                if (Fields[selected] == typeof(int))
-                    AddWhere = selected + " " + thisOp + DataInt;
-                else if (Fields[selected] == typeof(bool))
-                    AddWhere = (thisOp == "true" ? "" : "!") + selected;
-                else if (Fields[selected] == typeof(string))
+                if (_fields[selected] == typeof(int))
+                    addWhere = selected + " " + thisOp + dataInt;
+                else if (_fields[selected] == typeof(bool))
+                    addWhere = (thisOp == "true" ? "" : "!") + selected;
+                else if (_fields[selected] == typeof(string))
                 {
                     switch (thisOp)
                     {
                         case "Contains":
-                            AddWhere = selected + ".Contains(\"" + Data + "\")";
+                            addWhere = selected + ".Contains(\"" + data + "\")";
                             break;
                         case "Doesn't Contain":
-                            AddWhere = "!" + selected + ".Contains(\"" + Data + "\")";
+                            addWhere = "!" + selected + ".Contains(\"" + data + "\")";
                             break;
                         default:
-                            AddWhere = selected + " " + thisOp + " \"" + Data + "\"";
+                            addWhere = selected + " " + thisOp + " \"" + data + "\"";
                             break;
                     }
                 }
@@ -243,18 +243,18 @@ namespace DFWV
             else
             {
                 if (optionIsRadioButton.Checked)
-                    AddWhere = selected + " == \"" + thisOp + "\"";
+                    addWhere = selected + " == \"" + thisOp + "\"";
                 else
-                    AddWhere = selected + " != \"" + thisOp + "\"";
+                    addWhere = selected + " != \"" + thisOp + "\"";
 
             }
 
-            if (lstWhere.Items.Contains(AddWhere) || AddWhere == "")
+            if (lstWhere.Items.Contains(addWhere) || addWhere == "")
             {
                 WhereAdd.BackColor = Color.Red;
                 return;
             }
-            lstWhere.Items.Add(AddWhere);
+            lstWhere.Items.Add(addWhere);
             WhereAdd.BackColor = DefaultBackColor;
         }
 
@@ -278,77 +278,77 @@ namespace DFWV
                 return;
             }
             var selected = cmbOrderField.SelectedItem.ToString();
-            var thisOp = cmbOrderOperation.SelectedItem == null ? null : cmbOrderOperation.SelectedItem.ToString();
-            var DataInt = 0;
-            var Data = "";
+            var thisOp = cmbOrderOperation.SelectedItem?.ToString();
+            var dataInt = 0;
+            var data = "";
 
-            if (Fields.ContainsKey(selected))
+            if (_fields.ContainsKey(selected))
             {
-                if (Fields[selected] == typeof (int))
+                if (_fields[selected] == typeof (int))
                 {
                     if (txtOrderData.Text == "" && cmbOrderOperation.SelectedIndex != -1)
                     {
                         OrderAdd.BackColor = Color.Red;
                         return;
                     }
-                    if (!int.TryParse(txtOrderData.Text, out DataInt) && cmbOrderOperation.SelectedIndex != -1)
+                    if (!int.TryParse(txtOrderData.Text, out dataInt) && cmbOrderOperation.SelectedIndex != -1)
                     {
                         OrderAdd.BackColor = Color.Red;
                         return;
                     }
                 }
-                else if (Fields[selected] == typeof (string))
+                else if (_fields[selected] == typeof (string))
                 {
                     if (thisOp != null && thisOp.Contains("Contain") && txtOrderData.Text == "")
                     {
                         OrderAdd.BackColor = Color.Red;
                         return;
                     }
-                    Data = txtOrderData.Text;
+                    data = txtOrderData.Text;
                 }
             }
-            var AddOrder = "";
+            var addOrder = "";
 
             if (thisOp == null)
-               AddOrder = selected;
+               addOrder = selected;
             else
             {
-                if (Fields.ContainsKey(selected))
+                if (_fields.ContainsKey(selected))
                 {
-                    if (Fields[selected] == typeof (int))
-                        AddOrder = selected + " " + thisOp + DataInt;
-                    else if (Fields[selected] == typeof (bool))
-                        AddOrder = (thisOp == "true" ? "" : "!") + selected;
-                    else if (Fields[selected] == typeof (string))
+                    if (_fields[selected] == typeof (int))
+                        addOrder = selected + " " + thisOp + dataInt;
+                    else if (_fields[selected] == typeof (bool))
+                        addOrder = (thisOp == "true" ? "" : "!") + selected;
+                    else if (_fields[selected] == typeof (string))
                     {
                         switch (thisOp)
                         {
                             case "Contains":
-                                AddOrder = selected + ".Contains(\"" + Data + "\")";
+                                addOrder = selected + ".Contains(\"" + data + "\")";
                                 break;
                             case "Doesn't Contain":
-                                AddOrder = "!" + selected + ".Contains(\"" + Data + "\")";
+                                addOrder = "!" + selected + ".Contains(\"" + data + "\")";
                                 break;
                             default:
-                                AddOrder = selected + " " + thisOp + " \"" + Data + "\"";
+                                addOrder = selected + " " + thisOp + " \"" + data + "\"";
                                 break;
                         }
                     }
                 }
                 else
                 {
-                    AddOrder = selected + " = \"" + thisOp + "\"";
+                    addOrder = selected + " = \"" + thisOp + "\"";
                 }
             }
-            if (AddOrder != "" && chkDescending.Checked)
-                AddOrder = "-" + AddOrder;
+            if (addOrder != "" && chkDescending.Checked)
+                addOrder = "-" + addOrder;
 
-            if (lstOrder.Items.Contains(AddOrder) || AddOrder == "")
+            if (lstOrder.Items.Contains(addOrder) || addOrder == "")
             {
                 OrderAdd.BackColor = Color.Red;
                 return;
             }
-            lstOrder.Items.Add(AddOrder);
+            lstOrder.Items.Add(addOrder);
             OrderAdd.BackColor = DefaultBackColor;
         }
 
@@ -356,27 +356,27 @@ namespace DFWV
         {
             var selected = ((ComboBox)sender).SelectedItem.ToString();
             cmbOrderOperation.Items.Clear();
-            if (Fields.ContainsKey(selected))
+            if (_fields.ContainsKey(selected))
             {
-                if (Fields[selected] == typeof (bool))
+                if (_fields[selected] == typeof (bool))
                 {
-                    cmbOrderOperation.Items.AddRange(boolOps.ToArray<object>());
+                    cmbOrderOperation.Items.AddRange(_boolOps.ToArray<object>());
                     txtOrderData.Visible = false;
                 }
-                else if (Fields[selected] == typeof (int))
+                else if (_fields[selected] == typeof (int))
                 {
-                    cmbOrderOperation.Items.AddRange(intOps.ToArray<object>());
+                    cmbOrderOperation.Items.AddRange(_intOps.ToArray<object>());
                     txtOrderData.Visible = true;
                 }
-                else if (Fields[selected] == typeof (string))
+                else if (_fields[selected] == typeof (string))
                 {
-                    cmbOrderOperation.Items.AddRange(stringOps.ToArray<object>());
+                    cmbOrderOperation.Items.AddRange(_stringOps.ToArray<object>());
                     txtOrderData.Visible = true;
                 }
             }
             else
             {
-                var addRange = Options[selected].ToList();
+                var addRange = _options[selected].ToList();
                 addRange.Sort();
                 cmbOrderOperation.Items.AddRange(addRange.ToArray<object>());
                 txtOrderData.Visible = false;
@@ -387,41 +387,41 @@ namespace DFWV
         private void OrderMoveUp_Click(object sender, EventArgs e)
         {
             if (lstOrder.SelectedItem == null || lstOrder.SelectedIndex == 0) return;
-            var CurIndex = lstOrder.SelectedIndex;
+            var curIndex = lstOrder.SelectedIndex;
             var curItem = lstOrder.SelectedItem.ToString();
             lstOrder.Items.Remove(lstOrder.SelectedItem);
-            lstOrder.Items.Insert(CurIndex-1,curItem);
+            lstOrder.Items.Insert(curIndex-1,curItem);
             lstOrder.SelectedItem = curItem;
         }
 
         private void OrderMoveDown_Click(object sender, EventArgs e)
         {
             if (lstOrder.SelectedItem == null || lstOrder.SelectedIndex == lstOrder.Items.Count - 1) return;
-            var CurIndex = lstOrder.SelectedIndex;
+            var curIndex = lstOrder.SelectedIndex;
             var curItem = lstOrder.SelectedItem.ToString();
             lstOrder.Items.Remove(lstOrder.SelectedItem);
-            lstOrder.Items.Insert(CurIndex + 1, curItem);
+            lstOrder.Items.Insert(curIndex + 1, curItem);
             lstOrder.SelectedItem = curItem;
         }
 
         private void Apply_Click(object sender, EventArgs e)
         {
-            List<string> Wheres = null;
-            List<string> Orders = null;
-            List<string> Groups = null;
+            List<string> wheres = null;
+            List<string> orders = null;
+            List<string> groups = null;
 
             if (lstWhere.Items.Count > 0)
-                Wheres = lstWhere.Items.Cast<string>().ToList();
+                wheres = lstWhere.Items.Cast<string>().ToList();
             if (lstOrder.Items.Count > 0)
-                Orders = lstOrder.Items.Cast<string>().ToList();
+                orders = lstOrder.Items.Cast<string>().ToList();
             if (lstGroup.Items.Count > 0)
-                Groups = lstGroup.Items.Cast<string>().ToList();
+                groups = lstGroup.Items.Cast<string>().ToList();
 
-            int TakeI;
-            if (!(chkTake.Checked && int.TryParse(txtTake.Text,out TakeI)))
-                TakeI = -1;
+            int takeI;
+            if (!(chkTake.Checked && int.TryParse(txtTake.Text,out takeI)))
+                takeI = -1;
 
-            outFilter = new Filter(Orders, Wheres, Groups, TakeI);
+            OutFilter = new Filter(orders, wheres, groups, takeI);
         }
 
         private void GroupAdd_Click(object sender, EventArgs e)
@@ -431,34 +431,34 @@ namespace DFWV
                 GroupAdd.BackColor = Color.Red;
                 return;
             }
-            var AddGroup = cmbGroupField.SelectedItem.ToString();
+            var addGroup = cmbGroupField.SelectedItem.ToString();
 
-            if (lstGroup.Items.Contains(AddGroup) || AddGroup == "")
+            if (lstGroup.Items.Contains(addGroup) || addGroup == "")
             {
                 GroupAdd.BackColor = Color.Red;
                 return;
             }
-            lstGroup.Items.Add(AddGroup);
+            lstGroup.Items.Add(addGroup);
             GroupAdd.BackColor = DefaultBackColor;
         }
 
         private void GroupMoveUp_Click(object sender, EventArgs e)
         {
             if (lstGroup.SelectedItem == null || lstGroup.SelectedIndex == 0) return;
-            var CurIndex = lstGroup.SelectedIndex;
+            var curIndex = lstGroup.SelectedIndex;
             var curItem = lstGroup.SelectedItem.ToString();
             lstGroup.Items.Remove(lstGroup.SelectedItem);
-            lstGroup.Items.Insert(CurIndex - 1, curItem);
+            lstGroup.Items.Insert(curIndex - 1, curItem);
             lstGroup.SelectedItem = curItem;
         }
 
         private void GroupMoveDown_Click(object sender, EventArgs e)
         {
             if (lstGroup.SelectedItem == null || lstGroup.SelectedIndex == lstGroup.Items.Count - 1) return;
-            var CurIndex = lstGroup.SelectedIndex;
+            var curIndex = lstGroup.SelectedIndex;
             var curItem = lstGroup.SelectedItem.ToString();
             lstGroup.Items.Remove(lstGroup.SelectedItem);
-            lstGroup.Items.Insert(CurIndex + 1, curItem);
+            lstGroup.Items.Insert(curIndex + 1, curItem);
             lstGroup.SelectedItem = curItem;
         }
 

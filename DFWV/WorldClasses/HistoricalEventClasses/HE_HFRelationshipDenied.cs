@@ -1,40 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_HFRelationshipDenied : HistoricalEvent
+    class HeHfRelationshipDenied : HistoricalEvent
     {
-        private int? SeekerHFID { get; set; }
-        private HistoricalFigure SeekerHF { get; set; }
-        private int? TargetHFID { get; set; }
-        private HistoricalFigure TargetHF { get; set; }
-        private int? SiteID { get; set; }
+        private int? SeekerHfid { get; }
+        private HistoricalFigure SeekerHf { get; set; }
+        private int? TargetHfid { get; }
+        private HistoricalFigure TargetHf { get; set; }
+        private int? SiteId { get; }
         private Site Site { get; set; }
-        private int? SubregionID { get; set; }
+        private int? SubregionId { get; }
         private Region Subregion { get; set; }
-        private int? FeatureLayerID { get; set; }
+        private int? FeatureLayerId { get; }
 
         override public Point Location => Point.Empty;
 
-        public int? WCID { get; set; }
-        public int? ReasonID { get; set; }
-        public int Reason { get; private set; }
+        public int? Wcid { get; set; }
+        public int? ReasonId { get; set; }
+        public int Reason { get; }
         public static List<string> Reasons = new List<string>();
-        public int Relationship { get; private set; }
-        public static List<string> Relationships = new List<string>();
+        public int RelationshipString { get; }
+        public static List<string> RelationshipStrings = new List<string>();
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
             get
             {
-                yield return SeekerHF;
-                yield return TargetHF;
+                yield return SeekerHf;
+                yield return TargetHf;
             }
         }
         public override IEnumerable<Site> SitesInvolved
@@ -50,7 +48,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
 
 
-        public HE_HFRelationshipDenied(XDocument xdoc, World world)
+        public HeHfRelationshipDenied(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -67,14 +65,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "seeker_hfid":
-                        SeekerHFID = valI;
+                        SeekerHfid = valI;
                         break;
                     case "target_hfid":
-                        TargetHFID = valI;
+                        TargetHfid = valI;
                         break;
                     case "wc_id":
                         if (valI != -1)
-                            WCID = valI;
+                            Wcid = valI;
                         break;
                     case "reason":
                         if (!Reasons.Contains(val))
@@ -83,27 +81,27 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                     case "reason_id":
                         if (valI != -1)
-                            ReasonID = valI;
+                            ReasonId = valI;
                         break;
                     case "relationship":
-                        if (!Relationships.Contains(val))
-                            Relationships.Add(val);
-                        Relationship = Relationships.IndexOf(val);
+                        if (!RelationshipStrings.Contains(val))
+                            RelationshipStrings.Add(val);
+                        RelationshipString = RelationshipStrings.IndexOf(val);
                         break;
                     case "site_id":
                         if (valI != -1)
-                            SiteID = valI;
+                            SiteId = valI;
                         break;
                     case "subregion_id":
                         if (valI != -1)
-                            SubregionID = valI;
+                            SubregionId = valI;
                         break;
                     case "feature_layer_id":
                         if (valI != -1)
-                            FeatureLayerID = valI;
+                            FeatureLayerId = valI;
                         break;
                     default:
-                        DFXMLParser.UnexpectedXMLElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -112,26 +110,26 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (SeekerHFID.HasValue && World.HistoricalFigures.ContainsKey(SeekerHFID.Value))
-                SeekerHF = World.HistoricalFigures[SeekerHFID.Value];
-            if (TargetHFID.HasValue && World.HistoricalFigures.ContainsKey(TargetHFID.Value))
-                TargetHF = World.HistoricalFigures[TargetHFID.Value];
-            if (SiteID.HasValue && World.Sites.ContainsKey(SiteID.Value))
-                Site = World.Sites[SiteID.Value];
-            if (SubregionID.HasValue && World.Regions.ContainsKey(SubregionID.Value))
-                Subregion = World.Regions[SubregionID.Value];
+            if (SeekerHfid.HasValue && World.HistoricalFigures.ContainsKey(SeekerHfid.Value))
+                SeekerHf = World.HistoricalFigures[SeekerHfid.Value];
+            if (TargetHfid.HasValue && World.HistoricalFigures.ContainsKey(TargetHfid.Value))
+                TargetHf = World.HistoricalFigures[TargetHfid.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+                Site = World.Sites[SiteId.Value];
+            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
+                Subregion = World.Regions[SubregionId.Value];
 
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "Seeker:", SeekerHF);
-            EventLabel(frm, parent, ref location, "Target:", TargetHF);
+            EventLabel(frm, parent, ref location, "Seeker:", SeekerHf);
+            EventLabel(frm, parent, ref location, "Target:", TargetHf);
 
-            EventLabel(frm, parent, ref location, "Relationship:", Relationships[Relationship]);
+            EventLabel(frm, parent, ref location, "Relationship:", RelationshipStrings[RelationshipString]);
             EventLabel(frm, parent, ref location, "Reason:", Reasons[Reason]);
-            if (ReasonID.HasValue)
-                EventLabel(frm, parent, ref location, "Reason ID:", ReasonID.Value.ToString());
+            if (ReasonId.HasValue)
+                EventLabel(frm, parent, ref location, "Reason ID:", ReasonId.Value.ToString());
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Region:", Subregion);
 
@@ -143,12 +141,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
 
             var relationshipString = "";
-            switch (Relationships[Relationship])
+            switch (RelationshipStrings[RelationshipString])
             {
                 case "apprentice":
-                    relationshipString = $"an apprenticeship under the {TargetHF.Race.ToString().ToLower()} {TargetHF}";
-                    break;
-                default:
+                    relationshipString = $"an apprenticeship under the {TargetHf.Race.ToString().ToLower()} {TargetHf}";
                     break;
             }
 
@@ -161,12 +157,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 case "jealousy":
                     reasonString = "due to UNKNOWN's jealousy";
                     break;
-                default:
-                    break;
             }
 
             return
-                $"{timestring} {SeekerHF} was denied {relationshipString} {reasonString}.";
+                $"{timestring} {SeekerHf} was denied {relationshipString} {reasonString}.";
 
 
         }
@@ -175,7 +169,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timelinestring = base.ToTimelineString();
 
-            return $"{SeekerHF} was denied relationship with {TargetHF}.";
+            return $"{timelinestring} {SeekerHf} was denied relationship with {TargetHf}.";
 
         }
 
@@ -187,15 +181,15 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var vals = new List<object>
             {
-                ID,
-                SiteID.DBExport(),
-                SubregionID.DBExport(),
-                FeatureLayerID.DBExport(),
-                SeekerHFID.DBExport(),
-                TargetHFID.DBExport(),
-                Relationship.DBExport(Relationships),
+                Id,
+                SiteId.DBExport(),
+                SubregionId.DBExport(),
+                FeatureLayerId.DBExport(),
+                SeekerHfid.DBExport(),
+                TargetHfid.DBExport(),
+                RelationshipString.DBExport(RelationshipStrings),
                 Reason.DBExport(Reasons),
-                ReasonID.DBExport()
+                ReasonId.DBExport()
             };
 
             Database.ExportWorldItem(table, vals);
