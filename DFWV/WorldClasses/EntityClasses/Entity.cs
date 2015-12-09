@@ -12,7 +12,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.EntityClasses
 {
-    public class Entity : XmlObject
+    public class Entity : XMLObject
     {
 
         public Race Race { get; set; }
@@ -37,22 +37,22 @@ namespace DFWV.WorldClasses.EntityClasses
 
         public List<WorldConstruction> ConstructionsBuilt { get; set; }
 
-        private HeSiteTakenOver SiteTakeoverEvent { get; set; }
-        public HeEntityCreated CreatedEvent { private get; set; }
+        private HE_SiteTakenOver SiteTakeoverEvent { get; set; }
+        public HE_EntityCreated CreatedEvent { private get; set; }
 
         [UsedImplicitly]
-        public List<HeEntityLaw> LawEvents { get; set; }
+        public List<HE_EntityLaw> LawEvents { get; set; }
 
         [UsedImplicitly]
         public string DispNameLower => ToString().ToLower();
 
-        public List<EcBeastAttack> BeastAttackEventCollections { get; set; }
-        public List<EcWar> WarEventCollections { get; set; }
-        public List<EcAbduction> AbductionEventCollections { get; set; }
-        public List<EcSiteConquered> SiteConqueredEventCollections { get; set; }
-        public List<EcTheft> TheftEventCollections { get; set; }
-        public List<EcInsurrection> InsurrectionEventCollections { get; set; }
-        public List<EcOccasion> OccasionEventCollections { get; set; }
+        public List<EC_BeastAttack> BeastAttackEventCollections { get; set; }
+        public List<EC_War> WarEventCollections { get; set; }
+        public List<EC_Abduction> AbductionEventCollections { get; set; }
+        public List<EC_SiteConquered> SiteConqueredEventCollections { get; set; }
+        public List<EC_Theft> TheftEventCollections { get; set; }
+        public List<EC_Insurrection> InsurrectionEventCollections { get; set; }
+        public List<EC_Occasion> OccasionEventCollections { get; set; }
 
         public List<Point> Coords { get; set; }
 
@@ -158,7 +158,7 @@ namespace DFWV.WorldClasses.EntityClasses
                         break;
 
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -376,7 +376,7 @@ namespace DFWV.WorldClasses.EntityClasses
                         }
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t", element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t", element, xdoc.Root.ToString());
                         break;
                 }
             }

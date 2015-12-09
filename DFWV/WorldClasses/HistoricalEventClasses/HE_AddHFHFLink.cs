@@ -7,7 +7,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    public class HeAddHfhfLink : HistoricalEvent
+    public class HE_AddHFHFLink : HistoricalEvent
     {
         private int? Hfid { get; }
         private HistoricalFigure Hf { get; set; }
@@ -18,8 +18,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         public int? LinkType { get; set; }
 
-        public HfLink HfLink { get; set; }
-        public HfLink HfLink2 { get; set; }
+        public HFLink HfLink { get; set; }
+        public HFLink HfLink2 { get; set; }
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
@@ -29,7 +29,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 yield return HfTarget;
             }
         }
-        public HeAddHfhfLink(XDocument xdoc, World world)
+        public HE_AddHFHFLink(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -53,7 +53,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
 
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -123,12 +123,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "hf_target":
                         break;
                     case "link_type":
-                        if (!HfLink.LinkTypes.Contains(val))
-                            HfLink.LinkTypes.Add(val);
-                        LinkType = HfLink.LinkTypes.IndexOf(val);
+                        if (!HFLink.LinkTypes.Contains(val))
+                            HFLink.LinkTypes.Add(val);
+                        LinkType = HFLink.LinkTypes.IndexOf(val);
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -138,9 +138,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             EventLabel(frm, parent, ref location, "HF:", Hf);
             EventLabel(frm, parent, ref location, "Target:", HfTarget);
             if (HfLink != null)
-                EventLabel(frm, parent, ref location, "Type:", HfLink.LinkTypes[HfLink.LinkType]);
+                EventLabel(frm, parent, ref location, "Type:", HFLink.LinkTypes[HfLink.LinkType]);
             else if (LinkType.HasValue)
-                EventLabel(frm, parent, ref location, "Type:", HfLink.LinkTypes[LinkType.Value]);
+                EventLabel(frm, parent, ref location, "Type:", HFLink.LinkTypes[LinkType.Value]);
         }
 
         protected override string LegendsDescription() //Matched
@@ -148,8 +148,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             switch (HfLink != null ? 
-                HfLink.LinkTypes[HfLink.LinkType] :
-                (LinkType.HasValue ? HfLink.LinkTypes[LinkType.Value] : string.Empty))
+                HFLink.LinkTypes[HfLink.LinkType] :
+                (LinkType.HasValue ? HFLink.LinkTypes[LinkType.Value] : string.Empty))
             {
                 case "spouse":
                     return
@@ -189,7 +189,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Id, 
                 Hfid, 
                 HfidTarget,
-                LinkType.DBExport(HfLink.LinkTypes)
+                LinkType.DBExport(HFLink.LinkTypes)
             };
 
             Database.ExportWorldItem(table, vals);

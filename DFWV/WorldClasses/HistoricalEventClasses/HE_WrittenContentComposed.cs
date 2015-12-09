@@ -4,12 +4,12 @@ using System.Xml.Linq;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HeWrittenContentComposed : HistoricalEventCultureCreatedBase
+    class HE_WrittenContentComposed : HistoricalEvent_CultureCreatedBase
     {
 
         public int? Wcid { get; set; }
 
-        public HeWrittenContentComposed(XDocument xdoc, World world)
+        public HE_WrittenContentComposed(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             if (xdoc.Root.Elements("wc_id").Count() != 0)

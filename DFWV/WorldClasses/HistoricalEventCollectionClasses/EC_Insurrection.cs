@@ -8,7 +8,7 @@ using DFWV.WorldClasses.HistoricalEventClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
-    public class EcInsurrection : HistoricalEventCollection
+    public class EC_Insurrection : HistoricalEventCollection
     {
         private int? SiteId { get; }
         private Site Site { get; set; }
@@ -21,7 +21,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
         override public Point Location => Site?.Coords ?? Point.Empty;
 
-        public EcInsurrection(XDocument xdoc, World world)
+        public EC_Insurrection(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -56,7 +56,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         break;
 
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -126,19 +126,19 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             if (Site != null)
             {
                 if (Site.InsurrectionEventCollections == null)
-                    Site.InsurrectionEventCollections = new List<EcInsurrection>();
+                    Site.InsurrectionEventCollections = new List<EC_Insurrection>();
                 Site.InsurrectionEventCollections.Add(this);
             }
             if (TargetEnt != null)
             {
                 if (TargetEnt.InsurrectionEventCollections == null)
-                    TargetEnt.InsurrectionEventCollections = new List<EcInsurrection>();
+                    TargetEnt.InsurrectionEventCollections = new List<EC_Insurrection>();
                 TargetEnt.InsurrectionEventCollections.Add(this);
             }
 
-            if (Event.Last() is HeInsurrectionStarted)
+            if (Event.Last() is HE_InsurrectionStarted)
             {
-                Outcome = (Event.Last() as HeInsurrectionStarted).Outcome;
+                Outcome = (Event.Last() as HE_InsurrectionStarted).Outcome;
             }
             else
                 Outcome = "ongoing";

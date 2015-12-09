@@ -4,7 +4,7 @@ using System.Xml.Linq;
 
 namespace DFWV.WorldClasses
 {
-    public class Army : XmlObject
+    public class Army : XMLObject
     {
         override public Point Location => Point.Empty;
 
@@ -19,7 +19,7 @@ namespace DFWV.WorldClasses
                     case "id":
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
                         break;
                 }
             }

@@ -7,7 +7,7 @@ using DFWV.Annotations;
 
 namespace DFWV.WorldClasses
 {
-    public class UndergroundRegion : XmlObject
+    public class UndergroundRegion : XMLObject
     {
         public string Type { get; set; }
         public int Depth { get; set; }
@@ -37,7 +37,7 @@ namespace DFWV.WorldClasses
                         Depth = Convert.ToInt32(val);
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -125,7 +125,7 @@ namespace DFWV.WorldClasses
                         }
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + "", element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + "", element, xdoc.Root.ToString());
                         break;
                 }
             }

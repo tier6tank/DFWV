@@ -6,7 +6,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HeChangeHfJob : HistoricalEvent
+    class HE_ChangeHFJob : HistoricalEvent
     {
         private int? Hfid { get; }
         private HistoricalFigure Hf { get; set; }
@@ -35,7 +35,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Subregion; }
         }
 
-        public HeChangeHfJob(XDocument xdoc, World world)
+        public HE_ChangeHFJob(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -68,7 +68,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
 
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -108,7 +108,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         OldJob = val.Replace("_", " ");
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }

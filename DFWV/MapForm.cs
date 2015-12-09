@@ -300,7 +300,7 @@ namespace DFWV
         {
             foreach (var evtcol in _world.HistoricalEventCollections.Values.Where(x => HistoricalEventCollection.Types[x.Type] == "battle"))
             {
-                var battleEventCol = (EcBattle) evtcol;
+                var battleEventCol = (EC_Battle) evtcol;
                 if (!battleEventCol.BattleTotaled) continue;
                 var battlePoint = new Point(battleEventCol.Coords.X * _siteSize.Width + _siteSize.Width / 2,
                     battleEventCol.Coords.Y * _siteSize.Height + _siteSize.Height / 2);

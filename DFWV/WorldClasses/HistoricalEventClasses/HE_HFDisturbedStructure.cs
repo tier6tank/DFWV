@@ -6,7 +6,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HeHfDisturbedStructure : HistoricalEvent
+    class HE_HFDisturbedStructure : HistoricalEvent
     {
         private int? HistFigId { get; }
         private HistoricalFigure HistFig { get; set; }
@@ -28,7 +28,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Site; }
         }
 
-        public HeHfDisturbedStructure(XDocument xdoc, World world)
+        public HE_HFDisturbedStructure(XDocument xdoc, World world)
             : base(xdoc, world)
         {
 
@@ -58,7 +58,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
 
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -102,7 +102,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         Action = valI;
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }

@@ -2,10 +2,10 @@
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HeDanceFormCreated : HistoricalEventCultureCreatedBase
+    class HE_DanceFormCreated : HistoricalEvent_CultureCreatedBase
     {
 
-        public HeDanceFormCreated(XDocument xdoc, World world)
+        public HE_DanceFormCreated(XDocument xdoc, World world)
             : base(xdoc, world)
         {
 

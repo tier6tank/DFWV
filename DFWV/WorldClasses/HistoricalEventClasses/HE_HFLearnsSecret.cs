@@ -6,7 +6,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HeHfLearnsSecret : HistoricalEvent
+    class HE_HFLearnsSecret : HistoricalEvent
     {
         private int? StudentHfid { get; }
         private HistoricalFigure StudentHf { get; set; }
@@ -27,7 +27,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 yield return TeacherHf;
             }
         }
-        public HeHfLearnsSecret(XDocument xdoc, World world)
+        public HE_HFLearnsSecret(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -61,7 +61,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
 
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -87,7 +87,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         SecretText = val.Replace("[IS_NAME:", "").TrimEnd(']').Trim();
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }

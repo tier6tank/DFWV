@@ -7,7 +7,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     //TODO: Missing Details:  UnitID does not associate with anything, "NameOnly" events aren't shown in legends
-    public class HeArtifactCreated : HistoricalEvent
+    public class HE_ArtifactCreated : HistoricalEvent
     {
         private int? SiteId { get; }
         public Site Site { get; set; }
@@ -29,7 +29,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Site; }
         }
 
-        public HeArtifactCreated(XDocument xdoc, World world)
+        public HE_ArtifactCreated(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -64,7 +64,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
 
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -103,7 +103,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "site":
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -124,11 +124,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Site.CreatedArtifacts.Add(Artifact);
             }
 
-
-            if (HistFigure.CreatedArtifacts == null)
-                HistFigure.CreatedArtifacts = new List<Artifact>();
-            HistFigure.CreatedArtifacts.Add(Artifact);
-
+            if (HistFigure != null)
+            {
+                if (HistFigure.CreatedArtifacts == null)
+                    HistFigure.CreatedArtifacts = new List<Artifact>();
+                HistFigure.CreatedArtifacts.Add(Artifact);
+            }
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)

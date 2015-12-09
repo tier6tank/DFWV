@@ -7,7 +7,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    public class HeCreatedSite : HistoricalEvent
+    public class HE_CreatedSite : HistoricalEvent
     {
         private int? SiteId { get; }
         private Site Site { get; set; }
@@ -37,7 +37,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Site; }
         }
 
-        public HeCreatedSite(XDocument xdoc, World world)
+        public HE_CreatedSite(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -67,7 +67,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         BuilderHfid = valI;
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -104,8 +104,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         private void ProcessSladeSpireEventSet()
         {
-            var artifactCreatedEvent = NextEvent() as HeArtifactCreated;
-            var agreementFormedEvent = NextEvent().NextEvent() as HeAgreementFormed;
+            var artifactCreatedEvent = NextEvent() as HE_ArtifactCreated;
+            var agreementFormedEvent = NextEvent().NextEvent() as HE_AgreementFormed;
             //HE_ArtifactStored artifactStoredEvent = NextEvent().NextEvent().NextEvent() as HE_ArtifactStored;
 
             artifactCreatedEvent.Site = Site;

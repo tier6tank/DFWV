@@ -14,7 +14,7 @@ namespace DFWV
     {
         readonly World _world;
         int _lastEvent;
-        readonly List<XmlObject> _worldEvents = new List<XmlObject>();
+        readonly List<XMLObject> _worldEvents = new List<XMLObject>();
 
         private readonly List<string> _criticalEventTypes = new List<string>
         { "created site", "entity created", "peace accepted", "created world construction", 
@@ -142,26 +142,26 @@ namespace DFWV
             }
         }
 
-        private void ModifyMap(XmlObject nextItem)
+        private void ModifyMap(XMLObject nextItem)
         {
-            if (nextItem is HeCreatedSite || nextItem is HeReclaimSite || 
-                nextItem is HeNewSiteLeader || nextItem is HeSiteTakenOver || 
-                nextItem is HeSiteAbandoned || nextItem is HeDestroyedSite)
+            if (nextItem is HE_CreatedSite || nextItem is HE_ReclaimSite || 
+                nextItem is HE_NewSiteLeader || nextItem is HE_SiteTakenOver || 
+                nextItem is HE_SiteAbandoned || nextItem is HE_DestroyedSite)
             {
                 var evt = (HistoricalEvent)nextItem;
                 
                 Color penCol;
-                if (nextItem is HeCreatedSite)
-                    penCol = (nextItem as HeCreatedSite).Civ?.Civilization?.Color ?? Color.White;
-                else if (nextItem is HeReclaimSite)
-                    penCol = (nextItem as HeReclaimSite).Civ.Civilization.Color;
-                else if (nextItem is HeNewSiteLeader)
+                if (nextItem is HE_CreatedSite)
+                    penCol = (nextItem as HE_CreatedSite).Civ?.Civilization?.Color ?? Color.White;
+                else if (nextItem is HE_ReclaimSite)
+                    penCol = (nextItem as HE_ReclaimSite).Civ.Civilization.Color;
+                else if (nextItem is HE_NewSiteLeader)
                 {
-                    penCol = (nextItem as HeNewSiteLeader).AttackerCiv.Civilization?.Color ?? Color.White;
+                    penCol = (nextItem as HE_NewSiteLeader).AttackerCiv.Civilization?.Color ?? Color.White;
                 }
-                else if (nextItem is HeSiteTakenOver)
-                    penCol = (nextItem as HeSiteTakenOver).AttackerCiv.Civilization.Color;
-                else if (nextItem is HeSiteAbandoned)
+                else if (nextItem is HE_SiteTakenOver)
+                    penCol = (nextItem as HE_SiteTakenOver).AttackerCiv.Civilization.Color;
+                else if (nextItem is HE_SiteAbandoned)
                     penCol = Color.White;
                 else // if (nextItem is HE_DestroyedSite)
                     penCol = Color.White;
@@ -187,7 +187,7 @@ namespace DFWV
             }
             else
             {
-                var worldConstruction = nextItem as HeCreatedWorldConstruction;
+                var worldConstruction = nextItem as HE_CreatedWorldConstruction;
                 if (worldConstruction == null) 
                     return;
                 var evt = worldConstruction;
@@ -218,7 +218,7 @@ namespace DFWV
             }
         }
 
-        private XmlObject GetNextItem()
+        private XMLObject GetNextItem()
         {
 
 
@@ -232,7 +232,7 @@ namespace DFWV
 
         private bool SkipEvent()
         {
-            if (_lastEvent >= _worldEvents.Count || !(_worldEvents[_lastEvent] is HeCreatedWorldConstruction))
+            if (_lastEvent >= _worldEvents.Count || !(_worldEvents[_lastEvent] is HE_CreatedWorldConstruction))
                 return _lastEvent < _worldEvents.Count &&
                        !(
                            _worldEvents[_lastEvent] is HistoricalEventCollection &&
@@ -264,7 +264,7 @@ namespace DFWV
                                )
                            );
 
-            var evt = (HeCreatedWorldConstruction)_worldEvents[_lastEvent];
+            var evt = (HE_CreatedWorldConstruction)_worldEvents[_lastEvent];
 
             return !((chkEventCritical.Checked && evt.MasterWc == null) ||
                      (chkEventMajor.Checked && evt.MasterWc != null));

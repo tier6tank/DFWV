@@ -17,7 +17,7 @@ namespace DFWV
 
     public delegate void XmlStartedSectionEventHandler(string section);
 
-    public static class DfxmlParser
+    public static class DFXMLParser
     {
 
         private static string _path;
@@ -281,7 +281,7 @@ namespace DFWV
         /// <summary>
         /// Given a specific section of type T if we encounter an open tag at one level below we want to load a new object of type T, starting at that XML.
         /// </summary>
-        private static void LoadSection<T>(IDictionary<int, T> worldList, World world, XmlReader xReader) where T : XmlObject
+        private static void LoadSection<T>(IDictionary<int, T> worldList, World world, XmlReader xReader) where T : XMLObject
         {
             OnStartedSection(xReader.Name);
             while (xReader.Read())
@@ -310,7 +310,7 @@ namespace DFWV
         /// <summary>
         /// Given a specific section of type T if we encounter an open tag at one level below we want to load a new object of type T, starting at that XML.
         /// </summary>
-        private static void PlusLoadSection<T>(IDictionary<int, T> worldList, World world, XmlReader xReader) where T : XmlObject
+        private static void PlusLoadSection<T>(IDictionary<int, T> worldList, World world, XmlReader xReader) where T : XMLObject
         {
             OnStartedSection(xReader.Name);
             while (xReader.Read())
@@ -343,7 +343,7 @@ namespace DFWV
         ///   In any case we add the object after making it to the appropriate dictionary.
         /// Individual object reads are separated out to allow us to work past failing to load any specific XML item for some weird reason.
         /// </summary>
-        private static void LoadItem<T>(IDictionary<int, T> worldList, World world, XmlReader xReader) where T : XmlObject
+        private static void LoadItem<T>(IDictionary<int, T> worldList, World world, XmlReader xReader) where T : XMLObject
         {
             XDocument xdoc = null;
             try
@@ -450,7 +450,7 @@ namespace DFWV
         ///   in other cases, it already exists and details need to be added to the existing items.
         /// Individual object reads are separated out to allow us to work past failing to load any specific XML item for any reason.
         /// </summary>
-        private static void PlusLoadItem<T>(IDictionary<int, T> worldList, World world, XmlReader xReader) where T : XmlObject
+        private static void PlusLoadItem<T>(IDictionary<int, T> worldList, World world, XmlReader xReader) where T : XMLObject
         {
             XDocument xdoc = null;
             try

@@ -6,7 +6,7 @@ using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    public class HeDestroyedSite : HistoricalEvent
+    public class HE_DestroyedSite : HistoricalEvent
     {
         private int? SiteId { get; }
         private Site Site { get; set; }
@@ -33,7 +33,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Site; }
         }
 
-        public HeDestroyedSite(XDocument xdoc, World world)
+        public HE_DestroyedSite(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -63,7 +63,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
 
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }

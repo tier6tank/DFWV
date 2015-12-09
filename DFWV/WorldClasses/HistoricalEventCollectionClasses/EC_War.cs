@@ -27,7 +27,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
     }
 
 
-    public class EcWar : HistoricalEventCollection
+    public class EC_War : HistoricalEventCollection
     {
         public List<int> EventColIDs { get; set; }
         public List<HistoricalEventCollection> EventCol { get; private set; }
@@ -39,7 +39,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
         override public Point Location => AggressorEnt.Location;
 
-        public EcWar(XDocument xdoc, World world)
+        public EC_War(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -74,7 +74,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         break;
 
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -165,10 +165,10 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         {
             base.Process();
             if (AggressorEnt.WarEventCollections == null)
-                AggressorEnt.WarEventCollections = new List<EcWar>();
+                AggressorEnt.WarEventCollections = new List<EC_War>();
             AggressorEnt.WarEventCollections.Add(this);
             if (DefenderEnt.WarEventCollections == null)
-                DefenderEnt.WarEventCollections = new List<EcWar>();
+                DefenderEnt.WarEventCollections = new List<EC_War>();
             DefenderEnt.WarEventCollections.Add(this);
             if (EventCol != null)
                 TotalWar();
@@ -180,7 +180,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             base.Evaluate();
 
             // Total up deaths/fighters in a war from the battle
-            foreach (var battle in EventCol.Where(x => x is EcBattle).Cast<EcBattle>())
+            foreach (var battle in EventCol.Where(x => x is EC_Battle).Cast<EC_Battle>())
                 battle.BattleTotaled = false;
             TotalWar();
 
@@ -188,7 +188,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
         public void TotalWar()
         {
-            foreach (var battle in EventCol.Where(x => Types[x.Type] == "battle").Cast<EcBattle>())
+            foreach (var battle in EventCol.Where(x => Types[x.Type] == "battle").Cast<EC_Battle>())
             {
                 if (!battle.BattleTotaled)
                     battle.TotalBattle();

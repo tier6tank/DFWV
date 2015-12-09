@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using DFWV.Properties;
 using DFWV.WorldClasses;
@@ -321,11 +322,11 @@ namespace DFWV
         /// <summary>
         /// Takes a groupbox and loads an inner Listbox with a list of objects efficiently
         /// </summary>
-        internal static void FillListboxWith(this GroupBox groupbox, ListBox listbox, IEnumerable<object> objects)
+        internal static void FillListboxWith(this GroupBox groupbox, ListBox listbox, IEnumerable<object> objects, object listboxTag = null)
         {
             try
             {
-                var objectsAsArray = objects as object[] ?? objects.ToArray();
+                var objectsAsArray = objects as object[] ?? objects?.ToArray();
                 if (objects == null || !objectsAsArray.Any())
                 {
                     groupbox.Visible = false;
@@ -333,10 +334,15 @@ namespace DFWV
                 }
                 groupbox.Visible = true;
                 listbox.BeginUpdate();
+                if (listboxTag != null)
+                    listbox.Tag = listboxTag;
                 listbox.Items.Clear();
                 listbox.Items.AddRange(objectsAsArray.ToArray());
                 listbox.EndUpdate();
                 listbox.SelectedIndex = 0;
+                //typeof(ListBox).InvokeMember("RefreshItems",
+                //  BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod,
+                //  null, listbox, new object[] { });
                 var title = groupbox.Text.Split('(')[0].Trim();
                 groupbox.Text = $"{title} ({listbox.Items.Count})";
             }

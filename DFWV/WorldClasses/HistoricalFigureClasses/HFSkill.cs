@@ -4,13 +4,13 @@ using System.Xml.Linq;
 
 namespace DFWV.WorldClasses.HistoricalFigureClasses
 {
-    public struct HfSkill
+    public struct HFSkill
     {
         public int Skill { get; }
         public int TotalIp { get; }
         public static List<string> Skills = new List<string>();
 
-        public HfSkill(XContainer data) : this()
+        public HFSkill(XContainer data) : this()
         {
             
             var skillname = data.Element("skill").Value;

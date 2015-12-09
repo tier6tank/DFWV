@@ -7,7 +7,7 @@ using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
-    public class EcOccasion : HistoricalEventCollection
+    public class EC_Occasion : HistoricalEventCollection
     {
         private int Ordinal { get; }
         private int? CivId { get; }
@@ -18,7 +18,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
         override public Point Location => Civ.Location;
 
-        public EcOccasion(XDocument xdoc, World world)
+        public EC_Occasion(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -54,7 +54,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         break;
 
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -121,7 +121,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         {
             base.Process();
             if (Civ.OccasionEventCollections == null)
-                Civ.OccasionEventCollections = new List<EcOccasion>();
+                Civ.OccasionEventCollections = new List<EC_Occasion>();
 
 
         }

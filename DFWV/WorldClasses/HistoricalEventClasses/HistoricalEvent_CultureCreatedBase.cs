@@ -6,7 +6,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HistoricalEventCultureCreatedBase : HistoricalEvent
+    class HistoricalEvent_CultureCreatedBase : HistoricalEvent
     {
         internal int? HistFigureId { get; set; }
         internal HistoricalFigure HistFigure { get; set; }
@@ -32,7 +32,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Site; }
         }
 
-        public HistoricalEventCultureCreatedBase(XDocument xdoc, World world)
+        public HistoricalEvent_CultureCreatedBase(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -80,7 +80,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "wc_id": //handled in HE_WrittenContentComposed
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }

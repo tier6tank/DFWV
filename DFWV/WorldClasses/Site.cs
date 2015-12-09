@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using DFWV.Annotations;
@@ -13,7 +14,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses
 {
-    public class Site : XmlObject
+    public class Site : XMLObject
     {
         [UsedImplicitly]
         public string AltName { get; private set; }
@@ -33,16 +34,16 @@ namespace DFWV.WorldClasses
         public List<HistoricalFigure> Inhabitants { get; set; }
         public List<WorldConstruction> ConstructionLinks { get; set; }
 
-        public HeCreatedSite CreatedEvent { get; set; }
-        public HeSiteDied DiedEvent { get; set; }
+        public HE_CreatedSite CreatedEvent { get; set; }
+        public HE_SiteDied DiedEvent { get; set; }
 
-        public List<EcBeastAttack> BeastAttackEventCollections { get; set; }
-        public List<EcBattle> BattleEventCollections { get; set; }
-        public List<EcDuel> DuelEventCollections { get; set; }
-        public List<EcAbduction> AbductionEventCollections { get; set; }
-        public List<EcSiteConquered> SiteConqueredEventCollections { get; set; }
-        public List<EcTheft> TheftEventCollections { get; set; }
-        public List<EcInsurrection> InsurrectionEventCollections { get; set; }
+        public List<EC_BeastAttack> BeastAttackEventCollections { get; set; }
+        public List<EC_Battle> BattleEventCollections { get; set; }
+        public List<EC_Duel> DuelEventCollections { get; set; }
+        public List<EC_Abduction> AbductionEventCollections { get; set; }
+        public List<EC_SiteConquered> SiteConqueredEventCollections { get; set; }
+        public List<EC_Theft> TheftEventCollections { get; set; }
+        public List<EC_Insurrection> InsurrectionEventCollections { get; set; }
 
         public List<Artifact> CreatedArtifacts { get; set; }
 
@@ -266,7 +267,7 @@ namespace DFWV.WorldClasses
                         break;
                     
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -319,7 +320,7 @@ namespace DFWV.WorldClasses
 
             if (Population != null)
             {
-                frm.grpSitePopulation.FillListboxWith(frm.lstSitePopulation, Population.Keys);
+                frm.grpSitePopulation.FillListboxWith(frm.lstSitePopulation, Population.Keys, this);
                 frm.grpSitePopulation.Text = $"Population ({Population.Sum(x => x.Value)})";
             }
             else
@@ -330,7 +331,7 @@ namespace DFWV.WorldClasses
             frm.grpSiteStructures.FillListboxWith(frm.lstSiteStructures, Structures);
             if (Prisoners != null)
             {
-                frm.grpSitePrisoners.FillListboxWith(frm.lstSitePrisoners, Prisoners.Keys);
+                frm.grpSitePrisoners.FillListboxWith(frm.lstSitePrisoners, Prisoners.Keys, this);
                 frm.grpSitePrisoners.Text = $"Prisoners ({Prisoners.Sum(x => x.Value)})";
             }
             else
@@ -339,7 +340,7 @@ namespace DFWV.WorldClasses
             }
             if (Outcasts != null)
             {
-                frm.grpSiteOutcasts.FillListboxWith(frm.lstSiteOutcasts, Outcasts.Keys);
+                frm.grpSiteOutcasts.FillListboxWith(frm.lstSiteOutcasts, Outcasts.Keys, this);
                 frm.grpSiteOutcasts.Text = $"Outcasts ({Outcasts.Sum(x => x.Value)})";
             }
             else
@@ -425,7 +426,7 @@ namespace DFWV.WorldClasses
 
             frm.grpSiteEventCollection.Visible = frm.trvSiteEventCollection.Nodes.Count > 0;
 
-            
+            frm.SetDisplayedItem(this);
         }
 
         internal void MergeInSiteFile(Site sf)
@@ -492,7 +493,7 @@ namespace DFWV.WorldClasses
                         }
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + SiteType, element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + SiteType, element, xdoc.Root.ToString());
                         break;
                 }
             }

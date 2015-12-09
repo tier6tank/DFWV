@@ -8,12 +8,12 @@ using DFWV.WorldClasses.HistoricalEventClasses;
 
 namespace DFWV.WorldClasses
 {
-    public class WorldConstruction: XmlObject
+    public class WorldConstruction: XMLObject
     {
 
         public List<WorldConstruction> Subconstructions { get; set; }
         public WorldConstruction MasterWc { get; set; }
-        public HeCreatedWorldConstruction CreatedEvent { get; set; }
+        public HE_CreatedWorldConstruction CreatedEvent { get; set; }
 
         public Site From { get; set; }
         public Site To { get; set; }
@@ -113,7 +113,7 @@ namespace DFWV.WorldClasses
                         Type = Types.IndexOf(val);
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t", element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t", element, xdoc.Root.ToString());
                         break;
                 }
             }

@@ -5,7 +5,7 @@ using System.Xml.Linq;
 
 namespace DFWV.WorldClasses.HistoricalFigureClasses
 {
-    class RelationshipProfileHf
+    class RelationshipProfileHF
     {
 
         //Historical Figures.relationship_profile_hf has unknown sub items!
@@ -26,7 +26,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
 
         public HistoricalFigure Hf => ThisHf.World.HistoricalFigures.ContainsKey(RelationshipHfid) ? ThisHf.World.HistoricalFigures[RelationshipHfid] : null;
 
-        public RelationshipProfileHf(XContainer data, HistoricalFigure hf)
+        public RelationshipProfileHF(XContainer data, HistoricalFigure hf)
         {
 
             RelationshipHfid = Convert.ToInt32(data.Element("hf_id").Value);

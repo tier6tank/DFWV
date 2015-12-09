@@ -3,19 +3,19 @@ using System.Xml.Linq;
 
 namespace DFWV.WorldClasses
 {
-    public abstract class XmlObject : WorldObject, IEquatable<XmlObject>
+    public abstract class XMLObject : WorldObject, IEquatable<XMLObject>
     {
         public int Id { get; set; }
         public int Notability { get; set; }
 
-        protected XmlObject(XDocument xdoc, World world) 
+        protected XMLObject(XDocument xdoc, World world) 
             : base(world)
         {
             Id = Convert.ToInt32(xdoc.Root.Element("id").Value);
             World = world;
         }
 
-        protected XmlObject(World world) : base(world)
+        protected XMLObject(World world) : base(world)
         {
             
         }
@@ -33,10 +33,10 @@ namespace DFWV.WorldClasses
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as XmlObject);
+            return Equals(obj as XMLObject);
         }
 
-        public bool Equals(XmlObject other)
+        public bool Equals(XMLObject other)
         {
             // Check for null
             if (ReferenceEquals(other, null))

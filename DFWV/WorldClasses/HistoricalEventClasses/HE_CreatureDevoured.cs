@@ -7,7 +7,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HeCreatureDevoured : HistoricalEvent
+    class HE_CreatureDevoured : HistoricalEvent
     {
         private int? SiteId { get; set; }
         private Site Site { get; set; }
@@ -47,7 +47,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Subregion; }
         }
 
-        public HeCreatureDevoured(XDocument xdoc, World world)
+        public HE_CreatureDevoured(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -76,7 +76,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                             FeatureLayerId = valI;
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -137,7 +137,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         SiteId = valI;
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }

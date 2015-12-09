@@ -10,7 +10,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses
 {
-    public class Region : XmlObject
+    public class Region : XMLObject
     {
         public static List<string> Types = new List<string>();
         public int Type { get; }
@@ -21,10 +21,10 @@ namespace DFWV.WorldClasses
         public List<HistoricalFigure> Inhabitants { get; set; }
 
 
-        public List<EcBattle> BattleEventCollections { get; set; }
-        public List<EcDuel> DuelEventCollections { get; set; }
-        public List<EcAbduction> AbductionEventCollections { get; set; }
-        public List<EcTheft> TheftEventCollections { get; set; }
+        public List<EC_Battle> BattleEventCollections { get; set; }
+        public List<EC_Duel> DuelEventCollections { get; set; }
+        public List<EC_Abduction> AbductionEventCollections { get; set; }
+        public List<EC_Theft> TheftEventCollections { get; set; }
 
         public IEnumerable<HistoricalEvent> Events
         {
@@ -71,7 +71,7 @@ namespace DFWV.WorldClasses
                         Type = Types.IndexOf(val);
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -101,7 +101,7 @@ namespace DFWV.WorldClasses
 
             if (Populations != null)
             {
-                frm.grpRegionPopulation.FillListboxWith(frm.lstRegionPopulation, Populations.Keys);
+                frm.grpRegionPopulation.FillListboxWith(frm.lstRegionPopulation, Populations.Keys, this);
                 frm.grpRegionPopulation.Text =
                     $"Population ({(Populations.Values.Contains(10000001) ? "Unnumbered" : Populations.Values.Sum().ToString())})";
                 frm.grpRegionPopulation.Visible = true;
@@ -156,7 +156,7 @@ namespace DFWV.WorldClasses
                         }
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + "Region", element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + "Region", element, xdoc.Root.ToString());
                         break;
                 }
             }

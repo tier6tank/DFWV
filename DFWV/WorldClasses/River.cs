@@ -7,7 +7,7 @@ using DFWV.Annotations;
 
 namespace DFWV.WorldClasses
 {
-    public class River : XmlObject
+    public class River : XMLObject
     {
 
         [UsedImplicitly]
@@ -47,7 +47,7 @@ namespace DFWV.WorldClasses
                         Elevation = val.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries).Select(x => Convert.ToInt32(x)).ToList();
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
                         break;
                 }
             }

@@ -7,7 +7,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    public class HeRemoveHfSiteLink : HistoricalEvent
+    public class HE_RemoveHFSiteLink : HistoricalEvent
     {
         private int? SiteId { get; set; }
         private Site Site { get; set; }
@@ -21,7 +21,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         private int? LinkType { get; set; }
 
-        public HfSiteLink HfSiteLink { get; set; }
+        public HFSiteLink HfSiteLink { get; set; }
 
         override public Point Location => Site?.Location ?? Point.Empty;
 
@@ -39,7 +39,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         }
 
 
-        public HeRemoveHfSiteLink(XDocument xdoc, World world)
+        public HE_RemoveHFSiteLink(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -59,7 +59,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         SiteId = valI;
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -138,12 +138,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         val = val.Replace('_', ' ');
                         if (val == "home site abstract building")
                             val = "home structure";
-                        if (!HfSiteLink.LinkTypes.Contains(val))
-                            HfSiteLink.LinkTypes.Add(val);
-                        LinkType = HfSiteLink.LinkTypes.IndexOf(val);
+                        if (!HFSiteLink.LinkTypes.Contains(val))
+                            HFSiteLink.LinkTypes.Add(val);
+                        LinkType = HFSiteLink.LinkTypes.IndexOf(val);
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -157,10 +157,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             EventLabel(frm, parent, ref location, "Civ:", Civ);
             if (HfSiteLink != null)
                 EventLabel(frm, parent, ref location, "Type:",
-                    HfSiteLink.LinkTypes[HfSiteLink.LinkType]);
+                    HFSiteLink.LinkTypes[HfSiteLink.LinkType]);
             if (LinkType != null)
                 EventLabel(frm, parent, ref location, "Type:",
-                    HfSiteLink.LinkTypes[LinkType.Value]);
+                    HFSiteLink.LinkTypes[LinkType.Value]);
         }
 
         protected override string LegendsDescription() //Matched
@@ -170,7 +170,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             if (LinkType.HasValue)
             {
-                switch (HfSiteLink.LinkTypes[LinkType.Value])
+                switch (HFSiteLink.LinkTypes[LinkType.Value])
                 {
                     case "hangout":
                     case "seat of power":
@@ -181,7 +181,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                             $"{timestring} {Hf} moved out of {(Structure.Name != null ? Structure.ToString() : "UNKNOWN")} of {Civ} in {Site.AltName}.";
                     default:
                         return
-                            $"{timestring} {"UNKNOWN"} became {HfSiteLink.LinkTypes[LinkType.Value]} of {Site.AltName}.";
+                            $"{timestring} {"UNKNOWN"} became {HFSiteLink.LinkTypes[LinkType.Value]} of {Site.AltName}.";
                 }
             }
 
@@ -191,7 +191,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 return
                     $"{timestring} {Hf} ruled from {(Structure.Name != null ? Structure.ToString() : "UNKNOWN")} of {Civ} in {Site.AltName}.";
             return
-                $"{timestring} {"UNKNOWN"} became {(LinkType.HasValue ? HfSiteLink.LinkTypes[LinkType.Value] : "UNKNOWN")} of {Site.AltName}.";
+                $"{timestring} {"UNKNOWN"} became {(LinkType.HasValue ? HFSiteLink.LinkTypes[LinkType.Value] : "UNKNOWN")} of {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
@@ -214,7 +214,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Hfid.DBExport(),
                 CivId.DBExport(),
                 StructureId.DBExport(),
-                LinkType.DBExport(HfSiteLink.LinkTypes)
+                LinkType.DBExport(HFSiteLink.LinkTypes)
             };
 
             Database.ExportWorldItem(table, vals);

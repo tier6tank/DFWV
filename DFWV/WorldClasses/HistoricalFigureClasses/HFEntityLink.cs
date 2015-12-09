@@ -7,7 +7,7 @@ using DFWV.WorldClasses.HistoricalEventClasses;
 
 namespace DFWV.WorldClasses.HistoricalFigureClasses
 {
-    public class HfEntityLink
+    public class HFEntityLink
     {
         public static List<string> LinkTypes = new List<string>();
 
@@ -20,10 +20,10 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
 
         public int? LinkStrength { get; }
 
-        public HeAddHfEntityLink AddEvent { get; set; }
-        public HeRemoveHfEntityLink RemoveEvent { get; set; }
+        public HE_AddHFEntityLink AddEvent { get; set; }
+        public HE_RemoveHFEntityLink RemoveEvent { get; set; }
 
-        public HfEntityLink(XContainer data, HistoricalFigure hf)
+        public HFEntityLink(XContainer data, HistoricalFigure hf)
         {
             var linktypename = data.Element("link_type").Value;
             if (!LinkTypes.Contains(linktypename))

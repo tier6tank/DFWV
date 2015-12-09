@@ -6,7 +6,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    public class HeArtifactStored : HistoricalEvent
+    public class HE_ArtifactStored : HistoricalEvent
     {
         private int? SiteId { get; }
         private Site Site { get; set; }
@@ -28,7 +28,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Site; }
         }
 
-        public HeArtifactStored(XDocument xdoc, World world)
+        public HE_ArtifactStored(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -58,7 +58,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
 
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -84,7 +84,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             if (Artifact == null) return;
             if (Artifact.StoredEvents == null)
-                Artifact.StoredEvents = new List<HeArtifactStored>();
+                Artifact.StoredEvents = new List<HE_ArtifactStored>();
             Artifact.StoredEvents.Add(this);
         }
 

@@ -184,7 +184,7 @@ namespace DFWV
             })
             {
                 Fields[type].Add("Name", typeof (string));
-                if (!type.IsSubclassOf(typeof (XmlObject))) continue;
+                if (!type.IsSubclassOf(typeof (XMLObject))) continue;
                 Fields[type].Add("ID", typeof(int));
                 Fields[type].Add("Notability", typeof(int));
             }

@@ -7,7 +7,7 @@ using DFWV.WorldClasses.HistoricalEventClasses;
 
 namespace DFWV.WorldClasses
 {
-    public class Structure : XmlObject
+    public class Structure : XMLObject
     {
         private Site Site { get; }
         public int SiteId { get; set; }
@@ -21,15 +21,15 @@ namespace DFWV.WorldClasses
 
         public List<HistoricalEvent> Events { get; set; }
 
-        public HeRazedStructure RazedEvent { get { return (HeRazedStructure) Events.FirstOrDefault(e => HistoricalEvent.Types[e.Type] == "razed structure"); } }
-        public HeCreatedStructure CreatedEvent { get { return (HeCreatedStructure) Events.FirstOrDefault(e => HistoricalEvent.Types[e.Type] == "created structure"); } }
+        public HE_RazedStructure RazedEvent { get { return (HE_RazedStructure) Events.FirstOrDefault(e => HistoricalEvent.Types[e.Type] == "razed structure"); } }
+        public HE_CreatedStructure CreatedEvent { get { return (HE_CreatedStructure) Events.FirstOrDefault(e => HistoricalEvent.Types[e.Type] == "created structure"); } }
         [UsedImplicitly]
         public bool IsRazed => RazedEvent != null;
 
         [UsedImplicitly]
         public string StructureType => Type.HasValue ? Types[Type.Value] : "Unknown";
 
-        public IEnumerable<HeChangeHfBodyState> ChangeHfBodyStateEvents { get { return Events?.Where(e => HistoricalEvent.Types[e.Type] == "change hf body state").Cast<HeChangeHfBodyState>(); } }
+        public IEnumerable<HE_ChangeHFBodyState> ChangeHfBodyStateEvents { get { return Events?.Where(e => HistoricalEvent.Types[e.Type] == "change hf body state").Cast<HE_ChangeHFBodyState>(); } }
         [UsedImplicitly]
         public bool Tomb { get { return ChangeHfBodyStateEvents != null && (ChangeHfBodyStateEvents.Count(f=>f.BodyState == "entombed at site") > 0); } }
         [UsedImplicitly]

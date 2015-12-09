@@ -4,7 +4,7 @@ using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HeAgreementConcluded : HistoricalEvent
+    class HE_AgreementConcluded : HistoricalEvent
     {
         private int? SiteId { get; set; }
         private Site Site { get; set; }
@@ -29,7 +29,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get { yield return Site; }
         }
-        public HeAgreementConcluded(XDocument xdoc, World world)
+        public HE_AgreementConcluded(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -48,7 +48,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
 
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -100,7 +100,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         Result = MeetingResults.IndexOf(val);
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }

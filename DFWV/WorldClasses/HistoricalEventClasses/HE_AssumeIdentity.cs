@@ -7,7 +7,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HeAssumeIdentity : HistoricalEvent
+    class HE_AssumeIdentity : HistoricalEvent
     {
         private int? TricksterHfid { get; }
         private HistoricalFigure TricksterHf { get; set; }
@@ -35,7 +35,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get { yield return TargetEn; }
         }
-        public HeAssumeIdentity(XDocument xdoc, World world)
+        public HE_AssumeIdentity(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -61,7 +61,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         TargetEnId = valI;
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -116,7 +116,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
 
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
 

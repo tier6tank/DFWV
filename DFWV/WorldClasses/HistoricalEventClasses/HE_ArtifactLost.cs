@@ -5,7 +5,7 @@ using System.Xml.Linq;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    public class HeArtifactLost : HistoricalEvent
+    public class HE_ArtifactLost : HistoricalEvent
     {
         private int? SiteId { get; }
         public Site Site { get; private set; }
@@ -19,7 +19,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Site; }
         }
 
-        public HeArtifactLost(XDocument xdoc, World world)
+        public HE_ArtifactLost(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -43,7 +43,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
 
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }

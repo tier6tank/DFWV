@@ -152,7 +152,7 @@ namespace DFWV
             return DBNull.Value;
         }
 
-        internal static object DBExport(this XmlObject xmlobject)
+        internal static object DBExport(this XMLObject xmlobject)
         {
             if (xmlobject != null)
                 return xmlobject.Id;

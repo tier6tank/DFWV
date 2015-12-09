@@ -7,7 +7,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    public class HeCreatedStructure : HistoricalEvent
+    public class HE_CreatedStructure : HistoricalEvent
     {
         private int? SiteId { get; }
         public Site Site { get; set; }
@@ -39,7 +39,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Site; }
         }
 
-        public HeCreatedStructure(XDocument xdoc, World world)
+        public HE_CreatedStructure(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -71,7 +71,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         BuilderHfid = valI;
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -125,7 +125,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "builder_hf":
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -155,9 +155,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         private void ProcessSladeSpireEventSet()
         {
-            var addHfEntityLinkEvent = NextEvent() as HeAddHfEntityLink;
-            var changeHfStateEvent = NextEvent().NextEvent() as HeChangeHfState;
-            var addHfSiteLinkEvent = NextEvent().NextEvent().NextEvent() as HeAddHfSiteLink;
+            var addHfEntityLinkEvent = NextEvent() as HE_AddHFEntityLink;
+            var changeHfStateEvent = NextEvent().NextEvent() as HE_ChangeHFState;
+            var addHfSiteLinkEvent = NextEvent().NextEvent().NextEvent() as HE_AddHFSiteLink;
 
             addHfEntityLinkEvent.Hf = BuilderHf;
             addHfSiteLinkEvent.Hf = BuilderHf;

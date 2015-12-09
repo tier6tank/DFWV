@@ -6,7 +6,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HeHfAbducted : HistoricalEvent
+    class HE_HFAbducted : HistoricalEvent
     {
         private int? TargetHfid { get; }
         public HistoricalFigure TargetHf { get; private set; }
@@ -37,7 +37,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Subregion; }
         }
 
-        public HeHfAbducted(XDocument xdoc, World world)
+        public HE_HFAbducted(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -72,7 +72,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         SnatcherHfid = valI;
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }

@@ -7,7 +7,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HeMasterpieceDye : HistoricalEvent
+    class HE_MasterpieceDye : HistoricalEvent
     {
         private int? Hfid { get; }
         private HistoricalFigure Hf { get; set; }
@@ -33,7 +33,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         }
 
 
-        public HeMasterpieceDye(XDocument xdoc, World world)
+        public HE_MasterpieceDye(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -62,7 +62,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         SkillAtTime = valI;
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -93,7 +93,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }

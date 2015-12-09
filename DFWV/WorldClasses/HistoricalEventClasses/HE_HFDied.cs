@@ -6,7 +6,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    public class HeHfDied : HistoricalEvent
+    public class HE_HFDied : HistoricalEvent
     {
         private int? Hfid { get; }
         public HistoricalFigure Hf { get; private set; }
@@ -62,7 +62,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Subregion; }
         }
 
-        public HeHfDied(XDocument xdoc, World world)
+        public HE_HFDied(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -119,7 +119,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         Cause = Causes.IndexOf(val);
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -222,7 +222,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         BowMat = Materials.IndexOf(val);
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -236,18 +236,18 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (SlayerHf != null)
             {
                 if (SlayerHf.SlayingEvents == null)
-                    SlayerHf.SlayingEvents = new List<HeHfDied>();
+                    SlayerHf.SlayingEvents = new List<HE_HFDied>();
                 SlayerHf.SlayingEvents.Add(this);
             }
             if (SlayerItem != null)
             {
                 if (SlayerItem.Kills == null)
-                    SlayerItem.Kills = new List<HeHfDied>();
+                    SlayerItem.Kills = new List<HE_HFDied>();
                 SlayerItem.Kills.Add(this);
             }
             if (SlayerShooterItem == null) return;
             if (SlayerShooterItem.Kills == null)
-                SlayerShooterItem.Kills = new List<HeHfDied>();
+                SlayerShooterItem.Kills = new List<HE_HFDied>();
             SlayerShooterItem.Kills.Add(this);
         }
 

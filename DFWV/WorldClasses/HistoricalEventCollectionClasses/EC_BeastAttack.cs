@@ -10,7 +10,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
-    public class EcBeastAttack : HistoricalEventCollection
+    public class EC_BeastAttack : HistoricalEventCollection
     {
         private int? SubregionId { get; }
         private Region Subregion { get; set; }
@@ -29,7 +29,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
         override public Point Location => Site.Coords;
 
-        public EcBeastAttack(XDocument xdoc, World world)
+        public EC_BeastAttack(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -79,7 +79,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         break;
 
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -151,10 +151,10 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         {
             base.Process();
             if (Site.BeastAttackEventCollections == null)
-                Site.BeastAttackEventCollections = new List<EcBeastAttack>();
+                Site.BeastAttackEventCollections = new List<EC_BeastAttack>();
             Site.BeastAttackEventCollections.Add(this);
             if (DefendingEn.BeastAttackEventCollections == null)
-                DefendingEn.BeastAttackEventCollections = new List<EcBeastAttack>();
+                DefendingEn.BeastAttackEventCollections = new List<EC_BeastAttack>();
             DefendingEn.BeastAttackEventCollections.Add(this);
         }
 
@@ -163,7 +163,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             base.Evaluate();
 
             var checkBeastHf = Event.Where(x => HistoricalEvent.Types[x.Type] == "hf simple battle event")
-                .Cast<HeHfSimpleBattleEvent>()
+                .Cast<HE_HFSimpleBattleEvent>()
                 .TakeWhile(ev => ev.Group1Hf.Count != 0)
                 .Select(ev => ev.Group1Hf[0])
                 .FirstOrDefault();
@@ -171,7 +171,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             if (checkBeastHf != null)
             {
                 BeastHf = checkBeastHf;
-                foreach (var ev in Event.Where(x => HistoricalEvent.Types[x.Type] == "creature devoured").Cast<HeCreatureDevoured>())
+                foreach (var ev in Event.Where(x => HistoricalEvent.Types[x.Type] == "creature devoured").Cast<HE_CreatureDevoured>())
                 {
                     ev.Devourer = BeastHf;
                 }

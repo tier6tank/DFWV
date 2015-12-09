@@ -6,7 +6,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HeHfGainsSecretGoal : HistoricalEvent
+    class HE_HFGainsSecretGoal : HistoricalEvent
     {
         private int? Hfid { get; }
         private HistoricalFigure Hf { get; set; }
@@ -19,7 +19,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get { yield return Hf; }
         }
-        public HeHfGainsSecretGoal(XDocument xdoc, World world)
+        public HE_HFGainsSecretGoal(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -45,7 +45,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
 
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }

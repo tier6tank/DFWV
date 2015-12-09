@@ -6,7 +6,7 @@ using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    public class HeEntityCreated : HistoricalEvent
+    public class HE_EntityCreated : HistoricalEvent
     {
         private int? EntityId { get; }
         private Entity Entity { get; set; }
@@ -26,7 +26,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Site; }
         }
 
-        public HeEntityCreated(XDocument xdoc, World world)
+        public HE_EntityCreated(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -54,7 +54,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
 
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -105,7 +105,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timelinestring = base.ToTimelineString();
 
-            return $"{timelinestring} {Entity} formed in {Site.AltName}";
+            return $"{timelinestring} {Entity} formed in {Site?.AltName}";
         }
 
         internal override void Export(string table)

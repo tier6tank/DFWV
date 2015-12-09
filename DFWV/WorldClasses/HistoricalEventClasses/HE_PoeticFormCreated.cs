@@ -2,10 +2,10 @@
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HePoeticFormCreated : HistoricalEventCultureCreatedBase
+    class HE_PoeticFormCreated : HistoricalEvent_CultureCreatedBase
     {
 
-        public HePoeticFormCreated(XDocument xdoc, World world)
+        public HE_PoeticFormCreated(XDocument xdoc, World world)
             : base(xdoc, world)
         {
  

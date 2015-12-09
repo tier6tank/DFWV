@@ -14,7 +14,7 @@ namespace DFWVTests
     /// Summary description for ParsingXML
     /// </summary>
     [TestClass]
-    public class ParsingXml
+    public class ParsingXML
     {
         [TestMethod]
         public void RegionXML_Parses()
@@ -183,23 +183,23 @@ namespace DFWVTests
             Assert.AreEqual(historicalFigure.Birth.Year, -55);
             Assert.AreEqual(historicalFigure.Death.Year, 126);
             Assert.AreEqual(historicalFigure.HfLinks.Count, 2);
-            Assert.AreEqual(historicalFigure.HfLinks[HfLink.LinkTypes.IndexOf("deity")].Count, 1);
-            Assert.AreEqual(historicalFigure.HfLinks[HfLink.LinkTypes.IndexOf("deity")][0].LinkedHfid, 304);
-            Assert.AreEqual(historicalFigure.HfLinks[HfLink.LinkTypes.IndexOf("deity")][0].LinkStrength, 61);
-            Assert.AreEqual(historicalFigure.HfLinks[HfLink.LinkTypes.IndexOf("child")].Count, 1);
-            Assert.AreEqual(historicalFigure.HfLinks[HfLink.LinkTypes.IndexOf("child")][0].LinkedHfid, 501);
-            Assert.AreEqual(historicalFigure.EntityLinks[HfEntityLink.LinkTypes.IndexOf("former member")].Count, 1);
-            Assert.AreEqual(historicalFigure.EntityLinks[HfEntityLink.LinkTypes.IndexOf("former member")][0].EntityId, 80);
-            Assert.AreEqual(historicalFigure.EntityLinks[HfEntityLink.LinkTypes.IndexOf("former member")][0].LinkStrength, 60);
-            Assert.AreEqual(historicalFigure.EntityLinks[HfEntityLink.LinkTypes.IndexOf("enemy")].Count, 1);
-            Assert.AreEqual(historicalFigure.EntityLinks[HfEntityLink.LinkTypes.IndexOf("enemy")][0].EntityId, 123);
+            Assert.AreEqual(historicalFigure.HfLinks[HFLink.LinkTypes.IndexOf("deity")].Count, 1);
+            Assert.AreEqual(historicalFigure.HfLinks[HFLink.LinkTypes.IndexOf("deity")][0].LinkedHfid, 304);
+            Assert.AreEqual(historicalFigure.HfLinks[HFLink.LinkTypes.IndexOf("deity")][0].LinkStrength, 61);
+            Assert.AreEqual(historicalFigure.HfLinks[HFLink.LinkTypes.IndexOf("child")].Count, 1);
+            Assert.AreEqual(historicalFigure.HfLinks[HFLink.LinkTypes.IndexOf("child")][0].LinkedHfid, 501);
+            Assert.AreEqual(historicalFigure.EntityLinks[HFEntityLink.LinkTypes.IndexOf("former member")].Count, 1);
+            Assert.AreEqual(historicalFigure.EntityLinks[HFEntityLink.LinkTypes.IndexOf("former member")][0].EntityId, 80);
+            Assert.AreEqual(historicalFigure.EntityLinks[HFEntityLink.LinkTypes.IndexOf("former member")][0].LinkStrength, 60);
+            Assert.AreEqual(historicalFigure.EntityLinks[HFEntityLink.LinkTypes.IndexOf("enemy")].Count, 1);
+            Assert.AreEqual(historicalFigure.EntityLinks[HFEntityLink.LinkTypes.IndexOf("enemy")][0].EntityId, 123);
             Assert.AreEqual(historicalFigure.EntityFormerPositionLinks.Count, 1);
             Assert.AreEqual(historicalFigure.EntityFormerPositionLinks[0].PositionProfileId, 2);
             Assert.AreEqual(historicalFigure.EntityFormerPositionLinks[0].EntityId, 80);
             Assert.AreEqual(historicalFigure.EntityFormerPositionLinks[0].StartYear, 1);
             Assert.AreEqual(historicalFigure.EntityFormerPositionLinks[0].EndYear, 23);
             Assert.AreEqual(historicalFigure.HfSkills.Count, 1);
-            Assert.AreEqual(HfSkill.Skills[historicalFigure.HfSkills[0].Skill], "INTIMIDATION");
+            Assert.AreEqual(HFSkill.Skills[historicalFigure.HfSkills[0].Skill], "INTIMIDATION");
             Assert.AreEqual(historicalFigure.HfSkills[0].TotalIp, 5600);
             Assert.AreEqual(historicalFigure.EntPopId, 25);
         }
@@ -256,10 +256,10 @@ namespace DFWVTests
             Assert.AreEqual(historicalevent.Id, 0);
             Assert.AreEqual(historicalevent.Year, 1);
             Assert.AreEqual(HistoricalEvent.Types[historicalevent.Type], "change hf state");
-            Assert.IsInstanceOfType(historicalevent, typeof (HeChangeHfState));
-            var changehfstateEvent = historicalevent as HeChangeHfState;
+            Assert.IsInstanceOfType(historicalevent, typeof (HE_ChangeHFState));
+            var changehfstateEvent = historicalevent as HE_ChangeHFState;
             Assert.AreEqual(changehfstateEvent.Hfid, 264);
-            Assert.AreEqual(HeChangeHfState.States[changehfstateEvent.State.Value], "settled");
+            Assert.AreEqual(HE_ChangeHFState.States[changehfstateEvent.State.Value], "settled");
             Assert.IsNull(changehfstateEvent.SiteId);
             Assert.AreEqual(changehfstateEvent.SubregionId.Value, 4);
             Assert.IsNull(changehfstateEvent.FeatureLayerId);
@@ -281,7 +281,7 @@ namespace DFWVTests
             var historicalevent = HistoricalEvent.Create(xdoc, world);
             Assert.AreEqual(historicalevent.Id, 0);
             Assert.AreEqual(historicalevent.Year, 1);
-            Assert.IsInstanceOfType(historicalevent, typeof(HeUnassessedEvent));
+            Assert.IsInstanceOfType(historicalevent, typeof(HE_UnassessedEvent));
         }
 
         //TODO: Add other Historical Event tests.
@@ -314,7 +314,7 @@ namespace DFWVTests
             Assert.AreEqual(historicalEventCollection.EventIDs.Count, 1);
             Assert.AreEqual(historicalEventCollection.EventIDs[0], 1212);
             Assert.AreEqual(HistoricalEventCollection.Types[historicalEventCollection.Type], "war");
-            var warEventCollection = historicalEventCollection as EcWar;
+            var warEventCollection = historicalEventCollection as EC_War;
             Assert.AreEqual(warEventCollection.EventColIDs.Count, 2);
             Assert.AreEqual(warEventCollection.EventColIDs[0], 87);
             Assert.AreEqual(warEventCollection.EventColIDs[1], 97);
@@ -372,7 +372,7 @@ namespace DFWVTests
             Assert.AreEqual(historicalEventCollection.EventIDs[0], 180182);
             Assert.AreEqual(historicalEventCollection.EventIDs[1], 180183);
             Assert.AreEqual(HistoricalEventCollection.Types[historicalEventCollection.Type], "battle");
-            var battleEventCollection = historicalEventCollection as EcBattle;
+            var battleEventCollection = historicalEventCollection as EC_Battle;
             Assert.AreEqual(battleEventCollection.EventColIDs.Count, 2);
             Assert.AreEqual(battleEventCollection.EventColIDs[0], 21797);
             Assert.AreEqual(battleEventCollection.EventColIDs[1], 21798);
@@ -422,7 +422,7 @@ namespace DFWVTests
             Assert.AreEqual(historicalEventCollection.Id, 30);
             Assert.AreEqual(historicalEventCollection.StartTime, new WorldTime(45, 285600));
             Assert.AreEqual(historicalEventCollection.EndTime, new WorldTime(50, 285600));
-            Assert.IsInstanceOfType(historicalEventCollection, typeof(EcUnassessedEventCollection));
+            Assert.IsInstanceOfType(historicalEventCollection, typeof(EC_UnassessedEventCollection));
         }
 
 

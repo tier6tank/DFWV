@@ -7,7 +7,7 @@ using DFWV.WorldClasses.HistoricalEventClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
-    class EcJourney : HistoricalEventCollection
+    class EC_Journey : HistoricalEventCollection
     {
         private int Ordinal { get; }
 
@@ -15,17 +15,17 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         { 
             get
             {
-                HeHfTravel evt;
-                var hfTravel = Event[0] as HeHfTravel;
+                HE_HFTravel evt;
+                var hfTravel = Event[0] as HE_HFTravel;
                 if (hfTravel != null)
                 {
                     evt = hfTravel;
                     if (evt.Site != null)
                         return evt.Site.Location;
                 }
-                if (!(Event.Last() is HeHfTravel)) return 
+                if (!(Event.Last() is HE_HFTravel)) return 
                     Point.Empty;
-                evt = (HeHfTravel) Event.Last();
+                evt = (HE_HFTravel) Event.Last();
                 if (evt.Return && evt.Site != null)
                     return evt.Site.Location;
                 return Point.Empty;
@@ -33,7 +33,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         }
 
 
-        public EcJourney(XDocument xdoc, World world)
+        public EC_Journey(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -56,7 +56,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         Ordinal = valI;
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }

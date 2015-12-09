@@ -6,7 +6,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HeAgreementFormed : HistoricalEvent
+    class HE_AgreementFormed : HistoricalEvent
     {
         public int AgreementId { get; set; }
         public God God { get; set; }
@@ -32,7 +32,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Site; }
         }
 
-        public HeAgreementFormed(XDocument xdoc, World world)
+        public HE_AgreementFormed(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -61,7 +61,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         Reason = val;
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }

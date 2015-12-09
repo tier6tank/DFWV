@@ -26,10 +26,10 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         public int NonCombatHFs;
     }
 
-    public class EcBattle : HistoricalEventCollection
+    public class EC_Battle : HistoricalEventCollection
     {
         public int? WarEventColId { get; set; }
-        public EcWar WarEventCol { get; private set; }
+        public EC_War WarEventCol { get; private set; }
         public int? SubregionId { get; set; }
         private Region Subregion { get; set; }
         public int? FeatureLayerId { get; set; }
@@ -65,7 +65,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
         override public Point Location => Site?.Coords ?? Coords;
 
-        public EcBattle(XDocument xdoc, World world)
+        public EC_Battle(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -180,7 +180,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         break;
 
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -195,7 +195,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
                 Site = World.Sites[SiteId.Value];
             if (WarEventColId.HasValue && World.HistoricalEventCollections.ContainsKey(WarEventColId.Value))
-                WarEventCol = (EcWar)World.HistoricalEventCollections[WarEventColId.Value];
+                WarEventCol = (EC_War)World.HistoricalEventCollections[WarEventColId.Value];
 
             if (EventColIDs != null)
                 EventCol = new List<HistoricalEventCollection>();
@@ -299,12 +299,14 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                 frm.lblBattleDefenderOutcome.Text = @"Defender Won";
             }
             frm.lstBattleAttackingHF.Items.Clear();
+            frm.lstBattleAttackingHF.Tag = this;
             if (AttackingHf != null)
                 frm.lstBattleAttackingHF.Items.AddRange(AttackingHf.ToArray());
 
             frm.grpBattleAttackingHF.Text = $"Historical Figures ({frm.lstBattleAttackingHF.Items.Count})";
 
             frm.lstBattleDefendingHF.Items.Clear();
+            frm.lstBattleDefendingHF.Tag = this;
             if (DefendingHf != null)
                 frm.lstBattleDefendingHF.Items.AddRange(DefendingHf.ToArray());
 
@@ -372,7 +374,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             if (Subregion != null)
             {
                 if (Subregion.BattleEventCollections == null)
-                    Subregion.BattleEventCollections = new List<EcBattle>();
+                    Subregion.BattleEventCollections = new List<EC_Battle>();
                 Subregion.BattleEventCollections.Add(this);
                 if (Subregion.Coords == null)
                     Subregion.Coords = new List<Point>();
@@ -381,7 +383,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             if (Site != null)
             {
                 if (Site.BattleEventCollections == null)
-                    Site.BattleEventCollections = new List<EcBattle>();
+                    Site.BattleEventCollections = new List<EC_Battle>();
                 Site.BattleEventCollections.Add(this);
             }
             if (AttackingHf != null)
@@ -389,7 +391,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                 foreach (var hf in AttackingHf)
                 {
                     if (hf.BattleEventCollections == null)
-                        hf.BattleEventCollections = new List<EcBattle>();
+                        hf.BattleEventCollections = new List<EC_Battle>();
                     hf.BattleEventCollections.Add(this);
                 }
             }
@@ -398,7 +400,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                 foreach (var hf in DefendingHf)
                 {
                     if (hf.BattleEventCollections == null)
-                        hf.BattleEventCollections = new List<EcBattle>();
+                        hf.BattleEventCollections = new List<EC_Battle>();
                     hf.BattleEventCollections.Add(this);
                 }
             }
@@ -407,7 +409,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                 foreach (var hf in _nonComHf)
                 {
                     if (hf.BattleEventCollections == null)
-                        hf.BattleEventCollections = new List<EcBattle>();
+                        hf.BattleEventCollections = new List<EC_Battle>();
                     hf.BattleEventCollections.Add(this);
                 }
             }
@@ -416,7 +418,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                 foreach (var squad in AttackingSquad.Where(squad => squad.EntityPopulation != null))
                 {
                     if (squad.EntityPopulation.BattleEventCollections == null)
-                        squad.EntityPopulation.BattleEventCollections = new List<EcBattle>();
+                        squad.EntityPopulation.BattleEventCollections = new List<EC_Battle>();
                     squad.EntityPopulation.BattleEventCollections.Add(this);
                 }
             }
@@ -425,7 +427,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                 foreach (var squad in DefendingSquad.Where(squad => squad.EntityPopulation != null))
                 {
                     if (squad.EntityPopulation.BattleEventCollections == null)
-                        squad.EntityPopulation.BattleEventCollections = new List<EcBattle>();
+                        squad.EntityPopulation.BattleEventCollections = new List<EC_Battle>();
                     squad.EntityPopulation.BattleEventCollections.Add(this);
                 }
             }
@@ -441,7 +443,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             // For battle event collections, if we have hf died events we can add that HF as a casualty of the battle, 
             //      which will be displayed in bold when viewing participating HFs.
 
-            foreach (var ev in Event.Where(x => HistoricalEvent.Types[x.Type] == "hf died").Cast<HeHfDied>().Where(ev => ev.Hf != null))
+            foreach (var ev in Event.Where(x => HistoricalEvent.Types[x.Type] == "hf died").Cast<HE_HFDied>().Where(ev => ev.Hf != null))
             {
                 if (AttackingHf.Contains(ev.Hf))
                 {

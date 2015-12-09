@@ -8,7 +8,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    public class HeChangeHfBodyState : HistoricalEvent
+    public class HE_ChangeHFBodyState : HistoricalEvent
     {
         
         private int? SiteId { get; }
@@ -34,7 +34,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Site; }
         }
 
-        public HeChangeHfBodyState(XDocument xdoc, World world)
+        public HE_ChangeHFBodyState(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -77,7 +77,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
 
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }

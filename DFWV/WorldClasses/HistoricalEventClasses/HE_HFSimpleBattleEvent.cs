@@ -7,7 +7,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HeHfSimpleBattleEvent : HistoricalEvent
+    class HE_HFSimpleBattleEvent : HistoricalEvent
     {
         private List<int> Group1Hfid { get; }
         public List<HistoricalFigure> Group1Hf { get; private set; }
@@ -48,7 +48,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Subregion; }
         }
 
-        public HeHfSimpleBattleEvent(XDocument xdoc, World world)
+        public HE_HFSimpleBattleEvent(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -92,7 +92,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         Group2Hfid.Add(valI);
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }

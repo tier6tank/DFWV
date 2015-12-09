@@ -10,10 +10,10 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses
 {
-    public class EntityPopulation : XmlObject
+    public class EntityPopulation : XMLObject
     {
 
-        public List<EcBattle> BattleEventCollections { get; set; }
+        public List<EC_Battle> BattleEventCollections { get; set; }
         public List<HistoricalFigure> Members { get; set; }
         public Race Race { private get; set; }
         [UsedImplicitly]
@@ -48,7 +48,7 @@ namespace DFWV.WorldClasses
                     case "id":
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -73,7 +73,7 @@ namespace DFWV.WorldClasses
 
             frm.grpEntityPopulationBattles.FillListboxWith(frm.lstEntityPopulationBattles, BattleEventCollections);
             frm.grpEntityPopulationMembers.FillListboxWith(frm.lstEntityPopulationMembers, Members);
-            frm.grpEntityPopluationRaces.FillListboxWith(frm.lstEntityPopluationRaces, RaceCounts.Keys);
+            frm.grpEntityPopluationRaces.FillListboxWith(frm.lstEntityPopluationRaces, RaceCounts.Keys, this);
 
 
             frm.grpEntityPopulationMembers.Text =
@@ -115,7 +115,7 @@ namespace DFWV.WorldClasses
                         EntityId = valI;
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t", element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t", element, xdoc.Root.ToString());
                         break;
                 }
             }

@@ -354,7 +354,7 @@ namespace DFWV.WorldClasses
         private void LoadXml()
         {
             Program.Log(LogType.Status, "Loading XML");
-            StartThread(() => DfxmlParser.Parse(this, XmlPath), "XML Parsing");
+            StartThread(() => DFXMLParser.Parse(this, XmlPath), "XML Parsing");
         }
 
         #endregion
@@ -586,7 +586,7 @@ namespace DFWV.WorldClasses
             StartThread(Link, "XML Linking");
         }
 
-        private static void LinkSection<T>(IEnumerable<T> list, string sectionName) where T : XmlObject
+        private static void LinkSection<T>(IEnumerable<T> list, string sectionName) where T : XMLObject
         {
 
             OnLinkedSectionStart(sectionName);
@@ -687,7 +687,7 @@ namespace DFWV.WorldClasses
             OnProcessed();
         }
 
-        private static void ProcessSection<T>(IEnumerable<T> list, string sectionName) where T : XmlObject
+        private static void ProcessSection<T>(IEnumerable<T> list, string sectionName) where T : XMLObject
         {
             OnProcessedSectionStart(sectionName);
             foreach (var item in list)
@@ -904,7 +904,7 @@ namespace DFWV.WorldClasses
                 //Position off change hf state
                 if (hf.Events.All(x => HistoricalEvent.Types[x.Type] != "change hf state"))
                     continue;
-                var evt = (HeChangeHfState)hf.Events.Last(x => HistoricalEvent.Types[x.Type] == "change hf state");
+                var evt = (HE_ChangeHFState)hf.Events.Last(x => HistoricalEvent.Types[x.Type] == "change hf state");
 
                 hf.Site = evt.Site ?? hf.Site;
                 hf.Region = evt.Subregion;
@@ -1305,28 +1305,33 @@ namespace DFWV.WorldClasses
         private static void ClearStaticLists()
         {
             God.Types = new List<string>();
-            Leader.InheritanceTypes = new List<string>();
             Leader.LeaderTypes = new List<string>();
             Leader.InheritanceTypes = new List<string> { "Unknown", "Inherited", "New Line", "Original Line" };
             Region.Types = new List<string>();
             Site.Types = new List<string>();
             WorldConstruction.Types = new List<string>();
+            Structure.Types = new List<string>();
             Structure.NumStructures = 0;
 
             EntityEntityLink.LinkTypes = new List<string>();
             EntitySiteLink.LinkTypes = new List<string>();
 
             HistoricalEvent.Types = new List<string>();
-            HistoricalEvent.Buildings = new List<string>();
-            HistoricalEvent.ItemSubTypes = new List<string>();
             HistoricalEvent.ItemTypes = new List<string>();
+            HistoricalEvent.ItemSubTypes = new List<string>();
             HistoricalEvent.Materials = new List<string>();
             HistoricalEvent.MeetingResults = new List<string>();
             HistoricalEvent.MeetingTopics = new List<string>();
-            HeChangeHfState.States = new List<string>();
-            HeHfDied.Causes = new List<string>();
-            HeHfSimpleBattleEvent.SubTypes = new List<string>();
-            HeMasterpieceItemImprovement.ImprovementTypes = new List<string>();
+            HistoricalEvent.Buildings = new List<string>();
+            HistoricalEvent_CultureCreatedBase.Reasons = new List<string>();
+            HistoricalEvent_CultureCreatedBase.Circumstances = new List<string>();
+            HE_ChangeHFState.States = new List<string>();
+            HE_HFDied.Causes = new List<string>();
+            HE_HFRelationshipDenied.Reasons = new List<string>();
+            HE_HFRelationshipDenied.RelationshipStrings = new List<string>();
+            HE_HFSimpleBattleEvent.SubTypes = new List<string>();
+            HE_KnowledgeDiscovered.Knowledges = new List<string>();
+            HE_MasterpieceItemImprovement.ImprovementTypes = new List<string>();
 
             HistoricalEventCollection.Types = new List<string>();
 
@@ -1336,11 +1341,11 @@ namespace DFWV.WorldClasses
             HistoricalFigure.Interactions = new List<string>();
             HistoricalFigure.JourneyPets = new List<string>();
             HistoricalFigure.Spheres = new List<string>();
-            HfEntityLink.LinkTypes = new List<string>();
-            HfEntityLink.Positions = new List<string>();
-            HfLink.LinkTypes = new List<string>();
-            HfSkill.Skills = new List<string>();
-            HfSiteLink.LinkTypes = new List<string>();
+            HFEntityLink.LinkTypes = new List<string>();
+            HFEntityLink.Positions = new List<string>();
+            HFLink.LinkTypes = new List<string>();
+            HFSkill.Skills = new List<string>();
+            HFSiteLink.LinkTypes = new List<string>();
 
 
         }

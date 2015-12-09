@@ -6,7 +6,7 @@ using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HeRegionPopIncorporatedIntoEntity : HistoricalEvent
+    class HE_RegionPopIncorporatedIntoEntity : HistoricalEvent
     {
         private int? PopRaceId { get; }
         private Race PopRace { get; set; }
@@ -37,7 +37,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return PopSr; }
         }
 
-        public HeRegionPopIncorporatedIntoEntity(XDocument xdoc, World world)
+        public HE_RegionPopIncorporatedIntoEntity(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -72,7 +72,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         PopFlid = valI;
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }

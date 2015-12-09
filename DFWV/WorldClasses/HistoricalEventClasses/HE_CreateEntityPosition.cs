@@ -7,7 +7,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HeCreateEntityPosition : HistoricalEvent
+    class HE_CreateEntityPosition : HistoricalEvent
     {
 
         private int? Hfid { get; set; }
@@ -32,7 +32,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        public HeCreateEntityPosition(XDocument xdoc, World world)
+        public HE_CreateEntityPosition(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -49,7 +49,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -81,16 +81,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "position":
                         if (valI != -1)
                         {
-                            if (!HfEntityLink.Positions.Contains(val))
-                                HfEntityLink.Positions.Add(val);
-                            Position = HfEntityLink.Positions.IndexOf(val);
+                            if (!HFEntityLink.Positions.Contains(val))
+                                HFEntityLink.Positions.Add(val);
+                            Position = HFEntityLink.Positions.IndexOf(val);
                         }
                         break;
                     case "reason":
                         Reason = valI;
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -121,7 +121,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (Hf != null)
                 EventLabel(frm, parent, ref location, "HF:", Hf);
             if (Position.HasValue)
-                EventLabel(frm, parent, ref location, "Position:", HfEntityLink.Positions[Position.Value]);
+                EventLabel(frm, parent, ref location, "Position:", HFEntityLink.Positions[Position.Value]);
         }
 
         protected override string LegendsDescription() //Matched
@@ -130,7 +130,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             var positionText = "a position";
             if (Position.HasValue)
-                positionText = "the position of " + HfEntityLink.Positions[Position.Value];
+                positionText = "the position of " + HFEntityLink.Positions[Position.Value];
                 
 
             switch (Reason)

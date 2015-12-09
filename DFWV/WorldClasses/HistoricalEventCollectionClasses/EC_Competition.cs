@@ -6,13 +6,13 @@ using System.Xml.Linq;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
-    public class EcCompetition : HistoricalEventCollection
+    public class EC_Competition : HistoricalEventCollection
     {
         private int Ordinal { get; }
 
         override public Point Location => Point.Empty;
 
-        public EcCompetition(XDocument xdoc, World world)
+        public EC_Competition(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -37,7 +37,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         break;
 
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }

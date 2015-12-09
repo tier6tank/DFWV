@@ -7,7 +7,7 @@ using DFWV.WorldClasses.HistoricalEventClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
-    public class HistoricalEventCollection : XmlObject
+    public class HistoricalEventCollection : XMLObject
     {
         [UsedImplicitly]
         public int StartYear { get; set; }
@@ -37,11 +37,11 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             {
                 if (Types[Type] == "war")
                 {
-                    var war = (EcWar)this;
+                    var war = (EC_War)this;
                     return war.WarData.AttackingHFs + war.WarData.AttackingNumber + war.WarData.DefendingHFs + war.WarData.DefendingSquads;
                 }
                 if (Types[Type] != "battle") return 0;
-                var battle = (EcBattle)this;
+                var battle = (EC_Battle)this;
                 return battle.BattleData.AttackingHFs + battle.BattleData.AttackingNumber + battle.BattleData.DefendingHFs + battle.BattleData.DefendingSquads;
             }
         }
@@ -53,11 +53,11 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             {
                 if (Types[Type] == "war")
                 {
-                    var war = (EcWar)this;
+                    var war = (EC_War)this;
                     return war.WarData.AttackingDeaths + war.WarData.DefendingDeaths;
                 }
                 if (Types[Type] != "battle") return 0;
-                var battle = (EcBattle)this;
+                var battle = (EC_Battle)this;
                 return battle.BattleData.AttackingDeaths + battle.BattleData.DefendingDeaths;
             }
         }
@@ -68,7 +68,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             get
             {
                 if (Types[Type] != "war") return 0;
-                var war = (EcWar)this;
+                var war = (EC_War)this;
                 return war.EventCol?.Count(x => Types[x.Type] == "battle") ?? 0;
             }
         }
@@ -78,33 +78,33 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             switch (xdoc.Root.Element("type").Value)
             {
                 case "abduction":
-                    return new EcAbduction(xdoc, world);
+                    return new EC_Abduction(xdoc, world);
                 case "battle":
-                    return new EcBattle(xdoc, world);
+                    return new EC_Battle(xdoc, world);
                 case "beast attack":
-                    return new EcBeastAttack(xdoc, world);
+                    return new EC_BeastAttack(xdoc, world);
                 case "duel":
-                    return new EcDuel(xdoc, world);
+                    return new EC_Duel(xdoc, world);
                 case "journey":
-                    return new EcJourney(xdoc, world);
+                    return new EC_Journey(xdoc, world);
                 case "site conquered":
-                    return new EcSiteConquered(xdoc, world);
+                    return new EC_SiteConquered(xdoc, world);
                 case "theft":
-                    return new EcTheft(xdoc, world);
+                    return new EC_Theft(xdoc, world);
                 case "war":
-                    return new EcWar(xdoc, world);
+                    return new EC_War(xdoc, world);
                 case "insurrection":
-                    return new EcInsurrection(xdoc, world);
+                    return new EC_Insurrection(xdoc, world);
                 case "occasion":
-                    return new EcOccasion(xdoc, world);
+                    return new EC_Occasion(xdoc, world);
                 case "ceremony":
-                    return new EcCeremony(xdoc, world);
+                    return new EC_Ceremony(xdoc, world);
                 case "procession":
-                    return new EcProcession(xdoc, world);
+                    return new EC_Procession(xdoc, world);
                 case "performance":
-                    return new EcPerformance(xdoc, world);
+                    return new EC_Performance(xdoc, world);
                 case "competition":
-                    return new EcCompetition(xdoc, world);
+                    return new EC_Competition(xdoc, world);
 
                 default:
                     var logtext = "Unassessed Event Collection Type: " + (xdoc.Root.Element("type").Value);// + raw.Replace("<", "//<") + "\n\t\t\tbreak;");
@@ -121,7 +121,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                     logtext += "\t\t\treturn new HistoricalEventCollection(xdoc, world);";
 
                     Program.Log(LogType.Warning, logtext);
-                    return new EcUnassessedEventCollection(xdoc, world);
+                    return new EC_UnassessedEventCollection(xdoc, world);
             }
         }
 

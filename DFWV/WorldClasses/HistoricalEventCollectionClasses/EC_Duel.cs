@@ -8,7 +8,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
-    public class EcDuel : HistoricalEventCollection
+    public class EC_Duel : HistoricalEventCollection
     {
         private int? SubregionId { get; }
         private Region Subregion { get; set; }
@@ -26,7 +26,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
         override public Point Location => Site?.Coords ?? Coords;
 
-        public EcDuel(XDocument xdoc, World world)
+        public EC_Duel(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -77,7 +77,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         break;
 
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -151,24 +151,24 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             if (Subregion != null)
             {
                 if (Subregion.DuelEventCollections == null)
-                    Subregion.DuelEventCollections = new List<EcDuel>();
+                    Subregion.DuelEventCollections = new List<EC_Duel>();
                 Subregion.DuelEventCollections.Add(this);
             }
             if (Site != null)
             {
                 if (Site.DuelEventCollections == null)
-                    Site.DuelEventCollections = new List<EcDuel>();
+                    Site.DuelEventCollections = new List<EC_Duel>();
                 Site.DuelEventCollections.Add(this);
             }
             if (_attackingHf != null && _attackingHf.Count != 0)
             {
                 if (_attackingHf[0].DuelEventCollections == null)
-                    _attackingHf[0].DuelEventCollections = new List<EcDuel>();
+                    _attackingHf[0].DuelEventCollections = new List<EC_Duel>();
                 _attackingHf[0].DuelEventCollections.Add(this);
             }
             if (_defendingHf == null || _defendingHf.Count == 0) return;
             if (_defendingHf[0].DuelEventCollections == null)
-                _defendingHf[0].DuelEventCollections = new List<EcDuel>();
+                _defendingHf[0].DuelEventCollections = new List<EC_Duel>();
             _defendingHf[0].DuelEventCollections.Add(this);
         }
 

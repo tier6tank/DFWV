@@ -7,7 +7,7 @@ using DFWV.WorldClasses.HistoricalEventCollectionClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HePeaceAccepted : HistoricalEvent
+    class HE_PeaceAccepted : HistoricalEvent
     {
         private int? SiteId { get; }
         private Site Site { get; set; }
@@ -34,7 +34,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         }
 
 
-        public HePeaceAccepted(XDocument xdoc, World world)
+        public HE_PeaceAccepted(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -55,7 +55,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                             SiteId = valI;
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -99,7 +99,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "site":
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -117,7 +117,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             //TODO: Incorporate new data
             var timestring = base.LegendsDescription();
             if (EventCollection == null) return timestring;
-            var war = (EcWar)EventCollection;
+            var war = (EC_War)EventCollection;
             return $"{timestring} {war.AggressorEnt} accepted an offer of peace from {war.DefenderEnt}.";
         }
 
@@ -127,7 +127,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             if (EventCollection == null) return timelinestring;
-            var war = (EcWar)EventCollection;
+            var war = (EC_War)EventCollection;
             return $"{timelinestring} {war.AggressorEnt} accepted peace from {war.DefenderEnt}.";
         }
 

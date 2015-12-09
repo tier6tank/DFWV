@@ -5,7 +5,7 @@ using System.Xml.Linq;
 
 namespace DFWV.WorldClasses
 {
-    public class Caste : XmlObject
+    public class Caste : XMLObject
     {
         public Race Race;
 

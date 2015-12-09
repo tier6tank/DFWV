@@ -7,7 +7,7 @@ using DFWV.WorldClasses.EntityClasses;
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     //TODO: Verify new event
-    class HeSiteDispute : HistoricalEvent
+    class HE_SiteDispute : HistoricalEvent
     {
         public string Dispute { get; set; }
         public int? EntityId1 { get; set; }
@@ -36,7 +36,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         }
 
 
-        public HeSiteDispute(XDocument xdoc, World world)
+        public HE_SiteDispute(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -71,7 +71,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
 
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }

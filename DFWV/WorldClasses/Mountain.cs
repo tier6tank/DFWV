@@ -6,7 +6,7 @@ using DFWV.Annotations;
 
 namespace DFWV.WorldClasses
 {
-    public class Mountain : XmlObject
+    public class Mountain : XMLObject
     {
 
         [UsedImplicitly]
@@ -41,7 +41,7 @@ namespace DFWV.WorldClasses
                         Height = Convert.ToInt32(val);
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
                         break;
                 }
             }

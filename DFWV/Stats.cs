@@ -280,7 +280,7 @@ namespace DFWV
                     latestSiteBuilt = createdYear;
 
 
-                foreach (var evt in site.Events.OfType<HeReclaimSite>())
+                foreach (var evt in site.Events.OfType<HE_ReclaimSite>())
                 {
                     if (!sitesBuiltInYear.ContainsKey(evt.Time.Year))
                         sitesBuiltInYear.Add(evt.Time.Year, 1);
@@ -293,7 +293,7 @@ namespace DFWV
                         latestSiteBuilt = evt.Time.Year;
                 }
 
-                foreach (var evt in site.Events.OfType<HeDestroyedSite>())
+                foreach (var evt in site.Events.OfType<HE_DestroyedSite>())
                 {
                     if (!sitesDestroyedInYear.ContainsKey(evt.Time.Year))
                         sitesDestroyedInYear.Add(evt.Time.Year, 1);

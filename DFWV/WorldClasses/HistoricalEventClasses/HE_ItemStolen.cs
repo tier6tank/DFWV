@@ -7,7 +7,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HeItemStolen : HistoricalEvent
+    class HE_ItemStolen : HistoricalEvent
     {
         private int? AttackerCivId { get; set; }
         public Entity AttackerCiv { private get; set; }
@@ -50,7 +50,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         }
 
 
-        public HeItemStolen(XDocument xdoc, World world)
+        public HE_ItemStolen(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -67,7 +67,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -127,7 +127,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                             StructureId = valI;
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }

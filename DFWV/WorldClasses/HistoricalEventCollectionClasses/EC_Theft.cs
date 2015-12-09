@@ -9,10 +9,10 @@ using DFWV.WorldClasses.HistoricalEventClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
-    public class EcTheft : HistoricalEventCollection
+    public class EC_Theft : HistoricalEventCollection
     {
         private int? WarEventCol_ { get; set; }
-        private EcWar WarEventCol { get; set; }
+        private EC_War WarEventCol { get; set; }
         private int? SubregionId { get; }
         private Region Subregion { get; set; }
         private int? FeatureLayerId { get; }
@@ -31,7 +31,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
         override public Point Location => Site.Coords;
 
-        public EcTheft(XDocument xdoc, World world)
+        public EC_Theft(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -86,7 +86,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         break;
 
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -166,20 +166,20 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             if (Subregion != null)
             {
                 if (Subregion.TheftEventCollections == null)
-                    Subregion.TheftEventCollections = new List<EcTheft>();
+                    Subregion.TheftEventCollections = new List<EC_Theft>();
                 Subregion.TheftEventCollections.Add(this);
             }
             if (Site != null)
             {
                 if (Site.TheftEventCollections == null)
-                    Site.TheftEventCollections = new List<EcTheft>();
+                    Site.TheftEventCollections = new List<EC_Theft>();
                 Site.TheftEventCollections.Add(this);
             }
             if (AttackingEn.TheftEventCollections == null)
-                AttackingEn.TheftEventCollections = new List<EcTheft>();
+                AttackingEn.TheftEventCollections = new List<EC_Theft>();
             AttackingEn.TheftEventCollections.Add(this);
             if (DefendingEn.TheftEventCollections == null)
-                DefendingEn.TheftEventCollections = new List<EcTheft>();
+                DefendingEn.TheftEventCollections = new List<EC_Theft>();
             DefendingEn.TheftEventCollections.Add(this);
 
         }
@@ -190,7 +190,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
             // For theft event collections, if we have item stolen events within that collection, we can note information about who stole, 
             //      and who was stolen from and where based on data from the event collection.
-            foreach (var ev in Event.Where(x => HistoricalEvent.Types[x.Type] == "item stolen").Cast<HeItemStolen>())
+            foreach (var ev in Event.Where(x => HistoricalEvent.Types[x.Type] == "item stolen").Cast<HE_ItemStolen>())
             {
                 ev.AttackerCiv = AttackingEn;
                 ev.DefenderCiv = DefendingEn;

@@ -7,7 +7,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    public class HeRemoveHfEntityLink : HistoricalEvent
+    public class HE_RemoveHFEntityLink : HistoricalEvent
     {
         private int? CivId { get; }
         private Entity Civ { get; set; }
@@ -16,7 +16,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public int? LinkType { private get; set; }
         public int? Position { private get; set; }
 
-        public HfEntityLink HfEntityLink { get; set; }
+        public HFEntityLink HfEntityLink { get; set; }
 
         override public Point Location => Civ.Location;
 
@@ -30,7 +30,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Civ; }
         }
 
-        public HeRemoveHfEntityLink(XDocument xdoc, World world)
+        public HE_RemoveHFEntityLink(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -50,7 +50,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         CivId = valI;
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -83,22 +83,22 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         Hfid = valI;
                         break;
                     case "link_type":
-                        if (!HfEntityLink.LinkTypes.Contains(val))
-                            HfEntityLink.LinkTypes.Add(val);
-                        LinkType = HfEntityLink.LinkTypes.IndexOf(val);
+                        if (!HFEntityLink.LinkTypes.Contains(val))
+                            HFEntityLink.LinkTypes.Add(val);
+                        LinkType = HFEntityLink.LinkTypes.IndexOf(val);
                         break;
                     case "position":
                         if (valI != -1)
                         {
-                            if (!HfEntityLink.Positions.Contains(val))
-                                HfEntityLink.Positions.Add(val);
-                            Position = HfEntityLink.Positions.IndexOf(val);
+                            if (!HFEntityLink.Positions.Contains(val))
+                                HFEntityLink.Positions.Add(val);
+                            Position = HFEntityLink.Positions.IndexOf(val);
                         }
                         break;
                     case "civ":
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -136,9 +136,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             EventLabel(frm, parent, ref location, "Entity:", Civ);
             if (LinkType.HasValue)
             {
-                EventLabel(frm, parent, ref location, "Link Type:", HfEntityLink.LinkTypes[LinkType.Value]);
-                if (HfEntityLink.LinkTypes[LinkType.Value] == "position" && Position != null)
-                    EventLabel(frm, parent, ref location, "Position:", HfEntityLink.Positions[Position.Value]);
+                EventLabel(frm, parent, ref location, "Link Type:", HFEntityLink.LinkTypes[LinkType.Value]);
+                if (HFEntityLink.LinkTypes[LinkType.Value] == "position" && Position != null)
+                    EventLabel(frm, parent, ref location, "Position:", HFEntityLink.Positions[Position.Value]);
             }
         }
 
@@ -146,12 +146,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            if (!Position.HasValue || HfEntityLink.Positions[Position.Value] == "-1")
+            if (!Position.HasValue || HFEntityLink.Positions[Position.Value] == "-1")
                 return $"{timestring} {Hf?.ToString() ?? "UNKNOWN"} left the {Civ}.";
             if (Hf == null)
-                return $"{timestring} {"UNKNOWN"} became the {HfEntityLink.Positions[Position.Value]} of {Civ}.";
+                return $"{timestring} {"UNKNOWN"} became the {HFEntityLink.Positions[Position.Value]} of {Civ}.";
             return
-                $"{timestring} the {Hf.Race.ToString().ToLower()} {Hf} ceased to be the {HfEntityLink.Positions[Position.Value]} of {Civ}.";
+                $"{timestring} the {Hf.Race.ToString().ToLower()} {Hf} ceased to be the {HFEntityLink.Positions[Position.Value]} of {Civ}.";
         }
 
         internal override string ToTimelineString()
@@ -173,8 +173,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Id, 
                 CivId.DBExport(),
                 Hfid.DBExport(),
-                LinkType.DBExport(HfEntityLink.LinkTypes),
-                Position.DBExport(HfEntityLink.Positions)
+                LinkType.DBExport(HFEntityLink.LinkTypes),
+                Position.DBExport(HFEntityLink.Positions)
             };
 
             Database.ExportWorldItem(table, vals);

@@ -6,7 +6,7 @@ using DFWV.WorldClasses.HistoricalEventClasses;
 
 namespace DFWV.WorldClasses
 {
-    public class Artifact : XmlObject
+    public class Artifact : XMLObject
     {
         public string Item { get; set; }
 
@@ -19,11 +19,11 @@ namespace DFWV.WorldClasses
 
         public string Description { get; set; }
 
-        public HeArtifactCreated CreatedEvent { get; set; }
-        public List<HeArtifactStored> StoredEvents { get; set; }
-        public List<HeArtifactPossessed> PossessedEvents { get; set; }
-        public HeArtifactLost LostEvent { get; set; }
-        public List<HeHfDied> Kills { get; set; }
+        public HE_ArtifactCreated CreatedEvent { get; set; }
+        public List<HE_ArtifactStored> StoredEvents { get; set; }
+        public List<HE_ArtifactPossessed> PossessedEvents { get; set; }
+        public HE_ArtifactLost LostEvent { get; set; }
+        public List<HE_HFDied> Kills { get; set; }
 
         [UsedImplicitly]
         public bool Lost => LostEvent != null;
@@ -63,7 +63,7 @@ namespace DFWV.WorldClasses
                         Item = val;
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -171,7 +171,7 @@ namespace DFWV.WorldClasses
                         Description = val;
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" , element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" , element, xdoc.Root.ToString());
                         break;
                 }
             }

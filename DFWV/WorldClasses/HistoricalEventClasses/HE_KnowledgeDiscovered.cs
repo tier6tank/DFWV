@@ -6,7 +6,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HeKnowledgeDiscovered : HistoricalEvent
+    class HE_KnowledgeDiscovered : HistoricalEvent
     {
         private int? Hfid { get; }
         private HistoricalFigure Hf { get; set; }
@@ -21,7 +21,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get { yield return Hf; }
         }
 
-        public HeKnowledgeDiscovered(XDocument xdoc, World world)
+        public HE_KnowledgeDiscovered(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -49,7 +49,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         _first = true;
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }

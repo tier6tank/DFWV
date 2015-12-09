@@ -7,7 +7,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HeMasterpieceEngraving : HistoricalEvent
+    class HE_MasterpieceEngraving : HistoricalEvent
     {
         private int? Hfid { get; }
         private HistoricalFigure Hf { get; set; }
@@ -37,7 +37,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         }
 
 
-        public HeMasterpieceEngraving(XDocument xdoc, World world)
+        public HE_MasterpieceEngraving(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -66,7 +66,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         SkillAtTime = valI;
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
@@ -114,7 +114,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "skill_rating":
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }

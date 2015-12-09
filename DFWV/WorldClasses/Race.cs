@@ -7,7 +7,7 @@ using DFWV.Annotations;
 
 namespace DFWV.WorldClasses
 {
-    public class Race : XmlObject
+    public class Race : XMLObject
     {
         [UsedImplicitly]
         public long Population { private get; set; }
@@ -92,6 +92,7 @@ namespace DFWV.WorldClasses
 
 
             frm.lstRacePopulation.BeginUpdate();
+            frm.lstRacePopulation.Tag = this;
             frm.lstRacePopulation.Items.Clear();
             var pops = Populations;
             if (pops.Count > 0)
@@ -165,7 +166,7 @@ namespace DFWV.WorldClasses
                         Castes.Add(newCaste);
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t Race", element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t Race", element, xdoc.Root.ToString());
                         break;
                 }
             }

@@ -6,7 +6,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HeHfRelationshipDenied : HistoricalEvent
+    class HE_HFRelationshipDenied : HistoricalEvent
     {
         private int? SeekerHfid { get; }
         private HistoricalFigure SeekerHf { get; set; }
@@ -48,7 +48,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
 
 
-        public HeHfRelationshipDenied(XDocument xdoc, World world)
+        public HE_HFRelationshipDenied(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -101,7 +101,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                             FeatureLayerId = valI;
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }

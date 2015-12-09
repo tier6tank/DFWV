@@ -6,7 +6,7 @@ using DFWV.Annotations;
 
 namespace DFWV.WorldClasses
 {
-    public class HistoricalEra : XmlObject
+    public class HistoricalEra : XMLObject
     {
         [UsedImplicitly]
         public int StartYear { get; set; }
@@ -35,7 +35,7 @@ namespace DFWV.WorldClasses
                         StartYear = Id;
                         break;
                     default:
-                        DfxmlParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
                         break;
                 }
             }

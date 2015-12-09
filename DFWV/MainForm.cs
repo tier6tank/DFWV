@@ -32,6 +32,7 @@ namespace DFWV
         private readonly Stack<WorldObject> _navBackObjects = new Stack<WorldObject>();
         private readonly Stack<WorldObject> _navForwardObjects = new Stack<WorldObject>();
         private bool _navigatingBack;
+        public Dictionary<Type, WorldObject> displayingItem = new Dictionary<Type, WorldObject>(); 
 
         public MainForm()
         {
@@ -144,13 +145,13 @@ namespace DFWV
             if (File.Exists(xmlPath) && File.Exists(paramPath) && File.Exists(historyPath) && File.Exists(sitesPath))
             {
 
-                DfxmlParser.StartedSection -= XmlSectionStarted;
-                DfxmlParser.FinishedSection -= XmlSectionFinished;
-                DfxmlParser.Finished -= XmlFinished;
+                DFXMLParser.StartedSection -= XmlSectionStarted;
+                DFXMLParser.FinishedSection -= XmlSectionFinished;
+                DFXMLParser.Finished -= XmlFinished;
 
-                DfxmlParser.StartedSection += XmlSectionStarted;
-                DfxmlParser.FinishedSection += XmlSectionFinished;
-                DfxmlParser.Finished += XmlFinished;
+                DFXMLParser.StartedSection += XmlSectionStarted;
+                DFXMLParser.FinishedSection += XmlSectionFinished;
+                DFXMLParser.Finished += XmlFinished;
 
                 Application.DoEvents();
 
@@ -534,7 +535,7 @@ namespace DFWV
         private void XmlSectionFinished(string section)
         {
             Program.Log(LogType.Status, " Done");
-            if (DfxmlParser.MemoryFailureQuitParsing)
+            if (DFXMLParser.MemoryFailureQuitParsing)
                 return;
             if (World.HasPlusXml && !World.IsPlusParsing) //Don't Provide Summary info or Fill Lists when there is still PlusXML to handle
                 return;
@@ -1038,7 +1039,7 @@ namespace DFWV
         /// </summary>
         private void lstEntityPopulationBattles_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var evtcol = (EcBattle)lstEntityPopulationBattles.SelectedItem;
+            var evtcol = (EC_Battle)lstEntityPopulationBattles.SelectedItem;
             var entpop = (EntityPopulation)lstEntityPopulation.SelectedItem;
 
             var number = 0;
@@ -1094,7 +1095,7 @@ namespace DFWV
 
             if (e.Index != -1)
             {
-                var thisSite = (Site)lstSite.SelectedItem;
+                var thisSite = (Site)lstSitePopulation.Tag ?? (Site)lstSite.SelectedItem;
                 if (thisSite == null)
                 {
                     grpSite.Visible = false;
@@ -1122,7 +1123,7 @@ namespace DFWV
 
             if (e.Index != -1)
             {
-                var thisSite = (Site)lstSite.SelectedItem;
+                var thisSite = (Site)lstSitePrisoners.Tag ?? (Site)lstSite.SelectedItem;
                 if (thisSite == null)
                 {
                     grpSite.Visible = false;
@@ -1152,7 +1153,7 @@ namespace DFWV
 
             if (e.Index != -1)
             {
-                var thisSite = (Site)lstSite.SelectedItem;
+                var thisSite = (Site)lstSiteOutcasts.Tag ?? (Site)lstSite.SelectedItem;
                 if (thisSite == null)
                 {
                     grpSite.Visible = false;
@@ -1185,7 +1186,7 @@ namespace DFWV
                 Dictionary<Race, int> pops = null;
                 if (sender == lstRegionPopulation)
                 {
-                    var thisRegion = (Region) lstRegion.SelectedItem;
+                    var thisRegion = (Region)lstRegionPopulation.Tag ?? (Region) lstRegion.SelectedItem;
                     if (thisRegion == null)
                     {
                         grpRegion.Visible = false;
@@ -1196,7 +1197,7 @@ namespace DFWV
                 }
                 else if (sender == lstUndergroundRegionPopulation)
                 {
-                    var thisUgRegion = (UndergroundRegion) lstUndergroundRegion.SelectedItem;
+                    var thisUgRegion = (UndergroundRegion)lstUndergroundRegion.Tag ?? (UndergroundRegion) lstUndergroundRegion.SelectedItem;
                     if (thisUgRegion == null)
                     {
                         grpUndergroundRegion.Visible = false;
@@ -1374,7 +1375,7 @@ namespace DFWV
             e.DrawBackground();
             if (e.Index != -1)
             {
-                var thisWar = (EcWar)lstCivilizationWars.Items[e.Index];
+                var thisWar = (EC_War)lstCivilizationWars.Items[e.Index];
                 if (!(lstCivilization.SelectedItem is WorldObject))
                     return;
                 var thisCiv = (Civilization)lstCivilization.SelectedItem;
@@ -1426,7 +1427,7 @@ namespace DFWV
 
             if (e.Index != -1)
             {
-                var thisRace = (Race)lstRace.SelectedItem;
+                var thisRace = (Race)lstRacePopulation.Tag ?? (Race)lstRace.SelectedItem;
                 if (thisRace == null)
                 {
                     grpRace.Visible = false;
@@ -1495,9 +1496,9 @@ namespace DFWV
         {
             e.DrawBackground();
 
-            if (e.Index != -1 && lstHistoricalEventCollection.SelectedItem is EcBattle)
+            if (e.Index != -1 && lstHistoricalEventCollection.SelectedItem is EC_Battle)
             {
-                var thisBattle = (EcBattle)lstHistoricalEventCollection.SelectedItem;
+                var thisBattle = (EC_Battle)lstBattleAttackingHF.Tag ?? (EC_Battle)lstHistoricalEventCollection.SelectedItem;
                 var drawstring = thisBattle.AttackingHf[e.Index].ToString();
 
                 var mColor = Color.Black;
@@ -1522,7 +1523,7 @@ namespace DFWV
 
             if (e.Index != -1)
             {
-                var thisBattle = (EcBattle)lstHistoricalEventCollection.SelectedItem;
+                var thisBattle = (EC_Battle)lstBattleDefendingHF.Tag ?? (EC_Battle)lstHistoricalEventCollection.SelectedItem;
                 if (thisBattle.DefendingHf != null)
                 {
                     var drawstring = thisBattle.DefendingHf[e.Index].ToString();
@@ -1946,7 +1947,7 @@ namespace DFWV
 
             if (e.Index != -1)
             {
-                var thisEntPop = (EntityPopulation)lstEntityPopulation.SelectedItem;
+                var thisEntPop = (EntityPopulation)lstEntityPopluationRaces.Tag ?? (EntityPopulation)lstEntityPopulation.SelectedItem;
                 if (thisEntPop == null)
                 {
                     grpEntityPopulation.Visible = false;
@@ -1978,5 +1979,12 @@ namespace DFWV
             Program.SiteMapForm.Show();
         }
 
+        public void SetDisplayedItem(WorldObject obj)
+        {
+            if (!displayingItem.ContainsKey(obj.GetType()))
+                displayingItem.Add(obj.GetType(), obj);
+            else
+                displayingItem[obj.GetType()] = obj;
+        }
     }
 }
