@@ -73,7 +73,8 @@ namespace DFWV.WorldClasses
 
             frm.grpEntityPopulationBattles.FillListboxWith(frm.lstEntityPopulationBattles, BattleEventCollections);
             frm.grpEntityPopulationMembers.FillListboxWith(frm.lstEntityPopulationMembers, Members);
-            frm.grpEntityPopluationRaces.FillListboxWith(frm.lstEntityPopluationRaces, RaceCounts.Keys, this);
+            if (RaceCounts != null)
+                frm.grpEntityPopluationRaces.FillListboxWith(frm.lstEntityPopluationRaces, RaceCounts.Keys, this);
 
 
             frm.grpEntityPopulationMembers.Text =
