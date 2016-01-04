@@ -111,19 +111,19 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "site":
                         break;
                     case "item_type":
-                        if (!ItemTypes.Contains(val))
-                            ItemTypes.Add(val);
-                        ItemType = ItemTypes.IndexOf(val);
+                        if (!Item.ItemTypes.Contains(val))
+                            Item.ItemTypes.Add(val);
+                        ItemType = Item.ItemTypes.IndexOf(val);
                         break;
                     case "item_subtype":
-                        if (!ItemSubTypes.Contains(val))
-                            ItemSubTypes.Add(val);
-                        ItemSubType = ItemSubTypes.IndexOf(val);
+                        if (!Item.ItemSubTypes.Contains(val))
+                            Item.ItemSubTypes.Add(val);
+                        ItemSubType = Item.ItemSubTypes.IndexOf(val);
                         break;
                     case "mat":
-                        if (!Materials.Contains(val))
-                            Materials.Add(val);
-                        Mat = Materials.IndexOf(val);
+                        if (!Item.Materials.Contains(val))
+                            Item.Materials.Add(val);
+                        Mat = Item.Materials.IndexOf(val);
                         break;
                     case "mattype":
                         MatType = valI;
@@ -140,9 +140,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         ImprovementSubType = valI;
                         break;
                     case "imp_mat":
-                        if (!Materials.Contains(val))
-                            Materials.Add(val);
-                        ImprovementMat = Materials.IndexOf(val);
+                        if (!Item.Materials.Contains(val))
+                            Item.Materials.Add(val);
+                        ImprovementMat = Item.Materials.IndexOf(val);
                         break;
                     case "art_id":
                         ArtId = valI;

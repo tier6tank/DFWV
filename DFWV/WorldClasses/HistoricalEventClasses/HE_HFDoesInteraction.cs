@@ -20,6 +20,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private Site Site { get; set; }
         private int? SubregionId { get; set; }
         private Region Subregion { get; set; }
+        private int? Source { get; set; }
 
         override public Point Location => Point.Empty;
 
@@ -114,6 +115,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "region":
                         if (valI != -1)
                             SubregionId = valI;
+                        break;
+                    case "source":
+                        Source = valI;
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());

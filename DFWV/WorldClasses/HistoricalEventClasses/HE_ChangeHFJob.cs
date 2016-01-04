@@ -102,10 +102,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "site":
                         break;
                     case "new_job":
-                        NewJob = val.Replace("_", " ");
+                        if (!Unit.JobTypes.Contains(val))
+                            Unit.JobTypes.Add(val);
+                        NewJob = Unit.JobTypes.IndexOf(val);
                         break;
                     case "old_job":
-                        OldJob = val.Replace("_", " ");
+                        if (!Unit.JobTypes.Contains(val))
+                            Unit.JobTypes.Add(val);
+                        OldJob = Unit.JobTypes.IndexOf(val);
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
@@ -128,7 +132,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         protected override string LegendsDescription() //Not Matched
         {
-            //TODO: Incorporate new data
             var timestring = base.LegendsDescription();
 
             if (NewJob != "standard")

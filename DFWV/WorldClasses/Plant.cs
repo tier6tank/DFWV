@@ -7,6 +7,8 @@ namespace DFWV.WorldClasses
     public class Plant : XMLObject
     {
         override public Point Location => Point.Empty;
+        public Point3 Coords { get; set; }
+        public int? Mat { get; set; }
 
         public Plant(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -17,6 +19,17 @@ namespace DFWV.WorldClasses
                 switch (element.Name.LocalName)
                 {
                     case "id":
+                        break;
+                    case "coords":
+                        Coords = new Point3(
+                            Convert.ToInt32(val.Split(',')[0]),
+                            Convert.ToInt32(val.Split(',')[1]),
+                            Convert.ToInt32(val.Split(',')[2]));
+                        break;
+                    case "material":
+                        if (!Item.Materials.Contains(val))
+                            Item.Materials.Add(val);
+                        Mat = Item.Materials.IndexOf(val);
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());

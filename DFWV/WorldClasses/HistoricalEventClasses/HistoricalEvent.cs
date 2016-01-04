@@ -44,9 +44,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         override public Point Location => Point.Empty;
 
-        public static List<string> ItemTypes = new List<string>();
-        public static List<string> ItemSubTypes = new List<string>();
-        public static List<string> Materials = new List<string>();
         public static List<string> MeetingTopics = new List<string>();
         public static List<string> MeetingResults = new List<string>();
         public static List<string> Buildings = new List<string>();

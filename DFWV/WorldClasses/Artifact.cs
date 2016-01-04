@@ -8,8 +8,9 @@ namespace DFWV.WorldClasses
 {
     public class Artifact : XMLObject
     {
-        public string Item { get; set; }
+        public string ItemName { get; set; }
 
+        private int? ItemID { get; set; }
         private int? ItemType { get; set; }
         private int? ItemSubType { get; set; }
         private int? Mat { get; set; }
@@ -60,7 +61,7 @@ namespace DFWV.WorldClasses
                         Name = val;
                         break;
                     case "item":
-                        Item = val;
+                        ItemName = val;
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
@@ -82,13 +83,13 @@ namespace DFWV.WorldClasses
             frm.grpArtifact.Show();
 
             frm.lblArtifactName.Text = Name.ToTitleCase();
-            frm.lblArtifactItem.Text = Item.ToTitleCase();
+            frm.lblArtifactItem.Text = ItemName.ToTitleCase();
 
-            frm.lblArtifactDescription.Text = (Mat.HasValue ? HistoricalEvent.Materials[Mat.Value] + " " : "") +
+            frm.lblArtifactDescription.Text = (Mat.HasValue ? Item.Materials[Mat.Value] + " " : "") +
                                               (ItemSubType.HasValue
-                                                  ? HistoricalEvent.ItemSubTypes[ItemSubType.Value]
+                                                  ? Item.ItemSubTypes[ItemSubType.Value]
                                                   : (ItemType.HasValue
-                                                      ? HistoricalEvent.ItemTypes[ItemType.Value]
+                                                      ? Item.ItemTypes[ItemType.Value]
                                                       : ""));
 
             frm.lblArtifactValue.Text = ItemValue?.ToString() ?? "";
@@ -141,16 +142,16 @@ namespace DFWV.WorldClasses
                     case "type":
                         break;
                     case "item_type":
-                        if (!HistoricalEvent.ItemTypes.Contains(val))
-                            HistoricalEvent.ItemTypes.Add(val);
-                        ItemType = HistoricalEvent.ItemTypes.IndexOf(val);
+                        if (!Item.ItemTypes.Contains(val))
+                            Item.ItemTypes.Add(val);
+                        ItemType = Item.ItemTypes.IndexOf(val);
                         break;
                     case "item_subtype":
                         if (valI != -1)
                         {
-                            if (!HistoricalEvent.ItemSubTypes.Contains(val))
-                                HistoricalEvent.ItemSubTypes.Add(val);
-                            ItemSubType = HistoricalEvent.ItemSubTypes.IndexOf(val);
+                            if (!Item.ItemSubTypes.Contains(val))
+                                Item.ItemSubTypes.Add(val);
+                            ItemSubType = Item.ItemSubTypes.IndexOf(val);
                         }
                         break;
                     case "mattype":
@@ -160,15 +161,19 @@ namespace DFWV.WorldClasses
                         MatIndex = valI;
                         break;
                     case "mat":
-                        if (!HistoricalEvent.Materials.Contains(val))
-                            HistoricalEvent.Materials.Add(val);
-                        Mat = HistoricalEvent.Materials.IndexOf(val);
+                        if (!Item.Materials.Contains(val))
+                            Item.Materials.Add(val);
+                        Mat = Item.Materials.IndexOf(val);
                         break;
                     case "value":
                         ItemValue = valI;
                         break;
                     case "item_description":
                         Description = val;
+                        break;
+                    case "item_id":
+                        if (valI != -1)
+                            ItemID = valI;
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" , element, xdoc.Root.ToString());

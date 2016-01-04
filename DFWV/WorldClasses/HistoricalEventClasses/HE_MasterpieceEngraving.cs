@@ -104,9 +104,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         ArtSubId = valI;
                         break;
                     case "mat":
-                        if (!Materials.Contains(val))
-                            Materials.Add(val);
-                        Mat = Materials.IndexOf(val);
+                        if (!Item.Materials.Contains(val))
+                            Item.Materials.Add(val);
+                        Mat = Item.Materials.IndexOf(val);
                         break;
                     case "maker":
                     case "maker_entity":

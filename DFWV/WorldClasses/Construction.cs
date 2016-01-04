@@ -6,7 +6,11 @@ namespace DFWV.WorldClasses
 {
     public class Construction : XMLObject
     {
+        private Point3 Coords { get; set; }
         override public Point Location => Point.Empty;
+        private int? ItemType { get; set; }
+        private int? Mat { get; set; }
+
 
         public Construction(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -17,6 +21,22 @@ namespace DFWV.WorldClasses
                 switch (element.Name.LocalName)
                 {
                     case "id":
+                        break;
+                    case "coords":
+                        Coords = new Point3(
+                            Convert.ToInt32(val.Split(',')[0]),
+                            Convert.ToInt32(val.Split(',')[1]),
+                            Convert.ToInt32(val.Split(',')[2]));
+                        break;
+                    case "item_type":
+                        if (!Item.ItemTypes.Contains(val))
+                            Item.ItemTypes.Add(val);
+                        ItemType = Item.ItemTypes.IndexOf(val);
+                        break;
+                    case "mat":
+                        if (!Item.Materials.Contains(val))
+                            Item.Materials.Add(val);
+                        Mat = Item.Materials.IndexOf(val);
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());

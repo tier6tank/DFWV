@@ -27,7 +27,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? SubregionId { get; }
         public Region Subregion { get; private set; }
 
-        private int? Item { get; set; }
+        private int? ItemID { get; set; }
         private int? ArtifactId { get; set; }
         private int? ItemType { get; set; }
         private int? ItemSubType { get; set; }
@@ -168,20 +168,20 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "death_cause":
                         break;
                     case "item":
-                        Item = valI;
+                        ItemID = valI;
                         break;
                     case "artifact_id":
                         ArtifactId = valI;
                         break;
                     case "item_type":
-                        if (!ItemTypes.Contains(val))
-                            ItemTypes.Add(val);
-                        ItemType = ItemTypes.IndexOf(val);
+                        if (!Item.ItemTypes.Contains(val))
+                            Item.ItemTypes.Add(val);
+                        ItemType = Item.ItemTypes.IndexOf(val);
                         break;
                     case "item_subtype":
-                        if (!ItemSubTypes.Contains(val))
-                            ItemSubTypes.Add(val);
-                        ItemSubType = ItemSubTypes.IndexOf(val);
+                        if (!Item.ItemSubTypes.Contains(val))
+                            Item.ItemSubTypes.Add(val);
+                        ItemSubType = Item.ItemSubTypes.IndexOf(val);
                         break;
                     case "mattype":
                         MatType = valI;
@@ -190,9 +190,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         MatIndex = valI;
                         break;
                     case "mat":
-                        if (!Materials.Contains(val))
-                            Materials.Add(val);
-                        Mat = Materials.IndexOf(val);
+                        if (!Item.Materials.Contains(val))
+                            Item.Materials.Add(val);
+                        Mat = Item.Materials.IndexOf(val);
                         break;
                     case "bow_item":
                         BowItem = valI;
@@ -201,14 +201,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         BowArtifactId = valI;
                         break;
                     case "bow_item_type":
-                        if (!ItemTypes.Contains(val))
-                            ItemTypes.Add(val);
-                        BowItemType = ItemTypes.IndexOf(val);
+                        if (!Item.ItemTypes.Contains(val))
+                            Item.ItemTypes.Add(val);
+                        BowItemType = Item.ItemTypes.IndexOf(val);
                         break;
                     case "bow_item_subtype":
-                        if (!ItemSubTypes.Contains(val))
-                            ItemSubTypes.Add(val);
-                        BowItemSubType = ItemSubTypes.IndexOf(val);
+                        if (!Item.ItemSubTypes.Contains(val))
+                            Item.ItemSubTypes.Add(val);
+                        BowItemSubType = Item.ItemSubTypes.IndexOf(val);
                         break;
                     case "bow_mattype":
                         BowMatType = valI;
@@ -217,9 +217,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         BowMatIndex = valI;
                         break;
                     case "bow_mat":
-                        if (!Materials.Contains(val))
-                            Materials.Add(val);
-                        BowMat = Materials.IndexOf(val);
+                        if (!Item.Materials.Contains(val))
+                            Item.Materials.Add(val);
+                        BowMat = Item.Materials.IndexOf(val);
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
@@ -320,7 +320,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                             return
                                 $"{timestring} the {Hf.Race} {Hf} was shot and killed by \nthe {SlayerRace?.ToString() ?? ""} {SlayerHf?.ToString() ?? SlayerHfid.ToString()} {"with a " + Materials[Mat.Value] + " " + ItemSubTypes[ItemSubType.Value]} in {locationText}.";
                         return
-                            $"{timestring} the {Hf.Race} {Hf} was shot and killed by \nthe {SlayerRace?.ToString() ?? ""} {SlayerHf?.ToString() ?? SlayerHfid.ToString()} in {locationText}.";
+                                "with a " + Materials[Mat.Value] + " " + ItemSubTypes[ItemSubType.Value],
                     }
                     if (SlayerShooterItem != null)
                         return
