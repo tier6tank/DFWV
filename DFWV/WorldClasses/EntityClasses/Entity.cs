@@ -262,8 +262,9 @@ namespace DFWV.WorldClasses.EntityClasses
             frm.grpEntityCreated.Visible = CreatedEvent != null;
             if (CreatedEvent != null)
             {
+
                 frm.lblEntityCreatedSite.Data = CreatedEvent.Site;
-                frm.lblEntityCreatedSite.Text = CreatedEvent.Site.AltName;
+                frm.lblEntityCreatedSite.Text = CreatedEvent.Site?.AltName;
                 frm.lblEntityCreatedTime.Data = CreatedEvent;
                 frm.lblEntityCreatedTime.Text = CreatedEvent.Time.ToString();
             }

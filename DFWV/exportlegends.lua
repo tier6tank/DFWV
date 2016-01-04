@@ -1,5 +1,23 @@
 -- Export everything from legends mode
--- Valid args:  "all", "info", "maps", "sites"
+--[[=begin
+
+exportlegends
+=============
+Controls legends mode to export data - especially useful to set-and-forget large
+worlds, or when you want a map of every site when there are several hundred.
+
+The 'info' option exports more data than is possible in vanilla, to a
+:file:`region-date-legends_plus.xml` file developed to extend
+:forums:`World Viewer <128932>` and other legends utilities.
+
+Options:
+
+:info:  Exports the world/gen info, the legends XML, and a custom XML with more information
+:sites: Exports all available site maps
+:maps:  Exports all seventeen detailed maps
+:all:   Equivalent to calling all of the above, in that order
+
+=end]]
 
 gui = require 'gui'
 local args = {...}
@@ -296,16 +314,21 @@ function export_more_legends_xml()
     for entityK, entityV in ipairs(df.global.world.entities.all) do
         io.write ("\t".."<entity>".."\n")
         io.write ("\t\t".."<id>"..entityV.id.."</id>".."\n")
-        io.write ("\t\t".."<race>"..(df.global.world.raws.creatures.all[entityV.race].creature_id):lower().."</race>".."\n")
-        io.write ("\t\t".."<type>"..(df.historical_entity_type[entityV.type]):lower().."</type>".."\n")
-        if (df.historical_entity_type[entityV.type]):lower() == "religion" then -- Get worshipped figure
-            if (entityV.unknown1b ~= nil and entityV.unknown1b.worship ~= nill and
-                #entityV.unknown1b.worship == 1) then
-                io.write ("\t\t".."<worship_id>"..entityV.unknown1b.worship[0].."</worship_id>".."\n")
-            else
-                print(entityV.unknown1b, entityV.unknown1b.worship, #entityV.unknown1b.worship)
-            end
+		if (entityV.race ~= -1) then
+			io.write ("\t\t".."<race>"..(df.global.world.raws.creatures.all[entityV.race].creature_id):lower().."</race>".."\n")
+		end
+		if (df.historical_entity_type[entityV.type] ~= nil) then
+			io.write ("\t\t".."<type>"..(df.historical_entity_type[entityV.type]):lower().."</type>".."\n")
+			if (df.historical_entity_type[entityV.type]):lower() == "religion" then -- Get worshipped figure
+                if (entityV.unknown1b ~= nil and entityV.unknown1b.worship ~= nill and
+                    #entityV.unknown1b.worship == 1) then
+                    io.write ("\t\t".."<worship_id>"..entityV.unknown1b.worship[0].."</worship_id>".."\n")
+                else
+                    print(entityV.unknown1b, entityV.unknown1b.worship, #entityV.unknown1b.worship)
+                end
+			end
         end
+
         for id, link in pairs(entityV.entity_links) do
             io.write ("\t\t".."<entity_link>".."\n")
                 for k, v in pairs(link) do
@@ -415,7 +438,9 @@ function export_more_legends_xml()
                         io.write ("\t\t".."<position>-1</position>".."\n")
                     end
                 elseif event:getType() == df.history_event_type.ADD_HF_HF_LINK and k == "type" then
-                    io.write ("\t\t".."<link_type>"..df.histfig_hf_link_type[v]:lower().."</link_type>".."\n")
+					if (df.histfig_hf_link_type[v] ~= nil) then
+						io.write ("\t\t".."<link_type>"..df.histfig_hf_link_type[v]:lower().."</link_type>".."\n")
+					end
                 elseif event:getType() == df.history_event_type.ADD_HF_SITE_LINK and k == "type" then
                     io.write ("\t\t".."<link_type>"..df.histfig_site_link_type[v]:lower().."</link_type>".."\n")
                 elseif event:getType() == df.history_event_type.REMOVE_HF_SITE_LINK and k == "type" then
@@ -506,16 +531,16 @@ function export_more_legends_xml()
                     --io.write ("\t\t".."<"..k.."_item_mat_index"..">"..tostring(event.props.item.mat_index).."</"..k.."_item_mat_index"..">".."\n")
                     io.write ("\t\t".."<"..k.."_pile_type"..">"..tostring(event.props.pile_type).."</"..k.."_pile_type"..">".."\n")
                 elseif event:getType() == df.history_event_type.ASSUME_IDENTITY and k == "identity" then
-					if (table.contains(df.global.world.identities.all,v)) then
-						if (df.global.world.identities.all[v].histfig_id == -1) then
-							local thisIdentity = df.global.world.identities.all[v]
-							io.write ("\t\t".."<identity_name>"..thisIdentity.name.first_name.."</identity_name>".."\n")
-							io.write ("\t\t".."<identity_race>"..(df.global.world.raws.creatures.all[thisIdentity.race].creature_id):lower().."</identity_race>".."\n")
-							io.write ("\t\t".."<identity_caste>"..(df.global.world.raws.creatures.all[thisIdentity.race].caste[thisIdentity.caste].caste_id):lower().."</identity_caste>".."\n")
-						else
-							io.write ("\t\t".."<identity_hf>"..df.global.world.identities.all[v].histfig_id.."</identity_hf>".."\n")
-						end
-					end
+                    if (table.contains(df.global.world.identities.all,v)) then
+                        if (df.global.world.identities.all[v].histfig_id == -1) then
+                            local thisIdentity = df.global.world.identities.all[v]
+                            io.write ("\t\t".."<identity_name>"..thisIdentity.name.first_name.."</identity_name>".."\n")
+                            io.write ("\t\t".."<identity_race>"..(df.global.world.raws.creatures.all[thisIdentity.race].creature_id):lower().."</identity_race>".."\n")
+                            io.write ("\t\t".."<identity_caste>"..(df.global.world.raws.creatures.all[thisIdentity.race].caste[thisIdentity.caste].caste_id):lower().."</identity_caste>".."\n")
+                        else
+                            io.write ("\t\t".."<identity_hf>"..df.global.world.identities.all[v].histfig_id.."</identity_hf>".."\n")
+                        end
+                    end
                 elseif event:getType() == df.history_event_type.MASTERPIECE_CREATED_ARCH_CONSTRUCT and k == "building_type" then
                     io.write ("\t\t".."<building_type>"..df.building_type[v]:lower().."</building_type>".."\n")
                 elseif event:getType() == df.history_event_type.MASTERPIECE_CREATED_ARCH_CONSTRUCT and k == "building_subtype" then
@@ -634,13 +659,13 @@ function export_legends_info()
     export_more_legends_xml()
 end
 
--- presses 'd' for detailed maps
+--- presses 'd' for detailed maps
 function wait_for_legends_vs()
     local vs = dfhack.gui.getCurViewscreen()
     if i <= #MAPS then
-		if df.viewscreen_legendsst:is_instance(vs.parent) then
-			vs = vs.parent
-		end
+        if df.viewscreen_legendsst:is_instance(vs.parent) then
+            vs = vs.parent
+        end
         if df.viewscreen_legendsst:is_instance(vs) then
             gui.simulateInput(vs, 'LEGENDS_EXPORT_DETAILED_MAP')
             dfhack.timeout(10,'frames',wait_for_export_maps_vs)
@@ -667,9 +692,9 @@ end
 -- export site maps
 function export_site_maps()
     local vs = dfhack.gui.getCurViewscreen()
-	if ((dfhack.gui.getCurFocus() ~= "legends" ) and (not table.contains(vs, "main_cursor"))) then -- Using open-legends
-		vs = vs.parent
-	end 
+    if ((dfhack.gui.getCurFocus() ~= "legends" ) and (not table.contains(vs, "main_cursor"))) then -- Using open-legends
+        vs = vs.parent
+    end
     print('    Exporting:  All possible site maps')
     vs.main_cursor = 1
     gui.simulateInput(vs, 'SELECT')
@@ -682,6 +707,7 @@ end
 
 -- main()
 if dfhack.gui.getCurFocus() == "legends" or dfhack.gui.getCurFocus() == "dfhack/lua/legends" then
+    -- either native legends mode, or using the open-legends.lua script
     if args[1] == "all" then
         export_legends_info()
         export_site_maps()

@@ -98,7 +98,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             return
-                $"{timestring} {Entity} formed in {Structure?.ToString() ?? StructureId.ToString()} in {Site.AltName}.";
+                $"{timestring} {Entity} formed in {Structure?.ToString() ?? StructureId.ToString()} in {Site?.AltName}.";
         }
 
         internal override string ToTimelineString()
