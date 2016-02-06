@@ -234,12 +234,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 if (ItemSubType.HasValue)
                 {
                     return
-                        $"{timestring} {abusedHFtext} impaled on a {Materials[ItemMat.Value] + " " + ItemSubTypes[ItemSubType.Value]} by {AbuserEn} in {locationtext}.";
+                        $"{timestring} {abusedHFtext} impaled on a {Item.Materials[ItemMat.Value] + " " + Item.ItemSubTypes[ItemSubType.Value]} by {AbuserEn} in {locationtext}.";
                 }
                 return
-                    $"{timestring} {abusedHFtext} impaled on a {Materials[ItemMat.Value] + " " + ItemTypes[ItemType.Value]} by {AbuserEn} in {locationtext}.";
+                    $"{timestring} {abusedHFtext} impaled on a {Item.Materials[ItemMat.Value] + " " + Item.ItemTypes[ItemType.Value]} by {AbuserEn} in {locationtext}.";
             }
-            if (AbuserEn != null && PileType == -1 && ItemMat == null && ItemType != null && ItemTypes[ItemType.Value] == "none")
+            if (AbuserEn != null && PileType == -1 && ItemMat == null && ItemType != null && Item.ItemTypes[ItemType.Value] == "none")
                 return $"{timestring} {abusedHFtext} horribly mutilated by {AbuserEn} in {locationtext}.";
             if (AbuserEn == null && Hf != null && PileType == -1 && ItemMat == null)
                 return $"{timestring} {abusedHFtext} animated by the {Hf.Race} {Hf} in {locationtext}.";
@@ -284,9 +284,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Coords.DBExport(),
                 AbuserEnId.DBExport(),
                 BodyHfiDs.DBExport(),
-                ItemType.DBExport(ItemTypes),
-                ItemSubType.DBExport(ItemSubTypes),
-                ItemMat.DBExport(Materials),
+                ItemType.DBExport(Item.ItemTypes),
+                ItemSubType.DBExport(Item.ItemSubTypes),
+                ItemMat.DBExport(Item.Materials),
                 Hfid.DBExport(),
                 AbuseType.DBExport()
             };

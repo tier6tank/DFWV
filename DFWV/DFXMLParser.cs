@@ -172,26 +172,11 @@ namespace DFWV
                             case "units":
                                 PlusLoadSection(world.Units, world, xReader);
                                 break;
-                            case "vehicles":
-                                PlusLoadSection(world.Vehicles, world, xReader);
-                                break;
                             case "engravings":
                                 PlusLoadSection(world.Engravings, world, xReader);
                                 break;
-                            case "incidents":
-                                PlusLoadSection(world.Incidents, world, xReader);
-                                break;
-                            case "crimes":
-                                PlusLoadSection(world.Crimes, world, xReader);
-                                break;
-                            case "adamantine_tubes":
-                                PlusLoadSection(world.AdamantineTubes, world, xReader);
-                                break;
                             case "reports":
                                 PlusLoadSection(world.Reports, world, xReader);
-                                break;
-                            case "announcements":
-                                PlusLoadSection(world.Announcements, world, xReader);
                                 break;
                             case "buildings":
                                 PlusLoadSection(world.Buildings, world, xReader);
@@ -211,6 +196,18 @@ namespace DFWV
                             case "races":
                                 PlusLoadSection(world.Races, world, xReader);
                                 SortRaces(world);
+                                break;
+                            case "written_contents":
+                                PlusLoadSection(world.WrittenContents, world, xReader);
+                                break;
+                            case "poetic_forms":
+                                PlusLoadSection(world.PoeticForms, world, xReader);
+                                break;
+                            case "musical_forms":
+                                PlusLoadSection(world.MusicalForms, world, xReader);
+                                break;
+                            case "dance_forms":
+                                PlusLoadSection(world.DanceForms, world, xReader);
                                 break;
                             case "mountains":
                                 PlusLoadSection(world.Mountains, world, xReader);
@@ -490,46 +487,16 @@ namespace DFWV
                         world.Units.Add(newUnit.Id, newUnit);
                         return;
                     }
-                    if (typeof(T) == typeof(Vehicle))
-                    {
-                        var newVehicle = new Vehicle(xdoc, world);
-                        world.Vehicles.Add(newVehicle.Id, newVehicle);
-                        return;
-                    }
                     if (typeof(T) == typeof(Engraving))
                     {
                         var newEngraving = new Engraving(xdoc, world);
                         world.Engravings.Add(newEngraving.Id, newEngraving);
                         return;
                     }
-                    if (typeof(T) == typeof(Incident))
-                    {
-                        var newIncident = new Incident(xdoc, world);
-                        world.Incidents.Add(newIncident.Id, newIncident);
-                        return;
-                    }
-                    if (typeof(T) == typeof(Crime))
-                    {
-                        var newCrime = new Crime(xdoc, world);
-                        world.Crimes.Add(newCrime.Id, newCrime);
-                        return;
-                    }
-                    if (typeof(T) == typeof(AdamantineTube))
-                    {
-                        var newAdamantineTube = new AdamantineTube(xdoc, world);
-                        world.AdamantineTubes.Add(newAdamantineTube.Id, newAdamantineTube);
-                        return;
-                    }
                     if (typeof(T) == typeof(Report))
                     {
                         var newReport = new Report(xdoc, world);
                         world.Reports.Add(newReport.Id, newReport);
-                        return;
-                    }
-                    if (typeof(T) == typeof(Announcement))
-                    {
-                        var newAnnouncement = new Announcement(xdoc, world);
-                        world.Announcements.Add(newAnnouncement.Id, newAnnouncement);
                         return;
                     }
                     if (typeof(T) == typeof(Building))
@@ -562,6 +529,32 @@ namespace DFWV
                         world.Squads.Add(newSquad.Id, newSquad);
                         return;
                     }
+                    if (typeof(T) == typeof(WrittenContent))
+                    {
+                        var newWrittenContent = new WrittenContent(xdoc, world);
+                        world.WrittenContents.Add(newWrittenContent.Id, newWrittenContent);
+                        return;
+                    }
+                    if (typeof(T) == typeof(PoeticForm))
+                    {
+                        var newPoeticForm = new PoeticForm(xdoc, world);
+                        world.PoeticForms.Add(newPoeticForm.Id, newPoeticForm);
+                        Console.WriteLine(newPoeticForm.Id);
+                        return;
+                    }
+                    if (typeof(T) == typeof(MusicalForm))
+                    {
+                        var newMusicalForm = new MusicalForm(xdoc, world);
+                        world.MusicalForms.Add(newMusicalForm.Id, newMusicalForm);
+                        return;
+                    }
+                    if (typeof(T) == typeof(DanceForm))
+                    {
+                        var newDanceForm = new DanceForm(xdoc, world);
+                        world.DanceForms.Add(newDanceForm.Id, newDanceForm);
+                        return;
+                    }
+
                 }
                 if (typeof(T) == typeof(Race))
                 {

@@ -5,6 +5,7 @@ using System.Drawing.Design;
 using System.Linq;
 using System.Xml.Linq;
 using DFWV.Annotations;
+using DFWV.WorldClasses.HistoricalEventClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses
@@ -22,6 +23,12 @@ namespace DFWV.WorldClasses
         private int? Quality { get; set; }
         private string Position { get; set; }
         private bool Hidden { get; set; }
+        private int? CreatedEventID { get; set; }
+        public HE_MasterpieceEngraving CreatedEvent { get; set; }
+
+        [UsedImplicitly]
+        public string DispNameLower => ToString().ToLower();
+
 
         public Engraving(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -65,6 +72,9 @@ namespace DFWV.WorldClasses
                     case "hidden":
                         Hidden = true;
                         break;
+                    case "masterpiece_event":
+                        CreatedEventID = valI;
+                        break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
                         break;
@@ -78,15 +88,23 @@ namespace DFWV.WorldClasses
                 return;
             Program.MakeSelected(frm.tabEngraving, frm.lstEngraving, this);
 
-            //frm.grpEngraving.Text = ToString();
-            //frm.grpEngraving.Show();
+            frm.grpEngraving.Text = ToString();
+            frm.grpEngraving.Show();
 #if DEBUG
-            //frm.grpEngraving.Text += string.Format(" - ID: {0}", ID);
+            frm.grpEngraving.Text += string.Format(" - ID: {0}", Id);
 #endif
+            frm.lblEngravingArtist.Data = Artist;
+            frm.lblEngravingSkill.Text = SkillRating.ToString();
+            frm.lblEngravingCoords.Text = Coords.ToString();
+            frm.lblEngravingTile.Text = TileID.ToString();
+            frm.lblEngravingArtID.Text = ArtID.ToString();
+            frm.lblEngravingArtSubID.Text = ArtSubID.ToString();
+            frm.lblEngravingQuality.Text = Quality.ToString();
+            frm.lblEngravingLocation.Text = Location.ToString();
+            frm.lblEngravingHidden.Text = Hidden.ToString();
+            frm.lblEngravingCreatedEvent.Data = CreatedEvent;
 
-
-            //frm.lblEngravingName.Text = ToString();
-
+            frm.lblEngravingName.Text = ToString();
         }
 
         internal override void Export(string table)
@@ -105,6 +123,11 @@ namespace DFWV.WorldClasses
         {
             if (ArtistID.HasValue)
                 Artist = World.HistoricalFigures[ArtistID.Value];
+            if (CreatedEventID.HasValue)
+            {
+                CreatedEvent = (HE_MasterpieceEngraving) World.HistoricalEvents[CreatedEventID.Value];
+                CreatedEvent.Engraving = this;
+            }
         }
 
         internal override void Process()
@@ -116,6 +139,12 @@ namespace DFWV.WorldClasses
         {
             
         }
+
+        public override string ToString()
+        {
+            return base.ToString();
+        }
+
     }
 
 

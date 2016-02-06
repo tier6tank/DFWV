@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Forms;
 using System.Xml.Linq;
 using DFWV.Annotations;
 using DFWV.WorldClasses.EntityClasses;
@@ -14,10 +15,14 @@ namespace DFWV.WorldClasses
 
         public static List<string> JobTypes = new List<string>();
         public string AltName { get; private set; }
-        public int? Profession { get; set; }
-        public int? Profession2 { get; set; }
+
+        [UsedImplicitly]
+        public string Profession => ProfessionId.HasValue ? JobTypes[ProfessionId.Value] : "";
+        public int? ProfessionId { get; set; }
         private int? RaceID { get; set; }
         public Race Race { get; set; }
+        [UsedImplicitly]
+        public string RaceName => Race != null ? Race.Name : "";
         private int? CasteID { get; set; }
         public Caste Caste { get; set; }
         public Point3 Coords { get; set; }
@@ -36,8 +41,26 @@ namespace DFWV.WorldClasses
         public HistoricalFigure HistFigure { get; private set; }
         private int? HistFigureID2 { get; set; }
         public HistoricalFigure HistFigure2 { get; private set; }
-        public string[] Labors { get; private set; }
-        public string[] Flags { get; set; }
+        public static List<string> Flags = new List<string>();
+        public List<short> Flag { get; set; }
+
+        [UsedImplicitly]
+        public bool IsDead => Flags != null && Flags.Contains("dead") && Flag.Contains((short)Flags.IndexOf("dead"));
+        public static List<string> Labors = new List<string>();
+        public List<short> Labor { get; set; }
+        public Dictionary<string, int> RelationIDs { get; set; }
+        public Dictionary<string, HistoricalFigure> Relations { get; set; }
+        private static List<string> HealthFlags = new List<string>();
+        private List<short> HealthFlag { get; set; }
+        private List<int> UsedItemIds { get; set; }
+        private List<int> OwnedItemIds { get; set; }
+        private List<int> TradedItemIds { get; set; }
+        private List<int> OwnedBuildingIds { get; set; }
+        private List<UnitInventoryItem> InventoryItems { get; set; }
+
+        [UsedImplicitly]
+        public string DispNameLower => ToString().ToLower();
+
 
         public Unit(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -60,18 +83,19 @@ namespace DFWV.WorldClasses
                     case "profession":
                         if (!JobTypes.Contains(val))
                             JobTypes.Add(val);
-                        Profession = JobTypes.IndexOf(val);
-                        break;
-                    case "profession2":
-                        if (!JobTypes.Contains(val))
-                            JobTypes.Add(val);
-                        Profession2 = JobTypes.IndexOf(val);
+                        ProfessionId = JobTypes.IndexOf(val);
                         break;
                     case "race":
-                        RaceID = valI;
+                        if (valI != -1)
+                            Race = World.GetAddRace(val);
                         break;
                     case "caste":
-                        CasteID = valI;
+                        if (valI != -1)
+                        {
+                            if (!HistoricalFigure.Castes.Contains(val))
+                                HistoricalFigure.Castes.Add(val);
+                            CasteID = HistoricalFigure.Castes.IndexOf(val);
+                        }
                         break;
                     case "coords":
                         Coords = new Point3(
@@ -101,9 +125,6 @@ namespace DFWV.WorldClasses
                     case "mood":
                         Mood = valI;
                         break;
-                    case "labors":
-                        Labors = val.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                        break;
                     case "hist_figure_id":
                         if (valI != -1)
                             HistFigureID = valI;
@@ -112,8 +133,97 @@ namespace DFWV.WorldClasses
                         if (valI != -1)
                             HistFigureID2 = valI;
                         break;
+                    case "labors":
+                        var labors = val.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var labor in labors)
+                        {
+                            if (!Labors.Contains(labor))
+                                Labors.Add(labor);
+                            if (Labor == null)
+                                Labor = new List<short>();
+                            Labor.Add((short)Labors.IndexOf(labor));
+                        }
+                        break;
                     case "flags":
-                        Flags = val.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        var flags = val.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var flag in flags)
+                        {
+                            if (!Flags.Contains(flag))
+                                Flags.Add(flag);
+                            if (Flag == null)
+                                Flag = new List<short>();
+                            Flag.Add((short)Flags.IndexOf(flag));
+                        }
+                        break;
+                    case "health":
+                        var healthflags = val.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var healthflag in healthflags)
+                        {
+                            if (!HealthFlags.Contains(healthflag))
+                                HealthFlags.Add(healthflag);
+                            if (HealthFlag == null)
+                                HealthFlag = new List<short>();
+                            HealthFlag.Add((short)HealthFlags.IndexOf(healthflag));
+                        }
+                        break;
+                    case "used_items":
+                        UsedItemIds = val.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
+                        break;
+                    case "owned_items":
+                        OwnedItemIds = val.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
+                        break;
+                    case "owned_buildings":
+                        OwnedBuildingIds = val.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
+                        break;
+                    case "traded_items":
+                        TradedItemIds = val.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
+                        break;
+                    case "inventory":
+                        foreach (var inv in element.Elements())
+                        {
+                            if (InventoryItems == null)
+                                InventoryItems = new List<UnitInventoryItem>();
+                            InventoryItems.Add(new UnitInventoryItem(new XDocument(inv),world));
+                        }
+                        break;
+                    case "in_item_id":
+                    case "nestbox_id":
+                    case "civzone_id":
+                        break;
+                    case "nemesis_id": // Relations with HFs
+                    case "pregnancy_spouse":
+                    case "following_unit":
+                    case "pet_owner_id":
+                    case "spouse_id":
+                    case "mother_id":
+                    case "father_id":
+                    case "last_attacker_id":
+                    case "group_leader_id":
+                    case "draggee_id":
+                    case "dragger_id":
+                    case "rider_mount_id":
+                    case "lover_id":
+                        if (valI != -1)
+                        { 
+                            if (RelationIDs == null)
+                                RelationIDs = new Dictionary<string, int>();
+                            RelationIDs.Add(string.Join(" ", element.Name.LocalName.Split('_').Reverse().Skip(1).Reverse().ToArray()), valI);
+                        }
+                        break;
+                    case "pregnancy_timer":
+                    case "pregnancy_caste":
+                    case "mood_copy":
+                    case "anon_1":
+                    case "birth_year":
+                    case "birth_time":
+                    case "curse_year":
+                    case "curse_time":
+                    case "birth_year_bias":
+                    case "birth_time_bias":
+                    case "old_year":
+                    case "old_time":
+                    case "unk_238":
+                    case "mount_type":
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
@@ -134,7 +244,7 @@ namespace DFWV.WorldClasses
                 frm.grpUnit.Text = ToString();
                 frm.grpUnit.Show();
 #if DEBUG
-                frm.grpUnit.Text += string.Format(" - ID: {0}", ID);
+                frm.grpUnit.Text += string.Format(" - ID: {0}", Id);
 #endif
 
                 frm.lblUnitName.Text = Name;
@@ -146,10 +256,10 @@ namespace DFWV.WorldClasses
                 frm.lblUnitMood.Text = Mood.ToString();
                 frm.lblUnitHF.Data = HistFigure;
                 frm.lblUnitRace.Data = Race;
-                frm.lblUnitCaste.Text = Caste.ToString();
-                if (Profession.HasValue)
+                frm.lblUnitCaste.Text = CasteID.HasValue ? HistoricalFigure.Castes[CasteID.Value] : "";
+                if (ProfessionId.HasValue)
                 {
-                    frm.lblUnitProfession.Text = JobTypes[Profession.Value];
+                    frm.lblUnitProfession.Text = JobTypes[ProfessionId.Value];
                     frm.lblUnitProfession.Visible = true;
                 }
                 else
@@ -157,20 +267,103 @@ namespace DFWV.WorldClasses
                 frm.lblUnitSquad.Data = Squad;
                 frm.lblUnitOpponent.Data = Opponent;
 
-                frm.grpUnitFlags.Visible = Flags.Any();
+                frm.grpUnitFlags.Visible = Flag != null;
                 frm.lstUnitFlags.Items.Clear();
-                if (Flags.Any())
+                if (frm.grpUnitFlags.Visible)
                 {
-                    frm.lstUnitFlags.Items.AddRange(Flags.Select(x=>x.ToLower().Replace("_"," ").ToTitleCase()).ToArray());
+                    foreach (var flag in Flag.Distinct())
+                    {
+                        frm.lstUnitFlags.Items.Add(Flags[flag].ToLower().Replace("_", " ").ToTitleCase());
+                    }
                 }
 
-                frm.grpUnitLabors.Visible = Labors.Any();
+                frm.grpUnitLabors.Visible = Labor != null;
                 frm.lstUnitLabors.Items.Clear();
-                if (Labors.Any())
+                if (frm.grpUnitLabors.Visible)
                 {
-                    frm.lstUnitLabors.Items.AddRange(Labors.Select(x => x.ToLower().Replace("_", " ").ToTitleCase()).ToArray());
+                    foreach (var labor in Labor.Distinct())
+                    {
+                        frm.lstUnitLabors.Items.Add(Labors[labor].ToLower().Replace("_", " ").ToTitleCase());
+                    }
                 }
 
+                frm.grpUnitRelations.Visible = Relations != null;
+                frm.lstUnitRelations.Items.Clear();
+                if (Relations != null)
+                { 
+                    if (Relations.Any())
+                    {
+                        frm.lstUnitRelations.Items.AddRange(Relations.Select(x=>x.Value).ToArray());
+                    }
+                }
+
+                frm.grpUnitHealth.Visible = HealthFlag != null;
+                frm.lstUnitHealth.Items.Clear();
+                if (HealthFlag != null)
+                {
+                    foreach (var flag in HealthFlag.Distinct())
+                    {
+                        frm.lstUnitHealth.Items.Add(HealthFlags[flag].ToLower().Replace("_", " ").ToTitleCase());
+                    }
+                }
+
+                frm.grpUnitItems.Visible = OwnedItemIds != null || TradedItemIds != null || UsedItemIds != null;
+                frm.trvUnitItems.Nodes.Clear();
+                if (frm.grpUnitItems.Visible)
+                {
+                    if (OwnedItemIds != null)
+                    {
+                        var node = new TreeNode("Owned Items");
+                        foreach (var itemId in OwnedItemIds.Where(i => World.Items.ContainsKey(i)))
+                        {
+                            node.Nodes.Add(new TreeNode(World.Items[itemId].ToString())
+                            {
+                                Tag = World.Items[itemId]
+                            });
+                        }
+                        frm.trvUnitItems.Nodes.Add(node);
+                    }
+                    if (TradedItemIds != null)
+                    {
+                        var node = new TreeNode("Traded Items");
+                        foreach (var itemId in TradedItemIds.Where(i => World.Items.ContainsKey(i)))
+                        {
+                            node.Nodes.Add(new TreeNode(World.Items[itemId].ToString())
+                            {
+                                Tag = World.Items[itemId]
+                            });
+                        }
+                        frm.trvUnitItems.Nodes.Add(node);
+                    }
+                    if (UsedItemIds != null)
+                    {
+                        var node = new TreeNode("Used Items");
+                        foreach (var itemId in UsedItemIds.Where(i => World.Items.ContainsKey(i)))
+                        {
+                            node.Nodes.Add(new TreeNode(World.Items[itemId].ToString())
+                            {
+                                Tag = World.Items[itemId]
+                            });
+                        }
+                        frm.trvUnitItems.Nodes.Add(node);
+                    }
+                }
+
+                frm.grpUnitInventory.Visible = InventoryItems != null;
+                frm.lstUnitInventory.Items.Clear();
+                if (InventoryItems != null)
+                {
+                    frm.lstUnitInventory.Items.AddRange(InventoryItems.ToArray());
+                }
+
+                frm.grpUnitOwnedBuildings.Visible = OwnedBuildingIds != null;
+                frm.lstUnitOwnedBuildings.Items.Clear();
+                if (OwnedBuildingIds != null)
+                {
+                    frm.lstUnitOwnedBuildings.Items.AddRange(
+                        OwnedBuildingIds.Where(x => World.Buildings.ContainsKey(x))
+                        .Select(x => World.Buildings[x]).ToArray());
+                }
             }
             finally
             {
@@ -194,7 +387,7 @@ namespace DFWV.WorldClasses
         {
             if (CivID.HasValue)
                 Civ = World.Entities[CivID.Value];
-            if (RaceID.HasValue)
+            if (RaceID.HasValue && RaceID.Value != 0) //TODO: Remove and condition
             {
                 Race = World.Races[RaceID.Value];
                 if (CasteID.HasValue)
@@ -204,15 +397,28 @@ namespace DFWV.WorldClasses
                 Civ = World.Entities[CivID.Value];
             if (PopID.HasValue)
                 Population = World.EntityPopulations[PopID.Value];
-            if (SquadID.HasValue)
+            if (SquadID.HasValue && World.Squads.ContainsKey(SquadID.Value))
                 Squad = World.Squads[SquadID.Value];
             if (OpponentID.HasValue && World.Units.ContainsKey(OpponentID.Value))
                 Opponent = World.HistoricalFigures[OpponentID.Value];
 
             if (HistFigureID.HasValue)
+            {
                 HistFigure = World.HistoricalFigures[HistFigureID.Value];
+                HistFigure.Unit = this;
+            }
             if (HistFigureID2.HasValue)
                 HistFigure2 = World.HistoricalFigures[HistFigureID2.Value];
+
+            if (RelationIDs != null)
+            {
+                foreach (var relationId in RelationIDs.Where(relationId => World.HistoricalFigures.ContainsKey(relationId.Value)))
+                {
+                    if (Relations == null)
+                        Relations = new Dictionary<string, HistoricalFigure>();
+                    Relations.Add(relationId.Key, World.HistoricalFigures[relationId.Value]);
+                }
+            }
         }
 
         internal override void Process()
@@ -236,7 +442,7 @@ namespace DFWV.WorldClasses
             else
             {
                 if (Race != null)
-                    return Race.ToString() + " - " + ID;
+                    return Race.ToString() + " - " + Id;
                 else
                     return base.ToString();
             }

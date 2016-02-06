@@ -1,4 +1,6 @@
-﻿using System.Xml.Linq;
+﻿using System.Drawing;
+using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
@@ -11,13 +13,26 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
  
         }
 
+        protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
+        {
+            base.WriteDataOnParent(frm, parent, ref location);
+
+            if (FormId.HasValue && World.EntityPopulations.ContainsKey(FormId.Value))
+                EventLabel(frm, parent, ref location, "Form:", World.PoeticForms[FormId.Value]);
+
+        }
+
         protected override string LegendsDescription() 
         {
             var timestring = base.LegendsDescription();
 
             var reasoncircumstancestring = GetReasonCircumstanceString();
 
-            return $"{timestring} UNKNOWN was created by the {HistFigure.Race.ToString().ToLower()} {HistFigure} in {Site.AltName}{reasoncircumstancestring}.";
+            var Form = "UNKNOWN";
+            if (FormId.HasValue && World.PoeticForms.ContainsKey(FormId.Value))
+                Form = World.PoeticForms[FormId.Value].ToString();
+
+            return $"{timestring} {Form} was created by the {HistFigure.Race.ToString().ToLower()} {HistFigure} in {Site.AltName}{reasoncircumstancestring}.";
 
         }
 

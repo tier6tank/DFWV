@@ -17,7 +17,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private Site Site { get; set; }
         private int? SkillAtTime { get; }
 
-        private int? Item { get; set; }
+        private int? ItemID { get; set; }
         private int? ItemType { get; set; }
         private int? ItemSubType { get; set; }
         private int? Mat { get; set; }
@@ -163,12 +163,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             if (ItemType.HasValue && Mat.HasValue)
             {
-                if (ItemSubType.HasValue && ItemSubTypes[ItemSubType.Value] != "-1")
+                if (ItemSubType.HasValue && Item.ItemSubTypes[ItemSubType.Value] != "-1")
                     return
-                        $"{timestring} {Hf} created a masterful {Materials[Mat.Value]} {ItemSubTypes[ItemSubType.Value]} for {Entity} at {Site.AltName}.";
+                        $"{timestring} {Hf} created a masterful {Item.Materials[Mat.Value]} {Item.ItemSubTypes[ItemSubType.Value]} for {Entity} at {Site.AltName}.";
 
                 return
-                    $"{timestring} {Hf} created a masterful {Materials[Mat.Value]} {ItemTypes[ItemType.Value]} for {Entity} at {Site.AltName}.";
+                    $"{timestring} {Hf} created a masterful {Item.Materials[Mat.Value]} {Item.ItemTypes[ItemType.Value]} for {Entity} at {Site.AltName}.";
             }
 
             return $"{timestring} {Hf} created a masterful {"UNKNOWN"} for {Entity} at {Site.AltName}.";
@@ -195,10 +195,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 EntityId.DBExport(), 
                 SiteId.DBExport(), 
                 SkillAtTime,
-                Item.DBExport(),
-                ItemType.DBExport(ItemTypes),
-                ItemSubType.DBExport(ItemSubTypes),
-                Mat.DBExport(Materials)
+                ItemID.DBExport(),
+                ItemType.DBExport(Item.ItemTypes),
+                ItemSubType.DBExport(Item.ItemSubTypes),
+                Mat.DBExport(Item.Materials)
             };
 
             Database.ExportWorldItem(table, vals);

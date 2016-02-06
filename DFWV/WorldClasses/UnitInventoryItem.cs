@@ -4,16 +4,20 @@ using System.Drawing;
 using System.Linq;
 using System.Xml.Linq;
 using DFWV.Annotations;
+using DFWV.WorldClasses.EntityClasses;
+using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses
 {
-    public class Vehicle : XMLObject
+    public class UnitInventoryItem : XMLObject
     {
-        override public Point Location => Point.Empty;
-        private int? ItemID { get; set; }
-        private Unit Item { get; set; }
+        public override Point Location { get; }
+        public int Mode { get; set; }
+        public static List<string> BodyParts = new List<string>();
+        public int BodyPart { get; set; }
+        public string BodyPartName => BodyParts[BodyPart];
 
-        public Vehicle(XDocument xdoc, World world)
+        public UnitInventoryItem(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -25,8 +29,13 @@ namespace DFWV.WorldClasses
                 {
                     case "id":
                         break;
-                    case "item_id":
-                        ItemID = valI;
+                    case "mode":
+                        Mode = valI;
+                        break;
+                    case "body_part":
+                        if (!BodyParts.Contains(val))
+                            BodyParts.Add(val);
+                        BodyPart = BodyParts.IndexOf(val);
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
@@ -35,30 +44,12 @@ namespace DFWV.WorldClasses
             }
         }
 
-        public override void Select(MainForm frm)
-        {
-            if (frm.grpVehicle.Text == ToString() && frm.MainTab.SelectedTab == frm.tabVehicle)
-                return;
-            Program.MakeSelected(frm.tabVehicle, frm.lstVehicle, this);
-
-
-            //frm.grpVehicle.Text = ToString();
-            //frm.grpVehicle.Show();
-#if DEBUG
-            //frm.grpVehicle.Text += string.Format(" - ID: {0}", ID);
-#endif
-
-
-            //frm.lblVehicleName.Text = ToString();
-
-        }
-
         internal override void Export(string table)
         {
 
             var vals = new List<object>
             {
-                Id, 
+                Id,
                 Name.DBExport()
             };
 
@@ -67,20 +58,27 @@ namespace DFWV.WorldClasses
 
         internal override void Link()
         {
-            //if (ItemID.HasValue)
-            //    Item = World.Units[ItemID.Value];
+
         }
 
         internal override void Process()
         {
-            
+
         }
 
         internal override void Plus(XDocument xdoc)
         {
-            
+
+        }
+
+        public override void Select(MainForm frm)
+        {
+            World.Items[Id]?.Select(frm);
+        }
+
+        public override string ToString()
+        {
+            return $"{BodyPartName.ToTitleCase()} - {World.Items[Id].ToString().ToTitleCase()}";
         }
     }
-
-
 }

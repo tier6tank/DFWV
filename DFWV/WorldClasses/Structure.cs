@@ -21,8 +21,8 @@ namespace DFWV.WorldClasses
 
         public List<HistoricalEvent> Events { get; set; }
 
-        public HE_RazedStructure RazedEvent { get { return (HE_RazedStructure) Events.FirstOrDefault(e => HistoricalEvent.Types[e.Type] == "razed structure"); } }
-        public HE_CreatedStructure CreatedEvent { get { return (HE_CreatedStructure) Events.FirstOrDefault(e => HistoricalEvent.Types[e.Type] == "created structure"); } }
+        public HE_RazedStructure RazedEvent { get { return (HE_RazedStructure) Events?.FirstOrDefault(e => HistoricalEvent.Types[e.Type] == "razed structure"); } }
+        public HE_CreatedStructure CreatedEvent { get { return (HE_CreatedStructure) Events?.FirstOrDefault(e => HistoricalEvent.Types[e.Type] == "created structure"); } }
         [UsedImplicitly]
         public bool IsRazed => RazedEvent != null;
 

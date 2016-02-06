@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Xml.Linq;
+using DFWV.Annotations;
 
 namespace DFWV.WorldClasses
 {
@@ -9,6 +11,11 @@ namespace DFWV.WorldClasses
         override public Point Location => Point.Empty;
         public Point3 Coords { get; set; }
         public int? Mat { get; set; }
+        [UsedImplicitly]
+        public string Material => Mat.HasValue ? Item.Materials[Mat.Value] : "";
+
+        [UsedImplicitly]
+        public string DispNameLower => ToString().ToLower();
 
         public Plant(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -44,12 +51,15 @@ namespace DFWV.WorldClasses
                 return;
             Program.MakeSelected(frm.tabPlant, frm.lstPlant, this);
 
-            //frm.grpPlant.Text = ToString();
-            //frm.grpPlant.Show();
+            frm.grpPlant.Text = ToString();
+            frm.grpPlant.Show();
 #if DEBUG
-            //frm.grpPlant.Text += string.Format(" - ID: {0}", ID);
+            frm.grpPlant.Text += string.Format(" - ID: {0}", Id);
 #endif
 
+            frm.lblPlantCoords.Text = Coords.ToString();
+            frm.lblPlantMat.Text = Mat.HasValue ? Item.Materials[Mat.Value] : "";
+            frm.lblPlantName.Text = ToString();
         }
 
         internal override void Export(string table)
@@ -78,6 +88,12 @@ namespace DFWV.WorldClasses
         {
             
         }
+
+        public override string ToString()
+        {
+            return Mat.HasValue ? Item.Materials[Mat.Value].ToTitleCase() : base.ToString();
+        }
+
     }
 
 

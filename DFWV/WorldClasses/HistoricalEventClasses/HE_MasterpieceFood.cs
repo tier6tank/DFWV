@@ -17,7 +17,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private Site Site { get; set; }
         private int? SkillAtTime { get; }
 
-        private int? Item { get; set; }
+        private int? ItemID { get; set; }
         private int? ItemSubType { get; set; }
 
 
@@ -90,6 +90,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             EventLabel(frm, parent, ref location, "Entity:", Entity);
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Skill:", SkillAtTime.ToString());
+            if (ItemID.HasValue && World.Items.ContainsKey(ItemID.Value)) //Open legends
+                EventLabel(frm, parent, ref location, "Item:", World.Items[ItemID.Value]);
         }
 
         internal override void Plus(XDocument xdoc)
@@ -137,8 +139,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             //TODO: Incorporate new data
             var timestring = base.LegendsDescription();
 
+            if (ItemID.HasValue && World.Items.ContainsKey(ItemID.Value)) //Open legends
+                return
+                    $"{timestring} {Hf} prepared a masterful {World.Items[ItemID.Value]} for {Entity} at {Site.AltName}.";
+
             return
-                $"{timestring} {Hf} prepared a masterful {(ItemSubType.HasValue ? ItemSubTypes[ItemSubType.Value] : "UNKNOWN")} for {Entity} at {Site.AltName}.";
+                $"{timestring} {Hf} prepared a masterful {(ItemSubType.HasValue ? Item.ItemSubTypes[ItemSubType.Value] : "UNKNOWN")} for {Entity} at {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
@@ -162,8 +168,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 EntityId.DBExport(), 
                 SiteId.DBExport(), 
                 SkillAtTime,
-                Item.DBExport(),
-                ItemSubType.DBExport(ItemSubTypes)
+                ItemID.DBExport(),
+                ItemSubType.DBExport(Item.ItemSubTypes)
             };
 
             Database.ExportWorldItem(table, vals);

@@ -16,6 +16,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? SiteId { get; }
         private Site Site { get; set; }
         private int? SkillAtTime { get; }
+        public int? BuildingType { get; set; }
+        public int? BuildingSubType { get; set; }
+        public int? BuildingCustom { get; set; }
 
         override public Point Location => Site.Location;
 
@@ -91,6 +94,27 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 {
                     case "id":
                     case "type":
+                        break;
+                    case "building_type":
+                        if (!Buildings.Contains(val))
+                            Buildings.Add(val);
+                        BuildingType = Buildings.IndexOf(val);
+                        break;
+                    case "building_subtype":
+                        if (val != "-1")
+                        {
+                            if (!Buildings.Contains(val))
+                                Buildings.Add(val);
+                            BuildingSubType = Buildings.IndexOf(val);
+                        }
+                        break;
+                    case "building_custom":
+                        if (valI != -1)
+                            BuildingCustom = valI;
+                        break;
+                    case "maker":
+                    case "maker_entity":
+                    case "site":
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());

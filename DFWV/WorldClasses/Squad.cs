@@ -18,6 +18,10 @@ namespace DFWV.WorldClasses
         public Entity Entity { get; set; }
         public List<int> MemberIDs { get; set; }
         public List<HistoricalFigure> Members { get; set; }
+        public int MemberCount => Members?.Count ?? 0;
+
+        [UsedImplicitly]
+        public string DispNameLower => ToString().ToLower();
 
         public Squad(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -62,11 +66,21 @@ namespace DFWV.WorldClasses
                 return;
             Program.MakeSelected(frm.tabSquad, frm.lstSquad, this);
 
-            //frm.grpSquad.Text = ToString();
-            //frm.grpSquad.Show();
+            frm.grpSquad.Text = ToString();
+            frm.grpSquad.Show();
 #if DEBUG
-            //frm.grpSquad.Text += string.Format(" - ID: {0}", ID);
+            frm.grpSquad.Text += string.Format(" - ID: {0}", Id);
 #endif
+            frm.lblSquadName.Text = ToString();
+            frm.lblSquadAltName.Text = AltName;
+            frm.lblSquadEntity.Data = Entity;
+            frm.lstSquadMembers.Items.Clear();
+            frm.grpSquadMembers.Visible = Members != null && Members.Count > 0;
+            if (Members != null)
+            {
+                
+                frm.lstSquadMembers.Items.AddRange(Members.ToArray());
+            }
         }
 
         internal override void Export(string table)
@@ -103,6 +117,12 @@ namespace DFWV.WorldClasses
         {
             
         }
+
+        public override string ToString()
+        {
+            return base.ToString();
+        }
+
     }
 
 

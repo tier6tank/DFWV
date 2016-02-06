@@ -16,14 +16,19 @@ namespace DFWV.WorldClasses
         public Rectangle Rect { get; set; }
         private int? Z { get; set; }
         private int? Mat { get; set; }
+
+        [UsedImplicitly]
+        public string Material => Mat.HasValue ? Item.Materials[Mat.Value] : "";
         private int? RaceID { get; set; }
         public Race Race { get; set; }
+        [UsedImplicitly]
+        public string RaceName => Race != null ? Race.Name : "";
         private int? BuildingTypeID { get; set; }
-        public string BuildingType { get { return BuildingTypes[BuildingTypeID.Value]; } }
-        private static List<string> BuildingTypes = new List<string>();
+        public string Type => BuildingTypeID.HasValue ? BuildingTypes[BuildingTypeID.Value] : "";
+        public static List<string> BuildingTypes = new List<string>();
         private int? BuildingSubTypeID { get; set; }
-        public string BuildingSubType { get { return BuildingSubTypes[BuildingSubTypeID.Value]; } }
-        private static List<string> BuildingSubTypes =  new List<string>();
+        public string SubType => BuildingSubTypeID.HasValue ? BuildingSubTypes[BuildingSubTypeID.Value]: "";
+        public static List<string> BuildingSubTypes =  new List<string>();
         private int? OwnerUnitID { get; set; }
         public Unit Owner { get; set; }
         public int? CorpseUnitID { get; set; }
@@ -34,8 +39,12 @@ namespace DFWV.WorldClasses
         public Unit ClaimedBy { get; set; }
         public int? SquadID { get; set; }
         public Squad Squad { get; set; }
-        public string[] Flags { get; private set; }
+        public static List<string> Flags = new List<string>();
+        public List<short> Flag { get; set; }
         public int? Direction { get; set; }
+
+        [UsedImplicitly]
+        public string DispNameLower => ToString().ToLower();
 
         public Building(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -70,16 +79,14 @@ namespace DFWV.WorldClasses
                             Convert.ToInt32(val.Split(',')[1]));
                         Rect = new Rectangle(Rect.Location, new Size(BR.X - Rect.Left, BR.Y - Rect.Top));
                         break;
-                    case "z":
-                        Z = valI;
-                        break;
                     case "mat":
                         if (!Item.Materials.Contains(val))
                             Item.Materials.Add(val);
                         Mat = Item.Materials.IndexOf(val);
                         break;
                     case "race":
-                        RaceID = valI;
+                        if (valI != -1)
+                            Race = World.GetAddRace(val);
                         break;
                     case "type":
                         if (!BuildingTypes.Contains(val))
@@ -108,7 +115,15 @@ namespace DFWV.WorldClasses
                         SquadID = valI;
                         break;
                     case "zone_flags":
-                        Flags = val.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        var flags = val.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var flag in flags)
+                        {
+                            if (!Flags.Contains(flag))
+                                Flags.Add(flag);
+                            if (Flag == null)
+                                Flag = new List<short>();
+                            Flag.Add((short)Flags.IndexOf(flag));
+                        }
                         break;
                     case "direction":
                         Direction = valI;
@@ -126,14 +141,27 @@ namespace DFWV.WorldClasses
                 return;
             Program.MakeSelected(frm.tabBuilding, frm.lstBuilding, this);
 
-            //frm.grpBuilding.Text = ToString();
-            //frm.grpBuilding.Show();
+            frm.grpBuilding.Text = ToString();
+            frm.grpBuilding.Show();
 #if DEBUG
-            //frm.grpBuilding.Text += string.Format(" - ID: {0}", ID);
+            frm.grpBuilding.Text += string.Format(" - ID: {0}", Id);
 #endif
 
-
-            //frm.lblBuildingName.Text = ToString();
+            frm.lblBuildingName.Text = ToString();
+            frm.lblBuildingCoords1.Text = $"({Rect.Left}, {Rect.Top}, {CoordsCenter.Z})";
+            frm.lblBuildingCoordsCenter.Text = $"({CoordsCenter.X}, {CoordsCenter.Y}, {CoordsCenter.Z})";
+            frm.lblBuildingCoords2.Text = $"({Rect.Left}, {Rect.Top}, {CoordsCenter.Z})";
+            frm.lblBuildingMat.Text = Mat.HasValue ? Item.Materials[Mat.Value] : "";
+            frm.lblBuildingRace.Data = Race;
+            frm.lblBuildingType.Text = BuildingTypeID.HasValue ? BuildingTypes[BuildingTypeID.Value] : "";
+            frm.lblBuildingSubType.Text = BuildingSubTypeID.HasValue ? BuildingSubTypes[BuildingSubTypeID.Value] : "";
+            frm.lblBuildingOwner.Data = Owner;
+            frm.lblBuildingZoneFlags.Text = Flag != null ?  string.Join(",", Flag.Select(x=>Flags[x])) : "";
+            frm.lblBuildingCorpse.Data = CorpseUnit;
+            frm.lblBuildingCorpseHF.Data = CorpseHF;
+            frm.lblBuildingClaimed.Data = ClaimedBy;
+            frm.lblBuildingDir.Text = Direction.ToString();
+            frm.lblBuildingSquad.Data = Squad;
 
         }
 
@@ -177,6 +205,16 @@ namespace DFWV.WorldClasses
         {
             
         }
+
+        public override string ToString()
+        {
+            if (!BuildingTypeID.HasValue && !BuildingSubTypeID.HasValue)
+                return base.ToString();
+            if (!BuildingSubTypeID.HasValue)
+                return ($"{BuildingTypes[BuildingTypeID.Value]}").ToTitleCase();
+            return ($"{BuildingTypes[BuildingTypeID.Value]} - {BuildingSubTypes[BuildingSubTypeID.Value]}").ToTitleCase();
+        }
+
     }
 
 

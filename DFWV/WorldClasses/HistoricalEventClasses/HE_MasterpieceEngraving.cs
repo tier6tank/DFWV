@@ -7,7 +7,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_MasterpieceEngraving : HistoricalEvent
+    public class HE_MasterpieceEngraving : HistoricalEvent
     {
         private int? Hfid { get; }
         private HistoricalFigure Hf { get; set; }
@@ -20,6 +20,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public int? Mat { get; set; }
         public int? ArtId { get; set; }
         public int? ArtSubId { get; set; }
+        public Engraving Engraving { get; set; }
 
         override public Point Location => Site.Location;
 
@@ -169,7 +170,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 SkillAtTime,
                 ArtId.DBExport(),
                 ArtSubId.DBExport(),
-                Mat.DBExport(Materials)
+                Mat.DBExport(Item.Materials)
             };
 
             Database.ExportWorldItem(table, vals);

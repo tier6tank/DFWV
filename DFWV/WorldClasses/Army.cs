@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -16,6 +17,9 @@ namespace DFWV.WorldClasses
         private int? Mat { get; set; }
         public Point Coords { get; set; }
         override public Point Location => Point.Empty;
+
+        [UsedImplicitly]
+        public string DispNameLower => ToString().ToLower();
 
         public Army(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -66,17 +70,17 @@ namespace DFWV.WorldClasses
 			if (frm.grpArmy.Text == ToString() && frm.MainTab.SelectedTab == frm.tabArmy)
                 return;
             Program.MakeSelected(frm.tabArmy, frm.lstArmy, this);
-			
+
             try
             {
                 frm.grpArmy.Text = ToString();
                 frm.grpArmy.Show();
 #if DEBUG
-                frm.grpArmy.Text += string.Format(" - ID: {0}", ID);
+                frm.grpArmy.Text += string.Format(" - ID: {0}", Id);
 #endif
                 frm.lblArmyLocation.Text = Coords.ToString();
                 frm.lblArmyItem.Data = ArmyItem;
-
+                
                 if (ItemType.HasValue)
                 {
                     frm.lblArmyItemType.Visible = true;

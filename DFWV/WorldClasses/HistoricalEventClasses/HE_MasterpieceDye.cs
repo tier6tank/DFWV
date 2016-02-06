@@ -17,6 +17,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private Site Site { get; set; }
         private int? SkillAtTime { get; }
 
+        private int? ItemType { get; set; }
+        private int? ItemSubType { get; set; }
+        private int? Mat { get; set; }
+        private int? MatType { get; set; }
+        private int? MatIndex { get; set; }
+        private int? DyeMatType { get; set; }
+        private int? DyeMatIndex { get; set; }
+
         override public Point Location => Site.Location;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
@@ -91,6 +99,41 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 {
                     case "id":
                     case "type":
+                        break;
+                    case "item_type":
+                        if (!Item.ItemTypes.Contains(val))
+                            Item.ItemTypes.Add(val);
+                        ItemType = Item.ItemTypes.IndexOf(val);
+                        break;
+                    case "item_subtype":
+                        if (val != "-1")
+                        {
+                            if (!Item.ItemSubTypes.Contains(val))
+                                Item.ItemSubTypes.Add(val);
+                            ItemSubType = Item.ItemSubTypes.IndexOf(val);
+                        }
+                        break;
+                    case "mat_type":
+                        MatType = valI;
+                        break;
+                    case "mat_index":
+                        MatIndex = valI;
+                        break;
+                    case "mat":
+                        if (!Item.Materials.Contains(val))
+                            Item.Materials.Add(val);
+                        Mat = Item.Materials.IndexOf(val);
+                        break;
+                    case "dye_mat_type":
+                        DyeMatType = valI;
+                        break;
+                    case "dye_mat_index":
+                        DyeMatIndex = valI;
+                        break;
+                    case "maker":
+                    case "maker_entity":
+                    case "site":
+                    case "skill_used":
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());

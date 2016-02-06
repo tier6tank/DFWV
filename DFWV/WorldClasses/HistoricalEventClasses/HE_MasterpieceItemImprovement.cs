@@ -185,19 +185,19 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 {
                     case "spikes":
                         return
-                            $"{timestring} {Hf} added masterful {ImprovementTypes[ImprovementType.Value]} of {Materials[ImprovementMat.Value]} to a {Materials[Mat.Value]} {ItemTypes[ItemType.Value]} for {Entity} at {Site.AltName}.";
+                            $"{timestring} {Hf} added masterful {ImprovementTypes[ImprovementType.Value]} of {Item.Materials[ImprovementMat.Value]} to a {Item.Materials[Mat.Value]} {Item.ItemTypes[ItemType.Value]} for {Entity} at {Site.AltName}.";
                     case "rings_hanging":
                         return
-                            $"{timestring} {Hf} added masterful rings in {Materials[ImprovementMat.Value]} to a {Materials[Mat.Value]} {ItemTypes[ItemType.Value]} for {Entity} at {Site.AltName}.";
+                            $"{timestring} {Hf} added masterful rings in {Item.Materials[ImprovementMat.Value]} to a {Item.Materials[Mat.Value]} {Item.ItemTypes[ItemType.Value]} for {Entity} at {Site.AltName}.";
                     case "bands":
                         return
-                            $"{timestring} {Hf} added masterful bands in {Materials[ImprovementMat.Value]} to a {Materials[Mat.Value]} {ItemTypes[ItemType.Value]} for {Entity} at {Site.AltName}.";
+                            $"{timestring} {Hf} added masterful bands in {Item.Materials[ImprovementMat.Value]} to a {Item.Materials[Mat.Value]} {Item.ItemTypes[ItemType.Value]} for {Entity} at {Site.AltName}.";
                     case "covered":
                         return
-                            $"{timestring} {Hf} added masterful covering in {Materials[ImprovementMat.Value]} to a {Materials[Mat.Value]} {ItemTypes[ItemType.Value]} for {Entity} at {Site.AltName}.";
+                            $"{timestring} {Hf} added masterful covering in {Item.Materials[ImprovementMat.Value]} to a {Item.Materials[Mat.Value]} {Item.ItemTypes[ItemType.Value]} for {Entity} at {Site.AltName}.";
                     default:
                         return
-                            $"{timestring} {Hf} added masterful {ImprovementTypes[ImprovementType.Value]} of {Materials[ImprovementMat.Value]} to a {Materials[Mat.Value]} {ItemTypes[ItemType.Value]} for {Entity} at {Site.AltName}.";
+                            $"{timestring} {Hf} added masterful {ImprovementTypes[ImprovementType.Value]} of {Item.Materials[ImprovementMat.Value]} to a {Item.Materials[Mat.Value]} Item.{Item.ItemTypes[ItemType.Value]} for {Entity} at {Site.AltName}.";
                 }
             }
 
@@ -225,12 +225,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 EntityId.DBExport(), 
                 SiteId.DBExport(), 
                 SkillAtTime,
-                ItemType.DBExport(ItemTypes),
-                ItemSubType.DBExport(ItemSubTypes),
-                Mat.DBExport(Materials),
+                ItemType.DBExport(Item.ItemTypes),
+                ItemSubType.DBExport(Item.ItemSubTypes),
+                Mat.DBExport(Item.Materials),
                 ImprovementType.DBExport(ImprovementTypes),
                 //ImprovementSubType.DBExport(), //TODO: Uncomment this
-                ImprovementMat.DBExport(Materials),
+                ImprovementMat.DBExport(Item.Materials),
                 ArtId.DBExport(),
                 ArtSubId.DBExport()
             };

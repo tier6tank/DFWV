@@ -13,8 +13,8 @@ using DFWV.Properties;
 using DFWV.WorldClasses;
 using SevenZip;
 
-//TODO: Issues
-//TODO: Export doesn't properly release link to exported DB (can't be deleted while app is running following export)
+//TODO: Check static lists on all new classes
+//TODO: Export doesn't properly release link to exported DB (can't be deleted while app is running following export
 //TODO: Explanatory text/tooltips in filter
 //TODO: Add Total Population listing in civ screen
 //TODO: Group gods by first civ
@@ -22,6 +22,7 @@ using SevenZip;
 //TODO: Leaders sorting by reign started and by civ
 //TODO: Fix bug on selecting religious entity
 //TODO: Group races by civilized or not
+//TODO: Better arrange Unit List
 
 
 namespace DFWV

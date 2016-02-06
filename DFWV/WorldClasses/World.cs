@@ -59,19 +59,18 @@ namespace DFWV.WorldClasses
 
         public readonly Dictionary<int, Army> Armies = new Dictionary<int, Army>();
         public readonly Dictionary<int, Unit> Units = new Dictionary<int, Unit>();
-        public readonly Dictionary<int, Vehicle> Vehicles = new Dictionary<int, Vehicle>();
         public readonly Dictionary<int, Engraving> Engravings = new Dictionary<int, Engraving>();
-        public readonly Dictionary<int, Incident> Incidents = new Dictionary<int, Incident>();
-        public readonly Dictionary<int, Crime> Crimes = new Dictionary<int, Crime>();
-        public readonly Dictionary<int, AdamantineTube> AdamantineTubes = new Dictionary<int, AdamantineTube>();
         public readonly Dictionary<int, Report> Reports = new Dictionary<int, Report>();
-        public readonly Dictionary<int, Announcement> Announcements = new Dictionary<int, Announcement>();
         public readonly Dictionary<int, Building> Buildings = new Dictionary<int, Building>();
         public readonly Dictionary<int, Construction> Constructions = new Dictionary<int, Construction>();
         public readonly Dictionary<int, Item> Items = new Dictionary<int, Item>();
         public readonly Dictionary<int, Plant> Plants = new Dictionary<int, Plant>();
         public readonly Dictionary<int, Squad> Squads = new Dictionary<int, Squad>();
         public readonly Dictionary<int, Race> Races = new Dictionary<int, Race>();
+        public readonly Dictionary<int, WrittenContent> WrittenContents = new Dictionary<int, WrittenContent>();
+        public readonly Dictionary<int, PoeticForm> PoeticForms = new Dictionary<int, PoeticForm>();
+        public readonly Dictionary<int, MusicalForm> MusicalForms = new Dictionary<int, MusicalForm>();
+        public readonly Dictionary<int, DanceForm> DanceForms = new Dictionary<int, DanceForm>();
         public readonly Dictionary<int, Mountain> Mountains = new Dictionary<int, Mountain>();
         public readonly Dictionary<int, River> Rivers = new Dictionary<int, River>();
         public readonly Dictionary<int, Region> Regions = new Dictionary<int, Region>();
@@ -617,13 +616,12 @@ namespace DFWV.WorldClasses
             LinkSection(Items.Values, "Items");
             LinkSection(Constructions.Values, "Constructions");
             LinkSection(Buildings.Values, "Buildings");
-            LinkSection(Announcements.Values, "Announcements");
+            LinkSection(WrittenContents.Values, "WrittenContents");
+            LinkSection(PoeticForms.Values, "PoeticForms");
+            LinkSection(DanceForms.Values, "DanceForms");
+            LinkSection(MusicalForms.Values, "MusicalForms");
             LinkSection(Reports.Values, "Reports");
-            LinkSection(AdamantineTubes.Values, "AdamantineTubes");
-            LinkSection(Crimes.Values, "Crimes");
-            LinkSection(Incidents.Values, "Incidents");
             LinkSection(Engravings.Values, "Engravings");
-            LinkSection(Vehicles.Values, "Vehicles");
             LinkSection(Units.Values, "Units");
             LinkSection(Armies.Values, "Armies");
 
@@ -1317,9 +1315,9 @@ namespace DFWV.WorldClasses
             EntitySiteLink.LinkTypes = new List<string>();
 
             HistoricalEvent.Types = new List<string>();
-            HistoricalEvent.ItemTypes = new List<string>();
-            HistoricalEvent.ItemSubTypes = new List<string>();
-            HistoricalEvent.Materials = new List<string>();
+            Item.ItemTypes = new List<string>();
+            Item.ItemSubTypes = new List<string>();
+            Item.Materials = new List<string>();
             HistoricalEvent.MeetingResults = new List<string>();
             HistoricalEvent.MeetingTopics = new List<string>();
             HistoricalEvent.Buildings = new List<string>();

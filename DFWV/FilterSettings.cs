@@ -54,11 +54,11 @@ namespace DFWV
             };
             Fields[typeof (Civilization)] = new Dictionary<string, Type>
             {
-                {"isFull", typeof (bool)}
+                {"IsFull", typeof (bool)}
             };
             Fields[typeof (Entity)] = new Dictionary<string, Type>
             {
-                {"isPlayerControlled", typeof (bool)},
+                {"IsPlayerControlled", typeof (bool)},
                 {"MemberCount", typeof (int)},
                 {"EventCount", typeof (int)}
             };
@@ -99,9 +99,10 @@ namespace DFWV
                 {"Ghost", typeof (bool)},
                 {"Dead", typeof (bool)},
                 {"Animated", typeof (bool)},
-                {"inEntPop", typeof (bool)},
-                {"isLeader", typeof (bool)},
-                {"isGod", typeof (bool)},
+                {"InEntPop", typeof (bool)},
+                {"IsLeader", typeof (bool)},
+                {"IsGod", typeof (bool)},
+                {"IsUnit", typeof (bool)},
                 {"CreatedArtifactCount", typeof (int)},
                 {"CreatedMasterpieceCount", typeof (int)},
                 {"ChildrenCount", typeof (int)},
@@ -135,7 +136,7 @@ namespace DFWV
             Fields[typeof (Site)] = new Dictionary<string, Type>
             {
                 {"AltName", typeof (string)},
-                {"isPlayerControlled", typeof (bool)},
+                {"IsPlayerControlled", typeof (bool)},
                 {"Parent.Name", typeof (string)},
                 {"HFInhabitantCount", typeof (int)},
                 {"TotalPopulation", typeof (int)},
@@ -144,7 +145,7 @@ namespace DFWV
             };
             Fields[typeof (Structure)] = new Dictionary<string, Type>
             {
-                {"isRazed", typeof (bool)},
+                {"IsRazed", typeof (bool)},
                 {"Tomb", typeof (bool)}
             };
             Fields[typeof (UndergroundRegion)] = new Dictionary<string, Type>();
@@ -159,28 +160,63 @@ namespace DFWV
             {
                 {"Height", typeof (int)},
             };
-            Fields[typeof(Army)] = new Dictionary<string, Type>();
-            Fields[typeof(Unit)] = new Dictionary<string, Type>();
-            Fields[typeof(Vehicle)] = new Dictionary<string, Type>();
+            Fields[typeof (Army)] = new Dictionary<string, Type>();
+            Fields[typeof (Unit)] = new Dictionary<string, Type>()
+            {
+                {"AltName", typeof (string)},
+                {"IsDead", typeof (bool)}
+            };
             Fields[typeof(Engraving)] = new Dictionary<string, Type>();
-            Fields[typeof(Incident)] = new Dictionary<string, Type>();
-            Fields[typeof(Crime)] = new Dictionary<string, Type>();
-            Fields[typeof(AdamantineTube)] = new Dictionary<string, Type>();
-            Fields[typeof(Report)] = new Dictionary<string, Type>();
-            Fields[typeof(Announcement)] = new Dictionary<string, Type>();
+            Fields[typeof (Report)] = new Dictionary<string, Type>()
+            {
+                {"Time", typeof (int)},
+                {"Text", typeof (string)}
+            };
             Fields[typeof(Building)] = new Dictionary<string, Type>();
             Fields[typeof(Construction)] = new Dictionary<string, Type>();
-            Fields[typeof(Item)] = new Dictionary<string, Type>();
+            Fields[typeof (Item)] = new Dictionary<string, Type>()
+            {
+                {"IsOnMap", typeof (bool)},
+                {"IsMadeOnMap", typeof (bool)},
+                {"IsArtifact", typeof (bool)},
+                {"IsHeld", typeof (bool)},
+                {"IsOwned", typeof (bool)},
+                {"InContainer", typeof (bool)},
+                {"InBuilding", typeof (bool)},
+                {"Quality", typeof (int)}
+            };
             Fields[typeof(Plant)] = new Dictionary<string, Type>();
             Fields[typeof(Squad)] = new Dictionary<string, Type>();
+            Fields[typeof (WrittenContent)] = new Dictionary<string, Type>()
+            {
+                {"Title", typeof(string) },
+                {"KnownAuthor", typeof(bool) }
+            };
+            Fields[typeof (MusicalForm)] = new Dictionary<string, Type>()
+            {
+                {"AltName", typeof (string)}
+            };
+            Fields[typeof(DanceForm)] = new Dictionary<string, Type>()
+            {
+                {"AltName", typeof (string)}
+            };
+            Fields[typeof(PoeticForm)] = new Dictionary<string, Type>()
+            {
+                {"AltName", typeof (string)}
+            };
+            Fields[typeof(Squad)] = new Dictionary<string, Type>()
+            {
+                {"AltName", typeof (string)},
+                {"MemberCount", typeof (int)}
+            };
 
             foreach (var type in new List<Type>
             {
                 typeof(Artifact), typeof(Civilization), typeof(Entity), typeof(EntityPopulation), typeof(God), typeof(HistoricalEra), typeof(HistoricalEvent),
                 typeof(HistoricalEventCollection), typeof(HistoricalFigure), typeof(Leader), typeof(Parameter), typeof(Race), typeof(Region), typeof(Site),
                 typeof(Structure), typeof(UndergroundRegion), typeof(WorldConstruction), typeof(Dynasty), typeof(River), typeof(Mountain),
-                typeof(Army), typeof(Unit), typeof(Vehicle), typeof(Engraving), typeof(Incident), typeof(Crime), typeof(AdamantineTube),
-                typeof(Report), typeof(Announcement), typeof(Building), typeof(Construction), typeof(Item), typeof(Plant), typeof(Squad)
+                typeof(Army), typeof(Unit), typeof(Engraving),
+                typeof(Report), typeof(WrittenContent),  typeof(MusicalForm),  typeof(PoeticForm),  typeof(DanceForm), typeof(Building), typeof(Construction), typeof(Item), typeof(Plant), typeof(Squad)
             })
             {
                 Fields[type].Add("Name", typeof (string));
@@ -236,10 +272,40 @@ namespace DFWV
                 {"RaceName", _world.Races.Values.Select(x=>x.Key)}
             };
             Options[typeof(Leader)] = new Dictionary<string, IEnumerable<string>> { { "RaceName", _world.Races.Values.Select(x => x.Key) } };
-            Options[typeof (Region)] = new Dictionary<string, IEnumerable<string>> {{"RegionType", Region.Types}};
+            Options[typeof(Region)] = new Dictionary<string, IEnumerable<string>> {{"RegionType", Region.Types}};
             Options[typeof(Site)] = new Dictionary<string, IEnumerable<string>> { { "SiteType", Site.Types } };
             Options[typeof(Structure)] = new Dictionary<string, IEnumerable<string>> { { "StructureType", Structure.Types } };
-
+            Options[typeof(Item)] = new Dictionary<string, IEnumerable<string>>
+            {
+                { "ItemType", Item.ItemTypes },
+                { "ItemSubType", Item.ItemSubTypes },
+                { "Material", Item.Materials }
+            };
+            Options[typeof(Unit)] = new Dictionary<string, IEnumerable<string>>
+            {
+                {"Profession", Unit.JobTypes },
+                {"RaceName", _world.Races.Values.Select(x=>x.Key) }
+            };
+            Options[typeof(Report)] = new Dictionary<string, IEnumerable<string>>
+            {
+                {"Type", Report.Types }
+            };
+            Options[typeof(Building)] = new Dictionary<string, IEnumerable<string>>
+            {
+                {"Type", Building.BuildingTypes },
+                {"RaceName", _world.Races.Values.Select(x=>x.Key) },
+                { "SubType", Building.BuildingSubTypes},
+                { "Material", Item.Materials }
+            };
+            Options[typeof(Construction)] = new Dictionary<string, IEnumerable<string>>
+            {
+                {"ItemType", Item.ItemTypes },
+                { "Material", Item.Materials }
+            };
+            Options[typeof(Plant)] = new Dictionary<string, IEnumerable<string>>
+            {
+                { "Material", Item.Materials }
+            };
 
             // Quick check to verify no option is concerning the same property as a Field
             foreach (var fieldSet in Fields)
@@ -284,13 +350,12 @@ namespace DFWV
             this[typeof(Mountain)] = new Filter("Name", null, null, -1);
             this[typeof(Army)] = new Filter("Name", null, null, -1);
             this[typeof(Unit)] = new Filter("Name", null, null, -1);
-            this[typeof(Vehicle)] = new Filter("Name", null, null, -1);
             this[typeof(Engraving)] = new Filter("Name", null, null, -1);
-            this[typeof(Incident)] = new Filter("Name", null, null, -1);
-            this[typeof(Crime)] = new Filter("Name", null, null, -1);
-            this[typeof(AdamantineTube)] = new Filter("Name", null, null, -1);
             this[typeof(Report)] = new Filter("Name", null, null, -1);
-            this[typeof(Announcement)] = new Filter("Name", null, null, -1);
+            this[typeof(WrittenContent)] = new Filter("Name", null, null, -1);
+            this[typeof(MusicalForm)] = new Filter("Name", null, null, -1);
+            this[typeof(PoeticForm)] = new Filter("Name", null, null, -1);
+            this[typeof(DanceForm)] = new Filter("Name", null, null, -1);
             this[typeof(Building)] = new Filter("Name", null, null, -1);
             this[typeof(Construction)] = new Filter("Name", null, null, -1);
             this[typeof(Item)] = new Filter("Name", null, null, -1);

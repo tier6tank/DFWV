@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Xml.Linq;
+using DFWV.Annotations;
 
 namespace DFWV.WorldClasses
 {
@@ -8,9 +10,14 @@ namespace DFWV.WorldClasses
     {
         private Point3 Coords { get; set; }
         override public Point Location => Point.Empty;
-        private int? ItemType { get; set; }
+        private int? ItemTypeId { get; set; }
+        public string ItemType => ItemTypeId.HasValue ? Item.ItemTypes[ItemTypeId.Value] : "";
         private int? Mat { get; set; }
+        [UsedImplicitly]
+        public string Material => Mat.HasValue ? Item.Materials[Mat.Value] : "";
 
+        [UsedImplicitly]
+        public string DispNameLower => ToString().ToLower();
 
         public Construction(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -31,7 +38,7 @@ namespace DFWV.WorldClasses
                     case "item_type":
                         if (!Item.ItemTypes.Contains(val))
                             Item.ItemTypes.Add(val);
-                        ItemType = Item.ItemTypes.IndexOf(val);
+                        ItemTypeId = Item.ItemTypes.IndexOf(val);
                         break;
                     case "mat":
                         if (!Item.Materials.Contains(val))
@@ -52,15 +59,18 @@ namespace DFWV.WorldClasses
             Program.MakeSelected(frm.tabConstruction, frm.lstConstruction, this);
 
 
-            //frm.grpRiver.Text = ToString();
-            //frm.grpRiver.Show();
+            frm.grpConstruction.Text = ToString();
+            frm.grpConstruction.Show();
 #if DEBUG
-            //frm.grpRiver.Text += string.Format(" - ID: {0}", ID);
+            frm.grpConstruction.Text += string.Format(" - ID: {0}", Id);
 #endif
 
 
-            //frm.lblRiverName.Text = ToString();
-
+            frm.grpConstruction.Text = ToString();
+            frm.lblConstructionName.Text = ToString();
+            frm.lblConstructionCoords.Text = Coords.ToString();
+            frm.lblConstructionItemType.Text = ItemTypeId.HasValue ? Item.ItemTypes[ItemTypeId.Value] : "";
+            frm.lblConstructionMat.Text = Mat.HasValue ? Item.Materials[Mat.Value] : "";
         }
 
         internal override void Export(string table)
@@ -88,6 +98,12 @@ namespace DFWV.WorldClasses
         internal override void Plus(XDocument xdoc)
         {
             
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0}{1}", ItemTypeId.HasValue ? Item.ItemTypes[ItemTypeId.Value] : "",
+                Mat.HasValue ? " " + Item.Materials[Mat.Value] : "").ToTitleCase();
         }
     }
 

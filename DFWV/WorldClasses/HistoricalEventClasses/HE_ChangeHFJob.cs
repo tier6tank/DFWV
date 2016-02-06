@@ -17,8 +17,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? FeatureLayerId { get; }
         public int? NewJobId { get; set; }
         public int? OldJobId { get; set; }
-        public string NewJob { get; set; }
-        public string OldJob { get; set; }
+        public int? NewJob { get; set; }
+        public int? OldJob { get; set; }
 
         override public Point Location => Site?.Location ?? (Subregion?.Location ?? Point.Empty);
 
@@ -133,12 +133,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         protected override string LegendsDescription() //Not Matched
         {
             var timestring = base.LegendsDescription();
-
-            if (NewJob != "standard")
+            if (NewJob.HasValue && OldJob.HasValue)
+            {
+                if (Unit.JobTypes[NewJob.Value] != "standard")
+                    return
+                        $"{timestring} {Hf.Race} {Hf} became {Unit.JobTypes[NewJob.Value]} in {(Site != null ? Site.AltName : Subregion.Name.ToTitleCase())}.";
                 return
-                    $"{timestring} {Hf.Race} {Hf} became {NewJob ?? "UNKNOWN"} in {(Site != null ? Site.AltName : Subregion.Name.ToTitleCase())}.";
-            return
-                $"{timestring} {Hf.Race} {Hf} stopped being a {OldJob ?? "UNKNOWN"} in {(Site != null ? Site.AltName : Subregion.Name)}.";
+                    $"{timestring} {Hf.Race} {Hf} stopped being a {Unit.JobTypes[OldJob.Value]} in {(Site != null ? Site.AltName : Subregion.Name)}.";
+            }
+            return $"{timestring} {Hf.Race} {Hf} became {"UNKNOWN"} in {(Site != null ? Site.AltName : Subregion.Name.ToTitleCase())}.";
+
         }
 
         internal override string ToTimelineString()

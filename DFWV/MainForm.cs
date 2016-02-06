@@ -436,13 +436,12 @@ namespace DFWV
         {
             FillList(lstArmy, World.Armies, tabArmy);
             FillList(lstUnit, World.Units, tabUnit);
-            FillList(lstVehicle, World.Vehicles, tabVehicle);
             FillList(lstEngraving, World.Engravings, tabEngraving);
-            FillList(lstIncident, World.Incidents, tabIncident);
-            FillList(lstCrime, World.Crimes, tabCrime);
-            FillList(lstAdamantineTube, World.AdamantineTubes, tabAdamantineTube);
             FillList(lstReport, World.Reports, tabReport);
-            FillList(lstAnnouncement, World.Announcements, tabAnnouncement);
+            FillList(lstWrittenContent, World.WrittenContents, tabWrittenContent);
+            FillList(lstMusicalForm, World.MusicalForms, tabMusicalForm);
+            FillList(lstDanceForm, World.MusicalForms, tabDanceForm);
+            FillList(lstPoeticForm, World.MusicalForms, tabPoeticForm);
             FillList(lstBuilding, World.Buildings, tabBuilding);
             FillList(lstConstruction, World.Constructions, tabConstruction);
             FillList(lstItem, World.Items, tabItem);
@@ -1566,7 +1565,45 @@ namespace DFWV
             evt.WriteDetailsOnParent(this, listBox.Parent, new Point(listBox.Left, listBox.Bottom + 10));
         }
 
-        #endregion 
+        #endregion
+
+        #region Unit Tab
+        /// <summary>
+        /// If a HF is clicked in the HF treeview, display event details underneath the tree view
+        /// </summary>
+        private void lstUnitRelations_DrawItem(object sender, DrawItemEventArgs e)
+        {
+
+            e.DrawBackground();
+
+
+            if (e.Index != -1)
+            {
+                var thisUnit = (Unit)lstUnitRelations.Tag ?? (Unit)lstUnit.SelectedItem;
+                if (thisUnit == null)
+                {
+                    grpUnit.Visible = false;
+                    return;
+                }
+
+                if (thisUnit.Relations == null)
+                {
+                    grpUnitRelations.Visible = false;
+                    return;
+                }
+                var selectedRelation = (HistoricalFigure)lstUnitRelations.Items[e.Index];
+
+                string relationName = thisUnit.Relations.FirstOrDefault(x => x.Value == selectedRelation).Key.ToTitleCase();
+
+                string drawString = $"{relationName} - {selectedRelation}";
+
+                e.Graphics.DrawString(drawString,
+                    e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
+            }
+            e.DrawFocusRectangle();
+        }
+        #endregion
+
 
         #region Historical Figure Tab
         /// <summary>
@@ -1574,11 +1611,11 @@ namespace DFWV
         /// </summary>
         private void trvHistoricalFigureHFLinks_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            
-            var treeView = (TreeView) sender;
+
+            var treeView = (TreeView)sender;
             var selectedHfNode = e.Node;
-            
-            var thisHf = (HistoricalFigure) lstHistoricalFigure.SelectedItem;
+
+            var thisHf = (HistoricalFigure)lstHistoricalFigure.SelectedItem;
 
             HistoricalEvent evt = null;
             if (selectedHfNode.Parent != null)
@@ -1691,6 +1728,42 @@ namespace DFWV
                     break;
                 case "FilterMountain":
                     StartFilter(lstMountain, World.Mountains, tabMountain);
+                    break;
+                case "FilterArmy":
+                    StartFilter(lstArmy, World.Armies, tabArmy);
+                    break;
+                case "FilterUnit":
+                    StartFilter(lstUnit, World.Units, tabUnit);
+                    break;
+                case "FilterEngraving":
+                    StartFilter(lstEngraving, World.Engravings, tabEngraving);
+                    break;
+                case "FilterReport":
+                    StartFilter(lstReport, World.Reports, tabReport);
+                    break;
+                case "FilterWrittenContent":
+                    StartFilter(lstWrittenContent, World.WrittenContents, tabWrittenContent);
+                    break;
+                case "FilterPoeticForm":
+                    StartFilter(lstPoeticForm, World.PoeticForms, tabPoeticForm);
+                    break;
+                case "FilterMusicalForm":
+                    StartFilter(lstMusicalForm, World.MusicalForms, tabMusicalForm);
+                    break;
+                case "FilterDanceForm":
+                    StartFilter(lstDanceForm, World.DanceForms, tabDanceForm);
+                    break;
+                case "FilterSquad":
+                    StartFilter(lstSquad, World.Squads, tabSquad);
+                    break;
+                case "FilterBuilding":
+                    StartFilter(lstBuilding, World.Buildings, tabBuilding);
+                    break;
+                case "FilterItem":
+                    StartFilter(lstItem, World.Items, tabItem);
+                    break;
+                case "FilterPlant":
+                    StartFilter(lstPlant, World.Plants, tabPlant);
                     break;
             }
 
@@ -1808,7 +1881,42 @@ namespace DFWV
                 case "TextFilterMountain":
                     TextFilter(txt, lstMountain, World.Mountains, tabMountain);
                     break;
-
+                case "TextFilterArmy":
+                    TextFilter(txt, lstArmy, World.Armies, tabArmy);
+                    break;
+                case "TextFilterUnit":
+                    TextFilter(txt, lstUnit, World.Units, tabUnit);
+                    break;
+                case "TextFilterEngraving":
+                    TextFilter(txt, lstEngraving, World.Engravings, tabEngraving);
+                    break;
+                case "TextFilterReport":
+                    TextFilter(txt, lstReport, World.Reports, tabReport);
+                    break;
+                case "TextFilterWrittenContent":
+                    TextFilter(txt, lstWrittenContent, World.WrittenContents, tabWrittenContent);
+                    break;
+                case "TextFilterPoeticForm":
+                    TextFilter(txt, lstPoeticForm, World.PoeticForms, tabPoeticForm);
+                    break;
+                case "TextFilterMusicalForm":
+                    TextFilter(txt, lstMusicalForm, World.MusicalForms, tabMusicalForm);
+                    break;
+                case "TextFilterDanceForm":
+                    TextFilter(txt, lstDanceForm, World.DanceForms, tabDanceForm);
+                    break;
+                case "TextFilterSquad":
+                    TextFilter(txt, lstSquad, World.Squads, tabSquad);
+                    break;
+                case "TextFilterBuilding":
+                    TextFilter(txt, lstBuilding, World.Buildings, tabBuilding);
+                    break;
+                case "TextFilterItem":
+                    TextFilter(txt, lstItem, World.Items, tabItem);
+                    break;
+                case "TextFilterPlant":
+                    TextFilter(txt, lstPlant, World.Plants, tabPlant);
+                    break;
             }
         }
 
@@ -1985,6 +2093,11 @@ namespace DFWV
                 displayingItem.Add(obj.GetType(), obj);
             else
                 displayingItem[obj.GetType()] = obj;
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

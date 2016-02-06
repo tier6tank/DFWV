@@ -9,9 +9,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     class HE_AssumeIdentity : HistoricalEvent
     {
-        private int? TricksterHfid { get; }
+        private int? TricksterHfid { get; set; }
         private HistoricalFigure TricksterHf { get; set; }
-        private int? TargetEnId { get; }
+        private int? TargetEnId { get; set; }
         private Entity TargetEn { get; set; }
         private int? IdentityId { get; }
 
@@ -115,10 +115,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "civ":
                         break;
                     case "trickster":
-                        TricksterHFID = valI;
+                        TricksterHfid = valI;
                         break;
                     case "target":
-                        TargetEnID = valI;
+                        TargetEnId = valI;
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());

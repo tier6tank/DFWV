@@ -293,24 +293,24 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             switch (Causes[Cause])
             {
                 case "struck":
-                    if (Item == null)
+                    if (ItemID == null)
                         return
                             $"{timestring} the {Hf.Race} {Hf} was struck down by \nthe {SlayerRace?.ToString() ?? ""} {SlayerHf?.ToString() ?? SlayerHfid.ToString()} in {locationText}.";
                     if (SlayerItem != null)
                         return
                             $"{timestring} the {Hf.Race} {Hf} was struck down by \n the {SlayerRace?.ToString() ?? ""} {SlayerHf?.ToString() ?? SlayerHfid.ToString()} with {SlayerItem} in {locationText}.";
-                    if (ItemType != null && ItemTypes[ItemType.Value] == "corpsepiece")
+                    if (ItemType != null && Item.ItemTypes[ItemType.Value] == "corpsepiece")
                         return
                             $"{timestring} the {Hf.Race} {Hf} was struck down by \nthe {SlayerRace?.ToString() ?? ""} {SlayerHf?.ToString() ?? SlayerHfid.ToString()} {"with a body part"} in {locationText}.";
-                    if (ItemType != null && ItemTypes[ItemType.Value] == "corpse")
+                    if (ItemType != null && Item.ItemTypes[ItemType.Value] == "corpse")
                         return
                             $"{timestring} the {Hf.Race} {Hf} was struck down by \nthe {SlayerRace?.ToString() ?? ""} {SlayerHf?.ToString() ?? SlayerHfid.ToString()} {"with a corpse"} in {locationText}.";
                     if (Mat != null && ItemType != null && ItemSubType == null) //Test
                         return
-                            $"{timestring} the {Hf.Race} {Hf} was struck down by \nthe {SlayerRace?.ToString() ?? ""} {SlayerHf?.ToString() ?? SlayerHfid.ToString()} {"with a " + Materials[Mat.Value] + " " + ItemTypes[ItemType.Value]} in {locationText}.";
+                            $"{timestring} the {Hf.Race} {Hf} was struck down by \nthe {SlayerRace?.ToString() ?? ""} {SlayerHf?.ToString() ?? SlayerHfid.ToString()} {"with a " + Item.Materials[Mat.Value] + " " + Item.ItemTypes[ItemType.Value]} in {locationText}.";
                     if (Mat != null && ItemType != null && ItemSubType != null)
                         return
-                            $"{timestring} the {Hf.Race} {Hf} was struck down by \nthe {SlayerRace?.ToString() ?? ""} {SlayerHf?.ToString() ?? SlayerHfid.ToString()} {"with a " + Materials[Mat.Value] + " " + ItemSubTypes[ItemSubType.Value]} in {locationText}.";
+                            $"{timestring} the {Hf.Race} {Hf} was struck down by \nthe {SlayerRace?.ToString() ?? ""} {SlayerHf?.ToString() ?? SlayerHfid.ToString()} {"with a " + Item.Materials[Mat.Value] + " " + Item.ItemSubTypes[ItemSubType.Value]} in {locationText}.";
                     return
                         $"{timestring} the {Hf.Race} {Hf} was struck down by \nthe {SlayerRace?.ToString() ?? ""} {SlayerHf?.ToString() ?? SlayerHfid.ToString()} {"with "} in {locationText}.";
                 case "shot":
@@ -318,19 +318,20 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     {
                         if (Mat != null && ItemType != null && ItemSubType != null)
                             return
-                                $"{timestring} the {Hf.Race} {Hf} was shot and killed by \nthe {SlayerRace?.ToString() ?? ""} {SlayerHf?.ToString() ?? SlayerHfid.ToString()} {"with a " + Materials[Mat.Value] + " " + ItemSubTypes[ItemSubType.Value]} in {locationText}.";
+                                $"{timestring} the {Hf.Race} {Hf} was shot and killed by \nthe {SlayerRace?.ToString() ?? ""} {SlayerHf?.ToString() ?? SlayerHfid.ToString()} {"with a " + Item.Materials[Mat.Value] + " " + Item.ItemSubTypes[ItemSubType.Value]} in {locationText}.";
                         return
-                                "with a " + Materials[Mat.Value] + " " + ItemSubTypes[ItemSubType.Value],
+                            $"{timestring} the {Hf.Race} {Hf} was shot and killed by \nthe {SlayerRace?.ToString() ?? ""} {SlayerHf?.ToString() ?? SlayerHfid.ToString()} in {locationText} " +
+                            "with a " + Item.Materials[Mat.Value] + " " + Item.ItemSubTypes[ItemSubType.Value];
                     }
                     if (SlayerShooterItem != null)
                         return
                             $"{timestring} the {Hf.Race} {Hf} was shot and killed by \n the {SlayerRace?.ToString() ?? ""} {SlayerHf?.ToString() ?? SlayerHfid.ToString()} with {SlayerShooterItem} in {locationText}.";
                     if (BowMat != null && BowItemType != null && BowItemSubType == null && ItemType != null && Mat != null) //Test
                         return
-                            $"{timestring} the {Hf.Race} {Hf} was shot and killed by \nthe {SlayerRace?.ToString() ?? ""} {SlayerHf?.ToString() ?? SlayerHfid.ToString()} {"with a " + Materials[Mat.Value] + " " + ItemTypes[ItemType.Value]} in {locationText}.";
+                            $"{timestring} the {Hf.Race} {Hf} was shot and killed by \nthe {SlayerRace?.ToString() ?? ""} {SlayerHf?.ToString() ?? SlayerHfid.ToString()} {"with a " + Item.Materials[Mat.Value] + " " + Item.ItemTypes[ItemType.Value]} in {locationText}.";
                     if (BowMat != null && BowItemType != null && BowItemSubType != null && Mat != null && ItemType != null && ItemSubType != null)
                         return
-                            $"{timestring} the {Hf.Race} {Hf} was shot and killed by \nthe {SlayerRace?.ToString() ?? ""} {SlayerHf?.ToString() ?? SlayerHfid.ToString()} {"with a " + Materials[Mat.Value] + " " + ItemSubTypes[ItemSubType.Value] + " from a " + Materials[BowMat.Value] + " " + ItemSubTypes[BowItemSubType.Value]} in {locationText}.";
+                            $"{timestring} the {Hf.Race} {Hf} was shot and killed by \nthe {SlayerRace?.ToString() ?? ""} {SlayerHf?.ToString() ?? SlayerHfid.ToString()} {"with a " + Item.Materials[Mat.Value] + " " + Item.ItemSubTypes[ItemSubType.Value] + " from a " + Item.Materials[BowMat.Value] + " " + Item.ItemSubTypes[BowItemSubType.Value]} in {locationText}.";
                     return
                         $"{timestring} the {Hf.Race} {Hf} was shot and killed by \nthe {SlayerRace?.ToString() ?? ""} {SlayerHf?.ToString() ?? SlayerHfid.ToString()} {"with "} in {locationText}.";
                 case "murdered":
@@ -449,16 +450,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 SiteId.DBExport(), 
                 SubregionId.DBExport(), 
                 FeatureLayerId.DBExport(),
-                Item.DBExport(),
+                ItemID.DBExport(),
                 ArtifactId.DBExport(),
-                ItemType.DBExport(ItemTypes),
-                ItemSubType.DBExport(ItemSubTypes),
-                Mat.DBExport(Materials),
+                ItemType.DBExport(Item.ItemTypes),
+                ItemSubType.DBExport(Item.ItemSubTypes),
+                Mat.DBExport(Item.Materials),
                 BowItem.DBExport(),
                 BowArtifactId.DBExport(),
-                BowItemType.DBExport(ItemTypes),
-                BowItemSubType.DBExport(ItemSubTypes),
-                BowMat.DBExport(Materials)
+                BowItemType.DBExport(Item.ItemTypes),
+                BowItemSubType.DBExport(Item.ItemSubTypes),
+                BowMat.DBExport(Item.Materials)
             };
 
             Database.ExportWorldItem(table, vals);

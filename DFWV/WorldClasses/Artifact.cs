@@ -34,13 +34,13 @@ namespace DFWV.WorldClasses
 
         [UsedImplicitly]
         public string Type => (ItemSubType.HasValue
-            ? HistoricalEvent.ItemSubTypes[ItemSubType.Value]
+            ? Item.ItemSubTypes[ItemSubType.Value]
             : (ItemType.HasValue
-                ? HistoricalEvent.ItemTypes[ItemType.Value]
+                ? Item.ItemTypes[ItemType.Value]
                 : ""));
 
         [UsedImplicitly]
-        public string Material => (Mat.HasValue ? HistoricalEvent.Materials[Mat.Value] + " " : "");
+        public string Material => (Mat.HasValue ? Item.Materials[Mat.Value] + " " : "");
 
         [UsedImplicitly]
         public string DispNameLower => ToString().ToLower();
@@ -191,10 +191,10 @@ namespace DFWV.WorldClasses
             {
                 Id,
                 Name.DBExport(),
-                Item.DBExport(),
-                Mat.DBExport(HistoricalEvent.Materials),
-                ItemType.DBExport(HistoricalEvent.ItemTypes),
-                ItemSubType.DBExport(HistoricalEvent.ItemSubTypes),
+                ItemID.DBExport(),
+                Mat.DBExport(Item.Materials),
+                ItemType.DBExport(Item.ItemTypes),
+                ItemSubType.DBExport(Item.ItemSubTypes),
                 ItemValue.DBExport()
             };
 

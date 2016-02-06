@@ -31,7 +31,7 @@ namespace DFWV
         {
 
 #if DEBUG
-            TestAllFilters(world);
+            //TestAllFilters(world);
 #endif
 
             InitializeComponent();
@@ -126,8 +126,75 @@ namespace DFWV
                     testFilter.Get(world.Regions.Values.ToList()).ToArray();
                 else if (thisType == typeof(UndergroundRegion))
                     testFilter.Get(world.UndergroundRegions.Values.ToList()).ToArray();
-                else if (thisType == typeof(Site))
+                else if (thisType == typeof (Site))
                     testFilter.Get(world.Sites.Values.ToList()).ToArray();
+                else if (thisType == typeof (Structure))
+                    testFilter.Get(world.Structures.Values.ToList()).ToArray();
+                else if (thisType == typeof (WorldConstruction))
+                    testFilter.Get(world.WorldConstructions.Values.ToList()).ToArray();
+                else if (thisType == typeof (Dynasty))
+                    testFilter.Get(world.Dynasties).ToArray();
+                else if (thisType == typeof (River))
+                    testFilter.Get(world.Rivers.Values.ToList()).ToArray();
+                else if (thisType == typeof (Mountain))
+                    testFilter.Get(world.Mountains.Values.ToList()).ToArray();
+                else if (thisType == typeof (Army))
+                    testFilter.Get(world.Armies.Values.ToList()).ToArray();
+                else if (thisType == typeof (Unit))
+                    testFilter.Get(world.Units.Values.ToList()).ToArray();
+                else if (thisType == typeof (Engraving))
+                    testFilter.Get(world.Engravings.Values.ToList()).ToArray();
+                else if (thisType == typeof (Report))
+                    testFilter.Get(world.Reports.Values.ToList()).ToArray();
+                else if (thisType == typeof (Building))
+                    testFilter.Get(world.Buildings.Values.ToList()).ToArray();
+                else if (thisType == typeof (Construction))
+                    testFilter.Get(world.Constructions.Values.ToList()).ToArray();
+                else if (thisType == typeof (Item))
+                    testFilter.Get(world.Items.Values.ToList()).ToArray();
+                else if (thisType == typeof (Plant))
+                    testFilter.Get(world.Plants.Values.ToList()).ToArray();
+                else if (thisType == typeof (WorldClasses.Squad))
+                    testFilter.Get(world.Squads.Values.ToList()).ToArray();
+                else if (thisType == typeof (WrittenContent))
+                    testFilter.Get(world.WrittenContents.Values.ToList()).ToArray();
+                else if (thisType == typeof (MusicalForm))
+                    testFilter.Get(world.MusicalForms.Values.ToList()).ToArray();
+                else if (thisType == typeof (DanceForm))
+                    testFilter.Get(world.DanceForms.Values.ToList()).ToArray();
+                else if (thisType == typeof (PoeticForm))
+                    testFilter.Get(world.PoeticForms.Values.ToList()).ToArray();
+                else
+                {
+                    Console.WriteLine("else if (thisType == typeof(" + thisType.Name + "))");
+                    Console.WriteLine("\ttestFilter.Get(world." + thisType.Name + "s.Values.ToList()).ToArray():");
+                }
+
+
+                //public readonly Dictionary<int, Army> Armies = new Dictionary<int, Army>();
+                //public readonly Dictionary<int, Unit> Units = new Dictionary<int, Unit>();
+                //public readonly Dictionary<int, Engraving> Engravings = new Dictionary<int, Engraving>();
+                //public readonly Dictionary<int, Report> Reports = new Dictionary<int, Report>();
+                //public readonly Dictionary<int, Building> Buildings = new Dictionary<int, Building>();
+                //public readonly Dictionary<int, Construction> Constructions = new Dictionary<int, Construction>();
+                //public readonly Dictionary<int, Item> Items = new Dictionary<int, Item>();
+                //public readonly Dictionary<int, Plant> Plants = new Dictionary<int, Plant>();
+                //public readonly Dictionary<int, Squad> Squads = new Dictionary<int, Squad>();
+                //public readonly Dictionary<int, Race> Races = new Dictionary<int, Race>();
+                //public readonly Dictionary<int, WrittenContent> WrittenContents = new Dictionary<int, WrittenContent>();
+                //public readonly Dictionary<int, PoeticForm> PoeticForms = new Dictionary<int, PoeticForm>();
+                //public readonly Dictionary<int, MusicalForm> MusicalForms = new Dictionary<int, MusicalForm>();
+                //public readonly Dictionary<int, DanceForm> DanceForms = new Dictionary<int, DanceForm>();
+                //public readonly Dictionary<int, Mountain> Mountains = new Dictionary<int, Mountain>();
+                //public readonly Dictionary<int, River> Rivers = new Dictionary<int, River>();
+                //public readonly Dictionary<int, Structure> Structures = new Dictionary<int, Structure>();
+                //public readonly Dictionary<int, WorldConstruction> WorldConstructions = new Dictionary<int, WorldConstruction>();
+
+
+                //public readonly Dictionary<int, Site> SitesFile = new Dictionary<int, Site>();
+                //public readonly List<Entity> EntitiesFile = new List<Entity>();
+                //public readonly List<Dynasty> Dynasties = new List<Dynasty>();
+
                 // ReSharper restore ReturnValueOfPureMethodIsNotUsed
 
             }

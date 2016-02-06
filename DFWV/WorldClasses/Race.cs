@@ -25,6 +25,9 @@ namespace DFWV.WorldClasses
         [UsedImplicitly]
         public string DispNameLower => ToString().ToLower();
 
+        public static List<string> Flags = new List<string>();
+        public List<short> Flag { get; set; }
+
 
         public List<Caste> Castes { get; set; }
 
@@ -164,6 +167,17 @@ namespace DFWV.WorldClasses
                         if (Castes == null)
                             Castes = new List<Caste>();
                         Castes.Add(newCaste);
+                        break;
+                    case "flags":
+                        var flags = val.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var flag in flags)
+                        {
+                            if (!Flags.Contains(flag))
+                                Flags.Add(flag);
+                            if (Flag == null)
+                                Flag = new List<short>();
+                            Flag.Add((short)Flags.IndexOf(flag));
+                        }
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t Race", element, xdoc.Root.ToString());

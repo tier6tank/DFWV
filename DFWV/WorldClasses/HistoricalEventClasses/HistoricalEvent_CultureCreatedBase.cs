@@ -12,6 +12,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal HistoricalFigure HistFigure { get; set; }
         internal int? SiteId { get; set; }
         internal Site Site { get; set; }
+        internal int? SubregionId { get; set; }
+        internal Region Subregion { get; set; }
 
         override public Point Location => Point.Empty;
 
@@ -73,6 +75,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         if (valI != -1)
                             SiteId = valI;
                         break;
+                    case "subregion_id":
+                        if (valI != -1)
+                            SiteId = valI;
+                        break;
                     case "form_id":
                         if (valI != -1)
                             FormId = valI;
@@ -93,6 +99,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 HistFigure = World.HistoricalFigures[HistFigureId.Value];
             if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
                 Site = World.Sites[SiteId.Value];
+            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
+                Subregion = World.Regions[SubregionId.Value];
 
         }
 

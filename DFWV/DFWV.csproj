@@ -156,8 +156,6 @@
       <DependentUpon>MapForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Point3.cs" />
-    <Compile Include="WorldClasses\AdamantineTube.cs" />
-    <Compile Include="WorldClasses\Announcement.cs" />
     <Compile Include="WorldClasses\HistoricalEventClasses\HE_ArtifactDestroyed.cs" />
     <Compile Include="WorldClasses\HistoricalEventClasses\HE_RegionPopIncorporatedIntoEntity.cs" />
     <Compile Include="WorldClasses\HistoricalEventClasses\HE_MusicalFormCreated.cs" />
@@ -176,17 +174,22 @@
     <Compile Include="WorldClasses\HistoricalEventCollectionClasses\EC_Ceremony.cs" />
     <Compile Include="WorldClasses\HistoricalEventCollectionClasses\EC_Procession.cs" />
     <Compile Include="WorldClasses\HistoricalEventCollectionClasses\EC_Occasion.cs" />
+    <Compile Include="WorldClasses\ArtForm.cs" />
+    <Compile Include="WorldClasses\DanceForm.cs" />
+    <Compile Include="WorldClasses\ItemImprovement.cs" />
+    <Compile Include="WorldClasses\ItemIngredient.cs" />
+    <Compile Include="WorldClasses\MusicalForm.cs" />
+    <Compile Include="WorldClasses\PoeticForm.cs" />
+    <Compile Include="WorldClasses\Unit.cs" />
+    <Compile Include="WorldClasses\WrittenContent.cs" />
     <Compile Include="WorldClasses\Squad.cs" />
     <Compile Include="WorldClasses\Plant.cs" />
     <Compile Include="WorldClasses\Item.cs" />
     <Compile Include="WorldClasses\Construction.cs" />
     <Compile Include="WorldClasses\Report.cs" />
-    <Compile Include="WorldClasses\Crime.cs" />
-    <Compile Include="WorldClasses\Incident.cs" />
     <Compile Include="WorldClasses\Engraving.cs" />
     <Compile Include="WorldClasses\Building.cs" />
-    <Compile Include="WorldClasses\Vehicle.cs" />
-    <Compile Include="WorldClasses\Unit.cs" />
+    <Compile Include="WorldClasses\UnitInventoryItem.cs" />
     <Compile Include="WorldClasses\Caste.cs" />
     <Compile Include="WorldClasses\Army.cs" />
     <Compile Include="WorldClasses\River.cs" />

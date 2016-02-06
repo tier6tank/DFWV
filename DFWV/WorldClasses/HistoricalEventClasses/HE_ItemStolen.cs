@@ -174,7 +174,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             EventLabel(frm, parent, ref location, "Theif:", Hf);
             if (Mat != null || ItemType != null)
                 EventLabel(frm, parent, ref location, "Item:",
-                    $"{(Mat != null ? Materials[Mat.Value] : "UNKNOWN")} {(ItemType != null ? ItemTypes[ItemType.Value] : "UNKNOWN")}");
+                    $"{(Mat != null ? Item.Materials[Mat.Value] : "UNKNOWN")} {(ItemType != null ? Item.ItemTypes[ItemType.Value] : "UNKNOWN")}");
             
             EventLabel(frm, parent, ref location, "Item:", Hf);
             EventLabel(frm, parent, ref location, "Site:", Site);
@@ -191,9 +191,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     $"{timestring} {"UNKNOWN"} was stolen from {"UNKNOWN"} in {Site?.ToString() ?? "UNKNOWN"} by the {"UNKNOWN"} {"UNKNOWN"} and brought to {"UNKNOWN"}";
             if (Hf != null)
                 return
-                    $"{timestring} {(Mat != null ? Materials[Mat.Value] : "UNKNOWN")} {(ItemType != null ? ItemTypes[ItemType.Value] : "UNKNOWN")} was stolen from {(Site == null ? "UNKNOWN" : Site.AltName)} by the {Hf.Race.ToString().ToLower()} {Hf}{""}."; //TODO: Missing "and brought to [Site]"
+                    $"{timestring} {(Mat != null ? Item.Materials[Mat.Value] : "UNKNOWN")} {(ItemType != null ? Item.ItemTypes[ItemType.Value] : "UNKNOWN")} was stolen from {(Site == null ? "UNKNOWN" : Site.AltName)} by the {Hf.Race.ToString().ToLower()} {Hf}{""}."; //TODO: Missing "and brought to [Site]"
             return
-                $"{timestring} {(Mat != null ? Materials[Mat.Value] : "UNKNOWN")} {(ItemType != null ? ItemTypes[ItemType.Value] : "UNKNOWN")} was stolen from {(Site == null ? "UNKNOWN" : Site.AltName)} by an unknown creature{""}."; //TODO: Missing "and brought to [Site]"
+                $"{timestring} {(Mat != null ? Item.Materials[Mat.Value] : "UNKNOWN")} {(ItemType != null ? Item.ItemTypes[ItemType.Value] : "UNKNOWN")} was stolen from {(Site == null ? "UNKNOWN" : Site.AltName)} by an unknown creature{""}."; //TODO: Missing "and brought to [Site]"
         }
 
         internal override string ToTimelineString()
@@ -219,10 +219,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 DefenderCivId.DBExport(), 
                 SiteId.DBExport(),
                 Coords.DBExport(),
-                Item.DBExport(),
-                ItemType.DBExport(ItemTypes),
-                ItemSubType.DBExport(ItemSubTypes),
-                Mat.DBExport(Materials),
+                ItemID.DBExport(),
+                ItemType.DBExport(Item.ItemTypes),
+                ItemSubType.DBExport(Item.ItemSubTypes),
+                Mat.DBExport(Item.Materials),
                 EntityId.DBExport(),
                 Hfid.DBExport(),
                 StructureId.DBExport()

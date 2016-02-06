@@ -74,6 +74,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         public int? BreedId { get; set; }
         public Leader Leader { get; set; }
         public God God { private get; set; }
+        public Unit Unit { get; set; }
 
         [UsedImplicitly]
         public bool IsPlayerControlled { private get; set; }
@@ -179,6 +180,8 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         public bool IsPositioned => Location != Point.Empty;
         [UsedImplicitly]
         public bool IsGod => God != null;
+        [UsedImplicitly]
+        public bool IsUnit => Unit != null;
         [UsedImplicitly]
         public int CreatedArtifactCount => CreatedArtifacts?.Count ?? 0;
         [UsedImplicitly]
@@ -445,6 +448,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             frm.lblHistoricalFigureGod.Text = God == null ? "" : (God + " (" + (Deity ? "Deity" : "Force") + ")");
             frm.lblHistoricalFigureLeader.Data = Leader;
             frm.lblHistoricalFigureLeader.Text = Leader == null ? "" : Leader.LeaderTypes[Leader.LeaderType].ToTitleCase();
+            frm.lblHistoricalFigureUnit.Data = Unit;
             frm.lblHistoricalFigureEntityPopulation.Data = EntPop;
 
             frm.grpHistoricalFigureSpheres.FillListboxWith(frm.lstHistoricalFigureSpheres, Sphere?.Select(x => Spheres[x].ToTitleCase()));
