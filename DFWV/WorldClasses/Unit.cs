@@ -43,6 +43,7 @@ namespace DFWV.WorldClasses
         public HistoricalFigure HistFigure2 { get; private set; }
         public static List<string> Flags = new List<string>();
         public List<short> Flag { get; set; }
+        public List<Reference> References { get; set; }
 
         [UsedImplicitly]
         public bool IsDead => Flags != null && Flags.Contains("dead") && Flag.Contains((short)Flags.IndexOf("dead"));
@@ -50,7 +51,7 @@ namespace DFWV.WorldClasses
         public List<short> Labor { get; set; }
         public Dictionary<string, int> RelationIDs { get; set; }
         public Dictionary<string, HistoricalFigure> Relations { get; set; }
-        private static List<string> HealthFlags = new List<string>();
+        public static List<string> HealthFlags = new List<string>();
         private List<short> HealthFlag { get; set; }
         private List<int> UsedItemIds { get; set; }
         private List<int> OwnedItemIds { get; set; }
@@ -185,6 +186,11 @@ namespace DFWV.WorldClasses
                                 InventoryItems = new List<UnitInventoryItem>();
                             InventoryItems.Add(new UnitInventoryItem(new XDocument(inv),world));
                         }
+                        break;
+                    case "reference":
+                        if (References == null)
+                            References = new List<Reference>();
+                        References.Add(new Reference(element, this));
                         break;
                     case "in_item_id":
                     case "nestbox_id":
@@ -349,12 +355,8 @@ namespace DFWV.WorldClasses
                     }
                 }
 
-                frm.grpUnitInventory.Visible = InventoryItems != null;
-                frm.lstUnitInventory.Items.Clear();
-                if (InventoryItems != null)
-                {
-                    frm.lstUnitInventory.Items.AddRange(InventoryItems.ToArray());
-                }
+                frm.grpUnitInventory.FillListboxWith(frm.lstUnitInventory, InventoryItems);
+                frm.grpUnitReferences.FillListboxWith(frm.lstUnitReferences, References);
 
                 frm.grpUnitOwnedBuildings.Visible = OwnedBuildingIds != null;
                 frm.lstUnitOwnedBuildings.Items.Clear();
@@ -419,6 +421,7 @@ namespace DFWV.WorldClasses
                     Relations.Add(relationId.Key, World.HistoricalFigures[relationId.Value]);
                 }
             }
+            References?.ForEach(x => x.Link());
         }
 
         internal override void Process()

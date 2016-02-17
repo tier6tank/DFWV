@@ -24,7 +24,7 @@ gui = require 'gui'
 local args = {...}
 local vs = dfhack.gui.getCurViewscreen()
 local i = 1
-
+local file
 local MAPS = {
     "Standard biome+site map",
     "Elevations including lake and ocean floors",
@@ -94,6 +94,50 @@ function string.starts(String,Start)
    return string.sub(String,1,string.len(Start))==Start
 end
 
+function export_references(table)
+	for refK, refV in pairs(table) do
+		file:write("\t\t<reference>\n")
+		file:write("\t\t\t<type>"..df.general_ref_type[refV:getType()].."</type>\n")
+		if refV:getType() == df.general_ref_type.ARTIFACT then file:write("\t\t\t<id>"..refV.artifact_id.."</id>\n") -- artifact
+		elseif refV:getType() == df.general_ref_type.ENTITY then file:write("\t\t\t<id>"..refV.entity_id.."</id>\n") -- entity
+		elseif refV:getType() == df.general_ref_type.HISTORICAL_EVENT then file:write("\t\t\t<id>"..refV.event_id.."</id>\n") -- event
+		elseif refV:getType() == df.general_ref_type.SITE then file:write("\t\t\t<id>"..refV.site_id.."</id>\n") -- site
+		elseif refV:getType() == df.general_ref_type.SUBREGION then file:write("\t\t\t<id>"..refV.region_id.."</id>\n") -- region
+		elseif refV:getType() == df.general_ref_type.HISTORICAL_FIGURE then file:write("\t\t\t<id>"..refV.hist_figure_id.."</id>\n") -- hist figure
+		elseif refV:getType() == df.general_ref_type.WRITTEN_CONTENT then file:write("\t\t\t<id>"..refV.anon_1.."</id>\n")
+		elseif refV:getType() == df.general_ref_type.POETIC_FORM then file:write("\t\t\t<id>"..refV.poetic_form_id.."</id>\n") -- poetic form
+		elseif refV:getType() == df.general_ref_type.MUSICAL_FORM then file:write("\t\t\t<id>"..refV.musical_form_id.."</id>\n") -- musical form
+		elseif refV:getType() == df.general_ref_type.DANCE_FORM then file:write("\t\t\t<id>"..refV.dance_form_id.."</id>\n") -- dance form
+		elseif refV:getType() == df.general_ref_type.KNOWLEDGE_SCHOLAR_FLAG then file:write("\t\t\t<id>"..refV.knowledge_category.."</id>\n") -- dance form
+		elseif refV:getType() == df.general_ref_type.ABSTRACT_BUILDING then -- abstract building
+			file:write("\t\t\t<id>"..refV.building_id.."</id>\n")
+			file:write("\t\t\t<site_id>"..refV.site_id.."</site_id>\n")
+		elseif refV:getType() == df.general_ref_type.CONTAINED_IN_ITEM then file:write("\t\t\t<id>"..refV.item_id.."</id>\n") -- item
+		elseif refV:getType() == df.general_ref_type.CONTAINS_ITEM then file:write("\t\t\t<id>"..refV.item_id.."</id>\n") -- item
+		elseif refV:getType() == df.general_ref_type.IS_ARTIFACT then file:write("\t\t\t<id>"..refV.artifact_id.."</id>\n") -- artifact
+		elseif refV:getType() == df.general_ref_type.UNIT_ITEMOWNER then file:write("\t\t\t<id>"..refV.unit_id.."</id>\n") -- unit
+		elseif refV:getType() == df.general_ref_type.UNIT_HOLDER then file:write("\t\t\t<id>"..refV.unit_id.."</id>\n") -- unit
+		elseif refV:getType() == df.general_ref_type.UNIT_TRADEBRINGER then file:write("\t\t\t<id>"..refV.unit_id.."</id>\n") -- unit
+		elseif refV:getType() == df.general_ref_type.CONTAINS_UNIT then file:write("\t\t\t<id>"..refV.unit_id.."</id>\n") -- unit
+		elseif refV:getType() == df.general_ref_type.IS_NEMESIS then file:write("\t\t\t<id>"..refV.nemesis_id.."</id>\n") -- unit
+		elseif refV:getType() == df.general_ref_type.BUILDING_HOLDER then file:write("\t\t\t<id>"..refV.building_id.."</id>\n") -- building
+		elseif refV:getType() == df.general_ref_type.BUILDING_NEST_BOX then file:write("\t\t\t<id>"..refV.building_id.."</id>\n") -- building
+		elseif refV:getType() == df.general_ref_type.BUILDING_CIVZONE_ASSIGNED then file:write("\t\t\t<id>"..refV.building_id.."</id>\n") -- building
+		elseif refV:getType() == df.general_ref_type.BUILDING_CHAIN then file:write("\t\t\t<id>"..refV.building_id.."</id>\n") -- building
+		elseif refV:getType() == df.general_ref_type.BUILDING_TRIGGER then file:write("\t\t\t<id>"..refV.building_id.."</id>\n") -- building
+		elseif refV:getType() == df.general_ref_type.BUILDING_TRIGGERTARGET then file:write("\t\t\t<id>"..refV.building_id.."</id>\n") -- building
+		elseif refV:getType() == df.general_ref_type.ACTIVITY_EVENT then file:write("\t\t\t<id>"..refV.anon_1.."</id>\n") -- event
+		elseif refV:getType() == df.general_ref_type.INTERACTION then -- TODO INTERACTION
+		elseif refV:getType() == df.general_ref_type.VALUE_LEVEL then -- TODO VALUE_LEVEL
+		elseif refV:getType() == df.general_ref_type.LANGUAGE then -- TODO LANGUAGE
+		else
+			print("unknown reference",refV:getType(),df.general_ref_type[refV:getType()])
+			for k,v in pairs(refV) do print(k,v) end
+		end
+		file:write("\t\t</reference>\n")
+	end
+end
+
 function export_geo_biomes()
 	--[[  geo_biomes can't be easily associated with map tiles or biomes without embarking, I think.
 	file:write("<geo_biomes>".."\n")
@@ -122,7 +166,6 @@ function export_geo_biomes()
     file:write("</geo_biomes>".."\n")
 	--]]
 end
-
 function export_armies()
 	file:write("<armies>".."\n")
     for armyK, armyV in ipairs(df.global.world.armies.all) do
@@ -236,22 +279,8 @@ function export_units()
 					if (printout ~= "") then
 						file:write("\t\t".."<"..k..">"..printout.."</"..k..">".."\n")
 					end
-				elseif (k == "general_refs") then
-					for refK, refV in pairs(unitV.general_refs) do
-						if (df.general_ref_type[refV:getType()] == "IS_NEMESIS") then
-							file:write("\t\t".."<nemesis_id>"..refV.nemesis_id.."</nemesis_id>".."\n")
-						elseif (df.general_ref_type[refV:getType()] == "BUILDING_CIVZONE_ASSIGNED") then
-							file:write("\t\t".."<civzone_id>"..refV.building_id.."</civzone_id>".."\n")
-						elseif (df.general_ref_type[refV:getType()] == "BUILDING_NEST_BOX") then
-							file:write("\t\t".."<nestbox_id>"..refV.building_id.."</nestbox_id>".."\n")
-						elseif (df.general_ref_type[refV:getType()] == "CONTAINED_IN_ITEM") then 
-							file:write("\t\t".."<in_item_id>"..refV.item_id.."</in_item_id>".."\n")
-						else
-							if table.contains(df.general_ref_type, refV:getType()) then
-								file:write("\t\t".."<general_ref>"..refV.getType()..":"..df.general_ref_type[refV:getType()].."</general_ref>".."\n")
-							end
-						end
-					end
+				elseif (k == "general_refs") then -- handled elsewhere
+
 				elseif (k == "specific_refs") then -- No specific refs found yet
 					
 
@@ -261,7 +290,7 @@ function export_units()
 			end
 		end
 		file:write("\t\t".."<flags>"..flagValues.."</flags>".."\n")
-		
+		export_references(unitV.general_refs)
 
 		for relationK, relationV in pairs(unitV.relations) do
 			if (relationK == "ghost_info" or relationK == "pregnancy_genes") then 
@@ -364,11 +393,13 @@ file:write("<buildings>".."\n")
 		file:write("\t\t".."<coordscenter>"..buildingV.centerx..","..buildingV.centery..","..buildingV.z.."</coordscenter>".."\n")
 		file:write("\t\t".."<coords2>"..buildingV.x2..","..buildingV.y2..","..buildingV.z.."</coords2>".."\n")
 		file:write("\t\t".."<mat>"..dfhack.matinfo.toString(dfhack.matinfo.decode(buildingV.mat_type, buildingV.mat_index)).."</mat>".."\n")
-		print (buildingK)
-		file:write("\t\t".."<race>"..(df.global.world.raws.creatures.all[buildingV.race].creature_id).."</race>".."\n")
+		if (buildingV.race >= 0) then
+			file:write("\t\t".."<race>"..(df.global.world.raws.creatures.all[buildingV.race].creature_id).."</race>".."\n")
+		end
 		buildingType = df.building_type[buildingV:getType()]:lower()
 		file:write("\t\t".."<type>"..buildingType.."</type>".."\n")
 		if (buildingType == "workshop") then
+
 			file:write("\t\t".."<subtype>"..df.workshop_type[buildingV.type]:lower().."</subtype>".."\n")
 		elseif (buildingType == "bed") then
 			if (buildingV.owner ~= nil) then
@@ -410,6 +441,7 @@ file:write("<buildings>".."\n")
 		else -- stockpile, door, table, chair, statue, cage, farmplot, barsfloor, barsvertical, chain, support, tradedepot
 
 		end
+		export_references(buildingV.general_refs)
 		file:write("\t".."</building>".."\n")
     end
     file:write("</buildings>".."\n")
@@ -457,7 +489,7 @@ function export_items()
 				
 				elseif (k == "subtype" or k == "curse_year" or k == "curse_time" or k == "birth_year" or k == "birth_time" or k == "planting_skill" or k == "death_year" or k == "death_time" or k == "race" or k == "race2" or k == "caste" or k == "caste2" or k == "mat_index" or k == "mat_type" or k == "id" or k == "dye_mat_index" or k == "sex" ) then -- Ignore, covered elsewhere
 				
-				elseif (k == "base_uniform_score" or k == "maker_race" or k == "dimension" or k == "sharpness" or k == "rot_timer" or k == "blood_count" or k == "stored_fat" or k == "birth_year_bias" or k == "birth_time_bias" or k == "grow_counter"  or k == "walkable_id" or k == "fixed_temp"  or k == "spec_heat" or k == "ignite_point" or k == "colddam_point" or k == "boiling_point" or k == "temperature" or k == "stack_size" or k == "melting_point" or k == "heatdam_point" or k == "temp_updated_frame"  or k == "wear_timer" or k == "stockpile_countdown" or k == "unit_id2"  or k == "hist_figure_id2"  or k == "bone2"  ) then -- Not important enough
+				elseif (k == "base_uniform_score" or k == "maker_race" or k == "dimension" or k == "sharpness" or k == "rot_timer" or k == "blood_count" or k == "stored_fat" or k == "birth_year_bias" or k == "birth_time_bias" or k == "grow_counter"  or k == "walkable_id" or k == "fixed_temp"  or k == "spec_heat" or k == "ignite_point" or k == "colddam_point" or k == "boiling_point" or k == "temperature" or k == "stack_size" or k == "melting_point" or k == "heatdam_point" or k == "temp_updated_frame"  or k == "wear_timer" or k == "stockpile_countdown" or k == "unit_id2"  or k == "hist_figure_id2"  or k == "bone2" or k == "stockpile_delay" or k == "weight_fraction"  ) then -- Not important enough
 				
 				elseif (k == "dye_mat_type") then
 					if (v ~= -1 and itemV.dye_mat_index ~= -1) then
@@ -493,38 +525,8 @@ function export_items()
 					end
 				elseif (k == "temperature") then
 					file:write("\t\t".."<temperature>"..v.whole.."."..v.fraction.."</temperature>".."\n")
-				elseif (k == "general_refs") then
-					file:write("\t\t".."<"..k..">".."\n")
-					for refK, refV in ipairs(v) do
-						if df.general_ref_type[refV:getType()] == "IS_ARTIFACT" then
-							file:write("\t\t\t".."<artifact_id>"..refV.artifact_id.."</artifact_id>".."\n")
-						elseif df.general_ref_type[refV:getType()] == "CONTAINED_IN_ITEM" then
-							file:write("\t\t\t".."<container_item_id>"..refV.item_id.."</container_item_id>".."\n")
-						elseif df.general_ref_type[refV:getType()] == "BUILDING_HOLDER" then
-							file:write("\t\t\t".."<container_building_id>"..refV.building_id.."</container_building_id>".."\n")
-						elseif df.general_ref_type[refV:getType()] == "CONTAINS_ITEM" then
-							file:write("\t\t\t".."<contains_item_id>"..refV.item_id.."</contains_item_id>".."\n")
-						elseif df.general_ref_type[refV:getType()] == "UNIT_HOLDER" then
-							file:write("\t\t\t".."<holding_unit_id>"..refV.unit_id.."</holding_unit_id>".."\n")
-						elseif df.general_ref_type[refV:getType()] == "UNIT_ITEMOWNER" then
-							file:write("\t\t\t".."<owner_unit_id>"..refV.unit_id.."</owner_unit_id>".."\n")
-						elseif df.general_ref_type[refV:getType()] == "UNIT_TRADEBRINGER" then
-							file:write("\t\t\t".."<trader_unit_id>"..refV.unit_id.."</trader_unit_id>".."\n")
-						elseif df.general_ref_type[refV:getType()] == "CONTAINS_UNIT" then
-							file:write("\t\t\t".."<contains_unit_id>"..refV.unit_id.."</contains_unit_id>".."\n")
-						elseif df.general_ref_type[refV:getType()] == "BUILDING_TRIGGER" then
-							file:write("\t\t\t".."<trigger_building_id>"..refV.building_id.."</trigger_building_id>".."\n")
-						elseif df.general_ref_type[refV:getType()] == "BUILDING_TRIGGERTARGET" then
-							file:write("\t\t\t".."<triggertarget_building_id>"..refV.building_id.."</triggertarget_building_id>".."\n")
-						elseif  df.general_ref_type[refV:getType()] == "ACTIVITY_EVENT" then -- Ignore, unknown
-						
-						else
-							print (df.general_ref_type[refV:getType()])
-							printall(refV)
-							file:write("\t\t\t".."<"..refK..">"..df.general_ref_type[refV:getType()].."</"..refK..">".."\n")
-						end
-					end
-					file:write("\t\t".."</"..k..">".."\n")
+				elseif (k == "general_refs") then --Handled elsewhere
+
 				elseif (k == "specific_refs" or k == "flags2" or k == "corpse_flags" or k == "contaminants" or k == "material_amount" or k == "body" or k == "appearance") then -- Ignore, not important
 
 				elseif (k == "ingredients") then
@@ -646,6 +648,7 @@ function export_items()
 				end
 			end
 		end
+		export_references(itemV.general_refs)
 		file:write("\t".."</item>".."\n")
 	end
 	file:write("</items>".."\n")
@@ -709,7 +712,7 @@ function export_races()
     end
     file:write("</races>".."\n")
 end
-function export_written_contents
+function export_written_contents()
     file:write("<written_contents>\n")
     for wcK, wcV in ipairs(df.global.world.written_contents.all) do
         file:write("\t<written_content>\n")
@@ -717,29 +720,7 @@ function export_written_contents
         file:write("\t\t<title>"..wcV.title.."</title>\n")
         file:write("\t\t<page_start>"..wcV.page_start.."</page_start>\n")
         file:write("\t\t<page_end>"..wcV.page_end.."</page_end>\n")
-        for refK, refV in pairs(wcV.refs) do
-            file:write("\t\t<reference>\n")
-            file:write("\t\t\t<type>"..df.general_ref_type[refV:getType()].."</type>\n")
-            if refV:getType() == df.general_ref_type.ARTIFACT then file:write("\t\t\t<id>"..refV.artifact_id.."</id>\n") -- artifact
-            elseif refV:getType() == df.general_ref_type.ENTITY then file:write("\t\t\t<id>"..refV.entity_id.."</id>\n") -- entity
-            elseif refV:getType() == df.general_ref_type.HISTORICAL_EVENT then file:write("\t\t\t<id>"..refV.event_id.."</id>\n") -- event
-            elseif refV:getType() == df.general_ref_type.SITE then file:write("\t\t\t<id>"..refV.site_id.."</id>\n") -- site
-            elseif refV:getType() == df.general_ref_type.SUBREGION then file:write("\t\t\t<id>"..refV.region_id.."</id>\n") -- region
-            elseif refV:getType() == df.general_ref_type.HISTORICAL_FIGURE then file:write("\t\t\t<id>"..refV.hist_figure_id.."</id>\n") -- hist figure
-            elseif refV:getType() == df.general_ref_type.WRITTEN_CONTENT then file:write("\t\t\t<id>"..refV.anon_1.."</id>\n")
-            elseif refV:getType() == df.general_ref_type.POETIC_FORM then file:write("\t\t\t<id>"..refV.poetic_form_id.."</id>\n") -- poetic form
-            elseif refV:getType() == df.general_ref_type.MUSICAL_FORM then file:write("\t\t\t<id>"..refV.musical_form_id.."</id>\n") -- musical form
-            elseif refV:getType() == df.general_ref_type.DANCE_FORM then file:write("\t\t\t<id>"..refV.dance_form_id.."</id>\n") -- dance form
-            elseif refV:getType() == df.general_ref_type.INTERACTION then -- TODO INTERACTION
-            elseif refV:getType() == df.general_ref_type.KNOWLEDGE_SCHOLAR_FLAG then -- TODO KNOWLEDGE_SCHOLAR_FLAG
-            elseif refV:getType() == df.general_ref_type.VALUE_LEVEL then -- TODO VALUE_LEVEL
-            elseif refV:getType() == df.general_ref_type.LANGUAGE then -- TODO LANGUAGE
-            else
-                print("unknown reference",refV:getType(),df.general_ref_type[refV:getType()])
-                --for k,v in pairs(refV) do print(k,v) end
-            end
-            file:write("\t\t</reference>\n")
-        end
+		export_references(wcV.refs)
         file:write("\t\t<type>"..(df.written_content_type[wcV.type] or wcV.type).."</type>\n")
         for styleK, styleV in pairs(wcV.styles) do
             file:write("\t\t<style>"..(df.written_content_style[styleV] or styleV).."</style>\n")
@@ -782,15 +763,15 @@ function export_dance_forms()
     end
     file:write("</dance_forms>".."\n")
 end
-
-function export landmasses()
+function export_landmasses()
     file:write("<landmasses>\n")
     for landmassK, landmassV in ipairs(df.global.world.world_data.landmasses) do
         file:write("\t<landmass>\n")
         file:write("\t\t<id>"..landmassV.index.."</id>\n")
         file:write("\t\t<name>"..dfhack.df2utf(dfhack.TranslateName(landmassV.name,1)).."</name>\n")
-        file:write("\t\t<coord_1>"..landmassV.min_x..","..landmassV.min_y.."</coord_1>\n")
-        file:write("\t\t<coord_2>"..landmassV.max_x..","..landmassV.max_y.."</coord_2>\n")
+        file:write("\t\t<coord_min>"..landmassV.min_x..","..landmassV.min_y.."</coord_min>\n")
+        file:write("\t\t<coord_max>"..landmassV.max_x..","..landmassV.max_y.."</coord_max>\n")
+        file:write("\t\t<area>"..landmassV.area.."</area>\n")
         file:write("\t</landmass>\n")
     end
     file:write("</landmasses>\n")
@@ -993,6 +974,7 @@ function export_entity_populations()
     for entityPopK, entityPopV in ipairs(df.global.world.entity_populations) do
         file:write("\t".."<entity_population>".."\n")
         file:write("\t\t".."<id>"..entityPopV.id.."</id>".."\n")
+        file:write("\t\t".."<name>"..dfhack.df2utf(dfhack.TranslateName(entityPopV.name,1)).."</name>".."\n")
         for raceK, raceV in ipairs(entityPopV.races) do
             local raceName = (df.global.world.raws.creatures.all[raceV].creature_id):lower()
             file:write("\t\t".."<race>"..raceName..":"..entityPopV.counts[raceK].."</race>".."\n")
@@ -1064,7 +1046,6 @@ function export_entities()
     end
     file:write("</entities>".."\n")
 end
-
 function export_historical_events()
     file:write("<historical_events>".."\n")
     for ID, event in ipairs(df.global.world.history.events) do
@@ -1415,9 +1396,6 @@ function export_historical_eras()
     file:write("</historical_eras>".."\n")
 end
 
-
-
-
 --create an extra legends xml with extra data, by Mason11987 for World Viewer
 function export_more_legends_xml()
     local month = dfhack.world.ReadCurrentMonth() + 1 --days and months are 1-indexed
@@ -1426,7 +1404,7 @@ function export_more_legends_xml()
     local date_str = year_str..string.format('-%02d-%02d', month, day)
 
     local filename = df.global.world.cur_savegame.save_dir.."-"..date_str.."-legends_plus.xml"
-    local file = io.open(filename, 'w')
+    file = io.open(filename, 'w')
     if not file then qerror("could not open file: " .. filename) end
 
     file:write("<?xml version=\"1.0\" encoding='UTF-8'?>".."\n")
@@ -1464,7 +1442,7 @@ function export_more_legends_xml()
 	export_historical_eras()
 	
     file:write("</df_world>".."\n")
-    io.close()
+    file:close()
 end
 
 -- export information and XML ('p, x')
@@ -1538,7 +1516,7 @@ if dfhack.gui.getCurFocus() == "legends" or dfhack.gui.getCurFocus() == "dfhack/
         wait_for_legends_vs()
     elseif args[1] == "sites" then
         export_site_maps()
-    else dfhack.printerr('Valid arguments are "all", "info", "maps" or "sites"')
+    else dfhack.printerr('Valid arguments are "all", "info", "custom", "maps" or "sites"')
     end
 elseif args[1] == "maps" and
         dfhack.gui.getCurFocus() == "export_graphical_map" then

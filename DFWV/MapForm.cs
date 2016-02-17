@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using DFWV.WorldClasses;
+using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
 using Region = DFWV.WorldClasses.Region;
@@ -24,10 +25,12 @@ namespace DFWV
         int _siteSelection;
         Region _selectedRegion;
         UndergroundRegion _selectedUndergroundRegion;
+        Entity _selectedEntityWithClaim;
         WorldConstruction _selectedWc;
         River _selectedRiver;
         Mountain _selectedMountain;
         Point _selectedCoords;
+        Landmass _selectedLandmass;
         private readonly List<string> _selectedSiteTypes = new List<string>();
  
         public MapForm()
@@ -41,7 +44,7 @@ namespace DFWV
             _world = world;
             LoadMaps();
             LoadSiteTypes();
-            LoadHFs();
+            _world.StartThread(LoadHFs, "Load Historical Figures for Mapping");
             LoadUgRegionDepth();
             ChangeMap();
             DrawMaps();
@@ -49,10 +52,16 @@ namespace DFWV
 
         private void LoadHFs()
         {
+            var HFArray = _world.HistoricalFigures.Values.ToArray();
             if (cmbHFTravels.Items.Count == 0)
-                cmbHFTravels.Items.AddRange(_world.HistoricalFigures.Values.ToArray());
-            cmbHFTravels.SelectedItem = cmbHFTravels.Items[0];
-            cmbHFTravels.Text = cmbHFTravels.SelectedItem.ToString();
+            {
+                this.InvokeEx(f => {
+                    f.cmbHFTravels.Items.AddRange(HFArray);
+                    f.cmbHFTravels.SelectedItem = cmbHFTravels.Items[0];
+                    f.cmbHFTravels.Text = cmbHFTravels.SelectedItem.ToString();
+                });
+            }
+
         }
 
         private Size MiniMapBoxSize => new Size((int)((float)pnlMap.ClientSize.Width / picMap.Width * picMiniMap.Width),
@@ -144,10 +153,14 @@ namespace DFWV
             }
             if (chkRivers.Checked)
                 DrawRiverOverlay(g);
-            if (chkUGRegions.Checked)
-                DrawUndergroundRegionOverlay(g);
             if (chkRegions.Checked)
                 DrawRegionOverlay(g);
+            if (chkUGRegions.Checked)
+                DrawUndergroundRegionOverlay(g);
+            if (chkLandmasses.Checked)
+                DrawLandmasses(g);
+            if (chkEntityClaims.Checked)
+                DrawEntityClaimOverlay(g);
             if (chkConstructions.Checked)
                 DrawWorldConstructionOverlay(g);
             if (chkMountains.Checked)
@@ -408,6 +421,59 @@ namespace DFWV
             }
         }
 
+        private void DrawLandmasses(Graphics g)
+        {
+            var colorNames = new List<string>
+            {"#00FF00", "#0000FF", "#FF0000", "#01FFFE", "#FFA6FE", "#FFDB66", "#006401", "#010067",
+                "#95003A", "#007DB5", "#FF00F6", "#FFEEE8", "#774D00", "#90FB92", "#0076FF", "#D5FF00",
+                "#FF937E", "#6A826C", "#FF029D", "#FE8900", "#7A4782", "#7E2DD2", "#85A900", "#FF0056",
+                "#A42400", "#00AE7E", "#683D3B", "#BDC6FF", "#263400", "#BDD393", "#00B917", "#9E008E",
+                "#001544", "#C28C9F", "#FF74A3", "#01D0FF", "#004754", "#E56FFE", "#788231", "#0E4CA1",
+                "#91D0CB", "#BE9970", "#968AE8", "#BB8800", "#43002C", "#DEFF74", "#00FFC6", "#FFE502",
+                "#620E00", "#008F9C", "#98FF52", "#7544B1", "#B500FF", "#00FF78", "#FF6E41", "#005F39",
+                "#6B6882", "#5FAD4E", "#A75740", "#A5FFD2", "#FFB167", "#009BFF", "#E85EBE"};
+            var rnd = new Random();
+
+            var curDistinctColor = 0;
+            foreach (var landmass in _world.Landmasses.Values)
+            {
+                curDistinctColor++;
+                Color thisColor;
+                if (curDistinctColor < colorNames.Count)
+                {
+                    var rgb = int.Parse(colorNames[curDistinctColor].Replace("#", ""), NumberStyles.HexNumber);
+                    thisColor = Color.FromArgb(255, Color.FromArgb(rgb));
+                }
+                else
+                {
+                    thisColor = Color.FromArgb(rnd.Next(150) + 100, rnd.Next(150) + 100, rnd.Next(150) + 100);
+                }
+                using (var p = new Pen(thisColor))
+                {
+                    var topLeft = new Point();
+                    var topRight = new Point();
+                    var bottomLeft = new Point();
+                    var bottomRight = new Point();
+                    using (Brush b = new SolidBrush(Color.FromArgb(50, thisColor)))
+                    {
+                        topLeft.X = landmass.CoordMin.X * _siteSize.Width;
+                        topLeft.Y = landmass.CoordMin.Y * _siteSize.Height;
+                        bottomLeft.X = topLeft.X;
+                        bottomLeft.Y = (landmass.CoordMax.Y + 1) * _siteSize.Height  - 1;
+                        topRight.X = (landmass.CoordMax.X + 1)*_siteSize.Width - 1;
+                        topRight.Y = topLeft.Y;
+                        bottomRight.X = topRight.X;
+                        bottomRight.Y = bottomLeft.Y;
+
+                        var rect = new Rectangle(topLeft, new Size(topRight.X - topLeft.X, bottomLeft.Y - topLeft.Y));
+
+                        g.FillRectangle(b, rect);
+                        g.DrawRectangle(p, rect);
+                    }
+                }
+            }
+        }
+
         private void DrawUndergroundRegionOverlay(Graphics g)
         {
             var colorNames = new List<string>
@@ -465,6 +531,53 @@ namespace DFWV
                             if (!ugregion.Coords.Contains(new Point(coord.X, coord.Y + 1)))
                                 g.DrawLine(p, bottomRight, bottomLeft);
                             if (!ugregion.Coords.Contains(new Point(coord.X - 1, coord.Y)))
+                                g.DrawLine(p, bottomLeft, topLeft);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void DrawEntityClaimOverlay(Graphics g)
+        {
+            var rnd = new Random();
+            foreach (var entity in _world.Entities.Values.Where(entity => entity.Claims != null && entity.Claims.Count > 0))
+            {
+                Color thisColor;
+                if (entity.Civilization == null)
+                    continue; //thisColor = Color.FromArgb(rnd.Next(150) + 100, rnd.Next(150) + 100, rnd.Next(150) + 100);
+                else
+                    thisColor  = Color.FromArgb(100, entity.Civilization.Color);
+                using (var p = new Pen(thisColor))
+                {
+                    var topLeft = new Point();
+                    var topRight = new Point();
+                    var bottomLeft = new Point();
+                    var bottomRight = new Point();
+                    using (Brush b = new SolidBrush(Color.FromArgb(50, thisColor)))
+                    {
+                        foreach (var coord in entity.Claims.Distinct())
+                        {
+                            topLeft.X = coord.X * _siteSize.Width;
+                            topLeft.Y = coord.Y * _siteSize.Height;
+                            bottomLeft.X = coord.X * _siteSize.Width;
+                            bottomLeft.Y = topLeft.Y + _siteSize.Height - 1;
+                            topRight.X = topLeft.X + _siteSize.Width - 1;
+                            topRight.Y = coord.Y * _siteSize.Height;
+                            bottomRight.X = topRight.X;
+                            bottomRight.Y = bottomLeft.Y;
+
+                            g.FillRectangle(b, topLeft.X, topLeft.Y, _siteSize.Width - 1, _siteSize.Height - 1);
+
+
+                            //g.DrawRectangle(p, TopLeft.X , TopLeft.Y , siteSize.Width - 1, siteSize.Height - 1);
+                            if (!entity.Claims.Contains(new Point(coord.X, coord.Y - 1)))
+                                g.DrawLine(p, topLeft, topRight);
+                            if (!entity.Claims.Contains(new Point(coord.X + 1, coord.Y)))
+                                g.DrawLine(p, topRight, bottomRight);
+                            if (!entity.Claims.Contains(new Point(coord.X, coord.Y + 1)))
+                                g.DrawLine(p, bottomRight, bottomLeft);
+                            if (!entity.Claims.Contains(new Point(coord.X - 1, coord.Y)))
                                 g.DrawLine(p, bottomLeft, topLeft);
                         }
                     }
@@ -833,6 +946,12 @@ namespace DFWV
                     parentText = _selectedWc.MasterWc.ToString();
                 objectTypeText = "World Construction";
             }
+            if (selectedObject is River)
+            {
+                nameText = _selectedRiver.ToString();
+                altNameText = _selectedRiver.AltName;
+                objectTypeText = "River";
+            }
             if (selectedObject is Region)
             {
                 nameText = _selectedRegion.ToString();
@@ -844,11 +963,15 @@ namespace DFWV
                 nameText = _selectedUndergroundRegion.ToString();
                 objectTypeText = "Underground Region";
             }
-            if (selectedObject is River)
+            if (selectedObject is Landmass)
             {
-                nameText = _selectedRiver.ToString();
-                altNameText = _selectedRiver.AltName;
-                objectTypeText = "River";
+                nameText = _selectedLandmass.ToString();
+                objectTypeText = "Landmass";
+            }
+            if (selectedObject is Entity)
+            {
+                nameText = _selectedEntityWithClaim.ToString();
+                objectTypeText = "Entity with claim";
             }
             lblMapName.Text = nameText;
             lblMapAltName.Text = altNameText;
@@ -909,6 +1032,16 @@ namespace DFWV
                 _selectedUndergroundRegion = GetUndergroundRegionAt(mouseCoord);
                 return _selectedUndergroundRegion;
             }
+            if (chkLandmasses.Checked)
+            {
+                _selectedLandmass = GetLandmassAt(mouseCoord);
+                return _selectedLandmass;
+            }
+            if (chkEntityClaims.Checked)
+            {
+                _selectedEntityWithClaim = GetEntityWithClaimAt(mouseCoord);
+                return _selectedEntityWithClaim;
+            }
             return null;
         }
 
@@ -955,9 +1088,21 @@ namespace DFWV
         {
             return _world.Regions.Values.Where(region => region.Coords != null).FirstOrDefault(region => region.Coords.Contains(coord));
         }
+
+        private Landmass GetLandmassAt(Point coord)
+        {
+            return _world.Landmasses.Values.Where(landmass => landmass.Range.Contains(coord))
+                    .OrderBy(landmass => landmass.Area).FirstOrDefault();
+        }
+
         private UndergroundRegion GetUndergroundRegionAt(Point coord)
         {
-            return _world.UndergroundRegions.Values.Where(ugregion => ugregion.Coords != null).FirstOrDefault(ugregion => ugregion.Coords.Contains(coord) && ugregion.Depth == ugRegionDepthPicker.Value);
+            return _world.UndergroundRegions.Values.FirstOrDefault(ugregion => ugregion.Coords != null && ugregion.Coords.Contains(coord) && ugregion.Depth == ugRegionDepthPicker.Value);
+        }
+
+        private Entity GetEntityWithClaimAt(Point coord)
+        {
+            return _world.Entities.Values.FirstOrDefault(e => e.Claims != null && e.Claims.Contains(coord));
         }
 
         private Site GetSiteAt(Point coord)
@@ -1010,6 +1155,16 @@ namespace DFWV
                     else if (chkUGRegions.Checked && _selectedUndergroundRegion != null)
                     {
                         _selectedUndergroundRegion.Select(Program.MainForm);
+                        Program.MainForm.BringToFront();
+                    }
+                    else if (chkLandmasses.Checked && _selectedLandmass != null)
+                    {
+                        _selectedLandmass.Select(Program.MainForm);
+                        Program.MainForm.BringToFront();
+                    }
+                    else if (chkEntityClaims.Checked && _selectedEntityWithClaim != null)
+                    {
+                        _selectedEntityWithClaim.Select(Program.MainForm);
                         Program.MainForm.BringToFront();
                     }
                     break;

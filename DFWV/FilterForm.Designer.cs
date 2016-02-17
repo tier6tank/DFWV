@@ -31,9 +31,12 @@ namespace DFWV
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.Apply = new System.Windows.Forms.Button();
             this.Cancel = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.optionIsNotRadioButton = new System.Windows.Forms.RadioButton();
+            this.optionIsRadioButton = new System.Windows.Forms.RadioButton();
             this.WhereAdd = new System.Windows.Forms.Button();
             this.WhereDelete = new System.Windows.Forms.Button();
             this.cmbWhereOperation = new System.Windows.Forms.ComboBox();
@@ -59,11 +62,13 @@ namespace DFWV
             this.GroupMoveUp = new System.Windows.Forms.Button();
             this.cmbGroupField = new System.Windows.Forms.ComboBox();
             this.lstGroup = new System.Windows.Forms.ListBox();
-            this.optionIsRadioButton = new System.Windows.Forms.RadioButton();
-            this.optionIsNotRadioButton = new System.Windows.Forms.RadioButton();
+            this.filterToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.Help = new System.Windows.Forms.Button();
+            this.picHelp = new System.Windows.Forms.PictureBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picHelp)).BeginInit();
             this.SuspendLayout();
             // 
             // Apply
@@ -74,6 +79,7 @@ namespace DFWV
             this.Apply.Size = new System.Drawing.Size(75, 23);
             this.Apply.TabIndex = 0;
             this.Apply.Text = "Apply";
+            this.filterToolTip.SetToolTip(this.Apply, "Applies the current filter to the list.");
             this.Apply.UseVisualStyleBackColor = true;
             this.Apply.Click += new System.EventHandler(this.Apply_Click);
             // 
@@ -103,6 +109,31 @@ namespace DFWV
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Filter On";
+            // 
+            // optionIsNotRadioButton
+            // 
+            this.optionIsNotRadioButton.AutoSize = true;
+            this.optionIsNotRadioButton.Location = new System.Drawing.Point(173, 36);
+            this.optionIsNotRadioButton.Name = "optionIsNotRadioButton";
+            this.optionIsNotRadioButton.Size = new System.Drawing.Size(50, 17);
+            this.optionIsNotRadioButton.TabIndex = 15;
+            this.optionIsNotRadioButton.Text = "is not";
+            this.optionIsNotRadioButton.UseVisualStyleBackColor = true;
+            this.optionIsNotRadioButton.Visible = false;
+            // 
+            // optionIsRadioButton
+            // 
+            this.optionIsRadioButton.AutoSize = true;
+            this.optionIsRadioButton.Checked = true;
+            this.optionIsRadioButton.Location = new System.Drawing.Point(135, 36);
+            this.optionIsRadioButton.Name = "optionIsRadioButton";
+            this.optionIsRadioButton.Size = new System.Drawing.Size(32, 17);
+            this.optionIsRadioButton.TabIndex = 14;
+            this.optionIsRadioButton.TabStop = true;
+            this.optionIsRadioButton.Text = "is";
+            this.filterToolTip.SetToolTip(this.optionIsRadioButton, "Use \"is\" and \"is not\" to negate any of\r\nthe filters on this list.\r\n");
+            this.optionIsRadioButton.UseVisualStyleBackColor = true;
+            this.optionIsRadioButton.Visible = false;
             // 
             // WhereAdd
             // 
@@ -148,6 +179,7 @@ namespace DFWV
             this.cmbWhereField.Name = "cmbWhereField";
             this.cmbWhereField.Size = new System.Drawing.Size(121, 21);
             this.cmbWhereField.TabIndex = 1;
+            this.filterToolTip.SetToolTip(this.cmbWhereField, "What property you want to filter the list based on.");
             this.cmbWhereField.SelectedIndexChanged += new System.EventHandler(this.cmbWhereField_SelectedIndexChanged);
             // 
             // lstWhere
@@ -254,6 +286,7 @@ namespace DFWV
             this.cmbOrderField.Name = "cmbOrderField";
             this.cmbOrderField.Size = new System.Drawing.Size(121, 21);
             this.cmbOrderField.TabIndex = 2;
+            this.filterToolTip.SetToolTip(this.cmbOrderField, "What property you want to order the list based on.");
             this.cmbOrderField.SelectedIndexChanged += new System.EventHandler(this.cmbOrderField_SelectedIndexChanged);
             // 
             // lstOrder
@@ -267,7 +300,7 @@ namespace DFWV
             // txtTake
             // 
             this.txtTake.Enabled = false;
-            this.txtTake.Location = new System.Drawing.Point(329, 10);
+            this.txtTake.Location = new System.Drawing.Point(329, 12);
             this.txtTake.Name = "txtTake";
             this.txtTake.Size = new System.Drawing.Size(100, 20);
             this.txtTake.TabIndex = 4;
@@ -275,11 +308,13 @@ namespace DFWV
             // chkTake
             // 
             this.chkTake.AutoSize = true;
-            this.chkTake.Location = new System.Drawing.Point(250, 12);
+            this.chkTake.Location = new System.Drawing.Point(250, 14);
             this.chkTake.Name = "chkTake";
             this.chkTake.Size = new System.Drawing.Size(73, 17);
             this.chkTake.TabIndex = 5;
             this.chkTake.Text = "Take First";
+            this.filterToolTip.SetToolTip(this.chkTake, "Check this to only pull a certain amount of items.\r\nUseful if you\'re filtering hu" +
+        "ge lists like events or historical figures.\r\n");
             this.chkTake.UseVisualStyleBackColor = true;
             this.chkTake.CheckedChanged += new System.EventHandler(this.chkTake_CheckedChanged);
             // 
@@ -349,6 +384,7 @@ namespace DFWV
             this.cmbGroupField.Name = "cmbGroupField";
             this.cmbGroupField.Size = new System.Drawing.Size(121, 21);
             this.cmbGroupField.TabIndex = 2;
+            this.filterToolTip.SetToolTip(this.cmbGroupField, "What property you want to group the list based on.");
             // 
             // lstGroup
             // 
@@ -358,39 +394,36 @@ namespace DFWV
             this.lstGroup.Size = new System.Drawing.Size(185, 95);
             this.lstGroup.TabIndex = 1;
             // 
-            // optionIsRadioButton
+            // Help
             // 
-            this.optionIsRadioButton.AutoSize = true;
-            this.optionIsRadioButton.Checked = true;
-            this.optionIsRadioButton.Location = new System.Drawing.Point(135, 36);
-            this.optionIsRadioButton.Name = "optionIsRadioButton";
-            this.optionIsRadioButton.Size = new System.Drawing.Size(32, 17);
-            this.optionIsRadioButton.TabIndex = 14;
-            this.optionIsRadioButton.TabStop = true;
-            this.optionIsRadioButton.Text = "is";
-            this.optionIsRadioButton.UseVisualStyleBackColor = true;
-            this.optionIsRadioButton.Visible = false;
+            this.Help.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.Help.Location = new System.Drawing.Point(526, 10);
+            this.Help.Name = "Help";
+            this.Help.Size = new System.Drawing.Size(75, 23);
+            this.Help.TabIndex = 14;
+            this.Help.Text = "Help";
+            this.Help.UseVisualStyleBackColor = false;
+            this.Help.Click += new System.EventHandler(this.Help_Click);
             // 
-            // optionIsNotRadioButton
+            // picHelp
             // 
-            this.optionIsNotRadioButton.AutoSize = true;
-            this.optionIsNotRadioButton.Location = new System.Drawing.Point(173, 36);
-            this.optionIsNotRadioButton.Name = "optionIsNotRadioButton";
-            this.optionIsNotRadioButton.Size = new System.Drawing.Size(50, 17);
-            this.optionIsNotRadioButton.TabIndex = 15;
-            this.optionIsNotRadioButton.Text = "is not";
-            this.optionIsNotRadioButton.UseVisualStyleBackColor = true;
-            this.optionIsNotRadioButton.Visible = false;
+            this.picHelp.Image = global::DFWV.Properties.Resources.DFVW_Filter_Help;
+            this.picHelp.Location = new System.Drawing.Point(12, 263);
+            this.picHelp.Name = "picHelp";
+            this.picHelp.Size = new System.Drawing.Size(721, 262);
+            this.picHelp.TabIndex = 15;
+            this.picHelp.TabStop = false;
             // 
             // FilterForm
             // 
             this.AcceptButton = this.Apply;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
             this.CancelButton = this.Cancel;
             this.ClientSize = new System.Drawing.Size(745, 261);
             this.ControlBox = false;
+            this.Controls.Add(this.picHelp);
+            this.Controls.Add(this.Help);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.chkTake);
             this.Controls.Add(this.txtTake);
@@ -398,20 +431,24 @@ namespace DFWV
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.Cancel);
             this.Controls.Add(this.Apply);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(761, 570);
             this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(761, 300);
             this.Name = "FilterForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Filter";
             this.TopMost = true;
+            this.Load += new System.EventHandler(this.FilterForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picHelp)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -449,5 +486,8 @@ namespace DFWV
         private ListBox lstGroup;
         private RadioButton optionIsNotRadioButton;
         private RadioButton optionIsRadioButton;
+        private ToolTip filterToolTip;
+        private Button Help;
+        private PictureBox picHelp;
     }
 }

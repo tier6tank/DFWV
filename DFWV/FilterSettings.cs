@@ -160,6 +160,7 @@ namespace DFWV
             {
                 {"Height", typeof (int)},
             };
+            Fields[typeof (Landmass)] = new Dictionary<string, Type>();
             Fields[typeof (Army)] = new Dictionary<string, Type>();
             Fields[typeof (Unit)] = new Dictionary<string, Type>()
             {
@@ -214,7 +215,7 @@ namespace DFWV
             {
                 typeof(Artifact), typeof(Civilization), typeof(Entity), typeof(EntityPopulation), typeof(God), typeof(HistoricalEra), typeof(HistoricalEvent),
                 typeof(HistoricalEventCollection), typeof(HistoricalFigure), typeof(Leader), typeof(Parameter), typeof(Race), typeof(Region), typeof(Site),
-                typeof(Structure), typeof(UndergroundRegion), typeof(WorldConstruction), typeof(Dynasty), typeof(River), typeof(Mountain),
+                typeof(Structure), typeof(UndergroundRegion), typeof(WorldConstruction), typeof(Dynasty), typeof(River), typeof(Mountain), typeof(Landmass),
                 typeof(Army), typeof(Unit), typeof(Engraving),
                 typeof(Report), typeof(WrittenContent),  typeof(MusicalForm),  typeof(PoeticForm),  typeof(DanceForm), typeof(Building), typeof(Construction), typeof(Item), typeof(Plant), typeof(Squad)
             })
@@ -348,6 +349,7 @@ namespace DFWV
             this[typeof(Dynasty)] = new Filter("Name", null, null, -1);
             this[typeof(River)] = new Filter("Name", null, null, -1);
             this[typeof(Mountain)] = new Filter("Name", null, null, -1);
+            this[typeof(Landmass)] = new Filter("Name", null, null, -1);
             this[typeof(Army)] = new Filter("Name", null, null, -1);
             this[typeof(Unit)] = new Filter("Name", null, null, -1);
             this[typeof(Engraving)] = new Filter("Name", null, null, -1);

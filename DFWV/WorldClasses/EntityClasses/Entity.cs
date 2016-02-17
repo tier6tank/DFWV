@@ -27,6 +27,8 @@ namespace DFWV.WorldClasses.EntityClasses
         private List<Entity> Children { get; set; }
         public List<HistoricalFigure> Enemies { get; set; }
         public List<HistoricalFigure> Members { get; set; }
+        public List<int> MemberHfids { get; set; }
+        public List<HistoricalFigure> MemberHfs { get; set; }
         public List<HistoricalFigure> FormerMembers { get; set; }
         public List<HistoricalFigure> Prisoners { get; set; }
         public List<HistoricalFigure> FormerPrisoners { get; set; }
@@ -126,6 +128,9 @@ namespace DFWV.WorldClasses.EntityClasses
 
         public Dictionary<int, List<EntityEntityLink>> EntityLinks { get; set; }
         public Dictionary<int, List<EntitySiteLink>> SiteLinks { get; set; }
+        public List<Point> Claims { get; set; }
+        public List<EntityPosition> Positions { get; set; }
+        public List<EntityPositionAssignment> PositionAssignments { get; set; }
 
         public int? WorshipHfid { get; set; }
         public HistoricalFigure WorshipHf { get; set; }
@@ -195,7 +200,7 @@ namespace DFWV.WorldClasses.EntityClasses
             if (hasHfLinks)
             {
                 var entityHfLists = new List<List<HistoricalFigure>>
-                {Enemies, Members, FormerMembers, Prisoners, FormerPrisoners, Criminals,
+                {Enemies, MemberHfs == null ? Members : Members.Intersect(MemberHfs).ToList(), FormerMembers, Prisoners, FormerPrisoners, Criminals,
                                 Slaves, FormerSlaves, Heroes};
                 var entityHfListNames = new List<string>
                 {"Enemies", "Members", "Former Members", "Prisoners", "Former Prisoners", "Criminals",
@@ -218,6 +223,7 @@ namespace DFWV.WorldClasses.EntityClasses
                     frm.trvEntityRelatedFigures.Nodes.Add(thisNode);
                 }
             }
+            frm.trvEntityRelatedFigures.ExpandAll();
             frm.trvEntityRelatedFigures.EndUpdate();
 
 
@@ -279,6 +285,8 @@ namespace DFWV.WorldClasses.EntityClasses
                 frm.lblEntitySiteTakeoverTime.Text = SiteTakeoverEvent.Time.ToString();
             }
 
+
+            frm.grpEntityPositions.FillListboxWith(frm.lstEntityPositions, Positions);
             frm.grpEntityEvents.FillListboxWith(frm.lstEntityEvents, Events);
 
         }
@@ -317,6 +325,14 @@ namespace DFWV.WorldClasses.EntityClasses
 
             if (WorshipHfid.HasValue && World.HistoricalFigures.ContainsKey(WorshipHfid.Value))
                 WorshipHf = World.HistoricalFigures[WorshipHfid.Value];
+
+            if (MemberHfids != null)
+            {
+                MemberHfs =
+                    MemberHfids.Where(id => World.HistoricalFigures.ContainsKey(Id))
+                        .Select(id => World.HistoricalFigures[id])
+                        .ToList();
+            }
         }
 
         internal override void Process()
@@ -375,6 +391,31 @@ namespace DFWV.WorldClasses.EntityClasses
                         {
                             Coords.Add(new Point(Convert.ToInt32(coordSplit[0]), Convert.ToInt32(coordSplit[1])));
                         }
+                        break;
+                    case "claims":
+                        if (Claims == null)
+                            Claims = new List<Point>();
+                        foreach (var coordSplit in val.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries).Select(coord => coord.Split(',')).Where(coordSplit => coordSplit.Length == 2))
+                        {
+                            Claims.Add(new Point(Convert.ToInt32(coordSplit[0]), Convert.ToInt32(coordSplit[1])));
+                        }
+                        break;
+                    case "entity_position":
+                        var newPosition = new EntityPosition(element, this);
+                        if (Positions == null)
+                            Positions = new List<EntityPosition>();
+                        Positions.Add(newPosition);
+                        break;
+                    case "entity_position_assignment":
+                        var newPositionAssignment = new EntityPositionAssignment(element, this);
+                        if (PositionAssignments == null)
+                            PositionAssignments = new List<EntityPositionAssignment>();
+                        PositionAssignments.Add(newPositionAssignment);
+                        break;
+                    case "histfig_id":
+                        if (MemberHfids == null)
+                            MemberHfids = new List<int>();
+                        MemberHfids.Add(valI);
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t", element, xdoc.Root.ToString());

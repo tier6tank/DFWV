@@ -534,5 +534,15 @@ namespace DFWV
             if (lstGroup.SelectedItem != null)
                 lstGroup.Items.Remove(lstGroup.SelectedItem);
         }
+
+        private void Help_Click(object sender, EventArgs e)
+        {
+            Height = Height < 500 ? 570 : 300;
+        }
+
+        private void FilterForm_Load(object sender, EventArgs e)
+        {
+            Height = 300;
+        }
     }
 }

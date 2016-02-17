@@ -156,6 +156,8 @@
       <DependentUpon>MapForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Point3.cs" />
+    <Compile Include="WorldClasses\EntityClasses\EntityPositionAssignment.cs" />
+    <Compile Include="WorldClasses\EntityClasses\EntityPosition.cs" />
     <Compile Include="WorldClasses\HistoricalEventClasses\HE_ArtifactDestroyed.cs" />
     <Compile Include="WorldClasses\HistoricalEventClasses\HE_RegionPopIncorporatedIntoEntity.cs" />
     <Compile Include="WorldClasses\HistoricalEventClasses\HE_MusicalFormCreated.cs" />
@@ -170,6 +172,7 @@
     <Compile Include="WorldClasses\HistoricalEventClasses\HE_Procession.cs" />
     <Compile Include="WorldClasses\HistoricalEventClasses\HE_Ceremony.cs" />
     <Compile Include="WorldClasses\HistoricalEventCollectionClasses\EC_Competition.cs" />
+    <Compile Include="WorldClasses\HistoricalEventCollectionClasses\EC_Purge.cs" />
     <Compile Include="WorldClasses\HistoricalEventCollectionClasses\EC_Performance.cs" />
     <Compile Include="WorldClasses\HistoricalEventCollectionClasses\EC_Ceremony.cs" />
     <Compile Include="WorldClasses\HistoricalEventCollectionClasses\EC_Procession.cs" />
@@ -178,8 +181,10 @@
     <Compile Include="WorldClasses\DanceForm.cs" />
     <Compile Include="WorldClasses\ItemImprovement.cs" />
     <Compile Include="WorldClasses\ItemIngredient.cs" />
+    <Compile Include="WorldClasses\Landmass.cs" />
     <Compile Include="WorldClasses\MusicalForm.cs" />
     <Compile Include="WorldClasses\PoeticForm.cs" />
+    <Compile Include="WorldClasses\Reference.cs" />
     <Compile Include="WorldClasses\Unit.cs" />
     <Compile Include="WorldClasses\WrittenContent.cs" />
     <Compile Include="WorldClasses\Squad.cs" />
@@ -435,6 +440,7 @@
     <Content Include="Readme.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\DFVW Filter Help.png" />
     <Content Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

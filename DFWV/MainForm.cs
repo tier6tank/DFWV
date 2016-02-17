@@ -384,6 +384,11 @@ namespace DFWV
             selectedItem?.Select(this);
         }
 
+        /// <summary>
+        ///  Used to Draw the main list box on each tab, allowing a different font/color for section headers.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ListBoxDrawItem(object sender, DrawItemEventArgs e)
         {
             e.DrawBackground();
@@ -407,7 +412,6 @@ namespace DFWV
             e.DrawFocusRectangle();
         }
 #endregion
-
 
         /// <summary>
         /// These all are used to fill the primary listboxes without having to write loops for each of them, 
@@ -445,10 +449,12 @@ namespace DFWV
             FillList(lstBuilding, World.Buildings, tabBuilding);
             FillList(lstConstruction, World.Constructions, tabConstruction);
             FillList(lstItem, World.Items, tabItem);
+            FillItemTreeviews();
             FillList(lstPlant, World.Plants, tabPlant);
             FillList(lstSquad, World.Squads, tabSquad);
             FillList(lstRiver, World.Rivers, tabRiver);
             FillList(lstMountain, World.Mountains, tabMountain);
+            FillList(lstLandmass, World.Landmasses, tabLandmass);
             FillList(lstRegion, World.Regions, tabRegion);
             FillList(lstUndergroundRegion, World.UndergroundRegions, tabUndergroundRegion);
             FillList(lstEntity, World.Entities, tabEntity);
@@ -460,6 +466,95 @@ namespace DFWV
             FillList(lstHistoricalEvent, World.HistoricalEvents, tabHistoricalEvent);
             FillList(lstHistoricalEventCollection, World.HistoricalEventCollections, tabHistoricalEventCollection);
             FillList(lstHistoricalEra , World.HistoricalEras, tabHistoricalEra);
+        }
+
+        private void FillItemTreeviews()
+        {
+
+            trvItemsByTypeMaterial.BeginUpdate();
+            trvItemsByTypeMaterial.Nodes.Clear();
+            var itemGroupings = World.Items.Values.GroupBy(i => i.ItemType).OrderBy(i => i.Key);
+
+            foreach (var itemGrouping in itemGroupings)
+            {
+                var typeNode = new TreeNode(itemGrouping.Key.ToTitleCase());
+                var typeCount = 0;
+
+                var subTypeGroups = itemGrouping.GroupBy(st => st.ItemSubType).OrderBy(st => st.Key);
+                foreach (var subTypeGroup in subTypeGroups)
+                {
+                    TreeNode subTypeNode;
+                    if (subTypeGroup.Key == "")
+                        subTypeNode = typeNode;
+                    else
+                        subTypeNode = new TreeNode(subTypeGroup.Key.ToTitleCase());
+
+                    var subTypeCount = 0;
+
+                    var matGroups = subTypeGroup.GroupBy(m => m.Material).OrderBy(m => m.Key);
+                    foreach (var matGroup in matGroups)
+                    {
+                        var matNode = new TreeNode(matGroup.Key.ToTitleCase());
+
+                        foreach (var item in matGroup)
+                        {
+                            var itemNode = new TreeNode(item.ToString()) {Tag = item};
+                            matNode.Nodes.Add(itemNode);
+                        }
+
+                        subTypeCount += matGroup.Count();
+                        matNode.Text += $" ({matGroup.Count()})";
+                        subTypeNode.Nodes.Add(matNode);
+                    }
+
+                    typeCount += subTypeCount;
+                    if (typeNode != subTypeNode)
+                    {
+                        subTypeNode.Text += $" ({subTypeCount})";
+                        typeNode.Nodes.Add(subTypeNode);
+                    }
+                }
+
+                typeNode.Text += $" ({typeCount})";
+                trvItemsByTypeMaterial.Nodes.Add(typeNode);
+            }
+
+            trvItemsByTypeMaterial.EndUpdate();
+
+            trvItemsByQualityType.BeginUpdate();
+            trvItemsByQualityType.Nodes.Clear();
+            var itemQualityGroupings = World.Items.Values.GroupBy(i => i.Quality).OrderBy(i => i.Key)
+                .Select(g => new
+                {
+                    ItemQuality = g.Key,
+                    TypeGroups = g.ToList().GroupBy(i => i.ItemType)
+                });
+
+            foreach (var itemQualityGrouping in itemQualityGroupings)
+            {
+                var qualityString = itemQualityGrouping.ItemQuality.ToString().Replace('_', ' ');
+                var qLabel = Item.QualityLabels[itemQualityGrouping.ItemQuality];
+                if (qLabel != '\0')
+                {
+                    qualityString = $"{qLabel}{qualityString}{qLabel}";
+                }
+                var qualityNode = new TreeNode(qualityString);
+                var typeCount = 0;
+                foreach (var typeGroup in itemQualityGrouping.TypeGroups)
+                {
+                    var typeNode = new TreeNode(typeGroup.Key.ToTitleCase());
+                    qualityNode.Nodes.Add(typeNode);
+                    foreach (var itemNode in typeGroup.Select(item => new TreeNode(item.ToString().ToTitleCase()) { Tag = item }))
+                    {
+                        typeNode.Nodes.Add(itemNode);
+                    }
+                    typeCount += typeGroup.Count();
+                    typeNode.Text += $" ({typeGroup.Count()})";
+                }
+                qualityNode.Text += $" ({typeCount})";
+                trvItemsByQualityType.Nodes.Add(qualityNode);
+            }
+            trvItemsByQualityType.EndUpdate();
         }
 
 
@@ -755,7 +850,6 @@ namespace DFWV
         /// Since the XML is all loaded we allow world exporting at this point, since nothing else after this point is data that's exported.
         /// Events are subscribed to for the "Linking" step, which turns associations to XML objects by IDs, to actual references to the corresponding object.
         /// </summary>
-        /// /TODO: Accont for plus parsing here
         private void XmlFinished()
         {
             Program.Log(LogType.Status, "XML Loading Done"); 
@@ -1080,6 +1174,33 @@ namespace DFWV
                 lblEntityPopulationBattleWar.Data = evtcol.WarEventCol;
             }
         }
+
+        private void lstEntityPopluationRaces_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            e.DrawBackground();
+
+            if (e.Index != -1)
+            {
+                var thisEntPop = (EntityPopulation)lstEntityPopluationRaces.Tag ?? (EntityPopulation)lstEntityPopulation.SelectedItem;
+                if (thisEntPop == null)
+                {
+                    grpEntityPopulation.Visible = false;
+                    return;
+                }
+                string drawString;
+                if (thisEntPop.RaceCounts[(Race)lstEntityPopluationRaces.Items[e.Index]] == 1)
+                    drawString = thisEntPop.RaceCounts[(Race)lstEntityPopluationRaces.Items[e.Index]] +
+                        " " + lstEntityPopluationRaces.Items[e.Index];
+                else
+                    drawString = thisEntPop.RaceCounts[(Race)lstEntityPopluationRaces.Items[e.Index]] +
+                        " " + lstEntityPopluationRaces.Items[e.Index].ToString().Pluralize();
+
+                e.Graphics.DrawString(drawString,
+                    e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
+            }
+            e.DrawFocusRectangle();
+        }
+
         #endregion
 
         /// <summary>
@@ -1604,7 +1725,6 @@ namespace DFWV
         }
         #endregion
 
-
         #region Historical Figure Tab
         /// <summary>
         /// If a HF is clicked in the HF treeview, display event details underneath the tree view
@@ -1728,6 +1848,9 @@ namespace DFWV
                     break;
                 case "FilterMountain":
                     StartFilter(lstMountain, World.Mountains, tabMountain);
+                    break;
+                case "FilterLandmass":
+                    StartFilter(lstLandmass, World.Landmasses, tabLandmass);
                     break;
                 case "FilterArmy":
                     StartFilter(lstArmy, World.Armies, tabArmy);
@@ -1877,6 +2000,9 @@ namespace DFWV
                     break;
                 case "TextFilterRiver":
                     TextFilter(txt, lstRiver, World.Rivers, tabRiver);
+                    break;
+                case "TextFilterLandmass":
+                    TextFilter(txt, lstLandmass, World.Landmasses, tabLandmass);
                     break;
                 case "TextFilterMountain":
                     TextFilter(txt, lstMountain, World.Mountains, tabMountain);
@@ -2049,32 +2175,7 @@ namespace DFWV
         
         #endregion
 
-        private void lstEntityPopluationRaces_DrawItem(object sender, DrawItemEventArgs e)
-        {
-            e.DrawBackground();
-
-            if (e.Index != -1)
-            {
-                var thisEntPop = (EntityPopulation)lstEntityPopluationRaces.Tag ?? (EntityPopulation)lstEntityPopulation.SelectedItem;
-                if (thisEntPop == null)
-                {
-                    grpEntityPopulation.Visible = false;
-                    return;
-                }
-                string drawString;
-                if (thisEntPop.RaceCounts[(Race)lstEntityPopluationRaces.Items[e.Index]] == 1)
-                    drawString = thisEntPop.RaceCounts[(Race)lstEntityPopluationRaces.Items[e.Index]] +
-                        " " + lstEntityPopluationRaces.Items[e.Index];
-                else
-                    drawString = thisEntPop.RaceCounts[(Race)lstEntityPopluationRaces.Items[e.Index]] +
-                        " " + lstEntityPopluationRaces.Items[e.Index].ToString().Pluralize();
-
-                e.Graphics.DrawString(drawString,
-                    e.Font, Brushes.Black, e.Bounds, StringFormat.GenericDefault);
-            }
-            e.DrawFocusRectangle();
-        }
-
+ 
         private void SiteMapLabel_Click(object sender, EventArgs e)
         {
             if (lstSite.SelectedItem == null)
@@ -2099,5 +2200,6 @@ namespace DFWV
         {
 
         }
+
     }
 }

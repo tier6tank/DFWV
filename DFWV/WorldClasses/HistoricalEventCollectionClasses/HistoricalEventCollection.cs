@@ -105,7 +105,8 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                     return new EC_Performance(xdoc, world);
                 case "competition":
                     return new EC_Competition(xdoc, world);
-
+                case "purge":
+                    return new EC_Purge(xdoc, world);
                 default:
                     var logtext = "Unassessed Event Collection Type: " + (xdoc.Root.Element("type").Value);// + raw.Replace("<", "//<") + "\n\t\t\tbreak;");
                     logtext = ("\t\t" + xdoc.Root.ToString().Replace("<", "//<")).Split('\n').Where(

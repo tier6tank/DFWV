@@ -17,6 +17,9 @@ namespace DFWV.WorldClasses
         private int? MatType { get; set; }
         private int? MatIndex { get; set; }
         private int? ItemValue { get; set; }
+        private int? PageCount { get; set; }
+        private int? WritingId { get; set; }
+        private WrittenContent WritenContent { get; set; }
 
         public string Description { get; set; }
 
@@ -114,12 +117,15 @@ namespace DFWV.WorldClasses
             frm.grpArtifactStored.FillListboxWith(frm.lstArtifactStored, StoredEvents);
             frm.grpArtifactPossessed.FillListboxWith(frm.lstArtifactPossessed, PossessedEvents);
             frm.grpArtifactKills.FillListboxWith(frm.lstArtifactKills, Kills);
-
+            frm.lblArtifactWCLabel.Visible = WritenContent != null;
+            frm.lblArtifactWC.Data = WritenContent;
+            frm.lblArtifactWC.Text = WritenContent == null ? "" : $"{WritenContent} ({PageCount} Pages)";
         }
 
         internal override void Link()
         {
-
+            if (WritingId.HasValue && World.WrittenContents.ContainsKey(WritingId.Value))
+                WritenContent = World.WrittenContents[WritingId.Value];
         }
 
         internal override void Process()
@@ -175,6 +181,15 @@ namespace DFWV.WorldClasses
                         if (valI != -1)
                             ItemID = valI;
                         break;
+                    case "page_count":
+                        if (valI != -1)
+                            PageCount = valI;
+                        break;
+                    case "writing":
+                        if (valI != -1)
+                            WritingId = valI;
+                        break;
+
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" , element, xdoc.Root.ToString());
                         break;

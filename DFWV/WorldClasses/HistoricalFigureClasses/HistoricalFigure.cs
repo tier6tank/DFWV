@@ -18,6 +18,8 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         [UsedImplicitly]
         public string RaceName => Race != null ? Race.Name : Race_ ?? "";
 
+        public int? Sex { get; set; }
+
         public int? Flags { get; set; }
         
         public int? Caste { get; }
@@ -419,6 +421,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             frm.lblHistoricalFigureName.Text = ToString();
             frm.lblHistoricalFigureRace.Data = Race;
             frm.lblHistoricalFigureCaste.Text = Caste.HasValue ? Castes[Caste.Value] : "";
+            frm.lblHistoricalFigureSex.Text = Sex.HasValue ? "" : Sex.ToString();
             frm.lblHistoricalFigureAppeared.Text = Appeared?.ToString() ?? "";
             frm.lblHistoricalFigureLife.Text = Birth == null ? "" : (Birth + " – " + (Death == WorldTime.Present ? "" : Death.ToString()));
             frm.lblHistoricalFigureAge.Text = Birth == null ? "" : WorldTime.Duration(Death, Birth);
@@ -1127,6 +1130,12 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                         break;
                     case "flags":
                         Flags = Convert.ToInt32(val, 2);
+                        break;
+                    case "sex":
+                        if (valI != -1)
+                            Sex = valI;
+                        break;
+                    case "race": //Ignore, captured elsewhere
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t", element, xdoc.Root.ToString());

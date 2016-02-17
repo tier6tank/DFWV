@@ -68,6 +68,7 @@ namespace DFWV.WorldClasses
             frm.grpEntityPopulation.Text = ToString();
             frm.grpEntityPopulation.Show();
 
+            frm.lblEntityPopulationName.Text = Name;
             frm.lblEntityPopulationRace.Data = Race;
             frm.lblEntityPopulationCiv.Data = Entity;
 
@@ -114,6 +115,9 @@ namespace DFWV.WorldClasses
                         break;
                     case "civ_id":
                         EntityId = valI;
+                        break;
+                    case "name":
+                        Name = val;
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t", element, xdoc.Root.ToString());

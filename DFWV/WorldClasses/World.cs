@@ -71,6 +71,7 @@ namespace DFWV.WorldClasses
         public readonly Dictionary<int, PoeticForm> PoeticForms = new Dictionary<int, PoeticForm>();
         public readonly Dictionary<int, MusicalForm> MusicalForms = new Dictionary<int, MusicalForm>();
         public readonly Dictionary<int, DanceForm> DanceForms = new Dictionary<int, DanceForm>();
+        public readonly Dictionary<int, Landmass> Landmasses = new Dictionary<int, Landmass>();
         public readonly Dictionary<int, Mountain> Mountains = new Dictionary<int, Mountain>();
         public readonly Dictionary<int, River> Rivers = new Dictionary<int, River>();
         public readonly Dictionary<int, Region> Regions = new Dictionary<int, Region>();
@@ -1304,7 +1305,7 @@ namespace DFWV.WorldClasses
         {
             God.Types = new List<string>();
             Leader.LeaderTypes = new List<string>();
-            Leader.InheritanceTypes = new List<string> { "Unknown", "Inherited", "New Line", "Original Line" };
+            Leader.InheritanceTypes = new List<string> {"Unknown", "Inherited", "New Line", "Original Line"};
             Region.Types = new List<string>();
             Site.Types = new List<string>();
             WorldConstruction.Types = new List<string>();
@@ -1314,10 +1315,10 @@ namespace DFWV.WorldClasses
             EntityEntityLink.LinkTypes = new List<string>();
             EntitySiteLink.LinkTypes = new List<string>();
 
-            HistoricalEvent.Types = new List<string>();
             Item.ItemTypes = new List<string>();
             Item.ItemSubTypes = new List<string>();
             Item.Materials = new List<string>();
+            HistoricalEvent.Types = new List<string>();
             HistoricalEvent.MeetingResults = new List<string>();
             HistoricalEvent.MeetingTopics = new List<string>();
             HistoricalEvent.Buildings = new List<string>();
@@ -1345,6 +1346,23 @@ namespace DFWV.WorldClasses
             HFSkill.Skills = new List<string>();
             HFSiteLink.LinkTypes = new List<string>();
 
+            WrittenContent.Types = new List<string>();
+            WrittenContent.Styles = new List<string>();
+            Building.Flags = new List<string>();
+            Building.BuildingTypes = new List<string>();
+            Building.BuildingSubTypes = new List<string>();
+            EntityPosition.PositionTitles = new List<string>();
+            EntityPosition.LinkTypes = new List<string>();
+            EntityPositionAssignment.LinkTypes = new List<string>();
+            Item.Flags = new List<string>();
+            ItemImprovement.ImprovementTypes = new List<string>();
+            Race.Flags = new List<string>();
+            Report.Types = new List<string>();
+            Unit.Flags = new List<string>();
+            Unit.JobTypes = new List<string>();
+            Unit.Labors = new List<string>();
+            Unit.HealthFlags = new List<string>();
+            UnitInventoryItem.BodyParts = new List<string>();
 
         }
         #endregion

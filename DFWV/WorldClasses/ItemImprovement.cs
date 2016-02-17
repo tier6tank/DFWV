@@ -11,6 +11,9 @@ namespace DFWV.WorldClasses
 {
     public class ItemImprovement : WorldObject
     {
+        public ItemQuality Quality => (ItemQuality)QualityVal;
+        public char QualityLabel => Item.QualityLabels[Quality];
+
         override public Point Location => Point.Empty;
         public static List<string> ImprovementTypes = new List<string>(); 
         public int ImprovementType { get; set; }
@@ -20,7 +23,7 @@ namespace DFWV.WorldClasses
         public int? Count { get; set; }
         public int? Contents { get; set; }
         public int? SkillRating { get; set; }
-        public int? Quality { get; set; }
+        public int QualityVal { get; set; }
         public int? Shape { get; set; }
         public int? MasterpieceEventId { get; set; }
         public int? ImageId { get; set; }
@@ -72,7 +75,7 @@ namespace DFWV.WorldClasses
                         SkillRating = valI;
                         break;
                     case "quality":
-                        Quality = valI;
+                        QualityVal = valI;
                         break;
                     case "shape":
                         Shape = valI;
@@ -111,6 +114,7 @@ namespace DFWV.WorldClasses
                         break;
                 }
             }
+            Name = ((Mat.HasValue ? Item.Materials[Mat.Value] + " " : "") + ImprovementTypeName).ToTitleCase();
         }
 
         public override void Select(MainForm frm)
@@ -150,7 +154,7 @@ namespace DFWV.WorldClasses
 
         public override string ToString()
         {
-            return ((Mat.HasValue ? Item.Materials[Mat.Value] + " " : "") + ImprovementTypeName).ToTitleCase();
+            return QualityLabel == '\0' ? Name : $"{QualityLabel}{Name}{QualityLabel}";
         }
     }
 

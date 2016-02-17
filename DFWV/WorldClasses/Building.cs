@@ -42,6 +42,7 @@ namespace DFWV.WorldClasses
         public static List<string> Flags = new List<string>();
         public List<short> Flag { get; set; }
         public int? Direction { get; set; }
+        public List<Reference> References { get; set; }
 
         [UsedImplicitly]
         public string DispNameLower => ToString().ToLower();
@@ -128,6 +129,11 @@ namespace DFWV.WorldClasses
                     case "direction":
                         Direction = valI;
                         break;
+                    case "reference":
+                        if (References == null)
+                            References = new List<Reference>();
+                        References.Add(new Reference(element, this));
+                        break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
                         break;
@@ -162,7 +168,7 @@ namespace DFWV.WorldClasses
             frm.lblBuildingClaimed.Data = ClaimedBy;
             frm.lblBuildingDir.Text = Direction.ToString();
             frm.lblBuildingSquad.Data = Squad;
-
+            frm.grpBuildingReferences.FillListboxWith(frm.lstBuildingReferences, References);
         }
 
         internal override void Export(string table)
@@ -193,6 +199,7 @@ namespace DFWV.WorldClasses
                 ClaimedBy = World.Units[ClaimedByID.Value];
             if (SquadID.HasValue)
                 Squad = World.Squads[SquadID.Value];
+            References?.ForEach(x => x.Link());
 
         }
 

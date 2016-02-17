@@ -53,6 +53,7 @@ namespace DFWV
             this.lblMapName = new System.Windows.Forms.Label();
             this.lblMapNameCaption = new System.Windows.Forms.Label();
             this.grpSettings = new System.Windows.Forms.GroupBox();
+            this.chkEntityClaims = new System.Windows.Forms.CheckBox();
             this.chkHighlightCoordinates = new System.Windows.Forms.CheckBox();
             this.cmbHFTravels = new System.Windows.Forms.ComboBox();
             this.chkHFTravels = new System.Windows.Forms.CheckBox();
@@ -72,6 +73,7 @@ namespace DFWV
             this.chkRegions = new System.Windows.Forms.CheckBox();
             this.chkBattles = new System.Windows.Forms.CheckBox();
             this.chkCivilizations = new System.Windows.Forms.CheckBox();
+            this.chkLandmasses = new System.Windows.Forms.CheckBox();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picMap)).BeginInit();
             this.mapTableLayout.SuspendLayout();
@@ -311,6 +313,8 @@ namespace DFWV
             // 
             // grpSettings
             // 
+            this.grpSettings.Controls.Add(this.chkLandmasses);
+            this.grpSettings.Controls.Add(this.chkEntityClaims);
             this.grpSettings.Controls.Add(this.chkHighlightCoordinates);
             this.grpSettings.Controls.Add(this.cmbHFTravels);
             this.grpSettings.Controls.Add(this.chkHFTravels);
@@ -329,16 +333,27 @@ namespace DFWV
             this.grpSettings.Controls.Add(this.chkCivilizations);
             this.grpSettings.Location = new System.Drawing.Point(64, 80);
             this.grpSettings.Name = "grpSettings";
-            this.grpSettings.Size = new System.Drawing.Size(361, 327);
+            this.grpSettings.Size = new System.Drawing.Size(361, 375);
             this.grpSettings.TabIndex = 5;
             this.grpSettings.TabStop = false;
             this.grpSettings.Text = "Settings";
             this.grpSettings.Visible = false;
             // 
+            // chkEntityClaims
+            // 
+            this.chkEntityClaims.AutoSize = true;
+            this.chkEntityClaims.Location = new System.Drawing.Point(6, 135);
+            this.chkEntityClaims.Name = "chkEntityClaims";
+            this.chkEntityClaims.Size = new System.Drawing.Size(85, 17);
+            this.chkEntityClaims.TabIndex = 16;
+            this.chkEntityClaims.Text = "Entity Claims";
+            this.chkEntityClaims.UseVisualStyleBackColor = true;
+            this.chkEntityClaims.Click += new System.EventHandler(this.ViewOptionChanged);
+            // 
             // chkHighlightCoordinates
             // 
             this.chkHighlightCoordinates.AutoSize = true;
-            this.chkHighlightCoordinates.Location = new System.Drawing.Point(6, 255);
+            this.chkHighlightCoordinates.Location = new System.Drawing.Point(6, 301);
             this.chkHighlightCoordinates.Name = "chkHighlightCoordinates";
             this.chkHighlightCoordinates.Size = new System.Drawing.Size(126, 17);
             this.chkHighlightCoordinates.TabIndex = 15;
@@ -350,7 +365,7 @@ namespace DFWV
             this.cmbHFTravels.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cmbHFTravels.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cmbHFTravels.FormattingEnabled = true;
-            this.cmbHFTravels.Location = new System.Drawing.Point(17, 228);
+            this.cmbHFTravels.Location = new System.Drawing.Point(17, 274);
             this.cmbHFTravels.Name = "cmbHFTravels";
             this.cmbHFTravels.Size = new System.Drawing.Size(156, 21);
             this.cmbHFTravels.TabIndex = 14;
@@ -359,7 +374,7 @@ namespace DFWV
             // chkHFTravels
             // 
             this.chkHFTravels.AutoSize = true;
-            this.chkHFTravels.Location = new System.Drawing.Point(6, 205);
+            this.chkHFTravels.Location = new System.Drawing.Point(6, 251);
             this.chkHFTravels.Name = "chkHFTravels";
             this.chkHFTravels.Size = new System.Drawing.Size(76, 17);
             this.chkHFTravels.TabIndex = 13;
@@ -370,7 +385,7 @@ namespace DFWV
             // chkRivers
             // 
             this.chkRivers.AutoSize = true;
-            this.chkRivers.Location = new System.Drawing.Point(6, 181);
+            this.chkRivers.Location = new System.Drawing.Point(6, 227);
             this.chkRivers.Name = "chkRivers";
             this.chkRivers.Size = new System.Drawing.Size(56, 17);
             this.chkRivers.TabIndex = 12;
@@ -381,7 +396,7 @@ namespace DFWV
             // chkMountains
             // 
             this.chkMountains.AutoSize = true;
-            this.chkMountains.Location = new System.Drawing.Point(6, 158);
+            this.chkMountains.Location = new System.Drawing.Point(6, 204);
             this.chkMountains.Name = "chkMountains";
             this.chkMountains.Size = new System.Drawing.Size(75, 17);
             this.chkMountains.TabIndex = 11;
@@ -394,7 +409,7 @@ namespace DFWV
             this.chkShowLegend.AutoSize = true;
             this.chkShowLegend.Checked = true;
             this.chkShowLegend.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkShowLegend.Location = new System.Drawing.Point(6, 275);
+            this.chkShowLegend.Location = new System.Drawing.Point(6, 321);
             this.chkShowLegend.Name = "chkShowLegend";
             this.chkShowLegend.Size = new System.Drawing.Size(92, 17);
             this.chkShowLegend.TabIndex = 10;
@@ -427,7 +442,7 @@ namespace DFWV
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(6, 298);
+            this.btnOK.Location = new System.Drawing.Point(6, 344);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 8;
@@ -453,7 +468,7 @@ namespace DFWV
             this.grpSites.Controls.Add(this.chkNeutralSites);
             this.grpSites.Location = new System.Drawing.Point(186, 19);
             this.grpSites.Name = "grpSites";
-            this.grpSites.Size = new System.Drawing.Size(163, 302);
+            this.grpSites.Size = new System.Drawing.Size(163, 323);
             this.grpSites.TabIndex = 7;
             this.grpSites.TabStop = false;
             this.grpSites.Visible = false;
@@ -463,7 +478,7 @@ namespace DFWV
             this.lstSiteTypes.CheckBoxes = true;
             this.lstSiteTypes.Location = new System.Drawing.Point(6, 70);
             this.lstSiteTypes.Name = "lstSiteTypes";
-            this.lstSiteTypes.Size = new System.Drawing.Size(151, 226);
+            this.lstSiteTypes.Size = new System.Drawing.Size(151, 247);
             this.lstSiteTypes.TabIndex = 3;
             this.lstSiteTypes.UseCompatibleStateImageBehavior = false;
             this.lstSiteTypes.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.lstSiteTypes_ItemChecked);
@@ -493,7 +508,7 @@ namespace DFWV
             // chkConstructions
             // 
             this.chkConstructions.AutoSize = true;
-            this.chkConstructions.Location = new System.Drawing.Point(6, 135);
+            this.chkConstructions.Location = new System.Drawing.Point(6, 181);
             this.chkConstructions.Name = "chkConstructions";
             this.chkConstructions.Size = new System.Drawing.Size(90, 17);
             this.chkConstructions.TabIndex = 6;
@@ -504,7 +519,7 @@ namespace DFWV
             // chkHistoricalFigures
             // 
             this.chkHistoricalFigures.AutoSize = true;
-            this.chkHistoricalFigures.Location = new System.Drawing.Point(6, 112);
+            this.chkHistoricalFigures.Location = new System.Drawing.Point(6, 158);
             this.chkHistoricalFigures.Name = "chkHistoricalFigures";
             this.chkHistoricalFigures.Size = new System.Drawing.Size(106, 17);
             this.chkHistoricalFigures.TabIndex = 5;
@@ -555,6 +570,17 @@ namespace DFWV
             this.chkCivilizations.Text = "Civilizations";
             this.chkCivilizations.UseVisualStyleBackColor = true;
             this.chkCivilizations.Click += new System.EventHandler(this.ViewOptionChanged);
+            // 
+            // chkLandmasses
+            // 
+            this.chkLandmasses.AutoSize = true;
+            this.chkLandmasses.Location = new System.Drawing.Point(6, 112);
+            this.chkLandmasses.Name = "chkLandmasses";
+            this.chkLandmasses.Size = new System.Drawing.Size(85, 17);
+            this.chkLandmasses.TabIndex = 17;
+            this.chkLandmasses.Text = "Landmasses";
+            this.chkLandmasses.UseVisualStyleBackColor = true;
+            this.chkLandmasses.Click += new System.EventHandler(this.ViewOptionChanged);
             // 
             // MapForm
             // 
@@ -636,5 +662,7 @@ namespace DFWV
         private CheckBox chkHFTravels;
         public ComboBox cmbHFTravels;
         private CheckBox chkHighlightCoordinates;
+        private CheckBox chkEntityClaims;
+        private CheckBox chkLandmasses;
     }
 }

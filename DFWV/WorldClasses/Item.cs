@@ -9,8 +9,32 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses
 {
+    public enum ItemQuality
+    {
+        Standard = 0,
+        Well_Crafted,
+        Finely_Crafted,
+        Superior_Quality,
+        Exceptional,
+        Masterful,
+        Artifact
+    }
+
     public class Item : XMLObject
     {
+        public static Dictionary<ItemQuality,char> QualityLabels = new Dictionary<ItemQuality, char>()
+        { {ItemQuality.Standard, '\0'}, {ItemQuality.Well_Crafted, '-'}, {ItemQuality.Finely_Crafted, '+'},
+            { ItemQuality.Superior_Quality, '*'}, { ItemQuality.Exceptional, '\u2261'}, { ItemQuality.Masterful, '\u263C'}, { ItemQuality.Artifact, '\0'} };
+
+        public ItemQuality Quality => (ItemQuality)QualityVal;
+        public char QualityLabel => QualityLabels[Quality];
+
+        public char ImprovementQualityLabel
+            => Improvements == null ? '\0' : QualityLabels[(ItemQuality)Improvements.Max(i => i.Quality)];
+
+        public string ImprovementPrefix => Improvements == null ? "" : (ImprovementQualityLabel == '\0' ? '\u00AB'.ToString() : new string(new char[] { ImprovementQualityLabel, '\u00AB'}));
+        public string ImprovementSuffix => Improvements == null ? "" : (ImprovementQualityLabel == '\0' ? '\u00BB'.ToString() : new string(new char[] { '\u00BB', ImprovementQualityLabel, }));
+
         override public Point Location => Point.Empty;
         public static List<string> ItemTypes = new List<string>();
         public static List<string> ItemSubTypes = new List<string>();
@@ -27,11 +51,11 @@ namespace DFWV.WorldClasses
         public int? Mat { get; set; }
         public int? MakerID { get; set; }
         public HistoricalFigure Maker { get; set; }
-        public int? Quality { get; set; }
+        public int QualityVal { get; set; }
         public int? SkillUsed { get; set; }
         public int? MasterpieceEventID { get; set; }
         public HistoricalEvent MasterpieceEvent { get; set; }
-        private static List<string> Flags = new List<string>();
+        public static List<string> Flags = new List<string>();
         private List<short> Flag { get; set; }
         public double Temperature { get; set; }
         public int? TopicId { get; set; }
@@ -46,24 +70,16 @@ namespace DFWV.WorldClasses
         public int? UnitId { get; set; }
         public int? HistFigureId { get; set; }
         public int? BoneMat { get; set; }
+        public int? Weight { get; set; }
         private List<ItemIngredient> Ingredients { get; set; }
         private List<ItemImprovement> Improvements { get; set; }
         public int? ImageId { get; set; }
         public int? ImageSubId { get; set; }
         public int? ImageCivId { get; set; }
         public int? ImageSiteId { get; set; }
-        public int? ArtifactId { get; set; }
-        public int? HoldingUnitId { get; set; }
-        public int? OwnerUnitId { get; set; }
-        public List<int> ContainsItemId { get; set; }
-        public int? ContainerItemId { get; set; }
-        public int? ContainerBuildingId { get; set; }
-        public int? TraderUnitId { get; set; }
-        public int? TriggerBuildingId { get; set; }
-        public int? TriggerTargetBuildingId { get; set; }
-        public int? ContainsUnitId { get; set; }
         public int? StockpileId { get; set; }
         public Point StockpileCoords { get; set; }
+        public List<Reference> References { get; set; }
 
         [UsedImplicitly]
         public string DispNameLower => ToString().ToLower();
@@ -73,18 +89,19 @@ namespace DFWV.WorldClasses
         public bool IsOnMap => !Coords.IsEmpty;
         [UsedImplicitly]
         public bool IsMadeOnMap => Maker != null;
-        [UsedImplicitly]
-        public bool IsArtifact => ArtifactId.HasValue;
-        [UsedImplicitly]
-        public bool IsHeld => HoldingUnitId.HasValue;
-        [UsedImplicitly]
-        public bool IsOwned => OwnerUnitId.HasValue;
-        [UsedImplicitly]
-        public bool InContainer => ContainerItemId.HasValue;
-        [UsedImplicitly]
-        public bool InBuilding => ContainerBuildingId.HasValue;
 
-    public Item(XDocument xdoc, World world)
+        [UsedImplicitly] //TODO REVIEW
+        public bool IsArtifact => References?.Any(r => r.Type == ReferenceType.IS_ARTIFACT) ?? false; 
+        [UsedImplicitly]
+        public bool IsHeld => References?.Any(r => r.Type == ReferenceType.UNIT_HOLDER) ?? false; 
+        [UsedImplicitly]
+        public bool IsOwned => References?.Any(r => r.Type == ReferenceType.UNIT_ITEMOWNER) ?? false; 
+        [UsedImplicitly]
+        public bool InContainer => References?.Any(r => r.Type == ReferenceType.CONTAINED_IN_ITEM) ?? false; 
+        [UsedImplicitly]
+        public bool InBuilding => References?.Any(r => r.Type == ReferenceType.BUILDING_HOLDER) ?? false;
+
+        public Item(XDocument xdoc, World world)
             : base(xdoc, world)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -124,7 +141,7 @@ namespace DFWV.WorldClasses
                         break;
                     case "quality":
                         if (valI != -1)
-                            Quality = valI;
+                            QualityVal = valI;
                         break;
                     case "skill_used":
                         if (valI != -1)
@@ -199,6 +216,10 @@ namespace DFWV.WorldClasses
                             Materials.Add(val);
                         BoneMat = Materials.IndexOf(val);
                         break;
+                    case "weight":
+                        if (valI != -1)
+                            Weight = valI;
+                        break;
                     case "ingredients":
                         foreach (var inv in element.Elements())
                         {
@@ -216,48 +237,10 @@ namespace DFWV.WorldClasses
                             ImageSiteId = Convert.ToInt32(element.Element("site_id").Value);
                         }
                         break;
-                    case "general_refs":
-                        foreach (var reference in element.Elements())
-                        {
-                            switch (reference.Name.LocalName)
-                            {
-                                case "artifact_id":
-                                    ArtifactId = Convert.ToInt32(reference.Value);
-                                    break;
-                                case "holding_unit_id":
-                                    HoldingUnitId = Convert.ToInt32(reference.Value);
-                                    break;
-                                case "owner_unit_id":
-                                    OwnerUnitId = Convert.ToInt32(reference.Value);
-                                    break;
-                                case "container_item_id":
-                                    ContainerItemId = Convert.ToInt32(reference.Value);
-                                    break;
-                                case "contains_item_id":
-                                    if (ContainsItemId == null)
-                                        ContainsItemId = new List<int>();
-                                    ContainsItemId.Add(Convert.ToInt32(reference.Value));
-                                    break;
-                                case "container_building_id":
-                                    ContainerBuildingId = Convert.ToInt32(reference.Value);
-                                    break;
-                                case "trader_unit_id":
-                                    TraderUnitId = Convert.ToInt32(reference.Value);
-                                    break;
-                                case "trigger_building_id":
-                                    TriggerBuildingId = Convert.ToInt32(reference.Value);
-                                    break;
-                                case "triggertarget_building_id":
-                                    TriggerTargetBuildingId = Convert.ToInt32(reference.Value);
-                                    break;
-                                case "contains_unit_id":
-                                    ContainsUnitId = Convert.ToInt32(reference.Value);
-                                    break;
-                                default:
-                                    DFXMLParser.UnexpectedXmlElement("general_refs." + reference.Name.LocalName, reference, reference.ToString());
-                                    break;
-                            }
-                        }
+                    case "reference":
+                        if (References == null)
+                            References = new List<Reference>();
+                        References.Add(new Reference(element, this));
                         break;
                     case "improvements":
                         foreach (var imp in element.Elements())
@@ -278,7 +261,8 @@ namespace DFWV.WorldClasses
                         break;
                 }
             }
-            Name = ToString();
+            Name = $"{(Mat.HasValue ? Materials[Mat.Value] + " " : "")}{(ItemSubTypeId.HasValue ? ItemSubTypes[ItemSubTypeId.Value] + " " : ItemTypes[ItemTypeId.Value])}"
+                    .Trim().ToTitleCase();
         }
 
         public override void Select(MainForm frm)
@@ -299,8 +283,9 @@ namespace DFWV.WorldClasses
             frm.lblItemMat.Text = Mat.HasValue ? Materials[Mat.Value].ToTitleCase() : "";
             frm.lblItemType.Text = ItemTypeId.HasValue ? ItemTypes[ItemTypeId.Value].ToTitleCase() : "";
             frm.lblItemSubType.Text = ItemSubTypeId.HasValue ? ItemSubTypes[ItemSubTypeId.Value].ToTitleCase() : "";
-            frm.lblItemName.Text = ToString();
+            frm.lblItemName.Text = Name;
             frm.lblItemQuality.Text = Quality.ToString();
+            frm.lblItemWeight.Text = Weight.ToString();
             frm.lblItemSkill.Text = SkillUsed.ToString();
             var AgeTime = new WorldTime(0, Age).ToString().Split('.').Select(x => Convert.ToInt32(x)).ToArray();
 
@@ -326,30 +311,6 @@ namespace DFWV.WorldClasses
                 ? World.HistoricalFigures[HistFigureId.Value]
                 : null;
             frm.lblItemBoneMat.Text = BoneMat.HasValue ? Materials[BoneMat.Value] : "";
-            frm.lblItemArtifact.Data = ArtifactId.HasValue && World.Artifacts.ContainsKey(ArtifactId.Value)
-                ? World.Artifacts[ArtifactId.Value]
-                : null;
-            frm.lblItemHolding.Data = HoldingUnitId.HasValue && World.Units.ContainsKey(HoldingUnitId.Value)
-                ? World.Units[HoldingUnitId.Value]
-                : null;
-            frm.lblItemOwner.Data = OwnerUnitId.HasValue && World.Units.ContainsKey(OwnerUnitId.Value)
-                ? World.Units[OwnerUnitId.Value]
-                : null;
-            frm.lblItemTrader.Data = TraderUnitId.HasValue && World.Units.ContainsKey(TraderUnitId.Value)
-                ? World.Units[TraderUnitId.Value]
-                : null;
-            frm.lblItemTriggerBuilding.Data = TriggerBuildingId.HasValue && World.Buildings.ContainsKey(TriggerBuildingId.Value)
-                ? World.Buildings[TriggerBuildingId.Value]
-                : null;
-            frm.lblItemTriggerTargetBuilding.Data = TriggerTargetBuildingId.HasValue && World.Buildings.ContainsKey(TriggerTargetBuildingId.Value)
-                ? World.Buildings[TriggerTargetBuildingId.Value]
-                : null;
-            frm.lblItemContainerBuilding.Data = ContainerBuildingId.HasValue && World.Buildings.ContainsKey(ContainerBuildingId.Value)
-                ? World.Buildings[ContainerBuildingId.Value]
-                : null;
-            frm.lblItemContainer.Data = ContainerItemId.HasValue && World.Items.ContainsKey(ContainerItemId.Value)
-                ? World.Items[ContainerItemId.Value]
-                : null;
 
             frm.lblItemStockpile.Text = StockpileId.ToString();
             frm.lblItemStockpileCoords.Text = StockpileCoords.IsEmpty ? "" : StockpileCoords.ToString();
@@ -368,27 +329,9 @@ namespace DFWV.WorldClasses
 
             }
 
-            frm.grpItemIngredient.Visible = Ingredients != null;
-            frm.lstItemIngredient.Items.Clear();
-            if (Ingredients != null)
-            {
-                frm.lstItemIngredient.Items.AddRange(Ingredients.ToArray());
-            }
-
-            frm.grpItemImprovement.Visible = Improvements != null;
-            frm.lstItemImprovement.Items.Clear();
-            if (Improvements != null)
-            {
-                frm.lstItemImprovement.Items.AddRange(Improvements.ToArray());
-            }
-
-            frm.grpItemContains.Visible = ContainsItemId != null;
-            frm.lstItemContains.Items.Clear();
-            if (ContainsItemId != null)
-            {
-                frm.lstItemContains.Items.AddRange(
-                    ContainsItemId.Where(x => World.Items.ContainsKey(x)).Select(x=>World.Items[x]).ToArray());
-            }
+            frm.grpItemIngredient.FillListboxWith(frm.lstItemIngredient, Ingredients);
+            frm.grpItemImprovement.FillListboxWith(frm.lstItemImprovement, Improvements);
+            frm.grpItemReferences.FillListboxWith(frm.lstItemReferences, References);
 
         }
 
@@ -407,11 +350,13 @@ namespace DFWV.WorldClasses
 
         internal override void Link()
         {
-            if (MakerID.HasValue)
+            if (MakerID.HasValue && World.HistoricalFigures.ContainsKey(MakerID.Value))
                 Maker = World.HistoricalFigures[MakerID.Value];
             if (MasterpieceEventID.HasValue)
                 MasterpieceEvent = World.HistoricalEvents[MasterpieceEventID.Value];
-
+            References?.ForEach(x => x.Link());
+            if (IsArtifact)
+                QualityVal = 6;
         }
 
         internal override void Process()
@@ -426,13 +371,10 @@ namespace DFWV.WorldClasses
 
         public override string ToString()
         {
-
-            return
-                $"{(Mat.HasValue ? Materials[Mat.Value] + " " : "")}{(ItemSubTypeId.HasValue ? ItemSubTypes[ItemSubTypeId.Value] + " " : ItemTypes[ItemTypeId.Value])}"
-                    .Trim().ToTitleCase();
+            if (IsArtifact)
+                return ((Artifact) References.First(r => r.Type == ReferenceType.IS_ARTIFACT).refObject).ToString();
+            return QualityLabel == '\0' ? Name : $"{ImprovementPrefix}{QualityLabel}{Name}{QualityLabel}{ImprovementSuffix}";
         }
-
-
     }
 
 

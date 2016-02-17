@@ -17,6 +17,13 @@ namespace DFWV.WorldClasses
         public string Title { get; set; }
         private int? AuthorID { get; set; }
         public Unit Author { get; set; }
+        public static List<string> Types = new List<string>();
+        public int? Type { get; set; }
+        public string TypeName => Type.HasValue ? Types[Type.Value] : "";
+        public static List<string> Styles = new List<string>();
+        public int? Style { get; set; }
+        public string StyleName => Style.HasValue ? Styles[Style.Value] : "";
+        public List<Reference> References { get; set; }
 
         [UsedImplicitly]
         public bool KnownAuthor => Author != null;
@@ -42,23 +49,35 @@ namespace DFWV.WorldClasses
                     case "name":
                         Name = val;
                         break;
+                    case "type":
+                        if (valI == 0)
+                        {
+                            if (!Types.Contains(val))
+                                Types.Add(val);
+                            Type = Types.IndexOf(val);
+                        }
+                        break;
+                    case "style":
+                        if (!Styles.Contains(val))
+                            Styles.Add(val);
+                        Style = Styles.IndexOf(val);
+                        break;
                     case "title":
                         Title = val;
                         break;
-                    case "pages":
-                        if (val.StartsWith("-"))
-                        {
-                            PageStart = -1;
-                            PageEnd = -1;
-                        }
-                        else
-                        {
-                            PageStart = Convert.ToInt32(val.Split('-')[0]);
-                            PageStart = Convert.ToInt32(val.Split('-')[1]);
-                        }
+                    case "page_start":
+                        PageStart = valI;
+                        break;
+                    case "page_end":
+                        PageEnd = valI;
                         break;
                     case "author":
                         AuthorID = valI;
+                        break;
+                    case "reference":
+                        if (References == null)
+                            References = new List<Reference>();
+                        References.Add(new Reference(element, this));
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
@@ -80,7 +99,11 @@ namespace DFWV.WorldClasses
 #endif
             frm.lblWrittenContentTitle.Text = ToString();
             frm.lblWrittenContentAuthor.Data = Author;
+            frm.lblWrittenContentType.Text = TypeName;
+            frm.lblWrittenContentStyle.Text = StyleName;
             frm.lblWrittenContentPages.Text = PageStart == -1 ? "" : $"{PageStart} - {PageEnd}";
+
+            frm.grpWrittenContentReferences.FillListboxWith(frm.lstWrittenContentReferences, References);
         }
 
         internal override void Export(string table)
@@ -99,6 +122,7 @@ namespace DFWV.WorldClasses
         {
             if (AuthorID.HasValue && World.Units.ContainsKey(AuthorID.Value))
                 Author = World.Units[AuthorID.Value];
+            References?.ForEach(x => x.Link());
         }
     
 

@@ -31,6 +31,11 @@ namespace DFWV.WorldClasses
         //public string SiteType { get; set; }
         private bool SiteFileMerged { get; set; }
 
+        public int? CivId { get; set; }
+        public Entity Civ { get; set; }
+        public int? CurOwnerId { get; set; }
+        public Entity CurOwner { get; set; }
+
         public List<HistoricalFigure> Inhabitants { get; set; }
         public List<WorldConstruction> ConstructionLinks { get; set; }
 
@@ -78,6 +83,8 @@ namespace DFWV.WorldClasses
         public int TotalPopulation => (Population?.Count ?? 0) +
                                       (Prisoners?.Count ?? 0) +
                                       (Outcasts?.Count ?? 0);
+
+
 
         #region Parse From Site File
         public Site(IEnumerable<string> curSite, World world) : base(world)
@@ -240,6 +247,8 @@ namespace DFWV.WorldClasses
             foreach (var element in xdoc.Root.Elements())
             {
                 var val = element.Value.Trim();
+                int valI;
+                int.TryParse(val, out valI);
                 switch (element.Name.LocalName)
                 {
                     case "id":
@@ -265,23 +274,20 @@ namespace DFWV.WorldClasses
                         if (val != "")
                             Program.Log(LogType.Warning, $"Unexpected structures list for site: {Name} - {val}");
                         break;
-                    
+                    case "civ_id":
+                        if (valI != -1)
+                            CivId = valI;
+                        break;
+                    case "cur_owner_id":
+                        if (valI != -1)
+                            CurOwnerId = valI;
+                        break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
                         break;
                 }
             }
         }
-
-        //public Site(NameValueCollection data, World world) 
-        //    : base (world)
-        //{
-        //    Name = data["Name"].ToString();
-        //    Type = data["Type"].ToString();
-        //    Coords = new Point(
-        //                Convert.ToInt32(data["Coords"].ToString().Split(',')[0]),
-        //                Convert.ToInt32(data["Coords"].ToString().Split(',')[1]));
-        //}
 
         public override void Select(MainForm frm)
         {
@@ -303,6 +309,8 @@ namespace DFWV.WorldClasses
             frm.lblSiteCoord.Data = new Coordinate(Coords);
             frm.lblSiteOwner.Data = Owner;
             frm.lblSiteParentCiv.Data = Parent;
+            frm.lblSiteCurOwner.Data = CurOwner;
+            frm.lblSiteCiv.Data = Civ;
 
             var siteMapPath = World.MapPath.Replace("world_map", "site_map-" + Id);
             frm.SiteMapLabel.Visible = File.Exists(siteMapPath);
@@ -492,6 +500,14 @@ namespace DFWV.WorldClasses
                             }
                         }
                         break;
+                    case "civ_id":
+                        if (valI != -1)
+                            CivId = valI;
+                        break;
+                    case "cur_owner_id":
+                        if (valI != -1)
+                            CurOwnerId = valI;
+                        break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + SiteType, element, xdoc.Root.ToString());
                         break;
@@ -528,12 +544,15 @@ namespace DFWV.WorldClasses
 
         internal override void Link()
         {
-           
+            if (CivId.HasValue && World.Entities.ContainsKey(CivId.Value))
+                Civ = World.Entities[CivId.Value];
+            if (CurOwnerId.HasValue && World.Entities.ContainsKey(CurOwnerId.Value))
+                CurOwner = World.Entities[CurOwnerId.Value];
         }
 
         internal override void Process()
         {
-            
+
         }
     }
 }

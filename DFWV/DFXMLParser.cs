@@ -209,6 +209,9 @@ namespace DFWV
                             case "dance_forms":
                                 PlusLoadSection(world.DanceForms, world, xReader);
                                 break;
+                            case "landmasses":
+                                PlusLoadSection(world.Landmasses, world, xReader);
+                                break;
                             case "mountains":
                                 PlusLoadSection(world.Mountains, world, xReader);
                                 break;
@@ -463,6 +466,12 @@ namespace DFWV
                         world.WorldConstructions.Add(newWc.Id, newWc);
                         return;
                     }
+                    if (typeof(T) == typeof(Landmass))
+                    {
+                        var newLandmass = new Landmass(xdoc, world);
+                        world.Landmasses.Add(newLandmass.Id, newLandmass);
+                        return;
+                    }
                     if (typeof(T) == typeof(Mountain))
                     {
                         var newMountain = new Mountain(xdoc, world);
@@ -574,7 +583,8 @@ namespace DFWV
                     }
                     id = associatedRace.AddedOrder;
                 }
-                worldList[id].Plus(xdoc);
+                if (worldList.ContainsKey(id))
+                    worldList[id].Plus(xdoc);
             }
             catch (OutOfMemoryException e)
             {
@@ -668,23 +678,6 @@ namespace DFWV
 #endif
             MissingXmlElements.Add(elementType + "-" + problemElement.Name.LocalName, problemElement.Value);
         }
-
-        ///// <summary>
-        ///// Returns a sequence of <see cref="XElement">XElements</see> corresponding to the currently
-        ///// positioned element and all following sibling elements which match the specified name.
-        ///// </summary>
-        ///// <param name="reader">The xml reader positioned at the desired hierarchy level.</param>
-        ///// <param name="elementName">An <see cref="XName"/> representing the name of the desired element.</param>
-        ///// <returns>A sequence of <see cref="XElement">XElements</see>.</returns>
-        ///// <remarks>At the end of the sequence, the reader will be positioned on the end tag of the parent element.</remarks>
-        //public static IEnumerable<XElement> ReadElements(this XmlReader reader, XName elementName)
-        //{
-        //    if (reader.Name == elementName.LocalName && reader.NamespaceURI == elementName.NamespaceName)
-        //        yield return (XElement)XElement.ReadFrom(reader);
-
-        //    while (reader.ReadToNextSibling(elementName.LocalName, elementName.NamespaceName))
-        //        yield return (XElement)XElement.ReadFrom(reader);
-        //}
     }
 
 
