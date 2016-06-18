@@ -128,6 +128,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 EventLabel(frm, parent, ref location, "Region:", Subregion);
             if (FeatureLayerId != null)
                 EventLabel(frm, parent, ref location, "Layer:", FeatureLayerId == -1 ? "" : FeatureLayerId.ToString());
+            if (OldJob.HasValue)
+                EventLabel(frm, parent, ref location, "Old Job:", Unit.JobTypes[OldJob.Value]);
+            if (NewJob.HasValue)
+                EventLabel(frm, parent, ref location, "New Job:", Unit.JobTypes[NewJob.Value]);
         }
 
         protected override string LegendsDescription() //Not Matched

@@ -1,12 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Design;
-using System.Linq;
 using System.Xml.Linq;
-using DFWV.Annotations;
-using DFWV.WorldClasses.EntityClasses;
-using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses
 {
@@ -29,15 +21,10 @@ namespace DFWV.WorldClasses
             frm.grpPoeticForm.Text = ToString();
             frm.grpPoeticForm.Show();
 #if DEBUG
-            frm.grpPoeticForm.Text += string.Format(" - ID: {0}", Id);
+            frm.grpPoeticForm.Text += $" - ID: {Id}";
 #endif
             frm.lblPoeticFormName.Text = ToString();
             frm.lblPoeticFormAltName.Text = AltName;
-        }
-
-        public override string ToString()
-        {
-            return base.ToString();
         }
 
     }

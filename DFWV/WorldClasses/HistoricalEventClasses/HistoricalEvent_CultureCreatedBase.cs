@@ -115,7 +115,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (Circumstance.HasValue)
                 EventLabel(frm, parent, ref location, "Circumstance:", Circumstances[Circumstance.Value]);
             if (ReasonId.HasValue)
-                EventLabel(frm, parent, ref location, "Circumstance ID:", CircumstanceId.Value.ToString());
+                EventLabel(frm, parent, ref location, "Circumstance ID:", CircumstanceId);
         }
 
         internal string GetReasonCircumstanceString()

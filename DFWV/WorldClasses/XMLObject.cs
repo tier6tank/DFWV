@@ -5,7 +5,7 @@ namespace DFWV.WorldClasses
 {
     public abstract class XMLObject : WorldObject, IEquatable<XMLObject>
     {
-        public int Id { get; set; }
+        public int Id { get; }
         public int Notability { get; set; }
 
         protected XMLObject(XDocument xdoc, World world) 

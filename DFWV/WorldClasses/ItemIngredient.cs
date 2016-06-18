@@ -1,11 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Xml.Linq;
-using DFWV.Annotations;
-using DFWV.WorldClasses.HistoricalEventClasses;
-using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses
 {
@@ -87,7 +82,7 @@ namespace DFWV.WorldClasses
 
         public override string ToString()
         {
-            if (Mat.HasValue && Item.Materials[Mat.Value] == "any")
+            if (Mat.HasValue && Item.Materials[Mat.Value] == "any" && (Type != null))
                 return Item.ItemTypes[Type.Value].ToTitleCase();
 
             return Mat.HasValue ? Item.Materials[Mat.Value].ToTitleCase(): "Other";

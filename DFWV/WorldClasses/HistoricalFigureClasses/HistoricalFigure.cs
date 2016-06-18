@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -81,11 +82,13 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         [UsedImplicitly]
         public bool IsPlayerControlled { private get; set; }
 
+        public List<HistoricalEvent> CachedEvents;
+
         public IEnumerable<HistoricalEvent> Events
         {
-            get
-            {
-                return World.HistoricalEvents.Values.Where(x=>x.HFsInvolved.Contains(this));
+            get {
+                return CachedEvents ??
+                       (CachedEvents = World.HistoricalEvents.Values.Where(x => x.HFsInvolved.Contains(this)).ToList());
             }
         }
 
@@ -156,8 +159,8 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         private List<HistoricalFigure> Imprisoners { get; set; }
         private List<HistoricalFigure> Companions { get; set; }
 
-        private HistoricalFigure Mother { get; set; }
-        private HistoricalFigure Father { get; set; }
+        public HistoricalFigure Mother { get; set; }
+        public HistoricalFigure Father { get; set; }
         private List<HistoricalFigure> _descendents;
         private List<HistoricalFigure> _ancestors;
 
@@ -200,9 +203,10 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         public int EntPopId => EntPop?.Id ?? (EntPop_ ?? -1);
 
         [UsedImplicitly]
-        public int DescendentCount { get; set; }
+        public int DescendentCount { get; set; } = -1;
+
         [UsedImplicitly]
-        public int AncestorCount { get; set; }
+        public int AncestorCount { get; set; } = -1;
         [UsedImplicitly]
         public int DescendentGenerations { get; set; }
         [UsedImplicitly]
@@ -460,6 +464,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             frm.grpHistoricalFigureSkills.FillListboxWith(frm.lstHistoricalFigureSkills, HfSkills?.OrderByDescending(x => x.TotalIp)
                 .Select(x => HFSkill.Skills[x.Skill].Replace("_", " ").ToLower().ToTitleCase() + " - " + IpToTitle(x.TotalIp)));
 
+            WriteHFSummary(frm);
 
             if (!frm.chkHistoricalFigureDetailedView.Checked)
             {
@@ -654,6 +659,189 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             }
             _descendents = null;
         }
+
+#region Displaying Summary
+
+        private string Pronoun => Sex == 0 ? "She" : "He";
+        private Site BirthSite => Events.FirstOrDefault(e => e.SitesInvolved.Any())?.SitesInvolved.FirstOrDefault();
+        private string BirthText => $"{Birth.ToLongString()}";
+        private string BirthSiteText
+        {
+            get
+            {
+
+                var birthSite = BirthSite;
+                return birthSite == null ? "at an unknown location" : $"at {birthSite}";
+            }
+        }
+
+        private Entity BirthEntity => EntityLinks != null && EntityLinks.ContainsKey(HFEntityLink.LinkTypes.IndexOf("member")) 
+            ? EntityLinks?[HFEntityLink.LinkTypes.IndexOf("member")].FirstOrDefault()?.Entity 
+            : null;
+
+        private string LastJob
+        {
+            get
+            {
+                var newjobId =
+                    (Events?.LastOrDefault(e => HistoricalEvent.Types[e.Type] == "change hf job") as HE_ChangeHFJob)?
+                        .NewJob;
+                return newjobId != null ? (Unit.JobTypes[newjobId.Value] == "standard" ? null : Unit.JobTypes[newjobId.Value].Replace('_', ' ')) : null;
+            }
+        }
+
+        private IEnumerable<HistoricalFigure> Siblings
+            => Father == null || Mother == null ? Enumerable.Empty<HistoricalFigure>() : Father.Children.Intersect(Mother.Children).Where(hf => !ReferenceEquals(hf, this)); 
+
+        private string IsWas => Dead ? "was" : "is";
+        private string HasHad => Dead ? "had" : "has";
+        public int? Generation;
+        public Point mapPt;
+        public Point mapGap = new Point(7, 7);
+
+        private void WriteHFSummary(MainForm frm)
+        {
+            var timer = Stopwatch.StartNew();
+            var rtb = frm.rtbHistoricalFigureSummary;
+            try
+            {
+                
+                rtb.Clear();
+                rtb.Tag = new List<WorldObject>();
+
+                rtb.SelectionFont = new Font(rtb.SelectionFont.FontFamily, rtb.SelectionFont.Size, FontStyle.Bold);
+                rtb.AddText(ToString());
+                rtb.SelectionFont = new Font(rtb.SelectionFont.FontFamily, rtb.SelectionFont.Size, FontStyle.Regular);
+                var deathDisplay = Dead ? $", died {Death.ToLongString()}" : "";
+                rtb.AddText($" (born {BirthText}{deathDisplay}) {IsWas} a ");
+                rtb.AddLink(Race);
+
+
+                if (LastJob != null)
+                {
+                    rtb.AddText($" {LastJob}");
+                }
+                if (BirthEntity != null)
+                {
+                    rtb.AddText(" of ");
+                    rtb.AddLink(BirthEntity);
+                }
+                rtb.AddText(".  ");
+
+                if (IsLeader)
+                {
+                    rtb.AddText($"{Pronoun} {IsWas} a ");
+                    rtb.AddLink(Leader, Leader.LeaderTypes[Leader.LeaderType]);
+                    rtb.AddText(" of ");
+                    rtb.AddLink(Leader.Civilization);
+                    if (Leader.Site != null)
+                    {
+                        rtb.AddText(" at ");
+                        rtb.AddLink(Leader.Site);
+                    }
+                    rtb.AddText(".  ");
+                }
+
+                if (BirthSite != null || (Father != null && Mother != null))
+                { 
+                    rtb.AddText($"{Pronoun} was born");
+                    if (Father != null && Mother != null)
+                    {
+                        rtb.AddText(" to ");
+                        rtb.AddLink(Mother);
+                        rtb.AddText(" and ");
+                        rtb.AddLink(Father);
+                    }
+                    var birthSite = BirthSite;
+                    if (birthSite != null)
+                    {
+                        rtb.AddText(" at ");
+                        rtb.AddText(BirthSiteText);
+                    }
+                    rtb.AddText(".  ");
+                }
+
+                var siblings = Siblings.ToList();
+                if (Siblings.Any())
+                {
+                    rtb.AddText($"{Pronoun} {HasHad} {siblings.Count} sibling{(siblings.Count > 1 ? "s" : "")} (");
+                    for (var i = 0; i < siblings.Count; i++)
+                    {
+                        rtb.AddLink(siblings[i]);
+                        if (i < siblings.Count - 2)
+                            rtb.AddText(", ");
+                        else if (i < siblings.Count - 1)
+                            rtb.AddText(", and ");
+
+                    }
+                    rtb.AddText(").  ");
+                }
+
+                var childrenBySpouse = Children?.GroupBy(c => c.Mother == this ? c.Father : c.Mother);
+
+                if (childrenBySpouse != null)
+                {
+                    foreach (var spouseChildrenGroup in childrenBySpouse)
+                    {
+                        rtb.AddText(
+                            $"{Pronoun} {HasHad} {(spouseChildrenGroup.Count() == 1 ? "1 child" : $"{spouseChildrenGroup.Count()} children")} with ");
+                        rtb.AddLink(spouseChildrenGroup.Key);
+                        rtb.AddText(": ");
+                        foreach (var spouseChild in spouseChildrenGroup)
+                        {
+                            rtb.AddLink(spouseChild);
+                            if (spouseChildrenGroup.Count() > 1 && spouseChild == spouseChildrenGroup.ToArray()[spouseChildrenGroup.Count() - 2])
+                            {
+                                rtb.AddText(", and ");
+                            }
+                            else if (spouseChild != spouseChildrenGroup.Last())
+                            {
+                                rtb.AddText(", ");
+                            }
+                        }
+                        rtb.AddText(".  ");
+
+                    }
+                }
+
+                if (Dead)
+                {
+                    //HE_HFDied.Causes[DiedEvent.Cause]
+                    if (DiedEvent.SlayerHf != null)
+                    {
+                        rtb.AddText($"{Pronoun} was {HE_HFDied.Causes[DiedEvent.Cause]} by ");
+                        rtb.AddLink(DiedEvent.SlayerHf);
+                        if (DiedEvent.Site != null)
+                        { 
+                            rtb.AddText(" at ");
+                            rtb.AddLink(DiedEvent.Site);
+                        }
+                    }
+                    else
+                    {
+                        rtb.AddText($"{Pronoun} died of {HE_HFDied.Causes[DiedEvent.Cause]}");
+                        if (DiedEvent.Site != null)
+                        {
+                            rtb.AddText(" at ");
+                            rtb.AddLink(DiedEvent.Site);
+                        }
+                    }
+                    rtb.AddText(".  ");
+                }
+
+                rtb.AddText("\n\n");
+                rtb.AddText(timer.ElapsedMilliseconds.ToString());
+            }
+            catch (Exception e)
+            {
+
+                rtb.Clear();
+                rtb.AddText("Error generating HF Summary: " + e);
+            }
+        }
+
+#endregion
+
 
         private void LoadHfLinkItems(MainForm frm, List<HistoricalFigure> hflinklist, string treenodename)
         {
@@ -1150,70 +1338,39 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         #region Count Families
         internal void CountDescendents()
         {
-            var currentDescendents = new List<HistoricalFigure>() ;
-
-            var generationmax = 1;
-
+            if (DescendentCount == -1)
+                DescendentCount = 0;
             if (Children != null)
             {
-                foreach (var hf in Children.Where(hf => !currentDescendents.Contains(hf)))
+                foreach (var hf in Children)
                 {
-                    currentDescendents.Add(hf);
-                    hf.CountDescendents(currentDescendents, 1, ref generationmax);
+                    if (hf != null)
+                    {
+                        if (hf.DescendentCount == -1) 
+                            hf.CountDescendents();
+                        DescendentCount += hf.DescendentCount;
+                    }
                 }
-            }
-
-            DescendentCount = currentDescendents.Count;
-            DescendentGenerations = generationmax;
-            currentDescendents.Clear();
-        }
-
-        private void CountDescendents(ICollection<HistoricalFigure> currentDescendents, int gen, ref int genmax)
-        {
-            if (!(Children != null & currentDescendents.Count <= 50000)) return;
-            gen++;
-            if (gen > genmax)
-                genmax = gen;
-            foreach (var hf in Children.Where(hf => !currentDescendents.Contains(hf)))
-            {
-                currentDescendents.Add(hf);
-                hf.CountDescendents(currentDescendents, gen, ref genmax);
             }
         }
 
         internal void CountAncestors()
         {
-            var currentAncestors = new List<HistoricalFigure>();
-
-            if (Mother != null && !currentAncestors.Contains(Mother))
+            if (AncestorCount == -1)
+                AncestorCount = 0;
+            if (Mother != null)
             {
-                currentAncestors.Add(Mother);
-                Mother.CountAncestors(currentAncestors);
+                if (Mother.AncestorCount == -1)
+                    Mother.CountAncestors();
+                AncestorCount += Mother.AncestorCount;
             }
-            if (Father != null && !currentAncestors.Contains(Father))
+            if (Father != null)
             {
-                currentAncestors.Add(Father);
-                Father.CountAncestors(currentAncestors);
+                if (Father.AncestorCount == -1)
+                    Father.CountAncestors();
+                AncestorCount += Father.AncestorCount;
             }
-            
-            AncestorCount = currentAncestors.Count;
-            currentAncestors.Clear();
         }
-
-        private void CountAncestors(ICollection<HistoricalFigure> currentAncestors)
-        {
-            if (Mother != null && !currentAncestors.Contains(Mother))
-            {
-                currentAncestors.Add(Mother);
-                Mother.CountAncestors(currentAncestors);
-            }
-            if (Father == null || currentAncestors.Contains(Father)) return;
-            currentAncestors.Add(Father);
-            Father.CountAncestors(currentAncestors);
-        }
-
-
-
         #endregion 
     
         internal override void Export(string table)

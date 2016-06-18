@@ -47,8 +47,6 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         internal override void Link()
         {
             base.Link();
-
-
         }
 
         public override void Select(MainForm frm)

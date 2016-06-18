@@ -92,8 +92,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "PopRace:", PopRaceId.Value.ToString());
-            EventLabel(frm, parent, ref location, "Number:", PopNumberMoved.Value.ToString());
+            EventLabel(frm, parent, ref location, "PopRace:", PopRaceId);
+            EventLabel(frm, parent, ref location, "Number:", PopNumberMoved);
             EventLabel(frm, parent, ref location, "Join Entity:", JoinEntity);
             EventLabel(frm, parent, ref location, "Site:", Site);
         }
@@ -118,7 +118,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
             var racetext = PopRace?.ToString().ToLower() ?? PopRaceId?.ToString() ?? "";
 
-            return $"{timelinestring} {PopNumberMoved.ToString()} {racetext} joined with {JoinEntity}.";
+            return $"{timelinestring} {PopNumberMoved} {racetext} joined with {JoinEntity}.";
 
         }
 

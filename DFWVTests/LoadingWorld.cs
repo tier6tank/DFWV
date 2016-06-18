@@ -8,7 +8,7 @@ namespace DFWVTests
     {
         public static World GetTestWorld()
         {
-            return new World("", "", "", "", "", "", new WorldTime(1000, 0));
+            return new World("", "", "", "", "", "", new WorldTime(1000));
         }
 
     }

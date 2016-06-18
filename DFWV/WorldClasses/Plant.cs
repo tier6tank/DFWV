@@ -54,7 +54,7 @@ namespace DFWV.WorldClasses
             frm.grpPlant.Text = ToString();
             frm.grpPlant.Show();
 #if DEBUG
-            frm.grpPlant.Text += string.Format(" - ID: {0}", Id);
+            frm.grpPlant.Text += $" - ID: {Id}";
 #endif
 
             frm.lblPlantCoords.Text = Coords.ToString();

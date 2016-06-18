@@ -1,12 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Design;
-using System.Linq;
 using System.Xml.Linq;
-using DFWV.Annotations;
-using DFWV.WorldClasses.EntityClasses;
-using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses
 {
@@ -29,15 +21,10 @@ namespace DFWV.WorldClasses
             frm.grpMusicalForm.Text = ToString();
             frm.grpMusicalForm.Show();
 #if DEBUG
-            frm.grpMusicalForm.Text += string.Format(" - ID: {0}", Id);
+            frm.grpMusicalForm.Text += $" - ID: {Id}";
 #endif
             frm.lblMusicalFormName.Text = ToString();
             frm.lblMusicalFormAltName.Text = AltName;
-        }
-
-        public override string ToString()
-        {
-            return base.ToString();
         }
 
     }

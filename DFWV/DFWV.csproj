@@ -140,6 +140,9 @@
     <Compile Include="Controls\LinkLabel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\RichTextBoxEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Database.cs" />
     <Compile Include="DFXMLParser.cs" />
     <Compile Include="Dynamic.cs" />

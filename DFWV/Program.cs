@@ -7,8 +7,8 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
+using DFWV.Controls;
 using DFWV.Properties;
 using DFWV.WorldClasses;
 using SevenZip;
@@ -368,6 +368,24 @@ namespace DFWV
         }
 
 
+        public static void AddText(this RichTextBoxEx rtb, string text)
+        {
+            rtb.SelectedText = text;            
+        }
+
+        public static void AddLink(this RichTextBoxEx rtb, WorldObject obj, string title = "")
+        {
+            if (obj == null)
+            {
+                rtb.AddText(title == "" ? "Null" : title);
+            }
+            else
+            {
+                var tags = rtb.Tag as List<WorldObject>;
+                tags.Add(obj);
+                rtb.InsertLink(title == "" ? obj.ToString() : title, tags.Count.ToString(), rtb.TextLength);
+            }
+        }
 
 
         #region Pluralization/Capitalization Services

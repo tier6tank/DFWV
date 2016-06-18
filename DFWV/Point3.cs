@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Runtime;
-using System.Text;
-
-namespace DFWV
+﻿namespace DFWV
 {
     //
     // Summary:
@@ -22,15 +15,12 @@ namespace DFWV
             Z = z;
         }
 
-        public bool IsEmpty
-        {
-            get { return X == 0 && Y == 0 && Z == 0; }
-        }
+        public bool IsEmpty => X == 0 && Y == 0 && Z == 0;
 
 
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int Z { get; set; }
+        public int X { get; }
+        public int Y { get; }
+        public int Z { get; }
 
 
         public override bool Equals(object obj)

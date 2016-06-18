@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Design;
-using System.Linq;
 using System.Xml.Linq;
 using DFWV.Annotations;
 using DFWV.WorldClasses.HistoricalEventClasses;
@@ -12,18 +10,18 @@ namespace DFWV.WorldClasses
 {
     public class Engraving : XMLObject
     {
-        private int? ArtistID { get; set; }
+        private int? ArtistID { get; }
         public HistoricalFigure Artist { get; set; }
-        private int? SkillRating { get; set; }
+        private int? SkillRating { get; }
         public Point3 Coords { get; set; }
         override public Point Location => Point.Empty;
-        private int? TileID { get; set; }
-        private int? ArtID { get; set; }
-        private int? ArtSubID { get; set; }
-        private int? Quality { get; set; }
+        private int? TileID { get; }
+        private int? ArtID { get; }
+        private int? ArtSubID { get; }
+        private int? Quality { get; }
         private string Position { get; set; }
-        private bool Hidden { get; set; }
-        private int? CreatedEventID { get; set; }
+        private bool Hidden { get; }
+        private int? CreatedEventID { get; }
         public HE_MasterpieceEngraving CreatedEvent { get; set; }
 
         [UsedImplicitly]
@@ -91,7 +89,7 @@ namespace DFWV.WorldClasses
             frm.grpEngraving.Text = ToString();
             frm.grpEngraving.Show();
 #if DEBUG
-            frm.grpEngraving.Text += string.Format(" - ID: {0}", Id);
+            frm.grpEngraving.Text += $" - ID: {Id}";
 #endif
             frm.lblEngravingArtist.Data = Artist;
             frm.lblEngravingSkill.Text = SkillRating.ToString();
@@ -139,13 +137,5 @@ namespace DFWV.WorldClasses
         {
             
         }
-
-        public override string ToString()
-        {
-            return base.ToString();
-        }
-
     }
-
-
 }

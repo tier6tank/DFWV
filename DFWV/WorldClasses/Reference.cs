@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
 
 namespace DFWV.WorldClasses
@@ -386,7 +384,7 @@ namespace DFWV.WorldClasses
                     throw new ArgumentOutOfRangeException();
             }
             if (refObject != null)
-                return prefixText + refObject.ToString();
+                return prefixText + refObject;
             if (prefixText != "Reference: ")
                 return prefixText + Id;
             return $"{Enum.GetName(typeof (ReferenceType), Type).Replace("_", " ").ToLower().ToTitleCase()} reference " + Id;

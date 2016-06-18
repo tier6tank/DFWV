@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using DFWV.Controls;
 using DFWV.WorldClasses;
 using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalEventClasses;
@@ -483,11 +484,7 @@ namespace DFWV
                 var subTypeGroups = itemGrouping.GroupBy(st => st.ItemSubType).OrderBy(st => st.Key);
                 foreach (var subTypeGroup in subTypeGroups)
                 {
-                    TreeNode subTypeNode;
-                    if (subTypeGroup.Key == "")
-                        subTypeNode = typeNode;
-                    else
-                        subTypeNode = new TreeNode(subTypeGroup.Key.ToTitleCase());
+                    var subTypeNode = subTypeGroup.Key == "" ? typeNode : new TreeNode(subTypeGroup.Key.ToTitleCase());
 
                     var subTypeCount = 0;
 
@@ -1000,6 +997,7 @@ namespace DFWV
         /// </summary>
         static void FamiliesCounted()
         {
+           
             Program.Log(LogType.Status, "Families Counted");
         }
 
@@ -2198,6 +2196,39 @@ namespace DFWV
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+
+        }
+
+        private void rtbHistoricalFigureSummary_LinkClicked(object sender, LinkClickedEventArgs e)
+        {
+            var tagId = Convert.ToInt32(e.LinkText.Split('#').Last()) - 1;
+            var objList = ((sender as RichTextBoxEx).Tag as List<WorldObject>);
+            objList[tagId].Select(this);
+        }
+
+        private void PositionChildren(HistoricalFigure hf, Dictionary<int, int> curX)
+        {
+            const int GAP = 7;
+            if (hf.Children != null)
+            {
+                if (hf.Children.First().Father != hf)
+                    return;
+                int gen = hf.Generation.Value;
+                int curY = GAP * (gen + 1);
+                foreach (var child in hf.Children)
+                {
+                    if (child.mapPt == Point.Empty)
+                    {
+                        if (!curX.ContainsKey(child.Generation.Value))
+                            curX.Add(child.Generation.Value, GAP);
+                        if (curX[child.Generation.Value] <= curX[gen])
+                            curX[child.Generation.Value] = curX[gen];
+                        else
+                            curX[child.Generation.Value] += GAP;
+                        child.mapPt = new Point(curX[child.Generation.Value], curY + GAP);
+                    }
+                }
+            }
 
         }
 

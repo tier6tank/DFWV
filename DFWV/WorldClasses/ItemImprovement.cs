@@ -1,11 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Xml.Linq;
-using DFWV.Annotations;
-using DFWV.WorldClasses.HistoricalEventClasses;
-using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses
 {

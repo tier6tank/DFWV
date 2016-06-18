@@ -9,6 +9,17 @@ namespace DFWV.WorldClasses
         public int Year { get; }
         public int TotalSeconds { get; }
 
+        public static string[] MonthNames = {
+            "ERROR", "Granite", "Slate", "Felsite", "Hematite", "Malachite", "Galena", "Limestone", "Sandstone", "Timber",
+            "Moonstone", "Opal", "Obsidian"
+        };
+
+        public static string[] NumberSuffix =
+        {
+            "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th", "th", "th", "th", "th", "th", "th", "th", "th",
+            "th", "th", "th", "st", "nd", "rd", "th", "th", "th", "th", "th"
+        };
+
         // The last year in the World
         public static WorldTime Present;
 
@@ -65,6 +76,20 @@ namespace DFWV.WorldClasses
             if (Year == -1)
                 return "Before Time";
             return (day + 1) + "." + (month + 1) + "." + Year;
+        }
+
+        public string ToLongString()
+        {
+            const int secPerDay = 1200;
+            const int dayPerMonth = 28;
+            var month = TotalSeconds / secPerDay / dayPerMonth;
+            var day = (TotalSeconds - (month * secPerDay * dayPerMonth)) / secPerDay + 1;
+            month++;
+            if (Year == -1)
+                return "Before Time";
+            if (TotalSeconds == 0)
+                return $"in {Year}";
+            return $"{MonthNames[month]} {day}, {Year}";
         }
 
 

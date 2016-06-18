@@ -439,7 +439,15 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             location.Y += 20;
         }
-        
+
+        internal static void EventLabel(MainForm frm, Control parent, ref Point location, string caption, int? data)
+        {
+            if (!data.HasValue)
+                return;
+            EventLabel(frm, parent, ref location, caption, data.ToString());
+        }
+
+
         internal static void EventLabel(MainForm frm, Control parent, ref Point location, string caption, WorldObject data, string dataCaption = "")
         {
             if (data == null)

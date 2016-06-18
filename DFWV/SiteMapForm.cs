@@ -28,11 +28,13 @@ namespace DFWV
                     picSiteMap.SizeMode = PictureBoxSizeMode.AutoSize;
                     Width = picSiteMap.Right + 27;
                     Height = Math.Max(picSiteMap.Bottom, picSiteMapLegend.Bottom) + 51;
-                    CurLegend = Site.Types[_site.Type.Value].Contains("dark") ? _world.MapLegends["site_color_key_dark"] : _world.MapLegends["site_color_key"];
-                    CurLegend.DrawTo(picSiteMapLegend);
-
+                    CurLegend = _site.Type != null && Site.Types[_site.Type.Value].Contains("dark") ? _world.MapLegends["site_color_key_dark"] : _world.MapLegends["site_color_key"];
+                    CurLegend?.DrawTo(picSiteMapLegend);
                 }
-                lblSiteName.Text = $"{_site.Name} \"{_site.AltName}\" ({Site.Types[_site.Type.Value]})";
+                if (_site.Type != null)
+                    lblSiteName.Text = $"{_site.Name} \"{_site.AltName}\" ({Site.Types[_site.Type.Value]})";
+                else
+                    lblSiteName.Text = $"{_site.Name} \"{_site.AltName}\"";
             }
         }
 

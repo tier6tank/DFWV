@@ -1,13 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Design;
-using System.Linq;
-using System.Windows.Forms;
 using System.Xml.Linq;
 using DFWV.Annotations;
-using DFWV.WorldClasses.EntityClasses;
-using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses
 {
@@ -15,7 +9,7 @@ namespace DFWV.WorldClasses
     {
         override public Point Location => Point.Empty;
         public string Title { get; set; }
-        private int? AuthorID { get; set; }
+        private int? AuthorID { get; }
         public Unit Author { get; set; }
         public static List<string> Types = new List<string>();
         public int? Type { get; set; }
@@ -95,7 +89,7 @@ namespace DFWV.WorldClasses
             frm.grpWrittenContent.Text = ToString();
             frm.grpWrittenContent.Show();
 #if DEBUG
-            frm.grpWrittenContent.Text += string.Format(" - ID: {0}", Id);
+            frm.grpWrittenContent.Text += $" - ID: {Id}";
 #endif
             frm.lblWrittenContentTitle.Text = ToString();
             frm.lblWrittenContentAuthor.Data = Author;

@@ -30,7 +30,7 @@ namespace DFWV.WorldClasses
         public char QualityLabel => QualityLabels[Quality];
 
         public char ImprovementQualityLabel
-            => Improvements == null ? '\0' : QualityLabels[(ItemQuality)Improvements.Max(i => i.Quality)];
+            => Improvements == null ? '\0' : QualityLabels[Improvements.Max(i => i.Quality)];
 
         public string ImprovementPrefix => Improvements == null ? "" : (ImprovementQualityLabel == '\0' ? '\u00AB'.ToString() : new string(new char[] { ImprovementQualityLabel, '\u00AB'}));
         public string ImprovementSuffix => Improvements == null ? "" : (ImprovementQualityLabel == '\0' ? '\u00BB'.ToString() : new string(new char[] { '\u00BB', ImprovementQualityLabel, }));
@@ -56,7 +56,7 @@ namespace DFWV.WorldClasses
         public int? MasterpieceEventID { get; set; }
         public HistoricalEvent MasterpieceEvent { get; set; }
         public static List<string> Flags = new List<string>();
-        private List<short> Flag { get; set; }
+        private List<short> Flag { get; }
         public double Temperature { get; set; }
         public int? TopicId { get; set; }
         public int? EngravingType { get; set; }
@@ -71,8 +71,8 @@ namespace DFWV.WorldClasses
         public int? HistFigureId { get; set; }
         public int? BoneMat { get; set; }
         public int? Weight { get; set; }
-        private List<ItemIngredient> Ingredients { get; set; }
-        private List<ItemImprovement> Improvements { get; set; }
+        private List<ItemIngredient> Ingredients { get; }
+        private List<ItemImprovement> Improvements { get; }
         public int? ImageId { get; set; }
         public int? ImageSubId { get; set; }
         public int? ImageCivId { get; set; }
@@ -290,13 +290,13 @@ namespace DFWV.WorldClasses
             var AgeTime = new WorldTime(0, Age).ToString().Split('.').Select(x => Convert.ToInt32(x)).ToArray();
 
             if (AgeTime[2] > 0)
-                frm.lblItemAge.Text = AgeTime[2] + " year" + (AgeTime[2] > 0 ? "s" : "");
+                frm.lblItemAge.Text = AgeTime[2] + @" year" + (AgeTime[2] > 0 ? "s" : "");
             else if (AgeTime[1] > 1)
-                frm.lblItemAge.Text = AgeTime[1] - 1 + " month" + (AgeTime[1] > 1 ? "s" : "");
+                frm.lblItemAge.Text = AgeTime[1] - 1 + @" month" + (AgeTime[1] > 1 ? "s" : "");
             else if (AgeTime[0] > 1)
-                frm.lblItemAge.Text = AgeTime[0] - 1 + " day" + (AgeTime[0] > 1 ? "s" : "");
+                frm.lblItemAge.Text = AgeTime[0] - 1 + @" day" + (AgeTime[0] > 1 ? "s" : "");
             else if (Age.HasValue)
-                frm.lblItemAge.Text = Age + " seconds";
+                frm.lblItemAge.Text = Age + @" seconds";
             else
                 frm.lblItemAge.Text = "";
 

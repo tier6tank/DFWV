@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Linq;
 using System.Xml.Linq;
 using DFWV.Annotations;
-using DFWV.WorldClasses.HistoricalEventClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses
@@ -12,10 +11,10 @@ namespace DFWV.WorldClasses
     public class Building : XMLObject
     {
         public Point3 CoordsCenter { get; set; }
-        override public Point Location { get { return Point.Empty; } }
+        override public Point Location => Point.Empty;
         public Rectangle Rect { get; set; }
         private int? Z { get; set; }
-        private int? Mat { get; set; }
+        private int? Mat { get; }
 
         [UsedImplicitly]
         public string Material => Mat.HasValue ? Item.Materials[Mat.Value] : "";
@@ -23,13 +22,13 @@ namespace DFWV.WorldClasses
         public Race Race { get; set; }
         [UsedImplicitly]
         public string RaceName => Race != null ? Race.Name : "";
-        private int? BuildingTypeID { get; set; }
+        private int? BuildingTypeID { get; }
         public string Type => BuildingTypeID.HasValue ? BuildingTypes[BuildingTypeID.Value] : "";
         public static List<string> BuildingTypes = new List<string>();
-        private int? BuildingSubTypeID { get; set; }
+        private int? BuildingSubTypeID { get; }
         public string SubType => BuildingSubTypeID.HasValue ? BuildingSubTypes[BuildingSubTypeID.Value]: "";
         public static List<string> BuildingSubTypes =  new List<string>();
-        private int? OwnerUnitID { get; set; }
+        private int? OwnerUnitID { get; }
         public Unit Owner { get; set; }
         public int? CorpseUnitID { get; set; }
         public Unit CorpseUnit { get; set; }

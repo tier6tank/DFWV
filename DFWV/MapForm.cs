@@ -543,11 +543,9 @@ namespace DFWV
             var rnd = new Random();
             foreach (var entity in _world.Entities.Values.Where(entity => entity.Claims != null && entity.Claims.Count > 0))
             {
-                Color thisColor;
-                if (entity.Civilization == null)
-                    continue; //thisColor = Color.FromArgb(rnd.Next(150) + 100, rnd.Next(150) + 100, rnd.Next(150) + 100);
-                else
-                    thisColor  = Color.FromArgb(100, entity.Civilization.Color);
+                var thisColor = entity.Civilization == null ? 
+                    Color.FromArgb(rnd.Next(150) + 100, rnd.Next(150) + 100, rnd.Next(150) + 100) :
+                    Color.FromArgb(100, entity.Civilization.Color);
                 using (var p = new Pen(thisColor))
                 {
                     var topLeft = new Point();

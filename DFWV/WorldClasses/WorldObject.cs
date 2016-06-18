@@ -37,6 +37,5 @@ namespace DFWV.WorldClasses
         }
 
         internal abstract void Export(string table);
-
     }
 }

@@ -14,7 +14,7 @@ namespace DFWV.WorldClasses
     {
 
         public static List<string> JobTypes = new List<string>();
-        public string AltName { get; private set; }
+        public string AltName { get; }
 
         [UsedImplicitly]
         public string Profession => ProfessionId.HasValue ? JobTypes[ProfessionId.Value] : "";
@@ -23,23 +23,23 @@ namespace DFWV.WorldClasses
         public Race Race { get; set; }
         [UsedImplicitly]
         public string RaceName => Race != null ? Race.Name : "";
-        private int? CasteID { get; set; }
+        private int? CasteID { get; }
         public Caste Caste { get; set; }
         public Point3 Coords { get; set; }
-        override public Point Location { get { return Point.Empty; } }
-        private int? Sex { get; set; }
-        private int? CivID { get; set; }
+        override public Point Location => Point.Empty;
+        private int? Sex { get; }
+        private int? CivID { get; }
         public Entity Civ { get; private set; }
-        private int? PopID { get; set; }
+        private int? PopID { get; }
         public EntityPopulation Population { get; private set; }
-        private int? SquadID { get; set; }
+        private int? SquadID { get; }
         public Squad Squad { get; private set; }
-        private int? OpponentID { get; set; }
+        private int? OpponentID { get; }
         public HistoricalFigure Opponent { get; private set; }
-        private int? Mood { get; set; }
-        private int? HistFigureID { get; set; }
+        private int? Mood { get; }
+        private int? HistFigureID { get; }
         public HistoricalFigure HistFigure { get; private set; }
-        private int? HistFigureID2 { get; set; }
+        private int? HistFigureID2 { get; }
         public HistoricalFigure HistFigure2 { get; private set; }
         public static List<string> Flags = new List<string>();
         public List<short> Flag { get; set; }
@@ -52,12 +52,12 @@ namespace DFWV.WorldClasses
         public Dictionary<string, int> RelationIDs { get; set; }
         public Dictionary<string, HistoricalFigure> Relations { get; set; }
         public static List<string> HealthFlags = new List<string>();
-        private List<short> HealthFlag { get; set; }
-        private List<int> UsedItemIds { get; set; }
-        private List<int> OwnedItemIds { get; set; }
-        private List<int> TradedItemIds { get; set; }
-        private List<int> OwnedBuildingIds { get; set; }
-        private List<UnitInventoryItem> InventoryItems { get; set; }
+        private List<short> HealthFlag { get; }
+        private List<int> UsedItemIds { get; }
+        private List<int> OwnedItemIds { get; }
+        private List<int> TradedItemIds { get; }
+        private List<int> OwnedBuildingIds { get; }
+        private List<UnitInventoryItem> InventoryItems { get; }
 
         [UsedImplicitly]
         public string DispNameLower => ToString().ToLower();
@@ -250,12 +250,12 @@ namespace DFWV.WorldClasses
                 frm.grpUnit.Text = ToString();
                 frm.grpUnit.Show();
 #if DEBUG
-                frm.grpUnit.Text += string.Format(" - ID: {0}", Id);
+                frm.grpUnit.Text += $" - ID: {Id}";
 #endif
 
                 frm.lblUnitName.Text = Name;
                 frm.lblUnitAltName.Text = AltName;
-                frm.lblUnitCoords.Text = string.Format("({0}, {1}, {2})", Coords.X, Coords.Y, Coords.Z);
+                frm.lblUnitCoords.Text = $"({Coords.X}, {Coords.Y}, {Coords.Z})";
                 frm.lblUnitSex.Text = Sex.ToString();
                 frm.lblUnitCiv.Data = Civ;
                 frm.lblUnitPop.Data = Population;
@@ -445,7 +445,7 @@ namespace DFWV.WorldClasses
             else
             {
                 if (Race != null)
-                    return Race.ToString() + " - " + Id;
+                    return Race + " - " + Id;
                 else
                     return base.ToString();
             }

@@ -71,7 +71,7 @@ namespace DFWV.WorldClasses
             frm.grpReport.Text = ToString();
             frm.grpReport.Show();
 #if DEBUG
-            frm.grpReport.Text += string.Format(" - ID: {0}", Id);
+            frm.grpReport.Text += $" - ID: {Id}";
 #endif
 
 

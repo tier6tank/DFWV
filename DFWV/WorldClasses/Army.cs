@@ -1,20 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Xml.Linq;
 using DFWV.Annotations;
-using DFWV.WorldClasses.HistoricalEventClasses;
 
 namespace DFWV.WorldClasses
 {
     public class Army : XMLObject
     {
-        private int? ItemID { get; set; }
+        private int? ItemID { get; }
         public Item ArmyItem { get; set; }
-        private int? ItemType { get; set; }
-        private int? ItemSubtype { get; set; }
-        private int? Mat { get; set; }
+        private int? ItemType { get; }
+        private int? ItemSubtype { get; }
+        private int? Mat { get; }
         public Point Coords { get; set; }
         override public Point Location => Point.Empty;
 
@@ -76,7 +74,7 @@ namespace DFWV.WorldClasses
                 frm.grpArmy.Text = ToString();
                 frm.grpArmy.Show();
 #if DEBUG
-                frm.grpArmy.Text += string.Format(" - ID: {0}", Id);
+                frm.grpArmy.Text += $" - ID: {Id}";
 #endif
                 frm.lblArmyLocation.Text = Coords.ToString();
                 frm.lblArmyItem.Data = ArmyItem;

@@ -1,19 +1,13 @@
-using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Design;
-using System.Linq;
 using System.Xml.Linq;
 using DFWV.Annotations;
-using DFWV.WorldClasses.EntityClasses;
-using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses
 {
     public class ArtForm : XMLObject
     {
         override public Point Location => Point.Empty;
-        public string Name { get; set; }
         public string AltName { get; set; }
 
         [UsedImplicitly]

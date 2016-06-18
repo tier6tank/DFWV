@@ -9,6 +9,7 @@ using DFWV.WorldClasses.HistoricalEventClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
 using Region = DFWV.WorldClasses.Region;
+using Squad = DFWV.WorldClasses.Squad;
 
 namespace DFWV
 {
@@ -154,7 +155,7 @@ namespace DFWV
                     testFilter.Get(world.Items.Values.ToList()).ToArray();
                 else if (thisType == typeof (Plant))
                     testFilter.Get(world.Plants.Values.ToList()).ToArray();
-                else if (thisType == typeof (WorldClasses.Squad))
+                else if (thisType == typeof (Squad))
                     testFilter.Get(world.Squads.Values.ToList()).ToArray();
                 else if (thisType == typeof (WrittenContent))
                     testFilter.Get(world.WrittenContents.Values.ToList()).ToArray();
@@ -166,8 +167,8 @@ namespace DFWV
                     testFilter.Get(world.PoeticForms.Values.ToList()).ToArray();
                 else
                 {
-                    Console.WriteLine("else if (thisType == typeof(" + thisType.Name + "))");
-                    Console.WriteLine("\ttestFilter.Get(world." + thisType.Name + "s.Values.ToList()).ToArray():");
+                    Console.WriteLine(@"else if (thisType == typeof(" + thisType.Name + @"))");
+                    Console.WriteLine(@"	testFilter.Get(world." + thisType.Name + @"s.Values.ToList()).ToArray():");
                 }
 
 

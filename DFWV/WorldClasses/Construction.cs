@@ -8,11 +8,11 @@ namespace DFWV.WorldClasses
 {
     public class Construction : XMLObject
     {
-        private Point3 Coords { get; set; }
+        private Point3 Coords { get; }
         override public Point Location => Point.Empty;
-        private int? ItemTypeId { get; set; }
+        private int? ItemTypeId { get; }
         public string ItemType => ItemTypeId.HasValue ? Item.ItemTypes[ItemTypeId.Value] : "";
-        private int? Mat { get; set; }
+        private int? Mat { get; }
         [UsedImplicitly]
         public string Material => Mat.HasValue ? Item.Materials[Mat.Value] : "";
 
@@ -62,7 +62,7 @@ namespace DFWV.WorldClasses
             frm.grpConstruction.Text = ToString();
             frm.grpConstruction.Show();
 #if DEBUG
-            frm.grpConstruction.Text += string.Format(" - ID: {0}", Id);
+            frm.grpConstruction.Text += $" - ID: {Id}";
 #endif
 
 
@@ -102,8 +102,9 @@ namespace DFWV.WorldClasses
 
         public override string ToString()
         {
-            return string.Format("{0}{1}", ItemTypeId.HasValue ? Item.ItemTypes[ItemTypeId.Value] : "",
-                Mat.HasValue ? " " + Item.Materials[Mat.Value] : "").ToTitleCase();
+            return
+                $"{(ItemTypeId.HasValue ? Item.ItemTypes[ItemTypeId.Value] : "")}{(Mat.HasValue ? " " + Item.Materials[Mat.Value] : "")}"
+                    .ToTitleCase();
         }
     }
 

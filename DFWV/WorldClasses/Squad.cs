@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Design;
-using System.Linq;
 using System.Xml.Linq;
 using DFWV.Annotations;
 using DFWV.WorldClasses.EntityClasses;
@@ -14,7 +11,7 @@ namespace DFWV.WorldClasses
     {
         override public Point Location => Point.Empty;
         public string AltName { get; set; }
-        private int? EntityID { get; set; }
+        private int? EntityID { get; }
         public Entity Entity { get; set; }
         public List<int> MemberIDs { get; set; }
         public List<HistoricalFigure> Members { get; set; }
@@ -69,7 +66,7 @@ namespace DFWV.WorldClasses
             frm.grpSquad.Text = ToString();
             frm.grpSquad.Show();
 #if DEBUG
-            frm.grpSquad.Text += string.Format(" - ID: {0}", Id);
+            frm.grpSquad.Text += $" - ID: {Id}";
 #endif
             frm.lblSquadName.Text = ToString();
             frm.lblSquadAltName.Text = AltName;
@@ -117,13 +114,5 @@ namespace DFWV.WorldClasses
         {
             
         }
-
-        public override string ToString()
-        {
-            return base.ToString();
-        }
-
     }
-
-
 }

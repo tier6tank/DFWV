@@ -3,7 +3,6 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
@@ -105,8 +104,6 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         internal override void Process()
         {
             base.Process();
-
-
         }
 
         internal override void Export(string table)
