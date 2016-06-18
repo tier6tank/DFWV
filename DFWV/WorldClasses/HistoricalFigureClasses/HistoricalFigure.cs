@@ -830,7 +830,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                 }
 
                 rtb.AddText("\n\n");
-                rtb.AddText(timer.ElapsedMilliseconds.ToString());
+                //rtb.AddText(timer.ElapsedMilliseconds.ToString());
             }
             catch (Exception e)
             {
