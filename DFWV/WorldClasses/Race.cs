@@ -12,7 +12,7 @@ namespace DFWV.WorldClasses
         [UsedImplicitly]
         public long Population { private get; set; }
         public bool IsCivilized { get; set; }
-        public int AddedOrder { get; }
+        public int AddedOrder { get; set; }
         public string Key { get; set; }
         [UsedImplicitly]
         public string PluralName { get; set; }
