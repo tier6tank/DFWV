@@ -131,6 +131,7 @@ namespace DFWV.WorldClasses.EntityClasses
         public List<Point> Claims { get; set; }
         public List<EntityPosition> Positions { get; set; }
         public List<EntityPositionAssignment> PositionAssignments { get; set; }
+        public List<EntityOccasion> Occasions { get; set; }
 
         public int? WorshipHfid { get; set; }
         public HistoricalFigure WorshipHf { get; set; }
@@ -416,6 +417,12 @@ namespace DFWV.WorldClasses.EntityClasses
                         if (MemberHfids == null)
                             MemberHfids = new List<int>();
                         MemberHfids.Add(valI);
+                        break;
+                    case "occasion":
+                        var newOccasion = new EntityOccasion(element, this);
+                        if (Occasions == null)
+                            Occasions = new List<EntityOccasion>();
+                        Occasions.Add(newOccasion);
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t", element, xdoc.Root.ToString());

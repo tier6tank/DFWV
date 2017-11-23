@@ -234,6 +234,7 @@ namespace DFWV.WorldClasses
         public static List<string> Types = new List<string>();
         public int? Type { get; private set; }
         public Point Coords { get; }
+        public Rectangle Area { get; }
         private string StructureList { get; set; }
         public List<Structure> Structures { get; set; }
 
@@ -267,6 +268,14 @@ namespace DFWV.WorldClasses
                         Coords = new Point(
                             Convert.ToInt32(val.Split(',')[0]),
                             Convert.ToInt32(val.Split(',')[1]));
+                        break;
+                    case "rectangle":
+                        var left = Convert.ToInt32(val.Split(':')[0].Split(',')[0]);
+                        var top = Convert.ToInt32(val.Split(':')[0].Split(',')[1]);
+                        var right = Convert.ToInt32(val.Split(':')[1].Split(',')[0]);
+                        var bottom = Convert.ToInt32(val.Split(':')[1].Split(',')[1]);
+
+                        Area = new Rectangle(left, top, right - left, bottom - top);
                         break;
                     case "structures":
                         StructureList = val;

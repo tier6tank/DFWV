@@ -212,7 +212,7 @@ namespace DFWV
                             case "landmasses":
                                 PlusLoadSection(world.Landmasses, world, xReader);
                                 break;
-                            case "mountains":
+                            case "mountain_peaks":
                                 PlusLoadSection(world.Mountains, world, xReader);
                                 break;
                             case "rivers":

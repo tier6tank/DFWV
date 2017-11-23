@@ -3,17 +3,22 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Xml.Linq;
 using DFWV.Annotations;
+using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses
 {
     public class Army : XMLObject
     {
+        private int? EntityId { get; }
+        private Entity EntityController { get; set; }
+
         private int? ItemID { get; }
         public Item ArmyItem { get; set; }
         private int? ItemType { get; }
         private int? ItemSubtype { get; }
         private int? Mat { get; }
-        public Point Coords { get; set; }
+        public Point3 Coords { get; set; }
+        public Point3 LastCoords { get; set; }
         override public Point Location => Point.Empty;
 
         [UsedImplicitly]
@@ -31,6 +36,9 @@ namespace DFWV.WorldClasses
                 switch (element.Name.LocalName)
                 {
                     case "id":
+                        break;
+                    case "controller_entity_id":
+                        EntityId = valI;
                         break;
                     case "item":
                         if (valI != -1)
@@ -51,10 +59,17 @@ namespace DFWV.WorldClasses
                             Item.Materials.Add(val);
                         Mat = Item.Materials.IndexOf(val);
                         break;
-                    case "coords":
-                        Coords = new Point(
+                    case "pos":
+                        Coords = new Point3(
                             Convert.ToInt32(val.Split(',')[0]),
-                            Convert.ToInt32(val.Split(',')[1]));
+                            Convert.ToInt32(val.Split(',')[1]),
+                            Convert.ToInt32(val.Split(',')[2]));
+                        break;
+                    case "last_pos":
+                        LastCoords = new Point3(
+                            Convert.ToInt32(val.Split(',')[0]),
+                            Convert.ToInt32(val.Split(',')[1]),
+                            Convert.ToInt32(val.Split(',')[2]));
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
@@ -127,6 +142,8 @@ namespace DFWV.WorldClasses
         {
             if (ItemID.HasValue)
                 ArmyItem = World.Items[ItemID.Value];
+            if (EntityId.HasValue && World.Entities.ContainsKey(EntityId.Value))
+                EntityController = World.Entities[EntityId.Value];
         }
 
         internal override void Process()

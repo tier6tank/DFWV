@@ -132,7 +132,7 @@ namespace DFWV.WorldClasses
 
         public override string ToString()
         {
-            return Title;
+            return Title ?? "Written Content";
         }
 
     }

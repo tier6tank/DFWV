@@ -36,12 +36,12 @@ namespace DFWV.WorldClasses
                     case "name":
                         Name = val;
                         break;
-                    case "coord_min":
+                    case "coord_1":
                         CoordMin = new Point(
                             Convert.ToInt32(val.Split(',')[0]),
                             Convert.ToInt32(val.Split(',')[1]));
                         break;
-                    case "coord_max":
+                    case "coord_2":
                         CoordMax = new Point(
                             Convert.ToInt32(val.Split(',')[0]),
                             Convert.ToInt32(val.Split(',')[1]));

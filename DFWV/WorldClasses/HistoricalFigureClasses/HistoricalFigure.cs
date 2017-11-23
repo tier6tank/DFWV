@@ -834,7 +834,6 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             }
             catch (Exception e)
             {
-
                 rtb.Clear();
                 rtb.AddText("Error generating HF Summary: " + e);
             }

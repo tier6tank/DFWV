@@ -98,7 +98,7 @@ namespace DFWV.WorldClasses
 
         public override string ToString()
         {
-            return AltName;
+            return Name ?? AltName ?? "Art Form";
         }
 
     }
