@@ -278,9 +278,18 @@ namespace DFWV.WorldClasses
                         Area = new Rectangle(left, top, right - left, bottom - top);
                         break;
                     case "structures":
-                        StructureList = val;
-                        if (val != "")
-                            Program.Log(LogType.Warning, $"Unexpected structures list for site: {Name} - {val}");
+                        if (element.HasElements)
+                        {
+                            Structures = new List<Structure>();
+                            foreach (var child in element.Descendants())
+                            {
+                                Structures.Add(new Structure(child, this));
+                            }
+                        }
+                        else
+                        {
+
+                        }
                         break;
                     case "civ_id":
                         if (valI != -1)

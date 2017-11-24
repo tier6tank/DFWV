@@ -16,6 +16,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private HistoricalFigure Unit { get; set; }
         private int? ArtifactId { get; }
         private Artifact Artifact { get; set; }
+        public int? Reason { get; set; }
+        public static List<string> Reasons = new List<string>();
+        public int? ReasonId { get; set; }
+        public int? SubregionId { get; set; }
+        public Region Subregion { get; private set; }
+        public int? FeatureLayerId { get; set; }
 
         override public Point Location => Site?.Location ?? Point.Empty;
 
@@ -50,13 +56,28 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "unit_id":
                         UnitId = valI;
                         break;
+                    case "reason":
+                        if (!Reasons.Contains(val))
+                            Reasons.Add(val);
+                        Reason = Reasons.IndexOf(val);
+                        break;
+                    case "reason_id":
+                        ReasonId = valI;
+                        break;
                     case "hist_figure_id":
                         HistFigureId = valI;
                         break;
                     case "site_id":
                         SiteId = valI;
                         break;
-
+                    case "subregion_id":
+                        if (valI != -1)
+                            SubregionId = valI;
+                        break;
+                    case "feature_layer_id":
+                        if (valI != -1)
+                            FeatureLayerId = valI;
+                        break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;

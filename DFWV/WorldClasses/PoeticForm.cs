@@ -4,12 +4,25 @@ namespace DFWV.WorldClasses
 {
     public class PoeticForm : ArtForm
     {
-
-
         public PoeticForm(XDocument xdoc, World world)
             : base(xdoc, world)
         {
-
+            foreach (var element in xdoc.Root.Elements())
+            {
+                var val = element.Value.Trim();
+                int valI;
+                int.TryParse(val, out valI);
+                switch (element.Name.LocalName)
+                {
+                    case "id":
+                    case "description":
+                        break;
+                        
+                    default:
+                        DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
+                        break;
+                }
+            }
         }
 
         public override void Select(MainForm frm)

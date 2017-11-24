@@ -12,6 +12,7 @@ namespace DFWV.WorldClasses
 
         [UsedImplicitly]
         public string DispNameLower => ToString().ToLower();
+        public string Description { get; set; }
 
         public ArtForm(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -30,6 +31,9 @@ namespace DFWV.WorldClasses
                         break;
                     case "altname":
                         AltName = val;
+                        break;
+                    case "description":
+                        Description = val;
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());

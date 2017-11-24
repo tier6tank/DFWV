@@ -164,7 +164,11 @@
     <Compile Include="WorldClasses\EntityClasses\EntityOccasion.cs" />
     <Compile Include="WorldClasses\EntityClasses\EntityPositionAssignment.cs" />
     <Compile Include="WorldClasses\EntityClasses\EntityPosition.cs" />
+    <Compile Include="WorldClasses\HistoricalEventClasses\HE_ArtifactFound.cs" />
     <Compile Include="WorldClasses\HistoricalEventClasses\HE_ArtifactDestroyed.cs" />
+    <Compile Include="WorldClasses\HistoricalEventClasses\HE_ArtifactClaimFormed.cs" />
+    <Compile Include="WorldClasses\HistoricalEventClasses\HE_ArtifactGiven.cs" />
+    <Compile Include="WorldClasses\HistoricalEventClasses\HE_HFFormsReputationRelationship.cs" />
     <Compile Include="WorldClasses\HistoricalEventClasses\HE_RegionPopIncorporatedIntoEntity.cs" />
     <Compile Include="WorldClasses\HistoricalEventClasses\HE_MusicalFormCreated.cs" />
     <Compile Include="WorldClasses\HistoricalEventClasses\HE_KnowledgeDiscovered.cs" />

@@ -231,7 +231,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                 int.TryParse(val, out valI);
                 string[] exclude = { "entity_link", "hf_link", "hf_skill", "site_link", "entity_position_link",
                                    "entity_former_position_link", "entity_reputation", "entity_squad_link",
-                                   "entity_former_squad_link", "relationship_profile_hf"};
+                                   "entity_former_squad_link", "relationship_profile_hf_visual"};
                 if (val.Contains("\n") && !exclude.Contains(element.Name.LocalName))
                     Program.Log(LogType.Warning, "Historical Figures." + element.Name.LocalName + " has unknown sub items!");
                 switch (element.Name.LocalName)
@@ -347,7 +347,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                             EntityPositionLinks = new List<EntityPositionLink>();
                         EntityPositionLinks.Add(new EntityPositionLink(element, this));
                         break;
-                    case "relationship_profile_hf":
+                    case "relationship_profile_hf_visual":
                         if (RelationshipProfileHFs == null)
                             RelationshipProfileHFs = new List<RelationshipProfileHF>();
                         RelationshipProfileHFs.Add(new RelationshipProfileHF(element, this));

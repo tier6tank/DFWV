@@ -224,13 +224,20 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     return new HE_ArtifactDestroyed(xdoc, world);
                 case "regionpop incorporated into entity":
                     return new HE_RegionPopIncorporatedIntoEntity(xdoc, world);
+                case "hfs formed reputation relationship":
+                    return new HE_HFFormsReputationRelationship(xdoc, world);
+                case "artifact claim formed":
+                    return new HE_ArtifactClaimFormed(xdoc, world);
+                case "artifact given":
+                    return new HE_ArtifactGiven(xdoc, world);
+                case "artifact found":
+                    return new HE_ArtifactFound(xdoc, world);
 
                 // ReSharper disable RedundantCaseLabel
                 case "agreement void": //Unknown events
                 case "hf razed structure":
                 case "remove hf hf link":
                 case "artifact hidden":
-                case "artifact found":
                 case "artifact recovered":
                 case "artifact dropped":
                 case "entity incorporated":

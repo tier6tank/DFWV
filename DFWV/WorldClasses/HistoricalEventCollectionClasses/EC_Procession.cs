@@ -9,6 +9,8 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
     public class EC_Procession : HistoricalEventCollection
     {
         private int Ordinal { get; }
+        private List<int> EventCol_ { get; }
+        private List<HistoricalEventCollection> EventCol { get; set; }
 
         override public Point Location => Point.Empty;
 
@@ -31,7 +33,11 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                     case "event":
                     case "type":
                         break;
-
+                    case "eventcol":
+                        if (EventCol_ == null)
+                            EventCol_ = new List<int>();
+                        EventCol_.Add(valI);
+                        break;
                     case "ordinal":
                         Ordinal = valI;
                         break;
@@ -46,6 +52,10 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
         internal override void Link()
         {
+            if (EventCol_ != null)
+                EventCol = new List<HistoricalEventCollection>();
+            LinkFieldList(EventCol_,
+                EventCol, World.HistoricalEventCollections);
             base.Link();
         }
 

@@ -11,6 +11,7 @@ namespace DFWV.WorldClasses
     {
         private Site Site { get; }
         public int SiteId { get; set; }
+        public int LocalId { get; set; }
 
         [UsedImplicitly]
         public new string Name { get; set; }
@@ -18,6 +19,7 @@ namespace DFWV.WorldClasses
         public static List<string> Types = new List<string>();
         public int? Type { get; set; }
         public static int NumStructures;
+        private XElement child;
 
         public List<HistoricalEvent> Events { get; set; }
 
@@ -45,6 +47,42 @@ namespace DFWV.WorldClasses
             Id = NumStructures;
             NumStructures++;
             World = world;
+        }
+
+        public Structure(XElement structureXML, Site site) : base(site.World)
+        {
+            Site = site;
+            SiteId = site.Id;
+
+            World = site.World;
+
+
+            foreach (var strElement in structureXML.Elements())
+            {
+                var strval = strElement.Value;
+                int strvalI;
+                int.TryParse(strval, out strvalI);
+                switch (strElement.Name.LocalName)
+                {
+                    case "local_id":
+                        LocalId = strvalI;
+                        break;
+                    case "type":
+                        if (!Types.Contains(strval))
+                            Types.Add(strval);
+                        Type = Types.IndexOf(strval);
+                        break;
+                    case "name":
+                        Name = strval;
+                        break;
+                    default:
+                        Program.Log(LogType.Warning, $"Unexpected structure element : {strElement.Name.LocalName}");
+                        break;
+
+                }
+            }
+
+
         }
 
         public override void Select(MainForm frm)

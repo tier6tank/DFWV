@@ -21,6 +21,9 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         public int LastMeetYear { get; set; }
         public int LastMeetSeconds { get; set; }
         public int RepFriendly { get; set; }
+        public int KnownIdentityID { get; set; }
+        public int RepBuddy { get; set; }
+        public int RepInformationSource { get; set; }
 
         public HistoricalFigure ThisHf { get; }
 
@@ -28,15 +31,42 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
 
         public RelationshipProfileHF(XContainer data, HistoricalFigure hf)
         {
-
-            RelationshipHfid = Convert.ToInt32(data.Element("hf_id").Value);
-            MeetCount = Convert.ToInt32(data.Element("meet_count").Value);
-            LastMeetYear = Convert.ToInt32(data.Element("last_meet_year").Value);
-            LastMeetSeconds = Convert.ToInt32(data.Element("last_meet_seconds72").Value);
-            if (data.Elements("rep_friendly").Any())
-                RepFriendly = Convert.ToInt32(data.Element("rep_friendly").Value);
-            else
-                RepFriendly = -1;
+            foreach (var element in data.Elements())
+            {
+                var val = element.Value;
+                int valI;
+                int.TryParse(val, out valI);
+                switch (element.Name.LocalName)
+                {
+                    case "hf_id":
+                        RelationshipHfid = valI;
+                        break;
+                    case "meet_count":
+                        MeetCount = valI;
+                        break;
+                    case "last_meet_year":
+                        LastMeetYear = valI;
+                        break;
+                    case "last_meet_seconds72":
+                        LastMeetSeconds = valI;
+                        break;
+                    case "rep_friendly":
+                        RepFriendly = valI;
+                        break;
+                    case "known_identity_id":
+                        KnownIdentityID = valI;
+                        break;
+                    case "rep_buddy":
+                        RepBuddy = valI;
+                        break;
+                    case "rep_information_source":
+                        RepInformationSource = valI;
+                        break;
+                    default:
+                        DFXMLParser.UnexpectedXmlElement("relationship_profile_hf_visual", element, element.ToString());
+                        break;
+                }
+            }
 
             ThisHf = hf;
         }

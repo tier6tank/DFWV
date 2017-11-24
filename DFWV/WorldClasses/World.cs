@@ -1346,7 +1346,7 @@ namespace DFWV.WorldClasses
             HFSkill.Skills = new List<string>();
             HFSiteLink.LinkTypes = new List<string>();
 
-            WrittenContent.Types = new List<string>();
+            WrittenContent.Forms = new List<string>();
             WrittenContent.Styles = new List<string>();
             Building.Flags = new List<string>();
             Building.BuildingTypes = new List<string>();

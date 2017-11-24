@@ -9,14 +9,18 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     public class HE_ChangeHFState : HistoricalEvent
     {
+        public int? State { get; set; }
+        public static List<string> States = new List<string>();
+        public int? Reason { get; set; }
+        public static List<string> Reasons = new List<string>();
+        public int? Mood { get; set; }
+        public static List<string> Moods = new List<string>();
+        public int? Hfid { get; set; }
+        public HistoricalFigure Hf { get; set; }
         public int? SiteId { get; set; }
         public Site Site { get; private set; }
         public int? SubregionId { get; set; }
         public Region Subregion { get; private set; }
-        public int? State { get; set; }
-        public static List<string> States = new List<string>();
-        public int? Hfid { get; set; }
-        public HistoricalFigure Hf { get; set; }
         public int? FeatureLayerId { get; set; }
         public Point Coords { get; }
 
@@ -59,6 +63,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                             States.Add(val);
                         State = States.IndexOf(val);
                         break;
+                    case "reason":
+                        if (!Reasons.Contains(val))
+                            Reasons.Add(val);
+                        Reason = Reasons.IndexOf(val);
+                        break;
+                    case "mood":
+                        if (!Moods.Contains(val))
+                            Moods.Add(val);
+                        Mood = Moods.IndexOf(val);
+                        break;
                     case "site_id":
                         if (valI != -1)
                             SiteId = valI;
@@ -90,6 +104,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Site = World.Sites[SiteId.Value];
             if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
                 Subregion = World.Regions[SubregionId.Value];
+
         }
 
 

@@ -108,6 +108,18 @@ namespace DFWV
                             case "historical_eras":
                                 LoadSection(world.HistoricalEras, world, xReader);
                                 break;
+                            case "written_contents":
+                                LoadSection(world.WrittenContents, world, xReader);
+                                break;
+                            case "poetic_forms":
+                                LoadSection(world.PoeticForms, world, xReader);
+                                break;
+                            case "musical_forms":
+                                LoadSection(world.MusicalForms, world, xReader);
+                                break;
+                            case "dance_forms":
+                                LoadSection(world.DanceForms, world, xReader);
+                                break;
                             default:
                                 Program.Log(LogType.Error, "Unknown XML Section: " + xReader.Name);
                                 xReader.Skip();

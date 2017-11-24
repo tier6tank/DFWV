@@ -21,6 +21,11 @@ namespace DFWV.WorldClasses
         private int? WritingId { get; set; }
         private WrittenContent WritenContent { get; set; }
 
+        private int? SiteID { get; set; }
+        private int? StructureLocalID { get; set; }
+        private int? HolderHFID { get; set; }
+
+
         public string Description { get; set; }
 
         public HE_ArtifactCreated CreatedEvent { get; set; }
@@ -56,6 +61,8 @@ namespace DFWV.WorldClasses
             foreach (var element in xdoc.Root.Elements())
             {
                 var val = element.Value;
+                int valI;
+                int.TryParse(val, out valI);
                 switch (element.Name.LocalName)
                 {
                     case "id":
@@ -65,6 +72,15 @@ namespace DFWV.WorldClasses
                         break;
                     case "item":
                         ItemName = val;
+                        break;
+                    case "site_id":
+                        SiteID = valI;
+                        break;
+                    case "structure_local_id":
+                        StructureLocalID = valI;
+                        break;
+                    case "holder_hfid":
+                        HolderHFID = valI;
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());

@@ -20,8 +20,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? FeatureLayerId { get; }
         private Point Coords { get; }
         private int? BuildingId { get; }
-        private Structure Structure { get; set; }
         public string BodyState { get; set; }
+        private int? StructureId { get; set; }
+        public Structure Structure { get; set; }
 
         override public Point Location => Coords;
 
@@ -62,6 +63,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "building_id":
                         BuildingId = valI;
                         break;
+                    case "structure_id":
+                        if (valI != -1)
+                            StructureId = valI;
+                        break;
                     case "subregion_id":
                         if (valI != -1)
                             SubregionId = valI;
@@ -93,15 +98,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
                 Subregion = World.Regions[SubregionId.Value];
 
-            if (!BuildingId.HasValue || Site.Structures == null) return;
-            foreach (var structure in Site.Structures.Where(structure => structure.SiteId == BuildingId))
-            {
-                Structure = structure;
-                if (Structure.Events == null)
-                    Structure.Events = new List<HistoricalEvent>();
-                Structure.Events.Add(this);
-                break;
-            }
+            if (StructureId.HasValue && World.Structures.ContainsKey(StructureId.Value))
+                Structure = World.Structures[StructureId.Value];
         }
 
 

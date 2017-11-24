@@ -28,7 +28,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? EntityId { get; set; }
         private Structure Structure { get; set; }
         private int? StructureId { get; set; }
-
+        private string Circumstance { get; set; }
+        private int? CircumstanceId { get; set; }
+        private int? HistoricalEventCollectionId { get; set; }
         override public Point Location => Site?.Location ?? Coords;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
@@ -65,6 +67,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "year":
                     case "seconds72":
                     case "type":
+                        break;
+                    case "circumstance":
+                        Circumstance = val;
+                        break;
+                    case "circumstance_id":
+                        CircumstanceId = valI;
+                        if (Circumstance == "historical_event_collection")
+                        {
+                            HistoricalEventCollectionId = valI;
+                        }
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());

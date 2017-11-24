@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Xml.Linq;
 using DFWV.Annotations;
+using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses
 {
@@ -9,11 +10,13 @@ namespace DFWV.WorldClasses
     {
         override public Point Location => Point.Empty;
         public string Title { get; set; }
-        private int? AuthorID { get; }
-        public Unit Author { get; set; }
-        public static List<string> Types = new List<string>();
-        public int? Type { get; set; }
-        public string TypeName => Type.HasValue ? Types[Type.Value] : "";
+        private int? AuthorHfid { get; }
+        public HistoricalFigure Author { get; set; }
+        private int? AuthorRoll { get; }
+        public static List<string> Forms = new List<string>();
+        public int? Form { get; set; }
+        public string FormName => Form.HasValue ? Forms[Form.Value] : "";
+        private int? FormId { get; set; }
         public static List<string> Styles = new List<string>();
         public int? Style { get; set; }
         public string StyleName => Style.HasValue ? Styles[Style.Value] : "";
@@ -43,13 +46,16 @@ namespace DFWV.WorldClasses
                     case "name":
                         Name = val;
                         break;
-                    case "type":
+                    case "form":
                         if (valI == 0)
                         {
-                            if (!Types.Contains(val))
-                                Types.Add(val);
-                            Type = Types.IndexOf(val);
+                            if (!Forms.Contains(val))
+                                Forms.Add(val);
+                            Form = Forms.IndexOf(val);
                         }
+                        break;
+                    case "form_id":
+                        FormId = valI;
                         break;
                     case "style":
                         if (!Styles.Contains(val))
@@ -65,8 +71,11 @@ namespace DFWV.WorldClasses
                     case "page_end":
                         PageEnd = valI;
                         break;
-                    case "author":
-                        AuthorID = valI;
+                    case "author_hfid":
+                        AuthorHfid = valI;
+                        break;
+                    case "author_roll":
+                        AuthorRoll = valI;
                         break;
                     case "reference":
                         if (References == null)
@@ -93,7 +102,7 @@ namespace DFWV.WorldClasses
 #endif
             frm.lblWrittenContentTitle.Text = ToString();
             frm.lblWrittenContentAuthor.Data = Author;
-            frm.lblWrittenContentType.Text = TypeName;
+            frm.lblWrittenContentType.Text = FormName;
             frm.lblWrittenContentStyle.Text = StyleName;
             frm.lblWrittenContentPages.Text = PageStart == -1 ? "" : $"{PageStart} - {PageEnd}";
 
@@ -114,8 +123,8 @@ namespace DFWV.WorldClasses
 
         internal override void Link()
         {
-            if (AuthorID.HasValue && World.Units.ContainsKey(AuthorID.Value))
-                Author = World.Units[AuthorID.Value];
+            if (AuthorHfid.HasValue && World.HistoricalFigures.ContainsKey(AuthorHfid.Value))
+                Author = World.HistoricalFigures[AuthorHfid.Value];
             References?.ForEach(x => x.Link());
         }
     
