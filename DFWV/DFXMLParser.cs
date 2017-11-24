@@ -286,7 +286,10 @@ namespace DFWV
 
             foreach (var race in newRaceList.Values.OrderBy(x=>x.Id))
             {
-                world.Races.Add(race.Id, race);
+                if (!world.Races.TryAdd(race.Id, race))
+                {
+                    Program.Log(LogType.Error, "Failed to add race - " + race.ToString() + " while sorting");
+                }
             }
         }
 
@@ -590,7 +593,11 @@ namespace DFWV
                         {
                             AddedOrder = world.Races.Keys.Min() - 1
                         };
-                        world.Races.Add(id, newRace);
+                        if (!world.Races.TryAdd(id, newRace))
+                        {
+                            Program.Log(LogType.Error, "Failed to add race - " + newRace.ToString() + " while adding Plus XML");
+                        }
+
                         return;
                     }
                     id = associatedRace.AddedOrder;

@@ -89,16 +89,26 @@ namespace DFWV
 
             foreach (var race in _world.Races.Values)
             {
-                totalLifeSpan.Add(race, new WorldTime(0));
-                _averageLifeSpan.Add(race, new WorldTime(0));
-                _deadHFs.Add(race,0);
-                _killedHFs.Add(race, 0);
-                _livingHFs.Add(race, 0);
-                _sitesPerRace.Add(race,0);
-                _civsPerRace.Add(race, 0);
-                _entGroupsPerRace.Add(race, 0);
-                _entReligionPerRace.Add(race, 0);
-                _entOtherPerRace.Add(race, 0);
+                if (!totalLifeSpan.ContainsKey(race))
+                    totalLifeSpan.Add(race, new WorldTime(0));
+                if (!_averageLifeSpan.ContainsKey(race))
+                    _averageLifeSpan.Add(race, new WorldTime(0));
+                if (!_deadHFs.ContainsKey(race))
+                    _deadHFs.Add(race,0);
+                if (!_killedHFs.ContainsKey(race))
+                    _killedHFs.Add(race, 0);
+                if (!_livingHFs.ContainsKey(race))
+                    _livingHFs.Add(race, 0);
+                if (!_sitesPerRace.ContainsKey(race))
+                    _sitesPerRace.Add(race,0);
+                if (!_civsPerRace.ContainsKey(race))
+                    _civsPerRace.Add(race, 0);
+                if (!_entGroupsPerRace.ContainsKey(race))
+                    _entGroupsPerRace.Add(race, 0);
+                if (!_entReligionPerRace.ContainsKey(race))
+                    _entReligionPerRace.Add(race, 0);
+                if (!_entOtherPerRace.ContainsKey(race))
+                    _entOtherPerRace.Add(race, 0);
             }
 
             foreach (var caste in HistoricalFigure.Castes)
@@ -231,7 +241,9 @@ namespace DFWV
 
             foreach (var race in _world.Races.Values)
             {
-                if (_deadHFs[race] > 0)
+                if (!_deadHFs.ContainsKey(race))
+                    continue;
+                if (_deadHFs.ContainsKey(race) && _deadHFs[race] > 0)
                     _averageLifeSpan[race] = totalLifeSpan[race] / _deadHFs[race];
                 else
                 {

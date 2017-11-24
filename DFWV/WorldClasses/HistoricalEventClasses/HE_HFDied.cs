@@ -29,6 +29,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         private int? ItemID { get; set; }
         private int? ArtifactId { get; set; }
+        private Artifact Artifact { get; set; }
         private int? ItemType { get; set; }
         private int? ItemSubType { get; set; }
         private int? Mat { get; set; }

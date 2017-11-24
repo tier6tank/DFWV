@@ -109,7 +109,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             EventLabel(frm, parent, ref location, "HF:", Hf);
             if (State.HasValue)
-            EventLabel(frm, parent, ref location, "State:", States[State.Value]);
+                EventLabel(frm, parent, ref location, "State:", States[State.Value]);
+            if (Reason.HasValue)
+                EventLabel(frm, parent, ref location, "Reason:", Reasons[Reason.Value]);
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Region:", Subregion);
             if (!Coords.IsEmpty)
@@ -131,7 +133,25 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         return $"{timestring} {Hf.Race} {Hf} {States[State.Value]} in {Site.AltName}.";
                     break;
                 case "wandering":
-                    return string.Format(FeatureLayerId == -1 ? "{0} {1} began wandering the wilds." : "{0} {1} began wandering the depths of the world.", timestring, Hf);
+                    if (FeatureLayerId.HasValue && FeatureLayerId.Value != -1)
+                    {
+                        return $"{timestring} {Hf} began wandering the depths of the world.";
+                    }
+                    else if (Reason.HasValue)
+                    {
+                        switch (Reasons[Reason.Value])
+                        {
+                            case "flight":
+                                return $"{timestring} {Hf} fled to {Subregion} in order to flee.";
+                            default:
+                                return $"{timestring} {Hf} began wandering the wilds.";
+                        }
+                    }
+                    else
+                    {
+                        return $"{timestring} {Hf} began wandering the wilds.";
+                    }
+                    break;
                 case "scouting":
                     if (Site != null)
                         return $"{timestring} {Hf.Race} {Hf} began scouting the area around {Site.AltName}.";
@@ -153,6 +173,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 case "refugee":
                     if (Subregion != null)
                         return $"{timestring} {Hf.Race} {Hf} fled into the {Subregion}.";
+                    break;
+                case "visiting":
+                    if (Site != null)
+                        return $"{timestring} {Hf.Race} {Hf} visited {Site.AltName} to {Reasons[Reason.Value]}.";
+                    break;
+                default:
                     break;
             }
 

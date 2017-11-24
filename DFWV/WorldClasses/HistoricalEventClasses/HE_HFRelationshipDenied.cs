@@ -21,6 +21,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         override public Point Location => Point.Empty;
 
         public int? WcId { get; set; }
+        public WorldConstruction Wc { get; set; }
         public int? ReasonId { get; set; }
         public int Reason { get; }
         public static List<string> Reasons = new List<string>();

@@ -346,12 +346,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 var detail = "";
                 if (prop.Name.Contains("_")) //Specific Hfs
                 {
-                    detail = prop.Name.Substring(prop.Name.IndexOf("_")+1);
+                    detail = prop.Name.Substring(prop.Name.IndexOf("_"));
                 }
                 var ClassProp = this.GetType().GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                    .FirstOrDefault(x => x.Name == prop.Name.Substring(0, prop.Name.IndexOf("Id")));
+                    .FirstOrDefault(x => x.Name == prop.Name.Substring(0, prop.Name.IndexOf("Id")) + detail);
                 if (ClassProp != null)
                     InternalLink(this, prop, ClassProp);
+                else
+                    Console.WriteLine("Couldn't Find"); //TODO: Remove
             }
         }
 
@@ -375,7 +377,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 }
                 else if (classProp.PropertyType == typeof(Structure))
                 {
-                    var thisSite = this.GetType().GetProperty("Site", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).GetValue(evt, null) as Site;
+                    var thisSite = this.GetType().GetProperty("Site", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(evt, null) as Site;
                     if (thisSite != null)
                         obj = thisSite.GetStructure(Id.Value);
                 }

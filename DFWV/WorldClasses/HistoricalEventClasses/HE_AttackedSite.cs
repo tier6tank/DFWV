@@ -12,7 +12,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         private int? SiteId { get; }
         private Site Site { get; set; }
-        private int? EntityId_SiteCivId { get; }
+        private int? EntityId_SiteCiv { get; }
         private Entity Entity_SiteCiv { get; set; }
 
         private int? EntityId_Attacker { get; }
@@ -71,7 +71,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         EntityId_Attacker = valI;
                         break;
                     case "site_civ_id":
-                        EntityId_SiteCivId = valI;
+                        EntityId_SiteCiv = valI;
                         break;
                     case "site_id":
                         SiteId = valI;
@@ -130,7 +130,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             {
                 Id, 
                 SiteId.DBExport(), 
-                EntityId_SiteCivId.DBExport(), 
+                EntityId_SiteCiv.DBExport(), 
                 EntityId_Attacker.DBExport(), 
                 EntityId_Defender.DBExport(), 
                 HfId_AttackerGeneral.DBExport(), 

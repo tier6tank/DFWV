@@ -587,7 +587,7 @@ namespace DFWV
         /// <param name="listBox">The listbox to fill</param>
         /// <param name="dict">The dictionary of objects to fill from</param>
         /// <param name="tabPage">The page this listbox is on</param>
-        public void FillList<T, TK>(ListBox listBox, Dictionary<TK, T> dict, TabPage tabPage) where T : WorldObject
+        public void FillList<T, TK>(ListBox listBox, IDictionary<TK, T> dict, TabPage tabPage) where T : WorldObject
         {
 
             listBox.InvokeEx(f =>
@@ -1920,7 +1920,7 @@ namespace DFWV
         /// <param name="listBox">The listbox to display into</param>
         /// <param name="dict">The dictionary we're filtering against</param>
         /// <param name="tabPage">The tabPage our listbox is on.</param>
-        private void StartFilter<T, TK>(ListBox listBox, Dictionary<TK, T> dict, TabPage tabPage) where T : WorldObject
+        private void StartFilter<T, TK>(ListBox listBox, IDictionary<TK, T> dict, TabPage tabPage) where T : WorldObject
         {
             var filterForm = new FilterForm(World, typeof(T));
             var res = filterForm.ShowDialog();
@@ -2072,7 +2072,7 @@ namespace DFWV
         /// <param name="listBox">The listbox to display into</param>
         /// <param name="dict">The dictionary we're filtering against</param>
         /// <param name="tabPage">The tabPage our listbox is on.</param>
-        private void TextFilter<T, TK>(string txt, ListBox listBox, Dictionary<TK, T> dict, TabPage tabPage) where T: WorldObject
+        private void TextFilter<T, TK>(string txt, ListBox listBox, IDictionary<TK, T> dict, TabPage tabPage) where T: WorldObject
         {
 
             var tempSelected = listBox.SelectedItem;

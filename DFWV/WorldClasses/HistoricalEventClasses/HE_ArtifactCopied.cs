@@ -94,6 +94,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
+        internal override void Link()
+        {
+            base.Link();
+
+            if (StructureId_Destination.HasValue && StructureId_Destination.Value != -1 && Site_Destination != null)
+                Structure_Destination = Site_Destination.GetStructure(StructureId_Destination.Value);
+            if (StructureId_Source.HasValue && StructureId_Source.Value != -1 && Site_Source != null)
+                Structure_Source = Site_Source.GetStructure(StructureId_Source.Value);
+        }
+
         {
             EventLabel(frm, parent, ref location, "Artifact:", Artifact);
         }

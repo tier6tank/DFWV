@@ -804,7 +804,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                     }
                 }
 
-                if (Dead)
+                if (Dead && DiedEvent != null)
                 {
                     //HE_HFDied.Causes[DiedEvent.Cause]
                     if (DiedEvent.Hf_Slayer != null)
@@ -1449,6 +1449,10 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             }
         }
 
-    }
 
+        public override string ToString()
+        {
+            return base.ToString().Replace(" The ", " the ");
+        }
+    }
 }

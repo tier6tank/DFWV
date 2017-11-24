@@ -12,7 +12,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? SiteId { get; }
         public Site Site { get; private set; }
         private int? EntityId_SiteCiv { get; }
-        public Entity Entity_SIteCiv { get; private set; }
+        public Entity Entity_SiteCiv { get; private set; }
         private int? EntityId_Attacker { get; }
         public Entity Entity_Attacker { get; private set; }
         private int? EntityId_Defender { get; }
@@ -24,7 +24,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get
             {
-                yield return Entity_SIteCiv;
+                yield return Entity_SiteCiv;
                 yield return Entity_Attacker;
                 yield return Entity_Defender;
             }
@@ -75,7 +75,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             EventLabel(frm, parent, ref location, "Attacker:", Entity_Attacker);
             EventLabel(frm, parent, ref location, "Defender:", Entity_Defender);
-            EventLabel(frm, parent, ref location, "Owner:", Entity_SIteCiv);
+            EventLabel(frm, parent, ref location, "Owner:", Entity_SiteCiv);
             EventLabel(frm, parent, ref location, "Site:", Site);
         }
 
@@ -84,7 +84,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             return
-                $"{timestring} {Entity_Attacker} secured tribute from {Entity_SIteCiv} of {Entity_Defender}, to be delivered from {Site.AltName}.";
+                $"{timestring} {Entity_Attacker} secured tribute from {Entity_SiteCiv} of {Entity_Defender}, to be delivered from {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
@@ -92,7 +92,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
              
             return
-                $"{timelinestring} {Entity_Attacker} secured tribute from {Entity_SIteCiv} of {Entity_Defender}, to be delivered from {Site.AltName}.";
+                $"{timelinestring} {Entity_Attacker} secured tribute from {Entity_SiteCiv} of {Entity_Defender}, to be delivered from {Site.AltName}.";
         }
 
         internal override void Export(string table)

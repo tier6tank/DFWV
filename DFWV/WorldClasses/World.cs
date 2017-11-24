@@ -10,6 +10,8 @@ using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalEventClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace DFWV.WorldClasses 
 {
@@ -66,7 +68,7 @@ namespace DFWV.WorldClasses
         public readonly Dictionary<int, Item> Items = new Dictionary<int, Item>();
         public readonly Dictionary<int, Plant> Plants = new Dictionary<int, Plant>();
         public readonly Dictionary<int, Squad> Squads = new Dictionary<int, Squad>();
-        public readonly Dictionary<int, Race> Races = new Dictionary<int, Race>();
+        public readonly ConcurrentDictionary<int, Race> Races = new ConcurrentDictionary<int, Race>();
         public readonly Dictionary<int, WrittenContent> WrittenContents = new Dictionary<int, WrittenContent>();
         public readonly Dictionary<int, PoeticForm> PoeticForms = new Dictionary<int, PoeticForm>();
         public readonly Dictionary<int, MusicalForm> MusicalForms = new Dictionary<int, MusicalForm>();
@@ -485,11 +487,11 @@ namespace DFWV.WorldClasses
                     return race;
             }
 
-            if (ExistsRace(lname)) 
+            if (ExistsRace(lname))
                 return FindRace(lname);
 
             var newRace = new Race(lname, -(Races.Count + 1), this);
-            Races.Add(-(Races.Count + 1), newRace);
+            Races.TryAdd(-(Races.Count + 1), newRace);
             return newRace;
         }
 
@@ -590,8 +592,8 @@ namespace DFWV.WorldClasses
         {
 
             OnLinkedSectionStart(sectionName);
-            foreach (var item in list)
-                item.Link();
+            Parallel.ForEach(list, item => item.Link());
+
             OnLinkedSection(sectionName);
 
         }
