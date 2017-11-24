@@ -6,10 +6,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     class HE_Merchant : HistoricalEvent
     {
-        public int? SourceId { get; set; }
-        public Entity Source { get; set; }
-        public int? DestinationId { get; set; }
-        public Entity Destination { get; set; }
+        public int? EntityId_Source { get; set; }
+        public Entity Entity_Source { get; set; }
+        public int? EntityId_Destination { get; set; }
+        public Entity Entity_Destination { get; set; }
         public int? SiteId { get; set; }
         public Site Site { get; set; }
 
@@ -17,8 +17,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get
             {
-                yield return Source;
-                yield return Destination;
+                yield return Entity_Source;
+                yield return Entity_Destination;
             }
         }
         public override IEnumerable<Site> SitesInvolved
@@ -64,10 +64,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "source":
-                        SourceId = valI;
+                        EntityId_Source = valI;
                         break;
                     case "destination":
-                        DestinationId = valI;
+                        EntityId_Destination = valI;
                         break;
                     case "site":
                         SiteId = valI;
@@ -79,23 +79,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        internal override void Link()
-        {
-            base.Link();
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (DestinationId.HasValue && World.Entities.ContainsKey(DestinationId.Value))
-                Destination = World.Entities[DestinationId.Value];
-            if (SourceId.HasValue && World.Entities.ContainsKey(SourceId.Value))
-                Source = World.Entities[SourceId.Value];
-        }
-
         protected override string LegendsDescription() //Matched
         {
             var timestring = base.LegendsDescription();
 
-            if (Destination != null && Source != null && Site != null)
-                return $"{timestring} merchants from {Source} visited {Destination} at {Site.AltName}.";
+            if (Entity_Destination != null && Entity_Source != null && Site != null)
+                return $"{timestring} merchants from {Entity_Source} visited {Entity_Destination} at {Site.AltName}.";
 
             return timestring;
         }
@@ -115,8 +104,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object>
             {
                 Id,
-                SourceId.DBExport(),
-                DestinationId.DBExport(),
+                EntityId_Source.DBExport(),
+                EntityId_Destination.DBExport(),
                 SiteId.DBExport()
             };
 

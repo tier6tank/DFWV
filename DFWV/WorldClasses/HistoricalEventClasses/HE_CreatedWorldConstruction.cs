@@ -8,35 +8,35 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     public class HE_CreatedWorldConstruction : HistoricalEvent
     {
-        private int? Wcid { get; }
+        private int? WcId { get; }
         private WorldConstruction Wc { get; set; }
-        private int? SiteCivId { get; }
-        public Entity SiteCiv { get; private set; }
-        private int? CivId { get; }
-        public Entity Civ { get; private set; }
-        private int? MasterWcid { get; }
-        public WorldConstruction MasterWc { get; private set; }
-        private int? SiteId1 { get; }
-        public Site Site1 { get; private set; }
-        private int? SiteId2 { get; }
-        public Site Site2 { get; private set; }
+        private int? EntityId_SiteCiv { get; }
+        public Entity Entity_SiteCiv { get; private set; }
+        private int? EntityId { get; }
+        public Entity Entity { get; private set; }
+        private int? WcId_Master { get; }
+        public WorldConstruction Wc_Master { get; private set; }
+        private int? SiteId_1 { get; }
+        public Site Site_1 { get; private set; }
+        private int? SiteId_2 { get; }
+        public Site Site_2 { get; private set; }
 
-        override public Point Location => Site1.Location;
+        override public Point Location => Site_1.Location;
 
         public override IEnumerable<Entity> EntitiesInvolved
         {
             get
             {
-                yield return Civ;
-                yield return SiteCiv;
+                yield return Entity;
+                yield return Entity_SiteCiv;
             }
         }
         public override IEnumerable<Site> SitesInvolved
         {
             get
             {
-                yield return Site1;
-                yield return Site2;
+                yield return Site_1;
+                yield return Site_2;
             }
         }
 
@@ -57,23 +57,23 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "civ_id":
-                        CivId = valI;
+                        EntityId = valI;
                         break;
                     case "site_civ_id":
-                        SiteCivId = valI;
+                        EntityId_SiteCiv = valI;
                         break;
                     case "site_id1":
-                        SiteId1 = valI;
+                        SiteId_1 = valI;
                         break;
                     case "site_id2":
-                        SiteId2 = valI;
+                        SiteId_2 = valI;
                         break;
                     case "wcid":
-                        Wcid = valI;
+                        WcId = valI;
                         break;
                     case "master_wcid":
                         if (valI != -1)
-                            MasterWcid = valI;
+                            WcId_Master = valI;
                         break;
 
                     default:
@@ -86,78 +86,70 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (CivId.HasValue && World.Entities.ContainsKey(CivId.Value))
-                Civ = World.Entities[CivId.Value];
-            if (SiteCivId.HasValue && World.Entities.ContainsKey(SiteCivId.Value))
-                SiteCiv = World.Entities[SiteCivId.Value];
-            if (Wcid.HasValue)
+            if (WcId.HasValue)
             {
-                if (World.WorldConstructions.ContainsKey(Wcid.Value))
-                    Wc = World.WorldConstructions[Wcid.Value];
+                if (World.WorldConstructions.ContainsKey(WcId.Value))
+                    Wc = World.WorldConstructions[WcId.Value];
                 else
                 {
-                    Wc = new WorldConstruction(Wcid.Value, World);
-                    World.WorldConstructions.Add(Wcid.Value, Wc);
+                    Wc = new WorldConstruction(WcId.Value, World);
+                    World.WorldConstructions.Add(WcId.Value, Wc);
                 }
-                if (MasterWcid.HasValue && MasterWcid != -1)
+                if (WcId_Master.HasValue && WcId_Master != -1)
                 {
-                    if (World.WorldConstructions.ContainsKey(MasterWcid.Value))
-                        MasterWc = World.WorldConstructions[MasterWcid.Value];
+                    if (World.WorldConstructions.ContainsKey(WcId_Master.Value))
+                        Wc_Master = World.WorldConstructions[WcId_Master.Value];
                     else
                     {
-                        MasterWc = new WorldConstruction(MasterWcid.Value, World);
-                        World.WorldConstructions.Add(MasterWcid.Value, MasterWc);
+                        Wc_Master = new WorldConstruction(WcId_Master.Value, World);
+                        World.WorldConstructions.Add(WcId_Master.Value, Wc_Master);
                     }
                 }
             }
-            if (SiteId1.HasValue && World.Sites.ContainsKey(SiteId1.Value))
-                Site1 = World.Sites[SiteId1.Value];
-            if (SiteId2.HasValue && World.Sites.ContainsKey(SiteId2.Value))
-                Site2 = World.Sites[SiteId2.Value];
         }
 
         internal override void Process()
         {
             base.Process();
-            if (MasterWc != null)
+            if (Wc_Master != null)
             {
-                if (MasterWc.Subconstructions == null)
-                    MasterWc.Subconstructions = new List<WorldConstruction>();
-                MasterWc.Subconstructions.Add(Wc);
+                if (Wc_Master.Subconstructions == null)
+                    Wc_Master.Subconstructions = new List<WorldConstruction>();
+                Wc_Master.Subconstructions.Add(Wc);
 
-                Wc.MasterWc = MasterWc;
+                Wc.MasterWc = Wc_Master;
             }
             Wc.CreatedEvent = this;
 
-            if (Site1 != null)
-                Wc.From = Site1;
-            if (Site2 != null)
-                Wc.To = Site2;
+            if (Site_1 != null)
+                Wc.From = Site_1;
+            if (Site_2 != null)
+                Wc.To = Site_2;
 
 
-            if (Site1 != null && Site1.ConstructionLinks == null)
-                Site1.ConstructionLinks = new List<WorldConstruction>();
-            Site1.ConstructionLinks.Add(Wc);
-            if (Site2 != null && Site2.ConstructionLinks == null)
-                Site2.ConstructionLinks = new List<WorldConstruction>();
-            Site2.ConstructionLinks.Add(Wc);
+            if (Site_1 != null && Site_1.ConstructionLinks == null)
+                Site_1.ConstructionLinks = new List<WorldConstruction>();
+            Site_1.ConstructionLinks.Add(Wc);
+            if (Site_2 != null && Site_2.ConstructionLinks == null)
+                Site_2.ConstructionLinks = new List<WorldConstruction>();
+            Site_2.ConstructionLinks.Add(Wc);
 
-            if (Civ != null && Civ.ConstructionsBuilt == null)
-                Civ.ConstructionsBuilt = new List<WorldConstruction>();
-            Civ.ConstructionsBuilt.Add(Wc);
-            if (SiteCiv != null && SiteCiv.ConstructionsBuilt == null)
-                SiteCiv.ConstructionsBuilt = new List<WorldConstruction>();
-            SiteCiv.ConstructionsBuilt.Add(Wc);
+            if (Entity != null && Entity.ConstructionsBuilt == null)
+                Entity.ConstructionsBuilt = new List<WorldConstruction>();
+            Entity.ConstructionsBuilt.Add(Wc);
+            if (Entity_SiteCiv != null && Entity_SiteCiv.ConstructionsBuilt == null)
+                Entity_SiteCiv.ConstructionsBuilt = new List<WorldConstruction>();
+            Entity_SiteCiv.ConstructionsBuilt.Add(Wc);
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "Civ:", Civ);
-            EventLabel(frm, parent, ref location, "Owner:", SiteCiv);
+            EventLabel(frm, parent, ref location, "Civ:", Entity);
+            EventLabel(frm, parent, ref location, "Owner:", Entity_SiteCiv);
             EventLabel(frm, parent, ref location, "Construction:", Wc);
-            EventLabel(frm, parent, ref location, "Master:", MasterWc);
-            EventLabel(frm, parent, ref location, "From:", Site1);
-            EventLabel(frm, parent, ref location, "To:", Site2);
+            EventLabel(frm, parent, ref location, "Master:", Wc_Master);
+            EventLabel(frm, parent, ref location, "From:", Site_1);
+            EventLabel(frm, parent, ref location, "To:", Site_2);
         }
 
         protected override string LegendsDescription() //Matched
@@ -165,14 +157,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             return
-                $"{timestring} {SiteCiv} of {Civ} finished contruction of {(Wc.Name == "" ? "CONSTRUCTION " + Wc : Wc.Name)} connecting {Site1} and {Site2}.";
+                $"{timestring} {Entity_SiteCiv} of {Entity} finished contruction of {(Wc.Name == "" ? "CONSTRUCTION " + Wc : Wc.Name)} connecting {Site_1} and {Site_2}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return $"{timelinestring} {Civ} built road from {Site1} to {Site2}.";
+            return $"{timelinestring} {Entity} built road from {Site_1} to {Site_2}.";
         }
 
         internal override void Export(string table)
@@ -184,12 +176,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object>
             {
                 Id, 
-                Wcid.DBExport(), 
-                MasterWcid.DBExport(),
-                SiteCivId.DBExport(), 
-                CivId.DBExport(), 
-                SiteId1.DBExport(),
-                SiteId2.DBExport()
+                WcId.DBExport(), 
+                WcId_Master.DBExport(),
+                EntityId_SiteCiv.DBExport(), 
+                EntityId.DBExport(), 
+                SiteId_1.DBExport(),
+                SiteId_2.DBExport()
             };
 
 

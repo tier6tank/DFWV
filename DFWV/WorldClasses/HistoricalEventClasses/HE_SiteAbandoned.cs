@@ -8,10 +8,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     class HE_SiteAbandoned : HistoricalEvent
     {
-        private int? CivId { get; }
-        private Entity Civ { get; set; }
-        private int? SiteCivId { get; }
-        private Entity SiteCiv { get; set; }
+        private int? EntityId_Civ { get; }
+        private Entity Entity_Civ { get; set; }
+        private int? EntityId_SiteCiv { get; }
+        private Entity Entity_SiteCiv { get; set; }
         private int? SiteId { get; }
         private Site Site { get; set; }
 
@@ -21,8 +21,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get
             {
-                yield return SiteCiv;
-                yield return Civ;
+                yield return Entity_SiteCiv;
+                yield return Entity_Civ;
             }
         }
         public override IEnumerable<Site> SitesInvolved
@@ -49,10 +49,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "civ_id":
-                        CivId = valI;
+                        EntityId_Civ = valI;
                         break;
                     case "site_civ_id":
-                        SiteCivId = valI;
+                        EntityId_SiteCiv = valI;
                         break;
                     case "site_id":
                         SiteId = valI;
@@ -64,21 +64,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        internal override void Link()
-        {
-            base.Link();
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (CivId.HasValue && World.Entities.ContainsKey(CivId.Value))
-                Civ = World.Entities[CivId.Value];
-            if (SiteCivId.HasValue && World.Entities.ContainsKey(SiteCivId.Value))
-                SiteCiv = World.Entities[SiteCivId.Value];
-        }
-
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "Group:", SiteCiv);
-            EventLabel(frm, parent, ref location, "Civ:", Civ);
+            EventLabel(frm, parent, ref location, "Group:", Entity_SiteCiv);
+            EventLabel(frm, parent, ref location, "Civ:", Entity_Civ);
             EventLabel(frm, parent, ref location, "Site:", Site);
         }
 
@@ -86,14 +75,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            return $"{timestring} {SiteCiv} of {Civ} abandoned the settlement of {Site.AltName}.";
+            return $"{timestring} {Entity_SiteCiv} of {Entity_Civ} abandoned the settlement of {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return $"{timelinestring} {Civ} abandoned {Site.AltName}.";
+            return $"{timelinestring} {Entity_Civ} abandoned {Site.AltName}.";
         }
 
         internal override void Export(string table)
@@ -105,8 +94,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object>
             {
                 Id, 
-                CivId.DBExport(), 
-                SiteCivId.DBExport(), 
+                EntityId_Civ.DBExport(), 
+                EntityId_SiteCiv.DBExport(), 
                 SiteId.DBExport()
             };
 

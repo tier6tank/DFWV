@@ -8,8 +8,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     class HistoricalEvent_CultureCreatedBase : HistoricalEvent
     {
-        internal int? HistFigureId { get; set; }
-        internal HistoricalFigure HistFigure { get; set; }
+        internal int? HfId { get; set; }
+        internal HistoricalFigure Hf { get; set; }
         internal int? SiteId { get; set; }
         internal Site Site { get; set; }
         internal int? SubregionId { get; set; }
@@ -27,7 +27,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
-            get { yield return HistFigure; }
+            get { yield return Hf; }
         }
         public override IEnumerable<Site> SitesInvolved
         {
@@ -51,7 +51,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "hist_figure_id":
-                        HistFigureId = valI;
+                        HfId = valI;
                         break;
                     case "reason":
                         if (!Reasons.Contains(val))
@@ -92,21 +92,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        internal override void Link()
-        {
-            base.Link();
-            if (HistFigureId.HasValue && World.HistoricalFigures.ContainsKey(HistFigureId.Value))
-                HistFigure = World.HistoricalFigures[HistFigureId.Value];
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
-                Subregion = World.Regions[SubregionId.Value];
-
-        }
-
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "HF:", HistFigure);
+            EventLabel(frm, parent, ref location, "HF:", Hf);
             EventLabel(frm, parent, ref location, "Site:", Site);
             if (Reason.HasValue)
                 EventLabel(frm, parent, ref location, "Reason:", Reasons[Reason.Value]);
@@ -176,7 +164,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             {
                 Id,
                 SiteId.DBExport(),
-                HistFigureId.DBExport(),
+                HfId.DBExport(),
                 Reason.DBExport(Reasons),
                 ReasonId.DBExport(),
                 Circumstance.DBExport(Circumstances),

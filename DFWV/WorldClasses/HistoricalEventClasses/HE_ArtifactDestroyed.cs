@@ -11,8 +11,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
     {
         private int? SiteId { get; }
         public Site Site { get; set; }
-        private int? DestroyerEnId { get; }
-        private Entity DestroyerEn { get; set; }
+        private int? EntityId { get; }
+        private Entity Entity { get; set; }
         private int? ArtifactId { get; }
         public Artifact Artifact { get; set; }
 
@@ -20,7 +20,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         public override IEnumerable<Entity> EntitiesInvolved
         {
-            get { yield return DestroyerEn; }
+            get { yield return Entity; }
         }
         public override IEnumerable<Site> SitesInvolved
         {
@@ -47,7 +47,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         ArtifactId = valI;
                         break;
                     case "destroyer_enid":
-                        DestroyerEnId = valI;
+                        EntityId = valI;
                         break;
                     case "site_id":
                         if (valI != -1)
@@ -61,25 +61,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        internal override void Link()
-        {
-            base.Link();
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (DestroyerEnId.HasValue && World.Entities.ContainsKey(DestroyerEnId.Value))
-                DestroyerEn = World.Entities[DestroyerEnId.Value];
-            if (ArtifactId.HasValue && World.Artifacts.ContainsKey(ArtifactId.Value))
-                Artifact = World.Artifacts[ArtifactId.Value];
-            //if (UnitID.HasValue && World.HistoricalFigures.ContainsKey(UnitID.Value))
-            //    Unit = World.HistoricalFigures[UnitID.Value];
-        }
-
-
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
             EventLabel(frm, parent, ref location, "Artifact:", Artifact);
             EventLabel(frm, parent, ref location, "Site:", Site);
-            EventLabel(frm, parent, ref location, "Destroyer:", DestroyerEn);
+            EventLabel(frm, parent, ref location, "Destroyer:", Entity);
         }
 
         protected override string LegendsDescription()
@@ -87,14 +73,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
 
-            return $"{timestring} {Artifact} was destroyed by {DestroyerEn} in {Site.AltName}.";
+            return $"{timestring} {Artifact} was destroyed by {Entity} in {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return $"{timelinestring} {Artifact} was destroyed by {DestroyerEn} in {Site.AltName}.";
+            return $"{timelinestring} {Artifact} was destroyed by {Entity} in {Site.AltName}.";
         }
 
         internal override void Export(string table)
@@ -108,7 +94,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Id, 
                 ArtifactId.DBExport(), 
                 SiteId.DBExport(), 
-                DestroyerEnId.DBExport(), 
+                EntityId.DBExport(), 
             };
 
             Database.ExportWorldItem(table, vals);

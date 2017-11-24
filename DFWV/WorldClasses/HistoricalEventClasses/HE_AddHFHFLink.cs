@@ -9,10 +9,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     public class HE_AddHFHFLink : HistoricalEvent
     {
-        private int? Hfid { get; }
+        private int? HfId { get; }
         private HistoricalFigure Hf { get; set; }
-        private int? HfidTarget { get; }
-        private HistoricalFigure HfTarget { get; set; }
+        private int? HfId_Target { get; }
+        private HistoricalFigure Hf_Target { get; set; }
 
         override public Point Location => Point.Empty;
 
@@ -26,7 +26,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get
             {
                 yield return Hf;
-                yield return HfTarget;
+                yield return Hf_Target;
             }
         }
         public HE_AddHFHFLink(XDocument xdoc, World world)
@@ -46,10 +46,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "hfid":
-                        Hfid = valI;
+                        HfId = valI;
                         break;
                     case "hfid_target":
-                        HfidTarget = valI;
+                        HfId_Target = valI;
                         break;
 
                     default:
@@ -57,15 +57,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                 }
             }
-        }
-
-        internal override void Link()
-        {
-            base.Link();
-            if (Hfid.HasValue && World.HistoricalFigures.ContainsKey(Hfid.Value))
-                Hf = World.HistoricalFigures[Hfid.Value];
-            if (HfidTarget.HasValue && World.HistoricalFigures.ContainsKey(HfidTarget.Value))
-                HfTarget = World.HistoricalFigures[HfidTarget.Value];
         }
 
         internal override void Process()
@@ -77,7 +68,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             {
                 foreach (var hfLinkList in Hf.HfLinks)
                 {
-                    foreach (var hflink in hfLinkList.Value.Where(hflink => hflink.LinkedHfid == HfidTarget))
+                    foreach (var hflink in hfLinkList.Value.Where(hflink => hflink.LinkedHfid == HfId_Target))
                     {
                         hflink.AddEvent = this;
                         HfLink = hflink;
@@ -89,10 +80,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 }
             }
             matched = false;
-            if (HfTarget?.HfLinks == null) return;
-            foreach (var hfLinkList in HfTarget.HfLinks)
+            if (Hf_Target?.HfLinks == null) return;
+            foreach (var hfLinkList in Hf_Target.HfLinks)
             {
-                foreach (var hflink in hfLinkList.Value.Where(hflink => hflink.LinkedHfid == Hfid))
+                foreach (var hflink in hfLinkList.Value.Where(hflink => hflink.LinkedHfid == HfId))
                 {
                     hflink.AddEvent = this;
                     HfLink2 = hflink;
@@ -136,7 +127,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
             EventLabel(frm, parent, ref location, "HF:", Hf);
-            EventLabel(frm, parent, ref location, "Target:", HfTarget);
+            EventLabel(frm, parent, ref location, "Target:", Hf_Target);
             if (HfLink != null)
                 EventLabel(frm, parent, ref location, "Type:", HFLink.LinkTypes[HfLink.LinkType]);
             else if (LinkType.HasValue)
@@ -153,18 +144,18 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             {
                 case "spouse":
                     return
-                        $"{timestring} {Hf} {"married"} {HfTarget?.ToString() ?? "an unknown creature"}.";
+                        $"{timestring} {Hf} {"married"} {Hf_Target?.ToString() ?? "an unknown creature"}.";
                 case "prisoner":
                     return
-                        $"{timestring} {Hf} {"imprisoned"} {HfTarget?.ToString() ?? "an unknown creature"}.";
+                        $"{timestring} {Hf} {"imprisoned"} {Hf_Target?.ToString() ?? "an unknown creature"}.";
                 case "apprentice":
                     return
-                        $"{timestring} {Hf} {"became master of the"} {HfTarget?.Race?.ToString().ToLower() ?? ""} {HfTarget?.ToString() ?? "an unknown creature"}.";
+                        $"{timestring} {Hf} {"became master of the"} {Hf_Target?.Race?.ToString().ToLower() ?? ""} {Hf_Target?.ToString() ?? "an unknown creature"}.";
                 case "deity":
                     return
-                        $"{timestring} {Hf} {"began worshipping"} {HfTarget?.ToString() ?? "an unknown creature"}.";
+                        $"{timestring} {Hf} {"began worshipping"} {Hf_Target?.ToString() ?? "an unknown creature"}.";
                 default:
-                    return $"{timestring} {Hf} {"UNKNOWN"} {HfTarget}.";
+                    return $"{timestring} {Hf} {"UNKNOWN"} {Hf_Target}.";
 
             }
         }
@@ -174,7 +165,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             return
-                $"{timelinestring} {Hf?.ToString() ?? Hfid.ToString()} {" linked to "} {HfTarget?.ToString() ?? HfidTarget.ToString()}.";
+                $"{timelinestring} {Hf?.ToString() ?? HfId.ToString()} {" linked to "} {Hf_Target?.ToString() ?? HfId_Target.ToString()}.";
         }
 
         internal override void Export(string table)
@@ -187,8 +178,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object>
             {
                 Id, 
-                Hfid, 
-                HfidTarget,
+                HfId, 
+                HfId_Target,
                 LinkType.DBExport(HFLink.LinkTypes)
             };
 

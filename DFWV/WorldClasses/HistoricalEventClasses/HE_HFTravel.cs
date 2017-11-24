@@ -9,8 +9,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     class HE_HFTravel : HistoricalEvent
     {
-        private int? GroupHfid { get; }
-        private HistoricalFigure GroupHf { get; set; }
+        private int? HfId { get; }
+        private HistoricalFigure Hf { get; set; }
         private bool Escape { get; }
         public bool Return { get; }
         private int? SiteId { get; }
@@ -24,7 +24,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
-            get { yield return GroupHf; }
+            get { yield return Hf; }
         }
         public override IEnumerable<Site> SitesInvolved
         {
@@ -69,7 +69,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
 
                     case "group_hfid":
-                        GroupHfid = valI;
+                        HfId = valI;
                         break;
                     case "return":
                         Return = true;
@@ -84,20 +84,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 }
             }
         }
-        internal override void Link()
-        {
-            base.Link();
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
-                Subregion = World.Regions[SubregionId.Value];
-            if (GroupHfid.HasValue && World.HistoricalFigures.ContainsKey(GroupHfid.Value))
-                GroupHf = World.HistoricalFigures[GroupHfid.Value];
-        }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "HF:", GroupHf);
+            EventLabel(frm, parent, ref location, "HF:", Hf);
             if (Escape)
             {
                 EventLabel(frm, parent, ref location, "Escaped from", "");
@@ -129,14 +119,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             if (Escape)
             {
-                return $"{timestring} {GroupHf} escaped from the Underworld.";
+                return $"{timestring} {Hf} escaped from the Underworld.";
 
             }
             if (Return)
             {
-                return $"{timestring} {GroupHf} returned to {(Site == null ? "UNKNONW" : Site.AltName)}.";
+                return $"{timestring} {Hf} returned to {(Site == null ? "UNKNONW" : Site.AltName)}.";
             }
-            return $"{timestring} {GroupHf} made a journey to {Subregion?.ToString() ?? "UNKNONW"}.";
+            return $"{timestring} {Hf} made a journey to {Subregion?.ToString() ?? "UNKNONW"}.";
         }
 
         internal override string ToTimelineString()
@@ -144,11 +134,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             if (Escape)
-                return $"{timelinestring} {GroupHf} escaped from the Underworld.";
+                return $"{timelinestring} {Hf} escaped from the Underworld.";
             if (Return)
-                return $"{timelinestring} {GroupHf} returned to {(Site == null ? "UNKNONW" : Site.AltName)}.";
+                return $"{timelinestring} {Hf} returned to {(Site == null ? "UNKNONW" : Site.AltName)}.";
             return
-                $"{timelinestring} {GroupHf} made a journey to {Subregion?.ToString() ?? "UNKNONW"}.";
+                $"{timelinestring} {Hf} made a journey to {Subregion?.ToString() ?? "UNKNONW"}.";
         }
 
         internal override void Export(string table)
@@ -160,7 +150,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object>
             {
                 Id, 
-                GroupHfid.DBExport(), 
+                HfId.DBExport(), 
                 Escape, 
                 Return, 
                 SiteId.DBExport(), 

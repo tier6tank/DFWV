@@ -15,7 +15,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private Site Site { get; set; }
         private int? SubregionId { get; }
         private Region Subregion { get; set; }
-        private int? Hfid { get; }
+        private int? HfId { get; }
         public HistoricalFigure Hf { get; set; }
         private int? FeatureLayerId { get; }
         private Point Coords { get; }
@@ -52,7 +52,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "hfid":
-                        Hfid = valI;
+                        HfId = valI;
                         break;
                     case "body_state":
                         BodyState = val;
@@ -87,21 +87,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 }
             }
         }
-
-        internal override void Link()
-        {
-            base.Link();
-            if (Hfid.HasValue && World.HistoricalFigures.ContainsKey(Hfid.Value))
-                Hf = World.HistoricalFigures[Hfid.Value];
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
-                Subregion = World.Regions[SubregionId.Value];
-
-            if (StructureId.HasValue && World.Structures.ContainsKey(StructureId.Value))
-                Structure = World.Structures[StructureId.Value];
-        }
-
 
         internal override void Process()
         {
@@ -154,7 +139,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object>
             {
                 Id, 
-                Hfid.DBExport(), 
+                HfId.DBExport(), 
                 BodyState.DBExport(), 
                 BuildingId.DBExport(), 
                 SiteId.DBExport(),  

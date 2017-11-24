@@ -279,8 +279,8 @@ namespace DFWV.WorldClasses.EntityClasses
             frm.grpEntitySiteTakeover.Visible = SiteTakeoverEvent != null;
             if (SiteTakeoverEvent != null)
             {
-                frm.lblEntitySiteTakeoverDefenderCiv.Data = SiteTakeoverEvent.DefenderCiv;
-                frm.lblEntitySiteTakeoverDefenderEntity.Data = SiteTakeoverEvent.SiteCiv;
+                frm.lblEntitySiteTakeoverDefenderCiv.Data = SiteTakeoverEvent.Entity_Defender;
+                frm.lblEntitySiteTakeoverDefenderEntity.Data = SiteTakeoverEvent.Entity_SiteCiv;
                 frm.lblEntitySiteTakeoverSite.Data = SiteTakeoverEvent.Site;
                 frm.lblEntitySiteTakeoverTime.Data = SiteTakeoverEvent;
                 frm.lblEntitySiteTakeoverTime.Text = SiteTakeoverEvent.Time.ToString();

@@ -10,14 +10,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
     {
         private int? SiteId { get; }
         public Site Site { get; set; }
-        private int? OldStructureId { get; }
-        private Structure OldStructure { get; set; }
-        private int? NewStructureId { get; }
-        private Structure NewStructure { get; set; }
-        private int? SiteCivId { get; }
-        public Entity SiteCiv { get; set; }
-        private int? CivId { get; }
-        public Entity Civ { get; set; }
+        private int? StructureId_Old { get; }
+        private Structure Structure_Old { get; set; }
+        private int? StructureId_New { get; }
+        private Structure Structure_New { get; set; }
+        private int? EntityId_SiteCiv { get; }
+        public Entity Entity_SiteCiv { get; set; }
+        private int? EntityId_Civ { get; }
+        public Entity Entity_Civ { get; set; }
 
         override public Point Location => Site.Location;
 
@@ -25,8 +25,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get
             {
-                yield return SiteCiv;
-                yield return Civ;
+                yield return Entity_SiteCiv;
+                yield return Entity_Civ;
             }
         }
         public override IEnumerable<Site> SitesInvolved
@@ -52,54 +52,24 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "civ_id":
-                        CivId = valI;
+                        EntityId_Civ = valI;
                         break;
                     case "site_civ_id":
-                        SiteCivId = valI;
+                        EntityId_SiteCiv = valI;
                         break;
                     case "site_id":
                         SiteId = valI;
                         break;
                     case "old_ab_id":
-                        OldStructureId = valI;
+                        StructureId_Old = valI;
                         break;
                     case "new_ab_id":
-                        NewStructureId = valI;
+                        StructureId_New = valI;
                         break;
 
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
-                }
-            }
-        }
-        internal override void Link()
-        {
-            base.Link();
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (CivId.HasValue && World.Entities.ContainsKey(CivId.Value))
-                Civ = World.Entities[CivId.Value];
-            if (SiteCivId.HasValue && World.Entities.ContainsKey(SiteCivId.Value))
-                SiteCiv = World.Entities[SiteCivId.Value];
-
-            if (OldStructureId.HasValue && OldStructureId.Value != -1 && Site != null)
-            {
-                OldStructure = Site.GetStructure(OldStructureId.Value);
-                if (OldStructure == null)
-                {
-                    OldStructure = new Structure(Site, OldStructureId.Value, World);
-                    Site.AddStructure(OldStructure);
-                }
-            }
-
-            if (NewStructureId.HasValue && NewStructureId.Value != -1 && Site != null)
-            {
-                NewStructure = Site.GetStructure(NewStructureId.Value);
-                if (NewStructure == null)
-                {
-                    NewStructure = new Structure(Site, NewStructureId.Value, World);
-                    Site.AddStructure(NewStructure);
                 }
             }
         }
@@ -132,50 +102,50 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Process()
         {
             base.Process();
-            if (OldStructure != null)
+            if (Structure_Old != null)
             {
-                if (OldStructure.Events == null)
-                    OldStructure.Events = new List<HistoricalEvent>();
-                OldStructure.Events.Add(this);
+                if (Structure_Old.Events == null)
+                    Structure_Old.Events = new List<HistoricalEvent>();
+                Structure_Old.Events.Add(this);
             }
 
-            if (NewStructure != null)
+            if (Structure_New != null)
             {
-                if (NewStructure.Events == null)
-                    NewStructure.Events = new List<HistoricalEvent>();
-                NewStructure.Events.Add(this);
+                if (Structure_New.Events == null)
+                    Structure_New.Events = new List<HistoricalEvent>();
+                Structure_New.Events.Add(this);
             }
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            if (Civ != null)
-                EventLabel(frm, parent, ref location, "Civ:", Civ);
-            if (SiteCiv != null)
-                EventLabel(frm, parent, ref location, "Owner:", SiteCiv);
+            if (Entity_Civ != null)
+                EventLabel(frm, parent, ref location, "Civ:", Entity_Civ);
+            if (Entity_SiteCiv != null)
+                EventLabel(frm, parent, ref location, "Owner:", Entity_SiteCiv);
 
             EventLabel(frm, parent, ref location, "Site:", Site);
-            EventLabel(frm, parent, ref location, "Old Structure:", OldStructure);
-            EventLabel(frm, parent, ref location, "New Structure:", NewStructure);
+            EventLabel(frm, parent, ref location, "Old Structure:", Structure_Old);
+            EventLabel(frm, parent, ref location, "New Structure:", Structure_New);
         }
 
         protected override string LegendsDescription()
         {
             var timestring = base.LegendsDescription();
 
-            if (SiteCiv == null)
+            if (Entity_SiteCiv == null)
                 return
-                    $"{timestring} {Civ} replaced {(OldStructure != null ? OldStructure.Name : "UNKNOWN")} in {Site.AltName} with {(NewStructure != null ? NewStructure.Name : "UNKNOWN")}.";
+                    $"{timestring} {Entity_Civ} replaced {(Structure_Old != null ? Structure_Old.Name : "UNKNOWN")} in {Site.AltName} with {(Structure_New != null ? Structure_New.Name : "UNKNOWN")}.";
 
             return
-                $"{timestring} {SiteCiv} of {Civ} replaced {(OldStructure != null ? OldStructure.Name : "UNKNOWN")} in {Site.AltName} with {(NewStructure != null ? NewStructure.Name : "UNKNOWN")}.";
+                $"{timestring} {Entity_SiteCiv} of {Entity_Civ} replaced {(Structure_Old != null ? Structure_Old.Name : "UNKNOWN")} in {Site.AltName} with {(Structure_New != null ? Structure_New.Name : "UNKNOWN")}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return $"{timelinestring} {Civ} replaced a structure in {Site.AltName}.";
+            return $"{timelinestring} {Entity_Civ} replaced a structure in {Site.AltName}.";
         }
 
         internal override void Export(string table)
@@ -188,10 +158,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             {
                 Id, 
                 SiteId.DBExport(), 
-                SiteCivId.DBExport(), 
-                CivId.DBExport(), 
-                OldStructureId.DBExport(),
-                NewStructureId.DBExport()
+                EntityId_SiteCiv.DBExport(), 
+                EntityId_Civ.DBExport(), 
+                StructureId_Old.DBExport(),
+                StructureId_New.DBExport()
             };
 
             Database.ExportWorldItem(table, vals);

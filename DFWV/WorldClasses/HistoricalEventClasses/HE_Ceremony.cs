@@ -13,8 +13,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? SubregionId { get; }
         private Region Subregion { get; set; }
         private int? FeatureLayerId { get; }
-        private int? CivId { get; }
-        public Entity Civ { get; private set; }
+        private int? EntityId { get; }
+        public Entity Entity { get; private set; }
 
         override public Point Location => Site.Location;
 
@@ -23,7 +23,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         public override IEnumerable<Entity> EntitiesInvolved
         {
-            get { yield return Civ; }
+            get { yield return Entity; }
         }
         public override IEnumerable<Site> SitesInvolved
         {
@@ -71,7 +71,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                             ScheduleId = valI;
                         break;
                     case "civ_id":
-                        CivId = valI;
+                        EntityId = valI;
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
@@ -80,22 +80,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        internal override void Link()
-        {
-            base.Link();
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
-                Subregion = World.Regions[SubregionId.Value];
-            if (CivId.HasValue && World.Entities.ContainsKey(CivId.Value))
-                Civ = World.Entities[CivId.Value];
-
-        }
-
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
             EventLabel(frm, parent, ref location, "Site:", Site);
-            EventLabel(frm, parent, ref location, "Civ:", Civ);
+            EventLabel(frm, parent, ref location, "Civ:", Entity);
             EventLabel(frm, parent, ref location, "Region:", Subregion);
         }
 
@@ -104,14 +92,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             return
-                $"{timestring} {Civ} held a ceremony in {Site.AltName} as part of {EventCollection.Name ?? "UNKNOWN"}. The event featured UNKNOWN.";
+                $"{timestring} {Entity} held a ceremony in {Site.AltName} as part of {EventCollection.Name ?? "UNKNOWN"}. The event featured UNKNOWN.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return $"{timelinestring} {Civ} held a ceremony in {Site.AltName}.";
+            return $"{timelinestring} {Entity} held a ceremony in {Site.AltName}.";
 
         }
 
@@ -124,7 +112,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object> 
             { 
                 Id, 
-                CivId.DBExport(),
+                EntityId.DBExport(),
                 SiteId.DBExport(),
                 SubregionId.DBExport(),
                 FeatureLayerId.DBExport()

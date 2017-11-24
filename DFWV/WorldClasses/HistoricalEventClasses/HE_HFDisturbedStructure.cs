@@ -8,8 +8,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     class HE_HFDisturbedStructure : HistoricalEvent
     {
-        private int? HistFigId { get; }
-        private HistoricalFigure HistFig { get; set; }
+        private int? HfId { get; }
+        private HistoricalFigure Hf { get; set; }
         private int? SiteId { get; }
         private Site Site { get; set; }
         private int? StructureId { get; }
@@ -21,7 +21,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
-            get { yield return HistFig; }
+            get { yield return Hf; }
         }
         public override IEnumerable<Site> SitesInvolved
         {
@@ -47,7 +47,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
 
                     case "hist_fig_id":
-                        HistFigId = valI;
+                        HfId = valI;
                         break;
                     case "site_id":
                         SiteId = valI;
@@ -62,23 +62,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                 }
             }
-        }
-
-        internal override void Link()
-        {
-            //TODO: Incorporate new data
-            base.Link();
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (HistFigId.HasValue && World.HistoricalFigures.ContainsKey(HistFigId.Value))
-                HistFig = World.HistoricalFigures[HistFigId.Value];
-
-            if (!StructureId.HasValue || StructureId.Value == -1 || Site == null) return;
-
-            Structure = Site.GetStructure(StructureId.Value);
-            if (Structure != null) return;
-            Structure = new Structure(Site, StructureId.Value, World);
-            Site.AddStructure(Structure);
         }
 
         internal override void Plus(XDocument xdoc)
@@ -120,7 +103,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
             //TODO: Incorporate new data
-            EventLabel(frm, parent, ref location, "Hist Fig:", HistFig);
+            EventLabel(frm, parent, ref location, "Hist Fig:", Hf);
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Structure:", Structure);
         }
@@ -129,7 +112,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            return $"{timestring} {HistFig.Race} {HistFig} profaned the {Structure} in {Site.AltName}.";
+            return $"{timestring} {Hf.Race} {Hf} profaned the {Structure} in {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
@@ -138,8 +121,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             if (Site != null)
-                return $"{timelinestring} {HistFig.Race} {HistFig} disturbed structure in {Site.AltName}.";
-            return $"{timelinestring} {HistFig.Race} {HistFig} disturbed structure.";
+                return $"{timelinestring} {Hf.Race} {Hf} disturbed structure in {Site.AltName}.";
+            return $"{timelinestring} {Hf.Race} {Hf} disturbed structure.";
         }
 
         internal override void Export(string table)
@@ -151,7 +134,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object>
             {
                 Id, 
-                HistFigId.DBExport(), 
+                HfId.DBExport(), 
                 SiteId.DBExport(), 
                 StructureId.DBExport(),
                 Action.DBExport()

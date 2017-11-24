@@ -8,10 +8,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     class HE_HFWounded : HistoricalEvent
     {
-        private int? WoundeeHfid { get; }
-        private HistoricalFigure WoundeeHf { get; set; }
-        private int? WounderHfid { get; }
-        private HistoricalFigure WounderHf { get; set; }
+        private int? HfId_Woundee { get; }
+        private HistoricalFigure Hf_Woundee { get; set; }
+        private int? HfId_Wounder { get; }
+        private HistoricalFigure Hf_Wounder { get; set; }
         private int? SiteId { get; }
         private Site Site { get; set; }
         private int? SubregionId { get; }
@@ -27,8 +27,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get
             {
-                yield return WoundeeHf;
-                yield return WounderHf;
+                yield return Hf_Woundee;
+                yield return Hf_Wounder;
             }
         }
         public override IEnumerable<Site> SitesInvolved
@@ -69,28 +69,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                             FeatureLayerId = valI;
                         break;
                     case "woundee_hfid":
-                        WoundeeHfid = valI;
+                        HfId_Woundee = valI;
                         break;
                     case "wounder_hfid":
-                        WounderHfid = valI;
+                        HfId_Wounder = valI;
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
-        }
-        internal override void Link()
-        {
-            base.Link();
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
-                Subregion = World.Regions[SubregionId.Value];
-            if (WoundeeHfid.HasValue && World.HistoricalFigures.ContainsKey(WoundeeHfid.Value))
-                WoundeeHf = World.HistoricalFigures[WoundeeHfid.Value];
-            if (WounderHfid.HasValue && World.HistoricalFigures.ContainsKey(WounderHfid.Value))
-                WounderHf = World.HistoricalFigures[WounderHfid.Value];
         }
 
         internal override void Plus(XDocument xdoc)
@@ -134,8 +122,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "HF:", WoundeeHf);
-            EventLabel(frm, parent, ref location, "By:", WounderHf);
+            EventLabel(frm, parent, ref location, "HF:", Hf_Woundee);
+            EventLabel(frm, parent, ref location, "By:", Hf_Wounder);
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Region:", Subregion);
         }
@@ -146,7 +134,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             return
-                $"{timestring} {(WoundeeHf != null ? "the " + WoundeeHf.Race + " " + WoundeeHf : "an unknown creature")} was wounded by {(WounderHf != null ? "the " + WounderHf.Race + " " + WounderHf : "an unknown creature")}.";
+                $"{timestring} {(Hf_Woundee != null ? "the " + Hf_Woundee.Race + " " + Hf_Woundee : "an unknown creature")} was wounded by {(Hf_Wounder != null ? "the " + Hf_Wounder.Race + " " + Hf_Wounder : "an unknown creature")}.";
 
            
         }
@@ -157,7 +145,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             return
-                $"{timelinestring} {WoundeeHf?.ToString() ?? WoundeeHfid.ToString()} was wounded by the {WounderHf?.ToString() ?? WounderHfid.ToString()}.";
+                $"{timelinestring} {Hf_Woundee?.ToString() ?? HfId_Woundee.ToString()} was wounded by the {Hf_Wounder?.ToString() ?? HfId_Wounder.ToString()}.";
         }        
 
         internal override void Export(string table)
@@ -169,8 +157,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object>
             {
                 Id, 
-                WoundeeHfid.DBExport(), 
-                WounderHfid.DBExport(), 
+                HfId_Woundee.DBExport(), 
+                HfId_Wounder.DBExport(), 
                 SiteId.DBExport(), 
                 SubregionId.DBExport(), 
                 FeatureLayerId.DBExport(),

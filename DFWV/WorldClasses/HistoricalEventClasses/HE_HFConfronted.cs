@@ -9,7 +9,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     class HE_HFConfronted : HistoricalEvent
     {
-        private int? Hfid { get; }
+        private int? HfId { get; }
         private HistoricalFigure Hf { get; set; }
         private int? SiteId { get; }
         private Site Site { get; set; }
@@ -70,7 +70,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                             Coords = new Point(Convert.ToInt32(val.Split(',')[0]), Convert.ToInt32(val.Split(',')[1]));
                         break;
                     case "hfid":
-                        Hfid = valI;
+                        HfId = valI;
                         break;
                     case "situation":
                         if (!Situations.Contains(val))
@@ -87,16 +87,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                 }
             }
-        }
-        internal override void Link()
-        {
-            base.Link();
-            if (Hfid.HasValue && World.HistoricalFigures.ContainsKey(Hfid.Value))
-                Hf = World.HistoricalFigures[Hfid.Value];
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
-                Subregion = World.Regions[SubregionId.Value];
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
@@ -148,7 +138,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object>
             {
                 Id, 
-                Hfid.DBExport(), 
+                HfId.DBExport(), 
                 Situation.DBExport(Situations),
                 Reason.DBExport(Reasons), 
                 SiteId.DBExport(), 

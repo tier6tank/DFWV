@@ -59,26 +59,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 }
             }
         }
-        internal override void Link()
-        {
-            base.Link();
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-            {
-                Site = World.Sites[SiteId.Value];
-                if (StructureId.HasValue)
-                {
-                    Structure = Site.GetStructure(StructureId.Value);
-
-                    if (Structure == null)
-                    {
-                        Structure = new Structure(Site, StructureId.Value, World);
-                        Site.AddStructure(Structure);
-                    }
-                }
-            }
-            if (EntityId.HasValue && World.Entities.ContainsKey(EntityId.Value))
-                Entity = World.Entities[EntityId.Value];
-        }
 
         internal override void Process()
         {

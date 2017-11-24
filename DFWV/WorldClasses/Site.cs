@@ -337,8 +337,8 @@ namespace DFWV.WorldClasses
             frm.grpSiteCreated.Visible = CreatedEvent != null;
             if (CreatedEvent != null)
             {
-                frm.lblSiteCreatedBy.Data = CreatedEvent.SiteCiv;
-                frm.lblSiteCreatedByCiv.Data = CreatedEvent.Civ;
+                frm.lblSiteCreatedBy.Data = CreatedEvent.Entity_SiteCiv;
+                frm.lblSiteCreatedByCiv.Data = CreatedEvent.Entity;
                 frm.lblSiteCreatedTime.Data = CreatedEvent;
                 frm.lblSiteCreatedTime.Text = CreatedEvent.Time.ToString();
             }

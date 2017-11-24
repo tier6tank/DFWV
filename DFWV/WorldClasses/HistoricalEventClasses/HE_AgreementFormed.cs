@@ -14,8 +14,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public Site Site { get; set; }
         public Artifact Artifact { get; set; }
 
-        public int? ConcluderHfid { get; set; }
-        public HistoricalFigure ConcluderHf { get; set; }
+        public int? HfId_Concluder { get; set; }
+        public HistoricalFigure Hf_Concluder { get; set; }
         public int? AgreementSubjectId { get; set; }
         public string Reason { get; set; }
 
@@ -24,7 +24,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get
             {
                 yield return Hf;
-                yield return ConcluderHf;
+                yield return Hf_Concluder;
             }
         }
         public override IEnumerable<Site> SitesInvolved
@@ -52,7 +52,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         AgreementId = valI;
                         break;
                     case "concluder_hfid":
-                        ConcluderHfid = valI;
+                        HfId_Concluder = valI;
                         break;
                     case "agreement_subject_id":
                         AgreementSubjectId = valI;
@@ -74,7 +74,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             EventLabel(frm, parent, ref location, "HF:", Hf);
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Artifact:", Artifact);
-            EventLabel(frm, parent, ref location, "Concluder HF:", ConcluderHf);
+            EventLabel(frm, parent, ref location, "Concluder HF:", Hf_Concluder);
             EventLabel(frm, parent, ref location, "Agreement Subject ID:", AgreementSubjectId.ToString());
             EventLabel(frm, parent, ref location, "Reason:", Reason);
 
@@ -84,7 +84,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            if (!ConcluderHfid.HasValue)
+            if (!HfId_Concluder.HasValue)
                 return
                     $"{timestring} {God?.ToString() ?? "UNKNOWN"} aided the {Hf?.Race.ToString() ?? "UNKNOWN"} {Hf?.ToString() ?? "UNKNOWN"} in becoming a permanent part of the living world that great fortresses might be raised and tested in siege. " +
                     $"The ritual took place in {Site?.ToString() ?? "UNKNOWN"} using {Artifact?.ToString() ?? "UNKNOWN"}";
@@ -95,7 +95,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timelinestring = base.ToTimelineString();
 
-            if (!ConcluderHfid.HasValue)
+            if (!HfId_Concluder.HasValue)
                 return
                     $"{timelinestring} {Hf?.ToString() ?? "UNKNOWN"} performed ritual at {Site?.ToString() ?? "UNKNOWN"} with {Artifact?.ToString() ?? "UNKNOWN"}.";
             return $"{timelinestring} Agreement formed";
@@ -114,7 +114,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Hf.DBExport(),
                 Site.DBExport(),
                 Artifact.DBExport(),
-                ConcluderHfid.DBExport(),
+                HfId_Concluder.DBExport(),
                 AgreementSubjectId.DBExport(),
                 Reason.DBExport()  
             };

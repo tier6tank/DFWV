@@ -10,12 +10,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
     {
         private int? SiteId { get; }
         private Site Site { get; set; }
-        private int? SiteCivId { get; }
-        private Entity SiteCiv { get; set; }
-        private int? AttackerCivId { get; }
-        private Entity AttackerCiv { get; set; }
-        private int? DefenderCivId { get; }
-        private Entity DefenderCiv { get; set; }
+        private int? EntityId_SiteCiv { get; }
+        private Entity Entity_SiteCiv { get; set; }
+        private int? EntityId_Attacker { get; }
+        private Entity Entity_Attacker { get; set; }
+        private int? EntityId_Defender { get; }
+        private Entity Entity_Defender { get; set; }
 
         override public Point Location => Site.Location;
 
@@ -23,9 +23,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get
             {
-                yield return AttackerCiv;
-                yield return DefenderCiv;
-                yield return SiteCiv;
+                yield return Entity_Attacker;
+                yield return Entity_Defender;
+                yield return Entity_SiteCiv;
             }
         }
         public override IEnumerable<Site> SitesInvolved
@@ -50,13 +50,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "attacker_civ_id":
-                        AttackerCivId = valI;
+                        EntityId_Attacker = valI;
                         break;
                     case "defender_civ_id":
-                        DefenderCivId = valI;
+                        EntityId_Defender = valI;
                         break;
                     case "site_civ_id":
-                        SiteCivId = valI;
+                        EntityId_SiteCiv = valI;
                         break;
                     case "site_id":
                         SiteId = valI;
@@ -68,25 +68,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 }
             }
         }
-        internal override void Link()
-        {
-            base.Link();
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (SiteCivId.HasValue && World.Entities.ContainsKey(SiteCivId.Value))
-                SiteCiv = World.Entities[SiteCivId.Value];
-            if (AttackerCivId.HasValue && World.Entities.ContainsKey(AttackerCivId.Value))
-                AttackerCiv = World.Entities[AttackerCivId.Value];
-            if (DefenderCivId.HasValue && World.Entities.ContainsKey(DefenderCivId.Value))
-                DefenderCiv = World.Entities[DefenderCivId.Value];
-        }
-
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "Attacker:", AttackerCiv);
-            EventLabel(frm, parent, ref location, "Defender:", DefenderCiv);
-            EventLabel(frm, parent, ref location, "Owner:", SiteCiv);
+            EventLabel(frm, parent, ref location, "Attacker:", Entity_Attacker);
+            EventLabel(frm, parent, ref location, "Defender:", Entity_Defender);
+            EventLabel(frm, parent, ref location, "Owner:", Entity_SiteCiv);
             EventLabel(frm, parent, ref location, "Site:", Site);
         }
 
@@ -94,14 +81,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            return $"{timestring} {AttackerCiv} defeated {SiteCiv} of {DefenderCiv} and destroyed {Site.AltName}.";
+            return $"{timestring} {Entity_Attacker} defeated {Entity_SiteCiv} of {Entity_Defender} and destroyed {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return $"{timelinestring} {AttackerCiv} destroyed {Site.AltName}.";
+            return $"{timelinestring} {Entity_Attacker} destroyed {Site.AltName}.";
         }
 
 
@@ -115,9 +102,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             {
                 Id, 
                 SiteId.DBExport(), 
-                SiteCivId.DBExport(), 
-                AttackerCivId.DBExport(), 
-                DefenderCivId.DBExport()
+                EntityId_SiteCiv.DBExport(), 
+                EntityId_Attacker.DBExport(), 
+                EntityId_Defender.DBExport()
             };
 
             Database.ExportWorldItem(table, vals);

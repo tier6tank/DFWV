@@ -9,10 +9,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     class HE_HFReunion : HistoricalEvent
     {
-        private List<int> Group1Hfid { get; }
-        private List<HistoricalFigure> Group1Hf { get; set; }
-        private List<int> Group2Hfid { get; }
-        private List<HistoricalFigure> Group2Hf { get; set; }
+        private List<int> HfId_Group1 { get; }
+        private List<HistoricalFigure> Hf_Group1 { get; set; }
+        private List<int> HfId_Group2 { get; }
+        private List<HistoricalFigure> Hf_Group2 { get; set; }
         private int? SiteId { get; }
         private Site Site { get; set; }
         private int? SubregionId { get; }
@@ -25,14 +25,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get 
             {
-                if (Group1Hf != null)
+                if (Hf_Group1 != null)
                 {
-                    foreach (var historicalFigure in Group1Hf)
+                    foreach (var historicalFigure in Hf_Group1)
                         yield return historicalFigure;
                 }
-                if (Group2Hf != null)
+                if (Hf_Group2 != null)
                 {
-                    foreach (var historicalFigure in Group2Hf)
+                    foreach (var historicalFigure in Hf_Group2)
                         yield return historicalFigure;
                 }
             }
@@ -75,14 +75,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                             FeatureLayerId = valI;
                         break;
                     case "group_1_hfid":
-                        if (Group1Hfid == null)
-                            Group1Hfid = new List<int>();
-                        Group1Hfid.Add(valI);
+                        if (HfId_Group1 == null)
+                            HfId_Group1 = new List<int>();
+                        HfId_Group1.Add(valI);
                         break;
                     case "group_2_hfid":
-                        if (Group2Hfid == null)
-                            Group2Hfid = new List<int>();
-                        Group2Hfid.Add(valI);
+                        if (HfId_Group2 == null)
+                            HfId_Group2 = new List<int>();
+                        HfId_Group2.Add(valI);
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
@@ -93,32 +93,28 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
-                Subregion = World.Regions[SubregionId.Value];
-            if (Group1Hfid != null)
+            if (HfId_Group1 != null)
             {
-                Group1Hf = new List<HistoricalFigure>();
-                foreach (var group1Hfid in Group1Hfid.Where(group1Hfid => World.HistoricalFigures.ContainsKey(group1Hfid)))
+                Hf_Group1 = new List<HistoricalFigure>();
+                foreach (var group1Hfid in HfId_Group1.Where(group1Hfid => World.HistoricalFigures.ContainsKey(group1Hfid)))
                 {
-                    Group1Hf.Add(World.HistoricalFigures[group1Hfid]);
+                    Hf_Group1.Add(World.HistoricalFigures[group1Hfid]);
                 }
             }
 
-            if (Group2Hfid == null) return;
-            Group2Hf = new List<HistoricalFigure>();
-            foreach (var group2Hfid in Group2Hfid.Where(group2Hfid => World.HistoricalFigures.ContainsKey(group2Hfid)))
+            if (HfId_Group2 == null) return;
+            Hf_Group2 = new List<HistoricalFigure>();
+            foreach (var group2Hfid in HfId_Group2.Where(group2Hfid => World.HistoricalFigures.ContainsKey(group2Hfid)))
             {
-                Group2Hf.Add(World.HistoricalFigures[group2Hfid]);
+                Hf_Group2.Add(World.HistoricalFigures[group2Hfid]);
             }
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            foreach (var hf in Group1Hf)
+            foreach (var hf in Hf_Group1)
                 EventLabel(frm, parent, ref location, "Group 1:", hf);
-            foreach (var hf in Group2Hf)
+            foreach (var hf in Hf_Group2)
                 EventLabel(frm, parent, ref location, "Group 2:", hf);
 
             EventLabel(frm, parent, ref location, "Site:", Site);
@@ -132,41 +128,41 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             string reunitedText;
-            if (Group2Hfid.Count == 2)
+            if (HfId_Group2.Count == 2)
             {
-                switch (Group2Hf.Count)
+                switch (Hf_Group2.Count)
                 {
                     case 2:
-                        reunitedText = Group2Hf[0] + " and " + Group2Hf[1];
+                        reunitedText = Hf_Group2[0] + " and " + Hf_Group2[1];
                         break;
                     case 0:
                         reunitedText = "an unknown creature and an unknown creature";
                         break;
                     default:
-                        if (Group2Hf[0].Id == Group2Hfid[0])
-                            reunitedText = Group2Hf[0] + " and an unknown creature";
+                        if (Hf_Group2[0].Id == HfId_Group2[0])
+                            reunitedText = Hf_Group2[0] + " and an unknown creature";
                         else
-                            reunitedText = "an unknown creature" + Group2Hf[0];
+                            reunitedText = "an unknown creature" + Hf_Group2[0];
                         break;
                 }
             }
             else
-                reunitedText = Group2Hf.Count == 0 ? "an unknown creature" : Group2Hf[0].ToString();
+                reunitedText = Hf_Group2.Count == 0 ? "an unknown creature" : Hf_Group2[0].ToString();
 
 
 
-                return $"{timestring} {Group1Hf[0]} was reunited with {reunitedText} in {Site.AltName}.";
+                return $"{timestring} {Hf_Group1[0]} was reunited with {reunitedText} in {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            if (Group2Hf.Count == Group2Hfid.Count && Group1Hf.Count == Group1Hfid.Count)
+            if (Hf_Group2.Count == HfId_Group2.Count && Hf_Group1.Count == HfId_Group1.Count)
                 return
-                    $"{timelinestring} {Group1Hf[0]} was reunited with {(Group2Hf.Count == 2 ? " and " + Group2Hf[1] : "")}{Group2Hf[0]} in {Site.AltName}.";
+                    $"{timelinestring} {Hf_Group1[0]} was reunited with {(Hf_Group2.Count == 2 ? " and " + Hf_Group2[1] : "")}{Hf_Group2[0]} in {Site.AltName}.";
             return
-                $"{timelinestring} {Group1Hfid[0]} was reunited with {(Group2Hf.Count == 2 ? " and " + Group2Hfid[1] : "")}{Group2Hfid[0]} in {Site.AltName}.";
+                $"{timelinestring} {HfId_Group1[0]} was reunited with {(Hf_Group2.Count == 2 ? " and " + HfId_Group2[1] : "")}{HfId_Group2[0]} in {Site.AltName}.";
         }
 
         internal override void Export(string table)
@@ -178,8 +174,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object>
             {
                 Id,
-                Group1Hfid.DBExport(),
-                Group2Hfid.DBExport(),
+                HfId_Group1.DBExport(),
+                HfId_Group2.DBExport(),
                 SiteId.DBExport(),
                 SubregionId.DBExport(),
                 FeatureLayerId.DBExport()

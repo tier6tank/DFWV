@@ -1,28 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using DFWV.WorldClasses.HistoricalFigureClasses;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using DFWV.WorldClasses.EntityClasses;
-using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_ArtifactFound : HistoricalEvent
+    internal class HE_HFViewedArtifact : HistoricalEvent
     {
-
         private int? ArtifactId { get; }
         private Artifact Artifact { get; set; }
-        public int? UnitId { get; set; }
         private int? HfId { get; }
         private HistoricalFigure Hf { get; set; }
         private int? SiteId { get; }
         private Site Site { get; set; }
+        private int? StructureId { get; set; }
+        public Structure Structure { get; set; }
 
         override public Point Location => Site.Location;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
-            get {
+            get
+            {
                 yield return Hf;
             }
         }
@@ -35,10 +35,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        public HE_ArtifactFound(XDocument xdoc, World world)
-            : base(xdoc, world)
-        {
 
+        public HE_HFViewedArtifact(XDocument xdoc, World world) : base(xdoc, world)
+        {
             foreach (var element in xdoc.Root.Elements())
             {
                 var val = element.Value;
@@ -56,19 +55,20 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "artifact_id":
                         ArtifactId = valI;
                         break;
-                    case "unit_id":
-                        UnitId = valI;
-                        break;
-                    case "hist_figure_id":
+                    case "hist_fig_id":
                         HfId = valI;
                         break;
                     case "site_id":
+                        SiteId = valI;
+                        break;
+                    case "structure_id":
                         SiteId = valI;
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
+
             }
         }
 
@@ -90,5 +90,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             return timelinestring;
         }
+
     }
 }

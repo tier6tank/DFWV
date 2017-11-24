@@ -15,7 +15,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public static List<string> Reasons = new List<string>();
         public int? Mood { get; set; }
         public static List<string> Moods = new List<string>();
-        public int? Hfid { get; set; }
+        public int? HfId { get; set; }
         public HistoricalFigure Hf { get; set; }
         public int? SiteId { get; set; }
         public Site Site { get; private set; }
@@ -56,7 +56,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "hfid":
-                        Hfid = valI;
+                        HfId = valI;
                         break;
                     case "state":
                         if (!States.Contains(val))
@@ -95,18 +95,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 }
             }
         }
-        internal override void Link()
-        {
-            base.Link();
-            if (Hfid.HasValue && World.HistoricalFigures.ContainsKey(Hfid.Value))
-                Hf = World.HistoricalFigures[Hfid.Value];
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
-                Subregion = World.Regions[SubregionId.Value];
-
-        }
-
 
         internal override void Process()
         {
@@ -176,10 +164,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             if (!State.HasValue)
-                return $"{timelinestring} HF Changed state - {Hfid}.";
+                return $"{timelinestring} HF Changed state - {HfId}.";
 
             if (Hf == null )
-                return $"{timelinestring} HF Changed state - {Hfid} - {States[State.Value]}.";
+                return $"{timelinestring} HF Changed state - {HfId} - {States[State.Value]}.";
 
             switch (States[State.Value])
             {
@@ -227,7 +215,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object>
             {
                 Id, 
-                Hfid.DBExport(), 
+                HfId.DBExport(), 
                 State.DBExport(States), 
                 SiteId.DBExport(), 
                 SubregionId.DBExport(), 

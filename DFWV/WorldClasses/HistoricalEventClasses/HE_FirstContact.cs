@@ -10,10 +10,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
     {
         private int? SiteId { get; }
         private Site Site { get; set; }
-        private int? ContactorEnId { get; }
-        private Entity ContactorEn { get; set; }
-        private int? ContactedEnId { get; }
-        private Entity ContactedEn { get; set; }
+        private int? EntityId_Contactor { get; }
+        private Entity Entity_Contactor { get; set; }
+        private int? EntityId_Contacted { get; }
+        private Entity Entity_Contacted { get; set; }
 
         override public Point Location => Site.Location;
 
@@ -21,8 +21,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get
             {
-                yield return ContactorEn;
-                yield return ContactedEn;
+                yield return Entity_Contactor;
+                yield return Entity_Contacted;
             }
         }
         public override IEnumerable<Site> SitesInvolved
@@ -47,10 +47,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "contactor_enid":
-                        ContactorEnId = valI;
+                        EntityId_Contactor = valI;
                         break;
                     case "contacted_enid":
-                        ContactedEnId = valI;
+                        EntityId_Contacted = valI;
                         break;
                     case "site_id":
                         SiteId = valI;
@@ -61,23 +61,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 }
             }
         }
-        internal override void Link()
-        {
-            base.Link();
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (ContactorEnId.HasValue && World.Entities.ContainsKey(ContactorEnId.Value))
-                ContactorEn = World.Entities[ContactorEnId.Value];
-            if (ContactedEnId.HasValue && World.Entities.ContainsKey(ContactedEnId.Value))
-                ContactedEn = World.Entities[ContactedEnId.Value];
-        }
-
-
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "Contactor:", ContactorEn);
-            EventLabel(frm, parent, ref location, "Contacted:", ContactedEn);
+            EventLabel(frm, parent, ref location, "Contactor:", Entity_Contactor);
+            EventLabel(frm, parent, ref location, "Contacted:", Entity_Contacted);
             EventLabel(frm, parent, ref location, "Site:", Site);
         }
 
@@ -85,14 +73,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            return $"{timestring} {ContactorEn} made contact with {ContactedEn} at {Site.AltName}.";
+            return $"{timestring} {Entity_Contactor} made contact with {Entity_Contacted} at {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return $"{timelinestring} {ContactorEn} made contact with {ContactedEn} at {Site.AltName}.";
+            return $"{timelinestring} {Entity_Contactor} made contact with {Entity_Contacted} at {Site.AltName}.";
         }
 
         internal override void Export(string table)
@@ -105,8 +93,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             {
                 Id, 
                 SiteId.DBExport(), 
-                ContactorEnId.DBExport(), 
-                ContactedEnId.DBExport()
+                EntityId_Contactor.DBExport(), 
+                EntityId_Contacted.DBExport()
             };
 
             Database.ExportWorldItem(table, vals);

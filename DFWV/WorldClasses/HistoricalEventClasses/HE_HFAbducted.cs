@@ -8,10 +8,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     class HE_HFAbducted : HistoricalEvent
     {
-        private int? TargetHfid { get; }
-        public HistoricalFigure TargetHf { get; private set; }
-        private int? SnatcherHfid { get; }
-        private HistoricalFigure SnatcherHf { get; set; }
+        private int? HfId_Target { get; }
+        public HistoricalFigure Hf_Target { get; private set; }
+        private int? HfId_Snatcher { get; }
+        private HistoricalFigure Hf_Snatcher { get; set; }
         private int? SiteId { get; }
         private Site Site { get; set; }
         private int? SubregionId { get; }
@@ -24,8 +24,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get
             {
-                yield return SnatcherHf;
-                yield return TargetHf;
+                yield return Hf_Snatcher;
+                yield return Hf_Target;
             }
         }
         public override IEnumerable<Site> SitesInvolved
@@ -66,10 +66,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                             FeatureLayerId = valI;
                         break;
                     case "target_hfid":
-                        TargetHfid = valI;
+                        HfId_Target = valI;
                         break;
                     case "snatcher_hfid":
-                        SnatcherHfid = valI;
+                        HfId_Snatcher = valI;
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
@@ -78,24 +78,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        internal override void Link()
-        {
-            base.Link();
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
-                Subregion = World.Regions[SubregionId.Value];
-            if (TargetHfid.HasValue && World.HistoricalFigures.ContainsKey(TargetHfid.Value))
-                TargetHf = World.HistoricalFigures[TargetHfid.Value];
-            if (SnatcherHfid.HasValue && World.HistoricalFigures.ContainsKey(SnatcherHfid.Value))
-                SnatcherHf = World.HistoricalFigures[SnatcherHfid.Value];
-        }
-
-
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "Target:", TargetHf);
-            EventLabel(frm, parent, ref location, "Snatcher:", SnatcherHf);
+            EventLabel(frm, parent, ref location, "Target:", Hf_Target);
+            EventLabel(frm, parent, ref location, "Snatcher:", Hf_Snatcher);
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Region:", Subregion);
 
@@ -106,7 +92,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             return
-                $"{timestring} {TargetHf} was abducted from {Site.AltName} by {SnatcherHf?.ToString() ?? "an unknown creature"}.";
+                $"{timestring} {Hf_Target} was abducted from {Site.AltName} by {Hf_Snatcher?.ToString() ?? "an unknown creature"}.";
         }
 
         internal override string ToTimelineString()
@@ -114,7 +100,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             return
-                $"{timelinestring} {TargetHf?.ToString() ?? TargetHfid.ToString()} was abducted from {Site.AltName} by {SnatcherHf?.ToString() ?? SnatcherHfid.ToString()}.";
+                $"{timelinestring} {Hf_Target?.ToString() ?? HfId_Target.ToString()} was abducted from {Site.AltName} by {Hf_Snatcher?.ToString() ?? HfId_Snatcher.ToString()}.";
         }
 
         internal override void Export(string table)
@@ -126,8 +112,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object>
             {
                 Id, 
-                TargetHfid.DBExport(), 
-                SnatcherHfid.DBExport(), 
+                HfId_Target.DBExport(), 
+                HfId_Snatcher.DBExport(), 
                 SiteId.DBExport(), 
                 SubregionId.DBExport(), 
                 FeatureLayerId.DBExport()

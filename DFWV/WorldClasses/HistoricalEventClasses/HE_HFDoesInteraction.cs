@@ -8,10 +8,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     class HE_HFDoesInteraction : HistoricalEvent
     {
-        private int? TargetHfid { get; }
-        private HistoricalFigure TargetHf { get; set; }
-        private int? DoerHfid { get; }
-        private HistoricalFigure DoerHf { get; set; }
+        private int? HfId_Target { get; }
+        private HistoricalFigure Hf_Target { get; set; }
+        private int? HfId_Doer { get; }
+        private HistoricalFigure Hf_Doer { get; set; }
         private int Interaction { get; }
         private string InteractionString { get; set; }
         private string InteractionAction { get; set; }
@@ -28,8 +28,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get
             {
-                yield return TargetHf;
-                yield return DoerHf;
+                yield return Hf_Target;
+                yield return Hf_Doer;
             }
         }
         public override IEnumerable<Site> SitesInvolved
@@ -54,10 +54,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "doer_hfid":
-                        DoerHfid = valI;
+                        HfId_Doer = valI;
                         break;
                     case "target_hfid":
-                        TargetHfid = valI;
+                        HfId_Target = valI;
                         break;
                     case "interaction":
                         if (!HistoricalFigure.Interactions.Contains(val))
@@ -70,19 +70,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 }
             }
         }
-        internal override void Link()
-        {
-            base.Link();
-            if (TargetHfid.HasValue && World.HistoricalFigures.ContainsKey(TargetHfid.Value))
-                TargetHf = World.HistoricalFigures[TargetHfid.Value];
-            if (DoerHfid.HasValue && World.HistoricalFigures.ContainsKey(DoerHfid.Value))
-                DoerHf = World.HistoricalFigures[DoerHfid.Value];
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
-                Subregion = World.Regions[SubregionId.Value];
-        }
-
         
         internal override void Plus(XDocument xdoc)
         {
@@ -129,8 +116,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
             //TODO: Incorporate new data
-            EventLabel(frm, parent, ref location, "HF:", DoerHf);
-            EventLabel(frm, parent, ref location, "Target:", TargetHf);
+            EventLabel(frm, parent, ref location, "HF:", Hf_Doer);
+            EventLabel(frm, parent, ref location, "Target:", Hf_Target);
             EventLabel(frm, parent, ref location, "Interaction:", HistoricalFigure.Interactions[Interaction]);
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Region:", Subregion);
@@ -142,38 +129,38 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             if (InteractionAction != null && InteractionString != null)
-                return $"{timestring} {DoerHf} {InteractionAction} {TargetHf} {InteractionString} in {Site.AltName}";
+                return $"{timestring} {Hf_Doer} {InteractionAction} {Hf_Target} {InteractionString} in {Site.AltName}";
             if (HistoricalFigure.Interactions[Interaction].ToLower().Contains("curse_vampire") || HistoricalFigure.Interactions[Interaction].ToLower().Contains("master_vampire_curse"))
-                return $"{timestring} {DoerHf} cursed {TargetHf} to prowl the night in search of blood in {"UNKNOWN"}.";
+                return $"{timestring} {Hf_Doer} cursed {Hf_Target} to prowl the night in search of blood in {"UNKNOWN"}.";
             if (HistoricalFigure.Interactions[Interaction].ToLower().Contains("curse_werebeast"))
                 return
-                    $"{timestring} {DoerHf} cursed {TargetHf} to assume the form of a {"UNKNOWN"}-like monster every full moon in {"UNKNOWN"}.";
+                    $"{timestring} {Hf_Doer} cursed {Hf_Target} to assume the form of a {"UNKNOWN"}-like monster every full moon in {"UNKNOWN"}.";
             if (HistoricalFigure.Interactions[Interaction].ToLower().Contains("werelizard_curse"))
                 return
-                    $"{timestring} {DoerHf} cursed {TargetHf} to assume the form of a lizard-like monster every full moon in {"UNKNOWN"}.";
+                    $"{timestring} {Hf_Doer} cursed {Hf_Target} to assume the form of a lizard-like monster every full moon in {"UNKNOWN"}.";
             if (HistoricalFigure.Interactions[Interaction].ToLower().Contains("werewolf_curse"))
                 return
-                    $"{timestring} {DoerHf} cursed {TargetHf} to assume the form of a wolf-like monster every full moon in {"UNKNOWN"}.";
+                    $"{timestring} {Hf_Doer} cursed {Hf_Target} to assume the form of a wolf-like monster every full moon in {"UNKNOWN"}.";
             if (HistoricalFigure.Interactions[Interaction].ToLower().Contains("werebear_curse"))
                 return
-                    $"{timestring} {DoerHf} cursed {TargetHf} to assume the form of a bear-like monster every full moon in {"UNKNOWN"}.";
+                    $"{timestring} {Hf_Doer} cursed {Hf_Target} to assume the form of a bear-like monster every full moon in {"UNKNOWN"}.";
             if (HistoricalFigure.Interactions[Interaction].ToLower().Contains("lesser_vampire_curse"))
                 return
-                    $"{timestring} {DoerHf} cursed {TargetHf} to slither through the shadows in search of blood in {"UNKNOWN"}.";
+                    $"{timestring} {Hf_Doer} cursed {Hf_Target} to slither through the shadows in search of blood in {"UNKNOWN"}.";
             if (HistoricalFigure.Interactions[Interaction].ToLower().Contains("minor_vampire_curse"))
-                return $"{timestring} {DoerHf} cursed {TargetHf} to endlessly lust for blood in {"UNKNOWN"}.";
+                return $"{timestring} {Hf_Doer} cursed {Hf_Target} to endlessly lust for blood in {"UNKNOWN"}.";
             if (HistoricalFigure.Interactions[Interaction].ToLower().Contains("curse"))
-                return $"{timestring} {DoerHf} cursed {TargetHf} to {Interaction} in {"UNKNOWN"}.";
+                return $"{timestring} {Hf_Doer} cursed {Hf_Target} to {Interaction} in {"UNKNOWN"}.";
             if (HistoricalFigure.Interactions[Interaction].ToLower().Contains("infected_bite"))
-                return $"{timestring} {DoerHf} bit the infected {TargetHf}, infecting in {"UNKNOWN"}.";
+                return $"{timestring} {Hf_Doer} bit the infected {Hf_Target}, infecting in {"UNKNOWN"}.";
             if (HistoricalFigure.Interactions[Interaction].ToLower().Contains("murder_roar"))
-                return $"{timestring} {DoerHf} cursed {TargetHf} to kill for enjoyment in {"UNKNOWN"}.";
+                return $"{timestring} {Hf_Doer} cursed {Hf_Target} to kill for enjoyment in {"UNKNOWN"}.";
             if (HistoricalFigure.Interactions[Interaction].ToLower().Contains("chosen_one"))
                 return
-                    $"{timestring} {DoerHf} chose {TargetHf} to seek out and destroy the powers of evil in {"UNKNOWN"}.";
+                    $"{timestring} {Hf_Doer} chose {Hf_Target} to seek out and destroy the powers of evil in {"UNKNOWN"}.";
             if (HistoricalFigure.Interactions[Interaction].ToLower().Contains("dwarf_to_spawn"))
                 return
-                    $"{timestring} {DoerHf} bit {TargetHf}, mutating them into a twisted mockery of dwarvenkind {"UNKNOWN"}.";
+                    $"{timestring} {Hf_Doer} bit {Hf_Target}, mutating them into a twisted mockery of dwarvenkind {"UNKNOWN"}.";
             return timestring;
         }
 
@@ -183,7 +170,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             return
-                $"{timelinestring} {DoerHf?.ToString() ?? DoerHfid.ToString()} cursed {TargetHf?.ToString() ?? TargetHfid.ToString()}";
+                $"{timelinestring} {Hf_Doer?.ToString() ?? HfId_Doer.ToString()} cursed {Hf_Target?.ToString() ?? HfId_Target.ToString()}";
         }
 
         internal override void Export(string table)
@@ -195,8 +182,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object>
             {
                 Id, 
-                TargetHfid.DBExport(), 
-                DoerHfid.DBExport(),
+                HfId_Target.DBExport(), 
+                HfId_Doer.DBExport(),
                 Interaction.DBExport(HistoricalFigure.Interactions),
                 SiteId.DBExport(),
                 Subregion.DBExport()

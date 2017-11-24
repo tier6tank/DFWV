@@ -17,13 +17,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private Region Subregion { get; set; }
         private int? FeatureLayerId { get; }
         private Point Coords { get; }
-        private List<int> GroupHfiDs { get; set; }
+        private List<int> HfIds { get; set; }
         private List<Race> Pets { get; set; }
-        private List<HistoricalFigure> GroupHFs { get; set; }
+        private List<HistoricalFigure> Hfs { get; set; }
 
         override public Point Location => Coords;
 
-        public override IEnumerable<HistoricalFigure> HFsInvolved => GroupHFs ?? Enumerable.Empty<HistoricalFigure>();
+        public override IEnumerable<HistoricalFigure> HFsInvolved => Hfs ?? Enumerable.Empty<HistoricalFigure>();
 
         public override IEnumerable<Site> SitesInvolved
         {
@@ -67,9 +67,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                             Coords = new Point(Convert.ToInt32(val.Split(',')[0]), Convert.ToInt32(val.Split(',')[1]));
                         break;
                     case "group_hfid":
-                        if (GroupHfiDs == null)
-                            GroupHfiDs = new List<int>();
-                        GroupHfiDs.Add(valI);
+                        if (HfIds == null)
+                            HfIds = new List<int>();
+                        HfIds.Add(valI);
                         break;
 
                     default:
@@ -82,15 +82,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             //TODO: Incorporate new data
             base.Link();
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
-                Subregion = World.Regions[SubregionId.Value];
-            if (GroupHfiDs == null) return;
-            GroupHFs = new List<HistoricalFigure>();
-            foreach (var grouphfid in GroupHfiDs.Where(grouphfid => World.HistoricalFigures.ContainsKey(grouphfid)))
+            if (HfIds == null) return;
+            Hfs = new List<HistoricalFigure>();
+            foreach (var grouphfid in HfIds.Where(grouphfid => World.HistoricalFigures.ContainsKey(grouphfid)))
             {
-                GroupHFs.Add(World.HistoricalFigures[grouphfid]);
+                Hfs.Add(World.HistoricalFigures[grouphfid]);
             }
         }
 
@@ -108,10 +104,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "group":
-                        if (GroupHfiDs == null)
-                            GroupHfiDs = new List<int>();
-                        if (!GroupHfiDs.Contains(valI))
-                            GroupHfiDs.Add(valI);
+                        if (HfIds == null)
+                            HfIds = new List<int>();
+                        if (!HfIds.Contains(valI))
+                            HfIds.Add(valI);
                         break;
                     case "pets":
                         var race = World.GetAddRace(val);
@@ -130,7 +126,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location) //TODO: Test Display
         {
-            foreach (var hf in GroupHFs)
+            foreach (var hf in Hfs)
                 EventLabel(frm, parent, ref location, "HF:", hf);
             foreach (var pet in Pets)
                 EventLabel(frm, parent, ref location, "Pet:", pet);
@@ -154,10 +150,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (Pets != null && Pets.Count == 1)
             {
                 return
-                    $"{timestring} {GroupHFs[0]} tamed the {Pets[0]} of {Subregion?.ToString() ?? "UNKNOWN"}.";
+                    $"{timestring} {Hfs[0]} tamed the {Pets[0]} of {Subregion?.ToString() ?? "UNKNOWN"}.";
             }
             return
-                $"{timestring} {GroupHFs[0]} tamed the {"UNKNOWN"} of {Subregion?.ToString() ?? "UNKNOWN"}.";
+                $"{timestring} {Hfs[0]} tamed the {"UNKNOWN"} of {Subregion?.ToString() ?? "UNKNOWN"}.";
         }
 
         internal override string ToTimelineString()
@@ -165,7 +161,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             //TODO: Incorporate new data (multiple GroupHFs)
             var timelinestring = base.ToTimelineString();
 
-            return $"{timelinestring} {GroupHFs[0]} got a new pet.";
+            return $"{timelinestring} {Hfs[0]} got a new pet.";
         }
 
         internal override void Export(string table)
@@ -177,7 +173,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object>
             {
                 Id, 
-                GroupHfiDs.DBExport(), 
+                HfIds.DBExport(), 
                 SiteId.DBExport(), 
                 SubregionId.DBExport(), 
                 FeatureLayerId.DBExport(),

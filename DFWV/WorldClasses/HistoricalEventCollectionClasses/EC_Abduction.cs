@@ -196,7 +196,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                 if (HistoricalEvent.Types[Event[i].Type] != "add hf entity link" ||
                     HistoricalEvent.Types[Event[i - 1].Type] != "hf abducted")
                     continue;
-                var abductedHf = ((HE_HFAbducted)Event[i - 1]).TargetHf;
+                var abductedHf = ((HE_HFAbducted)Event[i - 1]).Hf_Target;
                 var addLinkEvent = ((HE_AddHFEntityLink)Event[i]);
                 addLinkEvent.Hf = abductedHf;
 
@@ -207,7 +207,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         foreach (
                             var entityLink in
                                 abductedHf.EntityLinks[HFEntityLink.LinkTypes.IndexOf("prisoner")].Where(
-                                    entityLink => entityLink.Entity == addLinkEvent.Civ))
+                                    entityLink => entityLink.Entity == addLinkEvent.Entity))
                         {
                             addLinkEvent.HfEntityLink = entityLink;
                             break;
@@ -219,7 +219,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                         foreach (
                             var entityLink in
                                 abductedHf.EntityLinks[HFEntityLink.LinkTypes.IndexOf("former prisoner")].Where(
-                                    entityLink => entityLink.Entity == addLinkEvent.Civ))
+                                    entityLink => entityLink.Entity == addLinkEvent.Entity))
                         {
                             addLinkEvent.HfEntityLink = entityLink;
                             break;

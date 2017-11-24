@@ -567,7 +567,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                 var thisNode = new TreeNode("Kills");
                 foreach (var evt in SlayingEvents)
                 {
-                    if (evt.SlayerHf != this || evt.Hf == null) continue;
+                    if (evt.Hf_Slayer != this || evt.Hf == null) continue;
                     var hfNode = new TreeNode(evt.Hf.ToString()) {Tag = evt.Hf};
                     if (evt.Hf.Caste.HasValue && Castes[evt.Hf.Caste.Value].ToLower().StartsWith("male"))
                         hfNode.ForeColor = Color.Blue;
@@ -589,7 +589,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             frm.grpHistoricalFigureDeath.Visible = DiedEvent != null;
             if (DiedEvent != null)
             {
-                frm.lblHistoricalFigureDeathSlayer.Data = DiedEvent.SlayerHf;
+                frm.lblHistoricalFigureDeathSlayer.Data = DiedEvent.Hf_Slayer;
                 frm.lblHistoricalFigureDeathLocation.Data = DiedEvent.Site == null ? DiedEvent.Subregion : (WorldObject)DiedEvent.Site;
                 frm.lblHistoricalFigureDeathCause.Text = HE_HFDied.Causes[DiedEvent.Cause];
                 frm.lblHistoricalFigureDeathTime.Data = DiedEvent;
@@ -807,10 +807,10 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                 if (Dead)
                 {
                     //HE_HFDied.Causes[DiedEvent.Cause]
-                    if (DiedEvent.SlayerHf != null)
+                    if (DiedEvent.Hf_Slayer != null)
                     {
                         rtb.AddText($"{Pronoun} was {HE_HFDied.Causes[DiedEvent.Cause]} by ");
-                        rtb.AddLink(DiedEvent.SlayerHf);
+                        rtb.AddLink(DiedEvent.Hf_Slayer);
                         if (DiedEvent.Site != null)
                         { 
                             rtb.AddText(" at ");

@@ -258,7 +258,7 @@ namespace DFWVTests
             Assert.AreEqual(HistoricalEvent.Types[historicalevent.Type], "change hf state");
             Assert.IsInstanceOfType(historicalevent, typeof (HE_ChangeHFState));
             var changehfstateEvent = historicalevent as HE_ChangeHFState;
-            Assert.AreEqual(changehfstateEvent.Hfid, 264);
+            Assert.AreEqual(changehfstateEvent.HfId, 264);
             Assert.AreEqual(HE_ChangeHFState.States[changehfstateEvent.State.Value], "settled");
             Assert.IsNull(changehfstateEvent.SiteId);
             Assert.AreEqual(changehfstateEvent.SubregionId.Value, 4);

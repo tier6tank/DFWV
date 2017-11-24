@@ -11,8 +11,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
     {
         private int? SiteId { get; }
         public Site Site { get; private set; }
-        private int? TargetCivId { get; }
-        public Entity TargetCiv { get; private set; }
+        private int? EntityId { get; }
+        public Entity Entity { get; private set; }
         public string Outcome { get; set; }
 
 
@@ -20,7 +20,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         public override IEnumerable<Entity> EntitiesInvolved
         {
-            get { yield return TargetCiv; }
+            get { yield return Entity; }
         }
 
         public override IEnumerable<Site> SitesInvolved
@@ -45,7 +45,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "target_civ_id":
-                        TargetCivId = valI;
+                        EntityId = valI;
                         break;
                     case "site_id":
                         SiteId = valI;
@@ -63,19 +63,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        internal override void Link()
-        {
-            base.Link();
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (TargetCivId.HasValue && World.Entities.ContainsKey(TargetCivId.Value))
-                TargetCiv = World.Entities[TargetCivId.Value];
-        }
-
-
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "Target Civ:", TargetCiv);
+            EventLabel(frm, parent, ref location, "Target Civ:", Entity);
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Outcome:", Outcome);
         }
@@ -88,18 +78,18 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             {
                 case "population gone":
                     return
-                        $"{timestring} the insurrection in {Site.AltName} against {TargetCiv} ended with the disappearance of hte rebelling population.";
+                        $"{timestring} the insurrection in {Site.AltName} against {Entity} ended with the disappearance of hte rebelling population.";
                 case "leadership overthrown":
-                    return $"{timestring} the insurrection in {Site.AltName} concluded with {TargetCiv} overthrown.";
+                    return $"{timestring} the insurrection in {Site.AltName} concluded with {Entity} overthrown.";
             }
-            return $"{timestring} the insurrection in {Site.AltName} against {TargetCiv} - {Outcome}.";
+            return $"{timestring} the insurrection in {Site.AltName} against {Entity} - {Outcome}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return $"{timelinestring} insurrection in {Site.AltName} against {TargetCiv} - {Outcome}.";
+            return $"{timelinestring} insurrection in {Site.AltName} against {Entity} - {Outcome}.";
         }
 
         internal override void Export(string table)
@@ -112,7 +102,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             {
                 Id, 
                 SiteId.DBExport(), 
-                TargetCivId.DBExport(), 
+                EntityId.DBExport(), 
                 Outcome.DBExport()
             };
 

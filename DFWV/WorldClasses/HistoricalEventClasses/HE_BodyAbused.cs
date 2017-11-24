@@ -17,13 +17,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private Region Subregion { get; set; }
         private int? FeatureLayerId { get; }
         private Point Coords { get; }
-        public Entity AbuserEn { private get; set; }
+        public Entity Entity_Abuser { private get; set; }
 
         public List<int> BodyHfiDs;
         public List<HistoricalFigure> BodyHFs;
-        public int? AbuserEnId { get; set; }
+        public int? EntityId_Abuser { get; set; }
         public int? AbuseType { get; set; }
-        public int? Hfid { get; set; }
+        public int? HfId { get; set; }
         public HistoricalFigure Hf { get; set; }
         public int? ItemType { get; set; }
         public int? ItemSubType { get; set; }
@@ -57,7 +57,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         public override IEnumerable<Entity> EntitiesInvolved
         {
-            get { yield return AbuserEn; }
+            get { yield return Entity_Abuser; }
         }
         public HE_BodyAbused(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -101,10 +101,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
-                Subregion = World.Regions[SubregionId.Value];
             if (BodyHfiDs != null)
             {
                 foreach (var hfid in BodyHfiDs.Where(hfid => World.HistoricalFigures.ContainsKey(hfid)))
@@ -114,10 +110,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     BodyHFs.Add(World.HistoricalFigures[hfid]);
                 }
             }
-            if (AbuserEnId.HasValue && World.Entities.ContainsKey(AbuserEnId.Value))
-                AbuserEn = World.Entities[AbuserEnId.Value];
-            if (Hfid.HasValue && World.HistoricalFigures.ContainsKey(Hfid.Value))
-                Hf = World.HistoricalFigures[Hfid.Value];
         }
 
         internal override void Plus(XDocument xdoc)
@@ -140,7 +132,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                     case "civ":
                         if (valI != -1)
-                            AbuserEnId = valI;
+                            EntityId_Abuser = valI;
                         break;
                     case "site":
                         break;
@@ -171,7 +163,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         PileType = -1;
                         break;
                     case "histfig":
-                        Hfid = valI;
+                        HfId = valI;
                         break;
                     case "abuse_type":
                         AbuseType = valI;
@@ -185,7 +177,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "Abuser:", AbuserEn);
+            EventLabel(frm, parent, ref location, "Abuser:", Entity_Abuser);
             EventLabel(frm, parent, ref location, "Abuser:", Hf);
             if (BodyHFs != null)
             {
@@ -229,27 +221,27 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 abusedHFtext += $"and the {BodyHFs.Last().Race.Name.ToLower()} {BodyHFs.Last()} ";
             }
 
-            if (AbuserEn != null && PileType == -1 && ItemMat.HasValue && ItemType.HasValue)
+            if (Entity_Abuser != null && PileType == -1 && ItemMat.HasValue && ItemType.HasValue)
             {
                 if (ItemSubType.HasValue)
                 {
                     return
-                        $"{timestring} {abusedHFtext} impaled on a {Item.Materials[ItemMat.Value] + " " + Item.ItemSubTypes[ItemSubType.Value]} by {AbuserEn} in {locationtext}.";
+                        $"{timestring} {abusedHFtext} impaled on a {Item.Materials[ItemMat.Value] + " " + Item.ItemSubTypes[ItemSubType.Value]} by {Entity_Abuser} in {locationtext}.";
                 }
                 return
-                    $"{timestring} {abusedHFtext} impaled on a {Item.Materials[ItemMat.Value] + " " + Item.ItemTypes[ItemType.Value]} by {AbuserEn} in {locationtext}.";
+                    $"{timestring} {abusedHFtext} impaled on a {Item.Materials[ItemMat.Value] + " " + Item.ItemTypes[ItemType.Value]} by {Entity_Abuser} in {locationtext}.";
             }
-            if (AbuserEn != null && PileType == -1 && ItemMat == null && ItemType != null && Item.ItemTypes[ItemType.Value] == "none")
-                return $"{timestring} {abusedHFtext} horribly mutilated by {AbuserEn} in {locationtext}.";
-            if (AbuserEn == null && Hf != null && PileType == -1 && ItemMat == null)
+            if (Entity_Abuser != null && PileType == -1 && ItemMat == null && ItemType != null && Item.ItemTypes[ItemType.Value] == "none")
+                return $"{timestring} {abusedHFtext} horribly mutilated by {Entity_Abuser} in {locationtext}.";
+            if (Entity_Abuser == null && Hf != null && PileType == -1 && ItemMat == null)
                 return $"{timestring} {abusedHFtext} animated by the {Hf.Race} {Hf} in {locationtext}.";
-            if (AbuserEn == null && Hf == null && PileType == -1 && ItemMat == null)
+            if (Entity_Abuser == null && Hf == null && PileType == -1 && ItemMat == null)
                 return $"{timestring} {abusedHFtext} animated in {locationtext}.";
 
 
 
             return
-                $"{timestring} {abusedHFtext} were added to a grisly mound by {AbuserEn?.ToString() ?? "UNKNOWN"} in {(Site == null ? "UNKNOWN" : Site.AltName)}.";
+                $"{timestring} {abusedHFtext} were added to a grisly mound by {Entity_Abuser?.ToString() ?? "UNKNOWN"} in {(Site == null ? "UNKNOWN" : Site.AltName)}.";
 
         }
 
@@ -258,13 +250,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             //TODO: Incorporate new data
             var timelinestring = base.ToTimelineString();
 
-            if (Site == null && AbuserEn == null)
+            if (Site == null && Entity_Abuser == null)
                 return $"{timelinestring} Bodies abused.";
             if (Site == null)
-                return $"{timelinestring} Bodies abused by {AbuserEn}.";
-            if (AbuserEn == null)
+                return $"{timelinestring} Bodies abused by {Entity_Abuser}.";
+            if (Entity_Abuser == null)
                 return $"{timelinestring} Bodies abused at {Site.AltName}.";
-            return $"{timelinestring} Bodies abused at {Site.AltName} by {AbuserEn}.";
+            return $"{timelinestring} Bodies abused at {Site.AltName} by {Entity_Abuser}.";
         }
 
         internal override void Export(string table)
@@ -282,12 +274,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 SubregionId.DBExport(), 
                 FeatureLayerId.DBExport(),
                 Coords.DBExport(),
-                AbuserEnId.DBExport(),
+                EntityId_Abuser.DBExport(),
                 BodyHfiDs.DBExport(),
                 ItemType.DBExport(Item.ItemTypes),
                 ItemSubType.DBExport(Item.ItemSubTypes),
                 ItemMat.DBExport(Item.Materials),
-                Hfid.DBExport(),
+                HfId.DBExport(),
                 AbuseType.DBExport()
             };
 

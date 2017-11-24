@@ -71,17 +71,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        internal override void Link()
-        {
-            base.Link();
-            if (Hfid.HasValue && World.HistoricalFigures.ContainsKey(Hfid.Value))
-                Hf = World.HistoricalFigures[Hfid.Value];
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (EntityId.HasValue && World.Entities.ContainsKey(EntityId.Value))
-                Entity = World.Entities[EntityId.Value];
-        }
-
         internal override void Plus(XDocument xdoc)
         {
             foreach (var element in xdoc.Root.Elements())

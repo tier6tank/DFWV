@@ -143,7 +143,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             // For site conquered event collections, if there are body abused events, we can link the attacking entity as the abuser witin those events.
             foreach (var ev in Event.Where(x => HistoricalEvent.Types[x.Type] == "body abused").Cast<HE_BodyAbused>())
             {
-                ev.AbuserEn = AttackingEn;
+                ev.Entity_Abuser = AttackingEn;
             }
 
             //TODO

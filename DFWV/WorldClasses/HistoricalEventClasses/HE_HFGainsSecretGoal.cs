@@ -8,7 +8,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     class HE_HFGainsSecretGoal : HistoricalEvent
     {
-        private int? Hfid { get; }
+        private int? HfId { get; }
         private HistoricalFigure Hf { get; set; }
         private int SecretGoal { get; }
 
@@ -36,7 +36,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "hfid":
-                        Hfid = valI;
+                        HfId = valI;
                         break;
                     case "secret_goal":
                         if (!HistoricalFigure.Goals.Contains(val))
@@ -49,12 +49,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                 }
             }
-        }
-        internal override void Link()
-        {
-            base.Link();
-            if (Hfid.HasValue && World.HistoricalFigures.ContainsKey(Hfid.Value))
-                Hf = World.HistoricalFigures[Hfid.Value];
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
@@ -88,7 +82,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object>
             {
                 Id, 
-                Hfid.DBExport(),
+                HfId.DBExport(),
                 SecretGoal.DBExport(HistoricalFigure.Goals)
             };
 

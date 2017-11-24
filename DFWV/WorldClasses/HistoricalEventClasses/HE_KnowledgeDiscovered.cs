@@ -8,7 +8,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     class HE_KnowledgeDiscovered : HistoricalEvent
     {
-        private int? Hfid { get; }
+        private int? HfId { get; }
         private HistoricalFigure Hf { get; set; }
         public int Knowledge { get; }
         public static List<string> Knowledges = new List<string>();
@@ -43,7 +43,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         Knowledge = Knowledges.IndexOf(val);
                         break;
                     case "hfid":
-                        Hfid = valI;
+                        HfId = valI;
                         break;
                     case "first":
                         _first = true;
@@ -53,14 +53,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                 }
             }
-        }
-
-        internal override void Link()
-        {
-            base.Link();
-            if (Hfid.HasValue && World.HistoricalFigures.ContainsKey(Hfid.Value))
-                Hf = World.HistoricalFigures[Hfid.Value];
-
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
@@ -110,7 +102,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object>
             {
                 Id,
-                Hfid.DBExport(),
+                HfId.DBExport(),
                 Knowledge.DBExport(Knowledges)
             };
 

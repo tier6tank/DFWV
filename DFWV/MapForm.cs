@@ -246,7 +246,7 @@ namespace DFWV
                 var myColor = Color.FromArgb(100,site.Parent.Color);
                 using (var p = new Pen( myColor))
                 {
-                    if (site.CreatedEvent != null && site.CreatedEvent.Civ.Civilization != site.Parent)
+                    if (site.CreatedEvent != null && site.CreatedEvent.Entity.Civilization != site.Parent)
                         p.DashStyle = DashStyle.Dot;
                     else
                         p.DashStyle = DashStyle.Solid;
@@ -625,7 +625,7 @@ namespace DFWV
         {
             foreach (var wc in _world.WorldConstructions.Values)
             {
-                var myColor = wc.CreatedEvent?.Civ?.Civilization?.Color ?? Color.White;
+                var myColor = wc.CreatedEvent?.Entity?.Civilization?.Color ?? Color.White;
                 using (var p = new Pen(myColor))
                 {
                     
@@ -936,8 +936,8 @@ namespace DFWV
             {
                 nameText = _selectedWc.ToString();
                 typeText = _selectedWc.ConstructionType;
-                if (_selectedWc.CreatedEvent?.Civ?.Civilization != null)
-                    ownerText = _selectedWc.CreatedEvent.Civ.Civilization.ToString();
+                if (_selectedWc.CreatedEvent?.Entity?.Civilization != null)
+                    ownerText = _selectedWc.CreatedEvent.Entity.Civilization.ToString();
 
                 lblMapAltNameCaption.Visible = false;
                 if (_selectedWc.MasterWc != null)

@@ -176,7 +176,7 @@ namespace DFWV
                     if (hf.Race != null)
                         _deadHFs[hf.Race]++;
 
-                    if (hf.DiedEvent?.SlayerHf != null)
+                    if (hf.DiedEvent?.Hf_Slayer != null)
                     { 
                         _overallKilledHFs++;
                         if (hf.Race != null)

@@ -164,8 +164,8 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
             var checkBeastHf = Event.Where(x => HistoricalEvent.Types[x.Type] == "hf simple battle event")
                 .Cast<HE_HFSimpleBattleEvent>()
-                .TakeWhile(ev => ev.Group1Hf.Count != 0)
-                .Select(ev => ev.Group1Hf[0])
+                .TakeWhile(ev => ev.Hf_Group1.Count != 0)
+                .Select(ev => ev.Hf_Group1[0])
                 .FirstOrDefault();
 
             if (checkBeastHf != null)
@@ -173,7 +173,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                 BeastHf = checkBeastHf;
                 foreach (var ev in Event.Where(x => HistoricalEvent.Types[x.Type] == "creature devoured").Cast<HE_CreatureDevoured>())
                 {
-                    ev.Devourer = BeastHf;
+                    ev.Hf_Devourer = BeastHf;
                 }
             }
         }

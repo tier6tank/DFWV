@@ -192,8 +192,8 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             //      and who was stolen from and where based on data from the event collection.
             foreach (var ev in Event.Where(x => HistoricalEvent.Types[x.Type] == "item stolen").Cast<HE_ItemStolen>())
             {
-                ev.AttackerCiv = AttackingEn;
-                ev.DefenderCiv = DefendingEn;
+                ev.Entity_Attacker = AttackingEn;
+                ev.Entity_Defender = DefendingEn;
                 ev.Site = Site;
                 ev.Coords = Coords;
             }

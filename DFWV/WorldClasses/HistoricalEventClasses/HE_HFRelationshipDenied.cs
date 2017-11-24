@@ -8,10 +8,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     class HE_HFRelationshipDenied : HistoricalEvent
     {
-        private int? SeekerHfid { get; }
-        private HistoricalFigure SeekerHf { get; set; }
-        private int? TargetHfid { get; }
-        private HistoricalFigure TargetHf { get; set; }
+        private int? HfId_Seeker { get; }
+        private HistoricalFigure Hf_Seeker { get; set; }
+        private int? HfId_Target { get; }
+        private HistoricalFigure Hf_Target { get; set; }
         private int? SiteId { get; }
         private Site Site { get; set; }
         private int? SubregionId { get; }
@@ -20,7 +20,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         override public Point Location => Point.Empty;
 
-        public int? Wcid { get; set; }
+        public int? WcId { get; set; }
         public int? ReasonId { get; set; }
         public int Reason { get; }
         public static List<string> Reasons = new List<string>();
@@ -31,8 +31,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get
             {
-                yield return SeekerHf;
-                yield return TargetHf;
+                yield return Hf_Seeker;
+                yield return Hf_Target;
             }
         }
         public override IEnumerable<Site> SitesInvolved
@@ -65,14 +65,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "seeker_hfid":
-                        SeekerHfid = valI;
+                        HfId_Seeker = valI;
                         break;
                     case "target_hfid":
-                        TargetHfid = valI;
+                        HfId_Target = valI;
                         break;
                     case "wc_id":
                         if (valI != -1)
-                            Wcid = valI;
+                            WcId = valI;
                         break;
                     case "reason":
                         if (!Reasons.Contains(val))
@@ -107,24 +107,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        internal override void Link()
-        {
-            base.Link();
-            if (SeekerHfid.HasValue && World.HistoricalFigures.ContainsKey(SeekerHfid.Value))
-                SeekerHf = World.HistoricalFigures[SeekerHfid.Value];
-            if (TargetHfid.HasValue && World.HistoricalFigures.ContainsKey(TargetHfid.Value))
-                TargetHf = World.HistoricalFigures[TargetHfid.Value];
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
-                Subregion = World.Regions[SubregionId.Value];
-
-        }
-
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "Seeker:", SeekerHf);
-            EventLabel(frm, parent, ref location, "Target:", TargetHf);
+            EventLabel(frm, parent, ref location, "Seeker:", Hf_Seeker);
+            EventLabel(frm, parent, ref location, "Target:", Hf_Target);
 
             EventLabel(frm, parent, ref location, "Relationship:", RelationshipStrings[RelationshipString]);
             EventLabel(frm, parent, ref location, "Reason:", Reasons[Reason]);
@@ -144,7 +130,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             switch (RelationshipStrings[RelationshipString])
             {
                 case "apprentice":
-                    relationshipString = $"an apprenticeship under the {TargetHf.Race.ToString().ToLower()} {TargetHf}";
+                    relationshipString = $"an apprenticeship under the {Hf_Target.Race.ToString().ToLower()} {Hf_Target}";
                     break;
             }
 
@@ -160,7 +146,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
 
             return
-                $"{timestring} {SeekerHf} was denied {relationshipString} {reasonString}.";
+                $"{timestring} {Hf_Seeker} was denied {relationshipString} {reasonString}.";
 
 
         }
@@ -169,7 +155,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timelinestring = base.ToTimelineString();
 
-            return $"{timelinestring} {SeekerHf} was denied relationship with {TargetHf}.";
+            return $"{timelinestring} {Hf_Seeker} was denied relationship with {Hf_Target}.";
 
         }
 
@@ -185,8 +171,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 SiteId.DBExport(),
                 SubregionId.DBExport(),
                 FeatureLayerId.DBExport(),
-                SeekerHfid.DBExport(),
-                TargetHfid.DBExport(),
+                HfId_Seeker.DBExport(),
+                HfId_Target.DBExport(),
                 RelationshipString.DBExport(RelationshipStrings),
                 Reason.DBExport(Reasons),
                 ReasonId.DBExport()

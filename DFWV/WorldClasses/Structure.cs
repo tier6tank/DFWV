@@ -4,18 +4,28 @@ using System.Linq;
 using System.Xml.Linq;
 using DFWV.Annotations;
 using DFWV.WorldClasses.HistoricalEventClasses;
+using DFWV.WorldClasses.HistoricalFigureClasses;
+using DFWV.WorldClasses.EntityClasses;
 
 namespace DFWV.WorldClasses
 {
     public class Structure : XMLObject
     {
-        private Site Site { get; }
         public int SiteId { get; set; }
-        public int LocalId { get; set; }
+        private Site Site { get; }
+        public int? WorshipHFid { get; set; }
+        private HistoricalFigure WorshipHF { get; set; }
+        public int? CopiedArtifactId { get; set; }
+        private Artifact CopiedArtifact { get; set; }
+        public int? EntityId { get; set; }
+        private Entity Entity { get; set; }
+        public int? LocalId { get; set; }
 
         [UsedImplicitly]
         public new string Name { get; set; }
 
+        public static List<string> SubTypes = new List<string>();
+        public int? SubType { get; set; }
         public static List<string> Types = new List<string>();
         public int? Type { get; set; }
         public static int NumStructures;
@@ -72,6 +82,21 @@ namespace DFWV.WorldClasses
                             Types.Add(strval);
                         Type = Types.IndexOf(strval);
                         break;
+                    case "worship_hfid":
+                        WorshipHFid = strvalI;
+                        break;
+                    case "entity_id":
+                        EntityId = strvalI;
+                        break;
+                    case "copied_artifact_id":
+                        CopiedArtifactId = strvalI;
+                        break;
+                    case "subtype":
+                        if (!SubTypes.Contains(strval))
+                            SubTypes.Add(strval);
+                        SubType = SubTypes.IndexOf(strval);
+                        break;
+
                     case "name":
                         Name = strval;
                         break;
@@ -82,6 +107,21 @@ namespace DFWV.WorldClasses
                 }
             }
 
+
+        }
+
+        internal override void Link()
+        {
+            if (WorshipHFid.HasValue && World.HistoricalFigures.ContainsKey(WorshipHFid.Value))
+                WorshipHF = World.HistoricalFigures[WorshipHFid.Value];
+            if (EntityId.HasValue && World.Entities.ContainsKey(EntityId.Value))
+                Entity = World.Entities[EntityId.Value];
+            if (CopiedArtifactId.HasValue && World.Artifacts.ContainsKey(CopiedArtifactId.Value))
+                CopiedArtifact = World.Artifacts[CopiedArtifactId.Value];
+        }
+
+        internal override void Process()
+        {
 
         }
 
@@ -100,8 +140,8 @@ namespace DFWV.WorldClasses
 
             if (CreatedEvent != null)
             {
-                frm.lblStructureCreatedSiteCiv.Data = CreatedEvent.SiteCiv;
-                frm.lblStructureCreatedCiv.Data = CreatedEvent.Civ;
+                frm.lblStructureCreatedSiteCiv.Data = CreatedEvent.Entity_SiteCiv;
+                frm.lblStructureCreatedCiv.Data = CreatedEvent.Entity;
                 frm.lblStructureCreatedSite.Data = CreatedEvent.Site;
                 frm.lblStructureCreatedTime.Data = CreatedEvent;
                 frm.lblStructureCreatedTime.Text = CreatedEvent.Time.ToString();
@@ -110,7 +150,7 @@ namespace DFWV.WorldClasses
 
             if (RazedEvent != null)
             {
-                frm.lblStructureRazedCiv.Data = RazedEvent.Civ;
+                frm.lblStructureRazedCiv.Data = RazedEvent.Entity;
                 frm.lblStructureRazedSite.Data = RazedEvent.Site;
                 frm.lblStructureRazedTime.Data = RazedEvent;
                 frm.lblStructureRazedTime.Text = RazedEvent.Time.ToString();
@@ -125,15 +165,7 @@ namespace DFWV.WorldClasses
 
         }
 
-        internal override void Link()
-        {
 
-        }
-
-        internal override void Process()
-        {
-
-        }
         internal override void Plus(XDocument xdoc)
         {
 

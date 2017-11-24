@@ -10,10 +10,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
     {
         private int? SiteId { get; }
         private Site Site { get; set; }
-        private int? ContactorEnId { get; }
-        private Entity ContactorEn { get; set; }
-        private int? RejectorEnId { get; }
-        private Entity RejectorEn { get; set; }
+        private int? EntityId_Contactor { get; }
+        private Entity Entity_Contactor { get; set; }
+        private int? EntityId_Rejector { get; }
+        private Entity Entity_Rejector { get; set; }
 
         override public Point Location => Site.Location;
 
@@ -21,8 +21,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get
             {
-                yield return ContactorEn;
-                yield return RejectorEn;
+                yield return Entity_Contactor;
+                yield return Entity_Rejector;
             }
         }
         public override IEnumerable<Site> SitesInvolved
@@ -47,10 +47,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "contactor_enid":
-                        ContactorEnId = valI;
+                        EntityId_Contactor = valI;
                         break;
                     case "rejector_enid":
-                        RejectorEnId = valI;
+                        EntityId_Rejector = valI;
                         break;
                     case "site_id":
                         SiteId = valI;
@@ -62,22 +62,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        internal override void Link()
-        {
-            base.Link();
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (ContactorEnId.HasValue && World.Entities.ContainsKey(ContactorEnId.Value))
-                ContactorEn = World.Entities[ContactorEnId.Value];
-            if (RejectorEnId.HasValue && World.Entities.ContainsKey(RejectorEnId.Value))
-                RejectorEn = World.Entities[RejectorEnId.Value];
-        }
-
-
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "Contactor:", ContactorEn);
-            EventLabel(frm, parent, ref location, "Rejecter:", RejectorEn);
+            EventLabel(frm, parent, ref location, "Contactor:", Entity_Contactor);
+            EventLabel(frm, parent, ref location, "Rejecter:", Entity_Rejector);
             EventLabel(frm, parent, ref location, "Site:", Site);
         }
 
@@ -85,14 +73,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            return $"{timestring} {RejectorEn} rejected contact with {ContactorEn} at {Site.AltName}.";
+            return $"{timestring} {Entity_Rejector} rejected contact with {Entity_Contactor} at {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return $"{timelinestring} {RejectorEn} rejected contact with {ContactorEn} at {Site.AltName}.";
+            return $"{timelinestring} {Entity_Rejector} rejected contact with {Entity_Contactor} at {Site.AltName}.";
         }
 
         internal override void Export(string table)
@@ -105,8 +93,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             {
                 Id, 
                 SiteId.DBExport(), 
-                ContactorEnId.DBExport(), 
-                RejectorEnId.DBExport()
+                EntityId_Contactor.DBExport(), 
+                EntityId_Rejector.DBExport()
             };
 
             Database.ExportWorldItem(table, vals);

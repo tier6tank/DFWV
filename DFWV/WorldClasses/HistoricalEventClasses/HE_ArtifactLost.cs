@@ -49,15 +49,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        internal override void Link()
-        {
-            base.Link();
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (ArtifactId.HasValue && World.Artifacts.ContainsKey(ArtifactId.Value))
-                Artifact = World.Artifacts[ArtifactId.Value];
-        }
-
         internal override void Process()
         {
             base.Process();

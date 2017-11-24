@@ -12,10 +12,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private Site Site { get; set; }
 
         public int? Topic { get; set; }
-        public int? SourceEntId { get; set; }
-        public int? DestinationEntId { get; set; }
-        public Entity Source { get; set; }
-        public Entity Destination { get; set; }
+        public int? EntityId_Source { get; set; }
+        public int? EntityId_Destination { get; set; }
+        public Entity Entity_Source { get; set; }
+        public Entity Entity_Destination { get; set; }
 
         override public Point Location => Site.Location;
 
@@ -23,8 +23,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get
             {
-                yield return Source;
-                yield return Destination;
+                yield return Entity_Source;
+                yield return Entity_Destination;
             }
         }
         public override IEnumerable<Site> SitesInvolved
@@ -58,18 +58,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        internal override void Link()
-        {
-            base.Link();
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (DestinationEntId.HasValue && World.Entities.ContainsKey(DestinationEntId.Value))
-                Destination = World.Entities[DestinationEntId.Value];
-            if (SourceEntId.HasValue && World.Entities.ContainsKey(SourceEntId.Value))
-                Source = World.Entities[SourceEntId.Value];
-        }
-
-
         internal override void Plus(XDocument xdoc)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -89,10 +77,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         Topic = MeetingTopics.IndexOf(val);
                         break;
                     case "source":
-                        SourceEntId = valI;
+                        EntityId_Source = valI;
                         break;
                     case "destination":
-                        DestinationEntId = valI;
+                        EntityId_Destination = valI;
                         break;
                     case "site":
                         break;
@@ -134,8 +122,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             {
                 Id,
                 Topic.DBExport(MeetingTopics),
-                SourceEntId.DBExport(),
-                DestinationEntId.DBExport(),
+                EntityId_Source.DBExport(),
+                EntityId_Destination.DBExport(),
                 SiteId.DBExport()
             };
 

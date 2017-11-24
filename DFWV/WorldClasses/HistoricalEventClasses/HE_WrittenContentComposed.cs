@@ -37,7 +37,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (Wcid.HasValue && World.WrittenContents.ContainsKey(Wcid.Value))
                 wcName = World.WrittenContents[Wcid.Value].ToString();
 
-            return $"{timestring} {wcName} was authored by the {HistFigure.Race.ToString().ToLower()} {HistFigure} in {Site.AltName}{reasoncircumstancestring}.";
+            return $"{timestring} {wcName} was authored by the {Hf.Race.ToString().ToLower()} {Hf} in {Site.AltName}{reasoncircumstancestring}.";
         }
 
         internal override string ToTimelineString()

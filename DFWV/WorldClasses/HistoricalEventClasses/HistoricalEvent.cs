@@ -9,6 +9,7 @@ using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
 using LinkLabel = DFWV.Controls.LinkLabel;
+using System.Reflection;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
@@ -232,13 +233,21 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     return new HE_ArtifactGiven(xdoc, world);
                 case "artifact found":
                     return new HE_ArtifactFound(xdoc, world);
-
+                case "hf prayed inside structure":
+                    return new HE_HFPrayedInsideStructure(xdoc, world);
+                case "hf viewed artifact":
+                    return new HE_HFViewedArtifact(xdoc, world);
+                case "hf recruited unit type for entity":
+                    return new HE_HFRecruitedUnitTypeForEntity(xdoc, world);
+                case "artifact copied":
+                    return new HE_ArtifactCopied(xdoc, world);
+                case "artifact recovered":
+                    return new HE_ArtifactRecovered(xdoc, world);
                 // ReSharper disable RedundantCaseLabel
                 case "agreement void": //Unknown events
                 case "hf razed structure":
                 case "remove hf hf link":
                 case "artifact hidden":
-                case "artifact recovered":
                 case "artifact dropped":
                 case "entity incorporated":
                 case "impersonate hf":
@@ -327,9 +336,72 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             
         }
 
+        static List<string> LinkStrings = new List<string>() { "Site", "Structure", "Entity", "Hf", "Artifact", "Wc", "Subregion" };
+
         internal override void Link()
         {
-            
+            foreach (var prop in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                .Where(x => LinkStrings.Any(s => x.Name.StartsWith(s) && (x.Name.EndsWith("Id") || x.Name.Contains("Id_")))).OrderBy(x => x.Name))
+            {
+                var detail = "";
+                if (prop.Name.Contains("_")) //Specific Hfs
+                {
+                    detail = prop.Name.Substring(prop.Name.IndexOf("_")+1);
+                }
+                var ClassProp = this.GetType().GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                    .FirstOrDefault(x => x.Name == prop.Name.Substring(0, prop.Name.IndexOf("Id")));
+                if (ClassProp != null)
+                    InternalLink(this, prop, ClassProp);
+            }
+        }
+
+        private void InternalLink(HistoricalEvent evt, PropertyInfo idProp, PropertyInfo classProp)
+        {
+            var Id = idProp.GetValue(this, null) as int?;
+            XMLObject obj = null;
+            if (Id.HasValue && Id.Value != -1)
+            {
+                if (classProp.PropertyType == typeof(Site))
+                {
+                    obj = World.Sites.ContainsKey(Id.Value) ? World.Sites[Id.Value] : null;
+                }
+                else if (classProp.PropertyType == typeof(Entity))
+                {
+                    obj = World.Entities.ContainsKey(Id.Value) ? World.Entities[Id.Value] : null;
+                }
+                else if (classProp.PropertyType == typeof(HistoricalFigure))
+                {
+                    obj = World.HistoricalFigures.ContainsKey(Id.Value) ? World.HistoricalFigures[Id.Value] : null;
+                }
+                else if (classProp.PropertyType == typeof(Structure))
+                {
+                    var thisSite = this.GetType().GetProperty("Site", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).GetValue(evt, null) as Site;
+                    if (thisSite != null)
+                        obj = thisSite.GetStructure(Id.Value);
+                }
+                else if (classProp.PropertyType == typeof(Artifact))
+                {
+                    obj = World.Artifacts.ContainsKey(Id.Value) ? World.Artifacts[Id.Value] : null;
+                }
+                else if (classProp.PropertyType == typeof(WorldConstruction))
+                {
+                    if (!World.WorldConstructions.ContainsKey(Id.Value))
+                    {
+                        WorldConstruction wC = new WorldConstruction(Id.Value, World);
+                        World.WorldConstructions.Add(Id.Value, wC);
+                    }
+                    obj = World.WorldConstructions[Id.Value];
+                }
+                else if (classProp.PropertyType == typeof(Region))
+                {
+                    obj = World.Regions.ContainsKey(Id.Value) ? World.Regions[Id.Value] : null;
+                }
+            }
+            if (obj == null && Id.HasValue && Id.Value != -1 && classProp.PropertyType != typeof(Structure))
+            {
+                Console.WriteLine("obj is null");
+            }
+            classProp.SetValue(this, obj, null);
         }
 
         internal override void Process()

@@ -1,15 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using DFWV.WorldClasses.HistoricalFigureClasses;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using DFWV.WorldClasses.EntityClasses;
-using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_ArtifactFound : HistoricalEvent
+    internal class HE_ArtifactRecovered : HistoricalEvent
     {
-
         private int? ArtifactId { get; }
         private Artifact Artifact { get; set; }
         public int? UnitId { get; set; }
@@ -17,12 +15,18 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private HistoricalFigure Hf { get; set; }
         private int? SiteId { get; }
         private Site Site { get; set; }
+        private int? StructureId { get; set; }
+        public Structure Structure { get; set; }
+        private int? SubregionId { get; }
+        private Region Subregion { get; set; }
+        private int? FeatureLayerId { get; }
 
-        override public Point Location => Site.Location;
+        override public Point Location => Site != null ? Site.Location : Point.Empty ;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
-            get {
+            get
+            {
                 yield return Hf;
             }
         }
@@ -35,10 +39,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        public HE_ArtifactFound(XDocument xdoc, World world)
-            : base(xdoc, world)
-        {
 
+        public HE_ArtifactRecovered(XDocument xdoc, World world) : base(xdoc, world)
+        {
             foreach (var element in xdoc.Root.Elements())
             {
                 var val = element.Value;
@@ -63,12 +66,25 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         HfId = valI;
                         break;
                     case "site_id":
-                        SiteId = valI;
+                        if (valI != -1 )
+                            SiteId = valI;
+                        break;
+                    case "structure_id":
+                        StructureId = valI;
+                        break;
+                    case "subregion_id":
+                        if (valI != -1)
+                            SubregionId = valI;
+                        break;
+                    case "feature_layer_id":
+                        if (valI != -1)
+                            FeatureLayerId = valI;
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
+
             }
         }
 

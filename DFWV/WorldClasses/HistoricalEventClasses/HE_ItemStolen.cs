@@ -9,10 +9,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     class HE_ItemStolen : HistoricalEvent
     {
-        private int? AttackerCivId { get; set; }
-        public Entity AttackerCiv { private get; set; }
-        private int? DefenderCivId { get; set; }
-        public Entity DefenderCiv { private get; set; }
+        private int? EntityId_Attacker { get; set; }
+        public Entity Entity_Attacker { private get; set; }
+        private int? EntityId_Defender { get; set; }
+        public Entity Entity_Defender { private get; set; }
         private int? SiteId { get; set; }
         public Site Site { private get; set; }
         public Point Coords { private get; set; }
@@ -28,6 +28,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? EntityId { get; set; }
         private Structure Structure { get; set; }
         private int? StructureId { get; set; }
+
         private string Circumstance { get; set; }
         private int? CircumstanceId { get; set; }
         private int? HistoricalEventCollectionId { get; set; }
@@ -41,8 +42,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get
             {
-                yield return AttackerCiv;
-                yield return DefenderCiv;
+                yield return Entity_Attacker;
+                yield return Entity_Defender;
                 yield return Entity;
             }
         }
@@ -145,29 +146,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        internal override void Link()
-        {
-            base.Link();
-            if (EntityId.HasValue && World.Entities.ContainsKey(EntityId.Value))
-                Entity = World.Entities[EntityId.Value];
-            if (Hfid.HasValue && World.HistoricalFigures.ContainsKey(Hfid.Value))
-                Hf = World.HistoricalFigures[Hfid.Value];
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-            {
-                Site = World.Sites[SiteId.Value];
-                if (StructureId.HasValue)
-                {
-                    Structure = Site.GetStructure(StructureId.Value);
-
-                    if (Structure == null)
-                    {
-                        Structure = new Structure(Site, StructureId.Value, World);
-                        Site.AddStructure(Structure);
-                    }
-                }
-            }
-        }
-
         internal override void Process()
         {
             base.Process();
@@ -181,8 +159,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "Victim:", DefenderCiv);
-            EventLabel(frm, parent, ref location, "Theif:", AttackerCiv);
+            EventLabel(frm, parent, ref location, "Victim:", Entity_Defender);
+            EventLabel(frm, parent, ref location, "Theif:", Entity_Attacker);
             EventLabel(frm, parent, ref location, "Theif:", Hf);
             if (Mat != null || ItemType != null)
                 EventLabel(frm, parent, ref location, "Item:",
@@ -227,8 +205,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object>
             {
                 Id, 
-                AttackerCivId.DBExport(), 
-                DefenderCivId.DBExport(), 
+                EntityId_Attacker.DBExport(), 
+                EntityId_Defender.DBExport(), 
                 SiteId.DBExport(),
                 Coords.DBExport(),
                 ItemID.DBExport(),

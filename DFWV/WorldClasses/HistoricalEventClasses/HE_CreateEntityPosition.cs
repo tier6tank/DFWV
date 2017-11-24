@@ -10,12 +10,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
     class HE_CreateEntityPosition : HistoricalEvent
     {
 
-        private int? Hfid { get; set; }
+        private int? HfId { get; set; }
         private HistoricalFigure Hf { get; set; }
-        public int? CivId { get; set; }
-        public Entity Civ { get; set; }
-        public int? GroupId { get; set; }
-        public Entity Group { get; set; }
+        public int? EntityId { get; set; }
+        public Entity Entity { get; set; }
+        public int? EntityId_Group { get; set; }
+        public Entity Entity_Group { get; set; }
         public int? Position { get; set; }
         public int? Reason { get; set; }
 
@@ -27,8 +27,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get
             {
-                yield return Civ;
-                yield return Group;
+                yield return Entity;
+                yield return Entity_Group;
             }
         }
 
@@ -69,14 +69,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "histfig":
-                        Hfid = valI;
+                        HfId = valI;
                         break;
                     case "civ":
-                        CivId = valI;
+                        EntityId = valI;
                         break;
                     case "group":
                     case "site_civ":
-                        GroupId = valI;
+                        EntityId_Group = valI;
                         break;
                     case "position":
                         if (valI != -1)
@@ -96,28 +96,15 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        internal override void Link()
-        {
-            //TODO: Add Group Item
-            base.Link();
-            if (CivId.HasValue && World.Entities.ContainsKey(CivId.Value))
-                Civ = World.Entities[CivId.Value];
-            if (GroupId.HasValue && World.Entities.ContainsKey(GroupId.Value) && CivId.HasValue && GroupId.Value != CivId.Value)
-                Group = World.Entities[GroupId.Value];
-            if (Hfid.HasValue && World.HistoricalFigures.ContainsKey(Hfid.Value))
-                Hf = World.HistoricalFigures[Hfid.Value];
-       
-        }
-
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
             //TODO: Incorporate new data
             base.WriteDataOnParent(frm, parent, ref location);
 
-            if (Civ != null)
-                EventLabel(frm, parent, ref location, "Entity:", Civ);
-            if (Group != null)
-                EventLabel(frm, parent, ref location, "Group:",  Group);
+            if (Entity != null)
+                EventLabel(frm, parent, ref location, "Entity:", Entity);
+            if (Entity_Group != null)
+                EventLabel(frm, parent, ref location, "Group:",  Entity_Group);
             if (Hf != null)
                 EventLabel(frm, parent, ref location, "HF:", Hf);
             if (Position.HasValue)
@@ -136,26 +123,26 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             switch (Reason)
             {
                 case 0:
-                    return $"{timestring} {Hf} of {Civ} created {positionText} through force of argument.";
+                    return $"{timestring} {Hf} of {Entity} created {positionText} through force of argument.";
                 case 1:
                     return
-                        $"{timestring} {Hf} of {Civ} compelled the creation of {positionText} with threats of violence.";
+                        $"{timestring} {Hf} of {Entity} compelled the creation of {positionText} with threats of violence.";
                 case 2:
                     if (Hf == null)
                     {
-                        return $"{timestring} members of {Civ} created {positionText}.";
+                        return $"{timestring} members of {Entity} created {positionText}.";
                     }
                     return "";
                 case 3:
-                    return $"{timestring} {Hf} of {Civ} created {positionText}, pushed by a wave of popular support.";
+                    return $"{timestring} {Hf} of {Entity} created {positionText}, pushed by a wave of popular support.";
                 case 4:
-                    return $"{timestring} {Hf} of {Civ} created {positionText} as a matter of course.";
+                    return $"{timestring} {Hf} of {Entity} created {positionText} as a matter of course.";
                 default:
                     if (Hf == null)
                     {
-                        return $"{timestring} members of {Civ} created {positionText} for UNKNOWN reason.";
+                        return $"{timestring} members of {Entity} created {positionText} for UNKNOWN reason.";
                     }
-                    return $"{timestring} {Hf} of {Civ} created {positionText} for UNKNOWN reason.";
+                    return $"{timestring} {Hf} of {Entity} created {positionText} for UNKNOWN reason.";
 
             }
         }
@@ -175,9 +162,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object>
             {
                 Id,
-                Hfid.DBExport(),
-                CivId.DBExport(),
-                GroupId.DBExport(),
+                HfId.DBExport(),
+                EntityId.DBExport(),
+                EntityId_Group.DBExport(),
                 Position.DBExport(),
                 Reason.DBExport()
             };

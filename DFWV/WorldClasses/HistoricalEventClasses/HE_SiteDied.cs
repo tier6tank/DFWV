@@ -10,10 +10,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
     {
         private int? SiteId { get; }
         private Site Site { get; set; }
-        private int? SiteCivId { get; }
-        public Entity SiteCiv { get; private set; }
-        private int? CivId { get; }
-        public Entity Civ { get; private set; }
+        private int? EntityId_SiteCiv { get; }
+        public Entity Entity_SiteCiv { get; private set; }
+        private int? EntityId_Civ { get; }
+        public Entity Entity_Civ { get; private set; }
         public bool Abandoned { get; set; }
 
         override public Point Location => Site.Location;
@@ -22,8 +22,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get
             {
-                yield return SiteCiv;
-                yield return Civ;
+                yield return Entity_SiteCiv;
+                yield return Entity_Civ;
             }
         }
         public override IEnumerable<Site> SitesInvolved
@@ -49,11 +49,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "civ_id":
-                        CivId = valI;
+                        EntityId_Civ = valI;
                         break;
                     case "site_civ_id":
                         if (valI != -1)
-                            SiteCivId = valI;
+                            EntityId_SiteCiv = valI;
                         break;
                     case "site_id":
                         SiteId = valI;
@@ -68,18 +68,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        internal override void Link()
-        {
-            base.Link();
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (CivId.HasValue && World.Entities.ContainsKey(CivId.Value))
-                Civ = World.Entities[CivId.Value];
-            if (SiteCivId.HasValue && World.Entities.ContainsKey(SiteCivId.Value))
-                SiteCiv = World.Entities[SiteCivId.Value];
-
-        }
-
         internal override void Process()
         {
             base.Process();
@@ -88,8 +76,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "Civ:", Civ);
-            EventLabel(frm, parent, ref location, "Owner:", SiteCiv);
+            EventLabel(frm, parent, ref location, "Civ:", Entity_Civ);
+            EventLabel(frm, parent, ref location, "Owner:", Entity_SiteCiv);
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Abandoned:", Abandoned ? "Yes": "No" );
         }
@@ -99,8 +87,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             if (Abandoned)
-                return $"{timestring} {SiteCiv} abandoned the settlement of {Site.AltName}.";
-            return $"{timestring} {SiteCiv} and {Civ} settlement of {Site.AltName} withered.";
+                return $"{timestring} {Entity_SiteCiv} abandoned the settlement of {Site.AltName}.";
+            return $"{timestring} {Entity_SiteCiv} and {Entity_Civ} settlement of {Site.AltName} withered.";
         }
 
         internal override string ToTimelineString()
@@ -108,7 +96,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             if (Abandoned)
-                return $"{timelinestring} {SiteCiv} abandoned the settlement of {Site.AltName}.";
+                return $"{timelinestring} {Entity_SiteCiv} abandoned the settlement of {Site.AltName}.";
             return $"{timelinestring} {Site.AltName} died.";
         }
 
@@ -121,8 +109,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object>
             {
                 Id, 
-                CivId.DBExport(), 
-                SiteCivId.DBExport(), 
+                EntityId_Civ.DBExport(), 
+                EntityId_SiteCiv.DBExport(), 
                 SiteId.DBExport()
             };
 

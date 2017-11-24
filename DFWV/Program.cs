@@ -13,6 +13,22 @@ using DFWV.Properties;
 using DFWV.WorldClasses;
 using SevenZip;
 
+//TODO: Match up property names across HE classes
+
+//TODO: Validate linking on all events
+//TODO: Validate processing on all events
+//TODO: Validate WriteDataOnParent on all events
+//TODO: Validate LegendsDescription on all events
+//TODO: Validate ToTimelineString on all events
+//TODO: Validate Export on all events
+
+//TODO: Validate linking on all xml world classes
+//TODO: Validate processing on all xml world classes
+//TODO: Validate select on all xml world classes
+
+//TOOD: Generic reflection based Linker method?
+
+
 //TODO: Export doesn't properly release link to exported DB (can't be deleted while app is running following export
 //TODO: Add Total Population listing in civ screen
 //TODO: Group gods by first civ

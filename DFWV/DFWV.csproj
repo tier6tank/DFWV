@@ -164,11 +164,16 @@
     <Compile Include="WorldClasses\EntityClasses\EntityOccasion.cs" />
     <Compile Include="WorldClasses\EntityClasses\EntityPositionAssignment.cs" />
     <Compile Include="WorldClasses\EntityClasses\EntityPosition.cs" />
+    <Compile Include="WorldClasses\HistoricalEventClasses\HE_ArtifactCopied.cs" />
     <Compile Include="WorldClasses\HistoricalEventClasses\HE_ArtifactFound.cs" />
     <Compile Include="WorldClasses\HistoricalEventClasses\HE_ArtifactDestroyed.cs" />
     <Compile Include="WorldClasses\HistoricalEventClasses\HE_ArtifactClaimFormed.cs" />
     <Compile Include="WorldClasses\HistoricalEventClasses\HE_ArtifactGiven.cs" />
+    <Compile Include="WorldClasses\HistoricalEventClasses\HE_ArtifactRecovered.cs" />
     <Compile Include="WorldClasses\HistoricalEventClasses\HE_HFFormsReputationRelationship.cs" />
+    <Compile Include="WorldClasses\HistoricalEventClasses\HE_HFPrayedInsideStructure.cs" />
+    <Compile Include="WorldClasses\HistoricalEventClasses\HE_HFRecruitedUnitTypeForEntity.cs" />
+    <Compile Include="WorldClasses\HistoricalEventClasses\HE_HFViewedArtifact.cs" />
     <Compile Include="WorldClasses\HistoricalEventClasses\HE_RegionPopIncorporatedIntoEntity.cs" />
     <Compile Include="WorldClasses\HistoricalEventClasses\HE_MusicalFormCreated.cs" />
     <Compile Include="WorldClasses\HistoricalEventClasses\HE_KnowledgeDiscovered.cs" />
@@ -392,6 +397,7 @@
       <DependentUpon>Timeline.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="DFWV.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

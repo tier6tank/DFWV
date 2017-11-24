@@ -66,8 +66,8 @@ namespace DFWV.WorldClasses
             frm.grpWorldConstruction.Visible = CreatedEvent != null;
             if (CreatedEvent != null)
             {
-                frm.lblWorldConstructionCreatedBy.Data = CreatedEvent.SiteCiv;
-                frm.lblWorldConstructionCreatedByCiv.Data = CreatedEvent.Civ;
+                frm.lblWorldConstructionCreatedBy.Data = CreatedEvent.Entity_SiteCiv;
+                frm.lblWorldConstructionCreatedByCiv.Data = CreatedEvent.Entity;
                 frm.lblWorldConstructionCreatedTime.Data = CreatedEvent;
                 frm.lblWorldConstructionCreatedTime.Text = CreatedEvent.Time.ToString();
             }

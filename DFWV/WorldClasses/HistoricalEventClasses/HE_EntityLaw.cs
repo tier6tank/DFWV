@@ -11,8 +11,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     public class HE_EntityLaw : HistoricalEvent
     {
-        private int? HistFigureId { get; }
-        private HistoricalFigure HistFigure { get; set; }
+        private int? HfId { get; }
+        private HistoricalFigure Hf { get; set; }
         private int? EntityId { get; }
         private Entity Entity { get; set; }
         private string LawAdd { get; }
@@ -23,7 +23,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
-            get { yield return HistFigure; }
+            get { yield return Hf; }
         }
         public override IEnumerable<Entity> EntitiesInvolved
         {
@@ -50,7 +50,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         EntityId = valI;
                         break;
                     case "hist_figure_id":
-                        HistFigureId = valI;
+                        HfId = valI;
                         break;
                     case "law_add":
                         LawAdd = val;
@@ -65,20 +65,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 }
             }
         }
-        internal override void Link()
-        {
-            base.Link();
-            if (EntityId.HasValue && World.Entities.ContainsKey(EntityId.Value))
-                Entity = World.Entities[EntityId.Value];
-            if (HistFigureId.HasValue && World.HistoricalFigures.ContainsKey(HistFigureId.Value))
-                HistFigure = World.HistoricalFigures[HistFigureId.Value];
-        }
-
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
             EventLabel(frm, parent, ref location, "Entity:", Entity);
-            EventLabel(frm, parent, ref location, "Hist Fig:", HistFigure);
+            EventLabel(frm, parent, ref location, "Hist Fig:", Hf);
             if (LawAdd != null)
                 EventLabel(frm, parent, ref location, "Add Law:", LawAdd);
             if (LawRemove != null)
@@ -90,9 +81,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             if (LawAdd == "harsh")
-                return $"{timestring} {HistFigure.Race} {HistFigure} laid a series of oppressive edicts upon {Entity}.";
+                return $"{timestring} {Hf.Race} {Hf} laid a series of oppressive edicts upon {Entity}.";
             return LawRemove == "harsh" ? 
-                $"{timestring} {HistFigure.Race} {HistFigure} lifted numerous  oppressive laws from {Entity}." : 
+                $"{timestring} {Hf.Race} {Hf} lifted numerous  oppressive laws from {Entity}." : 
                 timestring;
         }
 
@@ -101,7 +92,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timelinestring = base.ToTimelineString();
 
             return LawAdd == "harsh" ? 
-                $"{timelinestring} {HistFigure} created harsh laws for {Entity}." : 
+                $"{timelinestring} {Hf} created harsh laws for {Entity}." : 
                 timelinestring;
         }
 
@@ -114,7 +105,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object>
             {
                 Id, 
-                HistFigureId.DBExport(), 
+                HfId.DBExport(), 
                 EntityId.DBExport(), 
                 LawAdd.DBExport(), 
                 LawRemove.DBExport()

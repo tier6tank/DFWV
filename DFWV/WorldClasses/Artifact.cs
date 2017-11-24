@@ -24,6 +24,11 @@ namespace DFWV.WorldClasses
         private int? SiteID { get; set; }
         private int? StructureLocalID { get; set; }
         private int? HolderHFID { get; set; }
+        private int? AbsTileX { get; set; }
+        private int? AbsTileY { get; set; }
+        private int? AbsTileZ { get; set; }
+        public int? SubregionId { get; set; }
+        public Region Subregion { get; private set; }
 
 
         public string Description { get; set; }
@@ -82,6 +87,20 @@ namespace DFWV.WorldClasses
                     case "holder_hfid":
                         HolderHFID = valI;
                         break;
+                    case "abs_tile_x":
+                        AbsTileX = valI;
+                        break;
+                    case "abs_tile_y":
+                        AbsTileY = valI;
+                        break;
+                    case "abs_tile_z":
+                        AbsTileZ = valI;
+                        break;
+                    case "subregion_id":
+                        if (valI != -1)
+                            SubregionId = valI;
+                        break;
+
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());
                         break;
@@ -116,7 +135,7 @@ namespace DFWV.WorldClasses
             frm.grpArtifactCreated.Visible = CreatedEvent != null;
             if (CreatedEvent != null)
             {
-                frm.lblArtifactCreatedBy.Data = CreatedEvent.HistFigure;
+                frm.lblArtifactCreatedBy.Data = CreatedEvent.Hf;
                 frm.lblArtifactCreatedSite.Data = CreatedEvent.Site;
                 frm.lblArtifactCreatedTime.Data = CreatedEvent;
                 frm.lblArtifactCreatedTime.Text = CreatedEvent.Time.ToString();
@@ -142,6 +161,8 @@ namespace DFWV.WorldClasses
         {
             if (WritingId.HasValue && World.WrittenContents.ContainsKey(WritingId.Value))
                 WritenContent = World.WrittenContents[WritingId.Value];
+            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
+                Subregion = World.Regions[SubregionId.Value];
         }
 
         internal override void Process()

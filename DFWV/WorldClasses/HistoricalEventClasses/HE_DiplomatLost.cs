@@ -14,8 +14,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public int? EntityId { get; set; }
         public Entity Entity { get; set; }
 
-        public int? InvolvedId { get; set; }
-        public Entity Involved { get; set; }
+        public int? EntityId_Involved { get; set; }
+        public Entity Entity_Involved { get; set; }
 
         override public Point Location => Site.Location;
 
@@ -24,7 +24,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             get
             {
                 yield return Entity;
-                yield return Involved;
+                yield return Entity_Involved;
             }
         }
         public override IEnumerable<Site> SitesInvolved
@@ -58,18 +58,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        internal override void Link()
-        {
-            base.Link();
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (EntityId.HasValue && World.Entities.ContainsKey(EntityId.Value))
-                Entity = World.Entities[EntityId.Value];
-            if (InvolvedId.HasValue && World.Entities.ContainsKey(InvolvedId.Value))
-                Involved = World.Entities[InvolvedId.Value];
-
-        }
-
         internal override void Plus(XDocument xdoc)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -89,7 +77,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                     case "involved":
                         if (valI != -1)
-                            InvolvedId = valI;
+                            EntityId_Involved = valI;
                         break;
                     case "site":
                         break;
@@ -105,16 +93,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             //TODO: Incorporate new data
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Entity:", Entity);
-            EventLabel(frm, parent, ref location, "Involved:", Involved);
+            EventLabel(frm, parent, ref location, "Involved:", Entity_Involved);
         }
 
         protected override string LegendsDescription() //Matched
         {
             var timestring = base.LegendsDescription();
 
-            if (Entity != null && Involved != null)
+            if (Entity != null && Entity_Involved != null)
                 return
-                    $"{timestring} {Entity} lost a diplomat at {Site.AltName}. They suspected the involvement of {Involved}.";
+                    $"{timestring} {Entity} lost a diplomat at {Site.AltName}. They suspected the involvement of {Entity_Involved}.";
 
             return $"{timestring} A Diplomat was lost at {Site.AltName}.";
         }
@@ -138,7 +126,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Id, 
                 SiteId.DBExport(),
                 EntityId.DBExport(),
-                Involved.DBExport()
+                Entity_Involved.DBExport()
             };
 
             Database.ExportWorldItem(table, vals);

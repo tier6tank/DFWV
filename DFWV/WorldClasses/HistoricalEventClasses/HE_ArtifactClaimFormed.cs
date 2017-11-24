@@ -14,19 +14,19 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private Artifact Artifact { get; set; }
         public int? Claim { get; set; }
         public static List<string> Claims = new List<string>();
-        private int? HistFigureId { get; }
-        private HistoricalFigure HistFigure { get; set; }
+        private int? HfId { get; }
+        private HistoricalFigure Hf { get; set; }
         private int? EntityId { get; }
         private Entity Entity { get; set; }
         public int PositionProfileId { get; set; }
 
 
-        override public Point Location => Entity.Location;
+        override public Point Location => Entity != null ? Entity.Location : Point.Empty;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
             get {
-                yield return HistFigure;
+                yield return Hf;
             }
         }
         public override IEnumerable<Entity> EntitiesInvolved
@@ -64,7 +64,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         Claim = Claims.IndexOf(val);
                         break;
                     case "hist_figure_id":
-                        HistFigureId = valI;
+                        HfId = valI;
                         break;
                     case "entity_id":
                         EntityId = valI;
@@ -80,20 +80,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        internal override void Link()
-        {
-            base.Link();
-            if (ArtifactId.HasValue && World.Artifacts.ContainsKey(ArtifactId.Value))
-                Artifact = World.Artifacts[ArtifactId.Value];
-            if (HistFigureId.HasValue && World.HistoricalFigures.ContainsKey(HistFigureId.Value))
-                HistFigure = World.HistoricalFigures[HistFigureId.Value];
-            if (EntityId.HasValue && World.Entities.ContainsKey(EntityId.Value))
-                Entity = World.Entities[EntityId.Value];
-        }
-
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "Hist Fig:", HistFigure);
+            EventLabel(frm, parent, ref location, "Hist Fig:", Hf);
         }
 
         protected override string LegendsDescription()

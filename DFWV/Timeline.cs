@@ -152,15 +152,15 @@ namespace DFWV
                 
                 Color penCol;
                 if (nextItem is HE_CreatedSite)
-                    penCol = (nextItem as HE_CreatedSite).Civ?.Civilization?.Color ?? Color.White;
+                    penCol = (nextItem as HE_CreatedSite).Entity?.Civilization?.Color ?? Color.White;
                 else if (nextItem is HE_ReclaimSite)
-                    penCol = (nextItem as HE_ReclaimSite).Civ.Civilization.Color;
+                    penCol = (nextItem as HE_ReclaimSite).Entity_Civ.Civilization.Color;
                 else if (nextItem is HE_NewSiteLeader)
                 {
-                    penCol = (nextItem as HE_NewSiteLeader).AttackerCiv.Civilization?.Color ?? Color.White;
+                    penCol = (nextItem as HE_NewSiteLeader).Entity_Attacker.Civilization?.Color ?? Color.White;
                 }
                 else if (nextItem is HE_SiteTakenOver)
-                    penCol = (nextItem as HE_SiteTakenOver).AttackerCiv.Civilization.Color;
+                    penCol = (nextItem as HE_SiteTakenOver).Entity_Attacker.Civilization.Color;
                 else if (nextItem is HE_SiteAbandoned)
                     penCol = Color.White;
                 else // if (nextItem is HE_DestroyedSite)
@@ -197,15 +197,15 @@ namespace DFWV
                 var from = new Point();
                 var to = new Point();
 
-                @from.X = (int)(evt.Site1.Location.X * _siteSize.Width + _siteSize.Width / 2);
-                @from.Y = (int)(evt.Site1.Location.Y * _siteSize.Height + _siteSize.Height / 2);
+                @from.X = (int)(evt.Site_1.Location.X * _siteSize.Width + _siteSize.Width / 2);
+                @from.Y = (int)(evt.Site_1.Location.Y * _siteSize.Height + _siteSize.Height / 2);
 
-                to.X = (int)(evt.Site2.Location.X * _siteSize.Width + _siteSize.Width / 2);
-                to.Y = (int)(evt.Site2.Location.Y * _siteSize.Height + _siteSize.Height / 2);
+                to.X = (int)(evt.Site_2.Location.X * _siteSize.Width + _siteSize.Width / 2);
+                to.Y = (int)(evt.Site_2.Location.Y * _siteSize.Height + _siteSize.Height / 2);
 
                 var lineColor = Color.White;
-                if (evt.Civ?.Civilization != null)
-                    lineColor = evt.Civ.Civilization.Color;
+                if (evt.Entity?.Civilization != null)
+                    lineColor = evt.Entity.Civilization.Color;
 
                 using (var p = new Pen(lineColor))
                 {
@@ -266,8 +266,8 @@ namespace DFWV
 
             var evt = (HE_CreatedWorldConstruction)_worldEvents[_lastEvent];
 
-            return !((chkEventCritical.Checked && evt.MasterWc == null) ||
-                     (chkEventMajor.Checked && evt.MasterWc != null));
+            return !((chkEventCritical.Checked && evt.Wc_Master == null) ||
+                     (chkEventMajor.Checked && evt.Wc_Master != null));
         }
 
         private void lstEvents_DrawItem(object sender, DrawItemEventArgs e)

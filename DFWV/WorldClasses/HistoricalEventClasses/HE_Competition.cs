@@ -15,12 +15,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? SubregionId { get; }
         private Region Subregion { get; set; }
         private int? FeatureLayerId { get; }
-        private int? CivId { get; }
-        public Entity Civ { get; private set; }
-        private int? WinnerHfid { get; }
-        private HistoricalFigure WinnerHf { get; set; }
-        public List<int> CompetitorHfiDs;
-        public List<HistoricalFigure> CompetitorHFs;
+        private int? EntityId { get; }
+        public Entity Entity { get; private set; }
+        private int? HfId_Winner { get; }
+        private HistoricalFigure Hf_Winner { get; set; }
+        public List<int> HfIDs_Competitor;
+        public List<HistoricalFigure> Hfs_Competitor;
 
         override public Point Location => Site.Location;
 
@@ -29,7 +29,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         public override IEnumerable<Entity> EntitiesInvolved
         {
-            get { yield return Civ; }
+            get { yield return Entity; }
         }
         public override IEnumerable<Site> SitesInvolved
         {
@@ -76,16 +76,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                             ScheduleId = valI;
                         break;
                     case "civ_id":
-                        CivId = valI;
+                        EntityId = valI;
                         break;
 
                     case "competitor_hfid":
-                        if (CompetitorHfiDs == null)
-                            CompetitorHfiDs = new List<int>();
-                        CompetitorHfiDs.Add(valI);
+                        if (HfIDs_Competitor == null)
+                            HfIDs_Competitor = new List<int>();
+                        HfIDs_Competitor.Add(valI);
                         break;
                     case "winner_hfid":
-                        WinnerHfid = valI;
+                        HfId_Winner = valI;
                         break;
 
                     default:
@@ -98,35 +98,26 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
-                Subregion = World.Regions[SubregionId.Value];
-            if (CivId.HasValue && World.Entities.ContainsKey(CivId.Value))
-                Civ = World.Entities[CivId.Value];
-            if (CompetitorHfiDs != null)
+            if (HfIDs_Competitor != null)
             {
-                CompetitorHFs = new List<HistoricalFigure>();
-                foreach (var competitorhfid in CompetitorHfiDs.Where(group1Hfid => World.HistoricalFigures.ContainsKey(group1Hfid)))
+                Hfs_Competitor = new List<HistoricalFigure>();
+                foreach (var competitorhfid in HfIDs_Competitor.Where(group1Hfid => World.HistoricalFigures.ContainsKey(group1Hfid)))
                 {
-                    CompetitorHFs.Add(World.HistoricalFigures[competitorhfid]);
+                    Hfs_Competitor.Add(World.HistoricalFigures[competitorhfid]);
 
                 }
             }
-            if (WinnerHfid.HasValue && World.HistoricalFigures.ContainsKey(WinnerHfid.Value))
-                WinnerHf = World.HistoricalFigures[WinnerHfid.Value];
-
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
             EventLabel(frm, parent, ref location, "Site:", Site);
-            EventLabel(frm, parent, ref location, "Civ:", Civ);
+            EventLabel(frm, parent, ref location, "Civ:", Entity);
             EventLabel(frm, parent, ref location, "Region:", Subregion);
-            EventLabel(frm, parent, ref location, "Winner:", WinnerHf);
-            if (CompetitorHFs != null)
+            EventLabel(frm, parent, ref location, "Winner:", Hf_Winner);
+            if (Hfs_Competitor != null)
             {
-                foreach (var hf in CompetitorHFs)
+                foreach (var hf in Hfs_Competitor)
                     EventLabel(frm, parent, ref location, "Competitor:", hf);
             }
         }
@@ -136,11 +127,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            var competitorsString = CompetitorHFs.Aggregate("", (current, hf) => current + $"the {hf.Race.ToString().ToLower()} {hf}, ");
+            var competitorsString = Hfs_Competitor.Aggregate("", (current, hf) => current + $"the {hf.Race.ToString().ToLower()} {hf}, ");
             competitorsString = competitorsString.Trim().TrimEnd(',');
 
             return
-                $"{timestring} {Civ} held a UNKNOWN competition in {Site.AltName} as part of {EventCollection.Name ?? "UNKNOWN"}. \nCompeting were {competitorsString}.  \nThe {WinnerHf.Race.ToString().ToLower()} {WinnerHf} was the victor.";
+                $"{timestring} {Entity} held a UNKNOWN competition in {Site.AltName} as part of {EventCollection.Name ?? "UNKNOWN"}. \nCompeting were {competitorsString}.  \nThe {Hf_Winner.Race.ToString().ToLower()} {Hf_Winner} was the victor.";
 
 
         }
@@ -149,7 +140,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timelinestring = base.ToTimelineString();
 
-            return $"{timelinestring} {Civ} held a competition in {Site.AltName}.";
+            return $"{timelinestring} {Entity} held a competition in {Site.AltName}.";
 
         }
 
@@ -162,9 +153,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object>
             {
                 Id,
-                CivId.DBExport(),
-                WinnerHfid.DBExport(),
-                CompetitorHfiDs.DBExport(),
+                EntityId.DBExport(),
+                HfId_Winner.DBExport(),
+                HfIDs_Competitor.DBExport(),
                 SiteId.DBExport(),
                 SubregionId.DBExport(),
                 FeatureLayerId.DBExport()

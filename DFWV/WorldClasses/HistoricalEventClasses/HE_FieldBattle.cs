@@ -14,14 +14,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private Region Subregion { get; set; }
         private int? FeatureLayerId { get; }
         private Point Coords { get; }
-        private int? DefenderCivId { get; }
-        private Entity DefenderCiv { get; set; }
-        private int? AttackerCivId { get; }
-        private Entity AttackerCiv { get; set; }
-        private int? AttackerGeneralHfid { get; }
-        private HistoricalFigure AttackerGeneralHf { get; set; }
-        private int? DefenderGeneralHfid { get; }
-        private HistoricalFigure DefenderGeneralHf { get; set; }
+        private int? EntityId_Defender { get; }
+        private Entity Entity_Defender { get; set; }
+        private int? EntityId_Attacker { get; }
+        private Entity Entity_Attacker { get; set; }
+        private int? HfId_AttackerGeneral { get; }
+        private HistoricalFigure Hf_AttackerGeneral { get; set; }
+        private int? HfId_DefenderGeneral { get; }
+        private HistoricalFigure Hf_DefenderGeneral { get; set; }
 
         override public Point Location => Coords;
 
@@ -29,16 +29,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get
             {
-                yield return AttackerGeneralHf;
-                yield return DefenderGeneralHf;
+                yield return Hf_AttackerGeneral;
+                yield return Hf_DefenderGeneral;
             }
         }
         public override IEnumerable<Entity> EntitiesInvolved
         {
             get
             {
-                yield return DefenderCiv;
-                yield return AttackerCiv;
+                yield return Entity_Defender;
+                yield return Entity_Attacker;
             }
         }
         public override IEnumerable<Region> RegionsInvolved
@@ -75,16 +75,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                             Coords = new Point(Convert.ToInt32(val.Split(',')[0]), Convert.ToInt32(val.Split(',')[1]));
                         break;
                     case "attacker_civ_id":
-                        AttackerCivId = valI;
+                        EntityId_Attacker = valI;
                         break;
                     case "defender_civ_id":
-                        DefenderCivId = valI;
+                        EntityId_Defender = valI;
                         break;
                     case "attacker_general_hfid":
-                        AttackerGeneralHfid = valI;
+                        HfId_AttackerGeneral = valI;
                         break;
                     case "defender_general_hfid":
-                        DefenderGeneralHfid = valI;
+                        HfId_DefenderGeneral = valI;
                         break;
 
                     default:
@@ -94,27 +94,12 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        internal override void Link()
-        {
-            base.Link();
-            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
-                Subregion = World.Regions[SubregionId.Value];
-            if (AttackerCivId.HasValue && World.Entities.ContainsKey(AttackerCivId.Value))
-                AttackerCiv = World.Entities[AttackerCivId.Value];
-            if (DefenderCivId.HasValue && World.Entities.ContainsKey(DefenderCivId.Value))
-                DefenderCiv = World.Entities[DefenderCivId.Value];
-            if (AttackerGeneralHfid.HasValue && World.HistoricalFigures.ContainsKey(AttackerGeneralHfid.Value))
-                AttackerGeneralHf = World.HistoricalFigures[AttackerGeneralHfid.Value];
-            if (DefenderGeneralHfid.HasValue && World.HistoricalFigures.ContainsKey(DefenderGeneralHfid.Value))
-                DefenderGeneralHf = World.HistoricalFigures[DefenderGeneralHfid.Value];
-        }
-
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "Attacker:", AttackerCiv);
-            EventLabel(frm, parent, ref location, "--General:", AttackerGeneralHf);
-            EventLabel(frm, parent, ref location, "Defender:", DefenderCiv);
-            EventLabel(frm, parent, ref location, "--General:", DefenderGeneralHf);
+            EventLabel(frm, parent, ref location, "Attacker:", Entity_Attacker);
+            EventLabel(frm, parent, ref location, "--General:", Hf_AttackerGeneral);
+            EventLabel(frm, parent, ref location, "Defender:", Entity_Defender);
+            EventLabel(frm, parent, ref location, "--General:", Hf_DefenderGeneral);
             EventLabel(frm, parent, ref location, "Region:", Subregion);
             EventLabel(frm, parent, ref location, "Coords:", new Coordinate(Coords));
         }
@@ -124,7 +109,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             return
-                $"{timestring} {AttackerCiv} attacked {DefenderCiv} in {Subregion}. \n{(AttackerGeneralHf == null ? "An unknown creature" : ("The " + AttackerGeneralHf.Race + " " + AttackerGeneralHf))} led the attack, and the defenders were led by {(DefenderGeneralHf == null ? "an unknown creature" : ("The " + DefenderGeneralHf.Race + " " + DefenderGeneralHf))}.";
+                $"{timestring} {Entity_Attacker} attacked {Entity_Defender} in {Subregion}. \n{(Hf_AttackerGeneral == null ? "An unknown creature" : ("The " + Hf_AttackerGeneral.Race + " " + Hf_AttackerGeneral))} led the attack, and the defenders were led by {(Hf_DefenderGeneral == null ? "an unknown creature" : ("The " + Hf_DefenderGeneral.Race + " " + Hf_DefenderGeneral))}.";
 
         }
 
@@ -132,7 +117,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timelinestring = base.ToTimelineString();
 
-            return $"{timelinestring} {AttackerCiv} attacked {DefenderCiv} in {Subregion}.";
+            return $"{timelinestring} {Entity_Attacker} attacked {Entity_Defender} in {Subregion}.";
         }
 
         internal override void Export(string table)
@@ -146,10 +131,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Id, 
                 SubregionId.DBExport(), 
                 FeatureLayerId.DBExport(), 
-                AttackerCivId.DBExport(), 
-                AttackerGeneralHfid.DBExport(), 
-                DefenderCivId.DBExport(), 
-                DefenderGeneralHfid.DBExport(),
+                EntityId_Attacker.DBExport(), 
+                HfId_AttackerGeneral.DBExport(), 
+                EntityId_Defender.DBExport(), 
+                HfId_DefenderGeneral.DBExport(),
                 Coords.DBExport()
             };
 

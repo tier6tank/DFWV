@@ -8,8 +8,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     public class HE_RazedStructure : HistoricalEvent
     {
-        private int? CivId { get; }
-        public Entity Civ { get; set; }
+        private int? EntityId { get; }
+        public Entity Entity { get; set; }
         private int? SiteId { get; }
         public Site Site { get; set; }
         private int? StructureId { get; }
@@ -19,7 +19,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         public override IEnumerable<Entity> EntitiesInvolved
         {
-            get { yield return Civ; }
+            get { yield return Entity; }
         }
         public override IEnumerable<Site> SitesInvolved
         {
@@ -44,7 +44,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "civ_id":
-                        CivId = valI;
+                        EntityId = valI;
                         break;
                     case "site_id":
                         SiteId = valI;
@@ -61,25 +61,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        internal override void Link()
-        {
-            base.Link();
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (CivId.HasValue && World.Entities.ContainsKey(CivId.Value))
-                Civ = World.Entities[CivId.Value];
-
-            if (!StructureId.HasValue || StructureId.Value == -1 || Site == null) return;
-
-            Structure = Site.GetStructure(StructureId.Value);
-            if (Structure == null)
-            {
-                Structure = new Structure(Site, StructureId.Value, World);
-                Site.AddStructure(Structure);
-            }
-            
-        }
-
         internal override void Process()
         {
             base.Process();
@@ -93,7 +74,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "Civ:", Civ);
+            EventLabel(frm, parent, ref location, "Civ:", Entity);
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Structure:", Structure);   
         }
@@ -102,14 +83,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            return $"{timestring} {Civ} razed {Structure} in {Site.AltName}.";
+            return $"{timestring} {Entity} razed {Structure} in {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
 
-            return $"{timelinestring} {Civ} razed a structure in {Site.AltName}.";
+            return $"{timelinestring} {Entity} razed a structure in {Site.AltName}.";
         }
 
         internal override void Export(string table)
@@ -121,7 +102,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object>
             {
                 Id, 
-                CivId.DBExport(), 
+                EntityId.DBExport(), 
                 SiteId.DBExport(), 
                 StructureId.DBExport()
             };

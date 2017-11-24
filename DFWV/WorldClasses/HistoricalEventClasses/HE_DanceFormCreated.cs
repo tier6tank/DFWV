@@ -32,7 +32,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (FormId.HasValue && World.DanceForms.ContainsKey(FormId.Value))
                 Form = World.DanceForms[FormId.Value].ToString();
 
-            return $"{timestring} {Form} was created by the {HistFigure.Race.ToString().ToLower()} {HistFigure} in {Site.AltName}{reasoncircumstancestring}.";
+            return $"{timestring} {Form} was created by the {Hf.Race.ToString().ToLower()} {Hf} in {Site.AltName}{reasoncircumstancestring}.";
         }
 
         internal override string ToTimelineString()

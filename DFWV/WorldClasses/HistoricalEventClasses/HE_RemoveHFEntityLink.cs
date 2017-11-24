@@ -9,16 +9,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     public class HE_RemoveHFEntityLink : HistoricalEvent
     {
-        private int? CivId { get; }
-        private Entity Civ { get; set; }
-        private int? Hfid { get; set; }
+        private int? EntityId { get; }
+        private Entity Entity { get; set; }
+        private int? HfId { get; set; }
         public HistoricalFigure Hf { private get; set; }
         public int? LinkType { private get; set; }
         public int? Position { private get; set; }
 
         public HFEntityLink HfEntityLink { get; set; }
 
-        override public Point Location => Civ.Location;
+        override public Point Location => Entity.Location;
 
         public override IEnumerable<HistoricalFigure> HFsInvolved
         {
@@ -27,7 +27,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         public override IEnumerable<Entity> EntitiesInvolved
         {
-            get { yield return Civ; }
+            get { yield return Entity; }
         }
 
         public HE_RemoveHFEntityLink(XDocument xdoc, World world)
@@ -47,23 +47,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "civ_id":
-                        CivId = valI;
+                        EntityId = valI;
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
                 }
             }
-        }
-
-        internal override void Link()
-        {
-            //TODO: Incorporate new data
-            base.Link();
-            if (CivId.HasValue && World.Entities.ContainsKey(CivId.Value))
-                Civ = World.Entities[CivId.Value];
-            if (Hfid.HasValue && World.HistoricalFigures.ContainsKey(Hfid.Value))
-                Hf = World.HistoricalFigures[Hfid.Value];
         }
 
         internal override void Plus(XDocument xdoc)
@@ -80,7 +70,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "histfig":
-                        Hfid = valI;
+                        HfId = valI;
                         break;
                     case "link_type":
                         if (!HFEntityLink.LinkTypes.Contains(val))
@@ -115,7 +105,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 {
                     foreach (var entityLink in entityLinkList.Value)
                     {
-                        if (entityLink.Entity == Civ)
+                        if (entityLink.Entity == Entity)
                         {
                             entityLink.RemoveEvent = this;
                             HfEntityLink = entityLink;
@@ -133,7 +123,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
             EventLabel(frm, parent, ref location, "HF:", Hf);
-            EventLabel(frm, parent, ref location, "Entity:", Civ);
+            EventLabel(frm, parent, ref location, "Entity:", Entity);
             if (LinkType.HasValue)
             {
                 EventLabel(frm, parent, ref location, "Link Type:", HFEntityLink.LinkTypes[LinkType.Value]);
@@ -147,11 +137,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             if (!Position.HasValue || HFEntityLink.Positions[Position.Value] == "-1")
-                return $"{timestring} {Hf?.ToString() ?? "UNKNOWN"} left the {Civ}.";
+                return $"{timestring} {Hf?.ToString() ?? "UNKNOWN"} left the {Entity}.";
             if (Hf == null)
-                return $"{timestring} {"UNKNOWN"} became the {HFEntityLink.Positions[Position.Value]} of {Civ}.";
+                return $"{timestring} {"UNKNOWN"} became the {HFEntityLink.Positions[Position.Value]} of {Entity}.";
             return
-                $"{timestring} the {Hf.Race.ToString().ToLower()} {Hf} ceased to be the {HFEntityLink.Positions[Position.Value]} of {Civ}.";
+                $"{timestring} the {Hf.Race.ToString().ToLower()} {Hf} ceased to be the {HFEntityLink.Positions[Position.Value]} of {Entity}.";
         }
 
         internal override string ToTimelineString()
@@ -159,7 +149,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             //TODO: Incorporate new data
             var timelinestring = base.ToTimelineString();
 
-            return $"{timelinestring} Remove HF Link from {Civ}";
+            return $"{timelinestring} Remove HF Link from {Entity}";
         }
 
         internal override void Export(string table)
@@ -171,8 +161,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object>
             {
                 Id, 
-                CivId.DBExport(),
-                Hfid.DBExport(),
+                EntityId.DBExport(),
+                HfId.DBExport(),
                 LinkType.DBExport(HFEntityLink.LinkTypes),
                 Position.DBExport(HFEntityLink.Positions)
             };

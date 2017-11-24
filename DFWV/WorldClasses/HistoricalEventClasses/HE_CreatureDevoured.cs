@@ -14,10 +14,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? SubregionId { get; }
         private Region Subregion { get; set; }
         private int? FeatureLayerId { get; }
-        private int? DevourerId { get; set; }
-        public HistoricalFigure Devourer { private get; set; }
-        private int? VictimId { get; set; }
-        private HistoricalFigure Victim { get; set; }
+        private int? HfId_Devourer { get; set; }
+        public HistoricalFigure Hf_Devourer { private get; set; }
+        private int? HfId_Victim { get; set; }
+        private HistoricalFigure Hf_Victim { get; set; }
         private int? EntityId { get; set; }
         private Entity Entity { get; set; }
         private Race VictimRace { get; set; }
@@ -30,8 +30,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get
             {
-                yield return Devourer;
-                yield return Victim;
+                yield return Hf_Devourer;
+                yield return Hf_Victim;
             }
         }
         public override IEnumerable<Entity> EntitiesInvolved
@@ -82,26 +82,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        internal override void Link()
-        {
-            //TODO: Incorporate new data
-            base.Link();
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
-                Subregion = World.Regions[SubregionId.Value];
-            if (EntityId.HasValue && World.Entities.ContainsKey(EntityId.Value))
-                Entity = World.Entities[EntityId.Value];
-            if (DevourerId.HasValue && World.HistoricalFigures.ContainsKey(DevourerId.Value))
-                Devourer = World.HistoricalFigures[DevourerId.Value];
-            if (VictimId.HasValue && World.HistoricalFigures.ContainsKey(VictimId.Value))
-                Victim = World.HistoricalFigures[VictimId.Value];
-            if (DevourerId.HasValue && World.HistoricalFigures.ContainsKey(DevourerId.Value))
-                Devourer = World.HistoricalFigures[DevourerId.Value];
-
-            
-        }
-
         internal override void Plus(XDocument xdoc)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -117,7 +97,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                     case "victim":
                         if (valI != -1)
-                            VictimId = valI;
+                            HfId_Victim = valI;
                         break;
                     case "race":
                         VictimRace = World.GetAddRace(val);
@@ -128,7 +108,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         VictimCaste = HistoricalFigure.Castes.IndexOf(val);
                         break;
                     case "eater":
-                        DevourerId = valI;
+                        HfId_Devourer = valI;
                         break;
                     case "entity":
                         EntityId = valI;
@@ -145,9 +125,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "Devourer:", Devourer);
-            if (Victim != null)
-                EventLabel(frm, parent, ref location, "Victim:", Victim);
+            EventLabel(frm, parent, ref location, "Devourer:", Hf_Devourer);
+            if (Hf_Victim != null)
+                EventLabel(frm, parent, ref location, "Victim:", Hf_Victim);
             else if (VictimRace != null && VictimCaste != null)
                 EventLabel(frm, parent, ref location, "Victim:", HistoricalFigure.Castes[VictimCaste.Value] + " " + VictimRace);
             EventLabel(frm, parent, ref location, "Site:", Site);
@@ -168,10 +148,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 location += Site.AltName;
             //(time), (HF) devoured a (race) of (entity) in (site).
             var devourertext = "an unknown creature";
-            if (Devourer != null)
-                devourertext = $"the {Devourer.Race.ToString().ToLower()} {Devourer}";
+            if (Hf_Devourer != null)
+                devourertext = $"the {Hf_Devourer.Race.ToString().ToLower()} {Hf_Devourer}";
 
-            if (Victim == null)
+            if (Hf_Victim == null)
             {
                 return
                     $"{timestring} {devourertext} devoured a {VictimRace.ToString().ToLower()} of {Entity} in {location}.";
@@ -179,7 +159,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (Entity == null)
             {
                 return
-                    $"{timestring} {devourertext} devoured the {VictimRace.ToString().ToLower()} {Victim} {location}.";
+                    $"{timestring} {devourertext} devoured the {VictimRace.ToString().ToLower()} {Hf_Victim} {location}.";
             }
 
 
@@ -197,8 +177,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             else
                 location += Site.AltName;
 
-            if (Devourer != null)
-                return $"{timelinestring} {Devourer} devoured someone {location}.";
+            if (Hf_Devourer != null)
+                return $"{timelinestring} {Hf_Devourer} devoured someone {location}.";
             return $"{timelinestring} Creature devoured {location}.";
         }
 
@@ -214,8 +194,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 SiteId.DBExport(),
                 SubregionId.DBExport(), 
                 FeatureLayerId.DBExport(),
-                DevourerId.DBExport(),
-                VictimId.DBExport(),
+                HfId_Devourer.DBExport(),
+                HfId_Victim.DBExport(),
                 VictimRace.DBExport(),
                 VictimCaste.DBExport(HistoricalFigure.Castes),
                 EntityId.DBExport()

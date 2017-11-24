@@ -8,24 +8,24 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     class HE_RegionPopIncorporatedIntoEntity : HistoricalEvent
     {
-        private int? PopRaceId { get; }
-        private Race PopRace { get; set; }
+        private int? RaceId { get; }
+        private Race Race { get; set; }
         private int? SiteId { get; }
         private Site Site { get; set; }
-        private int? JoinEntityId { get; }
-        private Entity JoinEntity { get; set; }
+        private int? EntityId { get; }
+        private Entity Entity { get; set; }
 
         override public Point Location => Point.Empty;
 
         public int? PopNumberMoved { get; set; }
-        public int? PopSrid { get; set; }
-        public Region PopSr { get; set; }
+        public int? RegionId { get; set; }
+        public Region Region { get; set; }
         public int? PopFlid { get; set; }
 
 
         public override IEnumerable<Entity> EntitiesInvolved
         {
-            get { yield return JoinEntity; }
+            get { yield return Entity; }
         }
         public override IEnumerable<Site> SitesInvolved
         {
@@ -34,7 +34,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         public override IEnumerable<Region> RegionsInvolved
         {
-            get { yield return PopSr; }
+            get { yield return Region; }
         }
 
         public HE_RegionPopIncorporatedIntoEntity(XDocument xdoc, World world)
@@ -53,10 +53,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "seconds72":
                     case "type":
                     case "pop_race":
-                        PopRaceId = valI;
+                        RaceId = valI;
                         break;
                     case "join_entity_id":
-                        JoinEntityId = valI;
+                        EntityId = valI;
                         break;
                     case "site_id":
                         if (valI != -1)
@@ -66,7 +66,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         PopNumberMoved = valI;
                         break;
                     case "pop_srid":
-                        PopSrid = valI;
+                        RegionId = valI;
                         break;
                     case "pop_flid":
                         PopFlid = valI;
@@ -78,23 +78,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        internal override void Link()
-        {
-            base.Link();
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (JoinEntityId.HasValue && World.Sites.ContainsKey(JoinEntityId.Value))
-                JoinEntity = World.Entities[JoinEntityId.Value];
-            if (PopSrid.HasValue && World.Sites.ContainsKey(PopSrid.Value))
-                PopSr = World.Regions[PopSrid.Value];
-
-        }
-
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "PopRace:", PopRaceId);
+            EventLabel(frm, parent, ref location, "PopRace:", RaceId);
             EventLabel(frm, parent, ref location, "Number:", PopNumberMoved);
-            EventLabel(frm, parent, ref location, "Join Entity:", JoinEntity);
+            EventLabel(frm, parent, ref location, "Join Entity:", Entity);
             EventLabel(frm, parent, ref location, "Site:", Site);
         }
 
@@ -107,18 +95,18 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 count = "dozens";
 
 
-            var racetext = PopRace?.ToString().ToLower() ?? PopRaceId?.ToString() ?? "";
+            var racetext = Race?.ToString().ToLower() ?? RaceId?.ToString() ?? "";
 
 
-            return $"{timestring} {count} of {racetext} from {PopSr} joined with the {JoinEntity} at {Site.AltName}.";
+            return $"{timestring} {count} of {racetext} from {Region} joined with the {Entity} at {Site.AltName}.";
         }
 
         internal override string ToTimelineString()
         {
             var timelinestring = base.ToTimelineString();
-            var racetext = PopRace?.ToString().ToLower() ?? PopRaceId?.ToString() ?? "";
+            var racetext = Race?.ToString().ToLower() ?? RaceId?.ToString() ?? "";
 
-            return $"{timelinestring} {PopNumberMoved} {racetext} joined with {JoinEntity}.";
+            return $"{timelinestring} {PopNumberMoved} {racetext} joined with {Entity}.";
 
         }
 
@@ -131,11 +119,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object>
             {
                 Id,
-                JoinEntityId.DBExport(),
+                EntityId.DBExport(),
                 SiteId.DBExport(),
-                PopRaceId.DBExport(),
+                RaceId.DBExport(),
                 PopNumberMoved.DBExport(),
-                PopSrid.DBExport(),
+                RegionId.DBExport(),
                 PopFlid.DBExport()
             };
 

@@ -1,0 +1,347 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_AddHFEntityLink" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAABBABAAAAAAAgRiIABAAAAAAEAIAAACAAYAAAAAA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_AddHFEntityLink.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_AddHFHFLink" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>hAAAABABAAAAAgAAQiIABAAAAAAAAAAIACAAYAAAAAA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_AddHFHFLink.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_AddHFSiteLink" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAABBABEAAAgAACRiIABAAEAAAAAIgAACAAYAAAAAA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_AddHFSiteLink.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_AgreementConcluded" Collapsed="true">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAABEgAAgAAAQAAABAQQAQAAAIAEACAAQCAAAAA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_AgreementConcluded.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_AgreementFormed" Collapsed="true">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAABQBAAKAwAIEQCAABAAAEQAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_AgreementFormed.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_AgreementMade" Collapsed="true">
+    <Position X="9.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAABEgAAgAAAQCIABAAQAQAAAIAEACAAQCAAAAA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_AgreementMade.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_AgreementRejected" Collapsed="true">
+    <Position X="11" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAABEgAAgAAAQCIABAAQAQAAAIAEACAAQCAAAAA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_AgreementRejected.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_ArtifactClaimFormed" Collapsed="true">
+    <Position X="12.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>kAAAJAABEAKAAAAAQCIAAAAAACAAAIAAAAQAQAAAAAA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_ArtifactClaimFormed.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_ArtifactCopied" Collapsed="true">
+    <Position X="14.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEBABgBBAACACAAEQCIAAAAAASAAAAAAgiIAQAAAUAg=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_ArtifactCopied.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_ArtifactCreated" Collapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAABEACAgAAAUiIABAAAASAAAIAAACQEQAAAAAA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_ArtifactCreated.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_ArtifactDestroyed" Collapsed="true">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAABEACAgAAAQCIABAAEASAAAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_ArtifactDestroyed.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_ArtifactFound" Collapsed="true">
+    <Position X="4" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAABEACAgAAAQCIAAAAAASAAAIAAAAQEQAAAAAA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_ArtifactFound.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_ArtifactGiven" Collapsed="true">
+    <Position X="5.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAABAADAACAABAAQCIAAAABgCgAQAAQAAAAQAAAIAA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_ArtifactGiven.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_ArtifactLost" Collapsed="true">
+    <Position X="7.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABEACAgAAAQiIABAAAASAAAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_ArtifactLost.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_ArtifactPossessed" Collapsed="true">
+    <Position X="9.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gIAAAAABEACAgAJEZiIABACAASAAAIAAAAQEUAgAAAQ=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_ArtifactPossessed.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_ArtifactRecovered" Collapsed="true">
+    <Position X="11" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gIAAAAABEACAgAgEQCIAAAAEASAAAAgAAAAEQAAAAAQ=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_ArtifactRecovered.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_ArtifactStored" Collapsed="true">
+    <Position X="12.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAABEACAgAAAYiIABAAAASAAAIAAAAQEQAAAAAA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_ArtifactStored.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_AssumeIdentity" Collapsed="true">
+    <Position X="14.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAABAABAAAAAIBAQCIABABQAAAAAgBAICAAQBAAAEA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_AssumeIdentity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_AttackedSite" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>hBAADAgBEQIAgAAAQCIABAAAAQAAAAAACAAAQAACAAE=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_AttackedSite.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_BodyAbused" Collapsed="true">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gIAABBCBNAAAgAQEQCIABAIBAQBAAAQAQiAAQAACAgQ=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_BodyAbused.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_Ceremony" Collapsed="true">
+    <Position X="4" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAABIABEAAAgABERCIABAAAAQAAAIAAAAAAQAACAAQ=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_Ceremony.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_ChangedCreatureType" Collapsed="true">
+    <Position X="5.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAgAQBAQAAQAAAQCKARBAAAgAAAAAAIAAAQAAAAQA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_ChangedCreatureType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_ChangeHFBodyState" Collapsed="true">
+    <Position X="7.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gIAAABABEAAAgAAEQiIABAAEAQAAAAgAQQAAQAEAAAQ=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_ChangeHFBodyState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_ChangeHFJob" Collapsed="true">
+    <Position X="9.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gIAAABABEEAAgAAEQCIABAAACQAAAAAAACAAQAICEAQ=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_ChangeHFJob.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_ChangeHFState" Collapsed="true">
+    <Position X="11" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gIAAABABEEAAgAIERiIABAAAAQAAAIAAQAAARAACAAQ=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_ChangeHFState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_Competition" Collapsed="true">
+    <Position X="12.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IICAhIABEAAAgABERCIABAgAAQAAAIAAAAAAQAACAAQ=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_Competition.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_CreatedSite" Collapsed="true">
+    <Position X="14.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAABAABEQAAgAAAZiIABAAAAQAAAIAACIAAQAABAAA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_CreatedSite.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_CreatedStructure" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAABAABEQAAgAAAZiIABAAEAQAAAIgACKAAQAABAAA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_CreatedStructure.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_CreatedWorldConstruction" Collapsed="true">
+    <Position X="2.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>YAAABBABAQIACAAARiKABAAQAQAAAIAACAAAQAAAAQA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_CreatedWorldConstruction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_CreateEntityPosition" Collapsed="true">
+    <Position X="4" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAABFAFAAAAAAIgRCAABAAAAAAAAIAAACAAQAAAAAA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_CreateEntityPosition.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_CreatureDevoured" Collapsed="true">
+    <Position X="5.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>kIAABAABFAIAgAQEQCIABAAAAQAACAAQASAIQAACAAQ=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_CreatureDevoured.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_DanceFormCreated" Collapsed="true">
+    <Position X="7.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAAAAAAQCAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_DanceFormCreated.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_DestroyedSite" Collapsed="true">
+    <Position X="9.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAADAABEQAAgAAAQCIABAAAAQAAAAAACAAAQAACAAA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_DestroyedSite.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_DiplomatLost" Collapsed="true">
+    <Position X="11" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAACBAABEAIAgAAAQCIABAAIAQAAAAAAACAAQAAAAAA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_DiplomatLost.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_EntityCreated" Collapsed="true">
+    <Position X="12.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAABAABEAIAgAAAQiIABAAEAQAAAAgAAAAAQAAAAAA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_EntityCreated.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_EntityLaw" Collapsed="true">
+    <Position X="14.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>kAAABAABAAIAAAAAQCIABIAAAAAAAIAAAAQAQAABAAA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_EntityLaw.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_EntityPrimaryCriminals" Collapsed="true">
+    <Position X="0.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAABAABEAIAgAAAQCIABAAEAQAAAAgAAAAAQAAAAAA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_EntityPrimaryCriminals.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_EntityRelocate" Collapsed="true">
+    <Position X="2.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAABAABEAIAgAAAQiIABAAEAQAAAAgAAAAAQAAAAAA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_EntityRelocate.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_FieldBattle" Collapsed="true">
+    <Position X="4" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>hJAADAgBAAIAAAAEQCIABAAAAAAAAAAAQAAAQAACAAU=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_FieldBattle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_FirstContact" Collapsed="true">
+    <Position X="5.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAABEAAAgAACSCoABAAAAQAAAAAAAAAAQgAAAAA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_FirstContact.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_FirstContactFailed" Collapsed="true">
+    <Position X="7.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAABEAAAgAAAQCoABAAIAQAAAAAAAAAAQgABAAA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_FirstContactFailed.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_HFAbducted" Collapsed="true">
+    <Position X="9.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gIAAAAABEAAIgAAEQCIABAAAAQABAAAAAAAAQAICACQ=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_HFAbducted.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_HFAttackedSite" Collapsed="true">
+    <Position X="11" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>hCAABAABEQAAgAAAQCIABAAAAQAAAAAASAAAQAAAAAA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_HFAttackedSite.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_HFConfronted" Collapsed="true">
+    <Position X="12.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gIAAABABEAAAgAIERCIABAAAAQAAAAAAQAAAQAgCAAQ=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_HFConfronted.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_HFDestroyedSite" Collapsed="true">
+    <Position X="14.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>hCAABAABEQAAgAAAQCIABAAAAQAAAAAASAAAQAAAAAA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_HFDestroyedSite.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_HFDied" Collapsed="true">
+    <Position X="0.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>kIAAANkBEJCAgAQExiIgBAgAwSAAQQBAACAAQAECAgY=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_HFDied.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_HFDisturbedStructure" Collapsed="true">
+    <Position X="2.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAABEAAAgAgAQiIABAAEAQAAAAgAACAAQAAAAAQ=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_HFDisturbedStructure.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_HFDoesInteraction" Collapsed="true">
+    <Position X="4" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gIAAAAAhEgAIgAAEQCIABAgBAQAAAAAAACAQQEIAAAA=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_HFDoesInteraction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DFWV.WorldClasses.HistoricalEventClasses.HE_HFFormsReputationRelationship">
+    <Position X="5.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gIAAAAAJEAAAgCwEQCIAAABAAQEAAAEAAAAAQAAAAAQ=</HashCode>
+      <FileName>WorldClasses\HistoricalEventClasses\HE_HFFormsReputationRelationship.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

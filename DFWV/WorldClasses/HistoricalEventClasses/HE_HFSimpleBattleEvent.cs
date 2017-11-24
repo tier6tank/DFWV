@@ -9,10 +9,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     class HE_HFSimpleBattleEvent : HistoricalEvent
     {
-        private List<int> Group1Hfid { get; }
-        public List<HistoricalFigure> Group1Hf { get; private set; }
-        private List<int> Group2Hfid { get; }
-        private List<HistoricalFigure> Group2Hf { get; set; }
+        private List<int> HfId_Group1 { get; }
+        public List<HistoricalFigure> Hf_Group1 { get; private set; }
+        private List<int> HfId_Group2 { get; }
+        private List<HistoricalFigure> Hf_Group2 { get; set; }
         private int? SiteId { get; }
         private Site Site { get; set; }
         private int? SubregionId { get; }
@@ -27,14 +27,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             get
             {
-                if (Group1Hf != null)
+                if (Hf_Group1 != null)
                 {
-                    foreach (var historicalFigure in Group1Hf)
+                    foreach (var historicalFigure in Hf_Group1)
                         yield return historicalFigure;
                 }
-                if (Group2Hf != null)
+                if (Hf_Group2 != null)
                 {
-                    foreach (var historicalFigure in Group2Hf)
+                    foreach (var historicalFigure in Hf_Group2)
                         yield return historicalFigure;
                 }
             }
@@ -82,14 +82,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         Subtype = SubTypes.IndexOf(val);
                         break;
                     case "group_1_hfid":
-                        if (Group1Hfid == null)
-                            Group1Hfid = new List<int>();
-                        Group1Hfid.Add(valI);
+                        if (HfId_Group1 == null)
+                            HfId_Group1 = new List<int>();
+                        HfId_Group1.Add(valI);
                         break;
                     case "group_2_hfid":
-                        if (Group2Hfid == null)
-                            Group2Hfid = new List<int>();
-                        Group2Hfid.Add(valI);
+                        if (HfId_Group2 == null)
+                            HfId_Group2 = new List<int>();
+                        HfId_Group2.Add(valI);
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
@@ -100,32 +100,28 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         internal override void Link()
         {
             base.Link();
-            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
-                Site = World.Sites[SiteId.Value];
-            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
-                Subregion = World.Regions[SubregionId.Value];
-            if (Group1Hfid != null)
+            if (HfId_Group1 != null)
             {
-                Group1Hf = new List<HistoricalFigure>();
-                foreach (var group1Hfid in Group1Hfid.Where(group1Hfid => World.HistoricalFigures.ContainsKey(group1Hfid)))
+                Hf_Group1 = new List<HistoricalFigure>();
+                foreach (var group1Hfid in HfId_Group1.Where(group1Hfid => World.HistoricalFigures.ContainsKey(group1Hfid)))
                 {
-                    Group1Hf.Add(World.HistoricalFigures[group1Hfid]);
+                    Hf_Group1.Add(World.HistoricalFigures[group1Hfid]);
                 }
             }
-            if (Group2Hfid == null) return;
-            Group2Hf = new List<HistoricalFigure>();
-            foreach (var group2Hfid in Group2Hfid.Where(group2Hfid => World.HistoricalFigures.ContainsKey(group2Hfid)))
+            if (HfId_Group2 == null) return;
+            Hf_Group2 = new List<HistoricalFigure>();
+            foreach (var group2Hfid in HfId_Group2.Where(group2Hfid => World.HistoricalFigures.ContainsKey(group2Hfid)))
             {
-                Group2Hf.Add(World.HistoricalFigures[group2Hfid]);
+                Hf_Group2.Add(World.HistoricalFigures[group2Hfid]);
             }
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
             EventLabel(frm, parent, ref location, "Subtype:", SubTypes[Subtype]);
-            foreach (var hf in Group1Hf)
+            foreach (var hf in Hf_Group1)
                 EventLabel(frm, parent, ref location, "Side 1:", hf);
-            foreach (var hf in Group2Hf)
+            foreach (var hf in Hf_Group2)
                 EventLabel(frm, parent, ref location, "Side 2:", hf);
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Region:", Subregion);
@@ -142,26 +138,26 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 case "ambushed":
                 case "surprised":
                     return
-                        $"{timestring} the {Group1Hf[0].Race} {Group1Hf[0]} {SubTypes[Subtype]} the {Group2Hf[0].Race} {Group2Hf[0]}.";
+                        $"{timestring} the {Hf_Group1[0].Race} {Hf_Group1[0]} {SubTypes[Subtype]} the {Hf_Group2[0].Race} {Hf_Group2[0]}.";
                 case "corner":
                 case "confront":
                     return
-                        $"{timestring} the {Group1Hf[0].Race} {Group1Hf[0]} {SubTypes[Subtype]}ed the {Group2Hf[0].Race} {Group2Hf[0]}.";
+                        $"{timestring} the {Hf_Group1[0].Race} {Hf_Group1[0]} {SubTypes[Subtype]}ed the {Hf_Group2[0].Race} {Hf_Group2[0]}.";
                 case "scuffle":
                     return
-                        $"{timestring} the {Group1Hf[0].Race} {Group1Hf[0]} fought with the {Group2Hf[0].Race} {Group2Hf[0]}.";
+                        $"{timestring} the {Hf_Group1[0].Race} {Hf_Group1[0]} fought with the {Hf_Group2[0].Race} {Hf_Group2[0]}.";
                 case "2 lost after receiving wounds":
                     return
-                        $"{timestring} the {Group2Hf[0].Race} {Group2Hf[0]} managed to escape from the {Group1Hf[0].Race} {Group1Hf[0]}'s onslaught.";
+                        $"{timestring} the {Hf_Group2[0].Race} {Hf_Group2[0]} managed to escape from the {Hf_Group1[0].Race} {Hf_Group1[0]}'s onslaught.";
                 case "2 lost after giving wounds":
                     return
-                        $"{timestring} the {Group2Hf[0].Race} {Group2Hf[0]} was forced to retreat from {Group1Hf[0].Race} {Group1Hf[0]} despite the latter's wounds.";
+                        $"{timestring} the {Hf_Group2[0].Race} {Hf_Group2[0]} was forced to retreat from {Hf_Group1[0].Race} {Hf_Group1[0]} despite the latter's wounds.";
                 case "happen upon":
                     return
-                        $"{timestring} the {Group1Hf[0].Race} {Group1Hf[0]} happened upon the {Group2Hf[0].Race} {Group2Hf[0]}.";
+                        $"{timestring} the {Hf_Group1[0].Race} {Hf_Group1[0]} happened upon the {Hf_Group2[0].Race} {Hf_Group2[0]}.";
                 case "2 lost after mutual wounds":
                     return
-                        $"{timestring} the {Group2Hf[0].Race} {Group2Hf[0]} eventually prevailled and the {Group1Hf[0].Race} {Group1Hf[0]} was forced to make a hasty escape.";
+                        $"{timestring} the {Hf_Group2[0].Race} {Hf_Group2[0]} eventually prevailled and the {Hf_Group1[0].Race} {Hf_Group1[0]} was forced to make a hasty escape.";
             }
 
             return timestring;
@@ -171,9 +167,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timelinestring = base.ToTimelineString();
 
-            if (Group1Hf.Count == Group1Hfid.Count && Group2Hf.Count == Group2Hfid.Count)
-                return $"{timelinestring} {Group1Hf[0]} fought {Group2Hf[0]}.";
-            return $"{timelinestring} {Group1Hfid[0]} fought {Group2Hfid[0]}.";
+            if (Hf_Group1.Count == HfId_Group1.Count && Hf_Group2.Count == HfId_Group2.Count)
+                return $"{timelinestring} {Hf_Group1[0]} fought {Hf_Group2[0]}.";
+            return $"{timelinestring} {HfId_Group1[0]} fought {HfId_Group2[0]}.";
         }
 
         internal override void Export(string table)
@@ -185,8 +181,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object>
             {
                 Id,
-                Group1Hfid.DBExport(),
-                Group2Hfid.DBExport(),
+                HfId_Group1.DBExport(),
+                HfId_Group2.DBExport(),
                 Subtype.DBExport(SubTypes),
                 SiteId.DBExport(),
                 SubregionId.DBExport(),
