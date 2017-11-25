@@ -979,25 +979,31 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             //Death = DeathYear.HasValue ? new WorldTime(DeathYear.Value, DeathSeconds) : WorldTime.Present;
             //if (AppearedYear != null) 
             //    Appeared = new WorldTime(AppearedYear.Value);
-
-            if (Race_ != null)
+            try
             {
-                Race = World.GetAddRace(Race_);
-                Race_ = null;
-            }
+                if (Race_ != null)
+                {
+                    Race = World.GetAddRace(Race_);
+                    Race_ = null;
+                }
 
-            if (EntPop_.HasValue && World.EntityPopulations.ContainsKey(EntPop_.Value))
-            {
-                EntPop = World.EntityPopulations[EntPop_.Value];
-                if (EntPop.Members == null)
-                    EntPop.Members = new List<HistoricalFigure>();
-                EntPop.Members.Add(this);
+                if (EntPop_.HasValue && World.EntityPopulations.ContainsKey(EntPop_.Value))
+                {
+                    EntPop = World.EntityPopulations[EntPop_.Value];
+                    if (EntPop.Members == null)
+                        EntPop.Members = new List<HistoricalFigure>();
+                    EntPop.Members.Add(this);
+                }
+                if (Leader?.InheritanceId != null && World.HistoricalFigures.ContainsKey(Leader.InheritanceId.Value))
+                {
+                    Leader.InheritedFrom = World.HistoricalFigures[Leader.InheritanceId.Value];
+                }
             }
-            if (Leader?.InheritanceId != null && World.HistoricalFigures.ContainsKey(Leader.InheritanceId.Value))
+            catch (Exception)
             {
-                Leader.InheritedFrom = World.HistoricalFigures[Leader.InheritanceId.Value];
-            }
 
+                Program.Log(LogType.Error, $"Error Linking HF: {this}");
+            }
         }
 
         internal override void Process()

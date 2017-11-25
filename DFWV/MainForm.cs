@@ -445,8 +445,8 @@ namespace DFWV
             FillList(lstReport, World.Reports, tabReport);
             FillList(lstWrittenContent, World.WrittenContents, tabWrittenContent);
             FillList(lstMusicalForm, World.MusicalForms, tabMusicalForm);
-            FillList(lstDanceForm, World.MusicalForms, tabDanceForm);
-            FillList(lstPoeticForm, World.MusicalForms, tabPoeticForm);
+            FillList(lstDanceForm, World.DanceForms, tabDanceForm);
+            FillList(lstPoeticForm, World.PoeticForms, tabPoeticForm);
             FillList(lstBuilding, World.Buildings, tabBuilding);
             FillList(lstConstruction, World.Constructions, tabConstruction);
             FillList(lstItem, World.Items, tabItem);

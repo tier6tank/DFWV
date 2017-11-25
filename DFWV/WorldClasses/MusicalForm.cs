@@ -25,8 +25,13 @@ namespace DFWV.WorldClasses
 #endif
             frm.lblMusicalFormName.Text = ToString();
             frm.lblMusicalFormAltName.Text = AltName;
-        }
 
+            frm.grpMusicalFormDescription.Visible = Description != null;
+            if (Description != null)
+            {
+                frm.txtMusicalFormDescription.Text = Description;
+            }
+        }
     }
 
 

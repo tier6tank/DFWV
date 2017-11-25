@@ -25,6 +25,12 @@ namespace DFWV.WorldClasses
 #endif
             frm.lblDanceFormName.Text = ToString();
             frm.lblDanceFormAltName.Text = AltName;
+
+            frm.grpDanceForm.Visible = Description != null;
+            if (Description != null)
+            {
+                frm.txtDanceFormDescription.Text = Description;
+            }
         }
     }
 

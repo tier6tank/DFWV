@@ -38,6 +38,12 @@ namespace DFWV.WorldClasses
 #endif
             frm.lblPoeticFormName.Text = ToString();
             frm.lblPoeticFormAltName.Text = AltName;
+
+            frm.grpPoeticFormDescription.Visible = Description != null;
+            if (Description != null)
+            {
+                frm.txtPoeticFormDescription.Text = Description;
+            }
         }
 
     }

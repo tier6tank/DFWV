@@ -13,7 +13,9 @@ namespace DFWV.WorldClasses
         [UsedImplicitly]
         public string DispNameLower => ToString().ToLower();
         public string Description { get; set; }
-
+        public string NameFromDescription => (Description != null && Description.Length > 0 && Description.IndexOf(" is a ") > 0
+                ? Description.Substring(0, Description.IndexOf(" is a "))
+                : null);
         public ArtForm(XDocument xdoc, World world)
             : base(xdoc, world)
         {
@@ -44,25 +46,7 @@ namespace DFWV.WorldClasses
 
         public override void Select(MainForm frm)
         {
-//            if (frm.grpSquad.Text == ToString() && frm.MainTab.SelectedTab == frm.tabSquad)
-//                return;
-//            Program.MakeSelected(frm.tabSquad, frm.lstSquad, this);
 
-//            frm.grpSquad.Text = ToString();
-//            frm.grpSquad.Show();
-//#if DEBUG
-//            frm.grpSquad.Text += string.Format(" - ID: {0}", Id);
-//#endif
-//            frm.lblSquadName.Text = ToString();
-//            frm.lblSquadAltName.Text = AltName;
-//            frm.lblSquadEntity.Data = Entity;
-//            frm.lstSquadMembers.Items.Clear();
-//            frm.grpSquadMembers.Visible = Members != null && Members.Count > 0;
-//            if (Members != null)
-//            {
-                
-//                frm.lstSquadMembers.Items.AddRange(Members.ToArray());
-//            }
         }
 
         internal override void Export(string table)
@@ -102,7 +86,7 @@ namespace DFWV.WorldClasses
 
         public override string ToString()
         {
-            return Name ?? AltName ?? "Art Form";
+            return Name ?? AltName ?? NameFromDescription ?? "Art Form";
         }
 
     }
