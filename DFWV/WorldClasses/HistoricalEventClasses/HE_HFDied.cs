@@ -8,7 +8,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     public class HE_HFDied : HistoricalEvent
     {
-        private int? Hfid { get; }
+        private int? HfId { get; }
         public HistoricalFigure Hf { get; private set; }
         private int? FeatureLayerId { get; }
         private int? HfId_Slayer { get; }
@@ -92,7 +92,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                             FeatureLayerId = valI;
                         break;
                     case "hfid":
-                        Hfid = valI;
+                        HfId = valI;
                         break;
                     case "slayer_hfid":
                         if (valI != -1)
@@ -407,13 +407,13 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (Site == null)
             {
                 if (Hf_Slayer == null)
-                    return $"{timelinestring} {Hf?.ToString() ?? Hfid.ToString()} died.";
-                return $"{timelinestring} {Hf?.ToString() ?? Hfid.ToString()} killed by {Hf_Slayer}.";
+                    return $"{timelinestring} {Hf?.ToString() ?? HfId.ToString()} died.";
+                return $"{timelinestring} {Hf?.ToString() ?? HfId.ToString()} killed by {Hf_Slayer}.";
             }
             if (Hf_Slayer == null)
-                return $"{timelinestring} {Hf?.ToString() ?? Hfid.ToString()} died at {Site.AltName}";
+                return $"{timelinestring} {Hf?.ToString() ?? HfId.ToString()} died at {Site.AltName}";
             return
-                $"{timelinestring} {Hf?.ToString() ?? Hfid.ToString()} killed at {Site.AltName} by {Hf_Slayer}";
+                $"{timelinestring} {Hf?.ToString() ?? HfId.ToString()} killed at {Site.AltName} by {Hf_Slayer}";
         }
 
         internal override void Export(string table)
@@ -425,7 +425,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object>
             {
                 Id, 
-                Hfid.DBExport(), 
+                HfId.DBExport(), 
                 HfId_Slayer.DBExport(), 
                 SlayerRace.DBExport(),
                 SlayerCaste.DBExport(HistoricalFigure.Castes),

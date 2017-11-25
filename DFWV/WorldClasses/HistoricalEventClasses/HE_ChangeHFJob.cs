@@ -8,7 +8,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     class HE_ChangeHFJob : HistoricalEvent
     {
-        private int? Hfid { get; }
+        private int? HfId { get; }
         private HistoricalFigure Hf { get; set; }
         private int? SiteId { get; }
         private Site Site { get; set; }
@@ -64,7 +64,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                             FeatureLayerId = valI;
                         break;
                     case "hfid":
-                        Hfid = valI;
+                        HfId = valI;
                         break;
 
                     default:
@@ -145,8 +145,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             if (Site != null)
                 return
-                    $"{timelinestring} {Hf?.ToString() ?? Hfid.ToString()} changed jobs at {Site.AltName}";
-            return $"{timelinestring} {Hf?.ToString() ?? Hfid.ToString()} changed jobs";
+                    $"{timelinestring} {Hf?.ToString() ?? HfId.ToString()} changed jobs at {Site.AltName}";
+            return $"{timelinestring} {Hf?.ToString() ?? HfId.ToString()} changed jobs";
         }
 
         internal override void Export(string table)
@@ -159,7 +159,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object>
             {
                 Id, 
-                Hfid.DBExport(), 
+                HfId.DBExport(), 
                 SiteId.DBExport(), 
                 SubregionId.DBExport(), 
                 FeatureLayerId.DBExport(),

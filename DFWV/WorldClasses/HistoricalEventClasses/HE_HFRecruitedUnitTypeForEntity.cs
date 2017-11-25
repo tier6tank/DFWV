@@ -10,7 +10,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
     internal class HE_HFRecruitedUnitTypeForEntity : HistoricalEvent
     {
 
-        private int? Hfid { get; set; }
+        private int? HfId { get; set; }
         public HistoricalFigure Hf { get; set; }
         private int? SiteId { get; }
         private Site Site { get; set; }
@@ -52,7 +52,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
 
                     case "hfid":
-                        Hfid = valI;
+                        HfId = valI;
                         break;
                     case "site_id":
                         SiteId = valI;

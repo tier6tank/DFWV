@@ -9,7 +9,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     class HE_MasterpieceFood : HistoricalEvent
     {
-        private int? Hfid { get; }
+        private int? HfId { get; }
         private HistoricalFigure Hf { get; set; }
         private int? EntityId { get; }
         private Entity Entity { get; set; }
@@ -54,7 +54,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "type":
                         break;
                     case "hfid":
-                        Hfid = valI;
+                        HfId = valI;
                         break;
                     case "entity_id":
                         EntityId = valI;
@@ -153,7 +153,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object>
             {
                 Id, 
-                Hfid.DBExport(), 
+                HfId.DBExport(), 
                 EntityId.DBExport(), 
                 SiteId.DBExport(), 
                 SkillAtTime,

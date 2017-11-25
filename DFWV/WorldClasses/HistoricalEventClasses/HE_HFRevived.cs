@@ -8,7 +8,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     class HE_HFRevived : HistoricalEvent
     {
-        private int? Hfid { get; }
+        private int? HfId { get; }
         private HistoricalFigure Hf { get; set; }
         private string Ghost { get; }
         private bool RaisedBefore { get; }
@@ -62,7 +62,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                             FeatureLayerId = valI;
                         break;
                     case "hfid":
-                        Hfid = valI;
+                        HfId = valI;
                         break;
                     case "ghost":
                         Ghost = val;
@@ -100,9 +100,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             if (Site != null)
                 return
-                    $"{timelinestring} {Hf?.ToString() ?? Hfid.ToString()} came back from the dead as a {Ghost} in {Site.AltName}*";
+                    $"{timelinestring} {Hf?.ToString() ?? HfId.ToString()} came back from the dead as a {Ghost} in {Site.AltName}*";
             return
-                $"{timelinestring} {Hf?.ToString() ?? Hfid.ToString()} came back from the dead as a {Ghost}";
+                $"{timelinestring} {Hf?.ToString() ?? HfId.ToString()} came back from the dead as a {Ghost}";
         }
 
         internal override void Export(string table)
@@ -114,7 +114,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var vals = new List<object>
             {
                 Id, 
-                Hfid.DBExport(), 
+                HfId.DBExport(), 
                 Ghost, 
                 RaisedBefore, 
                 SiteId.DBExport(), 
