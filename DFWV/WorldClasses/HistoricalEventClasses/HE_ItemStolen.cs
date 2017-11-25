@@ -146,6 +146,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
+        internal override void Link()
+        {
+            base.Link();
+            if (HistoricalEventCollectionId.HasValue && World.HistoricalEventCollections.ContainsKey(HistoricalEventCollectionId.Value))
+                EventCollection = World.HistoricalEventCollections[HistoricalEventCollectionId.Value];
+        }
+        //TODO: Add Link with historical event collection, add to legends description as well "during ... ec"
+
         internal override void Process()
         {
             base.Process();
@@ -181,9 +189,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     $"{timestring} {"UNKNOWN"} was stolen from {"UNKNOWN"} in {Site?.ToString() ?? "UNKNOWN"} by the {"UNKNOWN"} {"UNKNOWN"} and brought to {"UNKNOWN"}";
             if (Hf != null)
                 return
-                    $"{timestring} {(Mat != null ? Item.Materials[Mat.Value] : "UNKNOWN")} {(ItemType != null ? Item.ItemTypes[ItemType.Value] : "UNKNOWN")} was stolen from {(Site == null ? "UNKNOWN" : Site.AltName)} by the {Hf.Race.ToString().ToLower()} {Hf}{""}."; //TODO: Missing "and brought to [Site]"
+                    $"{timestring} {(Mat != null ? Item.Materials[Mat.Value] : "UNKNOWN")} {(ItemType != null ? Item.ItemTypes[ItemType.Value] : "UNKNOWN")} was stolen from {(Site == null ? "UNKNOWN" : Site.AltName)} by the {Hf.Race.ToString().ToLower()} {Hf}{""}."; 
             return
-                $"{timestring} {(Mat != null ? Item.Materials[Mat.Value] : "UNKNOWN")} {(ItemType != null ? Item.ItemTypes[ItemType.Value] : "UNKNOWN")} was stolen from {(Site == null ? "UNKNOWN" : Site.AltName)} by an unknown creature{""}."; //TODO: Missing "and brought to [Site]"
+                $"{timestring} {(Mat != null ? Item.Materials[Mat.Value] : "UNKNOWN")} {(ItemType != null ? Item.ItemTypes[ItemType.Value] : "UNKNOWN")} was stolen from {(Site == null ? "UNKNOWN" : Site.AltName)} by an unknown creature{""}.";
         }
 
         internal override string ToTimelineString()
