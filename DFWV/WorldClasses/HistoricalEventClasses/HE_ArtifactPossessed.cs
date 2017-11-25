@@ -123,7 +123,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             var timestring = base.LegendsDescription();
 
             return
-                $"{timestring} the {Hf.Race} {Hf} learned {(Artifact.Description == "" ? "UNKNOWN" : Artifact.Description)} from {Artifact}.";
+                $"{timestring} the {Hf.Race} {Hf} learned {(Artifact?.Description == null || Artifact.Description == "" ? "UNKNOWN" : Artifact.Description)} from {Artifact}.";
         }
 
         internal override string ToTimelineString()

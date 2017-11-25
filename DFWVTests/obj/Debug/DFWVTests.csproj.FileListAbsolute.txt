@@ -49,3 +49,5 @@ D:\Code\DFWV\DFWVTests\obj\Debug\DFWVTests.dll
 D:\Code\DFWV\DFWVTests\obj\Debug\DFWVTests.pdb
 D:\Code\DFWV\DFWVTests\bin\Debug\Readme.txt
 D:\Code\DFWV\DFWVTests\bin\Debug\exportlegends.lua
+D:\Code\DFWV\DFWVTests\bin\Debug\DFWV.exe.config
+D:\Code\DFWV\DFWVTests\obj\Debug\DFWVTests.csproj.CoreCompileInputs.cache

@@ -128,13 +128,31 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        protected override string LegendsDescription() //Matched
+        protected override string LegendsDescription()
         { 
             var timestring = base.LegendsDescription();
-
             if (!Position.HasValue || HFEntityLink.Positions[Position.Value] == "-1")
+            {
+                if (HfEntityLink != null)
+                {
+                    switch (HFEntityLink.LinkTypes[HfEntityLink.LinkType])
+                    {
+                        case "member":
+                            if (Entity.Civilization.Leaders["master"].Any(x => x.Hf == Hf))
+                                return $"{timestring} {Hf?.ToString() ?? "UNKNOWN"} became the master of {Entity}.";
+                            return $"{timestring} {Hf?.ToString() ?? "UNKNOWN"} became a {HFEntityLink.LinkTypes[HfEntityLink.LinkType]} of {Entity}.";
+                        case "prisoner":
+                        case "former prisoner":
+                            return $"{timestring} {Hf?.ToString() ?? "UNKNOWN"} was imprisoned by {Entity}.";
+                        default:
+                            return $"{timestring} {Hf?.ToString() ?? "UNKNOWN"} became a {HFEntityLink.LinkTypes[HfEntityLink.LinkType]} of {Entity}.";
+                    }
+                    return
+                        $"{timestring} {Hf?.ToString() ?? "UNKNOWN"} became a {HFEntityLink.LinkTypes[HfEntityLink.LinkType]} of {Entity}.";
+                }
                 return
                     $"{timestring} {Hf?.ToString() ?? "UNKNOWN"} became a {(LinkType.HasValue ? HFEntityLink.LinkTypes[LinkType.Value] : "UNKNOWN")} of {Entity}.";
+            }
             if (Hf == null)
                 return $"{timestring} {"UNKNOWN"} became the {HFEntityLink.Positions[Position.Value]} of {Entity}.";
             

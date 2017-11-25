@@ -133,6 +133,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 case "apprentice":
                     relationshipString = $"an apprenticeship under the {Hf_Target.Race.ToString().ToLower()} {Hf_Target}";
                     break;
+                default:
+                    break;
             }
 
             var reasonString = "";
@@ -143,6 +145,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     break;
                 case "jealousy":
                     reasonString = "due to UNKNOWN's jealousy";
+                    break;
+                default:
                     break;
             }
 

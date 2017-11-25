@@ -171,9 +171,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             EventLabel(frm, parent, ref location, "Coords:", new Coordinate(Coords));
         }
 
-        protected override string LegendsDescription() //Matched
+        protected override string LegendsDescription()
         {
-
+            
             var timestring = base.LegendsDescription();
 
             if (ItemType == null && Mat == null)

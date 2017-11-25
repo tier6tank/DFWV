@@ -86,7 +86,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             if (!HfId_Concluder.HasValue)
                 return
-                    $"{timestring} {God?.ToString() ?? "UNKNOWN"} aided the {Hf?.Race.ToString() ?? "UNKNOWN"} {Hf?.ToString() ?? "UNKNOWN"} in becoming a permanent part of the living world that great fortresses might be raised and tested in siege. " +
+                    $"{timestring} {God?.ToString() ?? "UNKNOWN"} aided the {Hf?.Race.ToString() ?? "UNKNOWN"} {Hf?.ToString() ?? "UNKNOWN"} in becoming a permanent part of the living world\n that great fortresses might be raised and tested in siege. " +
                     $"The ritual took place in {Site?.ToString() ?? "UNKNOWN"} using {Artifact?.ToString() ?? "UNKNOWN"}";
             return $"{timestring} Agreement formed";
         }

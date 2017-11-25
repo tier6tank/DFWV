@@ -81,14 +81,17 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "Hist Fig:", Hf_Giver);
+            EventLabel(frm, parent, ref location, "Giver:", Hf_Giver);
+            EventLabel(frm, parent, ref location, "Giver Entity:", Entity_Giver);
+            EventLabel(frm, parent, ref location, "Receiver:", Hf_Receiver);
+            EventLabel(frm, parent, ref location, "Receiver Entity:", Entity_Receiver);
         }
 
         protected override string LegendsDescription()
         {
             var timestring = base.LegendsDescription();
 
-            return "";
+            return $"{timestring} {Artifact} was offered to {Hf_Receiver} of {Entity_Receiver} by {Hf_Giver}.";
         }
 
         internal override string ToTimelineString()

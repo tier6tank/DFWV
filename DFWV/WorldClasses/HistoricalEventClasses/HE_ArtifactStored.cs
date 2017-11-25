@@ -93,7 +93,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             EventLabel(frm, parent, ref location, "Site:", Site);
         }
 
-        protected override string LegendsDescription() //Matched
+        protected override string LegendsDescription()
         {
             var timestring = base.LegendsDescription();
 

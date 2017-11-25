@@ -112,6 +112,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 EventLabel(frm, parent, ref location, "State:", States[State.Value]);
             if (Reason.HasValue)
                 EventLabel(frm, parent, ref location, "Reason:", Reasons[Reason.Value]);
+            if (FeatureLayerId.HasValue && FeatureLayerId.Value != -1)
+                EventLabel(frm, parent, ref location, "Layer:", FeatureLayerId.Value);
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Region:", Subregion);
             if (!Coords.IsEmpty)
@@ -147,11 +149,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                                 return $"{timestring} {Hf} began wandering the wilds.";
                         }
                     }
+                    else if (SubregionId.HasValue && SubregionId.Value != -1)
+                    {
+                        return $"{timestring} {Hf} began wandering {Subregion}.";
+                    }
                     else
                     {
                         return $"{timestring} {Hf} began wandering the wilds.";
                     }
-                    break;
                 case "scouting":
                     if (Site != null)
                         return $"{timestring} {Hf.Race} {Hf} began scouting the area around {Site.AltName}.";
@@ -176,7 +181,20 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     break;
                 case "visiting":
                     if (Site != null)
-                        return $"{timestring} {Hf.Race} {Hf} visited {Site.AltName} to {Reasons[Reason.Value]}.";
+                        if (Reason.HasValue)
+                        {
+                            switch (Reasons[Reason.Value])
+                            {
+                                case "gather information":
+                                    return $"{timestring} {Hf.Race} {Hf} visited {Site.AltName} to {Reasons[Reason.Value]}.";
+                                case "on a pilgrimage":
+                                    return $"{timestring} {Hf.Race} {Hf} visited {Site.AltName} {Reasons[Reason.Value]}.";
+                                default:
+                                    return $"{timestring} {Hf.Race} {Hf} visited {Site.AltName}.";
+                            }
+                        }
+                        else
+                            return $"{timestring} {Hf.Race} {Hf} visited {Site.AltName}.";
                     break;
                 default:
                     break;

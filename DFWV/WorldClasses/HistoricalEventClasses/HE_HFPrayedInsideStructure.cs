@@ -62,6 +62,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
             EventLabel(frm, parent, ref location, "HF:", Hf);
+            EventLabel(frm, parent, ref location, "Site:", Site);
+            EventLabel(frm, parent, ref location, "Structure:", Structure);
 
         }
 
@@ -69,8 +71,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-
-            return timestring;
+            return $"{timestring} {Hf} prayed inside {Structure} in {Site.AltName}.";
         }
 
         internal override string ToTimelineString()

@@ -200,7 +200,7 @@ namespace DFWV
                 }
                 else
                 {
-                    if (hf.Race != null)
+                    if (hf.Race != null && _livingHFs.ContainsKey(hf.Race))
                         _livingHFs[hf.Race]++;
                     _overallLivingHFs++;
                 }

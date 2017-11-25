@@ -111,40 +111,44 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 EventLabel(frm, parent, ref location, "Position:", HFEntityLink.Positions[Position.Value]);
         }
 
-        protected override string LegendsDescription() //Matched
+        protected override string LegendsDescription()
         {
             var timestring = base.LegendsDescription();
 
             var positionText = "a position";
             if (Position.HasValue)
                 positionText = "the position of " + HFEntityLink.Positions[Position.Value];
-                
 
-            switch (Reason)
+            if (Reason.HasValue)
             {
-                case 0:
-                    return $"{timestring} {Hf} of {Entity} created {positionText} through force of argument.";
-                case 1:
-                    return
-                        $"{timestring} {Hf} of {Entity} compelled the creation of {positionText} with threats of violence.";
-                case 2:
-                    if (Hf == null)
-                    {
-                        return $"{timestring} members of {Entity} created {positionText}.";
-                    }
-                    return "";
-                case 3:
-                    return $"{timestring} {Hf} of {Entity} created {positionText}, pushed by a wave of popular support.";
-                case 4:
-                    return $"{timestring} {Hf} of {Entity} created {positionText} as a matter of course.";
-                default:
-                    if (Hf == null)
-                    {
-                        return $"{timestring} members of {Entity} created {positionText} for UNKNOWN reason.";
-                    }
-                    return $"{timestring} {Hf} of {Entity} created {positionText} for UNKNOWN reason.";
+                switch (Reason)
+                {
+                    case 0:
+                        return $"{timestring} {Hf} of {Entity} created {positionText} through force of argument.";
+                    case 1:
+                        return
+                            $"{timestring} {Hf} of {Entity} compelled the creation of {positionText} with threats of violence.";
+                    case 2:
+                        if (Hf == null)
+                        {
+                            return $"{timestring} members of {Entity} created {positionText}.";
+                        }
+                        return "";
+                    case 3:
+                        return $"{timestring} {Hf} of {Entity} created {positionText}, pushed by a wave of popular support.";
+                    case 4:
+                        return $"{timestring} {Hf} of {Entity} created {positionText} as a matter of course.";
+                    default:
+                        if (Hf == null)
+                        {
+                            return $"{timestring} members of {Entity} created {positionText} for UNKNOWN reason.";
+                        }
+                        return $"{timestring} {Hf} of {Entity} created {positionText} for UNKNOWN reason.";
 
+                }
             }
+            else
+                return $"{timestring} {Hf} of {Entity} created {positionText} for UNKNOWN reason.";
         }
 
         internal override string ToTimelineString()

@@ -159,10 +159,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         protected override string LegendsDescription() //Matched
         {
             var timestring = base.LegendsDescription();
-
+            
             if (Hf != null)
                 return
-                    $"{timestring} {Hf} thrust a spire of slade up from the underworld naming it {Structure}, and established a gateway between worlds in {Site.AltName}.";
+                    $"{timestring} {Hf} thrust a spire of slade up from the underworld naming it {Structure},\n"
+                    + $"and established a gateway between worlds in {Site.AltName}.";
 
             if (Entity_SiteCiv == null)
                 return $"{timestring} {Entity} constructed {Structure} in {Site.AltName}.";

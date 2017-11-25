@@ -188,7 +188,7 @@ namespace DFWV.WorldClasses
         public override string ToString()
         {
             if (!string.IsNullOrEmpty(Name))
-                return Name;
+                return Name.ToTitleCase();
             if (Site.Structures == null || Site.Structures.Count < 10)
                 return Site + " - " + SiteId;
             

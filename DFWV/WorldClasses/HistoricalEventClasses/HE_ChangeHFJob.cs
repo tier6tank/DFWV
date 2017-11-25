@@ -123,7 +123,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 EventLabel(frm, parent, ref location, "New Job:", Unit.JobTypes[NewJob.Value]);
         }
 
-        protected override string LegendsDescription() //Not Matched
+        protected override string LegendsDescription()
         {
             var timestring = base.LegendsDescription();
             if (NewJob.HasValue && OldJob.HasValue)
@@ -134,7 +134,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 return
                     $"{timestring} {Hf.Race} {Hf} stopped being a {Unit.JobTypes[OldJob.Value]} in {(Site != null ? Site.AltName : Subregion.Name)}.";
             }
-            return $"{timestring} {Hf.Race} {Hf} became {"UNKNOWN"} in {(Site != null ? Site.AltName : Subregion.Name.ToTitleCase())}.";
+            return $"{timestring} {Hf?.Race?.ToString() ?? ""} {(Hf == null ? "UNKNOWN" : Hf.ToString())} became {"UNKNOWN"} in {(Site != null ? Site.AltName : Subregion.Name.ToTitleCase())}.";
 
         }
 

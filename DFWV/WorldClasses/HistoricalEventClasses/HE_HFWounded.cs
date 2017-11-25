@@ -130,13 +130,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         protected override string LegendsDescription()
         {
-            //TODO: Incorporate new data
             var timestring = base.LegendsDescription();
 
             return
                 $"{timestring} {(Hf_Woundee != null ? "the " + Hf_Woundee.Race + " " + Hf_Woundee : "an unknown creature")} was wounded by {(Hf_Wounder != null ? "the " + Hf_Wounder.Race + " " + Hf_Wounder : "an unknown creature")}.";
-
-           
         }
 
         internal override string ToTimelineString()

@@ -93,7 +93,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         internal override void Link()
         {
             base.Link();
@@ -104,15 +103,25 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Structure_Source = Site_Source.GetStructure(StructureId_Source.Value);
         }
 
+        protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
             EventLabel(frm, parent, ref location, "Artifact:", Artifact);
+            EventLabel(frm, parent, ref location, "Destination:", "");
+            EventLabel(frm, parent, ref location, " Entity:", Entity_Destination);
+            EventLabel(frm, parent, ref location, " Structure:", Structure_Destination);
+            EventLabel(frm, parent, ref location, " Site:", Site_Destination);
+            EventLabel(frm, parent, ref location, "Source:", "");
+            EventLabel(frm, parent, ref location, " Entity:", Entity_Source);
+            EventLabel(frm, parent, ref location, " Structure:", Structure_Source);
+            EventLabel(frm, parent, ref location, " Site:", Site_Source);
+
         }
 
         protected override string LegendsDescription()
         {
             var timestring = base.LegendsDescription();
 
-            return "";
+            return $"{timestring} {Entity_Destination} made a copy of the original {Artifact} from {Structure_Source} in {Site_Source.AltName} of {Entity_Source},\n keeping it within {Structure_Destination} in {Site_Destination.AltName}.";
         }
 
         internal override string ToTimelineString()

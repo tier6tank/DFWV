@@ -145,7 +145,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     HFSiteLink.LinkTypes[LinkType.Value]);
         }
 
-        protected override string LegendsDescription() //Matched
+        protected override string LegendsDescription()
         {
             var timestring = base.LegendsDescription();
 

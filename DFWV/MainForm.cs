@@ -896,13 +896,13 @@ namespace DFWV
         /// </summary>
         private void XmlLinked()
         {
-            Program.Log(LogType.Status, "XML Linking Done");
             this.InvokeEx(f => f.showMapToolStripMenuItem.Visible = true);
             this.InvokeEx(f => f.timelineToolStripMenuItem.Visible = true);
             FillList(lstStructure, World.Structures, tabStructure);
 
             AddSummaryItemsLearnedFromLinking();
 
+            Program.Log(LogType.Status, "XML Linking Done");
             World.ProcessedSectionStart -= XmlSectionProcessedStart;
             World.ProcessedSection -= XmlSectionProcessed;
             World.Processed -= XmlProcessed;

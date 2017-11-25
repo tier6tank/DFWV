@@ -83,13 +83,32 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
             EventLabel(frm, parent, ref location, "Hist Fig:", Hf);
+            EventLabel(frm, parent, ref location, "Artifact", Artifact);
+            if (Claim.HasValue)
+                EventLabel(frm, parent, ref location, "Claim", Claims[Claim.Value]);
         }
 
         protected override string LegendsDescription()
         {
             var timestring = base.LegendsDescription();
 
-            return "";
+            var claimer = (Hf == null ? Entity?.ToString() : Hf.ToString());
+            if (Claim.HasValue)
+            {
+                switch (Claims[Claim.Value])
+                {
+                    case "heirloom":
+                        return $"{timestring} {Artifact} was made a family heirloom by {claimer}";
+                    case "treasure":
+                        return $"{timestring} {Artifact} was claimed by {claimer}";
+                    case "symbol":
+                        return $"{timestring} {Artifact} was made a symbol of the king by {claimer}";
+                    default:
+                        return $"{timestring} {Artifact} was claimed by {claimer}";
+                }
+            }
+            return $"{timestring} {Artifact} was claimed by {claimer}";
+
         }
 
         internal override string ToTimelineString()

@@ -8,9 +8,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 {
     class HE_HFFormsReputationRelationship : HistoricalEvent
     {
-
-
-
         private int? HfId_1 { get; }
         private HistoricalFigure Hf_1 { get; set; }
         private int? IdentityId { get; }
@@ -63,13 +60,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         HfId_1 = valI;
                         break;
                     case "identity_id1":
-                        HfId_1 = valI;
+                        if (valI != -1)
+                            HfId_1 = valI;
                         break;
                     case "hfid2":
-                        HfId_2 = valI;
+                        if (valI != -1)
+                            HfId_2 = valI;
                         break;
                     case "identity_id2":
-                        Identity2Id = valI;
+                        if (valI != -1)
+                            Identity2Id = valI;
                         break;
                     case "hf_rep_1_of_2":
                         if (!RepTypes.Contains(val))
@@ -102,15 +102,40 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
-            EventLabel(frm, parent, ref location, "Hist Fig:", Hf_1);
+            EventLabel(frm, parent, ref location, "Hist Fig 1:", Hf_1);
+            if (HFRep1Of2.HasValue)
+                EventLabel(frm, parent, ref location, "Rep 1 of 2:", RepTypes[HFRep1Of2.Value]);
+            if (IdentityId.HasValue)
+                EventLabel(frm, parent, ref location, "Identity 1:", IdentityId.Value);
+            EventLabel(frm, parent, ref location, "Hist Fig 2:", Hf_2);
+            if (HFRep2Of1.HasValue)
+                EventLabel(frm, parent, ref location, "Rep 2 of 1:", RepTypes[HFRep2Of1.Value]);
+            if (Identity2Id.HasValue)
+                EventLabel(frm, parent, ref location, "Identity 2:", Identity2Id.Value);
             EventLabel(frm, parent, ref location, "Site:", Site);
+            EventLabel(frm, parent, ref location, "Subregion:", Subregion);
         }
 
         protected override string LegendsDescription()
         {
             var timestring = base.LegendsDescription();
 
-            return "";
+            if (HFRep1Of2.HasValue)
+            {
+                switch (RepTypes[HFRep1Of2.Value])
+                {
+                    case "information source":
+                        return $"{timestring} {Hf_1}, as \"{"UKNOWN Identity"}\", formed a false friendship with {Hf_2} where each used the other for information {Site.AltName}";
+                    case "buddy":
+                        return $"{timestring} {Hf_1}, as \"{"UKNOWN Identity"}\", formed UNKNOWN Relationship with {Hf_2} in {Site.AltName}";
+
+                    default:
+                        break;
+                }
+            }
+            return $"{timestring} {Hf_1}, as \"{"UKNOWN Identity"}\", formed a false friendship with {Hf_2} in order to extract information in {Site.AltName}";
+
+
         }
 
         internal override string ToTimelineString()

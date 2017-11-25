@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Linq;
 using DFWV.WorldClasses.HistoricalFigureClasses;
+using System.Windows.Forms;
+using System.Drawing;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
@@ -73,6 +75,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
+        protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
+        {
+            base.WriteDataOnParent(frm, parent, ref location);
+        }
 
         protected override string LegendsDescription() //Matched (add method to write hf and site alt name)
         {

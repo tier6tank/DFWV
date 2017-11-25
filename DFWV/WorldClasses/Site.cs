@@ -556,7 +556,7 @@ namespace DFWV.WorldClasses
 
         internal Structure GetStructure(int structSiteId)
         {
-            return Structures?.FirstOrDefault(structure => structure.SiteId == structSiteId);
+            return Structures?.FirstOrDefault(structure => structure.LocalId == structSiteId);
         }
 
         internal override void Link()

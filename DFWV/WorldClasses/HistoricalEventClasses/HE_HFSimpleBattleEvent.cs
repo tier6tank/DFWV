@@ -125,10 +125,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 EventLabel(frm, parent, ref location, "Side 2:", hf);
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Region:", Subregion);
-
         }
 
-        protected override string LegendsDescription() //Matched
+        protected override string LegendsDescription()
         {
             var timestring = base.LegendsDescription();
 
@@ -158,6 +157,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 case "2 lost after mutual wounds":
                     return
                         $"{timestring} the {Hf_Group2[0].Race} {Hf_Group2[0]} eventually prevailled and the {Hf_Group1[0].Race} {Hf_Group1[0]} was forced to make a hasty escape.";
+                default:
+                    return $"{timestring} the {Hf_Group2[0].Race} {Hf_Group2[0]} UNKNOWN simple battle event with {Hf_Group1[0].Race} {Hf_Group1[0]}.";
+
             }
 
             return timestring;

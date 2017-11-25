@@ -83,6 +83,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
             EventLabel(frm, parent, ref location, "HF:", Hf);
+            EventLabel(frm, parent, ref location, "Site:", Site);
+            EventLabel(frm, parent, ref location, "Entity:", Entity);
+            EventLabel(frm, parent, ref location, "Subregion:", Subregion);
+            if (UnitType.HasValue)
+                EventLabel(frm, parent, ref location, "Unit Type:", UnitTypes[UnitType.Value]);
 
         }
 
@@ -90,8 +95,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-
-            return timestring;
+            if (UnitType.HasValue)
+                return $"{timestring} {(Hf == null ? "UNKNOWN" : Hf.ToString())} recruited {UnitTypes[UnitType.Value]} into {Entity} in {Site.AltName}.";
+            return $"{timestring} {(Hf == null ? "UNKNOWN" : Hf.ToString())} recruited {UnitTypes[UnitType.Value]} into {Entity} in {Site.AltName}.";
         }
 
         internal override string ToTimelineString()

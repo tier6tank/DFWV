@@ -21,7 +21,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public int Type { get; }
         public static List<string> Types = new List<string>();
 
-        public IEnumerable<XMLObject> Relationships => from propertyInfo in GetType().GetProperties() where propertyInfo.GetValue(this, null) is XMLObject select propertyInfo.GetValue(this, null) as XMLObject;
+        public IEnumerable<XMLObject> Relationships => Enumerable.Empty<XMLObject>(); //TODO: uncomment from propertyInfo in GetType().GetProperties() where propertyInfo.GetValue(this, null) is XMLObject select propertyInfo.GetValue(this, null) as XMLObject;
 
         public virtual IEnumerable<HistoricalFigure> HFsInvolved => Enumerable.Empty<HistoricalFigure>();
 
@@ -387,21 +387,18 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 }
                 else if (classProp.PropertyType == typeof(WorldConstruction))
                 {
-                    if (!World.WorldConstructions.ContainsKey(Id.Value))
+                    WorldConstruction wc;
+                    if (!World.WorldConstructions.TryGetValue(Id.Value, out wc))
                     {
-                        WorldConstruction wC = new WorldConstruction(Id.Value, World);
-                        World.WorldConstructions.Add(Id.Value, wC);
+                        wc = new WorldConstruction(Id.Value, World);
+                        World.WorldConstructions.Add(Id.Value, wc);
                     }
-                    obj = World.WorldConstructions[Id.Value];
+                    obj = wc;
                 }
                 else if (classProp.PropertyType == typeof(Region))
                 {
                     obj = World.Regions.ContainsKey(Id.Value) ? World.Regions[Id.Value] : null;
                 }
-            }
-            if (obj == null && Id.HasValue && Id.Value != -1 && classProp.PropertyType != typeof(Structure))
-            {
-                Console.WriteLine("obj is null");
             }
             classProp.SetValue(this, obj, null);
         }
@@ -475,8 +472,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 try
                 {
                     var description = LegendsDescription();
-                    if (description.Contains("UNKNOWN"))
-                        Console.WriteLine("");
                     EventLabel(frm, parent, ref location, description, "");
                 }
                 catch (Exception)

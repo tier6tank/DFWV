@@ -74,14 +74,17 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
+            EventLabel(frm, parent, ref location, "Artifact:", Artifact);
             EventLabel(frm, parent, ref location, "Hist Fig:", Hf);
+            EventLabel(frm, parent, ref location, "Site:", Site);
+            EventLabel(frm, parent, ref location, "Structure:", Structure);
         }
 
         protected override string LegendsDescription()
         {
             var timestring = base.LegendsDescription();
 
-            return "";
+            return $"{timestring} {Hf} viewed {Artifact} in {Structure} in {Site}.";
         }
 
         internal override string ToTimelineString()

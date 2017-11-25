@@ -140,6 +140,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "dream about hf":
                         circumstanceString = " after dreaming of UNKNOWN";
                         break;
+                    default:
+                        break;
                 }
             }
 

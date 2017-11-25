@@ -329,7 +329,7 @@ namespace DFWV
         /// </summary>
         private void SetDefaultFilters()
         {
-            this[typeof(Artifact)] = new Filter("Name", null, null, -1);
+            this[typeof(Artifact)] = new Filter("Name", null, null, 50000);
             this[typeof(Civilization)] = new Filter("Name", "IsFull = true", "Race.Name", -1);
             this[typeof(Entity)] = new Filter(new List<string> {"Name", "Type"}, null, null, -1);
             this[typeof(EntityPopulation)] = new Filter(new List<string> {"ID", "Race = null"}, null, null, -1);

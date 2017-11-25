@@ -137,7 +137,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
         }
 
-        protected override string LegendsDescription() //Matched
+        protected override string LegendsDescription()
         {
             var timestring = base.LegendsDescription();
 
@@ -146,7 +146,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 location += Subregion.ToString();
             else
                 location += Site.AltName;
-            //(time), (HF) devoured a (race) of (entity) in (site).
+
             var devourertext = "an unknown creature";
             if (Hf_Devourer != null)
                 devourertext = $"the {Hf_Devourer.Race.ToString().ToLower()} {Hf_Devourer}";
@@ -154,7 +154,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (Hf_Victim == null)
             {
                 return
-                    $"{timestring} {devourertext} devoured a {VictimRace.ToString().ToLower()} of {Entity} in {location}.";
+                    $"{timestring} {devourertext} devoured a {VictimRace?.ToString()?.ToLower() ?? "UNKNOWN"} of {Entity?.ToString() ?? ""} in {location}.";
             }
             if (Entity == null)
             {
