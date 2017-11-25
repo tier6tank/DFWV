@@ -857,7 +857,8 @@ namespace DFWV
             World.MatchHistoricalFiguresToPeople();
 
 
-            this.InvokeEx(f => f.exportWorldToolStripMenuItem.Visible = true);
+            //Turn off export temporarily
+            //this.InvokeEx(f => f.exportWorldToolStripMenuItem.Visible = true);
             
             Program.Log(LogType.Status, "XML Linking Started");
 
@@ -2231,6 +2232,5 @@ namespace DFWV
             }
 
         }
-
     }
 }

@@ -1204,10 +1204,10 @@ namespace DFWV.WorldClasses
             ExportWorldItems(Artifacts.Values, "artifact");
             ExportWorldItems(Entities.Values, "entity");
             ExportWorldItems(EntityPopulations.Values, "entitypopulation");
-            ExportWorldItems(HistoricalFigures.Values, "historicalfigure"); //
+            ExportWorldItems(HistoricalFigures.Values, "historicalfigure");
             ExportWorldItems(HistoricalEras.Values, "historicalera");
-            ExportWorldItems(HistoricalEvents.Values, "historicalevent"); //
-            ExportWorldItems(HistoricalEventCollections.Values, "historicaleventcollection"); //
+            ExportWorldItems(HistoricalEvents.Values, "historicalevent");
+            ExportWorldItems(HistoricalEventCollections.Values, "historicaleventcollection");
             ExportWorldItems(Parameters, "parameter");
             ExportWorldItems(Races.Values, "race");
             ExportWorldItems(Regions.Values, "region");
