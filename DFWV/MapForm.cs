@@ -1224,5 +1224,24 @@ namespace DFWV
                 cmbBox.BackColor = Color.White;
             }
         }
+
+        private void chkHFTravels_CheckedChanged(object sender, EventArgs e)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+            if (cmbHFTravels.Items.Count == 0)
+            {
+                var HFArray = _world.HistoricalFigures.Values.ToArray();
+                if (cmbHFTravels.Items.Count == 0)
+                {
+                    this.InvokeEx(f => {
+                        f.cmbHFTravels.Items.AddRange(HFArray);
+                        f.cmbHFTravels.SelectedItem = cmbHFTravels.Items[0];
+                        f.cmbHFTravels.Text = cmbHFTravels.SelectedItem.ToString();
+                    });
+                }
+            }
+            cmbHFTravels.Visible = true;
+            Cursor.Current = Cursors.Default;
+        }
     }
 }

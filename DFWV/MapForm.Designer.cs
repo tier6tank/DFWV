@@ -53,6 +53,7 @@ namespace DFWV
             this.lblMapName = new System.Windows.Forms.Label();
             this.lblMapNameCaption = new System.Windows.Forms.Label();
             this.grpSettings = new System.Windows.Forms.GroupBox();
+            this.chkLandmasses = new System.Windows.Forms.CheckBox();
             this.chkEntityClaims = new System.Windows.Forms.CheckBox();
             this.chkHighlightCoordinates = new System.Windows.Forms.CheckBox();
             this.cmbHFTravels = new System.Windows.Forms.ComboBox();
@@ -73,7 +74,6 @@ namespace DFWV
             this.chkRegions = new System.Windows.Forms.CheckBox();
             this.chkBattles = new System.Windows.Forms.CheckBox();
             this.chkCivilizations = new System.Windows.Forms.CheckBox();
-            this.chkLandmasses = new System.Windows.Forms.CheckBox();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picMap)).BeginInit();
             this.mapTableLayout.SuspendLayout();
@@ -339,6 +339,17 @@ namespace DFWV
             this.grpSettings.Text = "Settings";
             this.grpSettings.Visible = false;
             // 
+            // chkLandmasses
+            // 
+            this.chkLandmasses.AutoSize = true;
+            this.chkLandmasses.Location = new System.Drawing.Point(6, 112);
+            this.chkLandmasses.Name = "chkLandmasses";
+            this.chkLandmasses.Size = new System.Drawing.Size(85, 17);
+            this.chkLandmasses.TabIndex = 17;
+            this.chkLandmasses.Text = "Landmasses";
+            this.chkLandmasses.UseVisualStyleBackColor = true;
+            this.chkLandmasses.Click += new System.EventHandler(this.ViewOptionChanged);
+            // 
             // chkEntityClaims
             // 
             this.chkEntityClaims.AutoSize = true;
@@ -369,6 +380,7 @@ namespace DFWV
             this.cmbHFTravels.Name = "cmbHFTravels";
             this.cmbHFTravels.Size = new System.Drawing.Size(156, 21);
             this.cmbHFTravels.TabIndex = 14;
+            this.cmbHFTravels.Visible = false;
             this.cmbHFTravels.Validating += new System.ComponentModel.CancelEventHandler(this.cmbHFTravels_Validating);
             // 
             // chkHFTravels
@@ -380,6 +392,7 @@ namespace DFWV
             this.chkHFTravels.TabIndex = 13;
             this.chkHFTravels.Text = "Travels of:";
             this.chkHFTravels.UseVisualStyleBackColor = true;
+            this.chkHFTravels.CheckedChanged += new System.EventHandler(this.chkHFTravels_CheckedChanged);
             this.chkHFTravels.Click += new System.EventHandler(this.ViewOptionChanged);
             // 
             // chkRivers
@@ -570,17 +583,6 @@ namespace DFWV
             this.chkCivilizations.Text = "Civilizations";
             this.chkCivilizations.UseVisualStyleBackColor = true;
             this.chkCivilizations.Click += new System.EventHandler(this.ViewOptionChanged);
-            // 
-            // chkLandmasses
-            // 
-            this.chkLandmasses.AutoSize = true;
-            this.chkLandmasses.Location = new System.Drawing.Point(6, 112);
-            this.chkLandmasses.Name = "chkLandmasses";
-            this.chkLandmasses.Size = new System.Drawing.Size(85, 17);
-            this.chkLandmasses.TabIndex = 17;
-            this.chkLandmasses.Text = "Landmasses";
-            this.chkLandmasses.UseVisualStyleBackColor = true;
-            this.chkLandmasses.Click += new System.EventHandler(this.ViewOptionChanged);
             // 
             // MapForm
             // 

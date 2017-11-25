@@ -592,7 +592,7 @@ namespace DFWV.WorldClasses
         {
 
             OnLinkedSectionStart(sectionName);
-            Parallel.ForEach(list, item => item.Link());
+            Parallel.ForEach(list, item => item?.Link());
 
             OnLinkedSection(sectionName);
 

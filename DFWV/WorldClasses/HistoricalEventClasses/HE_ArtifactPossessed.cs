@@ -100,11 +100,10 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             base.Process();
 
-
             if (Artifact == null) return;
-            if (Artifact.PossessedEvents == null)
-                Artifact.PossessedEvents = new List<HE_ArtifactPossessed>();
-            Artifact.PossessedEvents.Add(this);
+            if (Artifact.ArtifactEvents == null)
+                Artifact.ArtifactEvents = new List<HistoricalEvent>();
+            Artifact.ArtifactEvents.Add(this);
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)

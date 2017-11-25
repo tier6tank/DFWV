@@ -7,7 +7,7 @@ using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    class HE_ArtifactClaimFormed : HistoricalEvent
+    public class HE_ArtifactClaimFormed : HistoricalEvent
     {
 
         private int? ArtifactId { get; }
@@ -78,6 +78,16 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         break;
                 }
             }
+        }
+
+        internal override void Process()
+        {
+            base.Process();
+
+            if (Artifact == null) return;
+            if (Artifact.ArtifactEvents == null)
+                Artifact.ArtifactEvents = new List<HistoricalEvent>();
+            Artifact.ArtifactEvents.Add(this);
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)

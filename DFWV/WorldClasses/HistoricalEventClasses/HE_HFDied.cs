@@ -229,14 +229,14 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
             if (Artifact_SlayerItem != null)
             {
-                if (Artifact_SlayerItem.Kills == null)
-                    Artifact_SlayerItem.Kills = new List<HE_HFDied>();
-                Artifact_SlayerItem.Kills.Add(this);
+                if (Artifact.ArtifactEvents == null)
+                    Artifact.ArtifactEvents = new List<HistoricalEvent>();
+                Artifact.ArtifactEvents.Add(this);
             }
             if (Artifact_SlayerShooterItem == null) return;
-            if (Artifact_SlayerShooterItem.Kills == null)
-                Artifact_SlayerShooterItem.Kills = new List<HE_HFDied>();
-            Artifact_SlayerShooterItem.Kills.Add(this);
+            if (Artifact_SlayerShooterItem.ArtifactEvents == null)
+                Artifact_SlayerShooterItem.ArtifactEvents = new List<HistoricalEvent>();
+            Artifact_SlayerShooterItem.ArtifactEvents.Add(this);
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)

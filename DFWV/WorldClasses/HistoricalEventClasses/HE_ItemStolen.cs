@@ -152,7 +152,6 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             if (HistoricalEventCollectionId.HasValue && World.HistoricalEventCollections.ContainsKey(HistoricalEventCollectionId.Value))
                 EventCollection = World.HistoricalEventCollections[HistoricalEventCollectionId.Value];
         }
-        //TODO: Add Link with historical event collection, add to legends description as well "during ... ec"
 
         internal override void Process()
         {

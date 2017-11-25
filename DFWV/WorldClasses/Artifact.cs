@@ -34,10 +34,9 @@ namespace DFWV.WorldClasses
         public string Description { get; set; }
 
         public HE_ArtifactCreated CreatedEvent { get; set; }
-        public List<HE_ArtifactStored> StoredEvents { get; set; }
-        public List<HE_ArtifactPossessed> PossessedEvents { get; set; }
+        public List<HistoricalEvent> ArtifactEvents { get; set; }
+
         public HE_ArtifactLost LostEvent { get; set; }
-        public List<HE_HFDied> Kills { get; set; }
 
         [UsedImplicitly]
         public bool Lost => LostEvent != null;
@@ -149,9 +148,7 @@ namespace DFWV.WorldClasses
                 frm.lblArtifactLostTime.Text = LostEvent.Time.ToString();
             }
 
-            frm.grpArtifactStored.FillListboxWith(frm.lstArtifactStored, StoredEvents);
-            frm.grpArtifactPossessed.FillListboxWith(frm.lstArtifactPossessed, PossessedEvents);
-            frm.grpArtifactKills.FillListboxWith(frm.lstArtifactKills, Kills);
+            frm.grpArtifactEvents.FillListboxWith(frm.lstArtifactEvents, ArtifactEvents);
             frm.lblArtifactWCLabel.Visible = WritenContent != null;
             frm.lblArtifactWC.Data = WritenContent;
             frm.lblArtifactWC.Text = WritenContent == null ? "" : $"{WritenContent} ({PageCount} Pages)";

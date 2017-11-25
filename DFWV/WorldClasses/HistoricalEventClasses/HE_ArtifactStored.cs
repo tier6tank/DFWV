@@ -77,9 +77,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             base.Process();
 
             if (Artifact == null) return;
-            if (Artifact.StoredEvents == null)
-                Artifact.StoredEvents = new List<HE_ArtifactStored>();
-            Artifact.StoredEvents.Add(this);
+            if (Artifact.ArtifactEvents == null)
+                Artifact.ArtifactEvents = new List<HistoricalEvent>();
+            Artifact.ArtifactEvents.Add(this);
         }
 
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
