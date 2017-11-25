@@ -138,6 +138,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     switch (HFEntityLink.LinkTypes[HfEntityLink.LinkType])
                     {
                         case "member":
+                        case "former member":
                             if (Entity.Civilization.Leaders["master"].Any(x => x.Hf == Hf))
                                 return $"{timestring} {Hf?.ToString() ?? "UNKNOWN"} became the master of {Entity}.";
                             return $"{timestring} {Hf?.ToString() ?? "UNKNOWN"} became a {HFEntityLink.LinkTypes[HfEntityLink.LinkType]} of {Entity}.";

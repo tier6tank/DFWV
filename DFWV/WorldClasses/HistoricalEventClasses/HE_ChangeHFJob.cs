@@ -134,7 +134,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 return
                     $"{timestring} {Hf.Race} {Hf} stopped being a {Unit.JobTypes[OldJob.Value]} in {(Site != null ? Site.AltName : Subregion.Name)}.";
             }
-            return $"{timestring} {Hf?.Race?.ToString() ?? ""} {(Hf == null ? "UNKNOWN" : Hf.ToString())} became {"UNKNOWN"} in {(Site != null ? Site.AltName : Subregion.Name.ToTitleCase())}.";
+            return $"{timestring} {Hf?.Race?.ToString() ?? ""} {(Hf == null ? "UNKNOWN" : Hf.ToString())} became {"UNKNOWN"} in {(Site != null ? Site.AltName : (Subregion != null ? Subregion.Name.ToTitleCase() : "UNKNOWN"))}.";
 
         }
 

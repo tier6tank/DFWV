@@ -128,9 +128,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             foreach (var hf in Hfs)
                 EventLabel(frm, parent, ref location, "HF:", hf);
-            foreach (var pet in Pets)
-                EventLabel(frm, parent, ref location, "Pet:", pet);
-                            
+            if (Pets != null)
+            {
+                foreach (var pet in Pets)
+                    EventLabel(frm, parent, ref location, "Pet:", pet);
+            }            
             if (Site != null)
                 EventLabel(frm, parent, ref location, "Site:", Site);
             if (Subregion != null)

@@ -127,11 +127,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         {
             var timestring = base.LegendsDescription();
 
-            var competitorsString = Hfs_Competitor.Aggregate("", (current, hf) => current + $"the {hf.Race.ToString().ToLower()} {hf}, ");
-            competitorsString = competitorsString.Trim().TrimEnd(',');
+            var competitorsString = Hfs_Competitor?.Aggregate("", (current, hf) => current + $"the {hf.Race.ToString().ToLower()} {hf}, ");
+            competitorsString = competitorsString?.Trim().TrimEnd(',') ?? "UNKNOWN";
 
             return
-                $"{timestring} {Entity} held a UNKNOWN competition in {Site.AltName} as part of {EventCollection.Name ?? "UNKNOWN"}. \nCompeting were {competitorsString}.  \nThe {Hf_Winner.Race.ToString().ToLower()} {Hf_Winner} was the victor.";
+                $"{timestring} {Entity} held a UNKNOWN competition in {Site.AltName} as part of {EventCollection.Name ?? "UNKNOWN"}. \nCompeting were {competitorsString}.  \nThe {Hf_Winner?.Race.ToString().ToLower() ?? ""} {Hf_Winner} was the victor.";
 
 
         }

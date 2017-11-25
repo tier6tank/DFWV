@@ -278,125 +278,122 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             else if (Subregion != null)
                 locationText = Subregion.ToString();
 
+            var hfText = Hf != null ? $"{Hf.Race} {Hf}" : "UNKNOWN";
+
             switch (Causes[Cause])
             {
                 case "struck":
                     if (ItemID == null)
                         return
-                            $"{timestring} the {Hf.Race} {Hf} was struck down by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} in {locationText}.";
+                            $"{timestring} the {hfText} was struck down by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} in {locationText}.";
                     if (Artifact_SlayerItem != null)
                         return
-                            $"{timestring} the {Hf.Race} {Hf} was struck down by \n the {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} with {Artifact_SlayerItem} in {locationText}.";
+                            $"{timestring} the {hfText} was struck down by \n the {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} with {Artifact_SlayerItem} in {locationText}.";
                     if (ItemType != null && Item.ItemTypes[ItemType.Value] == "corpsepiece")
                         return
-                            $"{timestring} the {Hf.Race} {Hf} was struck down by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} {"with a body part"} in {locationText}.";
+                            $"{timestring} the {hfText} was struck down by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} {"with a body part"} in {locationText}.";
                     if (ItemType != null && Item.ItemTypes[ItemType.Value] == "corpse")
                         return
-                            $"{timestring} the {Hf.Race} {Hf} was struck down by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} {"with a corpse"} in {locationText}.";
+                            $"{timestring} the {hfText} was struck down by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} {"with a corpse"} in {locationText}.";
                     if (Mat != null && ItemType != null && ItemSubType == null) //Test
                         return
-                            $"{timestring} the {Hf.Race} {Hf} was struck down by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} {"with a " + Item.Materials[Mat.Value] + " " + Item.ItemTypes[ItemType.Value]} in {locationText}.";
+                            $"{timestring} the {hfText} was struck down by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} {"with a " + Item.Materials[Mat.Value] + " " + Item.ItemTypes[ItemType.Value]} in {locationText}.";
                     if (Mat != null && ItemType != null && ItemSubType != null)
                         return
-                            $"{timestring} the {Hf.Race} {Hf} was struck down by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} {"with a " + Item.Materials[Mat.Value] + " " + Item.ItemSubTypes[ItemSubType.Value]} in {locationText}.";
+                            $"{timestring} the {hfText} was struck down by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} {"with a " + Item.Materials[Mat.Value] + " " + Item.ItemSubTypes[ItemSubType.Value]} in {locationText}.";
                     return
-                        $"{timestring} the {Hf.Race} {Hf} was struck down by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} {"with "} in {locationText}.";
+                        $"{timestring} the {hfText} was struck down by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} {"with "} in {locationText}.";
                 case "shot":
                     if (BowItem == null)
                     {
                         if (Mat != null && ItemType != null && ItemSubType != null)
                             return
-                                $"{timestring} the {Hf.Race} {Hf} was shot and killed by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} {"with a " + Item.Materials[Mat.Value] + " " + Item.ItemSubTypes[ItemSubType.Value]} in {locationText}.";
+                                $"{timestring} the {hfText} was shot and killed by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} {"with a " + Item.Materials[Mat.Value] + " " + Item.ItemSubTypes[ItemSubType.Value]} in {locationText}.";
                         return
-                            $"{timestring} the {Hf.Race} {Hf} was shot and killed by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} in {locationText} " +
-                            "with a " + Item.Materials[Mat.Value] + " " + Item.ItemSubTypes[ItemSubType.Value];
+                            $"{timestring} the {hfText} was shot and killed by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} in {locationText} " +
+                            $"with a {(Mat.HasValue ? Item.Materials[Mat.Value] : "UNKNOWN")}  {(ItemSubType.HasValue ? Item.ItemSubTypes[ItemSubType.Value] : "UNKNOWN")}";
                     }
                     if (Artifact_SlayerShooterItem != null)
                         return
-                            $"{timestring} the {Hf.Race} {Hf} was shot and killed by \n the {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} with {Artifact_SlayerShooterItem} in {locationText}.";
+                            $"{timestring} the {hfText} was shot and killed by \n the {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} with {Artifact_SlayerShooterItem} in {locationText}.";
                     if (BowMat != null && BowItemType != null && BowItemSubType == null && ItemType != null && Mat != null) //Test
                         return
-                            $"{timestring} the {Hf.Race} {Hf} was shot and killed by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} {"with a " + Item.Materials[Mat.Value] + " " + Item.ItemTypes[ItemType.Value]} in {locationText}.";
+                            $"{timestring} the {hfText} was shot and killed by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} {"with a " + Item.Materials[Mat.Value] + " " + Item.ItemTypes[ItemType.Value]} in {locationText}.";
                     if (BowMat != null && BowItemType != null && BowItemSubType != null && Mat != null && ItemType != null && ItemSubType != null)
                         return
-                            $"{timestring} the {Hf.Race} {Hf} was shot and killed by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} {"with a " + Item.Materials[Mat.Value] + " " + Item.ItemSubTypes[ItemSubType.Value] + " from a " + Item.Materials[BowMat.Value] + " " + Item.ItemSubTypes[BowItemSubType.Value]} in {locationText}.";
+                            $"{timestring} the {hfText} was shot and killed by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} {"with a " + Item.Materials[Mat.Value] + " " + Item.ItemSubTypes[ItemSubType.Value] + " from a " + Item.Materials[BowMat.Value] + " " + Item.ItemSubTypes[BowItemSubType.Value]} in {locationText}.";
                     return
-                        $"{timestring} the {Hf.Race} {Hf} was shot and killed by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} {"with "} in {locationText}.";
+                        $"{timestring} the {hfText} was shot and killed by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} {"with "} in {locationText}.";
                 case "murdered":
                     return
-                        $"{timestring} the {Hf.Race} {Hf} was murdered by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} in {locationText}.";
+                        $"{timestring} the {hfText} was murdered by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} in {locationText}.";
                 case "old age":
-                    return $"{timestring} the {Hf.Race} {Hf} died of old age.";
+                    return $"{timestring} the {hfText} died of old age.";
                 case "infection":
                     return
-                        $"{timestring} the {Hf.Race} {Hf} succumbed to infection, slain by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} in {locationText}.";
+                        $"{timestring} the {hfText} succumbed to infection, slain by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} in {locationText}.";
                 case "blood":
                     return Hf_Slayer == null ? 
-                        $"{timestring} the {Hf.Race} {Hf} bled to death in {locationText}." : 
-                        $"{timestring} the {Hf.Race} {Hf} bled to death, slain by the {SlayerRace?.ToString() ?? ""} {Hf_Slayer} with ITEM: {ArtifiactId_SlayerItem} in {locationText}.";
+                        $"{timestring} the {hfText} bled to death in {locationText}." : 
+                        $"{timestring} the {hfText} bled to death, slain by the {SlayerRace?.ToString() ?? ""} {Hf_Slayer} with ITEM: {ArtifiactId_SlayerItem} in {locationText}.";
                 case "thirst":
-                    return $"{timestring} the {Hf.Race} {Hf} died of thirst in {locationText}.";
+                    return $"{timestring} the {hfText} died of thirst in {locationText}.";
                 case "collapsed":
                     return
-                        $"{timestring} the {Hf.Race} {Hf} collapsed, struck down by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} in {locationText}.";
+                        $"{timestring} the {hfText} collapsed, struck down by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} in {locationText}.";
                 case "vanish":
-                    return $"{timestring} the {Hf.Race} {Hf} vanished in {locationText}.";
+                    return $"{timestring} the {hfText} vanished in {locationText}.";
                 case "drown":
-                    return $"{timestring} the {Hf.Race} {Hf} drowned in {locationText}.";
+                    return $"{timestring} the {hfText} drowned in {locationText}.";
                 case "crushed bridge":
-                    return $"{timestring} the {Hf.Race} {Hf} was crushed by a drawbridge in {locationText}.";
+                    return $"{timestring} the {hfText} was crushed by a drawbridge in {locationText}.";
                 case "put to rest":
-                    return $"{timestring} the {Hf.Race} {Hf} was put to rest in {locationText}.";
+                    return $"{timestring} the {hfText} was put to rest in {locationText}.";
                 case "quitdead":
-                    return $"{timestring} the {Hf.Race} {Hf} starved to death in {locationText}.";
+                    return $"{timestring} the {hfText} starved to death in {locationText}.";
                 case "exec beheaded":
                     return
-                        $"{timestring} the {Hf.Race} {Hf} was beheaded by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} in {locationText}.";
+                        $"{timestring} the {hfText} was beheaded by \nthe {SlayerRace?.ToString() ?? ""} {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} in {locationText}.";
                 case "exec burned alive":
                     return
-                        $"{timestring} the {Hf.Race} {Hf} burned \nthe {(SlayerRace?.ToString() ?? "")} {(Hf_Slayer?.ToString() ?? HfId_Slayer.ToString())} alive in {locationText}.";
+                        $"{timestring} the {hfText} burned \nthe {(SlayerRace?.ToString() ?? "")} {(Hf_Slayer?.ToString() ?? HfId_Slayer.ToString())} alive in {locationText}.";
                 case "exec fed to beasts":
                     return
-                        $"{timestring} the {Hf.Race} {Hf} fed \nthe {(SlayerRace?.ToString() ?? "")} {(Hf_Slayer?.ToString() ?? HfId_Slayer.ToString())} to beasts in {locationText}.";
+                        $"{timestring} the {hfText} fed \nthe {(SlayerRace?.ToString() ?? "")} {(Hf_Slayer?.ToString() ?? HfId_Slayer.ToString())} to beasts in {locationText}.";
                 case "exec hacked to pieces":
                     return
-                        $"{timestring} the {Hf.Race} {Hf} hacked \nthe {(SlayerRace?.ToString() ?? "")} {(Hf_Slayer?.ToString() ?? HfId_Slayer.ToString())} to pieces in {locationText}.";
+                        $"{timestring} the {hfText} hacked \nthe {(SlayerRace?.ToString() ?? "")} {(Hf_Slayer?.ToString() ?? HfId_Slayer.ToString())} to pieces in {locationText}.";
                 case "exec drowned":
                     return
-                        $"{timestring} the {Hf.Race} {Hf} drowned \nthe {(SlayerRace?.ToString() ?? "")} {(Hf_Slayer?.ToString() ?? HfId_Slayer.ToString())} in {locationText}.";
+                        $"{timestring} the {hfText} drowned \nthe {(SlayerRace?.ToString() ?? "")} {(Hf_Slayer?.ToString() ?? HfId_Slayer.ToString())} in {locationText}.";
                 case "exec buried alive":
                     return
-                        $"{timestring} the {Hf.Race} {Hf} buried \nthe {(SlayerRace?.ToString() ?? "")} {(Hf_Slayer?.ToString() ?? HfId_Slayer.ToString())} alive in {locationText}.";
+                        $"{timestring} the {hfText} buried \nthe {(SlayerRace?.ToString() ?? "")} {(Hf_Slayer?.ToString() ?? HfId_Slayer.ToString())} alive in {locationText}.";
                 case "exec crucified":
                     return
-                        $"{timestring} the {Hf.Race} {Hf} was crucified by \nthe {(SlayerRace?.ToString() ?? "")} {(Hf_Slayer?.ToString() ?? HfId_Slayer.ToString())} alive in {locationText}.";
+                        $"{timestring} the {hfText} was crucified by \nthe {(SlayerRace?.ToString() ?? "")} {(Hf_Slayer?.ToString() ?? HfId_Slayer.ToString())} alive in {locationText}.";
                 case "air":
                     return
-                        $"{timestring} the {Hf.Race} {Hf} suffocated, slain by {(SlayerRace?.ToString() ?? "")} {(Hf_Slayer?.ToString() ?? HfId_Slayer.ToString())} alive in {locationText}.";
+                        $"{timestring} the {hfText} suffocated, slain by {(SlayerRace?.ToString() ?? "")} {(Hf_Slayer?.ToString() ?? HfId_Slayer.ToString())} alive in {locationText}.";
                 case "obstacle":
                     return
-                        $"{timestring} the {Hf.Race} {Hf} died after colliding with an obstacle, slain by {(SlayerRace?.ToString() ?? "")} {(Hf_Slayer?.ToString() ?? HfId_Slayer.ToString())} in {locationText}.";
+                        $"{timestring} the {hfText} died after colliding with an obstacle, slain by {(SlayerRace?.ToString() ?? "")} {(Hf_Slayer?.ToString() ?? HfId_Slayer.ToString())} in {locationText}.";
                 case "hunger":
-                    return $"{timestring} the {Hf.Race} {Hf} starved to death in {locationText}.";
+                    return $"{timestring} the {hfText} starved to death in {locationText}.";
                 case "scuttled":
-                    return string.Format("{0} {2} a {1} was scuttled in {3}.",
-                        timestring, Hf.Race, Hf,
-                        locationText);
+                    return $"{timestring} {hfText} was scuttled in {locationText}.";
                 case "spikes":
-                    return $"{timestring} the {Hf.Race} {Hf} was impaled on spikes in {locationText}.";
+                    return $"{timestring} the {hfText} was impaled on spikes in {locationText}.";
                 case "scared to death":
                     return
-                        $"{timestring} the {Hf.Race} {Hf} was scared to death by \nthe {(SlayerRace?.ToString() ?? "")} {(Hf_Slayer?.ToString() ?? HfId_Slayer.ToString())} in {locationText}.";
+                        $"{timestring} the {hfText} was scared to death by \nthe {(SlayerRace?.ToString() ?? "")} {(Hf_Slayer?.ToString() ?? HfId_Slayer.ToString())} in {locationText}.";
                 case "slaughtered":
-                    return string.Format("{0} {2} a {1} was slaughtered in {5} by {4} a {3}.",
-                        timestring, Hf.Race, Hf,
-                        SlayerRace?.ToString() ?? "", Hf_Slayer?.ToString() ?? HfId_Slayer.ToString(),
-                        locationText);
+                    return $"{timestring} the {hfText} was slaughtered in {locationText} by {Hf_Slayer?.ToString() ?? HfId_Slayer.ToString()} a {SlayerRace?.ToString() ?? ""}.";
                 case "trap":
-                    return $"{timestring} the {Hf.Race} {Hf} was killed by a trap in {locationText}.";
+                    return $"{timestring} the {hfText} was killed by a trap in {locationText}.";
                 case "blood drained":
                     return
-                        $"{timestring} the {Hf.Race} {Hf} was drained of blood by \nthe {(SlayerRace?.ToString() ?? "")} {(Hf_Slayer?.ToString() ?? HfId_Slayer.ToString())} in {locationText}.";
+                        $"{timestring} the {hfText} was drained of blood by \nthe {(SlayerRace?.ToString() ?? "")} {(Hf_Slayer?.ToString() ?? HfId_Slayer.ToString())} in {locationText}.";
 
             }
 
