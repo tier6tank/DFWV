@@ -11,9 +11,11 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         private int? HfId_1 { get; }
         private HistoricalFigure Hf_1 { get; set; }
         private int? IdentityId { get; }
+        private HistoricalFigure Identity { get; set; }
         private int? HfId_2 { get; }
         private HistoricalFigure Hf_2 { get; set; }
         private int? Identity2Id { get; }
+        private HistoricalFigure Identity2 { get; set; }
         private int? HFRep1Of2 { get; set; }
         private int? HFRep2Of1 { get; set; }
         public static List<string> RepTypes = new List<string>();
@@ -100,17 +102,29 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
+        internal override void Link()
+        {
+            base.Link();
+            if (IdentityId.HasValue && World.HistoricalFigures.ContainsKey(IdentityId.Value))
+                Identity = World.HistoricalFigures[IdentityId.Value];
+            if (Identity2Id.HasValue && World.HistoricalFigures.ContainsKey(Identity2Id.Value))
+                Identity2 = World.HistoricalFigures[Identity2Id.Value];
+        }
         protected override void WriteDataOnParent(MainForm frm, Control parent, ref Point location)
         {
             EventLabel(frm, parent, ref location, "Hist Fig 1:", Hf_1);
             if (HFRep1Of2.HasValue)
                 EventLabel(frm, parent, ref location, "Rep 1 of 2:", RepTypes[HFRep1Of2.Value]);
-            if (IdentityId.HasValue)
+            if (Identity != null)
+                EventLabel(frm, parent, ref location, "Identity:", Identity);
+            else if (IdentityId.HasValue)
                 EventLabel(frm, parent, ref location, "Identity 1:", IdentityId.Value);
             EventLabel(frm, parent, ref location, "Hist Fig 2:", Hf_2);
             if (HFRep2Of1.HasValue)
                 EventLabel(frm, parent, ref location, "Rep 2 of 1:", RepTypes[HFRep2Of1.Value]);
-            if (Identity2Id.HasValue)
+            if (Identity2 != null)
+                EventLabel(frm, parent, ref location, "Identity 2:", Identity2);
+            else if (Identity2Id.HasValue)
                 EventLabel(frm, parent, ref location, "Identity 2:", Identity2Id.Value);
             EventLabel(frm, parent, ref location, "Site:", Site);
             EventLabel(frm, parent, ref location, "Subregion:", Subregion);

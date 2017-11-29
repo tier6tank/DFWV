@@ -139,7 +139,10 @@ namespace DFWV
                 PlusParse(world, world.XmlPlusPath);
             }
             else
+            {
+                SortRaces(world);
                 OnFinished();
+            }
         }
 
 

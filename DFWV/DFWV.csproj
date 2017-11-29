@@ -159,6 +159,7 @@
       <DependentUpon>MapForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Point3.cs" />
+    <Compile Include="WorldClasses\ArtifactItem.cs" />
     <Compile Include="WorldClasses\EntityClasses\EntityOccasionScheduleFeature.cs" />
     <Compile Include="WorldClasses\EntityClasses\EntityOccasionSchedule.cs" />
     <Compile Include="WorldClasses\EntityClasses\EntityOccasion.cs" />

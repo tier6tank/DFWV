@@ -458,16 +458,17 @@ namespace DFWV.WorldClasses
             else if (lname.Contains("outcast"))
                 lname = lname.Replace(" outcast", "");
 
-            if (ExistsRace(lname))
-                return FindRace(lname);
-            if (ExistsRace(lname.Remove(lname.Length - 1) + "ves"))
-                return FindRace(lname.Remove(lname.Length - 1) + "ves");
-            if (ExistsRace(lname + "s"))
-                return FindRace(lname + "s");
-            if (lname.Contains("men") && ExistsRace(lname.Replace("men", "man")))
-                return FindRace(lname.Replace("men", "man"));
-            if (lname.Contains("man") && ExistsRace(lname.Replace("man", "men")))
-                return FindRace(lname.Replace("man", "men"));
+            Race toReturn;
+            if (ExistsRace(lname, out toReturn))
+                return toReturn;
+            if (ExistsRace(lname.Remove(lname.Length - 1) + "ves", out toReturn))
+                return toReturn;
+            if (ExistsRace(lname + "s", out toReturn))
+                return toReturn;
+            if (lname.Contains("men") && ExistsRace(lname.Replace("men", "man"), out toReturn))
+                return toReturn;
+            if (lname.Contains("man") && ExistsRace(lname.Replace("man", "men"), out toReturn))
+                return toReturn;
 
 
             foreach (var race in Races.Values)
@@ -487,17 +488,18 @@ namespace DFWV.WorldClasses
                     return race;
             }
 
-            if (ExistsRace(lname))
-                return FindRace(lname);
+            if (ExistsRace(lname, out toReturn))
+                return toReturn;
 
             var newRace = new Race(lname, -(Races.Count + 1), this);
             Races.TryAdd(-(Races.Count + 1), newRace);
             return newRace;
         }
 
-        private bool ExistsRace(string name)
+        private bool ExistsRace(string name, out Race returnRace)
         {
-            return FindRace(name) != null;
+            returnRace = FindRace(name);
+            return returnRace != null;
         }
 
         public Race FindRace(string name)

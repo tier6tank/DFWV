@@ -3,6 +3,9 @@ using System.Drawing;
 using System.Linq;
 using DFWV.Annotations;
 using DFWV.WorldClasses.EntityClasses;
+using System;
+using DFWV.WorldClasses.HistoricalEventClasses;
+using DFWV.WorldClasses.HistoricalEventCollectionClasses;
 
 namespace DFWV.WorldClasses
 {
@@ -144,7 +147,136 @@ namespace DFWV.WorldClasses
             frm.grpCivilizationSites.FillListboxWith(frm.lstCivilizationSites, World.Sites.Values.Where(x => x.Parent != null && x.Parent == this));
             frm.grpCivilizationWars.FillListboxWith(frm.lstCivilizationWars, Entity?.WarEventCollections);
 
-
+            WriteCivilizationSummary(frm);
         }
+
+        #region Displaying Summary
+
+        public bool IsAlive => World.Sites.Values.Any(x => x.Parent != null && x.Parent == this);
+        public string IsWas => IsAlive ? "is" : "was";
+
+        private void WriteCivilizationSummary(MainForm frm)
+        {
+
+            var rtb = frm.rtbCivilizationSummary;
+            try
+            {
+                rtb.Clear();
+                rtb.Tag = new List<WorldObject>();
+
+                rtb.SelectionFont = new Font(rtb.SelectionFont.FontFamily, rtb.SelectionFont.Size, FontStyle.Bold);
+                rtb.AddText(ToString());
+                rtb.SelectionFont = new Font(rtb.SelectionFont.FontFamily, rtb.SelectionFont.Size, FontStyle.Regular);
+                rtb.AddText($" {IsWas} a ");
+                rtb.AddLink(Race);
+                rtb.AddText($" civilization.  ");
+
+                var foundingEvent = Entity?.Events.OfType<HE_CreatedSite>().FirstOrDefault() as HE_CreatedSite;
+
+                if (foundingEvent != null)
+                {
+                    rtb.AddText("It ");
+                    rtb.AddLink(foundingEvent, "was founded");
+                    rtb.AddText(" at ");
+                    rtb.AddLink(foundingEvent.Site);
+                    rtb.AddText(" by ");
+                    rtb.AddLink(foundingEvent.Entity_SiteCiv);
+                    rtb.AddText(".  ");
+                }
+
+                var firstLeader = World.Leaders.First(x => x.Civilization == this);
+                var currentLeader = Leaders[Leader.LeaderTypes[firstLeader.LeaderType]].Last();
+
+                var andOnly = (firstLeader == currentLeader) ? "and only " : "";
+                rtb.AddText($" The first {andOnly}{Leader.LeaderTypes[firstLeader.LeaderType]} was ");
+                rtb.AddLink(firstLeader);
+                rtb.AddText(".  ");
+
+                var siteCreatedEvents = Entity?.Events.OfType<HE_CreatedSite>().Skip(1).ToArray();
+
+                if (siteCreatedEvents != null && siteCreatedEvents.Count() > 0)
+                { 
+                    rtb.AddText($"It founded {siteCreatedEvents.Count()} other sites: ");
+
+                    for (int i = 0; i < siteCreatedEvents.Count(); i++)
+                    {
+                        rtb.AddLink(siteCreatedEvents[i].Site);
+                        if (i < siteCreatedEvents.Count() - 1)
+                        {
+                            rtb.AddText(", ");
+                        }
+                    }
+                    rtb.AddText(".  ");
+                }
+
+                if (currentLeader != firstLeader)
+                {
+                    rtb.AddText($"The {(IsAlive ? "current" : "last")} {Leader.LeaderTypes[currentLeader.LeaderType]} {IsWas} ");
+                    rtb.AddLink(currentLeader);
+                    rtb.AddText(".  ");
+                }
+
+                if (Entity?.WarEventCollections != null && Entity?.WarEventCollections.Count() > 0)
+                {
+                    var aggressorWars = Entity.WarEventCollections.Where(x => x.AggressorEnt == Entity);
+                    var defenderWars = Entity.WarEventCollections.Where(x => x.DefenderEnt == Entity);
+                    if (aggressorWars.Any())
+                    {
+                        var battles = aggressorWars.SelectMany(x => x.EventCol).OfType<HistoricalEventCollectionClasses.EC_Battle>().ToArray();
+                        rtb.AddText($"It initiated {aggressorWars.Count()} wars ");
+                        rtb.AddText($"winning {battles.Count(x => x.Outcome == "attacker won")} ");
+                        rtb.AddText($"of {battles.Count()} battles, it took {aggressorWars.Sum(x => x.WarData.AttackingDeaths)} causalties while killing {aggressorWars.Sum(x => x.WarData.DefendingDeaths)}.  ");
+
+                    }
+                    if (defenderWars.Any())
+                    {
+                        var battles = defenderWars.SelectMany(x => x.EventCol).OfType<HistoricalEventCollectionClasses.EC_Battle>().ToArray();
+
+                        rtb.AddText($"It was attacked in {defenderWars.Count()} wars ");
+                        rtb.AddText($"winning {battles.Count(x => x.Outcome != "attacker won")} ");
+                        rtb.AddText($"of {battles.Count()} battles, it took {defenderWars.Sum(x => x.WarData.DefendingDeaths)} causalties while killing {defenderWars.Sum(x => x.WarData.AttackingDeaths)}.  ");
+
+
+                    }
+
+                    var existingTime = IsAlive ? new WorldTime(World.LastYear) : (Entity != null && Entity.Events.Any() ? Entity.Events.Last().Time : new WorldTime(World.LastYear));
+                    var warTime = GetTimeAtWar(existingTime);
+
+                    rtb.AddText($" It's been at war for {WorldTime.Duration(warTime, new WorldTime(0))}, {(int)(warTime.ToSeconds()/(float)existingTime.ToSeconds() * 100)}% of the time.");
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                rtb.Clear();
+                rtb.AddText("Error generating Civilization Summary: " + e);
+            }
+        }
+
+        private WorldTime GetTimeAtWar(WorldTime endAtTime)
+        {
+            var warCollections = Entity?.WarEventCollections.OrderBy(x => x.StartTime.ToSeconds()).ToList();
+
+            EC_War war = warCollections.First();
+            WorldTime curStartTime;
+            WorldTime timeAtWar = new WorldTime(0);
+
+            do
+            {
+                var endTime = war.EndTime < endAtTime ? war.EndTime : endAtTime;
+                curStartTime = war.StartTime;
+                timeAtWar += (endTime - curStartTime);
+                if (endTime == endAtTime)
+                    break;
+                warCollections = warCollections.Where(x => x.EndTime > war.EndTime).OrderBy(x => x.StartTime.ToSeconds()).ToList();
+                war = warCollections.FirstOrDefault();
+            } while (warCollections.Count() > 0);
+
+            return timeAtWar;
+        }
+
+
+        #endregion
     }
 }

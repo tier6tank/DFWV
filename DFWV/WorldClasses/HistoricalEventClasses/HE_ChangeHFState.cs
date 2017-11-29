@@ -112,6 +112,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 EventLabel(frm, parent, ref location, "State:", States[State.Value]);
             if (Reason.HasValue)
                 EventLabel(frm, parent, ref location, "Reason:", Reasons[Reason.Value]);
+            if (Mood.HasValue)
+                EventLabel(frm, parent, ref location, "Mood:", Moods[Mood.Value]);
             if (FeatureLayerId.HasValue && FeatureLayerId.Value != -1)
                 EventLabel(frm, parent, ref location, "Layer:", FeatureLayerId.Value);
             EventLabel(frm, parent, ref location, "Site:", Site);

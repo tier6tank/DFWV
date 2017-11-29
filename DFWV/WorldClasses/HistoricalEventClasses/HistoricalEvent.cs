@@ -21,7 +21,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
         public int Type { get; }
         public static List<string> Types = new List<string>();
 
-        public IEnumerable<XMLObject> Relationships => Enumerable.Empty<XMLObject>(); //TODO: uncomment from propertyInfo in GetType().GetProperties() where propertyInfo.GetValue(this, null) is XMLObject select propertyInfo.GetValue(this, null) as XMLObject;
+        public IEnumerable<XMLObject> Relationships => from propertyInfo in GetType().GetProperties() where propertyInfo.GetValue(this, null) is XMLObject select propertyInfo.GetValue(this, null) as XMLObject;
 
         public virtual IEnumerable<HistoricalFigure> HFsInvolved => Enumerable.Empty<HistoricalFigure>();
 

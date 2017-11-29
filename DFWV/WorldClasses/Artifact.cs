@@ -8,7 +8,7 @@ namespace DFWV.WorldClasses
 {
     public class Artifact : XMLObject
     {
-        public string ItemName { get; set; }
+        public ArtifactItem ArtifactItem { get; set; }
 
         private int? ItemID { get; set; }
         private int? ItemType { get; set; }
@@ -75,7 +75,7 @@ namespace DFWV.WorldClasses
                         Name = val;
                         break;
                     case "item":
-                        ItemName = val;
+                        ArtifactItem = new ArtifactItem(element, world, this);
                         break;
                     case "site_id":
                         SiteID = valI;
@@ -120,7 +120,7 @@ namespace DFWV.WorldClasses
             frm.grpArtifact.Show();
 
             frm.lblArtifactName.Text = Name.ToTitleCase();
-            frm.lblArtifactItem.Text = ItemName.ToTitleCase();
+            frm.lblArtifactItem.Text = ArtifactItem.ToString();
 
             frm.lblArtifactDescription.Text = (Mat.HasValue ? Item.Materials[Mat.Value] + " " : "") +
                                               (ItemSubType.HasValue

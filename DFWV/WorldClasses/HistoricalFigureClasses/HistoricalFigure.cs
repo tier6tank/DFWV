@@ -701,7 +701,6 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
 
         private void WriteHFSummary(MainForm frm)
         {
-            var timer = Stopwatch.StartNew();
             var rtb = frm.rtbHistoricalFigureSummary;
             try
             {

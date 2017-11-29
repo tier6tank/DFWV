@@ -10,7 +10,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
     public class HE_CreatedSite : HistoricalEvent
     {
         private int? SiteId { get; }
-        private Site Site { get; set; }
+        public Site Site { get; set; }
         private int? EntityId_SiteCiv { get; }
         public Entity Entity_SiteCiv { get; private set; }
         private int? EntityId { get; }

@@ -1924,6 +1924,7 @@ namespace DFWV
         private void StartFilter<T, TK>(ListBox listBox, IDictionary<TK, T> dict, TabPage tabPage) where T : WorldObject
         {
             var filterForm = new FilterForm(World, typeof(T));
+            World.Filters.LoadOptions();
             var res = filterForm.ShowDialog();
             if (res == DialogResult.OK)
             {
@@ -2200,7 +2201,7 @@ namespace DFWV
 
         }
 
-        private void rtbHistoricalFigureSummary_LinkClicked(object sender, LinkClickedEventArgs e)
+        private void SummaryTextBox_LinkClicked(object sender, LinkClickedEventArgs e)
         {
             var tagId = Convert.ToInt32(e.LinkText.Split('#').Last()) - 1;
             var objList = ((sender as RichTextBoxEx).Tag as List<WorldObject>);

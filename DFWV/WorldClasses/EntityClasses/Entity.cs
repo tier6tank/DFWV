@@ -24,7 +24,7 @@ namespace DFWV.WorldClasses.EntityClasses
         public bool EntityFileMerged { get; private set; }
 
         private List<int> ChildrenIDs { get; set; }
-        private List<Entity> Children { get; set; }
+        private HashSet<Entity> Children { get; set; }
         public List<HistoricalFigure> Enemies { get; set; }
         public List<HistoricalFigure> Members { get; set; }
         public List<int> MemberHfids { get; set; }
@@ -297,7 +297,7 @@ namespace DFWV.WorldClasses.EntityClasses
             if (ParentCiv?.Entity != null)
             {
                 if (ParentCiv.Entity.Children == null)
-                    ParentCiv.Entity.Children = new List<Entity>();
+                    ParentCiv.Entity.Children = new HashSet<Entity>();
                 if (!ParentCiv.Entity.Children.Contains(this))
                     ParentCiv.Entity.Children.Add(this);
                 if (ChildrenIDs != null)
@@ -305,7 +305,7 @@ namespace DFWV.WorldClasses.EntityClasses
                     foreach (var child in ChildrenIDs)
                     {
                         if (Children == null)
-                            Children = new List<Entity>();
+                            Children = new HashSet<Entity>();
                         if (World.Entities.ContainsKey(child))
                             Children.Add(World.Entities[child]);
                     }

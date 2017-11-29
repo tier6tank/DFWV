@@ -92,6 +92,7 @@ namespace DFWV
             Fields[typeof (HistoricalFigure)] = new Dictionary<string, Type>
             {
                 {"BirthYear", typeof (int)},
+                {"DeathYear", typeof (int)},
                 {"PlayerControlled", typeof (bool)},
                 {"EntPopID", typeof (int)},
                 {"Deity", typeof (bool)},
@@ -233,7 +234,7 @@ namespace DFWV
         /// They're stored as Dictionary<string, IEnumerable<string>> 
         /// This is used with the Dynamic Query function to let you filter out all Events that match type "hf died".
         /// </summary>
-        private void LoadOptions()
+        public void LoadOptions()
         {
             Options[typeof (Civilization)] = new Dictionary<string, IEnumerable<string>>
             {
