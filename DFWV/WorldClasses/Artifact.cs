@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Xml.Linq;
 using DFWV.Annotations;
 using DFWV.WorldClasses.HistoricalEventClasses;
+using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses
 {
@@ -19,11 +20,16 @@ namespace DFWV.WorldClasses
         private int? ItemValue { get; set; }
         private int? PageCount { get; set; }
         private int? WritingId { get; set; }
-        private WrittenContent WritenContent { get; set; }
+        private WrittenContent WrittenContent { get; set; }
 
-        private int? SiteID { get; set; }
-        private int? StructureLocalID { get; set; }
-        private int? HolderHFID { get; set; }
+        private WrittenContent AssociatedWrittenContent => WrittenContent ?? ArtifactItem.WritingWrittenContent ?? ArtifactItem.PageWrittenContent;
+
+        private int? SiteId { get; set; }
+        private Site Site { get; set; }
+        private int? StructureLocalId { get; set; }
+        public Structure StructureLocal { get; set; }
+        private int? HfId_Holder { get; set; }
+        private HistoricalFigure Hf_Holder { get; set; }
         private int? AbsTileX { get; set; }
         private int? AbsTileY { get; set; }
         private int? AbsTileZ { get; set; }
@@ -78,13 +84,13 @@ namespace DFWV.WorldClasses
                         ArtifactItem = new ArtifactItem(element, world, this);
                         break;
                     case "site_id":
-                        SiteID = valI;
+                        SiteId = valI;
                         break;
                     case "structure_local_id":
-                        StructureLocalID = valI;
+                        StructureLocalId = valI;
                         break;
                     case "holder_hfid":
-                        HolderHFID = valI;
+                        HfId_Holder = valI;
                         break;
                     case "abs_tile_x":
                         AbsTileX = valI;
@@ -149,15 +155,35 @@ namespace DFWV.WorldClasses
             }
 
             frm.grpArtifactEvents.FillListboxWith(frm.lstArtifactEvents, ArtifactEvents);
-            frm.lblArtifactWCLabel.Visible = WritenContent != null;
-            frm.lblArtifactWC.Data = WritenContent;
-            frm.lblArtifactWC.Text = WritenContent == null ? "" : $"{WritenContent} ({PageCount} Pages)";
+            frm.lblArtifactWCLabel.Visible = AssociatedWrittenContent != null;
+
+            frm.lblArtifactWC.Data = AssociatedWrittenContent;
+            frm.lblArtifactWC.Text = AssociatedWrittenContent == null ? "" : $"{AssociatedWrittenContent}";
+
+            frm.lblArtifactHolder.Data = Hf_Holder;
+            frm.lblArtifactSite.Data = Site;
+            frm.lblArtifactRegion.Data = Subregion;
         }
 
         internal override void Link()
         {
             if (WritingId.HasValue && World.WrittenContents.ContainsKey(WritingId.Value))
-                WritenContent = World.WrittenContents[WritingId.Value];
+                WrittenContent = World.WrittenContents[WritingId.Value];
+            ArtifactItem?.Link();
+            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
+                Subregion = World.Regions[SubregionId.Value];
+            if (HfId_Holder.HasValue && World.HistoricalFigures.ContainsKey(HfId_Holder.Value))
+                Hf_Holder = World.HistoricalFigures[HfId_Holder.Value];
+            if (SiteId.HasValue && World.Sites.ContainsKey(SiteId.Value))
+            {
+                Site = World.Sites[SiteId.Value];
+                if (StructureLocalId.HasValue)
+                {
+                    StructureLocal = Site.GetStructure(StructureLocalId.Value);
+                }
+            }
+            if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
+                Subregion = World.Regions[SubregionId.Value];
             if (SubregionId.HasValue && World.Regions.ContainsKey(SubregionId.Value))
                 Subregion = World.Regions[SubregionId.Value];
         }

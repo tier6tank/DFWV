@@ -3,6 +3,8 @@ using System.Drawing;
 using System.Xml.Linq;
 using DFWV.Annotations;
 using DFWV.WorldClasses.HistoricalFigureClasses;
+using System.Linq;
+using System;
 
 namespace DFWV.WorldClasses
 {
@@ -17,15 +19,15 @@ namespace DFWV.WorldClasses
         public int? Form { get; set; }
         public string FormName => Form.HasValue ? Forms[Form.Value] : "";
         private int? FormId { get; set; }
-        public static List<string> Styles = new List<string>();
-        public int? Style { get; set; }
-        public string StyleName => Style.HasValue ? Styles[Style.Value] : "";
+        public static List<string> StyleNames = new List<string>();
+        public List<int> Styles { get; set; } = new List<int>();
+        public string StyleName => String.Join("\n", Styles.Select(x => StyleNames[x]));
         public List<Reference> References { get; set; }
 
         [UsedImplicitly]
         public bool KnownAuthor => Author != null;
-        public int PageEnd { get; set; }
-        public int PageStart { get; set; }
+        public int? PageEnd { get; set; }
+        public int? PageStart { get; set; }
 
         [UsedImplicitly]
         public string DispNameLower => ToString().ToLower();
@@ -58,9 +60,9 @@ namespace DFWV.WorldClasses
                         FormId = valI;
                         break;
                     case "style":
-                        if (!Styles.Contains(val))
-                            Styles.Add(val);
-                        Style = Styles.IndexOf(val);
+                        if (!StyleNames.Contains(val))
+                            StyleNames.Add(val);
+                        Styles.Add(StyleNames.IndexOf(val));
                         break;
                     case "title":
                         Title = val;
@@ -104,6 +106,8 @@ namespace DFWV.WorldClasses
             frm.lblWrittenContentAuthor.Data = Author;
             frm.lblWrittenContentType.Text = FormName;
             frm.lblWrittenContentStyle.Text = StyleName;
+
+            frm.LabelWrittenContentPages.Visible = PageStart.HasValue;
             frm.lblWrittenContentPages.Text = PageStart == -1 ? "" : $"{PageStart} - {PageEnd}";
 
             frm.grpWrittenContentReferences.FillListboxWith(frm.lstWrittenContentReferences, References);
@@ -141,7 +145,7 @@ namespace DFWV.WorldClasses
 
         public override string ToString()
         {
-            return Title ?? "Written Content";
+            return Title ?? $"{Forms[Form.Value].ToTitleCase()} by {Author}";
         }
 
     }

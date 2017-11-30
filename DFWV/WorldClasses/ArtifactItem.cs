@@ -9,9 +9,11 @@ namespace DFWV.WorldClasses
         public Artifact Artifact { get; set; }
 
         public string NameString { get; set; }
-        public int PageNumber { get; set; }
+        public int? PageNumber { get; set; }
         public int? PageWrittenContentId { get; set; }
+        public WrittenContent PageWrittenContent { get; set; }
         public int? WritingWrittenContentId { get; set; }
+        public WrittenContent WritingWrittenContent { get; set; }
         public override Point Location => Artifact.Location;
 
 
@@ -53,7 +55,10 @@ namespace DFWV.WorldClasses
 
         internal override void Link()
         {
-            throw new System.NotImplementedException();
+            if (PageWrittenContentId.HasValue && World.WrittenContents.ContainsKey(PageWrittenContentId.Value))
+                PageWrittenContent = World.WrittenContents[PageWrittenContentId.Value];
+            if (WritingWrittenContentId.HasValue && World.WrittenContents.ContainsKey(WritingWrittenContentId.Value))
+                WritingWrittenContent = World.WrittenContents[WritingWrittenContentId.Value];
         }
 
         internal override void Plus(XDocument xdoc)
@@ -64,6 +69,14 @@ namespace DFWV.WorldClasses
         internal override void Process()
         {
             throw new System.NotImplementedException();
+        }
+
+        public override string ToString()
+        {
+            if (PageNumber.HasValue)
+                return $"{NameString} p{PageNumber}";
+            else
+                return $"{NameString}";
         }
     }
 
