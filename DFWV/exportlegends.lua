@@ -726,7 +726,7 @@ function export_poetic_forms()
         file:write("\t<poetic_form>\n")
         file:write("\t\t<id>"..formV.id.."</id>\n")
         file:write("\t\t<name>"..dfhack.df2utf(dfhack.TranslateName(formV.name,1)).."</name>\n")
-        file:write("\t\t<altname>"..dfhack.df2utf(dfhack.TranslateName(formV.name)).."</name>\n")
+        file:write("\t\t<altname>"..dfhack.df2utf(dfhack.TranslateName(formV.name)).."</altname>\n")
         file:write("\t</poetic_form>\n")
     end
     file:write("</poetic_forms>\n")
