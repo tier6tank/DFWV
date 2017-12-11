@@ -1,7 +1,7 @@
 World Viewer by Mason11987
 
 Instructions (Not using DFHack):
-* Generate a world in Dwarf Fortress v0.40.XX
+* Generate a world in Dwarf Fortress v0.44
 	If you want to View a world with a fortress you currently are playing:
 		Make a copy of the save and then retire or abandon the fortress on the copy
 * Enter Legends mode
@@ -12,7 +12,7 @@ Instructions (Not using DFHack):
 
 Instructions (Using DFHack):
 * Copy the file exportlegends.lua into the hacks/scripts folder for DFHack.
-* Generate a world in Dwarf Fortress v0.40.0X
+* Generate a world in Dwarf Fortress v0.44
 	If you want to View a world with a fortress you currently are playing:
 		Make a copy of the save and then retire or abandon the fortress on the copy
 * Enter Legends mode
