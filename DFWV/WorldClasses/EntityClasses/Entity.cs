@@ -28,7 +28,21 @@ namespace DFWV.WorldClasses.EntityClasses
         public List<HistoricalFigure> Enemies { get; set; }
         public List<HistoricalFigure> Members { get; set; }
         public List<int> MemberHfids { get; set; }
-        public List<HistoricalFigure> MemberHfs { get; set; }
+        private List<HistoricalFigure> _memberHfs { get; set; }
+        public List<HistoricalFigure> MemberHfs
+        {
+            get
+            {
+                if (_memberHfs == null)
+                    _memberHfs = MemberHfids.Where(id => World.HistoricalFigures.ContainsKey(Id))
+                                .Select(id => World.HistoricalFigures[id])
+                                .ToList();
+                return _memberHfs;
+            }
+        }
+
+
+
         public List<HistoricalFigure> FormerMembers { get; set; }
         public List<HistoricalFigure> Prisoners { get; set; }
         public List<HistoricalFigure> FormerPrisoners { get; set; }
@@ -326,14 +340,6 @@ namespace DFWV.WorldClasses.EntityClasses
 
             if (WorshipHfid.HasValue && World.HistoricalFigures.ContainsKey(WorshipHfid.Value))
                 WorshipHf = World.HistoricalFigures[WorshipHfid.Value];
-
-            if (MemberHfids != null)
-            {
-                MemberHfs =
-                    MemberHfids.Where(id => World.HistoricalFigures.ContainsKey(Id))
-                        .Select(id => World.HistoricalFigures[id])
-                        .ToList();
-            }
         }
 
         internal override void Process()

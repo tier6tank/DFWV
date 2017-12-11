@@ -404,21 +404,24 @@ namespace DFWV.WorldClasses
             if (OpponentID.HasValue && World.Units.ContainsKey(OpponentID.Value))
                 Opponent = World.HistoricalFigures[OpponentID.Value];
 
-            if (HistFigureID.HasValue)
+            if (HistFigureID.HasValue && World.HistoricalFigures.ContainsKey(HistFigureID.Value))
             {
                 HistFigure = World.HistoricalFigures[HistFigureID.Value];
                 HistFigure.Unit = this;
             }
-            if (HistFigureID2.HasValue)
+            if (HistFigureID2.HasValue && World.HistoricalFigures.ContainsKey(HistFigureID.Value))
                 HistFigure2 = World.HistoricalFigures[HistFigureID2.Value];
 
             if (RelationIDs != null)
             {
-                foreach (var relationId in RelationIDs.Where(relationId => World.HistoricalFigures.ContainsKey(relationId.Value)))
+                foreach (var relationId in RelationIDs)
                 {
-                    if (Relations == null)
-                        Relations = new Dictionary<string, HistoricalFigure>();
-                    Relations.Add(relationId.Key, World.HistoricalFigures[relationId.Value]);
+                    if (World.HistoricalFigures.ContainsKey(relationId.Value))
+                    {
+                        if (Relations == null)
+                            Relations = new Dictionary<string, HistoricalFigure>();
+                        Relations.Add(relationId.Key, World.HistoricalFigures[relationId.Value]);
+                    }
                 }
             }
             References?.ForEach(x => x.Link());

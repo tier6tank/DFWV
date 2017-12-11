@@ -100,7 +100,10 @@ namespace DFWV.WorldClasses
             {
                 Members = new List<HistoricalFigure>();
                 foreach (var memberID in MemberIDs)
-                    Members.Add(World.HistoricalFigures[memberID]);
+                {
+                    if (World.HistoricalFigures.ContainsKey(memberID))
+                        Members.Add(World.HistoricalFigures[memberID]);
+                }
             }
         }
     
