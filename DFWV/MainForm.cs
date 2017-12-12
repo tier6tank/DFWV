@@ -160,7 +160,10 @@ namespace DFWV
 
                 loadWorldToolStripMenuItem.Visible = false;
 
+                Program.SetMinorProgress(0, 0);
+                Program.SetMajorProgress(0, 60);
                 World.StartThread(() => World.LoadFiles(), "World Loading");
+                
             }
             else
                 MessageBox.Show(@"Files not found.  Please make sure all 5 files Legends files are located with the selected map file. See the README.txt file included for details.", @"DF World Viewer",MessageBoxButtons.OK);
@@ -901,6 +904,8 @@ namespace DFWV
             this.InvokeEx(f => f.timelineToolStripMenuItem.Visible = true);
             FillList(lstStructure, World.Structures, tabStructure);
 
+            Program.IncrementMajorProgress();
+            Program.Log(LogType.Status, "Add World Summary Items");
             AddSummaryItemsLearnedFromLinking();
 
             Program.Log(LogType.Status, "XML Linking Done");
@@ -927,12 +932,17 @@ namespace DFWV
         /// </summary>
         private void AddSummaryItemsLearnedFromLinking()
         {
+            Program.SetMinorProgress(0, 7);
+            Program.IncrementMinorProgress();
             AddSummaryItem(@"World Constructions: " + World.WorldConstructions.Count, null,
                         new NavigationFilter(typeof(WorldConstruction), new Filter()));
 
+            Program.IncrementMinorProgress();
             var hfLabel = @"    Historical Figures: " + World.HistoricalFigures.Count;
             AddSummaryItem(@"Races", hfLabel,
                         new NavigationFilter(typeof(Race), new Filter(new List<string> {"Name", "!isCivilized"}, null, null, -1)));
+
+            Program.IncrementMinorProgress();
             foreach (var race in World.Races.Values)
             {
                 var count = World.HistoricalFigures.Values.Count(x => Equals(x.Race, race));
@@ -942,10 +952,13 @@ namespace DFWV
                             new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "RaceName == \"" + race.Name + "\"" }, null, -1)));
             }
 
+            Program.IncrementMinorProgress();
             AddSummaryItem(@"Alive: " + World.HistoricalFigures.Values.Count(x => !x.Dead), hfLabel,
                             new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "Dead == false" }, null, -1)));
+            Program.IncrementMinorProgress();
             AddSummaryItem(@" Dead: " + World.HistoricalFigures.Values.Count(x => x.Dead), hfLabel,
                             new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "Dead == true" }, null, -1)));
+            Program.IncrementMinorProgress();
             AddSummaryItem(@"Is Leader: " + World.HistoricalFigures.Values.Count(x => x.IsLeader), hfLabel,
                             new NavigationFilter(typeof(HistoricalFigure), new Filter(new List<string> { "Name" }, new List<string> { "isLeader == true" }, null, -1)));
 
@@ -1031,8 +1044,12 @@ namespace DFWV
         {
             Program.Log(LogType.Status, "XML Processing Done");
 
+            Program.Log(LogType.Status, "Filling Lists");
+            Program.IncrementMajorProgress();
             FillAllLists();
 
+            Program.Log(LogType.Status, "Adding Items to World Summary");
+            Program.IncrementMajorProgress();
             AddSummaryItemsLearnedFromProcessing();
 
             World.EventCollectionsEvaluated -= World_EventCollectionsEvaluated;
@@ -1052,13 +1069,19 @@ namespace DFWV
         {
             Program.Log(LogType.Status, "Event Collections Evaluated");
 
+            Program.Log(LogType.Status, $"Completed main load in {(DateTime.Now - World.StartTime).TotalSeconds} seconds.");
+            Program.SetMajorProgress(1, 1);
+            Program.SetMinorProgress(1, 1);
 
             //TODO: Implement Visualization Code:
             //World.VisualizationsCreated -= World_VisualizationsCreated;
 
             //World.VisualizationCreation();
-            
+
             //TODO: Move to a better spot
+
+            Program.Log(LogType.Status, "Calculating Notability");
+
             foreach (var xmlObject in World.HistoricalEvents.Values.SelectMany(evt => evt.Relationships))
             {
                 xmlObject.Notability++;
@@ -1077,6 +1100,7 @@ namespace DFWV
                     xmlObject.Notability += evt.Notability;
                 }
             }
+            Program.Log(LogType.Status, "Calculating Notability done");
 
             this.InvokeEx(f => f.closeWorldToolStripMenuItem.Visible = true);
         }
@@ -1093,7 +1117,10 @@ namespace DFWV
 
             Program.Log(LogType.Status, string.Format("Historical Figures Positioned (" + Math.Round(100.0f * hFsPositioned / hFsAlive, 0) + "% located)"));
 
-        }
+            Program.Log(LogType.Status, $"Completed in {(DateTime.Now - World.StartTime).TotalSeconds} seconds.");
+            Program.SetMajorProgress(1, 1);
+            Program.SetMinorProgress(1, 1);
+       }
 
         /// <summary>
         /// After hf positioning is complete, certain additional bits of World Summary Data can be dropped into the summary.

@@ -56,6 +56,7 @@ namespace DFWV
         public static void Parse(World world, string path)
         {
             _path = path;
+            Program.SetMinorProgress(0, 15);
 
             using (var streamReader = new StreamReader(path, Encoding.GetEncoding("ISO-8859-9")))
             using (var xReader = XmlReader.Create(streamReader))
@@ -73,6 +74,7 @@ namespace DFWV
                         if (xReader.NodeType == XmlNodeType.EndElement && xReader.Name == "df_world")
                             break;
                         var knownSection = true;
+                        Program.IncrementMinorProgress();
                         switch (xReader.Name)
                         {
                             case "regions":
@@ -136,10 +138,12 @@ namespace DFWV
             {
                 Program.Log(LogType.Status, "XML Loading Done");
                 Program.Log(LogType.Status, "Plus XML Loading");
+                Program.IncrementMajorProgress();
                 PlusParse(world, world.XmlPlusPath);
             }
             else
             {
+                Program.IncrementMajorProgress();
                 SortRaces(world);
                 OnFinished();
             }
@@ -154,6 +158,7 @@ namespace DFWV
         {
             _path = path;
             world.IsPlusParsing = true;
+            Program.SetMinorProgress(0, 30);
 
             using (var streamReader = new StreamReader(path, Encoding.GetEncoding("ISO-8859-9")))
             using (var xReader = XmlReader.Create(streamReader))
@@ -173,6 +178,7 @@ namespace DFWV
                         if (xReader.NodeType == XmlNodeType.EndElement && xReader.Name == "df_world")
                             break;
                         var knownSection = true;
+                        Program.IncrementMinorProgress();
                         switch (xReader.Name)
                         {
                             case "name":

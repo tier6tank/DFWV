@@ -9,6 +9,7 @@ using DFWV.Annotations;
 using DFWV.WorldClasses.HistoricalEventClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
+using System.Collections.Concurrent;
 
 namespace DFWV.WorldClasses.EntityClasses
 {
@@ -24,7 +25,7 @@ namespace DFWV.WorldClasses.EntityClasses
         public bool EntityFileMerged { get; private set; }
 
         private List<int> ChildrenIDs { get; set; }
-        private HashSet<Entity> Children { get; set; }
+        private ConcurrentBag<Entity> Children;
         public List<HistoricalFigure> Enemies { get; set; }
         public List<HistoricalFigure> Members { get; set; }
         public List<int> MemberHfids { get; set; }
@@ -311,7 +312,7 @@ namespace DFWV.WorldClasses.EntityClasses
             if (ParentCiv?.Entity != null)
             {
                 if (ParentCiv.Entity.Children == null)
-                    ParentCiv.Entity.Children = new HashSet<Entity>();
+                    ParentCiv.Entity.Children = new ConcurrentBag<Entity>();
                 if (!ParentCiv.Entity.Children.Contains(this))
                     ParentCiv.Entity.Children.Add(this);
                 if (ChildrenIDs != null)
@@ -319,7 +320,7 @@ namespace DFWV.WorldClasses.EntityClasses
                     foreach (var child in ChildrenIDs)
                     {
                         if (Children == null)
-                            Children = new HashSet<Entity>();
+                            Children = new ConcurrentBag<Entity>();
                         if (World.Entities.ContainsKey(child))
                             Children.Add(World.Entities[child]);
                     }

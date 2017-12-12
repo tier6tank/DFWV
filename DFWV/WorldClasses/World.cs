@@ -129,8 +129,10 @@ namespace DFWV.WorldClasses
 
 
         #region World Loading
+        public DateTime StartTime;
         public void LoadFiles()
         {
+            this.StartTime = DateTime.Now;
             LoadHistory();
             LoadSites();
             LoadMaps();
@@ -146,6 +148,7 @@ namespace DFWV.WorldClasses
         private void LoadMaps()
         {
             Program.Log(LogType.Status, "Loading Maps");
+            Program.IncrementMajorProgress();
             Maps = new Dictionary<string, string> {{"Main", MapPath}};
             var mapSymbols = new List<string>
             {"bm", "detailed", "dip", "drn", "el", "elw", "evil", "hyd", "nob", "rain",
@@ -247,6 +250,7 @@ namespace DFWV.WorldClasses
         private void LoadParam()
         {
             Program.Log(LogType.Status, "Loading Params");
+            Program.IncrementMajorProgress();
             var lines = File.ReadAllLines(ParamPath, Encoding.GetEncoding(437)).ToList();
 
             Version = lines[0].Substring(15);
@@ -268,13 +272,18 @@ namespace DFWV.WorldClasses
         private void LoadSites()
         {
             Program.Log(LogType.Status, "Loading Sites File");
+            Program.IncrementMajorProgress();
             var lines = File.ReadAllLines(SitesPath, Encoding.GetEncoding(437)).ToList();
+            Program.SetMinorProgress(0, lines.Count());
 
             lines.RemoveRange(0, 2);
 
             var curSite = new List<string>();
-            foreach (var line in lines)
+            for (int i = 0; i < lines.Count; i++)
             {
+                var line = lines[i];
+                Program.SetMinorProgress(i);
+
                 if (line == "" || line == "Sites" || line == "Outdoor Animal Populations (Including Undead)" || line == "Underground Animal Populations (Including Undead)")
                 {
                     if (curSite.Count > 0)
@@ -305,6 +314,7 @@ namespace DFWV.WorldClasses
                 else
                     curSite.Add(line);
             }
+
         }
 
 
@@ -318,7 +328,10 @@ namespace DFWV.WorldClasses
         private void LoadHistory()
         {
             Program.Log(LogType.Status, "Loading History File");
+            Program.IncrementMajorProgress();
+
             var lines = File.ReadAllLines(HistoryPath, Encoding.GetEncoding(437)).ToList();
+            Program.SetMinorProgress(0, lines.Count());
 
             Name = lines[0];
             AltName = lines[1];
@@ -331,10 +344,12 @@ namespace DFWV.WorldClasses
             lines.RemoveRange(0, 3);
 
             var curCiv = new List<string>();
-            foreach (var line in lines)
+            for (int i = 0; i < lines.Count; i++)
             {
+                var line = lines[i];
                 if (!line.StartsWith(" ")) // Start of a civ
                 {
+                    Program.SetMinorProgress(i);
                     if (curCiv.Count > 0)
                     {
                         Civilizations.Add(new Civilization(curCiv, this));
@@ -342,6 +357,7 @@ namespace DFWV.WorldClasses
                     }
                 }
                 curCiv.Add(line);
+
             }
             if (curCiv.Count <= 0) return;
             Civilizations.Add(new Civilization(curCiv, this));
@@ -356,6 +372,7 @@ namespace DFWV.WorldClasses
         private void LoadXml()
         {
             Program.Log(LogType.Status, "Loading XML");
+            Program.IncrementMajorProgress();
             StartThread(() => DFXMLParser.Parse(this, XmlPath), "XML Parsing");
         }
 
@@ -488,9 +505,6 @@ namespace DFWV.WorldClasses
                     return race;
             }
 
-            if (ExistsRace(lname, out toReturn))
-                return toReturn;
-
             var newRace = new Race(lname, -(Races.Count + 1), this);
             Races.TryAdd(-(Races.Count + 1), newRace);
             return newRace;
@@ -592,9 +606,21 @@ namespace DFWV.WorldClasses
 
         private static void LinkSection<T>(IEnumerable<T> list, string sectionName) where T : XMLObject
         {
-
+            Program.IncrementMajorProgress();
+            Program.SetMinorProgress(0, list.Any() ? list.Last().Id : 0);
             OnLinkedSectionStart(sectionName);
-            Parallel.ForEach(list, item => item?.Link());
+            Parallel.ForEach(list, new ParallelOptions { MaxDegreeOfParallelism = 4 }, item => 
+            {
+                try
+                {
+                    Program.SetMinorProgress(item.Id);
+                    item?.Link();
+                }
+                catch (Exception ex)
+                {
+                    Program.Log(LogType.Error, $"Error linking {item} - ID:{item.Id} - Msg:{ex.Message}");
+                }
+            });
 
             OnLinkedSection(sectionName);
 
@@ -693,8 +719,13 @@ namespace DFWV.WorldClasses
         private static void ProcessSection<T>(IEnumerable<T> list, string sectionName) where T : XMLObject
         {
             OnProcessedSectionStart(sectionName);
-            foreach (var item in list)
+            Program.IncrementMajorProgress();
+            Program.SetMinorProgress(0, list.Any() ? list.Last().Id : 0);
+
+            foreach (var item in list) {
+                Program.SetMinorProgress(item.Id);
                 item.Process();
+            }
             OnProcessedSection(sectionName);
 
         }
@@ -855,8 +886,12 @@ namespace DFWV.WorldClasses
         private void EvaluateEventCollections()
         {
             // Only check Historical Event Collections that contain events
-            foreach (var evtcol in HistoricalEventCollections.Values.Where(x => x.Event != null))
+            Program.IncrementMajorProgress();
+            var eventColsToEvaluate = HistoricalEventCollections.Values.Where(x => x.Event != null).ToList();
+            foreach (var evtcol in eventColsToEvaluate)
+            {
                 evtcol.Evaluate();
+            }
 
             //TODO
             //Case: Any simple battle event in event col with following hf died.
@@ -887,9 +922,12 @@ namespace DFWV.WorldClasses
         /// </summary>
         private void PositionHistoricalFigures()
         {
-
-            foreach (var hf in HistoricalFigures.Values.Where(x => x.DiedEvent == null))
+            Program.IncrementMajorProgress();
+            var hfToPosition = HistoricalFigures.Values.Where(x => x.DiedEvent == null).ToList();
+            Program.SetMinorProgress(0, hfToPosition.Last().Id);
+            foreach (var hf in hfToPosition)
             {
+                Program.IncrementMinorProgress();
                 //Position off Site Links
                 if (hf.SiteLinks?.Count > 0)
                 {
@@ -951,6 +989,7 @@ namespace DFWV.WorldClasses
 
         private void GatherStats()
         {
+            Program.IncrementMajorProgress();
             Stats = new Stats(this);
             Stats.Gather();
             OnStatsGathered();
@@ -996,8 +1035,11 @@ namespace DFWV.WorldClasses
         internal void MergeSites()
         {
             Program.Log(LogType.Status, "Site Merging...");
+            Program.IncrementMajorProgress();
+            Program.SetMinorProgress(0, SitesFile.Values.Count);
             foreach (var sf in SitesFile.Values)
             {
+                Program.IncrementMinorProgress();
                 if (Sites[sf.Id].Name == sf.AltName.ToLower())
                     Sites[sf.Id].MergeInSiteFile(sf);
                 else if (Sites[sf.Id].Name == Program.CleanString(sf.AltName.ToLower()))
@@ -1015,8 +1057,11 @@ namespace DFWV.WorldClasses
         internal void MergeEntities()
         {
             Program.Log(LogType.Status, "Entity Merging...");
+            Program.IncrementMajorProgress();
+            Program.SetMinorProgress(0, EntitiesFile.Count);
             foreach (var ent in EntitiesFile)
             {
+                Program.IncrementMinorProgress();
                 var entname = ent.Name.ToLower();
                 foreach (var entxml in Entities.Values.Where(entxml => entxml.Name == ent.Name.ToLower() && (entxml.Race == null || entxml.Race == ent.Race)))
                 {
@@ -1042,8 +1087,12 @@ namespace DFWV.WorldClasses
         internal void MergeCivs()
         {
             Program.Log(LogType.Status, "Civilization Merging...");
-            foreach (var civ in Civilizations.Where(x => x.IsFull))
+            Program.IncrementMajorProgress();
+            var fullCivs = Civilizations.Where(x => x.IsFull).ToList();
+            Program.SetMinorProgress(0, fullCivs.Count);
+            foreach (var civ in fullCivs)
             {
+                Program.IncrementMinorProgress();
                 var civname = civ.Name.ToLower();
                 if (civ.Color == Color.Empty)
                     civ.Color = Program.NextDistinctColor();
@@ -1078,9 +1127,11 @@ namespace DFWV.WorldClasses
         internal void MatchHistoricalFiguresToPeople()
         {
             Program.Log(LogType.Status, "Historical Figure Matching...");
-
+            Program.IncrementMajorProgress();
+            Program.SetMinorProgress(0, Leaders.Count);
             foreach (var leader in Leaders)
             {
+                Program.IncrementMinorProgress();
                 var leadername = leader.Name.ToLower();
                 foreach (var hf in HistoricalFigures.Values.Where(hf => hf.Name != null && hf.Name.ToLower() == leadername))
                 {
@@ -1123,8 +1174,11 @@ namespace DFWV.WorldClasses
                 if (leader.Hf == null)
                     Program.Log(LogType.Warning, "Leaderfrom File not in XML: " + leader.Name);
             }
+            Program.IncrementMajorProgress();
+            Program.SetMinorProgress(0, Gods.Count);
             foreach (var god in Gods)
             {
+                Program.IncrementMinorProgress();
                 var godname = god.Name.ToLower();
                 foreach (var hf in HistoricalFigures.Values.Where(hf => hf.Name != null && hf.Name.ToLower() == godname))
                 {

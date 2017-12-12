@@ -192,6 +192,27 @@ namespace DFWV
             return str;
         }
 
+        public static void IncrementMinorProgress() => SetProgress("Minor", MainForm.WorldProgressBarMinor.Value + 1);
+        public static void IncrementMajorProgress() => SetProgress("Major", MainForm.WorldProgressBarMajor.Value + 1);
+        public static void SetMinorProgress(int value, int max = -1) => SetProgress("Minor", value, max);
+        public static void SetMajorProgress(int value, int max = -1) => SetProgress("Major", value, max);
+
+        private static void SetProgress(string progressBarType, int value, int max = -1)
+        {
+            MainForm.InvokeEx(x =>
+            {
+                ProgressBar progressBar = progressBarType == "Minor" ? x.WorldProgressBarMinor : x.WorldProgressBarMajor;
+
+                if (max != -1)
+                    progressBar.Maximum = max;
+                if (value == 0 || value > progressBar.Value)
+                {
+                    progressBar.Value = value <= progressBar.Maximum ? value : progressBar.Maximum;
+                }
+            });
+        }
+
+
         /// <summary>
         /// Handles all logging from world generation
         /// </summary>
