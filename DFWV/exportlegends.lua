@@ -207,107 +207,28 @@ function export_units()
     for unitK, unitV in ipairs(df.global.world.units.all) do
 		file:write("\t<unit>\n")
 		file:write("\t\t<id>"..unitV.id.."</id>\n")
-		flagValues = ""
-		for k,v in pairs(unitV) do
-			if (k == "pos") then
-				file:write("\t\t<coords>")
-					file:write(v.x..","..v.y..","..v.z)
-				file:write("</coords>\n")
-			elseif (k == "name") then
-				file:write("\t\t<name>"..dfhack.df2utf(dfhack.TranslateName(v,0)).."</name>\n")
-				file:write("\t\t<name2>"..dfhack.df2utf(dfhack.TranslateName(v,1)).."</name2>\n")
-			elseif ( k == "sex" or k == "civ_id" or k == "population_id" 
-				 or k == "mood" or k == "hist_figure_id"  or k == "hist_figure_id2") then
-				file:write("\t\t<"..k..">"..v.."</"..k..">\n")
-			elseif (k == "race") then
-				file:write("\t\t<race>"..(df.global.world.raws.creatures.all[v].creature_id).."</race>\n")
-				file:write("\t\t<caste>"..(df.global.world.raws.creatures.all[v].caste[unitV.caste].caste_id).."</caste>\n")
-			elseif (k == "profession") then
-				file:write("\t\t<"..k..">"..df.profession[v]:lower().."</"..k..">\n")			
-			elseif (k == "military" and v.squad_id ~= "-1") then
-				file:write("\t\t<squad_id>"..v.squad_id.."</squad_id>\n")
-			elseif (k == "flags1" or k == "flags2" or k == "flags3") then
-				for flagK, flagV in pairs(v) do
-					if (flagV) then
-						flagValues = flagValues..flagK..","
-					end
-				end
-			elseif (k == "status") then
-				file:write("\t\t<labors>")
-				for kLabor, vLabor in pairs(v.labors) do
-					if (vLabor) then
-						file:write(kLabor..",")
-					end
-				end
-				file:write("</labors>\n")			
-			elseif (k == "opponent" and v.unit_id ~= "-1") then
-				file:write("\t\t<opponent_id>"..v.unit_id.."</opponent_id>\n")
-			elseif (string.starts(k,"unk") or  k == "profession2") then -- Ignore
-			
-			elseif (type(v) == "userdata") then
-				if (k == "patrol_route" or k == "burrows" or k == "counters" or k == "enemy" or k == "recuperation" or k == "syndromes" or k == "status2" or k == "unknown7" or k == "counters2" or k == "curse" or k == "idle_area" or k == "job" or k == "corpse_parts" or k == "flags4" or k == "path" or k == "last_hit" or k == "meeting" or k == "animal" or k == "activities" 
-					or string.starts(k,"anon")) then -- Ignore, unimportant
-				
-				elseif (k == "relations") then -- Covered elsewhere
-				
-				elseif (k == "reports" or k == "body" or k == "appearance" or k == "actions") then -- Too much data
-				
-				elseif (k == "inventory") then
-					printout = ""
-					for itemk, itemv in ipairs(v) do
-						printout = printout..("\t\t\t<item>\n")
-						printout = printout..("\t\t\t\t<id>"..itemv.item.id.."</id>\n")
-						printout = printout..("\t\t\t\t<mode>"..itemv.mode.."</mode>\n")
-						if (itemv.body_part_id ~= -1) then
-							printout = printout..("\t\t\t\t<body_part>"..unitV.body.body_plan.body_parts[itemv.body_part_id].name_singular[0].value.."</body_part>\n")
-						end
-						printout = printout..("\t\t\t</item>\n")
-					end
-					if (printout ~= "") then
-						file:write("\t\t<inventory>\n")
-						file:write(printout)
-						file:write("\t\t</inventory>\n")
-					end
-				elseif (k == "owned_buildings" or k == "used_items") then
-					printout = ""
-					for ownedK, ownedV in ipairs(v) do
-						printout = printout..ownedV.id..","
-					end
-					if (printout ~= "") then
-						file:write("\t\t<"..k..">"..printout.."</"..k..">\n")
-					end
-				elseif (k == "owned_items" or k == "traded_items") then -- ID List
-					printout = ""
-					for itemk, itemv in ipairs(v) do
-						printout = printout..itemv..","
-					end
-					if (printout ~= "") then
-						file:write("\t\t<"..k..">"..printout.."</"..k..">\n")
-					end
-				elseif (k == "health") then
-					printout = ""
-					for healthk, healthv in pairs(v.flags) do
-						if (healthk == 11) then
-							break
-						end
-						if (healthv) then
-							printout = printout..healthk..","
-						end
-					end
-					if (printout ~= "") then
-						file:write("\t\t<"..k..">"..printout.."</"..k..">\n")
-					end
-				elseif (k == "general_refs") then -- handled elsewhere
-
-				elseif (k == "specific_refs") then -- No specific refs found yet
-					
-
-				else
-					file:write("\t\t<"..k..">userdata</"..k..">\n")
-				end
+		file:write("\t\t<profession>"..df_enums.profession[unitV.profession]:lower().."</profession>\n")
+		file:write("\t\t<profession2>"..df_enums.profession[unitV.profession2]:lower().."</profession2>\n")
+		file:write("\t\t<race>"..(df.global.world.raws.creatures.all[unitV.race].creature_id).."</race>\n")
+		file:write("\t\t<coords>"..unitV.pos.x..","..unitV.pos.y.."</coords>\n")
+		file:write("\t\t<caste>"..(df.global.world.raws.creatures.all[unitV.race].caste[unitV.caste].caste_id):lower().."</caste>\n")
+		file:write("\t\t<sex>"..unitV.sex.."</sex>\n")
+		file:write("\t\t<civ_id>"..unitV.civ_id.."</civ_id>\n")
+		file:write("\t\t<population_id>"..unitV.population_id.."</population_id>\n")
+		file:write("\t\t<birth_year>"..unitV.birth_year.."</birth_year>\n")
+		file:write("\t\t<birth_time>"..unitV.birth_time.."</birth_time>\n")
+		file:write("\t\t<hist_figure_id>"..unitV.hist_figure_id.."</hist_figure_id>\n")
+		file:write("\t\t<inventory>\n")
+		for k,itemV in pairs(unitV.inventory) do
+			file:write("\t\t\t<unit_inventory_item>\n")
+			file:write("\t\t\t\t<id>"..itemV.item.id.."</id>\n")
+			file:write("\t\t\t\t<mode>"..itemV.mode.."</mode>\n")
+			if (itemV.body_part_id ~= -1) then
+				printout = printout..("\t\t\t\t".."<body_part>"..unitV.body.body_plan.body_parts[itemV.body_part_id].name_singular[0].value.."</body_part>".."\n")
 			end
+			file:write("\t\t\t</unit_inventory_item>\n")
 		end
-		file:write("\t\t<flags>"..flagValues.."</flags>\n")
+		file:write("\t\t</inventory>\n")
 		export_references(unitV.general_refs)
 		file:write("\t</unit>\n")
     end
@@ -580,7 +501,7 @@ function export_items()
 								elseif (improvementK == "contents") then
 									file:write("\t\t\t\t<"..improvementK..">"..improvementV[0].."</"..improvementK..">\n")
 								else
-									file:write("\t\t\t\t<"..improvementK..">userdata</"..improvementK..">\n")
+									
 								end 
 							else
 								if (type(improvementV) == "number" and improvementV == -1) then -- Ignore, -1
@@ -697,6 +618,9 @@ function export_races()
 		end
 		if (flagsString ~= "") then
 			file:write("\t\t<flags>"..flagsString:lower().."</flags>\n")
+		end
+		for sphereK, sphereV in pairs(raceV.sphere) do
+			file:write("\t\t<sphere>"..df.sphere_type[sphereV].."</sphere>\n")
 		end
 		file:write("\t</race>\n")
     end
@@ -1108,7 +1032,8 @@ function export_historical_events()
                 if k == "year" or k == "seconds" or k == "flags" or k == "id"
                     or (k == "region" and event:getType() ~= df.history_event_type.HF_DOES_INTERACTION)
                     or k == "region_pos" or k == "layer" or k == "feature_layer" or k == "subregion"
-                    or k == "anon_1" or k == "anon_2" or k == "flags2" or k == "unk1" then
+                    or k == "anon_1" or k == "anon_2" or k == "anon_3" or k == "anon_4" or k == "flags2" or k == "unk1"
+					or k == "circumstance" or k == "circumstance_id" or k == "reason" or k == "reason_id" then
 
                 elseif event:getType() == df.history_event_type.ADD_HF_ENTITY_LINK and k == "link_type" then
                     file:write("\t\t<"..k..">"..df_enums.histfig_entity_link_type[v]:lower().."</"..k..">\n")
@@ -1170,11 +1095,11 @@ function export_historical_events()
                     --if event.item_type > -1 and v > -1 then
                         file:write("\t\t<"..k..">"..getItemSubTypeName(event.item_type,v).."</"..k..">\n")
                     --end
-                    elseif event:getType() == df.history_event_type.MASTERPIECE_CREATED_FOOD and k == "item_subtype" then
-                        --if event.item_type > -1 and v > -1 then
-                            file:write("\t\t<item_type>food</item_type>\n")
-                            file:write("\t\t<"..k..">"..getItemSubTypeName(df.item_type.FOOD,v).."</"..k..">\n")
-                        --end
+				elseif event:getType() == df.history_event_type.MASTERPIECE_CREATED_FOOD and k == "item_subtype" then
+					--if event.item_type > -1 and v > -1 then
+						file:write("\t\t<item_type>food</item_type>\n")
+						file:write("\t\t<"..k..">"..getItemSubTypeName(df.item_type.FOOD,v).."</"..k..">\n")
+					--end
                 elseif event:getType() == df.history_event_type.ITEM_STOLEN and k == "mattype" then
                     if (v > -1) then
                         if (dfhack.matinfo.decode(event.mattype, event.matindex) == nil) then

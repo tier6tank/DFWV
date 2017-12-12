@@ -17,8 +17,7 @@ namespace DFWV.WorldClasses
         private int? ItemType { get; }
         private int? ItemSubtype { get; }
         private int? Mat { get; }
-        public Point3 Coords { get; set; }
-        public Point3 LastCoords { get; set; }
+        public Point Coords { get; set; }
         override public Point Location => Point.Empty;
 
         [UsedImplicitly]
@@ -59,17 +58,10 @@ namespace DFWV.WorldClasses
                             Item.Materials.Add(val);
                         Mat = Item.Materials.IndexOf(val);
                         break;
-                    case "pos":
-                        Coords = new Point3(
+                    case "coords":
+                        Coords = new Point(
                             Convert.ToInt32(val.Split(',')[0]),
-                            Convert.ToInt32(val.Split(',')[1]),
-                            Convert.ToInt32(val.Split(',')[2]));
-                        break;
-                    case "last_pos":
-                        LastCoords = new Point3(
-                            Convert.ToInt32(val.Split(',')[0]),
-                            Convert.ToInt32(val.Split(',')[1]),
-                            Convert.ToInt32(val.Split(',')[2]));
+                            Convert.ToInt32(val.Split(',')[1]));
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName, element, xdoc.Root.ToString());

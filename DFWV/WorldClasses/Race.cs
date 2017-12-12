@@ -27,7 +27,8 @@ namespace DFWV.WorldClasses
 
         public static List<string> Flags = new List<string>();
         public List<short> Flag { get; set; }
-
+        public static List<string> Spheres = new List<string>();
+        public List<short> Sphere { get; set; }
 
         public List<Caste> Castes { get; set; }
 
@@ -178,6 +179,12 @@ namespace DFWV.WorldClasses
                                 Flag = new List<short>();
                             Flag.Add((short)Flags.IndexOf(flag));
                         }
+                        break;
+                    case "sphere":
+                        if (!Spheres.Contains(val))
+                            Spheres.Add(val);
+                        if (Sphere == null)
+                            Sphere = new List<short>();
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t Race", element, xdoc.Root.ToString());

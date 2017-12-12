@@ -19,14 +19,16 @@ namespace DFWV.WorldClasses
         [UsedImplicitly]
         public string Profession => ProfessionId.HasValue ? JobTypes[ProfessionId.Value] : "";
         public int? ProfessionId { get; set; }
+        public string Profession2 => Profession2Id.HasValue ? JobTypes[Profession2Id.Value] : "";
+        public int? Profession2Id { get; set; }
         private int? RaceID { get; set; }
         public Race Race { get; set; }
         [UsedImplicitly]
         public string RaceName => Race != null ? Race.Name : "";
         private int? CasteID { get; }
         public Caste Caste { get; set; }
-        public Point3 Coords { get; set; }
-        override public Point Location => Point.Empty;
+        public Point Coords { get; set; }
+        override public Point Location => Coords;
         private int? Sex { get; }
         private int? CivID { get; }
         public Entity Civ { get; private set; }
@@ -86,6 +88,11 @@ namespace DFWV.WorldClasses
                             JobTypes.Add(val);
                         ProfessionId = JobTypes.IndexOf(val);
                         break;
+                    case "profession2":
+                        if (!JobTypes.Contains(val))
+                            JobTypes.Add(val);
+                        Profession2Id = JobTypes.IndexOf(val);
+                        break;
                     case "race":
                         if (valI != -1)
                             Race = World.GetAddRace(val);
@@ -99,10 +106,9 @@ namespace DFWV.WorldClasses
                         }
                         break;
                     case "coords":
-                        Coords = new Point3(
+                        Coords = new Point(
                             Convert.ToInt32(val.Split(',')[0]),
-                            Convert.ToInt32(val.Split(',')[1]),
-                            Convert.ToInt32(val.Split(',')[2]));
+                            Convert.ToInt32(val.Split(',')[1]));
                         break;
                     case "sex":
                         Sex = valI;
@@ -255,7 +261,7 @@ namespace DFWV.WorldClasses
 
                 frm.lblUnitName.Text = Name;
                 frm.lblUnitAltName.Text = AltName;
-                frm.lblUnitCoords.Text = $"({Coords.X}, {Coords.Y}, {Coords.Z})";
+                frm.lblUnitCoords.Text = $"({Coords.X}, {Coords.Y})";
                 frm.lblUnitSex.Text = Sex.ToString();
                 frm.lblUnitCiv.Data = Civ;
                 frm.lblUnitPop.Data = Population;
