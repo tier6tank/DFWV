@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Xml.Linq;
 using DFWV.Annotations;
+using DFWV.WorldClasses.HistoricalFigureClasses;
 
 namespace DFWV.WorldClasses
 {
@@ -27,7 +28,6 @@ namespace DFWV.WorldClasses
 
         public static List<string> Flags = new List<string>();
         public List<short> Flag { get; set; }
-        public static List<string> Spheres = new List<string>();
         public List<short> Sphere { get; set; }
 
         public List<Caste> Castes { get; set; }
@@ -181,10 +181,11 @@ namespace DFWV.WorldClasses
                         }
                         break;
                     case "sphere":
-                        if (!Spheres.Contains(val))
-                            Spheres.Add(val);
+                        if (!HistoricalFigure.Spheres.Contains(val))
+                            HistoricalFigure.Spheres.Add(val);
                         if (Sphere == null)
                             Sphere = new List<short>();
+                        Sphere.Add((short)HistoricalFigure.Spheres.IndexOf(val));
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t Race", element, xdoc.Root.ToString());

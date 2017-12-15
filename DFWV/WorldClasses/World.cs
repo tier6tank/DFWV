@@ -86,7 +86,7 @@ namespace DFWV.WorldClasses
         public readonly Dictionary<int, HistoricalEvent> HistoricalEvents = new Dictionary<int, HistoricalEvent>();
         public readonly Dictionary<int, HistoricalEventCollection> HistoricalEventCollections = new Dictionary<int, HistoricalEventCollection>();
         public readonly Dictionary<int, HistoricalEra> HistoricalEras = new Dictionary<int, HistoricalEra>();
-        public readonly Dictionary<int, WorldConstruction> WorldConstructions = new Dictionary<int, WorldConstruction>();
+        public readonly ConcurrentDictionary<int, WorldConstruction> WorldConstructions = new ConcurrentDictionary<int, WorldConstruction>();
         public readonly Dictionary<int, Artifact> Artifacts = new Dictionary<int, Artifact>();
 
         public Dictionary<string, string> Maps { get; private set; }

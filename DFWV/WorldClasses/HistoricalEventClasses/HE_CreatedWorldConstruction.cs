@@ -93,7 +93,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 else
                 {
                     Wc = new WorldConstruction(WcId.Value, World);
-                    World.WorldConstructions.Add(WcId.Value, Wc);
+                    World.WorldConstructions[WcId.Value] = Wc;
                 }
                 if (WcId_Master.HasValue && WcId_Master != -1)
                 {
@@ -102,7 +102,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     else
                     {
                         Wc_Master = new WorldConstruction(WcId_Master.Value, World);
-                        World.WorldConstructions.Add(WcId_Master.Value, Wc_Master);
+                        World.WorldConstructions[WcId_Master.Value] = Wc_Master;
                     }
                 }
             }

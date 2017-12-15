@@ -391,7 +391,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     if (!World.WorldConstructions.TryGetValue(Id.Value, out wc))
                     {
                         wc = new WorldConstruction(Id.Value, World);
-                        World.WorldConstructions.Add(Id.Value, wc);
+                        World.WorldConstructions[Id.Value] = wc;
                     }
                     obj = wc;
                 }
