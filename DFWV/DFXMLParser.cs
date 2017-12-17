@@ -487,7 +487,7 @@ namespace DFWV
                     if (typeof(T) == typeof(WorldConstruction))
                     {
                         var newWc = new WorldConstruction(xdoc, world);
-                        world.WorldConstructions.Add(newWc.Id, newWc);
+                        world.WorldConstructions[newWc.Id] = newWc;
                         return;
                     }
                     if (typeof(T) == typeof(Landmass))

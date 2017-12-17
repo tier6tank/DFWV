@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalEventClasses;
+using System.Collections.Concurrent;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
@@ -160,26 +161,26 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             SelectTab(frm);
         }
 
-        internal override void Process()
+        public override void Process()
         {
             base.Process();
             if (Subregion != null)
             {
                 if (Subregion.TheftEventCollections == null)
-                    Subregion.TheftEventCollections = new List<EC_Theft>();
+                    Subregion.TheftEventCollections = new ConcurrentBag<EC_Theft>();
                 Subregion.TheftEventCollections.Add(this);
             }
             if (Site != null)
             {
                 if (Site.TheftEventCollections == null)
-                    Site.TheftEventCollections = new List<EC_Theft>();
+                    Site.TheftEventCollections = new ConcurrentBag<EC_Theft>();
                 Site.TheftEventCollections.Add(this);
             }
             if (AttackingEn.TheftEventCollections == null)
-                AttackingEn.TheftEventCollections = new List<EC_Theft>();
+                AttackingEn.TheftEventCollections = new ConcurrentBag<EC_Theft>();
             AttackingEn.TheftEventCollections.Add(this);
             if (DefendingEn.TheftEventCollections == null)
-                DefendingEn.TheftEventCollections = new List<EC_Theft>();
+                DefendingEn.TheftEventCollections = new ConcurrentBag<EC_Theft>();
             DefendingEn.TheftEventCollections.Add(this);
 
         }

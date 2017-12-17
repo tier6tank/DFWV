@@ -1047,7 +1047,7 @@ namespace DFWV
         {
             if (!_world.HasPlusXml)
                 return null;
-            var rivermatches = _world.Rivers.Values.Where(x => x.Coords.Contains(mouseCoord));
+            var rivermatches = _world.Rivers.Values.Where(x => x.Coords.Any(c => c.X == mouseCoord.X && c.Y == mouseCoord.Y));
             var riverArray = rivermatches as River[] ?? rivermatches.ToArray();
             if (!riverArray.Any())
                 return null;

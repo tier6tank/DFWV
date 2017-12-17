@@ -103,7 +103,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 Structure_Source = Site_Source.GetStructure(StructureId_Source.Value);
         }
 
-        internal override void Process()
+        public override void Process()
         {
             base.Process();
 

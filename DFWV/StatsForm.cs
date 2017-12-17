@@ -29,6 +29,9 @@ namespace DFWV
             var yValues = _world.Stats.SitesInYear.Values.ToArray();
             var xValues = _world.Stats.SitesInYear.Keys.ToArray();
 
+            if (!xValues.Any())
+                return;
+
             var yAxis = new Axis(SiteCountChart.ChartAreas[0], AxisName.Y)
             {
                 IsStartedFromZero = true,

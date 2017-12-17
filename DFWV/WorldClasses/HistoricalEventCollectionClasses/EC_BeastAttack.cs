@@ -7,6 +7,7 @@ using System.Xml.Linq;
 using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalEventClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
+using System.Collections.Concurrent;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
@@ -147,14 +148,14 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             SelectTab(frm);
         }
 
-        internal override void Process()
+        public override void Process()
         {
             base.Process();
             if (Site.BeastAttackEventCollections == null)
-                Site.BeastAttackEventCollections = new List<EC_BeastAttack>();
+                Site.BeastAttackEventCollections = new ConcurrentBag<EC_BeastAttack>();
             Site.BeastAttackEventCollections.Add(this);
             if (DefendingEn.BeastAttackEventCollections == null)
-                DefendingEn.BeastAttackEventCollections = new List<EC_BeastAttack>();
+                DefendingEn.BeastAttackEventCollections = new ConcurrentBag<EC_BeastAttack>();
             DefendingEn.BeastAttackEventCollections.Add(this);
         }
 

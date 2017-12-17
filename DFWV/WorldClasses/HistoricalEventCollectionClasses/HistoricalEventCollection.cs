@@ -7,7 +7,7 @@ using DFWV.WorldClasses.HistoricalEventClasses;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
-    public class HistoricalEventCollection : XMLObject
+    public class HistoricalEventCollection : XMLObject, IProcessable
     {
         [UsedImplicitly]
         public int StartYear { get; set; }
@@ -246,10 +246,11 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
         }
         
 
-        internal override void Process()
+        public virtual void Process()
         {
             
         }
+
         internal override void Plus(XDocument xdoc)
         {
 
@@ -280,7 +281,6 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 
 	        }
         }
-
     }
 
 }

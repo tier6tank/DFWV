@@ -22,8 +22,6 @@ namespace DFWV.WorldClasses
 
         internal abstract void Link();
 
-        internal abstract void Process();
-
         internal abstract void Plus(XDocument xdoc);
 
         public override string ToString()

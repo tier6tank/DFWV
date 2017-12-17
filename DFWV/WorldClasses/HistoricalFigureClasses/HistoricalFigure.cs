@@ -9,6 +9,7 @@ using DFWV.Annotations;
 using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalEventClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
+using System.Collections.Concurrent;
 
 namespace DFWV.WorldClasses.HistoricalFigureClasses
 {
@@ -133,31 +134,31 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         public Region Region { get; set; }
         public Point Coords { get; set; }
 
-        private List<Entity> EnemyOf { get; set; }
-        private List<Entity> MemberOf { get; set; }
-        private List<Entity> FormerMemberOf { get; set; }
-        public List<Entity> PrisonerOf { get; set; }
-        private List<Entity> FormerPrisonerOf { get; set; }
-        private List<Entity> CriminalOf { get; set; }
-        public List<Entity> SlaveOf { get; set; }
-        private List<Entity> FormerSlaveOf { get; set; }
-        public List<Entity> HeroOf { get; set; }
+        private ConcurrentBag<Entity> EnemyOf { get; set; }
+        private ConcurrentBag<Entity> MemberOf { get; set; }
+        private ConcurrentBag<Entity> FormerMemberOf { get; set; }
+        public ConcurrentBag<Entity> PrisonerOf { get; set; }
+        private ConcurrentBag<Entity> FormerPrisonerOf { get; set; }
+        private ConcurrentBag<Entity> CriminalOf { get; set; }
+        public ConcurrentBag<Entity> SlaveOf { get; set; }
+        private ConcurrentBag<Entity> FormerSlaveOf { get; set; }
+        public ConcurrentBag<Entity> HeroOf { get; set; }
 
         public List<Artifact> CreatedArtifacts { get; set; }
 
-        public List<HistoricalFigure> Children { get; set; }
-        public List<HistoricalFigure> Spouses { get; set; }
-        private List<HistoricalFigure> Lovers { get; set; }
-        private List<HistoricalFigure> Followers { get; set; }
-        private List<HistoricalFigure> Deities { get; set; }
-        private List<HistoricalFigure> Parents { get; set; }
-        private List<HistoricalFigure> Apprentices { get; set; }
-        private List<HistoricalFigure> Masters { get; set; }
-        private List<HistoricalFigure> FormerApprentices { get; set; }
-        private List<HistoricalFigure> FormerMasters { get; set; }
-        private List<HistoricalFigure> Prisoners { get; set; }
-        private List<HistoricalFigure> Imprisoners { get; set; }
-        private List<HistoricalFigure> Companions { get; set; }
+        public ConcurrentBag<HistoricalFigure> Children { get; set; }
+        public ConcurrentBag<HistoricalFigure> Spouses { get; set; }
+        private ConcurrentBag<HistoricalFigure> Lovers { get; set; }
+        private ConcurrentBag<HistoricalFigure> Followers { get; set; }
+        private ConcurrentBag<HistoricalFigure> Deities { get; set; }
+        private ConcurrentBag<HistoricalFigure> Parents { get; set; }
+        private ConcurrentBag<HistoricalFigure> Apprentices { get; set; }
+        private ConcurrentBag<HistoricalFigure> Masters { get; set; }
+        private ConcurrentBag<HistoricalFigure> FormerApprentices { get; set; }
+        private ConcurrentBag<HistoricalFigure> FormerMasters { get; set; }
+        private ConcurrentBag<HistoricalFigure> Prisoners { get; set; }
+        private ConcurrentBag<HistoricalFigure> Imprisoners { get; set; }
+        private ConcurrentBag<HistoricalFigure> Companions { get; set; }
 
         public HistoricalFigure Mother { get; set; }
         public HistoricalFigure Father { get; set; }
@@ -169,8 +170,8 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
         public HE_ChangeHFBodyState EntombedEvent { get; set; }
 
 
-        public List<EC_Battle> BattleEventCollections { get; set; }
-        public List<EC_Duel> DuelEventCollections { get; set; }
+        public ConcurrentBag<EC_Battle> BattleEventCollections { get; set; }
+        public ConcurrentBag<EC_Duel> DuelEventCollections { get; set; }
 
         override public Point Location => Coords;
 
@@ -522,7 +523,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                 if (RelationshipProfileHFs != null)
                 {
                     var thisNode = new TreeNode("Relationships");
-                    foreach (var profile in RelationshipProfileHFs)
+                    foreach (var profile in RelationshipProfileHFs) //TODO                     foreach (var profile in RelationshipProfileHFs.Where(x => x.Hf != null))
                     {
                         var hfNode = new TreeNode(profile.Hf.ToString()) { Tag = profile.Hf };
                         if (profile.Hf.Caste.HasValue && Castes[profile.Hf.Caste.Value].ToLower().StartsWith("male"))
@@ -841,7 +842,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
 #endregion
 
 
-        private void LoadHfLinkItems(MainForm frm, List<HistoricalFigure> hflinklist, string treenodename)
+        private void LoadHfLinkItems(MainForm frm, ConcurrentBag<HistoricalFigure> hflinklist, string treenodename)
         {
             if (hflinklist == null) return;
 
@@ -1005,7 +1006,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
             }
         }
 
-        internal override void Process()
+        internal void Process() //TODO Concurrency support
         {
             if (SiteLinks != null)
             {
@@ -1014,7 +1015,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                     foreach (var sl in linklist.Value)
                     {
                         if (sl.Site.Inhabitants == null)
-                            sl.Site.Inhabitants = new List<HistoricalFigure>();
+                            sl.Site.Inhabitants = new ConcurrentBag<HistoricalFigure>(); 
                         if (!sl.Site.Inhabitants.Contains(this))
                             sl.Site.Inhabitants.Add(this);
                         Site = sl.Site;
@@ -1048,74 +1049,74 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                             case "enemy":
 
                                 if (el.Entity.Enemies == null)
-                                    el.Entity.Enemies = new List<HistoricalFigure>();
+                                    el.Entity.Enemies = new ConcurrentBag<HistoricalFigure>();
                                 el.Entity.Enemies.Add(this);
                                 if (EnemyOf == null)
-                                    EnemyOf = new List<Entity>();
+                                    EnemyOf = new ConcurrentBag<Entity>();
                                 EnemyOf.Add(el.Entity);
                                 break;
                             case "member":
                                 if (el.Entity.Members == null)
-                                    el.Entity.Members = new List<HistoricalFigure>();
+                                    el.Entity.Members = new ConcurrentBag<HistoricalFigure>();
                                 el.Entity.Members.Add(this);
                                 if (MemberOf == null)
-                                    MemberOf = new List<Entity>();
+                                    MemberOf = new ConcurrentBag<Entity>();
                                 MemberOf.Add(el.Entity);
                                 break;
                             case "former member":
                                 if (el.Entity.FormerMembers == null)
-                                    el.Entity.FormerMembers = new List<HistoricalFigure>();
+                                    el.Entity.FormerMembers = new ConcurrentBag<HistoricalFigure>();
                                 el.Entity.FormerMembers.Add(this);
                                 if (FormerMemberOf == null)
-                                    FormerMemberOf = new List<Entity>();
+                                    FormerMemberOf = new ConcurrentBag<Entity>();
                                 FormerMemberOf.Add(el.Entity);
                                 break;
                             case "prisoner":
                                 if (el.Entity.Prisoners == null)
-                                    el.Entity.Prisoners = new List<HistoricalFigure>();
+                                    el.Entity.Prisoners = new ConcurrentBag<HistoricalFigure>();
                                 el.Entity.Prisoners.Add(this);
                                 if (PrisonerOf == null)
-                                    PrisonerOf = new List<Entity>();
+                                    PrisonerOf = new ConcurrentBag<Entity>();
                                 PrisonerOf.Add(el.Entity);
                                 break;
                             case "former prisoner":
                                 if (el.Entity.FormerPrisoners == null)
-                                    el.Entity.FormerPrisoners = new List<HistoricalFigure>();
+                                    el.Entity.FormerPrisoners = new ConcurrentBag<HistoricalFigure>();
                                 el.Entity.FormerPrisoners.Add(this);
                                 if (FormerPrisonerOf == null)
-                                    FormerPrisonerOf = new List<Entity>();
+                                    FormerPrisonerOf = new ConcurrentBag<Entity>();
                                 FormerPrisonerOf.Add(el.Entity);
                                 break;
                             case "criminal":
                                 if (el.Entity.Criminals == null)
-                                    el.Entity.Criminals = new List<HistoricalFigure>();
+                                    el.Entity.Criminals = new ConcurrentBag<HistoricalFigure>();
                                 el.Entity.Criminals.Add(this);
                                 if (CriminalOf == null)
-                                    CriminalOf = new List<Entity>();
+                                    CriminalOf = new ConcurrentBag<Entity>();
                                 CriminalOf.Add(el.Entity);
                                 break;
                             case "slave":
                                 if (el.Entity.Slaves == null)
-                                    el.Entity.Slaves = new List<HistoricalFigure>();
+                                    el.Entity.Slaves = new ConcurrentBag<HistoricalFigure>();
                                 el.Entity.Slaves.Add(this);
                                 if (SlaveOf == null)
-                                    SlaveOf = new List<Entity>();
+                                    SlaveOf = new ConcurrentBag<Entity>();
                                 SlaveOf.Add(el.Entity);
                                 break;
                             case "former slave":
                                 if (el.Entity.FormerSlaves == null)
-                                    el.Entity.FormerSlaves = new List<HistoricalFigure>();
+                                    el.Entity.FormerSlaves = new ConcurrentBag<HistoricalFigure>();
                                 el.Entity.FormerSlaves.Add(this);
                                 if (FormerSlaveOf == null)
-                                    FormerSlaveOf = new List<Entity>();
+                                    FormerSlaveOf = new ConcurrentBag<Entity>();
                                 FormerSlaveOf.Add(el.Entity);
                                 break;
                             case "hero":
                                 if (el.Entity.Heroes == null)
-                                    el.Entity.Heroes = new List<HistoricalFigure>();
+                                    el.Entity.Heroes = new ConcurrentBag<HistoricalFigure>();
                                 el.Entity.Heroes.Add(this);
                                 if (HeroOf == null)
-                                    HeroOf = new List<Entity>();
+                                    HeroOf = new ConcurrentBag<Entity>();
                                 HeroOf.Add(el.Entity);
                                 break;
                             default:
@@ -1136,120 +1137,116 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
 
                             case "child":
                                 if (Children == null)
-                                    Children = new List<HistoricalFigure>();
+                                    Children = new ConcurrentBag<HistoricalFigure>();
                                 if (!Children.Contains(hfl.Hf))
                                 {
                                     Children.Add(hfl.Hf);
                                     if (hfl.Hf.Parents == null)
-                                        hfl.Hf.Parents = new List<HistoricalFigure>();
+                                        hfl.Hf.Parents = new ConcurrentBag<HistoricalFigure>();
                                     hfl.Hf.Parents.Add(this);
                                 }
                                 break;
                             case "spouse":
                                 if (hfl.Hf.Spouses == null)
-                                    hfl.Hf.Spouses = new List<HistoricalFigure>();
+                                    hfl.Hf.Spouses = new ConcurrentBag<HistoricalFigure>();
                                 if (!hfl.Hf.Spouses.Contains(this))
                                 {
                                     hfl.Hf.Spouses.Add(this);
                                     if (Spouses == null)
-                                        Spouses = new List<HistoricalFigure>();
+                                        Spouses = new ConcurrentBag<HistoricalFigure>();
                                     Spouses.Add(hfl.Hf);
                                 }
                                 break;
                             case "lover":
                                 if (hfl.Hf.Lovers == null)
-                                    hfl.Hf.Lovers = new List<HistoricalFigure>();
+                                    hfl.Hf.Lovers = new ConcurrentBag<HistoricalFigure>();
                                 if (!hfl.Hf.Lovers.Contains(this))
                                 {
                                     hfl.Hf.Lovers.Add(this);
                                     if (Lovers == null)
-                                        Lovers = new List<HistoricalFigure>();
+                                        Lovers = new ConcurrentBag<HistoricalFigure>();
                                     Lovers.Add(hfl.Hf);
                                 }
                                 break;
                             case "deity":
                                 if (hfl.Hf.Followers == null)
-                                    hfl.Hf.Followers = new List<HistoricalFigure>();
+                                    hfl.Hf.Followers = new ConcurrentBag<HistoricalFigure>();
                                 hfl.Hf.Followers.Add(this);
                                 if (Deities == null)
-                                    Deities = new List<HistoricalFigure>();
+                                    Deities = new ConcurrentBag<HistoricalFigure>();
                                 Deities.Add(hfl.Hf);
                                 break;
                             case "mother":
                                 Mother = hfl.Hf;
                                 if (hfl.Hf.Children == null)
-                                    hfl.Hf.Children = new List<HistoricalFigure>();
+                                    hfl.Hf.Children = new ConcurrentBag<HistoricalFigure>();
                                 if (!hfl.Hf.Children.Contains(this))
                                     hfl.Hf.Children.Add(this);
                                 else
                                 {
                                     if (Parents == null)
-                                        Parents = new List<HistoricalFigure>();
-                                    if (Parents.Contains(hfl.Hf))
-                                        Parents.Remove(Mother);
+                                        Parents = new ConcurrentBag<HistoricalFigure>();
                                 }
                                 break;
                             case "father":
                                 Father = hfl.Hf;
                                 if (hfl.Hf.Children == null)
-                                    hfl.Hf.Children = new List<HistoricalFigure>();
+                                    hfl.Hf.Children = new ConcurrentBag<HistoricalFigure>();
                                 if (!hfl.Hf.Children.Contains(this))
                                     hfl.Hf.Children.Add(this);
                                 else
                                 {
                                     if (Parents == null)
-                                        Parents = new List<HistoricalFigure>();
-                                    if (Parents.Contains(hfl.Hf))
-                                        Parents.Remove(Father);
+                                        Parents = new ConcurrentBag<HistoricalFigure>();
                                 }
                                 break;
                             case "master":
                                 if (hfl.Hf.Apprentices == null)
-                                    hfl.Hf.Apprentices = new List<HistoricalFigure>();
+                                    hfl.Hf.Apprentices = new ConcurrentBag<HistoricalFigure>();
                                 if (!hfl.Hf.Apprentices.Contains(this))
                                 {
                                     hfl.Hf.Apprentices.Add(this);
                                     if (Masters == null)
-                                        Masters = new List<HistoricalFigure>();
+                                        Masters = new ConcurrentBag<HistoricalFigure>();
                                     Masters.Add(hfl.Hf);
                                 }
                                 break;
                             case "apprentice":
                                 if (hfl.Hf.Masters == null)
-                                    hfl.Hf.Masters = new List<HistoricalFigure>();
+                                    hfl.Hf.Masters = new ConcurrentBag<HistoricalFigure>();
                                 if (!hfl.Hf.Masters.Contains(this))
                                 {
                                     hfl.Hf.Masters.Add(this);
                                     if (Apprentices == null)
-                                        Apprentices = new List<HistoricalFigure>();
+                                        Apprentices = new ConcurrentBag<HistoricalFigure>();
                                     Apprentices.Add(hfl.Hf);
                                 }
                                 break;
                             case "former master":
                                 if (hfl.Hf.FormerApprentices == null)
-                                    hfl.Hf.FormerApprentices = new List<HistoricalFigure>();
+                                    hfl.Hf.FormerApprentices = new ConcurrentBag<HistoricalFigure>();
                                 if (!hfl.Hf.FormerApprentices.Contains(this))
                                 {
                                     hfl.Hf.FormerApprentices.Add(this);
                                     if (FormerMasters == null)
-                                        FormerMasters = new List<HistoricalFigure>();
+                                        FormerMasters = new ConcurrentBag<HistoricalFigure>();
                                     FormerMasters.Add(hfl.Hf);
                                 }
                                 break;
                             case "former apprentice":
                                 if (hfl.Hf.FormerMasters == null)
-                                    hfl.Hf.FormerMasters = new List<HistoricalFigure>();
+                                    hfl.Hf.FormerMasters = new ConcurrentBag<HistoricalFigure>();
                                 if (!hfl.Hf.FormerMasters.Contains(this))
                                 {
                                     hfl.Hf.FormerMasters.Add(this);
                                     if (FormerApprentices == null)
-                                        FormerApprentices = new List<HistoricalFigure>();
+                                        FormerApprentices = new ConcurrentBag<HistoricalFigure>();
                                     FormerApprentices.Add(hfl.Hf);
                                 }
                                 break;
                             case "prisoner":
                                 if (hfl.Hf.Prisoners == null)
-                                    hfl.Hf.Prisoners = new List<HistoricalFigure>();
+                                    hfl.Hf.Prisoners = new ConcurrentBag<HistoricalFigure>();
                                 if (!hfl.Hf.Prisoners.Contains(this))
                                 {
                                     hfl.Hf.Prisoners.Add(this);
@@ -1257,7 +1254,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                                 break;
                             case "imprisoner":
                                 if (hfl.Hf.Imprisoners == null)
-                                    hfl.Hf.Imprisoners = new List<HistoricalFigure>();
+                                    hfl.Hf.Imprisoners = new ConcurrentBag<HistoricalFigure>();
                                 if (!hfl.Hf.Imprisoners.Contains(this))
                                 {
                                     hfl.Hf.Imprisoners.Add(this);
@@ -1265,7 +1262,7 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                                 break;
                             case "companion":
                                 if (hfl.Hf.Companions == null)
-                                    hfl.Hf.Companions = new List<HistoricalFigure>();
+                                    hfl.Hf.Companions = new ConcurrentBag<HistoricalFigure>();
                                 if (!hfl.Hf.Companions.Contains(this))
                                 {
                                     hfl.Hf.Companions.Add(this);
@@ -1327,7 +1324,9 @@ namespace DFWV.WorldClasses.HistoricalFigureClasses
                         if (valI != -1)
                             Sex = valI;
                         break;
-                    case "race": //Ignore, captured elsewhere
+                    case "race_id":
+                        if (valI != -1 && World.Races.ContainsKey(valI))
+                            Race = World.Races[valI];
                         break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t", element, xdoc.Root.ToString());

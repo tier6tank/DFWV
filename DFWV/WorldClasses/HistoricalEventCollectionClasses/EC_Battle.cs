@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using DFWV.WorldClasses.HistoricalEventClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
+using System.Collections.Concurrent;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
@@ -368,13 +369,13 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             SelectTab(frm);
         }
 
-        internal override void Process()
+        public override void Process()
         {
             base.Process();
             if (Subregion != null)
             {
                 if (Subregion.BattleEventCollections == null)
-                    Subregion.BattleEventCollections = new List<EC_Battle>();
+                    Subregion.BattleEventCollections = new ConcurrentBag<EC_Battle>();
                 Subregion.BattleEventCollections.Add(this);
                 if (Subregion.Coords == null)
                     Subregion.Coords = new List<Point>();
@@ -383,7 +384,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             if (Site != null)
             {
                 if (Site.BattleEventCollections == null)
-                    Site.BattleEventCollections = new List<EC_Battle>();
+                    Site.BattleEventCollections = new ConcurrentBag<EC_Battle>();
                 Site.BattleEventCollections.Add(this);
             }
             if (AttackingHf != null)
@@ -391,7 +392,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                 foreach (var hf in AttackingHf)
                 {
                     if (hf.BattleEventCollections == null)
-                        hf.BattleEventCollections = new List<EC_Battle>();
+                        hf.BattleEventCollections = new ConcurrentBag<EC_Battle>();
                     hf.BattleEventCollections.Add(this);
                 }
             }
@@ -400,7 +401,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                 foreach (var hf in DefendingHf)
                 {
                     if (hf.BattleEventCollections == null)
-                        hf.BattleEventCollections = new List<EC_Battle>();
+                        hf.BattleEventCollections = new ConcurrentBag<EC_Battle>();
                     hf.BattleEventCollections.Add(this);
                 }
             }
@@ -409,7 +410,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                 foreach (var hf in _nonComHf)
                 {
                     if (hf.BattleEventCollections == null)
-                        hf.BattleEventCollections = new List<EC_Battle>();
+                        hf.BattleEventCollections = new ConcurrentBag<EC_Battle>();
                     hf.BattleEventCollections.Add(this);
                 }
             }
@@ -418,7 +419,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                 foreach (var squad in AttackingSquad.Where(squad => squad.EntityPopulation != null))
                 {
                     if (squad.EntityPopulation.BattleEventCollections == null)
-                        squad.EntityPopulation.BattleEventCollections = new List<EC_Battle>();
+                        squad.EntityPopulation.BattleEventCollections = new ConcurrentBag<EC_Battle>();
                     squad.EntityPopulation.BattleEventCollections.Add(this);
                 }
             }
@@ -427,7 +428,7 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
                 foreach (var squad in DefendingSquad.Where(squad => squad.EntityPopulation != null))
                 {
                     if (squad.EntityPopulation.BattleEventCollections == null)
-                        squad.EntityPopulation.BattleEventCollections = new List<EC_Battle>();
+                        squad.EntityPopulation.BattleEventCollections = new ConcurrentBag<EC_Battle>();
                     squad.EntityPopulation.BattleEventCollections.Add(this);
                 }
             }

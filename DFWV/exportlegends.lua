@@ -190,8 +190,6 @@ function export_armies()
 		file:write("\t<army>\n")
 		file:write("\t\t<id>"..armyV.id.."</id>\n")
 		file:write("\t\t<coords>"..armyV.pos.x..","..armyV.pos.y.."</coords>\n")
-		file:write("\t\t<item>"..getItemSubTypeName(armyV.item_type,armyV.item_subtype).."</item>\n")
-		
 		file:write("\t\t<item_type>"..tostring(df.item_type[armyV.item_type]):lower().."</item_type>\n")
 		if (armyV.item_subtype ~= -1) then
 			file:write("\t\t<item_subtype>"..armyV.item_subtype.."</item_subtype>\n")
@@ -207,33 +205,71 @@ function export_units()
     for unitK, unitV in ipairs(df.global.world.units.all) do
 		file:write("\t<unit>\n")
 		file:write("\t\t<id>"..unitV.id.."</id>\n")
+		file:write("\t\t<name>"..dfhack.df2utf(dfhack.TranslateName(unitV.name)).."</name>\n")
+		file:write("\t\t<name2>"..dfhack.df2utf(dfhack.TranslateName(unitV.name,1)).."</name2>\n")
 		file:write("\t\t<profession>"..df_enums.profession[unitV.profession]:lower().."</profession>\n")
 		file:write("\t\t<profession2>"..df_enums.profession[unitV.profession2]:lower().."</profession2>\n")
 		file:write("\t\t<race>"..(df.global.world.raws.creatures.all[unitV.race].creature_id).."</race>\n")
-		file:write("\t\t<coords>"..unitV.pos.x..","..unitV.pos.y.."</coords>\n")
+		file:write("\t\t<coords>"..unitV.pos.x..","..unitV.pos.y..","..unitV.pos.z.."</coords>\n")
 		file:write("\t\t<caste>"..(df.global.world.raws.creatures.all[unitV.race].caste[unitV.caste].caste_id):lower().."</caste>\n")
 		file:write("\t\t<sex>"..unitV.sex.."</sex>\n")
-		file:write("\t\t<civ_id>"..unitV.civ_id.."</civ_id>\n")
-		file:write("\t\t<population_id>"..unitV.population_id.."</population_id>\n")
+		if (unitV.civ_id ~= -1) then
+			file:write("\t\t<civ_id>"..unitV.civ_id.."</civ_id>\n")
+		end
+		if (unitV.population_id ~= -1) then
+			file:write("\t\t<population_id>"..unitV.population_id.."</population_id>\n")
+		end
 		file:write("\t\t<birth_year>"..unitV.birth_year.."</birth_year>\n")
 		file:write("\t\t<birth_time>"..unitV.birth_time.."</birth_time>\n")
-		file:write("\t\t<hist_figure_id>"..unitV.hist_figure_id.."</hist_figure_id>\n")
+		if (unitV.hist_figure_id ~= -1) then
+			file:write("\t\t<hist_figure_id>"..unitV.hist_figure_id.."</hist_figure_id>\n")
+		end
 		file:write("\t\t<inventory>\n")
 		for k,itemV in pairs(unitV.inventory) do
 			file:write("\t\t\t<unit_inventory_item>\n")
 			file:write("\t\t\t\t<id>"..itemV.item.id.."</id>\n")
 			file:write("\t\t\t\t<mode>"..itemV.mode.."</mode>\n")
 			if (itemV.body_part_id ~= -1) then
-				printout = printout..("\t\t\t\t".."<body_part>"..unitV.body.body_plan.body_parts[itemV.body_part_id].name_singular[0].value.."</body_part>".."\n")
+				file:write("\t\t\t\t".."<body_part>"..unitV.body.body_plan.body_parts[itemV.body_part_id].name_singular[0].value.."</body_part>".."\n")
 			end
 			file:write("\t\t\t</unit_inventory_item>\n")
 		end
 		file:write("\t\t</inventory>\n")
+		
+		-- Ignore flags, not interesting
+		local ignoreFlags = {"calculated_nerves", "calculated_bodyparts", "calculated_insulation",
+							 "vision_good", "breathing_good", "body_part_relsize_computed",
+							 "size_modifier_computed", "stuck_weapon_computed", "body_temp_in_range",
+							 "move_state", "can_swap", "calculated_inventory", "unk1", "unk2", "unk3",
+							 "roaming_wilderness_population_source","roaming_wilderness_population_source_not_a_map_feature"}
+		file:write("\t\t<flags>")		
+		for flagName,flagValue in pairs(unitV.flags1) do
+			if (flagValue == true and not table.contains(ignoreFlags, flagName)) then
+				file:write(flagName..",")
+			end
+		end
+		for flagName,flagValue in pairs(unitV.flags2) do
+			if (flagValue == true and not table.contains(ignoreFlags, flagName)) then
+				file:write(flagName..",")
+			end
+		end
+		for flagName,flagValue in pairs(unitV.flags3) do
+			if (flagValue == true and not table.contains(ignoreFlags, flagName)) then
+				file:write(flagName..",")
+			end
+		end
+		for flagName,flagValue in pairs(unitV.flags4) do
+			if (flagValue == true and not table.contains(ignoreFlags, flagName)) then
+				file:write(flagName..",")
+			end
+		end
+		file:write("</flags>\n")
 		export_references(unitV.general_refs)
 		file:write("\t</unit>\n")
     end
     file:write("</units>\n")
 end
+
 function export_engravings()
 	file:write("<engravings>\n")
     for engravingK, engravingV in ipairs(df.global.world.engravings) do
@@ -629,18 +665,12 @@ end
 function export_written_contents()
     file:write("<written_contents>\n")
     for wcK, wcV in ipairs(df.global.world.written_contents.all) do
-        file:write("\t<written_content>\n")
-        file:write("\t\t<id>"..wcV.id.."</id>\n")
-        file:write("\t\t<title>"..wcV.title.."</title>\n")
-        file:write("\t\t<page_start>"..wcV.page_start.."</page_start>\n")
-        file:write("\t\t<page_end>"..wcV.page_end.."</page_end>\n")
-		export_references(wcV.refs)
-        file:write("\t\t<type>"..(df.written_content_type[wcV.type] or wcV.type).."</type>\n")
-        for styleK, styleV in pairs(wcV.styles) do
-            file:write("\t\t<style>"..(df.written_content_style[styleV] or styleV).."</style>\n")
-        end
-        file:write("\t\t<author>"..wcV.author.."</author>\n")
-        file:write("\t</written_content>\n")
+		if (tablelength(wcV.refs) > 0) then
+			file:write("\t<written_content>\n")
+			file:write("\t\t<id>"..wcV.id.."</id>\n")
+			export_references(wcV.refs)
+			file:write("\t</written_content>\n")
+		end
     end
     file:write("</written_contents>\n")
 end
@@ -713,16 +743,12 @@ function export_rivers()
 			elseif (k == "path") then
 				file:write("\t\t<coords>")
 				for xK, xVal in ipairs(riverV.path.x) do
-					file:write(xVal..","..riverV.path.y[xK].."|")
+					file:write(xVal..","..riverV.path.y[xK]..","..riverV.elevation[xK].."|")
 				end
-				file:write(riverV.end_pos.x..","..riverV.end_pos.y)
+				file:write(riverV.end_pos.x..","..riverV.end_pos.y..",-1")
 				file:write("</coords>\n")
-			elseif (k == "elevation") then
-				file:write("\t\t<elevation>")
-				for xK, xVal in ipairs(riverV.elevation) do
-					file:write(xVal.."|")
-				end
-				file:write("</elevation>\n")
+			elseif (k == "elevation") then -- Handled in coords
+
 			elseif (k == "name") then
 				file:write("\t\t<name>"..dfhack.df2utf(dfhack.TranslateName(v,0)).."</name>\n")
 				file:write("\t\t<name2>"..dfhack.df2utf(dfhack.TranslateName(v,1)).."</name2>\n")
@@ -779,8 +805,9 @@ function export_sites()
     file:write("<sites>\n")
     for siteK, siteV in ipairs(df.global.world.world_data.sites) do
         file:write("\t<site>\n")
+		file:write("\t\t<id>"..siteV.id.."</id>\n")
         for k,v in pairs(siteV) do
-            if (k == "id" or k == "civ_id" or k == "cur_owner_id") then
+            if ((k == "civ_id" or k == "cur_owner_id") and v ~= -1) then
                 file:write("\t\t<"..k..">"..tostring(v).."</"..k..">\n")
             elseif (k == "buildings") then
                 if (#siteV.buildings > 0) then
@@ -800,9 +827,14 @@ function export_sites()
                         if (buildingV:getType() == df.abstract_building_type.DUNGEON) then
                             file:write("\t\t\t\t<dungeon_type>"..buildingV.dungeon_type.."</dungeon_type>\n")
                         end
-                        for inhabitabntK,inhabitabntV in pairs(buildingV.inhabitants) do
-                            file:write("\t\t\t\t<inhabitant>"..inhabitabntV.histfig_id.."</inhabitant>\n")
-                        end
+						
+						if (buildingV.inhabitants ~= nil and tablelength(buildingV.inhabitants) > 0) then
+							file:write("\t\t<inhabitants>")
+							for inhabitabntK,inhabitantV in pairs(buildingV.inhabitants) do
+								file:write(inhabitantV.histfig_id..",")
+							end
+							file:write("</inhabitants>\n")
+						end
                         file:write("\t\t\t</structure>\n")
                     end
                     file:write("\t\t</structures>\n")
@@ -868,7 +900,9 @@ function export_historical_figures()
         file:write("\t<historical_figure>\n")
         file:write("\t\t<id>"..hfV.id.."</id>\n")
         file:write("\t\t<sex>"..hfV.sex.."</sex>\n")
-        if hfV.race >= 0 then file:write("\t\t<race>"..df.global.world.raws.creatures.all[hfV.race].name[0].."</race>\n") end
+        if hfV.race >= 0 then 
+			file:write("\t\t<race_id>"..hfV.race.."</race_id>\n") 
+		end
         file:write("\t</historical_figure>\n")
     end
     file:write("</historical_figures>\n")
@@ -879,8 +913,7 @@ function export_entity_populations()
         file:write("\t<entity_population>\n")
         file:write("\t\t<id>"..entityPopV.id.."</id>\n")
         for raceK, raceV in ipairs(entityPopV.races) do
-            local raceName = (df.global.world.raws.creatures.all[raceV].creature_id):lower()
-            file:write("\t\t<race>"..raceName..":"..entityPopV.counts[raceK].."</race>\n")
+            file:write("\t\t<race_count>"..raceK..":"..entityPopV.counts[raceK].."</race_count>\n")
         end
         file:write("\t\t<civ_id>"..entityPopV.civ_id.."</civ_id>\n")
         file:write("\t</entity_population>\n")
@@ -893,7 +926,7 @@ function export_entities()
         file:write("\t<entity>\n")
         file:write("\t\t<id>"..entityV.id.."</id>\n")
         if entityV.race >= 0 then
-            file:write("\t\t<race>"..(df.global.world.raws.creatures.all[entityV.race].creature_id):lower().."</race>\n")
+            file:write("\t\t<race_id>"..entityV.race.."</race_id>\n")
         end
         file:write("\t\t<type>"..(df_enums.historical_entity_type[entityV.type]):lower().."</type>\n")
         if entityV.type == df.historical_entity_type.Religion then -- Get worshipped figure
@@ -928,23 +961,19 @@ function export_entities()
         for assignmentK,assignmentV in pairs(entityV.positions.assignments) do
             file:write("\t\t<entity_position_assignment>\n")
             for k, v in pairs(assignmentV) do
-                if (k == "id" or k == "histfig" or k == "position_id" or k == "squad_id") then
+                if ((k == "id" or k == "histfig" or k == "position_id" or k == "squad_id") and v ~= -1) then
                     file:write("\t\t\t<"..k..">"..v.."</"..k..">\n")
                 end
             end
             file:write("\t\t</entity_position_assignment>\n")
         end
-        for idx,id in pairs(entityV.histfig_ids) do
-            file:write("\t\t<histfig_id>"..id.."</histfig_id>\n")
-        end
-        for id, link in ipairs(entityV.children) do
-            file:write("\t\t<child>"..link.."</child>\n")
-        end
-        file:write("\t\t<claims>")
-            for xK, xVal in ipairs(entityV.claims.unk2.x) do
-                file:write(xVal..","..entityV.claims.unk2.y[xK].."|")
-            end
-        file:write("\t\t</claims>\n")
+		if (entityV.histfig_ids ~= nil and tablelength(entityV.histfig_ids) > 0) then
+			file:write("\t\t<histfig_ids>")
+			for idx,id in pairs(entityV.histfig_ids) do
+				file:write(id..",")
+			end
+			file:write("</histfig_ids>\n")
+		end
         if (table.containskey(entityV,"occasion_info") and entityV.occasion_info ~= nil) then
             for occasionK, occasionV in pairs(entityV.occasion_info.occasions) do
                 file:write("\t\t<occasion>\n")
@@ -959,8 +988,12 @@ function export_entities()
                         file:write("\t\t\t\t<item_type>"..df_enums.item_type[scheduleV.reference]:lower().."</item_type>\n")
                         file:write("\t\t\t\t<item_subtype>"..getItemSubTypeName(scheduleV.reference,scheduleV.reference2).."</item_subtype>\n")
                     else
-                        file:write("\t\t\t\t<reference>"..scheduleV.reference.."</reference>\n")
-                        file:write("\t\t\t\t<reference2>"..scheduleV.reference2.."</reference2>\n")
+						if (scheduleV.reference ~= -1) then
+							file:write("\t\t\t\t<reference>"..scheduleV.reference.."</reference>\n")
+						end
+						if (scheduleV.reference2 ~= -1) then
+							file:write("\t\t\t\t<reference2>"..scheduleV.reference2.."</reference2>\n")
+						end
                     end
                     for featureK, featureV in pairs(scheduleV.features) do
                         file:write("\t\t\t\t<feature>\n")
@@ -969,7 +1002,9 @@ function export_entities()
                         else
                             file:write("\t\t\t\t\t<type>"..featureV.feature.."</type>\n")
                         end
-                        file:write("\t\t\t\t\t<reference>"..featureV.reference.."</reference>\n")
+						if (featureV.reference ~= -1) then
+							file:write("\t\t\t\t\t<reference>"..featureV.reference.."</reference>\n")
+						end
                         file:write("\t\t\t\t</feature>\n")
                     end
                     file:write("\t\t\t</schedule>\n")
@@ -988,15 +1023,9 @@ function export_historical_events()
               or event:getType() == df.history_event_type.ADD_HF_SITE_LINK
               or event:getType() == df.history_event_type.ADD_HF_HF_LINK
               or event:getType() == df.history_event_type.ADD_HF_ENTITY_LINK
-              or event:getType() == df.history_event_type.TOPICAGREEMENT_CONCLUDED
-              or event:getType() == df.history_event_type.TOPICAGREEMENT_REJECTED
-              or event:getType() == df.history_event_type.TOPICAGREEMENT_MADE
               or event:getType() == df.history_event_type.BODY_ABUSED
-              or event:getType() == df.history_event_type.CHANGE_CREATURE_TYPE
-              or event:getType() == df.history_event_type.CHANGE_HF_JOB
-              or event:getType() == df.history_event_type.CHANGE_HF_STATE
-              or event:getType() == df.history_event_type.CREATED_BUILDING
-              or event:getType() == df.history_event_type.CREATURE_DEVOURED
+              --or event:getType() == df.history_event_type.CHANGE_CREATURE_TYPE
+              -- or event:getType() == df.history_event_type.CHANGE_HF_STATE
               or event:getType() == df.history_event_type.HF_DOES_INTERACTION
               or event:getType() == df.history_event_type.HF_LEARNS_SECRET
               or event:getType() == df.history_event_type.HIST_FIGURE_NEW_PET
@@ -1024,6 +1053,12 @@ function export_historical_events()
               or event:getType() == df.history_event_type.WAR_PEACE_REJECTED
               or event:getType() == df.history_event_type.HIST_FIGURE_WOUNDED
               or event:getType() == df.history_event_type.HIST_FIGURE_DIED
+              or event:getType() == df.history_event_type.TOPICAGREEMENT_CONCLUDED
+              or event:getType() == df.history_event_type.TOPICAGREEMENT_REJECTED
+              or event:getType() == df.history_event_type.TOPICAGREEMENT_MADE
+              or event:getType() == df.history_event_type.CHANGE_HF_JOB
+              or event:getType() == df.history_event_type.CREATED_BUILDING
+              or event:getType() == df.history_event_type.CREATURE_DEVOURED
                 then
             file:write("\t<historical_event>\n")
             file:write("\t\t<id>"..event.id.."</id>\n")
@@ -1035,6 +1070,27 @@ function export_historical_events()
                     or k == "anon_1" or k == "anon_2" or k == "anon_3" or k == "anon_4" or k == "flags2" or k == "unk1"
 					or k == "circumstance" or k == "circumstance_id" or k == "reason" or k == "reason_id" then
 
+                elseif event:getType() == df.history_event_type.ITEM_STOLEN and k == "matindex" then
+                    --skip
+                elseif event:getType() == df.history_event_type.ITEM_STOLEN and k == "item" and v == -1 then
+                    --skip
+                elseif (event:getType() == df.history_event_type.MASTERPIECE_CREATED_ITEM or
+                        event:getType() == df.history_event_type.MASTERPIECE_CREATED_ITEM_IMPROVEMENT
+                        ) and k == "mat_index" then
+                    --skip
+                elseif event:getType() == df.history_event_type.MASTERPIECE_CREATED_ITEM_IMPROVEMENT and k == "imp_mat_index" then
+                    --skip
+				elseif event:getType() == df.history_event_type.ADD_HF_SITE_LINK and k == "site" then
+					--skip
+				elseif event:getType() == df.history_event_type.ADD_HF_HF_LINK and (k == "hf" or k == "hf_target") then
+					--skip
+				elseif event:getType() == df.history_event_type.ADD_HF_ENTITY_LINK and k == "civ" then
+					--skip
+				elseif event:getType() == df.history_event_type.CREATURE_DEVOURED 
+					and (k == "site" or (k == "victim" and v == -1)) then
+					--skip
+                elseif event:getType() == df.history_event_type.BODY_ABUSED and ((k == "civ" or k == "site") and v == -1) then
+					--skip
                 elseif event:getType() == df.history_event_type.ADD_HF_ENTITY_LINK and k == "link_type" then
                     file:write("\t\t<"..k..">"..df_enums.histfig_entity_link_type[v]:lower().."</"..k..">\n")
                 elseif event:getType() == df.history_event_type.ADD_HF_ENTITY_LINK and k == "position_id" then
@@ -1140,17 +1196,6 @@ function export_historical_events()
                             file:write("\t\t<dye_mat>"..dfhack.matinfo.toString(dfhack.matinfo.decode(event.dye_mat_type, event.dye_mat_index)).."</dye_mat>\n")
                         end
                     end
-
-                elseif event:getType() == df.history_event_type.ITEM_STOLEN and k == "matindex" then
-                    --skip
-                elseif event:getType() == df.history_event_type.ITEM_STOLEN and k == "item" and v == -1 then
-                    --skip
-                elseif (event:getType() == df.history_event_type.MASTERPIECE_CREATED_ITEM or
-                        event:getType() == df.history_event_type.MASTERPIECE_CREATED_ITEM_IMPROVEMENT
-                        ) and k == "mat_index" then
-                    --skip
-                elseif event:getType() == df.history_event_type.MASTERPIECE_CREATED_ITEM_IMPROVEMENT and k == "imp_mat_index" then
-                    --skip
                 elseif (event:getType() == df.history_event_type.WAR_PEACE_ACCEPTED or
                         event:getType() == df.history_event_type.WAR_PEACE_REJECTED or
                         event:getType() == df.history_event_type.TOPICAGREEMENT_CONCLUDED or
@@ -1205,7 +1250,7 @@ function export_historical_events()
                     end
                 elseif k == "race" then
                     if v > -1 then
-                        file:write("\t\t<race>"..df.global.world.raws.creatures.all[v].name[0].."</race>\n")
+                        file:write("\t\t<race_id>"..v.."</race_id>\n")
                     end
                 elseif k == "caste" then
                     if v > -1 then

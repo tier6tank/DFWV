@@ -474,87 +474,89 @@ namespace DFWV
 
         private void FillItemTreeviews()
         {
-
-            trvItemsByTypeMaterial.BeginUpdate();
-            trvItemsByTypeMaterial.Nodes.Clear();
-            var itemGroupings = World.Items.Values.GroupBy(i => i.ItemType).OrderBy(i => i.Key);
-
-            foreach (var itemGrouping in itemGroupings)
+            this.InvokeEx(x =>
             {
-                var typeNode = new TreeNode(itemGrouping.Key.ToTitleCase());
-                var typeCount = 0;
+                trvItemsByTypeMaterial.BeginUpdate();
+                trvItemsByTypeMaterial.Nodes.Clear();
+                var itemGroupings = World.Items.Values.GroupBy(i => i.ItemType).OrderBy(i => i.Key);
 
-                var subTypeGroups = itemGrouping.GroupBy(st => st.ItemSubType).OrderBy(st => st.Key);
-                foreach (var subTypeGroup in subTypeGroups)
+                foreach (var itemGrouping in itemGroupings)
                 {
-                    var subTypeNode = subTypeGroup.Key == "" ? typeNode : new TreeNode(subTypeGroup.Key.ToTitleCase());
+                    var typeNode = new TreeNode(itemGrouping.Key.ToTitleCase());
+                    var typeCount = 0;
 
-                    var subTypeCount = 0;
-
-                    var matGroups = subTypeGroup.GroupBy(m => m.Material).OrderBy(m => m.Key);
-                    foreach (var matGroup in matGroups)
+                    var subTypeGroups = itemGrouping.GroupBy(st => st.ItemSubType).OrderBy(st => st.Key);
+                    foreach (var subTypeGroup in subTypeGroups)
                     {
-                        var matNode = new TreeNode(matGroup.Key.ToTitleCase());
+                        var subTypeNode = subTypeGroup.Key == "" ? typeNode : new TreeNode(subTypeGroup.Key.ToTitleCase());
 
-                        foreach (var item in matGroup)
+                        var subTypeCount = 0;
+
+                        var matGroups = subTypeGroup.GroupBy(m => m.Material).OrderBy(m => m.Key);
+                        foreach (var matGroup in matGroups)
                         {
-                            var itemNode = new TreeNode(item.ToString()) {Tag = item};
-                            matNode.Nodes.Add(itemNode);
+                            var matNode = new TreeNode(matGroup.Key.ToTitleCase());
+
+                            foreach (var item in matGroup)
+                            {
+                                var itemNode = new TreeNode(item.ToString()) { Tag = item };
+                                matNode.Nodes.Add(itemNode);
+                            }
+
+                            subTypeCount += matGroup.Count();
+                            matNode.Text += $" ({matGroup.Count()})";
+                            subTypeNode.Nodes.Add(matNode);
                         }
 
-                        subTypeCount += matGroup.Count();
-                        matNode.Text += $" ({matGroup.Count()})";
-                        subTypeNode.Nodes.Add(matNode);
+                        typeCount += subTypeCount;
+                        if (typeNode != subTypeNode)
+                        {
+                            subTypeNode.Text += $" ({subTypeCount})";
+                            typeNode.Nodes.Add(subTypeNode);
+                        }
                     }
 
-                    typeCount += subTypeCount;
-                    if (typeNode != subTypeNode)
+                    typeNode.Text += $" ({typeCount})";
+                    trvItemsByTypeMaterial.Nodes.Add(typeNode);
+                }
+
+                trvItemsByTypeMaterial.EndUpdate();
+
+                trvItemsByQualityType.BeginUpdate();
+                trvItemsByQualityType.Nodes.Clear();
+                var itemQualityGroupings = World.Items.Values.GroupBy(i => i.Quality).OrderBy(i => i.Key)
+                    .Select(g => new
                     {
-                        subTypeNode.Text += $" ({subTypeCount})";
-                        typeNode.Nodes.Add(subTypeNode);
-                    }
-                }
+                        ItemQuality = g.Key,
+                        TypeGroups = g.ToList().GroupBy(i => i.ItemType)
+                    });
 
-                typeNode.Text += $" ({typeCount})";
-                trvItemsByTypeMaterial.Nodes.Add(typeNode);
-            }
-
-            trvItemsByTypeMaterial.EndUpdate();
-
-            trvItemsByQualityType.BeginUpdate();
-            trvItemsByQualityType.Nodes.Clear();
-            var itemQualityGroupings = World.Items.Values.GroupBy(i => i.Quality).OrderBy(i => i.Key)
-                .Select(g => new
+                foreach (var itemQualityGrouping in itemQualityGroupings)
                 {
-                    ItemQuality = g.Key,
-                    TypeGroups = g.ToList().GroupBy(i => i.ItemType)
-                });
-
-            foreach (var itemQualityGrouping in itemQualityGroupings)
-            {
-                var qualityString = itemQualityGrouping.ItemQuality.ToString().Replace('_', ' ');
-                var qLabel = Item.QualityLabels[itemQualityGrouping.ItemQuality];
-                if (qLabel != '\0')
-                {
-                    qualityString = $"{qLabel}{qualityString}{qLabel}";
-                }
-                var qualityNode = new TreeNode(qualityString);
-                var typeCount = 0;
-                foreach (var typeGroup in itemQualityGrouping.TypeGroups)
-                {
-                    var typeNode = new TreeNode(typeGroup.Key.ToTitleCase());
-                    qualityNode.Nodes.Add(typeNode);
-                    foreach (var itemNode in typeGroup.Select(item => new TreeNode(item.ToString().ToTitleCase()) { Tag = item }))
+                    var qualityString = itemQualityGrouping.ItemQuality.ToString().Replace('_', ' ');
+                    var qLabel = Item.QualityLabels[itemQualityGrouping.ItemQuality];
+                    if (qLabel != '\0')
                     {
-                        typeNode.Nodes.Add(itemNode);
+                        qualityString = $"{qLabel}{qualityString}{qLabel}";
                     }
-                    typeCount += typeGroup.Count();
-                    typeNode.Text += $" ({typeGroup.Count()})";
+                    var qualityNode = new TreeNode(qualityString);
+                    var typeCount = 0;
+                    foreach (var typeGroup in itemQualityGrouping.TypeGroups)
+                    {
+                        var typeNode = new TreeNode(typeGroup.Key.ToTitleCase());
+                        qualityNode.Nodes.Add(typeNode);
+                        foreach (var itemNode in typeGroup.Select(item => new TreeNode(item.ToString().ToTitleCase()) { Tag = item }))
+                        {
+                            typeNode.Nodes.Add(itemNode);
+                        }
+                        typeCount += typeGroup.Count();
+                        typeNode.Text += $" ({typeGroup.Count()})";
+                    }
+                    qualityNode.Text += $" ({typeCount})";
+                    trvItemsByQualityType.Nodes.Add(qualityNode);
                 }
-                qualityNode.Text += $" ({typeCount})";
-                trvItemsByQualityType.Nodes.Add(qualityNode);
-            }
-            trvItemsByQualityType.EndUpdate();
+                trvItemsByQualityType.EndUpdate();
+            });
         }
 
 

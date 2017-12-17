@@ -7,6 +7,7 @@ using System.Xml.Linq;
 using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalEventClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
+using System.Collections.Concurrent;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
@@ -160,26 +161,26 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             SelectTab(frm);
         }
 
-        internal override void Process()
+        public override void Process()
         {
             base.Process();
             if (Subregion != null)
             {
                 if (Subregion.AbductionEventCollections == null)
-                    Subregion.AbductionEventCollections = new List<EC_Abduction>();
+                    Subregion.AbductionEventCollections = new ConcurrentBag<EC_Abduction>();
                 Subregion.AbductionEventCollections.Add(this);
             }
             if (Site != null)
             {
                 if (Site.AbductionEventCollections == null)
-                    Site.AbductionEventCollections = new List<EC_Abduction>();
+                    Site.AbductionEventCollections = new ConcurrentBag<EC_Abduction>();
                 Site.AbductionEventCollections.Add(this);
             }
             if (AttackingEn.AbductionEventCollections == null)
-                AttackingEn.AbductionEventCollections = new List<EC_Abduction>();
+                AttackingEn.AbductionEventCollections = new ConcurrentBag<EC_Abduction>();
             AttackingEn.AbductionEventCollections.Add(this);
             if (DefendingEn.AbductionEventCollections == null)
-                DefendingEn.AbductionEventCollections = new List<EC_Abduction>();
+                DefendingEn.AbductionEventCollections = new ConcurrentBag<EC_Abduction>();
             DefendingEn.AbductionEventCollections.Add(this);
 
         }

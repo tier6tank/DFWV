@@ -153,7 +153,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                 EventCollection = World.HistoricalEventCollections[HistoricalEventCollectionId.Value];
         }
 
-        internal override void Process()
+        public override void Process()
         {
             base.Process();
             if (Structure != null)

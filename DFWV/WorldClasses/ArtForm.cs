@@ -72,12 +72,6 @@ namespace DFWV.WorldClasses
             //        Members.Add(World.HistoricalFigures[memberID]);
             //}
         }
-    
-
-        internal override void Process()
-        {
-            
-        }
 
         internal override void Plus(XDocument xdoc)
         {

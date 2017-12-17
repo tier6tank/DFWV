@@ -136,11 +136,6 @@ namespace DFWV.WorldClasses
             throw new NotImplementedException();
         }
 
-        internal override void Process()
-        {
-            throw new NotImplementedException();
-        }
-
         internal override sealed void Plus(XDocument xdoc)
         {
             foreach (var element in xdoc.Root.Elements())

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using DFWV.WorldClasses.EntityClasses;
+using System.Collections.Concurrent;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
@@ -117,11 +118,12 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             SelectTab(frm);
         }
 
-        internal override void Process()
+        public override void Process()
         {
             base.Process();
             if (Civ.OccasionEventCollections == null)
-                Civ.OccasionEventCollections = new List<EC_Occasion>();
+                Civ.OccasionEventCollections = new ConcurrentBag<EC_Occasion>();
+            Civ.OccasionEventCollections.Add(this);
 
 
         }

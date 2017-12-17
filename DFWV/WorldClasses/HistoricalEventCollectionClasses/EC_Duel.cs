@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using DFWV.WorldClasses.HistoricalFigureClasses;
+using System.Collections.Concurrent;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
@@ -145,30 +146,30 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             SelectTab(frm);
         }
 
-        internal override void Process()
+        public override void Process()
         {
             base.Process();
             if (Subregion != null)
             {
                 if (Subregion.DuelEventCollections == null)
-                    Subregion.DuelEventCollections = new List<EC_Duel>();
+                    Subregion.DuelEventCollections = new ConcurrentBag<EC_Duel>();
                 Subregion.DuelEventCollections.Add(this);
             }
             if (Site != null)
             {
                 if (Site.DuelEventCollections == null)
-                    Site.DuelEventCollections = new List<EC_Duel>();
+                    Site.DuelEventCollections = new ConcurrentBag<EC_Duel>();
                 Site.DuelEventCollections.Add(this);
             }
             if (_attackingHf != null && _attackingHf.Count != 0)
             {
                 if (_attackingHf[0].DuelEventCollections == null)
-                    _attackingHf[0].DuelEventCollections = new List<EC_Duel>();
+                    _attackingHf[0].DuelEventCollections = new ConcurrentBag<EC_Duel>();
                 _attackingHf[0].DuelEventCollections.Add(this);
             }
             if (_defendingHf == null || _defendingHf.Count == 0) return;
             if (_defendingHf[0].DuelEventCollections == null)
-                _defendingHf[0].DuelEventCollections = new List<EC_Duel>();
+                _defendingHf[0].DuelEventCollections = new ConcurrentBag<EC_Duel>();
             _defendingHf[0].DuelEventCollections.Add(this);
         }
 

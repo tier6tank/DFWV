@@ -7,13 +7,14 @@ using DFWV.Annotations;
 using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
+using System.Collections.Concurrent;
 
 namespace DFWV.WorldClasses
 {
-    public class EntityPopulation : XMLObject
+    public class EntityPopulation : XMLObject, IProcessable
     {
 
-        public List<EC_Battle> BattleEventCollections { get; set; }
+        public ConcurrentBag<EC_Battle> BattleEventCollections { get; set; }
         public List<HistoricalFigure> Members { get; set; }
         public Race Race { private get; set; }
         [UsedImplicitly]
@@ -88,7 +89,7 @@ namespace DFWV.WorldClasses
                 Entity = World.Entities[EntityId.Value];
         }
 
-        internal override void Process()
+        public void Process()
         {
             if (Race == null && RaceCounts != null)
                 Race = RaceCounts.First().Key;
@@ -106,9 +107,10 @@ namespace DFWV.WorldClasses
                 {
                     case "id":
                         break;
-                    case "race":
-                        var raceName = val.Split(':')[0];
-                        var race = World.GetAddRace(raceName);
+                    case "race_count":
+                        var race_id = Convert.ToInt32(val.Split(':')[0]);
+                        Race race;
+                        World.Races.TryGetValue(race_id, out race);
                         if (RaceCounts == null)
                             RaceCounts = new Dictionary<Race, int>();
                         RaceCounts.Add(race, Convert.ToInt32(val.Split(':')[1]));

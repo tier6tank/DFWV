@@ -26,31 +26,34 @@ namespace DFWV.WorldClasses.EntityClasses
 
         private List<int> ChildrenIDs { get; set; }
         private ConcurrentBag<Entity> Children;
-        public List<HistoricalFigure> Enemies { get; set; }
-        public List<HistoricalFigure> Members { get; set; }
+        public ConcurrentBag<HistoricalFigure> Enemies { get; set; }
+        public ConcurrentBag<HistoricalFigure> Members { get; set; }
         public List<int> MemberHfids { get; set; }
-        private List<HistoricalFigure> _memberHfs { get; set; }
-        public List<HistoricalFigure> MemberHfs
+        private ConcurrentBag<HistoricalFigure> _memberHfs { get; set; }
+        public ConcurrentBag<HistoricalFigure> MemberHfs
         {
             get
             {
                 if (_memberHfs == null)
-                    _memberHfs = MemberHfids.Where(id => World.HistoricalFigures.ContainsKey(Id))
+                {
+                    _memberHfs = new ConcurrentBag<HistoricalFigure>();
+                    MemberHfids.Where(id => World.HistoricalFigures.ContainsKey(Id))
                                 .Select(id => World.HistoricalFigures[id])
-                                .ToList();
+                                .ToList().ForEach(x => _memberHfs.Add(x));
+                }
                 return _memberHfs;
             }
         }
 
 
 
-        public List<HistoricalFigure> FormerMembers { get; set; }
-        public List<HistoricalFigure> Prisoners { get; set; }
-        public List<HistoricalFigure> FormerPrisoners { get; set; }
-        public List<HistoricalFigure> Criminals { get; set; }
-        public List<HistoricalFigure> Slaves { get; set; }
-        public List<HistoricalFigure> FormerSlaves { get; set; }
-        public List<HistoricalFigure> Heroes { get; set; }
+        public ConcurrentBag<HistoricalFigure> FormerMembers { get; set; }
+        public ConcurrentBag<HistoricalFigure> Prisoners { get; set; }
+        public ConcurrentBag<HistoricalFigure> FormerPrisoners { get; set; }
+        public ConcurrentBag<HistoricalFigure> Criminals { get; set; }
+        public ConcurrentBag<HistoricalFigure> Slaves { get; set; }
+        public ConcurrentBag<HistoricalFigure> FormerSlaves { get; set; }
+        public ConcurrentBag<HistoricalFigure> Heroes { get; set; }
 
         public List<WorldConstruction> ConstructionsBuilt { get; set; }
 
@@ -63,24 +66,27 @@ namespace DFWV.WorldClasses.EntityClasses
         [UsedImplicitly]
         public string DispNameLower => ToString().ToLower();
 
-        public List<EC_BeastAttack> BeastAttackEventCollections { get; set; }
-        public List<EC_War> WarEventCollections { get; set; }
-        public List<EC_Abduction> AbductionEventCollections { get; set; }
-        public List<EC_SiteConquered> SiteConqueredEventCollections { get; set; }
-        public List<EC_Theft> TheftEventCollections { get; set; }
-        public List<EC_Insurrection> InsurrectionEventCollections { get; set; }
-        public List<EC_Occasion> OccasionEventCollections { get; set; }
+        public ConcurrentBag<EC_BeastAttack> BeastAttackEventCollections { get; set; }
+        public ConcurrentBag<EC_War> WarEventCollections { get; set; }
+        public ConcurrentBag<EC_Abduction> AbductionEventCollections { get; set; }
+        public ConcurrentBag<EC_SiteConquered> SiteConqueredEventCollections { get; set; }
+        public ConcurrentBag<EC_Theft> TheftEventCollections { get; set; }
+        public ConcurrentBag<EC_Insurrection> InsurrectionEventCollections { get; set; }
+        public ConcurrentBag<EC_Occasion> OccasionEventCollections { get; set; }
 
         public List<Point> Coords { get; set; }
 
         [UsedImplicitly]
         public bool IsPlayerControlled { get; set; }
 
+        public List<HistoricalEvent> CachedEvents;
+
         public IEnumerable<HistoricalEvent> Events
         {
             get
             {
-                return World.HistoricalEvents.Values.Where(x => x.EntitiesInvolved.Contains(this));
+                return CachedEvents ??
+                       (CachedEvents = World.HistoricalEvents.Values.Where(x => x.EntitiesInvolved.Contains(this)).ToList());
             }
         }
 
@@ -215,8 +221,11 @@ namespace DFWV.WorldClasses.EntityClasses
             frm.grpEntityRelatedFigures.Visible = hasHfLinks;
             if (hasHfLinks)
             {
-                var entityHfLists = new List<List<HistoricalFigure>>
-                {Enemies, MemberHfs == null ? Members : Members.Intersect(MemberHfs).ToList(), FormerMembers, Prisoners, FormerPrisoners, Criminals,
+                var intersectedMembers = Members.Intersect(MemberHfs).ToList();
+                var intersectedMembersBag = new ConcurrentBag<HistoricalFigure>();
+                intersectedMembers.ForEach(x => intersectedMembersBag.Add(x));
+                var entityHfLists = new List<ConcurrentBag<HistoricalFigure>>
+                {Enemies, MemberHfs == null ? Members : intersectedMembersBag, FormerMembers, Prisoners, FormerPrisoners, Criminals,
                                 Slaves, FormerSlaves, Heroes};
                 var entityHfListNames = new List<string>
                 {"Enemies", "Members", "Former Members", "Prisoners", "Former Prisoners", "Criminals",
@@ -343,11 +352,6 @@ namespace DFWV.WorldClasses.EntityClasses
                 WorshipHf = World.HistoricalFigures[WorshipHfid.Value];
         }
 
-        internal override void Process()
-        {
-
-        }
-
         internal override void Plus(XDocument xdoc)
         {
             foreach (var element in xdoc.Root.Elements())
@@ -360,8 +364,9 @@ namespace DFWV.WorldClasses.EntityClasses
                 {
                     case "id":
                         break;
-                    case "race":
-                        Race = World.GetAddRace(val);
+                    case "race_id":
+                        if (valI != -1 && World.Races.ContainsKey(valI))
+                            Race = World.Races[valI];
                         break;
                     case "type":
                         if (!Types.Contains(val))
@@ -384,10 +389,8 @@ namespace DFWV.WorldClasses.EntityClasses
                             EntityLinks.Add(newEl.LinkType, new List<EntityEntityLink>());
                         EntityLinks[newEl.LinkType].Add(newEl);
                         break;
-                    case "child":
-                        if (ChildrenIDs == null)
-                            ChildrenIDs = new List<int>();
-                        ChildrenIDs.Add(valI);
+                    case "children":
+                        ChildrenIDs = val.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => Convert.ToInt32(x)).ToList();
                         break;
                     case "worship_id":
                         WorshipHfid = valI;
@@ -401,12 +404,11 @@ namespace DFWV.WorldClasses.EntityClasses
                         }
                         break;
                     case "claims":
-                        if (Claims == null)
-                            Claims = new List<Point>();
-                        foreach (var coordSplit in val.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries).Select(coord => coord.Split(',')).Where(coordSplit => coordSplit.Length == 2))
-                        {
-                            Claims.Add(new Point(Convert.ToInt32(coordSplit[0]), Convert.ToInt32(coordSplit[1])));
-                        }
+                        Claims = val.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries)
+                            .Select(coord => coord.Split(','))
+                            .Where(coordSplit => coordSplit.Length == 2)
+                            .Select(split => new Point(Convert.ToInt32(split[0]), Convert.ToInt32(split[1])))
+                            .ToList();
                         break;
                     case "entity_position":
                         var newPosition = new EntityPosition(element, this);
@@ -424,6 +426,9 @@ namespace DFWV.WorldClasses.EntityClasses
                         if (MemberHfids == null)
                             MemberHfids = new List<int>();
                         MemberHfids.Add(valI);
+                        break;
+                    case "histfig_ids":
+                        MemberHfids = val.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => Convert.ToInt32(x)).ToList();
                         break;
                     case "occasion":
                         var newOccasion = new EntityOccasion(element, this);

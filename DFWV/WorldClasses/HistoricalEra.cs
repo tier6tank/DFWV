@@ -84,11 +84,6 @@ namespace DFWV.WorldClasses
             }
         }
 
-        internal override void Process()
-        {
-
-        }
-
         internal override void Plus(XDocument xdoc)
         {
             

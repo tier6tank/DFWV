@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalEventClasses;
+using System.Collections.Concurrent;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
@@ -120,19 +121,19 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             SelectTab(frm);
         }
 
-        internal override void Process()
+        public override void Process()
         {
             base.Process();
             if (Site != null)
             {
                 if (Site.InsurrectionEventCollections == null)
-                    Site.InsurrectionEventCollections = new List<EC_Insurrection>();
+                    Site.InsurrectionEventCollections = new ConcurrentBag<EC_Insurrection>();
                 Site.InsurrectionEventCollections.Add(this);
             }
             if (TargetEnt != null)
             {
                 if (TargetEnt.InsurrectionEventCollections == null)
-                    TargetEnt.InsurrectionEventCollections = new List<EC_Insurrection>();
+                    TargetEnt.InsurrectionEventCollections = new ConcurrentBag<EC_Insurrection>();
                 TargetEnt.InsurrectionEventCollections.Add(this);
             }
 

@@ -195,6 +195,7 @@
     <Compile Include="WorldClasses\HistoricalEventCollectionClasses\EC_Occasion.cs" />
     <Compile Include="WorldClasses\ArtForm.cs" />
     <Compile Include="WorldClasses\DanceForm.cs" />
+    <Compile Include="WorldClasses\IProcessable.cs" />
     <Compile Include="WorldClasses\ItemImprovement.cs" />
     <Compile Include="WorldClasses\ItemIngredient.cs" />
     <Compile Include="WorldClasses\Landmass.cs" />

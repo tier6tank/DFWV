@@ -241,10 +241,7 @@ namespace DFWV.WorldClasses
                     throw new ArgumentOutOfRangeException();
             }
         }
-        internal override void Process()
-        {
-            
-        }
+
         internal override void Plus(XDocument xdoc)
         {
             

@@ -30,12 +30,6 @@ namespace DFWV.WorldClasses
             throw new NotImplementedException();
         }
 
-        internal override void Process()
-        {
-            throw new NotImplementedException();
-        }
-
-
         internal override void Plus(XDocument xdoc)
         {
             throw new NotImplementedException();

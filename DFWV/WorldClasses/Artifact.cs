@@ -188,11 +188,6 @@ namespace DFWV.WorldClasses
                 Subregion = World.Regions[SubregionId.Value];
         }
 
-        internal override void Process()
-        {
-
-        }
-
         internal override void Plus(XDocument xdoc)
         {
             foreach (var element in xdoc.Root.Elements())

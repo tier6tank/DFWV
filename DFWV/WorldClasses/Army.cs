@@ -138,11 +138,6 @@ namespace DFWV.WorldClasses
                 EntityController = World.Entities[EntityId.Value];
         }
 
-        internal override void Process()
-        {
-            
-        }
-
         internal override void Plus(XDocument xdoc)
         {
             

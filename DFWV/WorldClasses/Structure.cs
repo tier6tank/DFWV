@@ -120,11 +120,6 @@ namespace DFWV.WorldClasses
                 CopiedArtifact = World.Artifacts[CopiedArtifactId.Value];
         }
 
-        internal override void Process()
-        {
-
-        }
-
         public override void Select(MainForm frm)
         {
             if (frm.grpStructure.Text == ToString() && frm.MainTab.SelectedTab == frm.tabStructure)

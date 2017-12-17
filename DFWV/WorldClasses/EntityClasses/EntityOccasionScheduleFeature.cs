@@ -22,7 +22,8 @@ namespace DFWV.WorldClasses.EntityClasses
         public EntityOccasionScheduleFeature(XContainer data, EntityOccasionSchedule schedule)
         {
             Type = data.Element("type").Value;
-            ReferenceId = Convert.ToInt32(data.Element("reference").Value);
+            if (data.Element("reference") != null)
+                ReferenceId = Convert.ToInt32(data.Element("reference").Value);
 
             ThisSchedule = schedule;
         }

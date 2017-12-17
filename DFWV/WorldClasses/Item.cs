@@ -359,11 +359,6 @@ namespace DFWV.WorldClasses
                 QualityVal = 6;
         }
 
-        internal override void Process()
-        {
-            
-        }
-
         internal override void Plus(XDocument xdoc)
         {
             

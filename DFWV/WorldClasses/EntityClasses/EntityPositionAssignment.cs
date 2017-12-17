@@ -18,9 +18,11 @@ namespace DFWV.WorldClasses.EntityClasses
         public EntityPositionAssignment(XContainer data, Entity ent)
         {
             Id = Convert.ToInt16(data.Element("id").Value);
-            HistFigId = Convert.ToInt32(data.Element("histfig").Value);
+            if (data.Element("histfig") != null)
+                HistFigId = Convert.ToInt32(data.Element("histfig").Value);
             PositionId = Convert.ToInt32(data.Element("position_id").Value);
-            SquadId = Convert.ToInt32(data.Element("squad_id").Value);
+            if (data.Element("squad_id") != null)
+                SquadId = Convert.ToInt32(data.Element("squad_id").Value);
 
             ThisEntity = ent;
         }

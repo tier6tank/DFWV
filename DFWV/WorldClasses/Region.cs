@@ -7,6 +7,7 @@ using DFWV.Annotations;
 using DFWV.WorldClasses.HistoricalEventClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
+using System.Collections.Concurrent;
 
 namespace DFWV.WorldClasses
 {
@@ -18,13 +19,13 @@ namespace DFWV.WorldClasses
         public List<Point> Coords { get; set; }
         public Dictionary<Race, int> Populations { get; set; }
 
-        public List<HistoricalFigure> Inhabitants { get; set; }
+        public ConcurrentBag<HistoricalFigure> Inhabitants { get; set; }
 
 
-        public List<EC_Battle> BattleEventCollections { get; set; }
-        public List<EC_Duel> DuelEventCollections { get; set; }
-        public List<EC_Abduction> AbductionEventCollections { get; set; }
-        public List<EC_Theft> TheftEventCollections { get; set; }
+        public ConcurrentBag<EC_Battle> BattleEventCollections { get; set; }
+        public ConcurrentBag<EC_Duel> DuelEventCollections { get; set; }
+        public ConcurrentBag<EC_Abduction> AbductionEventCollections { get; set; }
+        public ConcurrentBag<EC_Theft> TheftEventCollections { get; set; }
 
         public IEnumerable<HistoricalEvent> Events
         {
@@ -119,10 +120,6 @@ namespace DFWV.WorldClasses
 
         }
 
-        internal override void Process()
-        {
-
-        }
         internal override void Plus(XDocument xdoc)
         {
             foreach (var element in xdoc.Root.Elements())

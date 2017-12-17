@@ -101,11 +101,6 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             SelectTab(frm);
         }
 
-        internal override void Process()
-        {
-            base.Process();
-        }
-
         internal override void Export(string table)
         {
             base.Export(table);

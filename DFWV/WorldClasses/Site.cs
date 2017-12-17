@@ -10,6 +10,7 @@ using DFWV.WorldClasses.EntityClasses;
 using DFWV.WorldClasses.HistoricalEventClasses;
 using DFWV.WorldClasses.HistoricalEventCollectionClasses;
 using DFWV.WorldClasses.HistoricalFigureClasses;
+using System.Collections.Concurrent;
 
 namespace DFWV.WorldClasses
 {
@@ -35,19 +36,19 @@ namespace DFWV.WorldClasses
         public int? CurOwnerId { get; set; }
         public Entity CurOwner { get; set; }
 
-        public List<HistoricalFigure> Inhabitants { get; set; }
+        public ConcurrentBag<HistoricalFigure> Inhabitants { get; set; }
         public List<WorldConstruction> ConstructionLinks { get; set; }
 
         public HE_CreatedSite CreatedEvent { get; set; }
         public HE_SiteDied DiedEvent { get; set; }
 
-        public List<EC_BeastAttack> BeastAttackEventCollections { get; set; }
-        public List<EC_Battle> BattleEventCollections { get; set; }
-        public List<EC_Duel> DuelEventCollections { get; set; }
-        public List<EC_Abduction> AbductionEventCollections { get; set; }
-        public List<EC_SiteConquered> SiteConqueredEventCollections { get; set; }
-        public List<EC_Theft> TheftEventCollections { get; set; }
-        public List<EC_Insurrection> InsurrectionEventCollections { get; set; }
+        public ConcurrentBag<EC_BeastAttack> BeastAttackEventCollections { get; set; }
+        public ConcurrentBag<EC_Battle> BattleEventCollections { get; set; }
+        public ConcurrentBag<EC_Duel> DuelEventCollections { get; set; }
+        public ConcurrentBag<EC_Abduction> AbductionEventCollections { get; set; }
+        public ConcurrentBag<EC_SiteConquered> SiteConqueredEventCollections { get; set; }
+        public ConcurrentBag<EC_Theft> TheftEventCollections { get; set; }
+        public ConcurrentBag<EC_Insurrection> InsurrectionEventCollections { get; set; }
 
         public List<Artifact> CreatedArtifacts { get; set; }
 
@@ -565,11 +566,6 @@ namespace DFWV.WorldClasses
                 Civ = World.Entities[CivId.Value];
             if (CurOwnerId.HasValue && World.Entities.ContainsKey(CurOwnerId.Value))
                 CurOwner = World.Entities[CurOwnerId.Value];
-        }
-
-        internal override void Process()
-        {
-
         }
     }
 }

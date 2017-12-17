@@ -352,7 +352,7 @@ namespace DFWV
             this[typeof(Mountain)] = new Filter("Name", null, null, -1);
             this[typeof(Landmass)] = new Filter("Name", null, null, -1);
             this[typeof(Army)] = new Filter("Name", null, null, -1);
-            this[typeof(Unit)] = new Filter("Name", null, null, -1);
+            this[typeof(Unit)] = new Filter("ID", null, "RaceName", -1);
             this[typeof(Engraving)] = new Filter("Name", null, null, -1);
             this[typeof(Report)] = new Filter("Name", null, null, -1);
             this[typeof(WrittenContent)] = new Filter("Name", null, null, -1);

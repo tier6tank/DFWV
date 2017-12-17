@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using DFWV.WorldClasses.EntityClasses;
+using System.Collections.Concurrent;
 
 namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
 {
@@ -161,14 +162,14 @@ namespace DFWV.WorldClasses.HistoricalEventCollectionClasses
             SelectTab(frm);
         }
 
-        internal override void Process()
+        public override void Process()
         {
             base.Process();
             if (AggressorEnt.WarEventCollections == null)
-                AggressorEnt.WarEventCollections = new List<EC_War>();
+                AggressorEnt.WarEventCollections = new ConcurrentBag<EC_War>();
             AggressorEnt.WarEventCollections.Add(this);
             if (DefenderEnt.WarEventCollections == null)
-                DefenderEnt.WarEventCollections = new List<EC_War>();
+                DefenderEnt.WarEventCollections = new ConcurrentBag<EC_War>();
             DefenderEnt.WarEventCollections.Add(this);
             if (EventCol != null)
                 TotalWar();

@@ -99,8 +99,9 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         if (valI != -1)
                             HfId_Victim = valI;
                         break;
-                    case "race":
-                        VictimRace = World.GetAddRace(val);
+                    case "race_id":
+                        if (valI != -1 && World.Races.ContainsKey(valI))
+                            VictimRace = World.Races[valI];
                         break;
                     case "caste":
                         if (!HistoricalFigure.Castes.Contains(val))

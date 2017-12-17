@@ -699,33 +699,34 @@ namespace DFWV.WorldClasses
 
         private void Process()
         {
-            ProcessSection(Regions.Values, "Regions");
-            ProcessSection(Sites.Values, "Sites");
-            ProcessSection(UndergroundRegions.Values, "Underground Regions");
-            ProcessSection(WorldConstructions.Values, "World Constructions");
-            ProcessSection(Artifacts.Values, "Artifacts");
-            ProcessSection(Entities.Values, "Entities");
+            //ProcessSection(Regions.Values, "Regions");
+            //ProcessSection(Sites.Values, "Sites");
+            //ProcessSection(UndergroundRegions.Values, "Underground Regions");
+            //ProcessSection(WorldConstructions.Values, "World Constructions");
+            //ProcessSection(Artifacts.Values, "Artifacts");
+            //ProcessSection(Entities.Values, "Entities");
             ProcessSection(EntityPopulations.Values, "Entity Populations");
-            ProcessSection(HistoricalEras.Values, "Historical Eras");
-            ProcessSection(HistoricalFigures.Values, "Historical Figures");
+            //ProcessSection(HistoricalEras.Values, "Historical Eras");
+            //ProcessSection(HistoricalFigures.Values, "Historical Figures");
             ProcessSection(HistoricalEvents.Values, "Historical Events");
             ProcessSection(HistoricalEventCollections.Values, "Historical Event Collections");
-            ProcessSection(Rivers.Values, "Rivers");
-            ProcessSection(Mountains.Values, "Mountains");
+            //ProcessSection(Rivers.Values, "Rivers");
+            //ProcessSection(Mountains.Values, "Mountains");
 
             OnProcessed();
         }
 
-        private static void ProcessSection<T>(IEnumerable<T> list, string sectionName) where T : XMLObject
+        private static void ProcessSection<T>(IEnumerable<T> list, string sectionName) where T : XMLObject, IProcessable
         {
             OnProcessedSectionStart(sectionName);
             Program.IncrementMajorProgress();
             Program.SetMinorProgress(0, list.Any() ? list.Last().Id : 0);
 
-            foreach (var item in list) {
+            Parallel.ForEach(list, item =>
+            {
                 Program.SetMinorProgress(item.Id);
                 item.Process();
-            }
+            });
             OnProcessedSection(sectionName);
 
         }
@@ -954,13 +955,13 @@ namespace DFWV.WorldClasses
                 if (hf.Site != null)
                 {
                     if (hf.Site.Inhabitants == null)
-                        hf.Site.Inhabitants = new List<HistoricalFigure>();
+                        hf.Site.Inhabitants = new ConcurrentBag<HistoricalFigure>();
                     if (!hf.Site.Inhabitants.Contains(hf))
                         hf.Site.Inhabitants.Add(hf);
                 }
                 if (hf.Region == null) continue;
                 if (hf.Region.Inhabitants == null)
-                    hf.Region.Inhabitants = new List<HistoricalFigure>();
+                    hf.Region.Inhabitants = new ConcurrentBag<HistoricalFigure>();
                 if (!hf.Region.Inhabitants.Contains(hf))
                     hf.Region.Inhabitants.Add(hf);
             }
@@ -1129,7 +1130,7 @@ namespace DFWV.WorldClasses
             Program.Log(LogType.Status, "Historical Figure Matching...");
             Program.IncrementMajorProgress();
             Program.SetMinorProgress(0, Leaders.Count);
-            foreach (var leader in Leaders)
+            Parallel.ForEach(Leaders, leader =>
             {
                 Program.IncrementMinorProgress();
                 var leadername = leader.Name.ToLower();
@@ -1158,9 +1159,9 @@ namespace DFWV.WorldClasses
                 if (leader.Hf == null)
                 {
                     foreach (var hf in HistoricalFigures.Values.Where(x =>
-                        ((x.BirthYear < 0 && leader.Birth == null) || 
+                        ((x.BirthYear < 0 && leader.Birth == null) ||
                          ((leader.Birth != null) && x.BirthYear == leader.Birth.Year)) &&
-                        ((x.DeathYear == null && leader.Death  == WorldTime.Present) || 
+                        ((x.DeathYear == null && leader.Death == WorldTime.Present) ||
                          (leader.Death != null && (x.DeathYear == leader.Death.Year)))
                         ).Where(hf => isPartialMatch(hf, leader)))
                     {
@@ -1173,10 +1174,10 @@ namespace DFWV.WorldClasses
                 }
                 if (leader.Hf == null)
                     Program.Log(LogType.Warning, "Leaderfrom File not in XML: " + leader.Name);
-            }
+            });
             Program.IncrementMajorProgress();
             Program.SetMinorProgress(0, Gods.Count);
-            foreach (var god in Gods)
+            Parallel.ForEach(Gods, god =>
             {
                 Program.IncrementMinorProgress();
                 var godname = god.Name.ToLower();
@@ -1208,7 +1209,7 @@ namespace DFWV.WorldClasses
                 }
                 if (god.Hf == null)
                     Program.Log(LogType.Warning, "God from File not in XML: " + god.Name);
-            }
+            });
 
             Program.Log(LogType.Status, " Done");
         }

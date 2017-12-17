@@ -66,11 +66,6 @@ namespace DFWV.WorldClasses
             throw new System.NotImplementedException();
         }
 
-        internal override void Process()
-        {
-            throw new System.NotImplementedException();
-        }
-
         public override string ToString()
         {
             if (PageNumber.HasValue)

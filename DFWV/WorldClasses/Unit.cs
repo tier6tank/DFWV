@@ -27,8 +27,8 @@ namespace DFWV.WorldClasses
         public string RaceName => Race != null ? Race.Name : "";
         private int? CasteID { get; }
         public Caste Caste { get; set; }
-        public Point Coords { get; set; }
-        override public Point Location => Coords;
+        public Point3 Coords { get; set; }
+        override public Point Location => Point.Empty;
         private int? Sex { get; }
         private int? CivID { get; }
         public Entity Civ { get; private set; }
@@ -106,9 +106,10 @@ namespace DFWV.WorldClasses
                         }
                         break;
                     case "coords":
-                        Coords = new Point(
+                        Coords = new Point3(
                             Convert.ToInt32(val.Split(',')[0]),
-                            Convert.ToInt32(val.Split(',')[1]));
+                            Convert.ToInt32(val.Split(',')[1]),
+                            Convert.ToInt32(val.Split(',')[2]));
                         break;
                     case "sex":
                         Sex = valI;
@@ -261,7 +262,7 @@ namespace DFWV.WorldClasses
 
                 frm.lblUnitName.Text = Name;
                 frm.lblUnitAltName.Text = AltName;
-                frm.lblUnitCoords.Text = $"({Coords.X}, {Coords.Y})";
+                frm.lblUnitCoords.Text = $"({Coords.X}, {Coords.Y}, {Coords.Z})";
                 frm.lblUnitSex.Text = Sex.ToString();
                 frm.lblUnitCiv.Data = Civ;
                 frm.lblUnitPop.Data = Population;
@@ -283,40 +284,28 @@ namespace DFWV.WorldClasses
                 frm.lstUnitFlags.Items.Clear();
                 if (frm.grpUnitFlags.Visible)
                 {
-                    foreach (var flag in Flag.Distinct())
-                    {
-                        frm.lstUnitFlags.Items.Add(Flags[flag].ToLower().Replace("_", " ").ToTitleCase());
-                    }
+                    frm.lstUnitFlags.Items.AddRange(Flag.Distinct().Select(x => Flags[x].ToLower().Replace("_", " ").ToTitleCase()).ToArray());
                 }
 
                 frm.grpUnitLabors.Visible = Labor != null;
                 frm.lstUnitLabors.Items.Clear();
-                if (frm.grpUnitLabors.Visible)
+                if (frm.grpUnitLabors.Visible && Labor.Any())
                 {
-                    foreach (var labor in Labor.Distinct())
-                    {
-                        frm.lstUnitLabors.Items.Add(Labors[labor].ToLower().Replace("_", " ").ToTitleCase());
-                    }
+                    frm.lstUnitLabors.Items.AddRange(Labor.Distinct().Select(x => Labors[x].ToLower().Replace("_", " ").ToTitleCase()).ToArray());
                 }
 
                 frm.grpUnitRelations.Visible = Relations != null;
                 frm.lstUnitRelations.Items.Clear();
-                if (Relations != null)
+                if (Relations != null && Relations.Any())
                 { 
-                    if (Relations.Any())
-                    {
-                        frm.lstUnitRelations.Items.AddRange(Relations.Select(x=>x.Value).ToArray());
-                    }
+                    frm.lstUnitRelations.Items.AddRange(Relations.Select(x=>x.Value).ToArray());
                 }
 
                 frm.grpUnitHealth.Visible = HealthFlag != null;
                 frm.lstUnitHealth.Items.Clear();
-                if (HealthFlag != null)
+                if (HealthFlag != null && HealthFlag.Any())
                 {
-                    foreach (var flag in HealthFlag.Distinct())
-                    {
-                        frm.lstUnitHealth.Items.Add(HealthFlags[flag].ToLower().Replace("_", " ").ToTitleCase());
-                    }
+                    frm.lstUnitHealth.Items.AddRange(HealthFlag.Distinct().Select(x => HealthFlags[x].ToLower().Replace("_", " ").ToTitleCase()).ToArray());
                 }
 
                 frm.grpUnitItems.Visible = OwnedItemIds != null || TradedItemIds != null || UsedItemIds != null;
@@ -433,11 +422,6 @@ namespace DFWV.WorldClasses
             References?.ForEach(x => x.Link());
         }
 
-        internal override void Process()
-        {
-
-        }
-
         internal override void Plus(XDocument xdoc)
         {
 
@@ -445,19 +429,13 @@ namespace DFWV.WorldClasses
 
         public override string ToString()
         {
-            if (Name != "")
-            {
-                if (HistFigure != null)
-                    return HistFigure.ToString();
+            if (HistFigure != null)
+                return HistFigure.ToString();
+            if (Name != null && Name != "")
                 return Name;
-            }
-            else
-            {
-                if (Race != null)
-                    return Race + " - " + Id;
-                else
-                    return base.ToString();
-            }
+            if (Race != null)
+                return Race + " - " + Id;
+            return base.ToString();
         }
     }
 

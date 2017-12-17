@@ -154,7 +154,7 @@ namespace DFWV
                 if (nextItem is HE_CreatedSite)
                     penCol = (nextItem as HE_CreatedSite).Entity?.Civilization?.Color ?? Color.White;
                 else if (nextItem is HE_ReclaimSite)
-                    penCol = (nextItem as HE_ReclaimSite).Entity_Civ.Civilization.Color;
+                    penCol = (nextItem as HE_ReclaimSite).Entity_Civ.Civilization?.Color ?? Color.White;
                 else if (nextItem is HE_NewSiteLeader)
                 {
                     penCol = (nextItem as HE_NewSiteLeader).Entity_Attacker.Civilization?.Color ?? Color.White;

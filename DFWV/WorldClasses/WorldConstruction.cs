@@ -79,11 +79,6 @@ namespace DFWV.WorldClasses
 
         }
 
-        internal override void Process()
-        {
-
-        }
-
         internal override sealed void Plus(XDocument xdoc)
         {
             foreach (var element in xdoc.Root.Elements())

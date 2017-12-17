@@ -12,12 +12,12 @@ namespace DFWV.WorldClasses
 
         [UsedImplicitly]
         public string AltName { get; set; }
-        public List<Point> Coords { get; set; }
+        public List<Point3> Coords { get; set; }
         public List<int> Elevation { get; set; }
         public River Parent { get; set; }
         public List<River> Tributaries { get; set; }
 
-        override public Point Location => Coords.Last();
+        override public Point Location => new Point(Coords.Last().X, Coords.Last().Y);
 
         public River(XDocument xdoc, World world)
             : base(xdoc, world)
@@ -37,10 +37,10 @@ namespace DFWV.WorldClasses
                         break;
                     case "coords":
                         if (Coords == null)
-                            Coords = new List<Point>();
-                        foreach (var coordSplit in val.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries).Select(coord => coord.Split(',')).Where(coordSplit => coordSplit.Length == 2))
+                            Coords = new List<Point3>();
+                        foreach (var coordSplit in val.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries).Select(coord => coord.Split(',')).Where(coordSplit => coordSplit.Length == 3))
                         {
-                            Coords.Add(new Point(Convert.ToInt32(coordSplit[0]), Convert.ToInt32(coordSplit[1])));
+                            Coords.Add(new Point3(Convert.ToInt32(coordSplit[0]), Convert.ToInt32(coordSplit[1]), Convert.ToInt32(coordSplit[2])));
                         }
                         break;
                     case "elevation":
@@ -68,8 +68,8 @@ namespace DFWV.WorldClasses
 
             frm.lblRiverName.Text = ToString();
             frm.lblRiverAltName.Text = AltName;
-            frm.lblRiverEndsAt.Data = new Coordinate(Coords.Last());
-            frm.lblRiverElevation.Text = string.Join(",", Elevation);
+            frm.lblRiverEndsAt.Data = new Coordinate(new Point(Coords.Last().X, Coords.Last().Y));
+            frm.lblRiverElevation.Text = string.Join(",", Coords.Select(x => x.Z).Where(z => z > 0));
             frm.lblRiverParent.Data = Parent;
 
 
@@ -128,11 +128,6 @@ namespace DFWV.WorldClasses
                     river.Tributaries.Add(this);
                 }
             }
-        }
-
-        internal override void Process()
-        {
-            
         }
 
         internal override void Plus(XDocument xdoc)

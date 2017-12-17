@@ -72,7 +72,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             }
         }
 
-        internal override void Process()
+        public override void Process()
         {
             base.Process();
 

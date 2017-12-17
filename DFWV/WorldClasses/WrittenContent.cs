@@ -131,12 +131,6 @@ namespace DFWV.WorldClasses
                 Author = World.HistoricalFigures[AuthorHfid.Value];
             References?.ForEach(x => x.Link());
         }
-    
-
-        internal override void Process()
-        {
-            
-        }
 
         internal override void Plus(XDocument xdoc)
         {

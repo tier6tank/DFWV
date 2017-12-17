@@ -13,7 +13,7 @@ using System.Reflection;
 
 namespace DFWV.WorldClasses.HistoricalEventClasses
 {
-    public class HistoricalEvent : XMLObject
+    public class HistoricalEvent : XMLObject, IProcessable
     {
         [UsedImplicitly]
         public int Year { get; set; }
@@ -403,7 +403,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
             classProp.SetValue(this, obj, null);
         }
 
-        internal override void Process()
+        public virtual void Process()
         {
             
         }
