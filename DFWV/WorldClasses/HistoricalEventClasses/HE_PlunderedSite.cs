@@ -62,6 +62,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                     case "site_id":
                         SiteId = valI;
                         break;
+                    case "detected":
+                        break;
                     default:
                         DFXMLParser.UnexpectedXmlElement(xdoc.Root.Name.LocalName + "\t" + Types[Type], element, xdoc.Root.ToString());
                         break;
