@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data.Entity.Design.PluralizationServices;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -65,7 +64,6 @@ namespace DFWV
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            InitiailzePluralService();
             MainForm = new MainForm();
             
             Application.Run(MainForm);
@@ -426,42 +424,8 @@ namespace DFWV
 
 
         #region Pluralization/Capitalization Services
-        static PluralizationService _pluralService;
-        private static void InitiailzePluralService()
-        {
-            _pluralService = PluralizationService.CreateService(CultureInfo.GetCultureInfo("en-us"));
-        }
 
-        static public string Pluralize(this string str)
-        {
-            if (_pluralService == null)
-                InitiailzePluralService();
-            return _pluralService.Pluralize(str);
-        }
-
-        static public string Singularize(this string str)
-        {
-            if (_pluralService == null)
-                InitiailzePluralService();
-            return _pluralService.Singularize(str);
-        }
-
-        static public bool IsPlural(this string str)
-        {
-            if (_pluralService == null)
-                InitiailzePluralService();
-            return _pluralService.IsPlural(str);
-        }
-
-        static public bool IsSingular(this string str)
-        {
-            if (_pluralService == null)
-                InitiailzePluralService();
-            return _pluralService.IsSingular(str);
-        }
-
-        static public string ToTitleCase(this string str)
-        {
+        static public string ToTitleCase(this string str) {
             return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(str ?? "");
         }
 
