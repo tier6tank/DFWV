@@ -162,7 +162,7 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
 
             }
 
-            return timestring;
+//            return timestring;
         }
 
         internal override string ToTimelineString()

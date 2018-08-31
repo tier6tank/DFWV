@@ -29,7 +29,9 @@ namespace DFWV.WorldClasses
         public static List<string> Types = new List<string>();
         public int? Type { get; set; }
         public static int NumStructures;
+/*
         private XElement child;
+*/
 
         public List<HistoricalEvent> Events { get; set; }
 

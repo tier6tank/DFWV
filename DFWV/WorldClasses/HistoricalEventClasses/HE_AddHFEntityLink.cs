@@ -148,8 +148,8 @@ namespace DFWV.WorldClasses.HistoricalEventClasses
                         default:
                             return $"{timestring} {Hf?.ToString() ?? "UNKNOWN"} became a {HFEntityLink.LinkTypes[HfEntityLink.LinkType]} of {Entity}.";
                     }
-                    return
-                        $"{timestring} {Hf?.ToString() ?? "UNKNOWN"} became a {HFEntityLink.LinkTypes[HfEntityLink.LinkType]} of {Entity}.";
+//                    return
+//                        $"{timestring} {Hf?.ToString() ?? "UNKNOWN"} became a {HFEntityLink.LinkTypes[HfEntityLink.LinkType]} of {Entity}.";
                 }
                 return
                     $"{timestring} {Hf?.ToString() ?? "UNKNOWN"} became a {(LinkType.HasValue ? HFEntityLink.LinkTypes[LinkType.Value] : "UNKNOWN")} of {Entity}.";
